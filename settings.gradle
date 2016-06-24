@@ -1,0 +1,5 @@
+rootProject.name = 'Warp Engine'
+include 'core'
+include 'graphics'
+include 'physics'
+include 'game'
