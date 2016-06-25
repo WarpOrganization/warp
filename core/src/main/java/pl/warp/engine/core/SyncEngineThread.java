@@ -30,14 +30,14 @@ public class SyncEngineThread implements EngineThread {
     @Override
     public void scheduleTask(EngineTask task) {
         tasks.add(task);
-        if (isRunning() && !task.isInitialized()) task.callInit();
+        if (isRunning() && !task.isInitialized()) task.init();
     }
 
     @Override
     public void start() {
         tasks.stream()
                 .filter(task -> !task.isInitialized())
-                .forEach(EngineTask::callInit);
+                .forEach(EngineTask::init);
         running = true;
         startEngineThread();
     }

@@ -7,9 +7,12 @@ package pl.warp.engine.core;
 public abstract class EngineTask {
     private boolean initialized;
 
-    void callInit() {
+    /**
+     * Call only this method in order to initialize the task.
+     */
+    void init() {
         if (initialized) throw new TaskInitializedException();
-        init();
+        onInit();
         initialized = true;
     }
 
@@ -17,7 +20,7 @@ public abstract class EngineTask {
         return initialized;
     }
 
-    public abstract void init();
+    protected abstract void onInit();
 
     public abstract void update(long delta);
 }

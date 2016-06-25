@@ -24,7 +24,7 @@ public class SyncEngineThreadTest {
         EngineTask task = mock(EngineTask.class);
         engineThread.scheduleTask(task);
         engineThread.start();
-        verify(task).callInit();
+        verify(task).init();
     }
 
     @Test
