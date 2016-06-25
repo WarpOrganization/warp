@@ -5,7 +5,7 @@ public class RotationProperty {
     private double yaw;
     private double roll;
 
-    public RotationProperty(double pitch, double yaw, double roll){
+    public RotationProperty(double pitch, double yaw, double roll) {
 
         this.pitch = pitch;
         this.yaw = yaw;
@@ -35,5 +35,17 @@ public class RotationProperty {
 
     public void setRoll(double roll) {
         this.roll = roll;
+    }
+
+    public void addPitch(double value) {
+        pitch += value;
+    }
+
+    public void addRoll(double value) {
+        roll += value;
+    }
+
+    public void addYaw(double value) {
+        yaw += value;
     }
 }

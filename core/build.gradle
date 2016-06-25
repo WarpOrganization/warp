@@ -12,6 +12,7 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
+    compile 'org.joml:joml:1.8.0'
 
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.4'

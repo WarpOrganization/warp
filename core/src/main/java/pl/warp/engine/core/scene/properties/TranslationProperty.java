@@ -1,18 +1,22 @@
 package pl.warp.engine.core.scene.properties;
 
-import com.sun.javafx.geom.Vec3f;
+import org.joml.Vector3f;
 
 public class TranslationProperty {
 
-    private Vec3f translation;
+    private Vector3f translation;
 
-    public TranslationProperty(Vec3f translation){
+    public TranslationProperty(Vector3f translation) {
 
         this.translation = translation;
     }
 
 
-    public Vec3f getTranslation() {
+    public Vector3f getTranslation() {
         return translation;
+    }
+
+    public void translate(Vector3f translation) {
+        this.translation.add(translation);
     }
 }
