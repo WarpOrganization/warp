@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -18,7 +17,7 @@ public class SyncEngineThreadTest {
         Timer timer = mock(Timer.class);
         when(timer.getDelta()).thenReturn(0L);
         doNothing().when(timer).await();
-        ScheduledExecutorStrategy strategy = mock(ScheduledExecutorStrategy.class);
+        ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
         doNothing().when(strategy).execute(any());
 
         SyncEngineThread engineThread = new SyncEngineThread(timer, strategy);
@@ -33,7 +32,7 @@ public class SyncEngineThreadTest {
         Timer timer = mock(Timer.class);
         when(timer.getDelta()).thenReturn(42L);
         doNothing().when(timer).await();
-        ScheduledExecutorStrategy strategy = mock(ScheduledExecutorStrategy.class);
+        ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
         doNothing().when(strategy).execute(any());
 
         SyncEngineThread engineThread = new SyncEngineThread(timer, strategy);
@@ -48,7 +47,7 @@ public class SyncEngineThreadTest {
         Timer timer = mock(Timer.class);
         when(timer.getDelta()).thenReturn(42L);
         doNothing().when(timer).await();
-        ScheduledExecutorStrategy strategy = new RapidExecutorStrategy();
+        ScheduledExecutionStrategy strategy = new RapidExecutionStrategy();
 
         SyncEngineThread engineThread = new SyncEngineThread(timer, strategy);
         Runnable runnable = mock(Runnable.class);
@@ -62,7 +61,7 @@ public class SyncEngineThreadTest {
         Timer timer = mock(Timer.class);
         when(timer.getDelta()).thenReturn(0L);
         doNothing().when(timer).await();
-        ScheduledExecutorStrategy strategy = mock(ScheduledExecutorStrategy.class);
+        ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
         doNothing().when(strategy).execute(any());
 
         AtomicBoolean flag = new AtomicBoolean();

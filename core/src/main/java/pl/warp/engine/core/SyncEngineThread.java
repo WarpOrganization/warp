@@ -14,12 +14,12 @@ public class SyncEngineThread implements EngineThread {
     private List<EngineTask> tasks = new ArrayList<>();
     private Queue<Runnable> scheduledRunnables = new ConcurrentLinkedQueue<>();
     private Timer timer;
-    private ScheduledExecutorStrategy executorStrategy;
+    private ScheduledExecutionStrategy executionStrategy;
     private boolean running;
 
-    public SyncEngineThread(Timer timer, ScheduledExecutorStrategy executorStrategy) {
+    public SyncEngineThread(Timer timer, ScheduledExecutionStrategy executionStrategy) {
         this.timer = timer;
-        this.executorStrategy = executorStrategy;
+        this.executionStrategy = executionStrategy;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SyncEngineThread implements EngineThread {
         long delta = timer.getDelta();
         for (EngineTask task : tasks)
             task.update(delta);
-        executorStrategy.execute(scheduledRunnables);
+        executionStrategy.execute(scheduledRunnables);
         timer.await();
     }
 
