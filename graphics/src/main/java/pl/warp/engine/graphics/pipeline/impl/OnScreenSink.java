@@ -23,5 +23,6 @@ public class OnScreenSink implements Sink<Texture2D> {
     @Override
     public void update() {
         //TODO
+        throw new UnsupportedOperationException();
     }
 }
