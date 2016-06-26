@@ -9,6 +9,7 @@ import java.util.Set;
  *         Created 2016-06-26 at 21
  */
 public class ScriptContext {
+
     private Set<Script<?>> scripts;
 
     public void addScript(Script<?> script) {

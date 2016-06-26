@@ -7,15 +7,16 @@ import pl.warp.engine.core.EngineContext;
  *         Created 2016-06-26 at 15
  */
 public abstract class Script<T extends Component> {
+
     private T owner = null;
     private EngineContext context = null;
+    private boolean initialized;
 
     public Script(T owner) {
         this.owner = owner;
         this.context = owner.getContext();
         owner.addScript(this);
         context.getScriptContext().addScript(this);
-        onInit();
     }
 
     public T getOwner() {
@@ -24,6 +25,14 @@ public abstract class Script<T extends Component> {
 
     protected EngineContext getContext() {
         return context;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    public void setInitialized(boolean initialized) {
+        this.initialized = initialized;
     }
 
     public abstract void onInit();

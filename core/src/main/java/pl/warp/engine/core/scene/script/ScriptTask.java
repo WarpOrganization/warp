@@ -1,6 +1,7 @@
 package pl.warp.engine.core.scene.script;
 
 import pl.warp.engine.core.EngineTask;
+import pl.warp.engine.core.scene.Script;
 
 /**
  * @author Jaca777
@@ -16,7 +17,13 @@ public class ScriptTask extends EngineTask {
 
     @Override
     protected void onInit() {
-
+        context.getScripts().forEach(s -> {
+            if (s.isInitialized())
+                throw new IllegalStateException("Unable to initialize script - script has already been initialized." +
+                        " There can be only one script task per context.");
+            s.onInit();
+            s.setInitialized(true);
+        });
     }
 
     @Override
@@ -26,6 +33,15 @@ public class ScriptTask extends EngineTask {
 
     @Override
     public void update(long delta) {
-        context.getScripts().forEach(s -> s.onUpdate(delta));
+        context.getScripts().forEach(s -> {
+            if (!s.isInitialized())
+                initialize(s);
+            s.onUpdate(delta);
+        });
+    }
+
+    private void initialize(Script<?> s) {
+        s.onInit();
+        s.setInitialized(true);
     }
 }
