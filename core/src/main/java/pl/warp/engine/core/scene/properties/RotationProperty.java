@@ -54,11 +54,6 @@ public class RotationProperty implements Property {
     }
 
     @Override
-    public String getName() {
-        return "RotationProperty";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

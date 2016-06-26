@@ -22,10 +22,6 @@ public class TranslationProperty implements Property {
         this.translation.add(translation);
     }
 
-    @Override
-    public String getName() {
-        return "TranslationProperty";
-    }
 
     @Override
     public boolean equals(Object o) {
