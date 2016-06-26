@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Created by Hubertus on 2016-06-26.
  */
-public class CapsuleColliderProperty implements Property {
+public class CapsuleColliderProperty extends Property {
     private double x;
     private double z;
 

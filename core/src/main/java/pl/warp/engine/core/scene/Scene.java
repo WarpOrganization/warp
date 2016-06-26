@@ -7,5 +7,8 @@ import org.joml.Vector3d;
  *         Created 2016-06-25 at 16
  */
 public class Scene {
-
+    public Component getComponentByName(String name) {
+        //TODO
+        throw new UnsupportedOperationException();
+    }
 }

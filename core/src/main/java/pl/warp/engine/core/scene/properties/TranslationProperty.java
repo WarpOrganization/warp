@@ -5,7 +5,7 @@ import pl.warp.engine.core.scene.Property;
 
 import java.util.Objects;
 
-public class TranslationProperty implements Property {
+public class TranslationProperty extends Property {
 
     private Vector3f translation;
 

@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.graphics.window.Display;
+import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.graphics.window.WindowManager;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -41,5 +42,9 @@ public class RenderingTask extends EngineTask {
     public void update(long delta) {
         //TODO
         throw new UnsupportedOperationException();
+    }
+    public static void main(String... args) {
+        RenderingTask task = new RenderingTask(new Display(512, 512), new GLFWWindowManager());
+        task.onInit();
     }
 }

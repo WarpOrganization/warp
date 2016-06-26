@@ -1,11 +1,12 @@
 package pl.warp.engine.core.scene.properties;
 
 import org.joml.Vector3f;
+import pl.warp.engine.core.scene.Property;
 
 /**
  * Created by Hubertus on 2016-06-26.
  */
-public class ScaleProperty {
+public class ScaleProperty extends Property {
 
     private Vector3f scale;
 
@@ -20,6 +21,6 @@ public class ScaleProperty {
     }
 
     public void scale(Vector3f value){
-        this.scale.add(value);
+        this.scale.mul(value);
     }
 }

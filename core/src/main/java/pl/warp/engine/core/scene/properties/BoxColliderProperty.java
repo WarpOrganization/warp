@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Created by Hubertus on 2016-06-26.
  */
-public class BoxColliderProperty implements Property {
+public class BoxColliderProperty extends Property {
 
     private double height;
     private double width;

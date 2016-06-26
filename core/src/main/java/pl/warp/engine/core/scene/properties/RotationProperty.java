@@ -4,7 +4,7 @@ import pl.warp.engine.core.scene.Property;
 
 import java.util.Objects;
 
-public class RotationProperty implements Property {
+public class RotationProperty extends Property {
     private double pitch;
     private double yaw;
     private double roll;
