@@ -1,6 +1,8 @@
 package pl.warp.engine.core.scene.properties;
 
-public class RotationProperty {
+import pl.warp.engine.core.scene.Property;
+
+public class RotationProperty implements Property {
     private double pitch;
     private double yaw;
     private double roll;
@@ -47,5 +49,10 @@ public class RotationProperty {
 
     public void addYaw(double value) {
         yaw += value;
+    }
+
+    @Override
+    public String getName() {
+        return "RotationProperty";
     }
 }
