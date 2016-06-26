@@ -1,6 +1,7 @@
 package pl.warp.engine.core;
 
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.script.ScriptContext;
 
 /**
  * @author Jaca777
@@ -8,4 +9,5 @@ import pl.warp.engine.core.scene.Scene;
  */
 public interface EngineContext {
     Scene getScene();
+    ScriptContext getScriptContext();
 }

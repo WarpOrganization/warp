@@ -9,8 +9,9 @@ import pl.warp.engine.core.EngineContext;
 public interface Component {
     <T extends Property> T getProperty(Class<T> c);
     <T extends Property> boolean hasProperty(Class<T> c);
-    void addProperty(Property property);
+    void addProperty(Property<?> property);
     void addScript(Script<?> script);
+    void addListener(Listener<?, ?> listener);
     Component getParent();
     EngineContext getContext();
 }

@@ -1,15 +1,17 @@
 package pl.warp.engine.core.scene.properties;
 
 import org.joml.Vector3f;
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 import java.util.Objects;
 
-public class TranslationProperty extends Property {
+public class TranslationProperty extends Property<Component> {
 
     private Vector3f translation;
 
-    public TranslationProperty(Vector3f translation) {
+    public TranslationProperty(Component owner, Vector3f translation) {
+        super(owner);
         this.translation = translation;
     }
 

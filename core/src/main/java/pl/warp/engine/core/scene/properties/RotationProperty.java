@@ -1,16 +1,17 @@
 package pl.warp.engine.core.scene.properties;
 
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 import java.util.Objects;
 
-public class RotationProperty extends Property {
+public class RotationProperty extends Property<Component> {
     private double pitch;
     private double yaw;
     private double roll;
 
-    public RotationProperty(double pitch, double yaw, double roll) {
-
+    public RotationProperty(Component owner, double pitch, double yaw, double roll) {
+        super(owner);
         this.pitch = pitch;
         this.yaw = yaw;
         this.roll = roll;

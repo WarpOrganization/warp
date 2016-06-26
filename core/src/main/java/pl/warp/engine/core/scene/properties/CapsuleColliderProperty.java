@@ -1,5 +1,6 @@
 package pl.warp.engine.core.scene.properties;
 
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 import java.util.Objects;
@@ -7,11 +8,12 @@ import java.util.Objects;
 /**
  * Created by Hubertus on 2016-06-26.
  */
-public class CapsuleColliderProperty extends Property {
+public class CapsuleColliderProperty extends Property<Component> {
     private double x;
     private double z;
 
-    public CapsuleColliderProperty(double x, double z) {
+    public CapsuleColliderProperty(Component owner, double x, double z) {
+        super(owner);
         this.x = x;
         this.z = z;
     }

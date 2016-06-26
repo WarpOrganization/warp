@@ -1,25 +1,25 @@
 package pl.warp.engine.core.scene;
 
 import pl.warp.engine.core.EngineContext;
-import pl.warp.engine.core.scene.Component;
 
 /**
  * @author Jaca777
  *         Created 2016-06-26 at 15
  */
 public abstract class Script<T extends Component> {
-    private T component = null;
+    private T owner = null;
     private EngineContext context = null;
 
-    public Script(T component) {
-        this.component = component;
-        this.context = component.getContext();
-        component.addScript(this);
+    public Script(T owner) {
+        this.owner = owner;
+        this.context = owner.getContext();
+        owner.addScript(this);
+        context.getScriptContext().addScript(this);
         onInit();
     }
 
-    public T getComponent() {
-        return component;
+    public T getOwner() {
+        return owner;
     }
 
     protected EngineContext getContext() {
