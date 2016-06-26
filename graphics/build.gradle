@@ -10,6 +10,7 @@ repositories {
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    compile group: 'org.lwjgl', name: 'lwjgl', version: '3.0.0'
     compile project(':core')
 
     testCompile 'junit:junit:4.12'

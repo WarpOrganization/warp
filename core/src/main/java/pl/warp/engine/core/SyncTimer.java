@@ -17,11 +17,11 @@ public class SyncTimer implements Timer {
     }
 
     public void await() {
-        recalculateDelta();
+        recalcDelta();
         sync.sync(ups);
     }
 
-    private void recalculateDelta() {
+    private void recalcDelta() {
         long time = System.currentTimeMillis();
         this.delta = time - this.lastUpdate;
         this.lastUpdate = time;

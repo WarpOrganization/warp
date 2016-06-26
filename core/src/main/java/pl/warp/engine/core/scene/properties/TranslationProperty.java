@@ -7,7 +7,6 @@ public class TranslationProperty {
     private Vector3f translation;
 
     public TranslationProperty(Vector3f translation) {
-
         this.translation = translation;
     }
 

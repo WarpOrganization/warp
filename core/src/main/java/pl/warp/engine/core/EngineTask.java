@@ -16,11 +16,19 @@ public abstract class EngineTask {
         initialized = true;
     }
 
+    void close() {
+        if(!initialized) throw new TaskNotInitializedException();
+        onClose();
+        initialized = false;
+    }
+
     public boolean isInitialized() {
         return initialized;
     }
 
     protected abstract void onInit();
+
+    protected abstract void onClose();
 
     public abstract void update(long delta);
 }
