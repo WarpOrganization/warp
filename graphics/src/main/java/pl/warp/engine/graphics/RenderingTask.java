@@ -40,6 +40,6 @@ public class RenderingTask extends EngineTask {
 
     @Override
     public void update(long delta) {
-        //TODO
+        System.out.println("a");
     }
 }

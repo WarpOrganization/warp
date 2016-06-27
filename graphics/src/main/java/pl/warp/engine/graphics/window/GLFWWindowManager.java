@@ -17,6 +17,11 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class GLFWWindowManager implements WindowManager {
 
     private long windowHandle;
+    private Runnable closeCallback;
+
+    public GLFWWindowManager(Runnable closeCallback) {
+        this.closeCallback = closeCallback;
+    }
 
     public void makeWindow(Display display) {
         setErrorCallback(System.err);
@@ -36,6 +41,7 @@ public class GLFWWindowManager implements WindowManager {
     }
 
     private GLFWErrorCallback setErrorCallback(PrintStream errorCallback) {
+        GLFWErrorCallback.createPrint(errorCallback).set();
         return GLFWErrorCallback.createPrint(errorCallback).set();
     }
 
@@ -51,8 +57,10 @@ public class GLFWWindowManager implements WindowManager {
 
     private void enableCloseKeyCallback() {
         glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(window, true);
+                closeCallback.run();
+            }
         });
     }
 

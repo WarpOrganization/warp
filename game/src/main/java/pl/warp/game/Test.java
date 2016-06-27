@@ -14,8 +14,8 @@ import pl.warp.engine.graphics.window.GLFWWindowManager;
  */
 public class Test {
     public static void main(String... args) {
-        EngineThread thread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        thread.scheduleTask(new RenderingTask(new Display(512, 512), new GLFWWindowManager()));
+        EngineThread thread = new SyncEngineThread(new SyncTimer(1), new RapidExecutionStrategy());
+        thread.scheduleTask(new RenderingTask(new Display(512, 512), new GLFWWindowManager(thread::interrupt)));
         thread.start();
     }
 }
