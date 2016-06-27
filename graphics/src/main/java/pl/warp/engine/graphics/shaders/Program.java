@@ -22,11 +22,15 @@ public abstract class Program {
 
     private final int program;
 
-    public Program(InputStream vertexShader, InputStream fragmentShader, String[] outNames) throws IOException {
-        int vS = ShaderUtil.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
-        int fS = ShaderUtil.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
-        this.program = ShaderUtil.createProgram(vS, fS, outNames);
-        GL20.glUseProgram(this.program);
+    public Program(InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
+        try {
+            int vS = ShaderUtil.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
+            int fS = ShaderUtil.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
+            this.program = ShaderUtil.createProgram(vS, fS, outNames);
+            GL20.glUseProgram(this.program);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Program(String vertexSource, String fragmentSource, String[] outNames) {
@@ -50,6 +54,7 @@ public abstract class Program {
 
     /**
      * Binds the texture to the given sampler.
+     *
      * @param texture Texture to bind.
      * @param sampler Sampler offset to bind the texture to.
      */
@@ -58,7 +63,7 @@ public abstract class Program {
     }
 
     public void useTexture(int texture, int tType, int sampler) {
-        if(texture != -1) {
+        if (texture != -1) {
             GL13.glActiveTexture(GL13.GL_TEXTURE0 + sampler);
             GL11.glBindTexture(tType, texture);
         }
@@ -93,6 +98,7 @@ public abstract class Program {
     }
 
     private FloatBuffer tempBuff4 = BufferUtils.createFloatBuffer(16);
+
     public void setUniformMatrix4(int location, Matrix4f matrix) {
         GL20.glUniformMatrix4fv(location, false, matrix.get(tempBuff4));
     }
@@ -102,6 +108,7 @@ public abstract class Program {
     }
 
     private FloatBuffer tempBuff3 = BufferUtils.createFloatBuffer(9);
+
     public void setUniformMatrix3(int location, Matrix3f matrix) {
         GL20.glUniformMatrix3fv(location, false, matrix.get(tempBuff3));
     }
