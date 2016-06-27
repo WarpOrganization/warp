@@ -6,13 +6,19 @@ package pl.warp.engine.core.scene;
  */
 public abstract class Listener<T extends Component, U extends Event> {
     private T owner;
-    private Class<U> eventClass;
+    private int eventTypeId; //reflection is just too slow
 
-    public Listener(T owner, Class<U> eventClass) {
+    public Listener(T owner, int eventTypeId) {
         this.owner = owner;
-        this.eventClass = eventClass;
+        this.eventTypeId = eventTypeId;
         this.owner.addListener(this);
     }
+
+    public boolean isInterestedIn(Event event) {
+        return event.getTypeID() == eventTypeId;
+    }
+
+    public abstract boolean handle(U event);
 
     public T getOwner() {
         return owner;

@@ -5,4 +5,5 @@ package pl.warp.engine.core.scene;
  *         Created 2016-06-26 at 22
  */
 public interface Event {
+    int getTypeID();
 }
