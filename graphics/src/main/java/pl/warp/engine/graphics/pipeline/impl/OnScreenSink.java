@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.pipeline.impl;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.MeshUtil;
 import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.shader.IdentityProgram;
@@ -36,7 +37,7 @@ public class OnScreenSink implements Sink<Texture2D> {
     public void render() {
         identityProgram.use();
         identityProgram.useTexture(srcTexture, GL_TEXTURE_2D, 0);
-        GL30.glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glDisable(GL_DEPTH_TEST);
         GL30.glBindVertexArray(rectVAO);

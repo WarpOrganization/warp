@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL30.*;
  * @author Jaca777
  *         Created 07.04.15 at 19:55
  */
-public class MultisampleFramebuffer extends Framebuffer {
+public class MultisampleFramebuffer extends TextureFramebuffer {
 
     public MultisampleFramebuffer(MultisampleTexture2D destTex) {
         super(destTex, GL30.glGenFramebuffers(), GL30.glGenRenderbuffers());
@@ -28,7 +28,7 @@ public class MultisampleFramebuffer extends Framebuffer {
         GL30.glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this.depthBuff);
 
         int status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-        if(status != GL30.GL_FRAMEBUFFER_COMPLETE) throw new RuntimeException("Incomplete framebuffer: " + status);
+        if(status != GL30.GL_FRAMEBUFFER_COMPLETE) throw new FramebufferException("Incomplete framebuffer: " + status);
     }
 
     @Override
