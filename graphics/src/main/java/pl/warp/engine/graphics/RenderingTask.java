@@ -20,10 +20,12 @@ import static org.lwjgl.system.MemoryUtil.NULL;
  */
 public class RenderingTask extends EngineTask {
 
+    private EngineContext context;
     private Display display;
     private WindowManager windowManager;
 
-    public RenderingTask(Display display, WindowManager windowManager) {
+    public RenderingTask(EngineContext context, Display display, WindowManager windowManager) {
+        this.context = context;
         this.display = display;
         this.windowManager = windowManager;
     }

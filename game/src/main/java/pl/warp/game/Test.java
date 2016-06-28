@@ -1,9 +1,8 @@
 package pl.warp.game;
 
-import pl.warp.engine.core.EngineThread;
-import pl.warp.engine.core.RapidExecutionStrategy;
-import pl.warp.engine.core.SyncEngineThread;
-import pl.warp.engine.core.SyncTimer;
+import pl.warp.engine.core.*;
+import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.script.ScriptContext;
 import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
@@ -14,8 +13,21 @@ import pl.warp.engine.graphics.window.GLFWWindowManager;
  */
 public class Test {
     public static void main(String... args) {
+        EngineContext c = new EngineContext() {
+            @Override
+            public Scene getScene() {
+                //TODO
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ScriptContext getScriptContext() {
+                //TODO
+                throw new UnsupportedOperationException();
+            }
+        };
         EngineThread thread = new SyncEngineThread(new SyncTimer(1), new RapidExecutionStrategy());
-        thread.scheduleTask(new RenderingTask(new Display(512, 512), new GLFWWindowManager(thread::interrupt)));
+        thread.scheduleTask(new RenderingTask(c, new Display(512, 512), new GLFWWindowManager(thread::interrupt)));
         thread.start();
     }
 }
