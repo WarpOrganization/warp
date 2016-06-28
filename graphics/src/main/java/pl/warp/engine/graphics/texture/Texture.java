@@ -65,6 +65,10 @@ public abstract class Texture {
         GL11.glBindTexture(this.type, this.texture);
     }
 
+    public void unbind() {
+        GL11.glBindTexture(this.type, 0);
+    }
+
     public void delete() {
         GL11.glDeleteTextures(texture);
     }

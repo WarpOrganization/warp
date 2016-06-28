@@ -7,6 +7,9 @@ import pl.warp.engine.graphics.texture.Texture;
 
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+
 
 /**
  * @author Jaca777
@@ -18,7 +21,7 @@ public class Texture2D extends Texture {
     }
 
     public Texture2D(int width, int height, int internalFormat, int format, boolean mipmap, ByteBuffer data) {
-        super(GL11.GL_TEXTURE_2D, TextureUtil.genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), width, height, internalFormat, format, mipmap);
+        super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), width, height, internalFormat, format, mipmap);
         enableDefaultParams();
     }
 
@@ -41,9 +44,17 @@ public class Texture2D extends Texture {
         this.height = src.height;
         this.width = src.width;
         this.mipmap = src.mipmap;
-        GL11.glBindTexture(this.type, this.texture);
+        bind();
         GL11.glTexImage2D(this.type, 0, this.getInternalformat(), this.getWidth(), this.getHeight(), 0, this.getFormat(), GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
         GL43.glCopyImageSubData(src.getTexture(), src.getType(), 0, 0, 0, 0, this.texture, this.type, 0, 0, 0, 0, src.getWidth(), src.getHeight(), 1);
         if(mipmap) genMipmap();
+    }
+
+    private static int genTexture2D(int target, int internalformat, int format, int width, int height, boolean mipmap, ByteBuffer data) {
+        int texture = glGenTextures();
+        glBindTexture(target, texture);
+        glTexImage2D(target, 0, internalformat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        if (mipmap) glGenerateMipmap(target);
+        return texture;
     }
 }

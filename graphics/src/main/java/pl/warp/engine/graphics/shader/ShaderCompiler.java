@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.shader;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL30;
 
 import static org.lwjgl.opengl.GL20.*;
@@ -8,9 +9,9 @@ import static org.lwjgl.opengl.GL20.*;
  * @author Jaca777
  *         Created 12.11.14 at 20:42
  */
-public class ShaderUtil {
+public class ShaderCompiler {
 
-    public static final String SUCCESS_LOG = "Success!";
+    private static Logger logger = Logger.getLogger("ShaderCompiler");
 
     /**
      * @param type       Type of the shader.
@@ -23,8 +24,11 @@ public class ShaderUtil {
         glCompileShader(shader);
 
         String log = glGetShaderInfoLog(shader, 65536); //Can either be empty, or contain a message (even if operation was successful).
-        if (log.isEmpty()) log = SUCCESS_LOG;
-        System.out.println("Shader name: " + shader + " - " + log);
+        if (log.isEmpty()) logger.info("Shader " + shader + " successfully compiled.");
+        else {
+            logger.error("Failed to compile shader " + shader + ". Cause: " + log);
+            throw new ShaderCompilationException(log);
+        }
         return shader;
     }
 
@@ -45,8 +49,11 @@ public class ShaderUtil {
         }
         glLinkProgram(program);
         String log = glGetProgramInfoLog(program, glGetProgrami(program, GL_INFO_LOG_LENGTH));
-        if (log.isEmpty()) log = SUCCESS_LOG;
-        System.out.println("Program name: " + program + " - " + log);
+        if (log.isEmpty()) logger.info("Program " + program + " successfully linked.");
+        else {
+            logger.error("Failed to link program " + program + ". Cause: " + log);
+            throw new ShaderCompilationException(log);
+        }
         return program;
     }
 

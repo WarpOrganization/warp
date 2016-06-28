@@ -24,9 +24,9 @@ public abstract class Program {
 
     public Program(InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
         try {
-            int vS = ShaderUtil.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
-            int fS = ShaderUtil.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
-            this.program = ShaderUtil.createProgram(vS, fS, outNames);
+            int vS = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
+            int fS = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
+            this.program = ShaderCompiler.createProgram(vS, fS, outNames);
             GL20.glUseProgram(this.program);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -34,9 +34,9 @@ public abstract class Program {
     }
 
     public Program(String vertexSource, String fragmentSource, String[] outNames) {
-        int vS = ShaderUtil.compileShader(GL20.GL_VERTEX_SHADER, vertexSource);
-        int fS = ShaderUtil.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentSource);
-        this.program = ShaderUtil.createProgram(vS, fS, outNames);
+        int vS = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, vertexSource);
+        int fS = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentSource);
+        this.program = ShaderCompiler.createProgram(vS, fS, outNames);
         GL20.glUseProgram(this.program);
     }
 

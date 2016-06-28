@@ -7,9 +7,7 @@ import org.lwjgl.opengl.GL30;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
-import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
-import static org.lwjgl.opengl.GL12.glTexSubImage3D;
+import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
@@ -31,7 +29,7 @@ public class Texture2DArray extends Texture {
     }
 
     public Texture2DArray(int width, int height, int size, ByteBuffer[] data, int internalformat, int format) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, TextureUtil.genTexture2DArray(internalformat, format, width, height, size, data), width, height, internalformat, format, true);
+        super(GL30.GL_TEXTURE_2D_ARRAY, genTexture2DArray(internalformat, format, width, height, size, data), width, height, internalformat, format, true);
         GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -66,5 +64,16 @@ public class Texture2DArray extends Texture {
         this.width = w;
         this.height = h;
         this.size = size;
+    }
+
+    private static int genTexture2DArray(int internalformat, int format, int width, int height, int size, ByteBuffer[] data) {
+        int texture = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+        glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalformat, width, height, size, 0, format, GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        for (int i = 0; i < size; i++) {
+            glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, 1, format, GL_UNSIGNED_BYTE, data[i]);
+        }
+        glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+        return texture;
     }
 }
