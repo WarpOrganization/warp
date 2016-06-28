@@ -1,10 +1,6 @@
-package pl.warp.engine.graphics.shaders;
+package pl.warp.engine.graphics.shader;
 
-import com.google.common.io.CharStreams;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-
-import java.io.*;
 
 import static org.lwjgl.opengl.GL20.*;
 

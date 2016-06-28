@@ -1,6 +1,5 @@
-package pl.warp.engine.graphics.shaders;
+package pl.warp.engine.graphics.shader;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

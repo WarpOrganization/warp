@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.shaders;
+package pl.warp.engine.graphics.shader;
 
 import com.google.common.io.CharStreams;
 import org.joml.Matrix3f;
