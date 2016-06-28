@@ -1,7 +1,8 @@
 package pl.warp.engine.core.scene;
 
-import org.joml.Vector3d;
 import pl.warp.engine.core.EngineContext;
+
+import java.util.Set;
 
 /**
  * @author Jaca777
@@ -17,9 +18,10 @@ public class Scene {
         this.root = root;
     }
 
-    public Component getComponentByName(String name) {
-        return root.getChildByName(name); //TODO tags? Name is not a good idea.
+    public Set<Component> getComponentsWithTag(String tag) {
+        return root.getChildrenWithTag(tag);
     }
+
 
     public EngineContext getContext() {
         return context;

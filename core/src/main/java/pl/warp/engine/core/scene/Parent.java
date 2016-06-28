@@ -1,6 +1,5 @@
 package pl.warp.engine.core.scene;
 
-import com.google.common.collect.Lists;
 import pl.warp.engine.core.EngineContext;
 
 import java.util.List;
@@ -24,7 +23,18 @@ public abstract class Parent extends Component {
 
     public abstract List<Component> getChildren();
 
-    public abstract Component getChildByName(String name);
+    public Set<Component> getChildrenWithTag(String tag) {
+        Stream<Component> childrenOfChildrenWithTag = getChildren().stream()
+                .filter(c -> c instanceof Parent)
+                .map(c -> (Parent) c)
+                .flatMap(p -> p.getChildrenWithTag(tag).stream());
+        Stream<Component> childrenWithTag = getChildren().stream()
+                .filter(c -> c.hasTag(tag));
+        Stream<Component> allChildrenWithTag = Stream.concat(
+                childrenOfChildrenWithTag,
+                childrenWithTag);
+        return allChildrenWithTag.collect(Collectors.toSet());
+    }
 
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()

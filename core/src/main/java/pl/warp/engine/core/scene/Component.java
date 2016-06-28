@@ -17,6 +17,7 @@ public abstract class Component {
     private EngineContext context;
     private Map<Class<? extends Property>, Property> properties = new HashMap<>();
     private Set<Listener> listeners = new HashSet<>();
+    private Set<String> tags = new HashSet<>();
 
     public Component(Parent parent) {
         this.parent = parent;
@@ -44,7 +45,7 @@ public abstract class Component {
     }
 
     public Component getParent() {
-        if (parent == null) throw new IllegalStateException("Component has no parent");
+        if (parent == null) throw new IllegalStateException("This component has no parent");
         return parent;
     }
 
@@ -54,6 +55,14 @@ public abstract class Component {
 
     public EngineContext getContext() {
         return context;
+    }
+
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+
+    public boolean hasTag(String tag) {
+        return tags.contains(tag);
     }
 
     void addProperty(Property<?> property) {
