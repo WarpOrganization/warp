@@ -24,6 +24,8 @@ public abstract class Parent extends Component {
 
     public abstract List<Component> getChildren();
 
+    public abstract Component getChildByName(String name);
+
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()
                 .filter(c -> c instanceof Parent)
