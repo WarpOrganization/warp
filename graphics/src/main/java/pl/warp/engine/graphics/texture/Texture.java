@@ -1,10 +1,13 @@
 package pl.warp.engine.graphics.texture;
 
+import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 /**
@@ -30,9 +33,20 @@ public abstract class Texture {
         this.mipmap = mipmap;
     }
 
-    public void setAnisotropy(boolean anisotropy) {
-        if(anisotropy) TextureUtil.enableAnisotropy(this.type, this.texture);
-        else TextureUtil.disableAnisotropy(this.type);
+    public void enableAnisotropy(int level) {
+        if (isAnisotropySupported())
+            glTexParameteri(type, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
+        else throw new RuntimeException("Anisotropic filtering is not supported.");
+    }
+
+    public void disableAnisotropy() {
+        if (isAnisotropySupported())
+            glTexParameteri(type, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 0);
+        else throw new RuntimeException("Anisotropic filtering is not supported.");
+    }
+
+    private static boolean isAnisotropySupported() {
+        return GL.getCapabilities().GL_EXT_texture_filter_anisotropic;
     }
 
     public void resize(int w, int h) {

@@ -8,7 +8,10 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL12.glTexImage3D;
+import static org.lwjgl.opengl.GL12.glTexSubImage3D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
 import static org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
@@ -26,19 +29,25 @@ public class TextureUtil {
         return texture;
     }
 
-    public static void enableAnisotropy(int target, int level) {
-        if (isAnisotropySupported())
-            glTexParameteri(target, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
-        else throw new RuntimeException("Anisotropic filtering is not supported.");
+    public static int genCubemap(int internalformat, int format, int width, int height, ByteBuffer[] data) {
+        int texture = glGenTextures();
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+        for (int i = 0; i < 6; i++) {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalformat, width, height, 0,
+                    format, GL_UNSIGNED_BYTE, data[i]);
+        }
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+        return texture;
     }
 
-    public static void disableAnisotropy(int target) {
-        if (isAnisotropySupported())
-            glTexParameteri(target, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 0);
-        else throw new RuntimeException("Anisotropic filtering is not supported.");
-    }
-
-    public static boolean isAnisotropySupported() {
-        return GL.getCapabilities().GL_EXT_texture_filter_anisotropic;
+    public static int genTexture2DArray(int internalformat, int format, int width, int height, int size, ByteBuffer[] data) {
+        int texture = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+        glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalformat, width, height, size, 0, format, GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        for (int i = 0; i < size; i++) {
+            glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, 1, format, GL_UNSIGNED_BYTE, data[i]);
+        }
+        glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+        return texture;
     }
 }
