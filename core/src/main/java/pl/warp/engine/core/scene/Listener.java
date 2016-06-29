@@ -18,7 +18,7 @@ public abstract class Listener<T extends Component, U extends Event> {
         return event.getTypeID() == eventTypeId;
     }
 
-    public abstract boolean handle(U event);
+    public abstract void handle(U event);
 
     public T getOwner() {
         return owner;
