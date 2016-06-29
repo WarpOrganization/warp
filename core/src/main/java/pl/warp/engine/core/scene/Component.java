@@ -24,7 +24,6 @@ public abstract class Component {
     }
 
     public Component(EngineContext context) {
-        this.parent = null;
         this.context = context;
     }
 
@@ -96,16 +95,7 @@ public abstract class Component {
      * Works only with properties with default name.
      */
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
-        Stream<T> childrenOfChildrenProperties = getChildren().stream()
-                .filter(Component::hasChildren)
-                .flatMap(p -> p.getChildrenProperties(propertyClass).stream());
-        Stream<T> childrenProperties = getChildren().stream()
-                .filter(c -> c.hasProperty(propertyClass))
-                .map(c -> c.getProperty(propertyClass));
-        Stream<T> allChildrenProperties = Stream.concat(
-                childrenOfChildrenProperties,
-                childrenProperties);
-        return allChildrenProperties.collect(Collectors.toSet());
+        return getChildrenProperties(propertyClass.getName());
     }
 
     public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
