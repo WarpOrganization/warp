@@ -11,9 +11,9 @@ import java.util.Set;
 public class Scene {
 
     private EngineContext context;
-    private Parent root;
+    private Component root;
 
-    public Scene(EngineContext context, Parent root) {
+    public Scene(EngineContext context, Component root) {
         this.context = context;
         this.root = root;
     }
@@ -27,7 +27,7 @@ public class Scene {
         return context;
     }
 
-    public Parent getRoot() {
+    public Component getRoot() {
         return root;
     }
 }

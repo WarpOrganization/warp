@@ -5,8 +5,10 @@ package pl.warp.engine.core.scene;
  *         Created 2016-06-25 at 18
  */
 public abstract class Property<T extends Component> {
+
     private T owner;
     private String name;
+    private boolean enabled;
 
     public Property(T owner) {
         this.owner = owner;
@@ -26,5 +28,17 @@ public abstract class Property<T extends Component> {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void enable() {
+        this.enabled = true;
+    }
+
+    public void disable() {
+        this.enabled = false;
     }
 }

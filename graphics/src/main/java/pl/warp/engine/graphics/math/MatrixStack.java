@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.math;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.graphics.utility.BufferTools;
 
@@ -54,7 +55,7 @@ public class MatrixStack {
         top--;
     }
 
-    private Vector3f temp = new Vector3f();
+    private Vector3f tempVector = new Vector3f();
 
     /**
      * Translates the topMatrix matrix of the stack.
@@ -63,8 +64,8 @@ public class MatrixStack {
      * @param z
      */
     public void translate(float x, float y, float z) {
-        temp.set(x,y,z);
-        matrixStack[top][MATRIX].translate(temp);
+        tempVector.set(x,y,z);
+        matrixStack[top][MATRIX].translate(tempVector);
     }
 
     /**
@@ -83,9 +84,14 @@ public class MatrixStack {
      * @param z
      */
     public void rotate(float rad, float x, float y, float z) {
-        temp.set(x,y,z);
-        matrixStack[top][MATRIX].rotate(rad, temp);
-        matrixStack[top][R_MATRIX].rotate(rad, temp);
+        tempVector.set(x,y,z);
+        matrixStack[top][MATRIX].rotate(rad, tempVector);
+        matrixStack[top][R_MATRIX].rotate(rad, tempVector);
+    }
+
+    public void rotate(Quaternionf quaternion) {
+        matrixStack[top][MATRIX].rotate(quaternion);
+        matrixStack[top][R_MATRIX].rotate(quaternion);
     }
 
     /**
@@ -95,8 +101,12 @@ public class MatrixStack {
      * @param z Z scale.
      */
     public void scale(float x, float y, float z) {
-        temp.set(x, y, z);
-        matrixStack[top][MATRIX].scale(temp);
+        tempVector.set(x, y, z);
+        matrixStack[top][MATRIX].scale(tempVector);
+    }
+
+    public void scale(Vector3f scale) {
+        matrixStack[top][MATRIX].scale(scale);
     }
 
     /**

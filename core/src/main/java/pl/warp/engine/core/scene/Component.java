@@ -3,6 +3,8 @@ package pl.warp.engine.core.scene;
 import pl.warp.engine.core.EngineContext;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Jaca777
@@ -10,13 +12,13 @@ import java.util.*;
  */
 public abstract class Component {
 
-    private Parent parent;
+    private Component parent;
     private EngineContext context;
     private Map<String, Property> properties = new HashMap<>();
     private Set<Listener> listeners = new HashSet<>();
     private Set<String> tags = new TreeSet<>();
 
-    public Component(Parent parent) {
+    public Component(Component parent) {
         this.parent = parent;
         this.context = parent.getContext();
     }
@@ -53,6 +55,22 @@ public abstract class Component {
         }
     }
 
+    public <T extends Event> void broadcastEvent(T event) {
+        if (hasParent()) parent.broadcastEvent(event);
+        else {
+            triggerEvent(event);
+            broadcastEventToChildren(event);
+        }
+    }
+
+    public <T extends Event> void broadcastEventToChildren(T event) {
+        if (hasChildren())
+            getChildren().forEach(child -> {
+                child.triggerEvent(event);
+                child.broadcastEventToChildren(event);
+            });
+    }
+
     public Component getParent() {
         if (parent == null) throw new IllegalStateException("This component has no parent");
         return parent;
@@ -61,6 +79,51 @@ public abstract class Component {
     public boolean hasParent() {
         return parent != null;
     }
+
+    public Set<Component> getChildrenWithTag(String tag) {
+        Stream<Component> childrenOfChildrenWithTag = getChildren().stream()
+                .filter(Component::hasChildren)
+                .flatMap(p -> p.getChildrenWithTag(tag).stream());
+        Stream<Component> childrenWithTag = getChildren().stream()
+                .filter(c -> c.hasTag(tag));
+        Stream<Component> allChildrenWithTag = Stream.concat(
+                childrenOfChildrenWithTag,
+                childrenWithTag);
+        return allChildrenWithTag.collect(Collectors.toSet());
+    }
+
+    /**
+     * Works only with properties with default name.
+     */
+    public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
+        Stream<T> childrenOfChildrenProperties = getChildren().stream()
+                .filter(Component::hasChildren)
+                .flatMap(p -> p.getChildrenProperties(propertyClass).stream());
+        Stream<T> childrenProperties = getChildren().stream()
+                .filter(c -> c.hasProperty(propertyClass))
+                .map(c -> c.getProperty(propertyClass));
+        Stream<T> allChildrenProperties = Stream.concat(
+                childrenOfChildrenProperties,
+                childrenProperties);
+        return allChildrenProperties.collect(Collectors.toSet());
+    }
+
+    public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
+        Stream<T> childrenOfChildrenProperties = getChildren().stream()
+                .filter(Component::hasChildren)
+                .flatMap(p -> p.<T>getChildrenProperties(propertyName).stream());
+        Stream<T> childrenProperties = getChildren().stream()
+                .filter(c -> c.hasProperty(propertyName))
+                .map(c -> c.getProperty(propertyName));
+        Stream<T> allChildrenProperties = Stream.concat(
+                childrenOfChildrenProperties,
+                childrenProperties);
+        return allChildrenProperties.collect(Collectors.toSet());
+    }
+
+    public abstract List<Component> getChildren();
+
+    public abstract boolean hasChildren();
 
     public EngineContext getContext() {
         return context;

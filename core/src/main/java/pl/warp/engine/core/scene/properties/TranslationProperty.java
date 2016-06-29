@@ -8,6 +8,8 @@ import java.util.Objects;
 
 public class TranslationProperty extends Property<Component> {
 
+    public static final String TRANSLATION_PROPERTY_NAME = "translation";
+
     private Vector3f translation;
 
     public TranslationProperty(Component owner, Vector3f translation) {

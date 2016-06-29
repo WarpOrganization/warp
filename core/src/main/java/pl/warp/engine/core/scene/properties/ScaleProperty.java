@@ -9,6 +9,8 @@ import pl.warp.engine.core.scene.Property;
  */
 public class ScaleProperty extends Property<Component> {
 
+    public static final String SCALE_PROPERTY_NAME = "scale";
+
     private Vector3f scale;
 
     public ScaleProperty(Component owner, Vector3f scale){
