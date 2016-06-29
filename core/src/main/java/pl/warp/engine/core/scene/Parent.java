@@ -36,6 +36,9 @@ public abstract class Parent extends Component {
         return allChildrenWithTag.collect(Collectors.toSet());
     }
 
+    /**
+     * Works only with properties with default name.
+     */
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()
                 .filter(c -> c instanceof Parent)
@@ -44,6 +47,20 @@ public abstract class Parent extends Component {
         Stream<T> childrenProperties = getChildren().stream()
                 .filter(c -> c.hasProperty(propertyClass))
                 .map(c -> c.getProperty(propertyClass));
+        Stream<T> allChildrenProperties = Stream.concat(
+                childrenOfChildrenProperties,
+                childrenProperties);
+        return allChildrenProperties.collect(Collectors.toSet());
+    }
+
+    public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
+        Stream<T> childrenOfChildrenProperties = getChildren().stream()
+                .filter(c -> c instanceof Parent)
+                .map(c -> (Parent) c)
+                .flatMap(p -> p.<T>getChildrenProperties(propertyName).stream());
+        Stream<T> childrenProperties = getChildren().stream()
+                .filter(c -> c.hasProperty(propertyName))
+                .map(c -> c.getProperty(propertyName));
         Stream<T> allChildrenProperties = Stream.concat(
                 childrenOfChildrenProperties,
                 childrenProperties);

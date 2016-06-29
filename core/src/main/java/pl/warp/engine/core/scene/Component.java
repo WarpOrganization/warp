@@ -2,10 +2,7 @@ package pl.warp.engine.core.scene;
 
 import pl.warp.engine.core.EngineContext;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Jaca777
@@ -15,9 +12,9 @@ public abstract class Component {
 
     private Parent parent;
     private EngineContext context;
-    private Map<Class<? extends Property>, Property> properties = new HashMap<>();
+    private Map<String, Property> properties = new HashMap<>();
     private Set<Listener> listeners = new HashSet<>();
-    private Set<String> tags = new HashSet<>();
+    private Set<String> tags = new TreeSet<>();
 
     public Component(Parent parent) {
         this.parent = parent;
@@ -29,12 +26,24 @@ public abstract class Component {
         this.context = context;
     }
 
+    /**
+     * Works only with properties with default name.
+     */
     public <T extends Property> T getProperty(Class<T> c) {
-        return (T) properties.get(c);
+        return (T) properties.get(c.getName());
     }
 
     public <T extends Property> boolean hasProperty(Class<T> c) {
-        return properties.containsKey(c);
+        return properties.containsKey(c.getName());
+    }
+
+
+    public <T extends Property> T getProperty(String name) {
+        return (T) properties.get(name);
+    }
+
+    public boolean hasProperty(String name) {
+        return properties.containsKey(name);
     }
 
     public <T extends Event> void triggerEvent(T event) {
@@ -66,7 +75,7 @@ public abstract class Component {
     }
 
     void addProperty(Property<?> property) {
-        this.properties.put(property.getClass(), property);
+        this.properties.put(property.getName(), property);
     }
 
     void addListener(Listener<?, ?> listener) {
