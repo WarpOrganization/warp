@@ -95,6 +95,14 @@ public abstract class Component {
     }
 
     /**
+     * Triggers event on a a composite root.
+     */
+    public <T extends Event> void triggerOnRoot(T event) {
+        if (hasParent()) parent.triggerOnRoot(event);
+        else triggerEvent(event);
+    }
+
+    /**
      * @throws IllegalStateException if parent is not present
      */
     public Component getParent() {
