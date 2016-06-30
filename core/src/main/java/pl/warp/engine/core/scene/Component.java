@@ -172,11 +172,25 @@ public abstract class Component {
         return tags.contains(tag);
     }
 
+    /**
+     * Methods used by factory methods of properties and listeners.
+     * Makes it possible to introduce type safety.
+     */
+
     void addProperty(Property<?> property) {
         this.properties.put(property.getName(), property);
+    }
+
+    void removeProperty(Property<?> property) {
+        this.properties.remove(property.getName());
     }
 
     void addListener(Listener<?, ?> listener) {
         this.listeners.add(listener);
     }
+
+    void removeListener(Listener<?, ?> listener) {
+        this.listeners.remove(listener);
+    }
+
 }

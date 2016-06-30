@@ -1,12 +1,14 @@
 package pl.warp.engine.core.scene;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author Jaca777
  *         Created 2016-06-26 at 22
  */
 public abstract class Listener<T extends Component, U extends Event> {
+
     private T owner;
     private EventFilterStrategy filterStrategy;
 
@@ -16,11 +18,11 @@ public abstract class Listener<T extends Component, U extends Event> {
         this.owner.addListener(this);
     }
 
-    public Listener(T owner, String eventTypeName) {
+    protected Listener(T owner, String eventTypeName) {
         this(owner, new TypeNameBasedEventFilterStrategy(eventTypeName));
     }
 
-    public Listener(T owner, Class<U> eventClass) {
+    protected Listener(T owner, Class<U> eventClass) {
         this(owner, new TypeBasedEventFilterStrategy(eventClass));
     }
 
@@ -30,7 +32,12 @@ public abstract class Listener<T extends Component, U extends Event> {
 
     public abstract void handle(U event);
 
+    public void destroy() {
+        this.owner.removeListener(this);
+    }
+
     public T getOwner() {
         return owner;
     }
+
 }
