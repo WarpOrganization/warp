@@ -5,11 +5,17 @@ package pl.warp.engine.core.scene;
  *         Created 2016-06-26 at 22
  */
 public abstract class Event {
-    abstract int getTypeID();
+    private String typeName;
 
-    private static int typeCounter = 0;
+    public Event(String typeName) {
+        this.typeName = typeName;
+    }
 
-    public static int getNextEventTypeID() {
-        return typeCounter++;
+    public Event() {
+        this.typeName = getClass().getName();
+    }
+
+    public String getTypeName() {
+        return typeName;
     }
 }

@@ -1,21 +1,31 @@
 package pl.warp.engine.core.scene;
 
+import java.util.Objects;
+
 /**
  * @author Jaca777
  *         Created 2016-06-26 at 22
  */
 public abstract class Listener<T extends Component, U extends Event> {
     private T owner;
-    private int eventTypeId; //reflection is just too slow
+    private EventFilterStrategy filterStrategy;
 
-    public Listener(T owner, int eventTypeId) {
+    protected Listener(T owner, EventFilterStrategy filterStrategy) {
         this.owner = owner;
-        this.eventTypeId = eventTypeId;
+        this.filterStrategy = filterStrategy;
         this.owner.addListener(this);
     }
 
+    public Listener(T owner, String eventTypeName) {
+        this(owner, new TypeNameBasedEventFilterStrategy(eventTypeName));
+    }
+
+    public Listener(T owner, Class<U> eventClass) {
+        this(owner, new TypeBasedEventFilterStrategy(eventClass));
+    }
+
     public boolean isInterestedIn(Event event) {
-        return event.getTypeID() == eventTypeId;
+        return filterStrategy.apply(event);
     }
 
     public abstract void handle(U event);
