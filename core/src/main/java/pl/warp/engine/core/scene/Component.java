@@ -130,6 +130,7 @@ public abstract class Component {
      * Returns children's components of type T. Children of children are traversed as well (and so on).
      * It's a bit slower than {@link #getChildrenProperties(String)}.
      */
+    //Considered redundant
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()
                 .filter(Component::hasChildren)
@@ -143,6 +144,7 @@ public abstract class Component {
         return allChildrenProperties.collect(Collectors.toSet());
     }
 
+    //Considered redundant
     public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()
                 .filter(Component::hasChildren)
