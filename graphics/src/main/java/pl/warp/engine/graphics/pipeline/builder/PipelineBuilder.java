@@ -21,16 +21,16 @@ public class PipelineBuilder<T extends Texture> {
         this.lastElem = lastElem;
     }
 
+    public static <T extends Texture> PipelineBuilder<T> from(Source<T> source) {
+        return new PipelineBuilder<>(new PipelineElement[]{source}, source);
+    }
+
     public <O extends Texture> PipelineBuilder<O> via(Flow<T, O> flow) {
         return new PipelineBuilder<>(ArrayUtils.add(elements, flow), flow);
     }
 
     public Pipeline to(Sink<T> dest) {
         return new Pipeline(ArrayUtils.add(elements, dest));
-    }
-
-    public static <T extends Texture> PipelineBuilder from(Source<T> source) {
-        return new PipelineBuilder(new PipelineElement[]{source}, source);
     }
 
 }

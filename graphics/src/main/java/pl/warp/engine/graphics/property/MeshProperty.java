@@ -18,4 +18,8 @@ public class MeshProperty extends Property<Component> {
         super(owner, MESH_PROPERTY_NAME);
         this.mesh = mesh;
     }
+
+    public Mesh getMesh() {
+        return mesh;
+    }
 }

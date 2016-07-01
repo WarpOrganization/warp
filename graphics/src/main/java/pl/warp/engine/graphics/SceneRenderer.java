@@ -10,6 +10,7 @@ import pl.warp.engine.core.scene.properties.TranslationProperty;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.pipeline.Source;
+import pl.warp.engine.graphics.property.MeshProperty;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
 import static org.lwjgl.opengl.GL30.GL_MAX_SAMPLES;
@@ -25,10 +26,12 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private RenderingSettings settings;
     private MultisampleFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
+    private ComponentRenderer renderer;
 
-    public SceneRenderer(Scene scene, RenderingSettings settings) {
+    public SceneRenderer(Scene scene, RenderingSettings settings, ComponentRenderer renderer) {
         this.scene = scene;
         this.settings = settings;
+        this.renderer = renderer;
     }
 
     public Scene getScene() {
@@ -44,6 +47,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private void render(Component component) {
         applyTransformations(component);
+        renderer.render(component);
     }
 
     private void applyTransformations(Component component) { //Scale, then rotate, then translate
@@ -75,7 +79,6 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void setupFramebuffer() {
-        System.out.println(GL11.glGetInteger(GL_MAX_SAMPLES));
         this.outputTexture = new MultisampleTexture2D(settings.getWidth(), settings.getHeight(), GL_RGBA32F, settings.getRenderingSamples());
         this.renderingFramebuffer = new MultisampleFramebuffer(outputTexture);
     }
