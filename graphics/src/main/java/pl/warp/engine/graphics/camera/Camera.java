@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.camera;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
@@ -13,30 +14,23 @@ import java.util.List;
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public class Camera extends Component {
-    private Vector3f position;
-    private Quaternionf rotation = new Quaternionf();
-
-    public Camera(Component parent, Vector3f position) {
-        super(parent);
-        this.position = position;
-    }
+public abstract class Camera extends Component {
 
     public Camera(Component parent) {
-        this(parent, new Vector3f());
+        super(parent);
     }
 
-    public void move(Vector3f d) {
-        position.add(d);
-    }
+    public abstract void move(Vector3f v);
 
-    public void move(float dx, float dy, float dz) {
-        position.add(dx, dy, dz);
-    }
+    public abstract void move(float dx, float dy, float dz);
 
-    public void rotate(float angleXInRadians, float angleYInRadians, float angleZInRadians) {
-        rotation.rotate(angleXInRadians, angleYInRadians, angleZInRadians);
-    }
+    public abstract void rotate(float angleXInRadians, float angleYInRadians, float angleZInRadians);
+
+    public abstract Vector3f getPosition();
+
+    public abstract Matrix4f getCameraMatrix();
+
+    public abstract Matrix4f getProjectionMatrix();
 
     @Override
     public List<Component> getChildren() {
@@ -46,9 +40,5 @@ public class Camera extends Component {
     @Override
     public boolean hasChildren() {
         return false;
-    }
-
-    Quaternionf getRotation() {
-        return rotation;
     }
 }
