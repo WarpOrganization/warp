@@ -3,6 +3,7 @@ package pl.warp.engine.graphics.math;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 import pl.warp.engine.graphics.utility.BufferTools;
 
 import java.nio.FloatBuffer;
@@ -131,6 +132,10 @@ public class MatrixStack {
         return matrixStack[top][MATRIX];
     }
 
+    public void storeTopBuffer(FloatBuffer dest) {
+        matrixStack[top][MATRIX].get(dest);
+    }
+
     /**
      * @return A direct FloatBuffer containing a rotation matrix of the topMatrix matrix.
      */
@@ -143,6 +148,10 @@ public class MatrixStack {
      */
     public Matrix4f topRotationMatrix(){
         return matrixStack[top][R_MATRIX];
+    }
+
+    public void storeRotationBuffer(FloatBuffer dest) {
+        matrixStack[top][R_MATRIX].get(dest);
     }
 
     /**

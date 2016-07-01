@@ -13,6 +13,7 @@ public class Material {
 
     private Texture2D mainTexture;
     private Texture2D specularTexture;
+    private float brightness = 1.0f;
 
     public Material(Texture2D mainTexture) {
         this.mainTexture = mainTexture;
@@ -27,10 +28,6 @@ public class Material {
         this.mainTexture = mainTexture;
     }
 
-    public boolean hasMainTexutre() {
-        return true;
-    }
-
     public Texture2D getSpecularTexture() {
         return specularTexture;
     }
@@ -41,5 +38,13 @@ public class Material {
 
     public boolean hasSpecularTexture(){
         return specularTexture != null;
+    }
+
+    public float getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(float brightness) {
+        this.brightness = brightness;
     }
 }

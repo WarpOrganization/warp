@@ -1,7 +1,7 @@
 #version 430
 
-attribute vec4 inVertex;
-attribute vec2 inTexCoord; out vec2 vTexCoord;
+layout(location = 0) in vec4 inVertex;
+layout(location = 1) in vec2 inTexCoord; out vec2 vTexCoord;
 
 void main(void) {
     vTexCoord = inTexCoord;

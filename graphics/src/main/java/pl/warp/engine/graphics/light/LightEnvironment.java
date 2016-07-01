@@ -10,6 +10,8 @@ import java.util.List;
  *         Created 2016-06-30 at 13
  */
 public class LightEnvironment {
+
+    private boolean lightEnabled = true;
     private List<DirectionalSpotLight> directionalSpotLights = new ArrayList<>();
     private List<SpotLight> spotLights = new ArrayList<>();
 
@@ -39,5 +41,13 @@ public class LightEnvironment {
         if(!spotLights.remove(light))
             throw new RendererException("Unable to remove directional light: " +
                     "Given light is not present in the environment");
+    }
+
+    public boolean isLightEnabled() {
+        return lightEnabled;
+    }
+
+    public void setLightEnabled(boolean lightEnabled) {
+        this.lightEnabled = lightEnabled;
     }
 }

@@ -9,16 +9,16 @@ import org.joml.Vector3f;
 public class SpotLight {
     private Vector3f position;
     private Vector3f color, ambientColor;
-    private float gradient, ambientGradient;
-    private float factor, specularFactor;
+    private float attenuation, gradient;
+    private float specularFactor;
 
-    public SpotLight(Vector3f position, Vector3f color, float gradient, Vector3f ambientColor,  float ambientGradient, float factor, float specularFactor) {
+    public SpotLight(Vector3f position, Vector3f color, Vector3f ambientColor,
+                     float attenuation, float gradient, float specularFactor) {
         this.position = position;
         this.color = color;
         this.ambientColor = ambientColor;
+        this.attenuation = attenuation;
         this.gradient = gradient;
-        this.ambientGradient = ambientGradient;
-        this.factor = factor;
         this.specularFactor = specularFactor;
     }
 
@@ -46,28 +46,20 @@ public class SpotLight {
         this.ambientColor = ambientColor;
     }
 
+    public float getAttenuation() {
+        return attenuation;
+    }
+
+    public void setAttenuation(float attenuation) {
+        this.attenuation = attenuation;
+    }
+
     public float getGradient() {
         return gradient;
     }
 
     public void setGradient(float gradient) {
         this.gradient = gradient;
-    }
-
-    public float getAmbientGradient() {
-        return ambientGradient;
-    }
-
-    public void setAmbientGradient(float ambientGradient) {
-        this.ambientGradient = ambientGradient;
-    }
-
-    public float getFactor() {
-        return factor;
-    }
-
-    public void setFactor(float factor) {
-        this.factor = factor;
     }
 
     public float getSpecularFactor() {
