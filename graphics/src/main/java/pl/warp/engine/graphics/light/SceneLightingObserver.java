@@ -17,11 +17,11 @@ public class SceneLightingObserver {
 
     public SceneLightingObserver(Scene scene, LightEnvironment environment) {
         Component root = scene.getRoot();
+        this.lightEnvironment = environment;
         this.lightAddedEventListener =
                 SimpleListener.createListener(root, LightAddedEvent.LIGHT_ADDED_EVENT_NAME, this::handleLightAdded);
         this.lightRemovedEventListener =
                 SimpleListener.createListener(root, LightRemovedEvent.LIGHT_REMOVED_EVENT_NAME, this::handleLightRemoved);
-        this.lightEnvironment = environment;
 
     }
 
