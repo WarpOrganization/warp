@@ -11,6 +11,7 @@ import pl.warp.engine.graphics.math.MatrixStack;
  */
 public interface ComponentRendererProgram {
 
+
     int SPOT_LIGHT_POSITION = 0;
     int SPOT_LIGHT_COLOR = 1;
     int SPOT_LIGHT_AMBIENT_COLOR = 2;
@@ -27,6 +28,7 @@ public interface ComponentRendererProgram {
     int DIRECTIONAL_LIGHT_GRADIENT = 6;
     int DIRECTIONAL_LIGHT_SPECULAR_FACTOR = 7;
 
+    int[] ATTRIBUTES = {0, 1, 2}; //vertex, textureCoord, normal
     int ATTR_VERTEX_LOCATION = 0;
     int ATTR_TEXUTRE_COORD_LOCATION = 1;
     int ATTR_NORMAL_LOCATION = 2;

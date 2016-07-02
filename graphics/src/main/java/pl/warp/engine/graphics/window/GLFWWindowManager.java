@@ -50,7 +50,7 @@ public class GLFWWindowManager implements WindowManager {
     }
 
     private void createHandle(Display display) {
-        this.windowHandle = glfwCreateWindow(display.getWidth(), display.getWidth(), "Hello World!", NULL, NULL);
+        this.windowHandle = glfwCreateWindow(display.getWidth(), display.getWidth(), "Warp Engine Demo", NULL, NULL);
         if (this.windowHandle == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
     }
@@ -59,9 +59,11 @@ public class GLFWWindowManager implements WindowManager {
         glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(window, true);
+                closeWindow();
                 closeCallback.run();
             }
         });
+
     }
 
     private void makeOGLContext() {
@@ -93,6 +95,8 @@ public class GLFWWindowManager implements WindowManager {
         try {
             glfwFreeCallbacks(windowHandle);
             glfwDestroyWindow(windowHandle);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             glfwTerminate();
             glfwSetErrorCallback(null).free();

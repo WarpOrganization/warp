@@ -76,7 +76,7 @@ public class ImageDecoder {
             this.h = h;
         }
 
-        public ByteBuffer getBuffer() {
+        public ByteBuffer getData() {
             return buffer;
         }
 

@@ -15,4 +15,7 @@ public class SimpleComponent extends Component {
         super(context);
     }
 
+    public SimpleComponent(Component parent) {
+        super(parent);
+    }
 }
