@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.shader;
+package pl.warp.engine.graphics.shader.component.defaultprog;
 
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.DirectionalSpotLight;
@@ -6,6 +6,8 @@ import pl.warp.engine.graphics.light.LightEnvironment;
 import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
+import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.Program;
 
 import java.io.InputStream;
 import java.util.List;
@@ -59,8 +61,8 @@ public class DefaultComponentProgram extends Program implements ComponentRendere
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
-        this.unifMainTexture = getUniformLocation("mainTexture");
-        this.unifBrightness = getUniformLocation("brightness");
+        this.unifMainTexture = getUniformLocation("material.mainTexture");
+        this.unifBrightness = getUniformLocation("material.brightness");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
     }
 

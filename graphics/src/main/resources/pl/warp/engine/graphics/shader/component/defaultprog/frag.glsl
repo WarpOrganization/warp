@@ -13,7 +13,7 @@ struct SpotLightSource {
     float specularFactor;
 };
 
-struct DiretionalLightSource {
+struct DirectionalLightSource {
     vec3 position;
     vec3 direction;
     float directionGradient;
@@ -36,6 +36,7 @@ uniform SpotLightSource spotLightSources[MAX_SPOT_LIGHTS];
 uniform int numSpotLights;
 const int MAX_DIRECTIONAL_LIGHTS = 25;
 uniform DirectionalLightSource directionalLightSources[MAX_DIRECTIONAL_LIGHTS];
+uniform int numDirectionalLights;
 uniform bool lightEnabled = true;
 uniform float shininess = 1;
 
@@ -46,22 +47,20 @@ uniform vec3 cameraPos;
 //From vertex shader
 in vec3 vNormal;
 in vec3 vPos3;
-in vec3 vTexCoord;
+in vec2 vTexCoord;
 in vec3 vEyeDir;
 
 out vec4 fragColor;
 
+vec3 getSpotLight();
+vec3 getDirectionalLight();
 
 void main(void) {
     //Light and texturing
     if(lightEnabled) {
-        vec3 sumLight = getSpotLight() + getDirectionaLight();
-        fragColor = vec4(sumLight, 1) * texture(texture, vTexCoord);
+        vec3 sumLight = getSpotLight() + getDirectionalLight();
+        fragColor = vec4(sumLight, 1) * texture(material.mainTexture, vTexCoord);
     } else fragColor = texture(material.mainTexture, vTexCoord);
-
-    //Fog
-    float dist = length(cameraPos.xz - vPos3.xz);
-    fragColor.a *= clamp(exp(-pow((dist * fog.density), fog.gradient)), 0.0, 1.0);
 
     //Brightness
     fragColor.rgb *= material.brightness;
@@ -73,17 +72,19 @@ vec3 getDirectionalLight() {
 
 vec3 getSpotLight(){
     vec3 totalLight = vec3(0);
-    for(int i = 0; i < numLights; i++){
+    for(int i = 0; i < numSpotLights; i++){
+        SpotLightSource source = spotLightSources[i];
+
         //Attenuation
-        float distance = length(lights[i].position - vPos3);
-        float att = exp(-pow((distance * lights[i].attenuation), lights[i].gradient));
+        float distance = length(source.position - vPos3);
+        float att = exp(-pow((distance * source.attenuation), source.gradient));
         if(att < 0.01) continue;
 
         //Ambient
-        vec3 ambient = lights[i].ambientColor;
+        vec3 ambient = source.ambientColor;
 
         //Diffuse
-        vec3 lightDir = normalize(lights[i].position - vPos3);
+        vec3 lightDir = normalize(source.position - vPos3);
         float diff = max(0, dot(vNormal, lightDir));
 
         //Specular
@@ -96,7 +97,7 @@ vec3 getSpotLight(){
         }
 
         //Sum
-        totalLight += (((diff + specular) * lights[i].color) + ambient) * att;
+        totalLight += (((diff + specular) * source.color) + ambient) * att;
     }
     return totalLight;
 }

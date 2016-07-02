@@ -8,4 +8,5 @@ public interface WindowManager {
     void makeWindow(Display display);
     void closeWindow();
     void resize(int w, int h);
+    void updateWindow();
 }

@@ -104,4 +104,10 @@ public class GLFWWindowManager implements WindowManager {
         //TODO
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void updateWindow() {
+        glfwSwapBuffers(windowHandle);
+        glfwPollEvents();
+    }
 }

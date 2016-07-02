@@ -1,4 +1,6 @@
-package pl.warp.engine.graphics.shader;
+package pl.warp.engine.graphics.shader.identity;
+
+import pl.warp.engine.graphics.shader.Program;
 
 import java.io.InputStream;
 
@@ -28,5 +30,9 @@ public class IdentityProgram extends Program {
 
     public int getAttrTexCoord() {
         return attrTexCoord;
+    }
+
+    public void useTexture(int texture) {
+
     }
 }

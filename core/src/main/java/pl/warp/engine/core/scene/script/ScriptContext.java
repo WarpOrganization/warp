@@ -2,6 +2,7 @@ package pl.warp.engine.core.scene.script;
 
 import pl.warp.engine.core.scene.Script;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Set;
  */
 public class ScriptContext {
 
-    private Set<Script<?>> scripts;
+    private Set<Script<?>> scripts = new HashSet<>();
 
     public void addScript(Script<?> script) {
         scripts.add(script);

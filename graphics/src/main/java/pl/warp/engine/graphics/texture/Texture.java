@@ -17,19 +17,20 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 public abstract class Texture {
     protected int type,
             texture,
+            width,
+            height,
             internalformat,
             format;
-    protected int width,
-            height;
+
     protected boolean mipmap;
 
-    public Texture(int type, int texture, int internalformat, int format, int width, int height, boolean mipmap) {
+    public Texture(int type, int texture, int width, int height, int internalformat, int format, boolean mipmap) {
         this.type = type;
         this.texture = texture;
-        this.internalformat = internalformat;
-        this.format = format;
         this.width = width;
         this.height = height;
+        this.internalformat = internalformat;
+        this.format = format;
         this.mipmap = mipmap;
     }
 

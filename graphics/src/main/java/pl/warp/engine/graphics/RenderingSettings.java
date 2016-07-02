@@ -7,7 +7,12 @@ package pl.warp.engine.graphics;
 public class RenderingSettings {
     private boolean changed = false;
     private int width, height;
-    private int renderingSamples;
+    private int renderingSamples = 4;
+
+    public RenderingSettings(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
     void setChanged(boolean changed) {
         this.changed = changed;

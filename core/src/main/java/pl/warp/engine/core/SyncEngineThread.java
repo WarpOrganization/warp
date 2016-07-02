@@ -35,16 +35,14 @@ public class SyncEngineThread implements EngineThread {
 
     @Override
     public void start() {
-        tasks.stream()
-                .filter(task -> !task.isInitialized())
-                .forEach(EngineTask::init);
-        running = true;
-        startEngineThread();
+        Thread engineThread = new Thread(this::startEngine);
+        engineThread.start();
     }
 
-    private void startEngineThread() {
-        Thread engineThread = new Thread(this::loop);
-        engineThread.start();
+    private void startEngine() {
+        tasks.forEach(EngineTask::init);
+        running = true;
+        loop();
     }
 
     private void loop() {

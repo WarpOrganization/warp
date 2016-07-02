@@ -1,25 +1,20 @@
 package pl.warp.engine.graphics;
 
-import org.lwjgl.Version;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.graphics.window.WindowManager;
-
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
  * @author Jaca777
  *         Created 2016-06-25 at 21
  */
 public class RenderingTask extends EngineTask {
+
+    private static Logger logger = Logger.getLogger(RenderingTask.class);
 
     private EngineContext context;
     private Display display;
@@ -35,7 +30,19 @@ public class RenderingTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        logger.info("Initializing rendering task.");
         windowManager.makeWindow(display);
+        logger.info("Window created.");
+        createOpenGL();
+
+        logger.info("OpenGL capabilities created");
+        pipeline.init();
+        logger.info("Initialized pipeline.");
+    }
+
+    private void createOpenGL() {
+        GL.createCapabilities();
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     @Override
@@ -45,6 +52,12 @@ public class RenderingTask extends EngineTask {
 
     @Override
     public void update(long delta) {
-        pipeline.render();
+        cleanFrame();
+        pipeline.update(delta);
+        windowManager.updateWindow();
+    }
+
+    private void cleanFrame(){
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 }

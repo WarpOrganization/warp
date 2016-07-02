@@ -17,9 +17,11 @@ public abstract class Component {
     private Map<String, Property> properties = new TreeMap<>();
     private Set<Listener> listeners = new HashSet<>();
     private Set<String> tags = new TreeSet<>();
+    private List<Component> children = new ArrayList<>();
 
     public Component(Component parent) {
         this.parent = parent;
+        parent.addChild(this);
         this.context = parent.getContext();
     }
 
@@ -76,7 +78,6 @@ public abstract class Component {
      * Triggers event on each children.
      */
     public <T extends Event> void triggerOnChildren(T event) {
-        if (hasChildren())
             getChildren().forEach(child -> {
                 child.triggerEvent(event);
                 child.triggerOnChildren(event);
@@ -116,7 +117,6 @@ public abstract class Component {
 
     public Set<Component> getChildrenWithTag(String tag) {
         Stream<Component> childrenOfChildrenWithTag = getChildren().stream()
-                .filter(Component::hasChildren)
                 .flatMap(p -> p.getChildrenWithTag(tag).stream());
         Stream<Component> childrenWithTag = getChildren().stream()
                 .filter(c -> c.hasTag(tag));
@@ -133,7 +133,6 @@ public abstract class Component {
     //Considered redundant
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()
-                .filter(Component::hasChildren)
                 .flatMap(p -> p.getChildrenProperties(propertyClass).stream());
         Stream<T> childrenProperties = getChildren().stream()
                 .filter(c -> c.hasProperty(propertyClass))
@@ -147,7 +146,6 @@ public abstract class Component {
     //Considered redundant
     public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
         Stream<T> childrenOfChildrenProperties = getChildren().stream()
-                .filter(Component::hasChildren)
                 .flatMap(p -> p.<T>getChildrenProperties(propertyName).stream());
         Stream<T> childrenProperties = getChildren().stream()
                 .filter(c -> c.hasProperty(propertyName))
@@ -158,9 +156,13 @@ public abstract class Component {
         return allChildrenProperties.collect(Collectors.toSet());
     }
 
-    public abstract List<Component> getChildren();
+    protected void addChild(Component child) {
+        children.add(child);
+    }
 
-    public abstract boolean hasChildren();
+    public List<Component> getChildren() {
+        return children;
+    }
 
     public EngineContext getContext() {
         return context;

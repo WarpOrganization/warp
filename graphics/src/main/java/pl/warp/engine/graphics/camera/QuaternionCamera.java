@@ -68,4 +68,5 @@ public class QuaternionCamera extends Camera {
     public Quaternionf getRotation() {
         return rotation;
     }
+
 }

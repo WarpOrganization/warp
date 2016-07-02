@@ -1,5 +1,6 @@
 package pl.warp.engine.core.scene;
 
+
 import pl.warp.engine.core.EngineContext;
 
 import java.util.Set;
@@ -10,21 +11,14 @@ import java.util.Set;
  */
 public class Scene {
 
-    private EngineContext context;
     private Component root;
 
-    public Scene(EngineContext context, Component root) {
-        this.context = context;
+    public Scene(Component root) {
         this.root = root;
     }
 
     public Set<Component> getComponentsWithTag(String tag) {
         return root.getChildrenWithTag(tag);
-    }
-
-
-    public EngineContext getContext() {
-        return context;
     }
 
     public Component getRoot() {

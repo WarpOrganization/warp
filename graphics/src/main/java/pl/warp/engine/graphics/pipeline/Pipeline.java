@@ -1,7 +1,5 @@
 package pl.warp.engine.graphics.pipeline;
 
-import java.util.List;
-
 /**
  * @author Jaca777
  *         Created 2016-06-30 at 17
@@ -18,9 +16,9 @@ public class Pipeline {
             element.init();
     }
 
-    public void render() {
+    public void update(long delta) {
         for(PipelineElement element : elements)
-            element.render();
+            element.update(delta);
     }
 
     public void resize(int newWidth, int newHeight) {

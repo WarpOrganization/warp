@@ -31,14 +31,4 @@ public abstract class Camera extends Component {
     public abstract Matrix4f getCameraMatrix();
 
     public abstract Matrix4f getProjectionMatrix();
-
-    @Override
-    public List<Component> getChildren() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public boolean hasChildren() {
-        return false;
-    }
 }

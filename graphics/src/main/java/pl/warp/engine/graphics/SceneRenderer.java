@@ -1,19 +1,18 @@
 package pl.warp.engine.graphics;
 
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.RotationProperty;
 import pl.warp.engine.core.scene.properties.ScaleProperty;
 import pl.warp.engine.core.scene.properties.TranslationProperty;
+import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.pipeline.Source;
-import pl.warp.engine.graphics.property.MeshProperty;
+import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.component.defaultprog.DefaultComponentProgram;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
-import static org.lwjgl.opengl.GL30.GL_MAX_SAMPLES;
 import static org.lwjgl.opengl.GL30.GL_RGBA32F;
 
 /**
@@ -23,15 +22,17 @@ import static org.lwjgl.opengl.GL30.GL_RGBA32F;
 public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private Scene scene;
+    private Camera camera;
     private RenderingSettings settings;
     private MultisampleFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
-    private ComponentRenderer renderer;
+    private ComponentRenderer componentRenderer;
+    private ComponentRendererProgram program;
 
-    public SceneRenderer(Scene scene, RenderingSettings settings, ComponentRenderer renderer) {
+    public SceneRenderer(Scene scene, Camera camera, RenderingSettings settings) {
         this.scene = scene;
+        this.camera = camera;
         this.settings = settings;
-        this.renderer = renderer;
     }
 
     public Scene getScene() {
@@ -41,13 +42,15 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private MatrixStack matrixStack = new MatrixStack();
 
     @Override
-    public void render() {
+    public void update(long delta) {
+        renderingFramebuffer.bindDraw();
+        program.useCamera(camera); //TODO optimize
         render(scene.getRoot());
     }
 
     private void render(Component component) {
         applyTransformations(component);
-        renderer.render(component);
+        componentRenderer.render(component);
     }
 
     private void applyTransformations(Component component) { //Scale, then rotate, then translate
@@ -76,6 +79,8 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     @Override
     public void init() {
         setupFramebuffer();
+        this.program = new DefaultComponentProgram();
+        this.componentRenderer = new ComponentRenderer(program);
     }
 
     private void setupFramebuffer() {
