@@ -10,5 +10,6 @@ public class RapidExecutionStrategy implements ScheduledExecutionStrategy {
     @Override
     public void execute(Queue<Runnable> runnables) {
         runnables.forEach(Runnable::run);
+        runnables.clear();
     }
 }
