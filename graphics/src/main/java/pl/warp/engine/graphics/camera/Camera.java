@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import pl.warp.engine.core.scene.Actor;
 import pl.warp.engine.core.scene.Component;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public abstract class Camera extends Component {
+public abstract class Camera extends Actor {
 
     public Camera(Component parent) {
         super(parent);
@@ -31,4 +32,6 @@ public abstract class Camera extends Component {
     public abstract Matrix4f getCameraMatrix();
 
     public abstract Matrix4f getProjectionMatrix();
+
+    public abstract Vector3f getDirectionVector();
 }

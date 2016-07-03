@@ -1,17 +1,11 @@
 package pl.warp.engine.graphics.camera;
 
-import com.google.common.collect.ImmutableList;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.lwjgl.BufferUtils;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
-import pl.warp.engine.graphics.utility.BufferTools;
-
-import java.nio.FloatBuffer;
-import java.util.List;
 
 /**
  * @author Jaca777
@@ -21,16 +15,16 @@ public class QuaternionCamera extends Camera {
 
     private Vector3f position;
     private Quaternionf rotation = new Quaternionf();
-    private ProjectionMatrix perspective;
+    private ProjectionMatrix projection;
 
-    public QuaternionCamera(Component parent, Vector3f position, ProjectionMatrix perspective) {
+    public QuaternionCamera(Component parent, Vector3f position, ProjectionMatrix projection) {
         super(parent);
         this.position = position;
-        this.perspective = perspective;
+        this.projection = projection;
     }
 
-    public QuaternionCamera(Component parent, ProjectionMatrix perspective) {
-        this(parent, new Vector3f(), perspective);
+    public QuaternionCamera(Component parent, ProjectionMatrix projection) {
+        this(parent, new Vector3f(), projection);
     }
 
     @Override
@@ -62,7 +56,15 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public Matrix4f getProjectionMatrix() {
-        return perspective.getMatrix();
+        return projection.getMatrix();
+    }
+
+    private static final Vector3f forwardVector = new Vector3f(0, 0, 1);
+
+    @Override
+    public Vector3f getDirectionVector() {
+        Matrix3f cameraMatrix3x3 = new Matrix3f();
+        return forwardVector.mul(getCameraMatrix().get3x3(cameraMatrix3x3));
     }
 
     public Quaternionf getRotation() {

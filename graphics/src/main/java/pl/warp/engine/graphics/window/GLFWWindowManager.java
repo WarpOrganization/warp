@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.window;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import pl.warp.engine.graphics.RenderingTask;
 
 import java.io.PrintStream;
 
@@ -28,7 +27,7 @@ public class GLFWWindowManager implements WindowManager {
         initGLFW();
         configureHints(display);
         createHandle(display);
-        enableCloseKeyCallback();
+        setupCloseCallbackCallback();
         centerWindow(display);
         makeOGLContext();
         enableVSync();
@@ -50,18 +49,16 @@ public class GLFWWindowManager implements WindowManager {
     }
 
     private void createHandle(Display display) {
-        this.windowHandle = glfwCreateWindow(display.getWidth(), display.getWidth(), "Warp Engine Demo", NULL, NULL);
+        this.windowHandle = glfwCreateWindow(display.getWidth(), display.getHeight(), "Warp Engine Demo", NULL, NULL);
         if (this.windowHandle == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
     }
 
-    private void enableCloseKeyCallback() {
-        glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                glfwSetWindowShouldClose(window, true);
-                closeWindow();
-                closeCallback.run();
-            }
+    private void setupCloseCallbackCallback() {
+        glfwSetWindowCloseCallback(windowHandle, (window) -> {
+            glfwSetWindowShouldClose(window, true);
+            closeWindow();
+            closeCallback.run();
         });
 
     }
@@ -113,5 +110,9 @@ public class GLFWWindowManager implements WindowManager {
     public void updateWindow() {
         glfwSwapBuffers(windowHandle);
         glfwPollEvents();
+    }
+
+    public long getWindowHandle() {
+        return windowHandle;
     }
 }
