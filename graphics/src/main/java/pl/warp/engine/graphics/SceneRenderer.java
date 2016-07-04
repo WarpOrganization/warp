@@ -3,9 +3,7 @@ package pl.warp.engine.graphics;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.properties.RotationProperty;
-import pl.warp.engine.core.scene.properties.ScaleProperty;
-import pl.warp.engine.core.scene.properties.TranslationProperty;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.math.MatrixStack;
@@ -53,7 +51,8 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private void render(Component component) {
         matrixStack.push();
-        applyTransformations(component);
+        if (component.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
+            applyTransformations(component);
         program.useMatrixStack(matrixStack);
         componentRenderer.render(component);
         component.getChildren().forEach(this::render);
@@ -61,24 +60,21 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void applyTransformations(Component component) { //Scale, then rotate, then translate
-        if (component.hasProperty(ScaleProperty.SCALE_PROPERTY_NAME))
-            applyScale(component.getProperty(ScaleProperty.SCALE_PROPERTY_NAME));
-        if (component.hasProperty(RotationProperty.ROTATION_PROPERTY_NAME))
-            applyRotation(component.getProperty(RotationProperty.ROTATION_PROPERTY_NAME));
-        if (component.hasProperty(TranslationProperty.TRANSLATION_PROPERTY_NAME))
-            applyTranslation(component.getProperty(TranslationProperty.TRANSLATION_PROPERTY_NAME));
-
+        TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        applyScale(property);
+        applyRotation(property);
+        applyTranslation(property);
     }
 
-    private void applyScale(ScaleProperty scale) {
+    private void applyScale(TransformProperty scale) {
         matrixStack.scale(scale.getScale());
     }
 
-    private void applyRotation(RotationProperty rotation) {
-        matrixStack.rotate(rotation.getQuaternion());
+    private void applyRotation(TransformProperty rotation) {
+        matrixStack.rotate(rotation.getRotation());
     }
 
-    private void applyTranslation(TranslationProperty translation) {
+    private void applyTranslation(TransformProperty translation) {
         matrixStack.translate(translation.getTranslation());
     }
 
