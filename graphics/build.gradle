@@ -12,6 +12,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile group: 'org.lwjgl', name: 'lwjgl', version: '3.0.0'
     compile "org.lwjgl:lwjgl-platform:3.0.0:natives-windows"
+    compile "org.lwjgl:lwjgl-platform:3.0.0:natives-linux"
     compile project(':core')
 
     testCompile 'junit:junit:4.12'
