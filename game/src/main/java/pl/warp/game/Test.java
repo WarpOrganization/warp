@@ -7,7 +7,6 @@ import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleComponent;
-import pl.warp.engine.core.scene.properties.TranslationProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
@@ -42,8 +41,8 @@ public class Test {
     private static final Logger logger = Logger.getLogger(Test.class);
 
     private static final int WIDTH = 1024, HEIGHT = 720;
-    private static final float ROT_SPEED = 0.0005f;
-    private static final float MOV_SPEED = 0.1f;
+    private static final float ROT_SPEED = 0.001f;
+    private static final float MOV_SPEED = 0.01f;
 
     public static void main(String... args) {
         EngineContext context = new EngineContext();

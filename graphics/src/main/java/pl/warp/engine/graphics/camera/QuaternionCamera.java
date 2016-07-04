@@ -13,14 +13,18 @@ import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
  */
 public class QuaternionCamera extends Camera {
 
+    private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, 1);
+
     private Vector3f position;
     private Quaternionf rotation = new Quaternionf();
     private ProjectionMatrix projection;
+    private Vector3f forwardVector = new Vector3f();
 
     public QuaternionCamera(Component parent, Vector3f position, ProjectionMatrix projection) {
         super(parent);
         this.position = position;
         this.projection = projection;
+        calcForwardVector();
     }
 
     public QuaternionCamera(Component parent, ProjectionMatrix projection) {
@@ -37,9 +41,34 @@ public class QuaternionCamera extends Camera {
         position.add(dx, dy, dz);
     }
 
+
+
+
     @Override
     public void rotate(float angleXInRadians, float angleYInRadians, float angleZInRadians) {
         rotation.rotateLocal(angleXInRadians, angleYInRadians, angleZInRadians);
+    }
+
+    @Override
+    public void rotateX(float angleInRadians) {
+        rotation.rotateLocalX(angleInRadians);
+    }
+
+    @Override
+    public void rotateY(float angleInRadians) {
+        rotation.rotateLocalY(angleInRadians);
+    }
+
+    @Override
+    public void rotateZ(float angleInRadians) {
+        rotation.rotateLocalZ(angleInRadians);
+    }
+
+
+    private Matrix3f tempCamera3x3Matrix = new Matrix3f();
+    private void calcForwardVector() {
+        getCameraMatrix().get3x3(tempCamera3x3Matrix);
+        FORWARD_VECTOR.mul(tempCamera3x3Matrix, forwardVector);
     }
 
     @Override
@@ -61,12 +90,9 @@ public class QuaternionCamera extends Camera {
         return projection.getMatrix();
     }
 
-    private static final Vector3f forwardVector = new Vector3f(0, 0, 1);
-
     @Override
-    public Vector3f getDirectionVector() {
-        Matrix3f cameraMatrix3x3 = new Matrix3f();
-        return forwardVector.mul(getCameraMatrix().get3x3(cameraMatrix3x3));
+    public Vector3f getForwardVector() {
+        return forwardVector;
     }
 
     public Quaternionf getRotation() {

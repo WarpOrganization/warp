@@ -34,8 +34,7 @@ public class RenderingTask extends EngineTask {
         windowManager.makeWindow(display);
         logger.info("Window created.");
         createOpenGL();
-
-        logger.info("OpenGL capabilities created");
+        logger.info("OpenGL capabilities created.");
         pipeline.init();
         logger.info("Initialized pipeline.");
     }
