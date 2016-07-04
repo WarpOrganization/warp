@@ -16,7 +16,7 @@ import java.util.Objects;
 public class BasicColliderProperty extends Property<Component> implements ColliderProperty {
 
     private final btCollisionShape shape;
-    btCollisionObject collisionObject;
+    private btCollisionObject collisionObject;
 
     public BasicColliderProperty(Component owner, btCollisionShape shape) {
         super(owner);
