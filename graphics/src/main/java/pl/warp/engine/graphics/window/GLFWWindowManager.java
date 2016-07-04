@@ -32,6 +32,7 @@ public class GLFWWindowManager implements WindowManager {
         makeOGLContext();
         enableVSync();
         showWindow();
+        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     private void initGLFW() {

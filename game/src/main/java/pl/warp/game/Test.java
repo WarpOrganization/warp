@@ -7,6 +7,7 @@ import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleComponent;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
@@ -16,12 +17,14 @@ import pl.warp.engine.graphics.camera.CameraControlScript;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
+import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
+import pl.warp.engine.graphics.property.LightProperty;
 import pl.warp.engine.graphics.property.MaterialProperty;
 import pl.warp.engine.graphics.property.MeshProperty;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
@@ -41,8 +44,8 @@ public class Test {
     private static final Logger logger = Logger.getLogger(Test.class);
 
     private static final int WIDTH = 1024, HEIGHT = 720;
-    private static final float ROT_SPEED = 0.001f;
-    private static final float MOV_SPEED = 0.01f;
+    private static final float ROT_SPEED = 0.0002f;
+    private static final float MOV_SPEED = 0.005f;
 
     public static void main(String... args) {
         EngineContext context = new EngineContext();
@@ -59,7 +62,14 @@ public class Test {
             ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("goat.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
             new MaterialProperty(goat, new Material(goatTexture));
+
+            Component light = new SimpleComponent(root);
+            LightProperty property = new LightProperty(light);
+            property.addSpotLight(new SpotLight(new Vector3f(2f,2f,2f), new Vector3f(1f,1f,1f), new Vector3f(0.1f, 0.1f, 0.1f), 0.001f, 0.001f, 1.0f));
     });
+        graphicsThread.scheduleOnce(() -> {
+
+        });
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
         Pipeline pipeline = PipelineBuilder.from(new SceneRenderer(scene, camera, settings)).to(new OnScreenRenderer());
         GLFWWindowManager windowManager = new GLFWWindowManager(graphicsThread::interrupt);

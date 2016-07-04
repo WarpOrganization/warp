@@ -1,11 +1,12 @@
 package pl.warp.engine.graphics;
 
-import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
+import pl.warp.engine.graphics.light.LightEnvironment;
+import pl.warp.engine.graphics.light.SceneLightObserver;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
@@ -27,11 +28,13 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private MultisampleTexture2D outputTexture;
     private ComponentRenderer componentRenderer;
     private ComponentRendererProgram program;
+    private LightEnvironment light;
 
     public SceneRenderer(Scene scene, Camera camera, RenderingSettings settings) {
         this.scene = scene;
         this.camera = camera;
         this.settings = settings;
+        this.light = new LightEnvironment();
     }
 
     public Scene getScene() {
@@ -46,6 +49,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         renderingFramebuffer.clean();
         program.use();
         program.useCamera(camera);
+        program.useLightEnvironment(light);
         render(scene.getRoot());
     }
 
@@ -82,6 +86,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     @Override
     public void init() {
         setupFramebuffer();
+        SceneLightObserver observer = new SceneLightObserver(scene, light);
         this.program = new DefaultComponentProgram();
         this.componentRenderer = new ComponentRenderer(program);
     }

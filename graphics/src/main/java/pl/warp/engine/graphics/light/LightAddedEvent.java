@@ -20,6 +20,14 @@ public class LightAddedEvent extends Event {
         this.spotLightsAdded = spotLightsAdded;
     }
 
+    public LightAddedEvent(DirectionalSpotLight light) {
+        this(new DirectionalSpotLight[]{light}, new SpotLight[0]);
+    }
+
+    public LightAddedEvent(SpotLight light) {
+        this(new DirectionalSpotLight[0], new SpotLight[]{light});
+    }
+
     public DirectionalSpotLight[] getDirectionalLightsAdded() {
         return directionalLightsAdded;
     }

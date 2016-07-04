@@ -18,13 +18,11 @@ public class QuaternionCamera extends Camera {
     private Vector3f position;
     private Quaternionf rotation = new Quaternionf();
     private ProjectionMatrix projection;
-    private Vector3f forwardVector = new Vector3f();
 
     public QuaternionCamera(Component parent, Vector3f position, ProjectionMatrix projection) {
         super(parent);
         this.position = position;
         this.projection = projection;
-        calcForwardVector();
     }
 
     public QuaternionCamera(Component parent, ProjectionMatrix projection) {
@@ -40,8 +38,6 @@ public class QuaternionCamera extends Camera {
     public void move(float dx, float dy, float dz) {
         position.add(dx, dy, dz);
     }
-
-
 
 
     @Override
@@ -65,12 +61,6 @@ public class QuaternionCamera extends Camera {
     }
 
 
-    private Matrix3f tempCamera3x3Matrix = new Matrix3f();
-    private void calcForwardVector() {
-        getCameraMatrix().get3x3(tempCamera3x3Matrix);
-        FORWARD_VECTOR.mul(tempCamera3x3Matrix, forwardVector);
-    }
-
     @Override
     public Vector3f getPosition() {
         return position;
@@ -90,9 +80,23 @@ public class QuaternionCamera extends Camera {
         return projection.getMatrix();
     }
 
+    private Vector3f forwardVector = new Vector3f();
+
     @Override
     public Vector3f getForwardVector() {
-        return forwardVector;
+        return rotation.positiveZ(forwardVector);
+    }
+
+    private Vector3f rightVector = new Vector3f();
+    @Override
+    public Vector3f getRightVector() {
+        return rotation.positiveX(rightVector);
+    }
+
+    private Vector3f upVector = new Vector3f();
+    @Override
+    public Vector3f getUpVector() {
+        return rotation.positiveY(upVector);
     }
 
     public Quaternionf getRotation() {

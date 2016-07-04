@@ -40,6 +40,8 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int unifMainTexture;
     private int unifBrightness;
     private int unifLightEnabled;
+    private int unifSpotLightCount;
+    private int unifDirectionalLightCount;
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
     private int[][] unifDirectionalLightSources = new int[MAX_DIRECTIONAL_LIGHT_SOURCES][DIRECTIONAL_LIGT_FIELD_NAMES.length];
 
@@ -64,6 +66,8 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         this.unifMainTexture = getUniformLocation("material.mainTexture");
         this.unifBrightness = getUniformLocation("material.brightness");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
+        this.unifSpotLightCount = getUniformLocation("numSpotLights");
+        this.unifDirectionalLightCount = getUniformLocation("numDirectionalLights");
     }
 
     private void loadSpotLightStructure() {
@@ -106,10 +110,12 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     public void useLightEnvironment(LightEnvironment environment) {
         setUniformb(unifLightEnabled, environment.isLightEnabled());
 
+        setUniformi(unifSpotLightCount, environment.getSpotLights().size());
         List<SpotLight> spotLights = environment.getSpotLights();
         for (int i = 0; i < spotLights.size(); i++)
             setSpotLight(unifSpotLightSources[i], spotLights.get(i));
 
+        setUniformi(unifDirectionalLightCount, environment.getDirectionalSpotLights().size());
         List<DirectionalSpotLight> directionalSpotLights = environment.getDirectionalSpotLights();
         for (int i = 0; i < directionalSpotLights.size(); i++)
             setDirectionalLight(unifDirectionalLightSources[i], directionalSpotLights.get(i));

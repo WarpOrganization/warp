@@ -40,4 +40,8 @@ public abstract class Camera extends Actor {
     public abstract Matrix4f getProjectionMatrix();
 
     public abstract Vector3f getForwardVector();
+
+    public abstract Vector3f getRightVector();
+
+    public abstract Vector3f getUpVector();
 }

@@ -37,7 +37,7 @@ uniform int numSpotLights;
 const int MAX_DIRECTIONAL_LIGHTS = 25;
 uniform DirectionalLightSource directionalLightSources[MAX_DIRECTIONAL_LIGHTS];
 uniform int numDirectionalLights;
-uniform bool lightEnabled = true;
+uniform bool lightEnabled;
 uniform float shininess = 1;
 
 
@@ -56,11 +56,10 @@ vec3 getSpotLight();
 vec3 getDirectionalLight();
 
 void main(void) {
-    //Light and texturing
-    /*if(lightEnabled) {
+    if(lightEnabled) {
         vec3 sumLight = getSpotLight() + getDirectionalLight();
         fragColor = vec4(sumLight, 1) * texture(material.mainTexture, vTexCoord);
-    } else*/ fragColor = texture(material.mainTexture, vTexCoord);
+    } else fragColor = texture(material.mainTexture, vTexCoord);
 
     //Brightness
     fragColor.rgb *= material.brightness;

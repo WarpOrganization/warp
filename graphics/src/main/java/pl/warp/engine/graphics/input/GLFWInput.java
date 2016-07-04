@@ -21,7 +21,6 @@ public class GLFWInput {
 
     public void init(long windowHandle) {
         this.windowHandle = windowHandle;
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         createCallbacks();
     }
 
