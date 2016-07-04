@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics;
 
+import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.RotationProperty;
@@ -44,13 +45,19 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     @Override
     public void update(long delta) {
         renderingFramebuffer.bindDraw();
-        program.useCamera(camera); //TODO optimize
+        renderingFramebuffer.clean();
+        program.use();
+        program.useCamera(camera);
         render(scene.getRoot());
     }
 
     private void render(Component component) {
+        matrixStack.push();
         applyTransformations(component);
+        program.useMatrixStack(matrixStack);
         componentRenderer.render(component);
+        component.getChildren().forEach(this::render);
+        matrixStack.pop();
     }
 
     private void applyTransformations(Component component) { //Scale, then rotate, then translate

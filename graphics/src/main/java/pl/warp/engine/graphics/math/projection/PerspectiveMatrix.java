@@ -7,13 +7,13 @@ import org.joml.Matrix4f;
  *         Created 2016-06-28 at 11
  */
 public class PerspectiveMatrix implements ProjectionMatrix {
-    private float fovInDegrees;
+    private float fov;
     private float zNear, zFar;
     private float aspectRatio;
     private Matrix4f matrix;
 
     public PerspectiveMatrix(float fovInDegrees, float zNear, float zFar, int width, int height) {
-        this.fovInDegrees = fovInDegrees;
+        this.fov = toRadians(fovInDegrees);
         this.aspectRatio = ((float) width) / height;
         this.zFar = zFar;
         this.zNear = zNear;
@@ -22,13 +22,13 @@ public class PerspectiveMatrix implements ProjectionMatrix {
 
     private void recalcMatrix() {
         float ymax, xmax;
-        ymax = (float) (zNear * Math.tan(toRadian()));
+        ymax = (float) (zNear * Math.tan(fov));
         xmax = ymax * aspectRatio;
         this.matrix = frustum(-xmax, xmax, -ymax, ymax);
     }
 
-    private double toRadian() {
-        return fovInDegrees * Math.PI / 360.0;
+    private float toRadians(float degrees) {
+        return (float) (degrees * Math.PI / 360.0);
     }
 
 
@@ -47,12 +47,12 @@ public class PerspectiveMatrix implements ProjectionMatrix {
         return matrix;
     }
 
-    public float getFovInDegrees() {
-        return fovInDegrees;
+    public float getFovInRadians() {
+        return fov;
     }
 
     public void setFov(float fovInDegrees) {
-        this.fovInDegrees = fovInDegrees;
+        this.fov = toRadians(fovInDegrees);
         recalcMatrix();
     }
 

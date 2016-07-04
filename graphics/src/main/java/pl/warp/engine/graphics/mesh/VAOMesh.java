@@ -89,7 +89,7 @@ public class VAOMesh extends Mesh {
      * @param types       Attributes types.
      * @return New VAO name.
      */
-    public static int createVAO(int[] buffers, int indexbuffer, int[] attributes, int[] sizes, int[] types) {
+    private static int createVAO(int[] buffers, int indexbuffer, int[] attributes, int[] sizes, int[] types) {
         int vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
         for (int i = 0; i < buffers.length; i++) {

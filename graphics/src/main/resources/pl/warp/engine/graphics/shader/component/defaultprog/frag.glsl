@@ -57,10 +57,10 @@ vec3 getDirectionalLight();
 
 void main(void) {
     //Light and texturing
-    if(lightEnabled) {
+    /*if(lightEnabled) {
         vec3 sumLight = getSpotLight() + getDirectionalLight();
         fragColor = vec4(sumLight, 1) * texture(material.mainTexture, vTexCoord);
-    } else fragColor = texture(material.mainTexture, vTexCoord);
+    } else*/ fragColor = texture(material.mainTexture, vTexCoord);
 
     //Brightness
     fragColor.rgb *= material.brightness;

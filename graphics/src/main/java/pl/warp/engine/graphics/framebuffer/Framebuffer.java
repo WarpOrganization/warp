@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.framebuffer;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.texture.Texture;
@@ -39,4 +40,8 @@ public class Framebuffer {
     }
 
     public static final Framebuffer SCREEN_FRAMEBUFFER = new Framebuffer(0);
+
+    public void clean() {
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+    }
 }

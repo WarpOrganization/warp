@@ -52,12 +52,8 @@ public class RenderingTask extends EngineTask {
 
     @Override
     public void update(long delta) {
-        cleanFrame();
         pipeline.update(delta);
         windowManager.updateWindow();
     }
 
-    private void cleanFrame(){
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-    }
 }

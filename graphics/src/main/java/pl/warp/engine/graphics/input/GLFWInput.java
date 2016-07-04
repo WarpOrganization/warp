@@ -68,7 +68,6 @@ public class GLFWInput {
         GLFW.glfwGetCursorPos(windowHandle, xPos, yPos);
         Vector2f currentCursorPos = new Vector2f((float) xPos[0], (float) yPos[0]);
         currentCursorPos.sub(cursorPosition, this.cursorPositionDelta);
-        System.out.println(cursorPositionDelta);
         this.cursorPosition = currentCursorPos;
     }
 

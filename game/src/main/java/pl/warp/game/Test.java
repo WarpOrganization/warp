@@ -1,11 +1,13 @@
 package pl.warp.game;
 
 import org.apache.log4j.Logger;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleComponent;
+import pl.warp.engine.core.scene.properties.TranslationProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
@@ -40,7 +42,7 @@ public class Test {
     private static final Logger logger = Logger.getLogger(Test.class);
 
     private static final int WIDTH = 1024, HEIGHT = 720;
-    private static final float ROT_SPEED = 0.1f;
+    private static final float ROT_SPEED = 0.0005f;
     private static final float MOV_SPEED = 0.1f;
 
     public static void main(String... args) {
@@ -58,7 +60,7 @@ public class Test {
             ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("goat.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
             new MaterialProperty(goat, new Material(goatTexture));
-        });
+    });
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
         Pipeline pipeline = PipelineBuilder.from(new SceneRenderer(scene, camera, settings)).to(new OnScreenRenderer());
         GLFWWindowManager windowManager = new GLFWWindowManager(graphicsThread::interrupt);

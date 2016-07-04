@@ -16,7 +16,7 @@ import java.util.List;
  * @author Jaca777
  *         Created 2016-07-01 at 13
  */
-public class DefaultComponentProgram extends Program implements ComponentRendererProgram {
+public class DefaultComponentProgram extends ComponentRendererProgram {
 
     private static final InputStream VERTEX_SHADER = DefaultComponentProgram.class.getResourceAsStream("vert.glsl");
     private static final InputStream FRAGMENT_SHADER = DefaultComponentProgram.class.getResourceAsStream("frag.glsl");

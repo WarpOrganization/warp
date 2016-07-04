@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.camera;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.graphics.input.GLFWInput;
 
@@ -38,14 +39,17 @@ public class CameraControlScript extends Script<Camera> {
         Vector2f cursorPosDelta = input.getCursorPositionDelta();
         Vector2f rotation = new Vector2f();
         cursorPosDelta.mul(speed * delta, rotation);
-        camera.rotate(cursorPosDelta.y, cursorPosDelta.x, 0);
+        camera.rotate(rotation.y, rotation.x, 0);
     }
 
     private void move(long delta) {
         Camera camera = getOwner();
-        Vector3f movement = new Vector3f();
-        camera.getDirectionVector().mul(movementSpeed * delta, movement);
-        camera.move(movement);
+        if (input.isKeyDown(GLFW.GLFW_KEY_W)) {
+            System.out.println("lul");
+            Vector3f movement = new Vector3f();
+            camera.getDirectionVector().mul(movementSpeed * delta, movement);
+            camera.move(movement);
+        }
     }
 
 }

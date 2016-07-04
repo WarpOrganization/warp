@@ -39,7 +39,7 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public void rotate(float angleXInRadians, float angleYInRadians, float angleZInRadians) {
-        rotation.rotate(angleXInRadians, angleYInRadians, angleZInRadians);
+        rotation.rotateLocal(angleXInRadians, angleYInRadians, angleZInRadians);
     }
 
     @Override
@@ -51,7 +51,9 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public Matrix4f getCameraMatrix() {
-        return rotation.get(tempMatrix);
+        rotation.get(tempMatrix);
+        tempMatrix.translate(position);
+        return tempMatrix;
     }
 
     @Override
