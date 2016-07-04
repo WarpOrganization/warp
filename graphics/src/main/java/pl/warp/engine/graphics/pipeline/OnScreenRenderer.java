@@ -29,7 +29,7 @@ public class OnScreenRenderer implements Sink<MultisampleTexture2D> {
     @Override
     public void destroy() {
         srcTexture.delete();
-
+        rect.destroy();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OnScreenRenderer implements Sink<MultisampleTexture2D> {
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glDisable(GL_DEPTH_TEST);
         GL11.glDrawElements(GL11.GL_TRIANGLES, Rect.INDICES_AMOUNT, GL11.GL_UNSIGNED_INT, 0);
-        GL30.glBindVertexArray(0);
+        rect.unbind();
         GL11.glEnable(GL_DEPTH_TEST);
     }
 

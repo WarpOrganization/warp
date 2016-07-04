@@ -57,8 +57,8 @@ public class Test {
         EngineThread graphicsThread = new SyncEngineThread(new SyncTimer(50), new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
             Component goat = new SimpleComponent(root);
-            Mesh mesh = ObjLoader.read(Test.class.getResourceAsStream("goat.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
-            new MeshProperty(goat, mesh);
+            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("goat.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
+            new MeshProperty(goat, goatMesh);
             ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("goat.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
             new MaterialProperty(goat, new Material(goatTexture));
