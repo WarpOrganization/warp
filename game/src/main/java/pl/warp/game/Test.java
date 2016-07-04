@@ -65,7 +65,7 @@ public class Test {
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            property.addSpotLight(new SpotLight(new Vector3f(2f,2f,2f), new Vector3f(1f,1f,1f), new Vector3f(0.1f, 0.1f, 0.1f), 0.001f, 0.001f, 1.0f));
+            property.addSpotLight(new SpotLight(new Vector3f(2f,2f,2f), new Vector3f(1f,1f,1f), new Vector3f(0.1f, 0.1f, 0.1f), 0.001f, 0.001f, 1000000000.0f));
     });
         graphicsThread.scheduleOnce(() -> {
 

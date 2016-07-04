@@ -30,6 +30,8 @@ public class GLFWInput {
     }
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
+        if(key == -1)
+            return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
                 keyboardKeys[key] = true;
@@ -44,6 +46,8 @@ public class GLFWInput {
     }
 
     private void mouseButtonAction(long window, int button, int action, int mods) {
+        if(button == -1)
+            return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
                 mouseButtons[button] = true;
