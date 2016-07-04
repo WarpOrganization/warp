@@ -42,7 +42,7 @@ public class SceneLightObserver {
         for (SpotLight spotLight : event.getSpotLightsRemoved())
             lightEnvironment.removeSpotLightSource(spotLight);
         for (DirectionalSpotLight directionalLight : event.getDirectionalLightsRemoved())
-            lightEnvironment.addDirectionalLightSource(directionalLight);
+            lightEnvironment.removeDirectionalLightSource(directionalLight);
     }
 
     private void addLights(Set<LightProperty> properties) {
