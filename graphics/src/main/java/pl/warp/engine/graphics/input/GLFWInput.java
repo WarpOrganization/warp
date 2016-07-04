@@ -91,7 +91,4 @@ public class GLFWInput {
         return mouseButtons[button];
     }
 
-    public void destroy() {
-        //TODO
-    }
 }

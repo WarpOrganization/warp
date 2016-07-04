@@ -47,6 +47,7 @@ public class RenderingTask extends EngineTask {
     @Override
     protected void onClose() {
         windowManager.closeWindow();
+        pipeline.destroy();
     }
 
     @Override

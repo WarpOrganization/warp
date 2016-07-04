@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
  * @author Jaca777
  *         Created 2015-06-25 at 14
  */
-public class MeshUtil {
+public class Rect {
 
     private static final float[] VERTICES = new float[]{
             -1.0f, -1.0f, 0.0f, 1.0f,
@@ -34,24 +34,29 @@ public class MeshUtil {
 
     public static final int INDICES_AMOUNT = INDICES.length;
 
-    public static int mkFullRect(int vertexAttr, int texCoordAttr) {
+    private int vao;
+    private int vertexBuffer;
+    private int texCoordBuffer;
+    private int indexBuffer;
+
+    public Rect(int vertexAttr, int texCoordAttr) {
         int screenrectVAO = GL30.glGenVertexArrays();
 
-        int vertBuffer = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertBuffer);
+        this.vertexBuffer = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, BufferTools.toDirectBuffer(VERTICES), GL15.GL_STATIC_DRAW);
 
-        int texCoordBuffer = GL15.glGenBuffers();
+        this.texCoordBuffer = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, texCoordBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, BufferTools.toDirectBuffer(TEX_COORDS), GL15.GL_STATIC_DRAW);
 
-        int indexBuffer = GL15.glGenBuffers();
+        this.indexBuffer = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, BufferTools.toDirectBuffer(INDICES), GL15.GL_STATIC_DRAW);
 
         GL30.glBindVertexArray(screenrectVAO);
         GL20.glEnableVertexAttribArray(vertexAttr);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertBuffer);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer);
         GL20.glVertexAttribPointer(vertexAttr, 4, GL_FLOAT, false, 0, 0);
 
         GL20.glEnableVertexAttribArray(texCoordAttr);
@@ -60,6 +65,14 @@ public class MeshUtil {
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         GL30.glBindVertexArray(0);
-        return screenrectVAO;
+    }
+
+    public void bind() {
+        GL30.glBindVertexArray(vao);
+    }
+
+    public void destroy() {
+        GL30.glDeleteVertexArrays(vao);
+        GL15.glDeleteBuffers(new int[]{vertexBuffer, texCoordBuffer, indexBuffer});
     }
 }

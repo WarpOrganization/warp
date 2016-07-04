@@ -35,7 +35,7 @@ public class Framebuffer {
         return name;
     }
 
-    public void unload() {
+    public void delete() {
         GL30.glDeleteFramebuffers(this.name);
     }
 

@@ -73,8 +73,8 @@ public class TextureFramebuffer extends Framebuffer{
         return name;
     }
 
-    public void unload() {
-        GL30.glDeleteFramebuffers(this.name);
+    public void delete() {
+        super.delete();
         GL30.glDeleteRenderbuffers(this.depthBuff);
     }
 }

@@ -7,5 +7,6 @@ package pl.warp.engine.graphics.pipeline;
 public interface PipelineElement {
     void update(long delta);
     void init();
+    void destroy();
     void onResize(int newWidth, int newHeight);
 }

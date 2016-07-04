@@ -20,13 +20,15 @@ import java.nio.FloatBuffer;
  */
 public abstract class Program {
 
-    private final int program;
+    private int program;
+    private int vertexShader;
+    private int fragmentShader;
 
     public Program(InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
         try {
-            int vS = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
-            int fS = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
-            this.program = ShaderCompiler.createProgram(vS, fS, outNames);
+            this.vertexShader = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
+            this.fragmentShader = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
+            this.program = ShaderCompiler.createProgram(this.vertexShader, this.fragmentShader, outNames);
             GL20.glUseProgram(this.program);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -74,6 +76,14 @@ public abstract class Program {
             String name = outNames[i];
             GL30.glBindFragDataLocation(program, i, name);
         }
+    }
+
+    public void delete(){
+        GL20.glDetachShader(program, vertexShader);
+        GL20.glDetachShader(program, fragmentShader);
+        GL20.glDeleteProgram(program);
+        GL20.glDeleteShader(vertexShader);
+        GL20.glDeleteShader(fragmentShader);
     }
 
 

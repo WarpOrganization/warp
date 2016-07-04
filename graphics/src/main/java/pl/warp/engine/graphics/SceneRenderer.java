@@ -7,8 +7,11 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.light.LightEnvironment;
 import pl.warp.engine.graphics.light.SceneLightObserver;
+import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.pipeline.Source;
+import pl.warp.engine.graphics.property.MaterialProperty;
+import pl.warp.engine.graphics.property.MeshProperty;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.component.defaultprog.DefaultComponentProgram;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
@@ -29,6 +32,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private ComponentRenderer componentRenderer;
     private ComponentRendererProgram program;
     private LightEnvironment light;
+    private SceneLightObserver observer;
 
     public SceneRenderer(Scene scene, Camera camera, RenderingSettings settings) {
         this.scene = scene;
@@ -86,9 +90,33 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     @Override
     public void init() {
         setupFramebuffer();
-        SceneLightObserver observer = new SceneLightObserver(scene, light);
+        this.observer = new SceneLightObserver(scene, light);
         this.program = new DefaultComponentProgram();
         this.componentRenderer = new ComponentRenderer(program);
+    }
+
+    @Override
+    public void destroy() {
+        observer.destroy();
+        renderingFramebuffer.delete();
+        outputTexture.delete();
+        program.delete();
+        destroyComponent(scene.getRoot());
+    }
+
+    private void destroyComponent(Component component) {
+        destroyProperties(component);
+        component.getChildren().forEach(this::destroyComponent);
+    }
+
+    private void destroyProperties(Component component) {
+        if (component.hasProperty(MeshProperty.MESH_PROPERTY_NAME))
+            component.<MeshProperty>getProperty(MeshProperty.MESH_PROPERTY_NAME).getMesh().unload();
+        if (component.hasProperty(MaterialProperty.MATERIAL_PROPERTY_NAME)) {
+            Material material = component.<MaterialProperty>getProperty(MaterialProperty.MATERIAL_PROPERTY_NAME).getMaterial();
+            material.getMainTexture().delete();
+            if (material.hasSpecularTexture()) material.getSpecularTexture().delete();
+        }
     }
 
     private void setupFramebuffer() {

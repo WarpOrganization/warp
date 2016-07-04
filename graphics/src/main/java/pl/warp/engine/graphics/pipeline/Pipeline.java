@@ -34,4 +34,9 @@ public class Pipeline {
         for (PipelineElement element : elements)
             element.onResize(newWidth, newHeight);
     }
+
+    public void destroy() {
+        for (PipelineElement element : elements)
+            element.destroy();
+    }
 }

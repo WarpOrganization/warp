@@ -43,7 +43,9 @@ public class SyncEngineThread implements EngineThread {
         tasks.forEach(EngineTask::init);
         running = true;
         loop();
+        close();
     }
+
 
     private void loop() {
         while (running) runUpdate();
@@ -55,6 +57,10 @@ public class SyncEngineThread implements EngineThread {
             task.update(delta);
         executionStrategy.execute(scheduledRunnables);
         timer.await();
+    }
+
+    private void close() {
+        tasks.forEach(EngineTask::onClose);
     }
 
     @Override
