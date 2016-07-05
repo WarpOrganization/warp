@@ -12,16 +12,17 @@ public class DirectionalSpotLight {
 
     private Component owner;
     private Vector3f relativePosition;
-    private Vector3f direction;
+    private Vector3f relativeDirection;
     private float directionGradient;
     private Vector3f color, ambientColor;
     private float attenuation, gradient;
     private float factor, specularFactor;
 
-    public DirectionalSpotLight(Component owner, Vector3f relativePosition, Vector3f direction, float directionGradient, Vector3f color, Vector3f ambientColor,
+    public DirectionalSpotLight(Component owner, Vector3f relativePosition, Vector3f relativeDirection, float directionGradient, Vector3f color, Vector3f ambientColor,
                                 float attenuation, float gradient, float factor, float specularFactor) {
+        this.owner = owner;
         this.relativePosition = relativePosition;
-        this.direction = direction;
+        this.relativeDirection = relativeDirection;
         this.directionGradient = directionGradient;
         this.color = color;
         this.ambientColor = ambientColor;
@@ -32,6 +33,7 @@ public class DirectionalSpotLight {
     }
 
     private Vector3f tempPosition = new Vector3f();
+
     public Vector3f getPosition() {
         tempPosition.set(relativePosition);
         if (owner.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
@@ -45,12 +47,19 @@ public class DirectionalSpotLight {
         this.relativePosition = position;
     }
 
+    private Vector3f tempDirection = new Vector3f();
+
     public Vector3f getDirection() {
-        return direction;
+        tempDirection.set(relativeDirection);
+        if (owner.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
+            TransformProperty transform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            return transform.getRotation().transform(tempDirection);
+        }
+        return tempPosition;
     }
 
-    public void setDirection(Vector3f direction) {
-        this.direction = direction;
+    public void setRelativeDirection(Vector3f direction) {
+        this.relativeDirection = direction;
     }
 
     public float getDirectionGradient() {

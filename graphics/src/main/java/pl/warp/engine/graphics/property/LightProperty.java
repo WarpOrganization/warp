@@ -4,6 +4,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.graphics.light.DirectionalSpotLight;
 import pl.warp.engine.graphics.light.LightAddedEvent;
+import pl.warp.engine.graphics.light.LightRemovedEvent;
 import pl.warp.engine.graphics.light.SpotLight;
 
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class LightProperty extends Property<Component> {
         super(owner);
         this.directionalSpotLights = directionalSpotLights;
         this.spotLights = spotLights;
-        getOwner().triggerOnRoot(new LightAddedEvent(directionalSpotLights.toArray(new DirectionalSpotLight[0]), spotLights.toArray(new SpotLight[0])));
+        triggerAllAddedEvent();
     }
 
     public LightProperty(Component owner) {
@@ -49,4 +50,25 @@ public class LightProperty extends Property<Component> {
     public Set<SpotLight> getSpotLights() {
         return spotLights;
     }
+
+    @Override
+    public void enable() {
+        if (!isEnabled()) triggerAllAddedEvent();
+        super.enable();
+    }
+
+    private void triggerAllAddedEvent() {
+        getOwner().triggerOnRoot(new LightAddedEvent(directionalSpotLights.toArray(new DirectionalSpotLight[0]), spotLights.toArray(new SpotLight[0])));
+    }
+
+    @Override
+    public void disable() {
+        if (isEnabled()) triggerAllRemovedEvent();
+        super.disable();
+    }
+
+    private void triggerAllRemovedEvent() {
+        getOwner().triggerOnRoot(new LightRemovedEvent(directionalSpotLights.toArray(new DirectionalSpotLight[0]), spotLights.toArray(new SpotLight[0])));
+    }
+
 }

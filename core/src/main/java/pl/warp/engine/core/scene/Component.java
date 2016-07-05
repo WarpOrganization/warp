@@ -64,6 +64,10 @@ public abstract class Component {
         return properties.containsKey(name);
     }
 
+    public boolean hasEnabledProperty(String name) {
+        return hasProperty(name) && getProperty(name).isEnabled();
+    }
+
     /**
      * Triggers event on this component. No other components are affected.
      */
@@ -78,10 +82,10 @@ public abstract class Component {
      * Triggers event on each children.
      */
     public <T extends Event> void triggerOnChildren(T event) {
-            getChildren().forEach(child -> {
-                child.triggerEvent(event);
-                child.triggerOnChildren(event);
-            });
+        getChildren().forEach(child -> {
+            child.triggerEvent(event);
+            child.triggerOnChildren(event);
+        });
     }
 
     /**

@@ -46,12 +46,13 @@ public class SceneLightObserver {
     }
 
     private void addLights(Set<LightProperty> properties) {
-        for (LightProperty property : properties) {
-            for (SpotLight spotLight : property.getSpotLights())
-                lightEnvironment.addSpotLightSource(spotLight);
-            for (DirectionalSpotLight directionalLight : property.getDirectionalSpotLights())
-                lightEnvironment.addDirectionalLightSource(directionalLight);
-        }
+        for (LightProperty property : properties)
+            if (property.isEnabled()) {
+                for (SpotLight spotLight : property.getSpotLights())
+                    lightEnvironment.addSpotLightSource(spotLight);
+                for (DirectionalSpotLight directionalLight : property.getDirectionalSpotLights())
+                    lightEnvironment.addDirectionalLightSource(directionalLight);
+            }
     }
 
     public void destroy() {

@@ -72,15 +72,12 @@ public class Test {
         EngineContext context = new EngineContext();
         Component root = new SimpleComponent(context);
         Camera camera = new QuaternionCamera(root, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
-        camera.move(50,50,50);
+        camera.move(new Vector3f(50));
         GLFWInput input = new GLFWInput();
         CameraControlScript cameraControlScript = new CameraControlScript(camera, input, ROT_SPEED, MOV_SPEED);
         Scene scene = new Scene(root);
         EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
-
-
-
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("goat.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
             ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("goat.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
@@ -94,7 +91,7 @@ public class Test {
             MaterialProperty lightMaterial = new MaterialProperty(light, new Material(goatTexture));
             lightMaterial.getMaterial().setBrightness(100f);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.translate(new Vector3f(50f,50f,50f));
+            lightSourceTransform.move(new Vector3f(50f,50f,50f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
         });
         graphicsThread.scheduleTask(fpsTask);
@@ -110,7 +107,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture){
-        for(int i = 0; i < 2000; i++) {
+        for(int i = 0; i < 3000; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             new MaterialProperty(goat, new Material(goatTexture));
@@ -118,7 +115,7 @@ public class Test {
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;
             TransformProperty transformProperty = new TransformProperty(goat);
-            transformProperty.translate(new Vector3f(x, y, z));
+            transformProperty.move(new Vector3f(x, y, z));
         }
     }
 }
