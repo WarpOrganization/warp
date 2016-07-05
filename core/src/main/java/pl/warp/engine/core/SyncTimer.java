@@ -31,6 +31,10 @@ public class SyncTimer implements Timer {
         return delta;
     }
 
+    public int getActualUPS() {
+        return (delta > 0) ? (int) (1000 / delta) : -1;
+    }
+
     /*
      * Copyright (c) 2002-2012 LWJGL Project
      * All rights reserved.

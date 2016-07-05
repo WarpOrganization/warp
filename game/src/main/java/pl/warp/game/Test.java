@@ -46,6 +46,27 @@ public class Test {
     private static final int WIDTH = 1024, HEIGHT = 720;
     private static final float ROT_SPEED = 0.0002f;
     private static final float MOV_SPEED = 0.005f;
+    private static SyncTimer timer = new SyncTimer(60);
+    private static EngineTask fpsTask = new EngineTask() {
+        @Override
+        protected void onInit() {
+            //
+        }
+
+        @Override
+        protected void onClose() {
+            //TODO
+            throw new UnsupportedOperationException();
+        }
+
+        private int i = 0;
+
+        @Override
+        public void update(long delta) {
+            if (i % 10 == 0)
+                System.out.println("UPS: " + timer.getActualUPS());
+        }
+    };
 
     public static void main(String... args) {
         EngineContext context = new EngineContext();
@@ -54,7 +75,7 @@ public class Test {
         GLFWInput input = new GLFWInput();
         CameraControlScript cameraControlScript = new CameraControlScript(camera, input, ROT_SPEED, MOV_SPEED);
         Scene scene = new Scene(root);
-        EngineThread graphicsThread = new SyncEngineThread(new SyncTimer(50), new RapidExecutionStrategy());
+        EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
             Component goat = new SimpleComponent(root);
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("goat.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
@@ -65,11 +86,9 @@ public class Test {
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            property.addSpotLight(new SpotLight(new Vector3f(2f,2f,2f), new Vector3f(1f,1f,1f), new Vector3f(0.1f, 0.1f, 0.1f), 0.001f, 0.001f, 1000000000.0f));
-    });
-        graphicsThread.scheduleOnce(() -> {
-
+            property.addSpotLight(new SpotLight(new Vector3f(2f, 2f, 2f), new Vector3f(10f, 10f, 10f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f, 1.0f));
         });
+        graphicsThread.scheduleTask(fpsTask);
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
         Pipeline pipeline = PipelineBuilder.from(new SceneRenderer(scene, camera, settings)).to(new OnScreenRenderer());
         GLFWWindowManager windowManager = new GLFWWindowManager(graphicsThread::interrupt);

@@ -56,7 +56,7 @@ vec3 getSpotLight();
 vec3 getDirectionalLight();
 
 void main(void) {
-    if(false) {
+    if(lightEnabled) {
         vec3 sumLight = getSpotLight() + getDirectionalLight();
         fragColor = vec4(sumLight, 1) * texture(material.mainTexture, vTexCoord);
     } else fragColor = texture(material.mainTexture, vTexCoord);
@@ -92,7 +92,7 @@ vec3 getSpotLight(){
             vec3 reflection = normalize(reflect(-lightDir, vNormal));
             float spec = max(0.0, dot(-vEyeDir, reflection));
             float specVal = pow(spec, shininess);
-            specular = diff * specVal;
+            specular = diff * specVal * source.specularFactor;
         }
 
         //Sum
