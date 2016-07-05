@@ -53,7 +53,7 @@ public class TransformProperty extends Property{
         return translation;
     }
 
-    public void move(Vector3f translation) {
-        this.translation.add(translation);
+    public void move(Vector3f movement) {
+        this.translation.add(movement);
     }
 }

@@ -50,7 +50,7 @@ public class CameraControlScript extends Script<Camera> {
 
     private void move(long delta) {
         Camera camera = getOwner();
-        if (input.isKeyDown(GLFW.GLFW_KEY_W)) {
+        if (input.isKeyDown(GLFW.GLFW_KEY_W)    ) {
             move(camera.getForwardVector(), movementSpeed * delta);
         }
         if (input.isKeyDown(GLFW.GLFW_KEY_S)) {

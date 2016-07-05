@@ -62,11 +62,12 @@ public class QuaternionCamera extends Camera {
     }
 
     private Matrix4f tempMatrix = new Matrix4f();
+    private Vector3f tempVector = new Vector3f();
 
     @Override
     public Matrix4f getCameraMatrix() {
         transform.getRotation().get(tempMatrix);
-        tempMatrix.translate(transform.getTranslation());
+        tempMatrix.translate(transform.getTranslation().negate(tempVector));
         return tempMatrix;
     }
 
