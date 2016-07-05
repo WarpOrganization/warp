@@ -28,15 +28,15 @@ public class ComponentRenderer {
     }
 
     public void render(Component component) {
-        if (component.hasProperty(MeshProperty.MESH_PROPERTY_NAME))
+        if (component.hasEnabledProperty(MeshProperty.MESH_PROPERTY_NAME))
             renderMesh(component);
-        if (component.hasProperty(ParticlesProperty.PARTICLES_PROPERTY_NAME))
+        if (component.hasEnabledProperty(ParticlesProperty.PARTICLES_PROPERTY_NAME))
             renderParticles(component);
     }
 
 
     private void renderMesh(Component component) {
-        if (component.hasProperty(MaterialProperty.MATERIAL_PROPERTY_NAME))
+        if (component.hasEnabledProperty(MaterialProperty.MATERIAL_PROPERTY_NAME))
             useMaterial(component.getProperty(MaterialProperty.MATERIAL_PROPERTY_NAME));
         Mesh mesh = component.<MeshProperty>getProperty(MeshProperty.MESH_PROPERTY_NAME).getMesh();
         mesh.bind();

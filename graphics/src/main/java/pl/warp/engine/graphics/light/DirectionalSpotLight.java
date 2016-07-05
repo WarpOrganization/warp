@@ -36,7 +36,7 @@ public class DirectionalSpotLight {
 
     public Vector3f getPosition() {
         tempPosition.set(relativePosition);
-        if (owner.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
+        if (owner.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
             TransformProperty transform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             return transform.getTranslation().add(relativePosition);
         }
