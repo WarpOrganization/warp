@@ -54,6 +54,6 @@ public class TransformProperty extends Property{
     }
 
     public void translate(Vector3f translation) {
-        this.translation.add(translation);
+        this.translation.sub(translation);
     }
 }
