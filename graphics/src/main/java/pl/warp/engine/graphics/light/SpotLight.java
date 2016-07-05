@@ -1,20 +1,25 @@
 package pl.warp.engine.graphics.light;
 
 import org.joml.Vector3f;
+import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 
 /**
  * @author Jaca777
  *         Created 2016-06-30 at 13
  */
 public class SpotLight {
-    private Vector3f position;
+
+    private Component owner;
+    private Vector3f relativePosition;
     private Vector3f color, ambientColor;
     private float attenuation, gradient;
     private float specularFactor;
 
-    public SpotLight(Vector3f position, Vector3f color, Vector3f ambientColor,
+    public SpotLight(Component owner, Vector3f relativePosition, Vector3f color, Vector3f ambientColor,
                      float attenuation, float gradient, float specularFactor) {
-        this.position = position;
+        this.owner = owner;
+        this.relativePosition = relativePosition;
         this.color = color;
         this.ambientColor = ambientColor;
         this.attenuation = attenuation;
@@ -22,12 +27,19 @@ public class SpotLight {
         this.specularFactor = specularFactor;
     }
 
+    private Vector3f tempPosition = new Vector3f();
+
     public Vector3f getPosition() {
-        return position;
+        tempPosition.set(relativePosition);
+        if (owner.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
+            TransformProperty transform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            return transform.getTranslation().add(relativePosition);
+        }
+        return tempPosition;
     }
 
-    public void setPosition(Vector3f position) {
-        this.position = position;
+    public void setRelativePosition(Vector3f position) {
+        this.relativePosition = position;
     }
 
     public Vector3f getColor() {

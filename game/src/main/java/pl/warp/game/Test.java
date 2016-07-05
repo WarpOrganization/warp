@@ -35,58 +35,67 @@ import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 
+import java.util.Random;
+
 /**
  * @author Jaca777
  *         Created 2016-06-27 at 14
+ *         CANCER CODE, ONLY FOR TESTING
  */
 public class Test {
 
-    private static final Logger logger = Logger.getLogger(Test.class);
-
+    private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1024, HEIGHT = 720;
     private static final float ROT_SPEED = 0.0002f;
     private static final float MOV_SPEED = 0.005f;
-    private static SyncTimer timer = new SyncTimer(60);
+    private static SyncTimer timer = new SyncTimer(100);
     private static EngineTask fpsTask = new EngineTask() {
         @Override
         protected void onInit() {
-            //
         }
 
         @Override
         protected void onClose() {
-            //TODO
-            throw new UnsupportedOperationException();
         }
 
         private int i = 0;
 
         @Override
         public void update(long delta) {
-            if (i % 10 == 0)
-                System.out.println("UPS: " + timer.getActualUPS());
+            if (i++ % 100 == 0)
+                logger.info("UPS: " + timer.getActualUPS());
         }
     };
+    private static Random random = new Random();
 
     public static void main(String... args) {
         EngineContext context = new EngineContext();
         Component root = new SimpleComponent(context);
-        Camera camera = new QuaternionCamera(root, new PerspectiveMatrix(60, 0.01f, 100f, WIDTH, HEIGHT));
+        Camera camera = new QuaternionCamera(root, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
+        camera.move(50,50,50);
         GLFWInput input = new GLFWInput();
         CameraControlScript cameraControlScript = new CameraControlScript(camera, input, ROT_SPEED, MOV_SPEED);
         Scene scene = new Scene(root);
         EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
-            Component goat = new SimpleComponent(root);
+
+
+
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("goat.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
-            new MeshProperty(goat, goatMesh);
             ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("goat.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
-            new MaterialProperty(goat, new Material(goatTexture));
+
+            generateGOATS(root, goatMesh, goatTexture);
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            property.addSpotLight(new SpotLight(new Vector3f(2f, 2f, 2f), new Vector3f(10f, 10f, 10f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f, 1.0f));
+            property.addSpotLight(new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(10f, 10f, 10f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f, 0.1f));
+            new MeshProperty(light, goatMesh);
+            MaterialProperty lightMaterial = new MaterialProperty(light, new Material(goatTexture));
+            lightMaterial.getMaterial().setBrightness(100f);
+            TransformProperty lightSourceTransform = new TransformProperty(light);
+            lightSourceTransform.translate(new Vector3f(50f,50f,50f));
+            lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
         });
         graphicsThread.scheduleTask(fpsTask);
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
@@ -98,5 +107,18 @@ public class Test {
         scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
         scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
         graphicsThread.scheduleOnce(scriptsThread::start); //has to start after the window is created
+    }
+
+    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture){
+        for(int i = 0; i < 1000; i++) {
+            Component goat = new SimpleComponent(parent);
+            new MeshProperty(goat, goatMesh);
+            new MaterialProperty(goat, new Material(goatTexture));
+            float x = random.nextFloat() * 200 - 100f;
+            float y = random.nextFloat() * 200 - 100f;
+            float z = random.nextFloat() * 200 - 100f;
+            TransformProperty transformProperty = new TransformProperty(goat);
+            transformProperty.translate(new Vector3f(x, y, z));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics;
 
+import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
@@ -18,6 +19,12 @@ public class ComponentRenderer {
 
     public ComponentRenderer(ComponentRendererProgram program) {
         this.program = program;
+        setupRendering();
+    }
+
+    private void setupRendering() {
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
     }
 
     public void render(Component component) {

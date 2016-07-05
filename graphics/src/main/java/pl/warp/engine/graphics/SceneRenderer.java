@@ -67,11 +67,11 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         matrixStack.pop();
     }
 
-    private void applyTransformations(Component component) { //Scale, then rotate, then translate
+    private void applyTransformations(Component component) { //translate, then rotate, then scale
         TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        applyTranslation(property);
         applyScale(property);
         applyRotation(property);
-        applyTranslation(property);
     }
 
     private void applyScale(TransformProperty scale) {
