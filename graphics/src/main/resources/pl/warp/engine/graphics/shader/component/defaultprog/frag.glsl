@@ -88,12 +88,12 @@ vec3 getSpotLight(){
 
         //Specular
         float specular = 0;
-        if(shininess > 0) {
+        /*if(shininess > 0) {
             vec3 reflection = normalize(reflect(-lightDir, vNormal));
             float spec = max(0.0, dot(-vEyeDir, reflection));
             float specVal = pow(spec, shininess);
             specular = diff * specVal * source.specularFactor;
-        }
+        }*/
 
         //Sum
         totalLight += (((diff + specular) * source.color) + ambient) * att;
