@@ -15,13 +15,11 @@ import java.util.Objects;
 
 public class BasicColliderProperty extends Property<Component> implements ColliderProperty {
 
-    public static final String BASIC_COLLIDER_PROPERTY_NAME = "basicCollider";
-
     private final btCollisionShape shape;
     private btCollisionObject collisionObject;
 
     public BasicColliderProperty(Component owner, btCollisionShape shape) {
-        super(owner, BASIC_COLLIDER_PROPERTY_NAME);
+        super(owner, COLLIDER_PROPERTY_NAME);
         this.shape = shape;
         collisionObject = new btCollisionObject();
         collisionObject.setCollisionShape(shape);
