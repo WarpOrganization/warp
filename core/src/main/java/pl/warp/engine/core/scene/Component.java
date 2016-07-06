@@ -164,6 +164,12 @@ public abstract class Component {
         children.add(child);
     }
 
+    protected void removeChild(Component child) {
+        if (children.contains(child))
+            children.remove(child);
+        else throw new ChildNotPresentException("Unable to remove a child.");
+    }
+
     public List<Component> getChildren() {
         return children;
     }
