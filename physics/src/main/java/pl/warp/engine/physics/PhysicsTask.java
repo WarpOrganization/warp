@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
+import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
+import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 
 /**
@@ -22,8 +24,8 @@ public class PhysicsTask extends EngineTask {
     private btDefaultCollisionConfiguration defaultCollisionConfiguration;
     private CollisionListener collisionListener;
 
-    private Listener<Component, SceneEnteredEvent> sceneEnteredListener;
-    private Listener<Component, SceneLeftEvent> sceneLeftEventListener;
+    private Listener<Component, ChildAddedEvent> sceneEnteredListener;
+    private Listener<Component, ChildRemovedEvent> sceneLeftEventListener;
 
     @Override
     protected void onInit() {
@@ -52,13 +54,13 @@ public class PhysicsTask extends EngineTask {
         collisionWorld.performDiscreteCollisionDetection();
     }
 
-    private void handleSceneEntered(SceneEnteredEvent event){
-        ColliderProperty tmp = event.getComponent().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.addToWorld(collisionWorld);
+    private void handleSceneEntered(ChildAddedEvent event){
+        ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+        tmp.getLogic().addToWorld(collisionWorld);
     }
 
-    private void handleSceneLeft(SceneLeftEvent event){
-        ColliderProperty tmp = event.getComponent().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.removeFromWorld(collisionWorld);
+    private void handleSceneLeft(ChildAddedEvent event){
+        ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+        tmp.getLogic().removeFromWorld(collisionWorld);
     }
 }
