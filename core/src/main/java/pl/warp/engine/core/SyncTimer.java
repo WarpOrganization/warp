@@ -31,8 +31,8 @@ public class SyncTimer implements Timer {
         return delta;
     }
 
-    public int getActualUPS() {
-        return (delta > 0) ? (int) (1000 / delta) : -1;
+    public float getActualUPS() {
+        return (delta > 0) ? 1000f / delta : -1;
     }
 
     /*

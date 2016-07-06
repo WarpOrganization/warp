@@ -80,21 +80,21 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public Vector3f getForwardVector() {
-        return transform.getRotation().positiveZ(forwardVector);
+        return transform.getRotation().positiveZ(forwardVector).negate();
     }
 
     private Vector3f rightVector = new Vector3f();
 
     @Override
     public Vector3f getRightVector() {
-        return transform.getRotation().positiveX(rightVector);
+        return transform.getRotation().positiveX(rightVector).negate();
     }
 
     private Vector3f upVector = new Vector3f();
 
     @Override
     public Vector3f getUpVector() {
-        return transform.getRotation().positiveY(upVector);
+        return transform.getRotation().positiveY(upVector).negate();
     }
 
 }

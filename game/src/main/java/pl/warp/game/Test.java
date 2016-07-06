@@ -49,6 +49,7 @@ public class Test {
     private static final float ROT_SPEED = 0.0002f;
     private static final float MOV_SPEED = 0.005f;
     private static SyncTimer timer = new SyncTimer(100);
+    private static final int UPS_LOGGING_RATIO = 100;
     private static EngineTask fpsTask = new EngineTask() {
         @Override
         protected void onInit() {
@@ -60,10 +61,21 @@ public class Test {
 
         private int i = 0;
 
+
+        private float sum = 0;
+        private float lowestUPS = Float.MAX_VALUE;
+
         @Override
         public void update(long delta) {
-            if (i++ % 100 == 0)
-                logger.info("UPS: " + timer.getActualUPS());
+            sum += timer.getActualUPS();
+            if(timer.getActualUPS() < lowestUPS || lowestUPS == 0)
+                lowestUPS = timer.getActualUPS();
+            if (i++ % UPS_LOGGING_RATIO == 0) {
+                float averageUPS = sum / (float) UPS_LOGGING_RATIO;
+                logger.info("Average UPS: " + averageUPS + ", Lowest UPS: " + lowestUPS);
+                sum = 0;
+                lowestUPS = Float.MAX_VALUE;
+            }
         }
     };
     private static Random random = new Random();
@@ -91,7 +103,7 @@ public class Test {
             MaterialProperty lightMaterial = new MaterialProperty(light, new Material(goatTexture));
             lightMaterial.getMaterial().setBrightness(100f);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(50f,50f,50f));
+            lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
         });
         graphicsThread.scheduleTask(fpsTask);
@@ -106,8 +118,8 @@ public class Test {
         graphicsThread.scheduleOnce(scriptsThread::start); //has to start after the window is created
     }
 
-    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture){
-        for(int i = 0; i < 2000; i++) {
+    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
+        for (int i = 0; i < 10000; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             new MaterialProperty(goat, new Material(goatTexture));
