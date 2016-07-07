@@ -4,7 +4,6 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -31,19 +30,19 @@ public class MovementTask extends EngineTask {
 
     @Override
     public void update(long delta) {
-/*        for (Component component : parent.getChildren()) {
-            PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-            TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+        parent.forEachChildren(component -> {
+            if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME) && component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
+                PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+                TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+                //ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
 
+                transformProperty.move(physicalBodyProperty.getSpeed());
 
-            physicalBodyProperty.getLogic().processAcceleration();
-            transformProperty.move(physicalBodyProperty.getSpeed());
+                Vector3f torque = physicalBodyProperty.getTorque();
+                transformProperty.rotate(torque.x, torque.y, torque.z);
 
-            Vector3f torque = physicalBodyProperty.getTorque();
-            transformProperty.rotate(torque.x, torque.y, torque.z);
-
-            colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
-        }*/
+                //colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
+            }
+        });
     }
 }

@@ -17,16 +17,16 @@ import pl.warp.engine.graphics.camera.CameraControlScript;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
+import pl.warp.engine.graphics.light.LightProperty;
 import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.Material;
+import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.MeshProperty;
+import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
-import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
-import pl.warp.engine.graphics.light.LightProperty;
-import pl.warp.engine.graphics.material.MaterialProperty;
-import pl.warp.engine.graphics.mesh.MeshProperty;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
@@ -34,6 +34,8 @@ import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
+import pl.warp.engine.physics.MovementTask;
+import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import java.util.Random;
 
@@ -68,7 +70,7 @@ public class Test {
         @Override
         public void update(long delta) {
             sum += timer.getActualUPS();
-            if(timer.getActualUPS() < lowestUPS || lowestUPS == 0)
+            if (timer.getActualUPS() < lowestUPS || lowestUPS == 0)
                 lowestUPS = timer.getActualUPS();
             if (i++ % UPS_LOGGING_RATIO == 0) {
                 float averageUPS = sum / (float) UPS_LOGGING_RATIO;
@@ -116,6 +118,9 @@ public class Test {
         scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
         scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
         graphicsThread.scheduleOnce(scriptsThread::start); //has to start after the window is created
+        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(20), new RapidExecutionStrategy());
+        physicsThread.scheduleTask(new MovementTask(root));
+        physicsThread.start();
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
@@ -123,6 +128,7 @@ public class Test {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             new MaterialProperty(goat, new Material(goatTexture));
+            new PhysicalBodyProperty(goat, 1).getLogic().applyForce(new Vector3f(1, 0, 0));
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;

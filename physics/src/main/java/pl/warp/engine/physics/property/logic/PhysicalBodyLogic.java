@@ -1,5 +1,6 @@
 package pl.warp.engine.physics.property.logic;
 
+import org.joml.Vector3f;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -15,7 +16,7 @@ public class PhysicalBodyLogic {
         this.root = root;
     }
 
-    public void processAcceleration(){
-        root.addSpeed(root.getForce().div(root.getMass()));
+    public synchronized void applyForce(Vector3f force){
+        root.getSpeed().add(force.div(root.getMass()));
     }
 }
