@@ -16,12 +16,24 @@ public class GLFWInput {
     private boolean[] keyboardKeys = new boolean[349];
     private boolean[] mouseButtons = new boolean[8];
 
-    private Vector2f cursorPosition = new Vector2f(0, 0);
+    private Vector2f cursorPosition;
     private Vector2f cursorPositionDelta = new Vector2f(0, 0);
 
     public void init(long windowHandle) {
         this.windowHandle = windowHandle;
         createCallbacks();
+        initCursorPos();
+    }
+
+    private void initCursorPos() {
+        this.cursorPosition = getRealCursorPos();
+    }
+
+    private Vector2f getRealCursorPos() {
+        double[] xPos = new double[1];
+        double[] yPos = new double[1];
+        GLFW.glfwGetCursorPos(windowHandle, xPos, yPos);
+        return new Vector2f((float) xPos[0], (float) yPos[0]);
     }
 
     private void createCallbacks() {
@@ -30,7 +42,7 @@ public class GLFWInput {
     }
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
-        if(key == -1)
+        if (key == -1)
             return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
@@ -46,7 +58,7 @@ public class GLFWInput {
     }
 
     private void mouseButtonAction(long window, int button, int action, int mods) {
-        if(button == -1)
+        if (button == -1)
             return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
@@ -66,10 +78,7 @@ public class GLFWInput {
     }
 
     private void updateMousePos() {
-        double[] xPos = new double[1];
-        double[] yPos = new double[1];
-        GLFW.glfwGetCursorPos(windowHandle, xPos, yPos);
-        Vector2f currentCursorPos = new Vector2f((float) xPos[0], (float) yPos[0]);
+        Vector2f currentCursorPos = getRealCursorPos();
         currentCursorPos.sub(cursorPosition, this.cursorPositionDelta);
         this.cursorPosition = currentCursorPos;
     }
