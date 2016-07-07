@@ -118,7 +118,7 @@ public class Test {
         scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
         scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
         graphicsThread.scheduleOnce(scriptsThread::start); //has to start after the window is created
-        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(20), new RapidExecutionStrategy());
+        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleTask(new MovementTask(root));
         physicsThread.start();
     }
@@ -128,7 +128,7 @@ public class Test {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             new MaterialProperty(goat, new Material(goatTexture));
-            new PhysicalBodyProperty(goat, 1).getLogic().applyForce(new Vector3f(1, 0, 0));
+            new PhysicalBodyProperty(goat, 1).getLogic().applyForce(new Vector3f((float) Math.random()/10, (float) Math.random()/10, (float) Math.random()/10));
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;
