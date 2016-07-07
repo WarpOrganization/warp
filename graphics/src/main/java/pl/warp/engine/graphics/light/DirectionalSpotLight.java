@@ -16,10 +16,10 @@ public class DirectionalSpotLight {
     private float directionGradient;
     private Vector3f color, ambientColor;
     private float attenuation, gradient;
-    private float factor, specularFactor;
+    private float factor;
 
     public DirectionalSpotLight(Component owner, Vector3f relativePosition, Vector3f relativeDirection, float directionGradient, Vector3f color, Vector3f ambientColor,
-                                float attenuation, float gradient, float factor, float specularFactor) {
+                                float attenuation, float gradient, float factor) {
         this.owner = owner;
         this.relativePosition = relativePosition;
         this.relativeDirection = relativeDirection;
@@ -29,7 +29,6 @@ public class DirectionalSpotLight {
         this.attenuation = attenuation;
         this.gradient = gradient;
         this.factor = factor;
-        this.specularFactor = specularFactor;
     }
 
     private Vector3f tempPosition = new Vector3f();
@@ -110,11 +109,4 @@ public class DirectionalSpotLight {
         this.factor = factor;
     }
 
-    public float getSpecularFactor() {
-        return specularFactor;
-    }
-
-    public void setSpecularFactor(float specularFactor) {
-        this.specularFactor = specularFactor;
-    }
 }

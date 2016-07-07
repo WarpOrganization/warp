@@ -1,6 +1,5 @@
 package pl.warp.engine.graphics.material;
 
-import pl.warp.engine.graphics.texture.Texture;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 import java.util.Objects;
@@ -14,6 +13,7 @@ public class Material {
     private Texture2D mainTexture;
     private Texture2D specularTexture;
     private float brightness = 1.0f;
+    private float shininess = 0.1f;
 
     public Material(Texture2D mainTexture) {
         this.mainTexture = mainTexture;
@@ -36,7 +36,7 @@ public class Material {
         this.specularTexture = specularTexture;
     }
 
-    public boolean hasSpecularTexture(){
+    public boolean hasSpecularTexture() {
         return specularTexture != null;
     }
 
@@ -47,4 +47,13 @@ public class Material {
     public void setBrightness(float brightness) {
         this.brightness = brightness;
     }
+
+    public float getShininess() {
+        return shininess;
+    }
+
+    public void setShininess(float shininess) {
+        this.shininess = shininess;
+    }
 }
+

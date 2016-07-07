@@ -10,7 +10,6 @@ struct SpotLightSource {
     vec3 ambientColor;
     float attenuation;
     float gradient;
-    float specularFactor;
 };
 
 struct DirectionalLightSource {
@@ -21,13 +20,14 @@ struct DirectionalLightSource {
     vec3 ambientColor;
     float attenuation;
     float gradient;
-    float specularFactor;
 };
 
 struct Material {
     sampler2D mainTexture;
     float brightness;
+    float shininess;
 };
+const float SPECULAR_EXPONENT = 100.0;
 
 uniform Material material;
 
@@ -38,7 +38,7 @@ const int MAX_DIRECTIONAL_LIGHTS = 25;
 uniform DirectionalLightSource directionalLightSources[MAX_DIRECTIONAL_LIGHTS];
 uniform int numDirectionalLights;
 uniform bool lightEnabled;
-uniform float shininess = 10000;
+
 
 
 //Basic rendering stuff
@@ -88,15 +88,15 @@ vec3 getSpotLight(){
 
         //Specular
         float specular = 0;
-        if(shininess > 0) {
+        if(material.shininess > 0) {
             vec3 reflection = normalize(reflect(-lightDir, vNormal));
             float spec = max(0.0, dot(-vEyeDir, reflection));
-            float specVal = pow(spec, shininess);
-            specular = diff * specVal * source.specularFactor;
+            float specVal = pow(spec, SPECULAR_EXPONENT);
+            specular = diff * specVal * material.shininess;
         }
 
         //Sum
-        totalLight += (((diff + specular * 5) * source.color) + ambient) * att;
+        totalLight += (((diff + specular * 20) * source.color) + ambient) * att;
     }
     return totalLight;
 }

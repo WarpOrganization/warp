@@ -19,7 +19,6 @@ public abstract class ComponentRendererProgram extends Program{
     public static final int SPOT_LIGHT_AMBIENT_COLOR = 2;
     public static final int SPOT_LIGHT_ATTENUATION = 3;
     public static final int SPOT_LIGHT_GRADIENT = 4;
-    public static final int SPOT_LIGHT_SPECULAR_FACTOR = 5;
 
     public static final int DIRECTIONAL_LIGHT_POSITION = 0;
     public static final int DIRECTIONAL_LIGHT_DIRECTION = 1;
@@ -28,7 +27,6 @@ public abstract class ComponentRendererProgram extends Program{
     public static final int DIRECTIONAL_LIGHT_AMBIENT_COLOR = 4;
     public static final int DIRECTIONAL_LIGHT_ATTENUATION = 5;
     public static final int DIRECTIONAL_LIGHT_GRADIENT = 6;
-    public static final int DIRECTIONAL_LIGHT_SPECULAR_FACTOR = 7;
 
     public static final int[] ATTRIBUTES = {0, 1, 2}; //vertex, textureCoord, normal
     public static final int ATTR_VERTEX_LOCATION = 0;

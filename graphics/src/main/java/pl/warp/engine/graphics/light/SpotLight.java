@@ -14,17 +14,15 @@ public class SpotLight {
     private Vector3f relativePosition;
     private Vector3f color, ambientColor;
     private float attenuation, gradient;
-    private float specularFactor;
 
     public SpotLight(Component owner, Vector3f relativePosition, Vector3f color, Vector3f ambientColor,
-                     float attenuation, float gradient, float specularFactor) {
+                     float attenuation, float gradient) {
         this.owner = owner;
         this.relativePosition = relativePosition;
         this.color = color;
         this.ambientColor = ambientColor;
         this.attenuation = attenuation;
         this.gradient = gradient;
-        this.specularFactor = specularFactor;
     }
 
     private Vector3f tempPosition = new Vector3f();
@@ -74,11 +72,4 @@ public class SpotLight {
         this.gradient = gradient;
     }
 
-    public float getSpecularFactor() {
-        return specularFactor;
-    }
-
-    public void setSpecularFactor(float specularFactor) {
-        this.specularFactor = specularFactor;
-    }
 }
