@@ -10,7 +10,6 @@ public class PhysicalBodyLogic {
 
     private PhysicalBodyProperty root;
 
-
     public PhysicalBodyLogic(PhysicalBodyProperty root){
 
         this.root = root;
