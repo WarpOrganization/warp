@@ -15,19 +15,15 @@ public class PhysicalBodyProperty extends Property<Component> {
 
     public static final String PHYSICAL_BODY_PROPERTY_NAME = "physicalBody";
 
-    private Vector3f torque;
-    private Vector3f speed;
+    private Vector3f torque = new Vector3f();
+    private Vector3f speed = new Vector3f();
     private float mass;
 
-    private PhysicalBodyLogic logic;
+    private PhysicalBodyLogic logic = new PhysicalBodyLogic(this);
 
     public PhysicalBodyProperty(Component owner, float mass) {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
-        torque = new Vector3f();
-        speed = new Vector3f();
         this.mass = mass;
-
-        logic = new PhysicalBodyLogic(this);
     }
 
     public Vector3f getTorque() {
