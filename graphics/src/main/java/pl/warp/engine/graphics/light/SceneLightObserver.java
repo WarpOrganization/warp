@@ -5,6 +5,7 @@ import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleListener;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**

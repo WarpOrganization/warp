@@ -3,21 +3,23 @@ package pl.warp.engine.core.scene;
 import pl.warp.engine.core.EngineContext;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * @author Jaca777
  *         Created 2016-06-27 at 12
+ *         TODO delete children streams
  */
 public abstract class Component {
 
     private Component parent;
     private EngineContext context;
-    private Map<String, Property> properties = new TreeMap<>();
-    private Set<Listener> listeners = new HashSet<>();
-    private Set<String> tags = new TreeSet<>();
-    private List<Component> children = new ArrayList<>();
+    private final Map<String, Property> properties = new TreeMap<>();
+    private final Set<Listener> listeners = new HashSet<>();
+    private final Set<String> tags = new TreeSet<>();
+    private final List<Component> children = new ArrayList<>();
 
     public Component(Component parent) {
         this.parent = parent;
@@ -72,9 +74,11 @@ public abstract class Component {
      * Triggers event on this component. No other components are affected.
      */
     public <T extends Event> void triggerEvent(T event) {
-        for (Listener listener : listeners) {
-            if (listener.isInterestedIn(event))
-                listener.handle(event);
+        synchronized (listeners) {
+            for (Listener listener : listeners) {
+                if (listener.isInterestedIn(event))
+                    listener.handle(event);
+            }
         }
     }
 
@@ -82,7 +86,7 @@ public abstract class Component {
      * Triggers event on each children.
      */
     public <T extends Event> void triggerOnChildren(T event) {
-        getChildren().forEach(child -> {
+        forEachChildren(child -> {
             child.triggerEvent(event);
             child.triggerOnChildren(event);
         });
@@ -120,9 +124,9 @@ public abstract class Component {
     }
 
     public Set<Component> getChildrenWithTag(String tag) {
-        Stream<Component> childrenOfChildrenWithTag = getChildren().stream()
+        Stream<Component> childrenOfChildrenWithTag = children.stream()
                 .flatMap(p -> p.getChildrenWithTag(tag).stream());
-        Stream<Component> childrenWithTag = getChildren().stream()
+        Stream<Component> childrenWithTag = children.stream()
                 .filter(c -> c.hasTag(tag));
         Stream<Component> allChildrenWithTag = Stream.concat(
                 childrenOfChildrenWithTag,
@@ -136,9 +140,9 @@ public abstract class Component {
      */
     //Considered redundant
     public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
-        Stream<T> childrenOfChildrenProperties = getChildren().stream()
+        Stream<T> childrenOfChildrenProperties = children.stream()
                 .flatMap(p -> p.getChildrenProperties(propertyClass).stream());
-        Stream<T> childrenProperties = getChildren().stream()
+        Stream<T> childrenProperties = children.stream()
                 .filter(c -> c.hasProperty(propertyClass))
                 .map(c -> c.getProperty(propertyClass));
         Stream<T> allChildrenProperties = Stream.concat(
@@ -149,9 +153,9 @@ public abstract class Component {
 
     //Considered redundant
     public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
-        Stream<T> childrenOfChildrenProperties = getChildren().stream()
+        Stream<T> childrenOfChildrenProperties = children.stream()
                 .flatMap(p -> p.<T>getChildrenProperties(propertyName).stream());
-        Stream<T> childrenProperties = getChildren().stream()
+        Stream<T> childrenProperties = children.stream()
                 .filter(c -> c.hasProperty(propertyName))
                 .map(c -> c.getProperty(propertyName));
         Stream<T> allChildrenProperties = Stream.concat(
@@ -161,17 +165,23 @@ public abstract class Component {
     }
 
     protected void addChild(Component child) {
-        children.add(child);
+        synchronized (children) {
+            children.add(child);
+        }
     }
 
     protected void removeChild(Component child) {
-        if (children.contains(child))
-            children.remove(child);
-        else throw new ChildNotPresentException("Unable to remove a child.");
+        synchronized (children) {
+            if (children.contains(child))
+                children.remove(child);
+            else throw new ChildNotPresentException("Unable to remove a child.");
+        }
     }
 
-    public List<Component> getChildren() {
-        return children;
+    public void forEachChildren(Consumer<Component> f) {
+        synchronized (children) {
+            children.forEach(f);
+        }
     }
 
     public EngineContext getContext() {
@@ -200,11 +210,15 @@ public abstract class Component {
     }
 
     void addListener(Listener<?, ?> listener) {
-        this.listeners.add(listener);
+        synchronized (listeners) {
+            this.listeners.add(listener);
+        }
     }
 
     void removeListener(Listener<?, ?> listener) {
-        this.listeners.remove(listener);
+        synchronized (listeners) {
+            this.listeners.remove(listener);
+        }
     }
 
 }
