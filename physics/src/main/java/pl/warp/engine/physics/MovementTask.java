@@ -31,7 +31,7 @@ public class MovementTask extends EngineTask {
 
     @Override
     public void update(long delta) {
-        for (Component component : parent.getChildren()) {
+/*        for (Component component : parent.getChildren()) {
             PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
@@ -44,6 +44,6 @@ public class MovementTask extends EngineTask {
             transformProperty.rotate(torque.x, torque.y, torque.z);
 
             colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
-        }
+        }*/
     }
 }

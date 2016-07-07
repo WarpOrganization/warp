@@ -38,7 +38,7 @@ const int MAX_DIRECTIONAL_LIGHTS = 25;
 uniform DirectionalLightSource directionalLightSources[MAX_DIRECTIONAL_LIGHTS];
 uniform int numDirectionalLights;
 uniform bool lightEnabled;
-uniform float shininess = 100;
+uniform float shininess = 10000;
 
 
 //Basic rendering stuff

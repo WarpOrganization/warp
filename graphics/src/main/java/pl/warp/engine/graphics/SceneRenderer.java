@@ -63,7 +63,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
             applyTransformations(component);
         program.useMatrixStack(matrixStack);
         componentRenderer.render(component);
-        component.getChildren().forEach(this::render);
+        component.forEachChildren(this::render);
         matrixStack.pop();
     }
 
@@ -106,7 +106,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private void destroyComponent(Component component) {
         destroyProperties(component);
-        component.getChildren().forEach(this::destroyComponent);
+        component.forEachChildren(this::destroyComponent);
     }
 
     private void destroyProperties(Component component) {
