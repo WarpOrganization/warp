@@ -36,7 +36,7 @@ public class BasicColliderLogic implements ColliderLogic {
     @Override
     public void addTransform(Vector3f translation, Vector3f rotation) {
         transform.translate(translation.x, translation.y, translation.z);
-        //TODO: transform.rotate();
+        transform.rotate(1,0,0,rotation.x).rotate(0,1,0,rotation.y).rotate(0,0,1,rotation.z);//Will it work?
         root.getCollisionObject().setWorldTransform(transform);
     }
 
