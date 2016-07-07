@@ -2,11 +2,10 @@ package pl.warp.engine.graphics;
 
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.graphics.property.MaterialProperty;
-import pl.warp.engine.graphics.property.MeshProperty;
-import pl.warp.engine.graphics.property.ParticlesProperty;
+import pl.warp.engine.graphics.material.MaterialProperty;
+import pl.warp.engine.graphics.mesh.MeshProperty;
+import pl.warp.engine.graphics.particles.ParticlesProperty;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 
 /**

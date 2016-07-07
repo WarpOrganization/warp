@@ -45,7 +45,7 @@ uniform float shininess = 1;
 uniform vec3 cameraPos;
 
 //From vertex shader
-in vec3 vNormal;
+smooth in vec3 vNormal;
 in vec3 vPos3;
 in vec2 vTexCoord;
 in vec3 vEyeDir;

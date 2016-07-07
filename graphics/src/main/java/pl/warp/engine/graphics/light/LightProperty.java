@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.property;
+package pl.warp.engine.graphics.light;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
@@ -19,7 +19,7 @@ public class LightProperty extends Property<Component> {
     private Set<DirectionalSpotLight> directionalSpotLights = new HashSet<>();
     private Set<SpotLight> spotLights = new HashSet<>();
 
-    public static final String LIGHT_PROPERTY_NAME = "LightProperty";
+    public static final String LIGHT_PROPERTY_NAME = "lightProperty";
 
     public LightProperty(Component owner, Set<DirectionalSpotLight> directionalSpotLights, Set<SpotLight> spotLights) {
         super(owner);

@@ -14,7 +14,7 @@ out vec3 vEyeDir;
 
 layout(location = 0) in vec4 inVertex;
 layout(location = 1) in vec2 inTexCoord; out vec2 vTexCoord;
-layout(location = 2) in vec3 inNormal; out vec3 vNormal;
+layout(location = 2) in vec3 inNormal; smooth out vec3 vNormal;
 
 vec3 calculateNormal();
 

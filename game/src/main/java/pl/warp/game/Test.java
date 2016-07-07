@@ -24,9 +24,9 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
-import pl.warp.engine.graphics.property.LightProperty;
-import pl.warp.engine.graphics.property.MaterialProperty;
-import pl.warp.engine.graphics.property.MeshProperty;
+import pl.warp.engine.graphics.light.LightProperty;
+import pl.warp.engine.graphics.material.MaterialProperty;
+import pl.warp.engine.graphics.mesh.MeshProperty;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
@@ -90,15 +90,15 @@ public class Test {
         Scene scene = new Scene(root);
         EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
-            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("goat.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
-            ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("goat.png"), PNGDecoder.Format.RGBA);
+            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
+            ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
             generateGOATS(root, goatMesh, goatTexture);
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            property.addSpotLight(new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(10f, 10f, 10f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f, 0.1f));
+            property.addSpotLight(new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f, 0.1f));
             new MeshProperty(light, goatMesh);
             MaterialProperty lightMaterial = new MaterialProperty(light, new Material(goatTexture));
             lightMaterial.getMaterial().setBrightness(100f);
@@ -119,7 +119,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 2000; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             new MaterialProperty(goat, new Material(goatTexture));

@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.property;
+package pl.warp.engine.graphics.particles;
 
 /**
  * @author Jaca777

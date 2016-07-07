@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.property;
+package pl.warp.engine.graphics.mesh;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
