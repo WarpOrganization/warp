@@ -1,15 +1,12 @@
 package pl.warp.engine.physics.property;
 
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import pl.warp.engine.physics.property.logic.ColliderLogic;
 
 /**
  * Created by hubertus on 7/3/16.
  */
 public interface ColliderProperty {
     String COLLIDER_PROPERTY_NAME = "collider";
-    void addToWorld(btCollisionWorld world);
-    void removeFromWorld(btCollisionWorld world);
-    void setTransform(Matrix4 transform);
-    void dispose();
+
+    ColliderLogic getLogic();
 }
