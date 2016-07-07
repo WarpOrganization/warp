@@ -17,10 +17,6 @@ public class Scene {
         this.root = root;
     }
 
-    public Set<Component> getComponentsWithTag(String tag) {
-        return root.getChildrenWithTag(tag);
-    }
-
     public Component getRoot() {
         return root;
     }
