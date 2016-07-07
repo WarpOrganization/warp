@@ -16,12 +16,14 @@ public class PhysicalBodyProperty extends Property<Component> {
 
     private Vector3f acceleration;
     private Vector3f torque;
+    private Vector3f speed;
     private float mass;
 
     public PhysicalBodyProperty(Component owner, float mass) {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
         acceleration = new Vector3f();
         torque = new Vector3f();
+        speed = new Vector3f();
         this.mass = mass;
     }
 
@@ -57,6 +59,14 @@ public class PhysicalBodyProperty extends Property<Component> {
         this.mass = mass;
     }
 
+    public void addSpeed(Vector3f acceleration){
+        speed.add(acceleration);
+    }
+
+    public Vector3f getSpeed() {
+        return speed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,11 +74,12 @@ public class PhysicalBodyProperty extends Property<Component> {
         PhysicalBodyProperty that = (PhysicalBodyProperty) o;
         return Float.compare(that.mass, mass) == 0 &&
                 Objects.equals(acceleration, that.acceleration) &&
-                Objects.equals(torque, that.torque);
+                Objects.equals(torque, that.torque) &&
+                Objects.equals(speed, that.speed);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(acceleration, torque, mass);
+        return Objects.hash(acceleration, torque, speed, mass);
     }
 }

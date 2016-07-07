@@ -5,5 +5,5 @@ package pl.warp.engine.physics.property;
  */
 public interface ColliderProperty {
     String COLLIDER_PROPERTY_NAME = "collider";
-    ColliderPropertyLogic getLogic();
+    ColliderLogic getLogic();
 }

@@ -17,7 +17,7 @@ public class BasicColliderProperty extends Property<Component> implements Collid
     private final btCollisionShape shape;
     private btCollisionObject collisionObject;
 
-    private BasicColliderPropertyLogic logic;
+    private BasicColliderLogic logic;
 
     public BasicColliderProperty(Component owner, btCollisionShape shape) {
         super(owner, COLLIDER_PROPERTY_NAME);
@@ -27,7 +27,7 @@ public class BasicColliderProperty extends Property<Component> implements Collid
         Matrix4 t = new Matrix4();
         collisionObject.setWorldTransform(new Matrix4());
 
-        logic = new BasicColliderPropertyLogic(this);
+        logic = new BasicColliderLogic(this);
     }
 
     public btCollisionObject getCollisionObject() {
@@ -39,7 +39,7 @@ public class BasicColliderProperty extends Property<Component> implements Collid
     }
 
     @Override
-    public BasicColliderPropertyLogic getLogic() {
+    public BasicColliderLogic getLogic() {
         return logic;
     }
 
