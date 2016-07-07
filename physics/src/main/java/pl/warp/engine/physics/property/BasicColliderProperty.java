@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.physics.property.logic.BasicColliderLogic;
 
 import java.util.Objects;
 
@@ -26,7 +27,6 @@ public class BasicColliderProperty extends Property<Component> implements Collid
         collisionObject.setCollisionShape(shape);
         Matrix4 t = new Matrix4();
         collisionObject.setWorldTransform(new Matrix4());
-
         logic = new BasicColliderLogic(this);
     }
 

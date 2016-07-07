@@ -1,10 +1,11 @@
-package pl.warp.engine.physics.property;
+package pl.warp.engine.physics.property.logic;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import pl.warp.engine.physics.property.BasicColliderProperty;
 
 /**
  * Created by hubertus on 7/7/16.

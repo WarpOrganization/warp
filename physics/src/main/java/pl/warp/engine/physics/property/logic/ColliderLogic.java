@@ -1,4 +1,4 @@
-package pl.warp.engine.physics.property;
+package pl.warp.engine.physics.property.logic;
 
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;

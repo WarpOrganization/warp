@@ -37,7 +37,7 @@ public class MovementTask extends EngineTask {
             ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
 
 
-            physicalBodyProperty.addSpeed(physicalBodyProperty.getAcceleration());
+            physicalBodyProperty.getLogic().processAcceleration();
             transformProperty.move(physicalBodyProperty.getSpeed());
 
             Vector3f torque = physicalBodyProperty.getTorque();
