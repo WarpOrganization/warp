@@ -18,7 +18,6 @@ public abstract class Component {
     private EngineContext context;
     private final Map<String, Property> properties = new TreeMap<>();
     private final Set<Listener> listeners = new HashSet<>();
-    private final Set<String> tags = new TreeSet<>();
     private final List<Component> children = new ArrayList<>();
 
     public Component(Component parent) {
@@ -123,17 +122,6 @@ public abstract class Component {
         return parent != null;
     }
 
-    public Set<Component> getChildrenWithTag(String tag) {
-        Stream<Component> childrenOfChildrenWithTag = children.stream()
-                .flatMap(p -> p.getChildrenWithTag(tag).stream());
-        Stream<Component> childrenWithTag = children.stream()
-                .filter(c -> c.hasTag(tag));
-        Stream<Component> allChildrenWithTag = Stream.concat(
-                childrenOfChildrenWithTag,
-                childrenWithTag);
-        return allChildrenWithTag.collect(Collectors.toSet());
-    }
-
     /**
      * Returns children's components of type T. Children of children are traversed as well (and so on).
      * It's a bit slower than {@link #getChildrenProperties(String)}.
@@ -186,14 +174,6 @@ public abstract class Component {
 
     public EngineContext getContext() {
         return context;
-    }
-
-    public void addTag(String tag) {
-        tags.add(tag);
-    }
-
-    public boolean hasTag(String tag) {
-        return tags.contains(tag);
     }
 
     /**
