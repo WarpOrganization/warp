@@ -1,7 +1,9 @@
 package pl.warp.engine.physics.property;
 
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 /**
@@ -29,14 +31,17 @@ public class BasicColliderLogic implements ColliderLogic {
     }
 
     @Override
-    public void setTransform(Matrix4 transform) {
-        this.transform = transform;
+    public void setTransform(Vector3f translation, Quaternionf rotation) {
+        transform.setToTranslation(translation.x, translation.y, translation.z);
+        transform.setToRotation(rotation.x, rotation.y, rotation.z, rotation.w);
+        root.getCollisionObject().setWorldTransform(transform);
     }
 
+
     @Override
-    public void addTransform(Vector3f translation, Vector3f rotation) {
+    public void addTransform(Vector3f translation, Quaternion rotation) {
         transform.translate(translation.x, translation.y, translation.z);
-        transform.rotate(1,0,0,rotation.x).rotate(0,1,0,rotation.y).rotate(0,0,1,rotation.z);//Will it work?
+        transform.rotate(rotation);
         root.getCollisionObject().setWorldTransform(transform);
     }
 

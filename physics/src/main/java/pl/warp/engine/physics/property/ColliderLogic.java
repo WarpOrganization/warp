@@ -1,7 +1,8 @@
 package pl.warp.engine.physics.property;
 
-import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 /**
@@ -9,8 +10,12 @@ import org.joml.Vector3f;
  */
 public interface ColliderLogic {
     void addToWorld(btCollisionWorld world);
+
     void removeFromWorld(btCollisionWorld world);
-    void setTransform(Matrix4 transform);
-    void addTransform(Vector3f translation, Vector3f rotation);
+
+    void setTransform(Vector3f translation, Quaternionf rotation);
+
+    void addTransform(Vector3f translation, Quaternion rotation);
+
     void dispose();
 }

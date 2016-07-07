@@ -59,7 +59,7 @@ public class PhysicalBodyProperty extends Property<Component> {
         this.mass = mass;
     }
 
-    public void addSpeed(Vector3f acceleration){
+    public void addSpeed(Vector3f acceleration) {
         speed.add(acceleration);
     }
 

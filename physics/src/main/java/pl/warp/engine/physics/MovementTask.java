@@ -43,7 +43,7 @@ public class MovementTask extends EngineTask {
             Vector3f torque = physicalBodyProperty.getTorque();
             transformProperty.rotate(torque.x, torque.y, torque.z);
 
-            colliderProperty.getLogic().addTransform(physicalBodyProperty.getSpeed(), torque);
+            colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
         }
     }
 }

@@ -54,12 +54,12 @@ public class PhysicsTask extends EngineTask {
         collisionWorld.performDiscreteCollisionDetection();
     }
 
-    private void handleSceneEntered(ChildAddedEvent event){
+    private void handleSceneEntered(ChildAddedEvent event) {
         ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         tmp.getLogic().addToWorld(collisionWorld);
     }
 
-    private void handleSceneLeft(ChildAddedEvent event){
+    private void handleSceneLeft(ChildAddedEvent event) {
         ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         tmp.getLogic().removeFromWorld(collisionWorld);
     }
