@@ -18,7 +18,7 @@ import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.camera.CameraControlScript;
+import pl.warp.engine.graphics.camera.CameraScript;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
@@ -56,7 +56,7 @@ public class Test {
     private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1024, HEIGHT = 720;
     private static final float ROT_SPEED = 0.0002f;
-    private static final float MOV_SPEED = 0.005f;
+    private static final float MOV_SPEED = 0.2f;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static EngineTask fpsTask = new EngineTask() {
@@ -146,7 +146,7 @@ public class Test {
             Material material = new Material(goatTexture);
             material.setShininess(0.2f);
             new MaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1).getLogic().applyForce(new Vector3f((float) Math.random(), (float) Math.random(), (float) Math.random()));
+            new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random(), (float) Math.random(), (float) Math.random()));
             new BasicColliderProperty(goat, new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0));
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;

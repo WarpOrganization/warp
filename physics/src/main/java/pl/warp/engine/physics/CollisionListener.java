@@ -32,8 +32,8 @@ public class CollisionListener extends ContactListener {
         tmpSpeed1.set(tmp1.getSpeed());
         tmpSpeed2.set(tmp2.getSpeed());
 
-        tmp1.getLogic().applyForce(tmpSpeed1.mul(-2));
-        tmp2.getLogic().applyForce(tmpSpeed2.mul(-2));
+        tmp1.applyForce(tmpSpeed1.mul(-2));
+        tmp2.applyForce(tmpSpeed2.mul(-2));
 
         tmp1.addTorque(tmpSpeed1);
         tmp2.addTorque(tmpSpeed2);
