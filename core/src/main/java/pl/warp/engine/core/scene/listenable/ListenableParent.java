@@ -12,10 +12,6 @@ public abstract class ListenableParent extends Component {
         super(parent);
     }
 
-    public ListenableParent(EngineContext context) {
-        super(context);
-    }
-
     @Override
     protected void addChild(Component child) {
         super.addChild(child);

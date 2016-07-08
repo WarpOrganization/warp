@@ -11,8 +11,4 @@ public class SimpleListenableParent extends ListenableParent{
     public SimpleListenableParent(Component parent) {
         super(parent);
     }
-
-    public SimpleListenableParent(EngineContext context) {
-        super(context);
-    }
 }

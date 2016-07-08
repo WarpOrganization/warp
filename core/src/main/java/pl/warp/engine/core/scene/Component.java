@@ -26,7 +26,7 @@ public abstract class Component {
         this.context = parent.getContext();
     }
 
-    public Component(EngineContext context) {
+    Component(EngineContext context) {
         this.context = context;
     }
 

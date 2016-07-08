@@ -9,15 +9,10 @@ import java.util.Set;
  * @author Jaca777
  *         Created 2016-06-25 at 16
  */
-public class Scene {
+public class Scene extends Component{
 
-    private Component root;
 
-    public Scene(Component root) {
-        this.root = root;
-    }
-
-    public Component getRoot() {
-        return root;
+    public Scene(EngineContext context) {
+        super(context);
     }
 }

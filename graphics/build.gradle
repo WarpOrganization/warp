@@ -11,8 +11,8 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile group: 'org.lwjgl', name: 'lwjgl', version: '3.0.0'
-    compile "org.lwjgl:lwjgl-platform:3.0.0:natives-windows"
-    compile "org.lwjgl:lwjgl-platform:3.0.0:natives-linux"
+    compile "org.lwjgl:lwjgl-platform:3.0.0:pl.warp.game.natives-windows"
+    compile "org.lwjgl:lwjgl-platform:3.0.0:pl.warp.game.natives-linux"
     compile project(':core')
 
     testCompile 'junit:junit:4.12'

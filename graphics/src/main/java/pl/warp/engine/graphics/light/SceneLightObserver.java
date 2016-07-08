@@ -19,13 +19,12 @@ public class SceneLightObserver {
     private Listener<Component, LightRemovedEvent> lightRemovedEventListener;
 
     public SceneLightObserver(Scene scene, LightEnvironment environment) {
-        Component root = scene.getRoot();
         this.lightEnvironment = environment;
         this.lightAddedEventListener =
-                SimpleListener.createListener(root, LightAddedEvent.LIGHT_ADDED_EVENT_NAME, this::handleLightAdded);
+                SimpleListener.createListener(scene, LightAddedEvent.LIGHT_ADDED_EVENT_NAME, this::handleLightAdded);
         this.lightRemovedEventListener =
-                SimpleListener.createListener(root, LightRemovedEvent.LIGHT_REMOVED_EVENT_NAME, this::handleLightRemoved);
-        Set<LightProperty> properties = scene.getRoot().getChildrenProperties(LightProperty.LIGHT_PROPERTY_NAME);
+                SimpleListener.createListener(scene, LightRemovedEvent.LIGHT_REMOVED_EVENT_NAME, this::handleLightRemoved);
+        Set<LightProperty> properties = scene.getChildrenProperties(LightProperty.LIGHT_PROPERTY_NAME);
         addLights(properties);
     }
 

@@ -1,14 +1,13 @@
-package pl.warp.engine.graphics;
+package pl.warp.engine.graphics.rendering;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.light.LightEnvironment;
 import pl.warp.engine.graphics.light.SceneLightObserver;
 import pl.warp.engine.graphics.material.Material;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.MeshProperty;
@@ -29,10 +28,13 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private RenderingSettings settings;
     private MultisampleFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
-    private ComponentRenderer componentRenderer;
     private ComponentRendererProgram program;
     private LightEnvironment light;
     private SceneLightObserver observer;
+
+    private ComponentRenderer componentRenderer;
+    private SkyboxRenderer cubemapRenderer;
+
 
     public SceneRenderer(Scene scene, Camera camera, RenderingSettings settings) {
         this.scene = scene;
@@ -45,45 +47,15 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         return scene;
     }
 
-    private MatrixStack matrixStack = new MatrixStack();
-
     @Override
     public void update(long delta) {
         renderingFramebuffer.bindDraw();
         renderingFramebuffer.clean();
+        cubemapRenderer.render(scene);
         program.use();
         program.useCamera(camera);
         program.useLightEnvironment(light);
-        render(scene.getRoot());
-    }
-
-    private void render(Component component) {
-        matrixStack.push();
-        if (component.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
-            applyTransformations(component);
-        program.useMatrixStack(matrixStack);
-        componentRenderer.render(component);
-        component.forEachChildren(this::render);
-        matrixStack.pop();
-    }
-
-    private void applyTransformations(Component component) { //translate, then rotate, then scale
-        TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-        applyTranslation(property);
-        applyScale(property);
-        applyRotation(property);
-    }
-
-    private void applyScale(TransformProperty scale) {
-        matrixStack.scale(scale.getScale());
-    }
-
-    private void applyRotation(TransformProperty rotation) {
-        matrixStack.rotate(rotation.getRotation());
-    }
-
-    private void applyTranslation(TransformProperty translation) {
-        matrixStack.translate(translation.getTranslation());
+        componentRenderer.render(scene);
     }
 
 
@@ -93,6 +65,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         this.observer = new SceneLightObserver(scene, light);
         this.program = new DefaultComponentProgram();
         this.componentRenderer = new ComponentRenderer(program);
+        this.cubemapRenderer = new SkyboxRenderer(camera);
     }
 
     @Override
@@ -101,7 +74,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         renderingFramebuffer.delete();
         outputTexture.delete();
         program.delete();
-        destroyComponent(scene.getRoot());
+        destroyComponent(scene);
     }
 
     private void destroyComponent(Component component) {

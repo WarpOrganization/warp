@@ -16,7 +16,7 @@ import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
-import pl.warp.engine.graphics.SceneRenderer;
+import pl.warp.engine.graphics.rendering.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
@@ -32,9 +32,12 @@ import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
+import pl.warp.engine.graphics.resource.texture.CubemapDecoder;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.skybox.SkyboxProperty;
+import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
@@ -89,14 +92,15 @@ public class Test {
     private static Random random = new Random();
 
     public static void main(String... args) {
+
         EngineContext context = new EngineContext();
-        Component root = new SimpleListenableParent(context);
+        Scene scene = new Scene(context);
+        Component root = new SimpleListenableParent(scene);
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 1f, 1));
         GLFWInput input = new GLFWInput();
         CameraScript cameraScript = new CameraScript(camera);
-        Scene scene = new Scene(root);
         EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
@@ -120,6 +124,10 @@ public class Test {
             new MaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
+
+            CubemapDecoder.DecodedCubemap decodedCubemap = CubemapDecoder.decodeCubemap("pl/warp/game/stars");
+            Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
+            new SkyboxProperty(scene, cubemap);
         });
         graphicsThread.scheduleTask(fpsTask);
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
