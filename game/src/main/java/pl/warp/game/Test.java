@@ -154,7 +154,7 @@ public class Test {
             Material material = new Material(goatTexture);
             material.setShininess(0.2f);
             new MaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random(), (float) Math.random(), (float) Math.random()));
+            new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random()*10, (float) Math.random()*10, (float) Math.random()*10));
             float x = random.nextFloat() * 20 - 100f;
             float y = random.nextFloat() * 20 - 100f;
             float z = random.nextFloat() * 20 - 100f;

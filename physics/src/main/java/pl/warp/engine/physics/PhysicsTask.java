@@ -57,6 +57,7 @@ public class PhysicsTask extends EngineTask {
             if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
                 BasicColliderProperty property = new BasicColliderProperty(component, new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0));
                 property.getLogic().addToWorld(collisionWorld, counter);
+                componentTreeMap.put(counter,component);
                 counter++;
             }
         });
