@@ -6,7 +6,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -25,6 +24,4 @@ gen### Example user template template
 # IntelliJ project files
 gen
 
-gradle
-.gradle
 

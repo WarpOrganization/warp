@@ -47,7 +47,7 @@ public class CameraScript extends Script<Camera> {
     private void applyForce(Vector3f velocityDelta) {
         Vector3f diff = new Vector3f();
         velocityDelta.sub(actualDistance, diff);
-        if (diff.length() > 0.01) {
+        if (diff.length() > 1) {
             Vector3f delta = diff.normalize().mul(SPEED);
             actualDistance.add(delta);
             cameraTransform.move(delta);

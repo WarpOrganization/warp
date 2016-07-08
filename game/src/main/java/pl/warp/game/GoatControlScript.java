@@ -18,6 +18,8 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 public class GoatControlScript extends Script<Component> {
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0,0,-1);
+    private static final Vector3f RIGHT_VECTOR = new Vector3f(1,0,0);
+    private static final Vector3f UP_VECTOR = new Vector3f(0,1,0);
 
     private float movementSpeed;
     private float rotationSpeed;
@@ -52,8 +54,8 @@ public class GoatControlScript extends Script<Component> {
     private void updateDirections() {
         Quaternionf goatFullRotation = Transforms.getFullRotation(getOwner());
         goatFullRotation.transform(forwardVector.set(FORWARD_VECTOR));
-        goatFullRotation.positiveX(rightVector).negate();
-        goatFullRotation.positiveY(upVector).negate();
+        goatFullRotation.transform(rightVector.set(RIGHT_VECTOR)).negate();
+        goatFullRotation.transform(upVector.set(UP_VECTOR)).negate();
     }
 
     private void move(long delta) {
