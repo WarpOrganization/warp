@@ -21,6 +21,13 @@ public class TransformProperty extends Property{
         super(owner, TRANSFORM_PROPERTY_NAME);
     }
 
+    protected TransformProperty(Component owner, Vector3f translation, Quaternionf rotation, Vector3f scale) {
+        super(owner);
+        this.translation = translation;
+        this.rotation = rotation;
+        this.scale = scale;
+    }
+
     public Vector3f getScale() {
         return scale;
     }
@@ -30,7 +37,7 @@ public class TransformProperty extends Property{
     }
 
     public void rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
-        rotation.rotateLocal(xAngleInRadians, yAngleInRadians, zAngleInRadians);
+        rotation.rotate(xAngleInRadians, yAngleInRadians, zAngleInRadians);
     }
 
     public void rotateX(float angleInRadians) {

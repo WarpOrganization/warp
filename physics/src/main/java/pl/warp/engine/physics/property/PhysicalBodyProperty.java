@@ -3,7 +3,6 @@ package pl.warp.engine.physics.property;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.physics.property.logic.PhysicalBodyLogic;
 
 import java.util.Objects;
 
@@ -18,8 +17,6 @@ public class PhysicalBodyProperty extends Property<Component> {
     private Vector3f torque = new Vector3f();
     private Vector3f speed = new Vector3f();
     private float mass;
-
-    private PhysicalBodyLogic logic = new PhysicalBodyLogic(this);
 
     public PhysicalBodyProperty(Component owner, float mass) {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
@@ -50,8 +47,8 @@ public class PhysicalBodyProperty extends Property<Component> {
         return speed;
     }
 
-    public PhysicalBodyLogic getLogic() {
-        return logic;
+    public synchronized void applyForce(Vector3f force) {
+        speed.add(force.div(mass));
     }
 
     @Override
@@ -61,12 +58,11 @@ public class PhysicalBodyProperty extends Property<Component> {
         PhysicalBodyProperty that = (PhysicalBodyProperty) o;
         return Float.compare(that.mass, mass) == 0 &&
                 Objects.equals(torque, that.torque) &&
-                Objects.equals(speed, that.speed) &&
-                Objects.equals(logic, that.logic);
+                Objects.equals(speed, that.speed);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(torque, speed, mass, logic);
+        return Objects.hash(torque, speed, mass);
     }
 }

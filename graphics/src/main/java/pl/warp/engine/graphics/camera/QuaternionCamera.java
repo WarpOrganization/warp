@@ -5,6 +5,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.graphics.math.Transforms;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 
 /**
@@ -61,14 +62,9 @@ public class QuaternionCamera extends Camera {
         return transform.getTranslation();
     }
 
-    private Matrix4f tempMatrix = new Matrix4f();
-    private Vector3f tempVector = new Vector3f();
-
     @Override
     public Matrix4f getCameraMatrix() {
-        transform.getRotation().get(tempMatrix);
-        tempMatrix.translate(transform.getTranslation().negate(tempVector));
-        return tempMatrix;
+        return Transforms.getFullTransform(this).invert();
     }
 
     @Override

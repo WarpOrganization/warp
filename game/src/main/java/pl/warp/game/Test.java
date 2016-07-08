@@ -14,7 +14,7 @@ import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.camera.CameraControlScript;
+import pl.warp.engine.graphics.camera.CameraScript;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
@@ -86,12 +86,11 @@ public class Test {
     public static void main(String... args) {
         EngineContext context = new EngineContext();
         Component root = new SimpleListenableParent(context);
-        Component controllableDrone = new SimpleComponent(root);
-        Camera camera = new QuaternionCamera(controllableDrone, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
-        camera.move(new Vector3f(1, 0.4f, 0));
-        camera.rotateY((float) (Math.PI/2));
+        Component controllableGoat = new SimpleComponent(root);
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
+        camera.move(new Vector3f(0, 0.4f, 1));
         GLFWInput input = new GLFWInput();
-        CameraControlScript cameraControlScript = new CameraControlScript(camera, input, ROT_SPEED, MOV_SPEED);
+        CameraScript cameraScript = new CameraScript(camera);
         Scene scene = new Scene(root);
         EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
@@ -111,9 +110,11 @@ public class Test {
             lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
 
-            new MeshProperty(controllableDrone, goatMesh);
-            new MaterialProperty(controllableDrone, new Material(goatTexture));
-            new TransformProperty(controllableDrone);
+            new MeshProperty(controllableGoat, goatMesh);
+            new PhysicalBodyProperty(controllableGoat, 2f);
+            new MaterialProperty(controllableGoat, new Material(goatTexture));
+            new TransformProperty(controllableGoat);
+            new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
         });
         graphicsThread.scheduleTask(fpsTask);
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
@@ -137,7 +138,7 @@ public class Test {
             Material material = new Material(goatTexture);
             material.setShininess(0.2f);
             new MaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1).getLogic().applyForce(new Vector3f((float) Math.random() / 10, (float) Math.random() / 10, (float) Math.random() / 10));
+            //new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random() / 10, (float) Math.random() / 10, (float) Math.random() / 10));
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;
