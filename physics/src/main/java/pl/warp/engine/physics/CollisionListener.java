@@ -17,7 +17,9 @@ public class CollisionListener extends ContactListener {
     private TreeMap<Integer, Component> componentTreeMap;
 
 
-    public CollisionListener(TreeMap<Integer, Component> componentTreeMap) {
+    public CollisionListener(TreeMap<Integer, Component> componentTreeMap)
+    {
+        super();
         this.componentTreeMap = componentTreeMap;
     }
 
