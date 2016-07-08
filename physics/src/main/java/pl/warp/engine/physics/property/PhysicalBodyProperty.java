@@ -15,7 +15,7 @@ public class PhysicalBodyProperty extends Property<Component> {
     public static final String PHYSICAL_BODY_PROPERTY_NAME = "physicalBody";
 
     private Vector3f torque = new Vector3f();
-    private Vector3f speed = new Vector3f();
+    private Vector3f velocity = new Vector3f();
     private float mass;
 
     public PhysicalBodyProperty(Component owner, float mass) {
@@ -43,12 +43,12 @@ public class PhysicalBodyProperty extends Property<Component> {
         this.mass = mass;
     }
 
-    public Vector3f getSpeed() {
-        return speed;
+    public Vector3f getVelocity() {
+        return velocity;
     }
 
     public synchronized void applyForce(Vector3f force) {
-        speed.add(force.div(mass));
+        velocity.add(force.div(mass));
     }
 
     @Override
@@ -58,11 +58,11 @@ public class PhysicalBodyProperty extends Property<Component> {
         PhysicalBodyProperty that = (PhysicalBodyProperty) o;
         return Float.compare(that.mass, mass) == 0 &&
                 Objects.equals(torque, that.torque) &&
-                Objects.equals(speed, that.speed);
+                Objects.equals(velocity, that.velocity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(torque, speed, mass);
+        return Objects.hash(torque, velocity, mass);
     }
 }

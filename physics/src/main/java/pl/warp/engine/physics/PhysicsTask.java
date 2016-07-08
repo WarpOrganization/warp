@@ -1,10 +1,9 @@
 package pl.warp.engine.physics;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
-import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.*;
+import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
@@ -12,7 +11,9 @@ import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
 import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
+import pl.warp.engine.physics.property.BasicColliderProperty;
 import pl.warp.engine.physics.property.ColliderProperty;
+import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import java.util.TreeMap;
 
@@ -52,6 +53,14 @@ public class PhysicsTask extends EngineTask {
         collisionListener = new CollisionListener(componentTreeMap);
         sceneEnteredListener = SimpleListener.createListener(parent, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, this::handleSceneEntered);
         sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
+        parent.forEachChildren(component -> {
+            if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
+                BasicColliderProperty property = new BasicColliderProperty(component, new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0));
+                property.getLogic().addToWorld(collisionWorld, counter);
+                counter++;
+            }
+        });
+
     }
 
     @Override
@@ -73,7 +82,6 @@ public class PhysicsTask extends EngineTask {
         tmp.getLogic().addToWorld(collisionWorld, counter);
         componentTreeMap.put(counter, event.getAddedChild());
         counter++;
-        System.out.println("siedzieje");
     }
 
     private void handleSceneLeft(ChildAddedEvent event) {
