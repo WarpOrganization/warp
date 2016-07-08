@@ -1,6 +1,5 @@
 package pl.warp.engine.physics;
 
-import com.badlogic.gdx.math.Matrix4;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -48,9 +47,7 @@ public class MovementTask extends EngineTask {
                 if (isCollidable(component)) {
                     BasicColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
                     colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
-                    Matrix4 t = new Matrix4();
-                    colliderProperty.getCollisionObject().getWorldTransform(t);
-                    //System.out.println(t.toString());
+                    System.out.println("uh");
                 }
             }
         });
