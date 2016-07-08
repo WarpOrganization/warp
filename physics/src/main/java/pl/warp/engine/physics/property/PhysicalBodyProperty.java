@@ -65,4 +65,8 @@ public class PhysicalBodyProperty extends Property<Component> {
     public int hashCode() {
         return Objects.hash(torque, velocity, mass);
     }
+
+    public void setVelocity(Vector3f velocity) {
+        this.velocity = velocity;
+    }
 }

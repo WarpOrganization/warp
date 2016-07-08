@@ -67,6 +67,8 @@ public class GoatControlScript extends Script<Component> {
             move(rightVector, movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_D))
             move(rightVector, -movementSpeed * delta);
+        if(input.isKeyDown(GLFW.GLFW_KEY_SPACE))
+            stop();
     }
 
     private Vector3f tmpForce = new Vector3f();
@@ -79,6 +81,11 @@ public class GoatControlScript extends Script<Component> {
         Vector2f rotation = new Vector2f();
         cursorPosDelta.mul(rotationSpeed * delta, rotation);
         transformProperty.rotate(-rotation.y, -rotation.x, 0);
+    }
+
+    private void stop() {
+        bodyProperty.setVelocity(new Vector3f(0));
+        bodyProperty.setTorque(new Vector3f(0));
     }
 
 }
