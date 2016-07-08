@@ -16,27 +16,30 @@ public class CollisionListener extends ContactListener {
 
     private TreeMap<Integer, Component> componentTreeMap;
 
-    private Vector3f tmpSpeed1;
-    private Vector3f tmpSpeed2;
 
     public CollisionListener(TreeMap<Integer, Component> componentTreeMap) {
         this.componentTreeMap = componentTreeMap;
     }
 
+    private Vector3f tmpSpeed1 = new Vector3f();
+    private Vector3f tmpSpeed2 = new Vector3f();
+
+
+
     @Override
     public boolean onContactAdded(btManifoldPoint cp, int userValue0, int partId0, int index0, int userValue1, int partId1, int index1) {
+        System.out.println("collision");
+        PhysicalBodyProperty property1 = componentTreeMap.get(userValue0).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        PhysicalBodyProperty property2 = componentTreeMap.get(userValue1).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
 
-        PhysicalBodyProperty tmp1 = componentTreeMap.get(userValue0).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-        PhysicalBodyProperty tmp2 = componentTreeMap.get(userValue1).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        tmpSpeed1.set(property1.getVelocity());
+        tmpSpeed2.set(property2.getVelocity());
 
-        tmpSpeed1.set(tmp1.getSpeed());
-        tmpSpeed2.set(tmp2.getSpeed());
+        property1.applyForce(tmpSpeed1.mul(-2));
+        property2.applyForce(tmpSpeed2.mul(-2));
 
-        tmp1.applyForce(tmpSpeed1.mul(-2));
-        tmp2.applyForce(tmpSpeed2.mul(-2));
-
-        tmp1.addTorque(tmpSpeed1);
-        tmp2.addTorque(tmpSpeed2);
+        property1.addTorque(tmpSpeed1);
+        property2.addTorque(tmpSpeed2);
         return true;
     }
 }

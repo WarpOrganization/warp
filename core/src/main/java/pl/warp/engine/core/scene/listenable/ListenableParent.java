@@ -15,7 +15,6 @@ public abstract class ListenableParent extends Component {
     @Override
     protected void addChild(Component child) {
         super.addChild(child);
-        System.out.println("atusiedzieje");
         triggerEvent(new ChildAddedEvent(child));
     }
 

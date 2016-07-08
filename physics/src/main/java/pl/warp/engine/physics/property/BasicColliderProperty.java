@@ -30,7 +30,6 @@ public class BasicColliderProperty extends Property<Component> implements Collid
         this.offset = offset;
         collisionObject = new btCollisionObject();
         collisionObject.setCollisionShape(shape);
-        Matrix4 t = new Matrix4();
         collisionObject.setWorldTransform(new Matrix4());
         logic = new BasicColliderLogic(this);
     }

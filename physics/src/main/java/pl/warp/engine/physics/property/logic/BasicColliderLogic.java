@@ -2,6 +2,7 @@ package pl.warp.engine.physics.property.logic;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -18,7 +19,7 @@ public class BasicColliderLogic implements ColliderLogic {
 
     public BasicColliderLogic(BasicColliderProperty root) {
         this.root = root;
-        transform = new Matrix4();
+        transform = new Matrix4(new Vector3(1,1,1),new Quaternion(), new Vector3(1,1,1));
         root.getCollisionObject().setWorldTransform(transform);
     }
 
@@ -36,9 +37,8 @@ public class BasicColliderLogic implements ColliderLogic {
 
     @Override
     public void setTransform(Vector3f translation, Quaternionf rotation) {
-        transform.setToTranslation(translation.x, translation.y, translation.z);
-        //transform.translate(root.getOffset().x, root.getOffset().y, root.getOffset().z);
-        transform.setToRotation(rotation.x, rotation.y, rotation.z, rotation.w);
+        transform.set(translation.x,translation.y,translation.z,rotation.x,rotation.y,rotation.z,rotation.w);
+        transform.translate(root.getOffset().x, root.getOffset().y, root.getOffset().z);
         root.getCollisionObject().setWorldTransform(transform);
     }
 

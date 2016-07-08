@@ -35,7 +35,7 @@ public class CameraScript extends Script<Camera> {
     @Override
     public void onUpdate(long delta) {
         Quaternionf rotation = new Quaternionf(parentTransform.getRotation()).invert();
-        Vector3f currentVelocity = new Vector3f(parentBody.getSpeed()).rotate(rotation);
+        Vector3f currentVelocity = new Vector3f(parentBody.getVelocity()).rotate(rotation);
         Vector3f velDelta = new Vector3f();
         currentVelocity.sub(prevVelocity, velDelta);
         this.prevVelocity = currentVelocity;
