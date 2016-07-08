@@ -47,7 +47,6 @@ public class MovementTask extends EngineTask {
                 if (isCollidable(component)) {
                     BasicColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
                     colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
-                    System.out.println("uh");
                 }
             }
         });
