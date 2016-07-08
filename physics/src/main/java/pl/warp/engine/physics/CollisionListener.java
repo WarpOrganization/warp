@@ -2,6 +2,11 @@ package pl.warp.engine.physics;
 
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
+import org.joml.Vector3f;
+import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.physics.property.PhysicalBodyProperty;
+
+import java.util.TreeMap;
 
 /**
  * Created by hubertus on 7/3/16.
@@ -9,9 +14,29 @@ import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
 
 public class CollisionListener extends ContactListener {
 
+    private TreeMap<Integer, Component> componentTreeMap;
+
+    private Vector3f tmpSpeed1;
+    private Vector3f tmpSpeed2;
+
+    public CollisionListener(TreeMap<Integer, Component> componentTreeMap) {
+        this.componentTreeMap = componentTreeMap;
+    }
+
     @Override
     public boolean onContactAdded(btManifoldPoint cp, int userValue0, int partId0, int index0, int userValue1, int partId1, int index1) {
-        //TODO: process collision
+
+        PhysicalBodyProperty tmp1 = componentTreeMap.get(userValue0).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        PhysicalBodyProperty tmp2 = componentTreeMap.get(userValue1).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+
+        tmpSpeed1.set(tmp1.getSpeed());
+        tmpSpeed2.set(tmp2.getSpeed());
+
+        tmp1.getLogic().applyForce(tmpSpeed1.mul(-2));
+        tmp2.getLogic().applyForce(tmpSpeed2.mul(-2));
+
+        tmp1.addTorque(tmpSpeed1);
+        tmp2.addTorque(tmpSpeed2);
         return true;
     }
 }

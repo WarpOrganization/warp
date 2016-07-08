@@ -9,7 +9,7 @@ import org.joml.Vector3f;
  * Created by hubertus on 7/7/16.
  */
 public interface ColliderLogic {
-    void addToWorld(btCollisionWorld world);
+    void addToWorld(btCollisionWorld world, int treeMapKey);
 
     void removeFromWorld(btCollisionWorld world);
 
@@ -18,4 +18,6 @@ public interface ColliderLogic {
     void addTransform(Vector3f translation, Quaternion rotation);
 
     void dispose();
+
+    int getTreeMapKey();
 }

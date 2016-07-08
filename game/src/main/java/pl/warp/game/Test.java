@@ -1,5 +1,8 @@
 package pl.warp.game;
 
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -7,6 +10,7 @@ import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleComponent;
+import pl.warp.engine.core.scene.listenable.ListenableParent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
@@ -14,7 +18,7 @@ import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.camera.CameraScript;
+import pl.warp.engine.graphics.camera.CameraControlScript;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
@@ -36,6 +40,8 @@ import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.MovementTask;
+import pl.warp.engine.physics.PhysicsTask;
+import pl.warp.engine.physics.property.BasicColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import java.util.Random;
@@ -126,8 +132,10 @@ public class Test {
         scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
         scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
         graphicsThread.scheduleOnce(scriptsThread::start); //has to start after the window is created
+        Bullet.init();
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleTask(new MovementTask(root));
+        physicsThread.scheduleTask(new PhysicsTask((ListenableParent) root));
         graphicsThread.scheduleOnce(physicsThread::start);
     }
 
@@ -138,7 +146,8 @@ public class Test {
             Material material = new Material(goatTexture);
             material.setShininess(0.2f);
             new MaterialProperty(goat, material);
-            //new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random() / 10, (float) Math.random() / 10, (float) Math.random() / 10));
+            new PhysicalBodyProperty(goat, 1).getLogic().applyForce(new Vector3f((float) Math.random(), (float) Math.random(), (float) Math.random()));
+            new BasicColliderProperty(goat, new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0));
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;

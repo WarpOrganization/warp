@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
+import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
 import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
@@ -31,10 +32,11 @@ public class PhysicsTask extends EngineTask {
     private Listener<Component, ChildRemovedEvent> sceneLeftEventListener;
 
     private TreeMap<Integer, Component> componentTreeMap;
+    private int counter = Integer.MIN_VALUE;
     private ListenableParent parent;
 
 
-    public PhysicsTask(ListenableParent parent){
+    public PhysicsTask(ListenableParent parent) {
 
         this.parent = parent;
     }
@@ -46,10 +48,10 @@ public class PhysicsTask extends EngineTask {
         dispatcher = new btCollisionDispatcher(defaultCollisionConfiguration);
         dbvtBroadphase = new btDbvtBroadphase();
         collisionWorld = new btCollisionWorld(dispatcher, dbvtBroadphase, defaultCollisionConfiguration);
-        collisionListener = new CollisionListener();
         componentTreeMap = new TreeMap<>();
-        //sceneEnteredListener = SimpleListener.createListener()
-        //sceneLeftEventListener = SimpleListener.createListener()
+        collisionListener = new CollisionListener(componentTreeMap);
+        sceneEnteredListener = SimpleListener.createListener(parent, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, this::handleSceneEntered);
+        sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
     }
 
     @Override
@@ -68,11 +70,15 @@ public class PhysicsTask extends EngineTask {
 
     private void handleSceneEntered(ChildAddedEvent event) {
         ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.getLogic().addToWorld(collisionWorld);
+        tmp.getLogic().addToWorld(collisionWorld, counter);
+        componentTreeMap.put(counter, event.getAddedChild());
+        counter++;
+        System.out.println("siedzieje");
     }
 
     private void handleSceneLeft(ChildAddedEvent event) {
         ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         tmp.getLogic().removeFromWorld(collisionWorld);
+        componentTreeMap.remove(tmp.getLogic().getTreeMapKey());
     }
 }

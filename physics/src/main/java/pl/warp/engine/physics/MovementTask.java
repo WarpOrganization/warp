@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -12,15 +13,16 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 public class MovementTask extends EngineTask {
 
     private Component parent;
+    private Vector3f tmpSpeed;
 
     public MovementTask(Component parent) {
-
+        tmpSpeed = new Vector3f();
         this.parent = parent;
     }
 
     @Override
     protected void onInit() {
-
+        //Bullet.init();
     }
 
     @Override
@@ -30,19 +32,35 @@ public class MovementTask extends EngineTask {
 
     @Override
     public void update(long delta) {
+        float fdelta = (float) delta / 1000;
         parent.forEachChildren(component -> {
-            if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME) && component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
+            if (isPhysicalBody(component) && isTransormable(component)) {
                 PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
                 TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-                //ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-
-                transformProperty.move(physicalBodyProperty.getSpeed());
+                tmpSpeed.set(physicalBodyProperty.getSpeed());
+                transformProperty.move(tmpSpeed.mul(fdelta));
 
                 Vector3f torque = physicalBodyProperty.getTorque();
-                transformProperty.rotate(torque.x, torque.y, torque.z);
+                transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
 
-                //colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
+                if (isCollidable(component)) {
+                    ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+                    colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
+
+                }
             }
         });
+    }
+
+    private boolean isPhysicalBody(Component component) {
+        return component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+    }
+
+    private boolean isTransormable(Component component) {
+        return component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+    }
+
+    private boolean isCollidable(Component component) {
+        return component.hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
     }
 }
