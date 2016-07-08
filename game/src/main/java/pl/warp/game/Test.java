@@ -18,7 +18,6 @@ import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.camera.CameraScript;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
@@ -94,7 +93,7 @@ public class Test {
         Component root = new SimpleListenableParent(context);
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
-        camera.move(new Vector3f(0, 0.4f, 1));
+        camera.move(new Vector3f(0, 1f, 1));
         GLFWInput input = new GLFWInput();
         CameraScript cameraScript = new CameraScript(camera);
         Scene scene = new Scene(root);

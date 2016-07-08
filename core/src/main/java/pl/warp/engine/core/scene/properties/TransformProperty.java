@@ -36,6 +36,10 @@ public class TransformProperty extends Property{
         this.scale.mul(value);
     }
 
+    public void setScale(Vector3f scale) {
+        this.scale = scale;
+    }
+
     public void rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
         rotation.rotate(xAngleInRadians, yAngleInRadians, zAngleInRadians);
     }
@@ -58,6 +62,10 @@ public class TransformProperty extends Property{
 
     public Vector3f getTranslation() {
         return translation;
+    }
+
+    public void setTranslation(Vector3f translation) {
+        this.translation = translation;
     }
 
     public void move(Vector3f movement) {
