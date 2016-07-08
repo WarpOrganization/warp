@@ -97,7 +97,7 @@ public class Test {
         Scene scene = new Scene(context);
         Component root = new SimpleListenableParent(scene);
         Component controllableGoat = new SimpleComponent(root);
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 200f, WIDTH, HEIGHT));
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 1000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 1f, 1));
         GLFWInput input = new GLFWInput();
         CameraScript cameraScript = new CameraScript(camera);
@@ -147,7 +147,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 10000; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
