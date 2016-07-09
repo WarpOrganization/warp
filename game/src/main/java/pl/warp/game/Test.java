@@ -148,16 +148,16 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 600; i++) {
+        for (int i = 0; i < 1000; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(0.2f);
             new MaterialProperty(goat, material);
             new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random()*10, (float) Math.random()*10, (float) Math.random()*10));
-            float x = random.nextFloat() * 20 - 100f;
-            float y = random.nextFloat() * 20 - 100f;
-            float z = random.nextFloat() * 20 - 100f;
+            float x = random.nextFloat() * 200 - 100f;
+            float y = random.nextFloat() * 200 - 100f;
+            float z = random.nextFloat() * 200 - 100f;
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
         }

@@ -1,6 +1,5 @@
 package pl.warp.engine.physics.property;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
@@ -31,6 +30,9 @@ public class BasicColliderProperty extends Property<Component> implements Collid
         collisionObject = new btCollisionObject();
         collisionObject.setCollisionShape(shape);
         collisionObject.setWorldTransform(new Matrix4());
+        collisionObject.setContactCallbackFilter(1);
+        collisionObject.setContactCallbackFlag(1);
+
         logic = new BasicColliderLogic(this);
     }
 

@@ -1,8 +1,11 @@
 package pl.warp.engine.physics;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import java.util.TreeMap;
@@ -21,20 +24,33 @@ public class CollisionListener extends ContactListener {
         this.componentTreeMap = componentTreeMap;
     }
 
-    private Vector3f tmpSpeed1 = new Vector3f();
-    private Vector3f tmpSpeed2 = new Vector3f();
+    private Vector3f Force = new Vector3f();
+    private Vector3 contactPos = new Vector3();
+    private Vector3f relativeSpeed = new Vector3f();
     @Override
-    public void onContactStarted(int userValue0, int userValue1) {
-        PhysicalBodyProperty property1 = componentTreeMap.get(userValue0).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-        PhysicalBodyProperty property2 = componentTreeMap.get(userValue1).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+    public void onContactStarted(btPersistentManifold manifold, boolean match0, boolean match1) {
+        PhysicalBodyProperty property1 = componentTreeMap.get(manifold.getBody0().getUserValue()).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        PhysicalBodyProperty property2 = componentTreeMap.get(manifold.getBody1().getUserValue()).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        TransformProperty transformProperty1 = componentTreeMap.get(manifold.getBody0().getUserValue()).getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        TransformProperty transformProperty2 = componentTreeMap.get(manifold.getBody1().getUserValue()).getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
 
-        tmpSpeed1.set(property1.getVelocity());
-        tmpSpeed2.set(property2.getVelocity());
+        manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
+        relativeSpeed.set(property2.getVelocity());
+        relativeSpeed.sub(property1.getVelocity());
 
-        property1.applyForce(tmpSpeed1.mul(-2));
-        property2.applyForce(tmpSpeed2.mul(-2));
+        Force.set(transformProperty1.getTranslation());
+        Force.sub(contactPos.x, contactPos.y, contactPos.z);
+        Force.normalize();
+        Force.mul(relativeSpeed.length());
+        property1.applyForce(Force);
 
-        property1.addTorque(tmpSpeed1);
-        property2.addTorque(tmpSpeed2);
+        manifold.getContactPoint(0).getPositionWorldOnB(contactPos);
+        Force.set(transformProperty2.getTranslation());
+        Force.sub(contactPos.x, contactPos.y, contactPos.z);
+        Force.normalize();
+        Force.mul(relativeSpeed.length());
+        property2.applyForce(Force);
+
     }
-}
+
+    }

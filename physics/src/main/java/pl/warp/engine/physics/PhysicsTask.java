@@ -51,6 +51,7 @@ public class PhysicsTask extends EngineTask {
         collisionWorld = new btCollisionWorld(dispatcher, dbvtBroadphase, defaultCollisionConfiguration);
         componentTreeMap = new TreeMap<>();
         collisionListener = new CollisionListener(componentTreeMap);
+        collisionListener.enableOnAdded();
         sceneEnteredListener = SimpleListener.createListener(parent, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, this::handleSceneEntered);
         sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
         parent.forEachChildren(component -> {
