@@ -1,12 +1,23 @@
 package pl.warp.engine.physics.property;
 
-import pl.warp.engine.physics.property.logic.ColliderLogic;
+import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.physics.collider.Collider;
 
 /**
  * Created by hubertus on 7/3/16.
  */
-public interface ColliderProperty {
-    String COLLIDER_PROPERTY_NAME = "collider";
+public class ColliderProperty extends Property<Component> {
+    public static final String COLLIDER_PROPERTY_NAME = "collider";
 
-    ColliderLogic getLogic();
+    private Collider collider;
+
+    public ColliderProperty(Component owner, Collider collider) {
+        super(owner, COLLIDER_PROPERTY_NAME);
+        this.collider = collider;
+    }
+
+    public Collider getCollider() {
+        return collider;
+    }
 }

@@ -4,7 +4,6 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.physics.property.BasicColliderProperty;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
@@ -45,8 +44,8 @@ public class MovementTask extends EngineTask {
                 transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
 
                 if (isCollidable(component)) {
-                    BasicColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-                    colliderProperty.getLogic().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
+                    ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+                    colliderProperty.getCollider().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
                 }
             }
         });
