@@ -15,6 +15,7 @@ import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
+import pl.warp.engine.graphics.light.DirectionalSpotLight;
 import pl.warp.engine.graphics.rendering.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
@@ -109,7 +110,8 @@ public class Test {
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            property.addSpotLight(new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f));
+            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f);
+            property.addSpotLight(spotLight);
             new MeshProperty(light, goatMesh);
             MaterialProperty lightMaterial = new MaterialProperty(light, new Material(goatTexture));
             lightMaterial.getMaterial().setBrightness(100f);
@@ -122,6 +124,16 @@ public class Test {
             new MaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
+
+           DirectionalSpotLight goatLight = new DirectionalSpotLight(
+                    controllableGoat,
+                    new Vector3f(0,0,1),
+                    new Vector3f(0,0,1), 0.15f, 0.2f,
+                    new Vector3f(5f,5f,5f),
+                    new Vector3f(0f,0f,0f),
+                    0.1f, 0.1f);
+            LightProperty directionalLightProperty = new LightProperty(controllableGoat);
+            directionalLightProperty.addDirectionalSpotLight(goatLight);
 
             CubemapDecoder.DecodedCubemap decodedCubemap = CubemapDecoder.decodeCubemap("pl/warp/game/stars");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -148,13 +160,13 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 3000; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
-            material.setShininess(0.2f);
+            material.setShininess(4f);
             new MaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1).applyForce(new Vector3f((float) Math.random()*10, (float) Math.random()*10, (float) Math.random()*10));
+            new PhysicalBodyProperty(goat, 1f);
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;

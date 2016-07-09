@@ -29,7 +29,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private static final String[] SPOT_LIGHT_FIELD_NAMES =
             {"position", "color", "ambientColor", "attenuation", "gradient"};
     private static final String[] DIRECTIONAL_LIGT_FIELD_NAMES =
-            {"position", "direction", "directionGradient", "color", "ambientColor", "attenuation", "gradient"};
+            {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
 
     private int unifProjectionMatrix;
     private int unifModelMatrix;
@@ -133,8 +133,9 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
 
     private void setDirectionalLight(int[] lightStruct, DirectionalSpotLight light) {
         setUniformV3(lightStruct[DIRECTIONAL_LIGHT_POSITION], light.getPosition());
-        setUniformV3(lightStruct[DIRECTIONAL_LIGHT_DIRECTION], light.getDirection());
-        setUniformf(lightStruct[DIRECTIONAL_LIGHT_DIRECTION_GRADIENT], light.getDirectionGradient());
+        setUniformV3(lightStruct[DIRECTIONAL_LIGHT_CONE_DIRECTION], light.getDirection());
+        setUniformf(lightStruct[DIRECTIONAL_LIGHT_CONE_ANGLE], light.getConeAngle());
+        setUniformf(lightStruct[DIRECTIONAL_LIGHT_CONE_GRADIENT], light.getConeGradient());
         setUniformV3(lightStruct[DIRECTIONAL_LIGHT_COLOR], light.getColor());
         setUniformV3(lightStruct[DIRECTIONAL_LIGHT_AMBIENT_COLOR], light.getAmbientColor());
         setUniformf(lightStruct[DIRECTIONAL_LIGHT_ATTENUATION], light.getAttenuation());
