@@ -1,4 +1,4 @@
-#version 430
+#version 330
 precision mediump float;
 
 uniform samplerCube cube;
