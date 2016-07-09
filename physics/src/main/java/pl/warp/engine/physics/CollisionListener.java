@@ -24,7 +24,7 @@ public class CollisionListener extends ContactListener {
         this.componentTreeMap = componentTreeMap;
     }
 
-    private Vector3f Force = new Vector3f();
+    private Vector3f force = new Vector3f();
     private Vector3 contactPos = new Vector3();
     private Vector3f relativeSpeed = new Vector3f();
 
@@ -39,18 +39,18 @@ public class CollisionListener extends ContactListener {
         relativeSpeed.set(property2.getVelocity());
         relativeSpeed.sub(property1.getVelocity());
 
-        Force.set(transformProperty1.getTranslation());
-        Force.sub(contactPos.x, contactPos.y, contactPos.z);
-        Force.normalize();
-        Force.mul(relativeSpeed.length());
-        property1.applyForce(Force);
+        force.set(transformProperty1.getTranslation());
+        force.sub(contactPos.x, contactPos.y, contactPos.z);
+        force.normalize();
+        force.mul(relativeSpeed.length());
+        property1.applyForce(force);
 
         manifold.getContactPoint(0).getPositionWorldOnB(contactPos);
-        Force.set(transformProperty2.getTranslation());
-        Force.sub(contactPos.x, contactPos.y, contactPos.z);
-        Force.normalize();
-        Force.mul(relativeSpeed.length());
-        property2.applyForce(Force);
+        force.set(transformProperty2.getTranslation());
+        force.sub(contactPos.x, contactPos.y, contactPos.z);
+        force.normalize();
+        force.mul(relativeSpeed.length());
+        property2.applyForce(force);
 
     }
 

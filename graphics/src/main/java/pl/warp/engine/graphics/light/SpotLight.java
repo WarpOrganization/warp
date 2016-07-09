@@ -1,8 +1,10 @@
 package pl.warp.engine.graphics.light;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.graphics.math.Transforms;
 
 /**
  * @author Jaca777
@@ -28,12 +30,8 @@ public class SpotLight {
     private Vector3f tempPosition = new Vector3f();
 
     public Vector3f getPosition() {
-        tempPosition.set(relativePosition);
-        if (owner.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
-            TransformProperty transform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            return transform.getTranslation().add(relativePosition);
-        }
-        return tempPosition;
+        Matrix4f fullTransform = Transforms.getFullTransform(owner);
+        return fullTransform.transformPosition(relativePosition, tempPosition);
     }
 
     public void setRelativePosition(Vector3f position) {

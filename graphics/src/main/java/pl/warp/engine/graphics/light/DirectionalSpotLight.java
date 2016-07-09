@@ -1,8 +1,11 @@
 package pl.warp.engine.graphics.light;
 
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.graphics.math.Transforms;
 
 /**
  * @author Jaca777
@@ -12,34 +15,37 @@ public class DirectionalSpotLight {
 
     private Component owner;
     private Vector3f relativePosition;
-    private Vector3f relativeDirection;
-    private float directionGradient;
+    private Vector3f coneDirection;
+    private float coneAngle;
+    private float coneGradient;
     private Vector3f color, ambientColor;
     private float attenuation, gradient;
-    private float factor;
 
-    public DirectionalSpotLight(Component owner, Vector3f relativePosition, Vector3f relativeDirection, float directionGradient, Vector3f color, Vector3f ambientColor,
-                                float attenuation, float gradient, float factor) {
+    public DirectionalSpotLight(
+            Component owner,
+            Vector3f relativePosition,
+            Vector3f coneDirection, float coneAngle,
+            float coneGradient,
+            Vector3f color,
+            Vector3f ambientColor,
+            float attenuation,
+            float gradient) {
         this.owner = owner;
         this.relativePosition = relativePosition;
-        this.relativeDirection = relativeDirection;
-        this.directionGradient = directionGradient;
+        this.coneDirection = coneDirection;
+        this.coneAngle = coneAngle;
+        this.coneGradient = coneGradient;
         this.color = color;
         this.ambientColor = ambientColor;
         this.attenuation = attenuation;
         this.gradient = gradient;
-        this.factor = factor;
     }
 
     private Vector3f tempPosition = new Vector3f();
 
     public Vector3f getPosition() {
-        tempPosition.set(relativePosition);
-        if (owner.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
-            TransformProperty transform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            return transform.getTranslation().add(relativePosition);
-        }
-        return tempPosition;
+        Matrix4f fullTransform = Transforms.getFullTransform(owner);
+        return fullTransform.transformPosition(relativePosition, tempPosition);
     }
 
     public void setRelativePosition(Vector3f position) {
@@ -49,24 +55,32 @@ public class DirectionalSpotLight {
     private Vector3f tempDirection = new Vector3f();
 
     public Vector3f getDirection() {
-        tempDirection.set(relativeDirection);
-        if (owner.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
-            TransformProperty transform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            return transform.getRotation().transform(tempDirection);
-        }
-        return tempPosition;
+        Quaternionf fullRotation = Transforms.getFullRotation(owner);
+        return fullRotation.transform(coneDirection, tempDirection);
     }
 
-    public void setRelativeDirection(Vector3f direction) {
-        this.relativeDirection = direction;
+    public void setConeDirection(Vector3f direction) {
+        this.coneDirection = direction;
     }
 
-    public float getDirectionGradient() {
-        return directionGradient;
+    public float getConeAngle() {
+        return coneAngle;
     }
 
-    public void setDirectionGradient(float directionGradient) {
-        this.directionGradient = directionGradient;
+    public void setConeAngle(float coneAngle) {
+        this.coneAngle = coneAngle;
+    }
+
+    public Vector3f getConeDirection() {
+        return coneDirection;
+    }
+
+    public float getConeGradient() {
+        return coneGradient;
+    }
+
+    public void setConeGradient(float coneGradient) {
+        this.coneGradient = coneGradient;
     }
 
     public Vector3f getColor() {
@@ -99,14 +113,6 @@ public class DirectionalSpotLight {
 
     public void setGradient(float gradient) {
         this.gradient = gradient;
-    }
-
-    public float getFactor() {
-        return factor;
-    }
-
-    public void setFactor(float factor) {
-        this.factor = factor;
     }
 
 }
