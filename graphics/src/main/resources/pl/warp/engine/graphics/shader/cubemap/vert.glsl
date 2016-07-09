@@ -1,4 +1,4 @@
-#version 430
+#version 330
 
 attribute vec4 inVertex;
 uniform mat4 perspMatrix;

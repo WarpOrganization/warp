@@ -1,4 +1,4 @@
-#version 450
+#version 330
 precision highp float;
 
 vec3 getLight();
