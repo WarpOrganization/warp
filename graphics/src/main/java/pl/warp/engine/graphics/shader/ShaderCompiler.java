@@ -25,9 +25,11 @@ public class ShaderCompiler {
 
         String log = glGetShaderInfoLog(shader, 65536); //Can either be empty, or contain a message (even if operation was successful).
         if (log.isEmpty()) logger.info("Shader " + shader + " successfully compiled.");
-        else {
+        if (log.contains("error")) {
             logger.error("Failed to compile shader " + shader + ". Cause: " + log);
             throw new ShaderCompilationException(log);
+        } else if(log.contains("warn")){
+            logger.warn("Warnings while compiling shader " + shader + ". Cause: " + log);
         }
         return shader;
     }
@@ -49,10 +51,13 @@ public class ShaderCompiler {
         }
         glLinkProgram(program);
         String log = glGetProgramInfoLog(program, glGetProgrami(program, GL_INFO_LOG_LENGTH));
-        if (log.isEmpty()) logger.info("Program " + program + " successfully linked.");
-        else {
+        if (log.isEmpty()) {
+            logger.info("Program " + program + " successfully linked.");
+        } else if (log.contains("error")) {
             logger.error("Failed to link program " + program + ". Cause: " + log);
             throw new ShaderCompilationException(log);
+        } else if(log.contains("warning")){
+            logger.warn("Warnings while linking program " + program + ". Cause: " + log);
         }
         return program;
     }
