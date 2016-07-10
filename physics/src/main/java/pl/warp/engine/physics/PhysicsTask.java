@@ -74,7 +74,7 @@ public class PhysicsTask extends EngineTask {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         collisionWorld.performDiscreteCollisionDetection();
     }
     private void handleSceneEntered(ChildAddedEvent event) {

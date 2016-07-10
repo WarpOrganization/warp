@@ -36,5 +36,5 @@ public abstract class Script<T extends Component> {
 
     public abstract void onInit();
 
-    public abstract void onUpdate(long delta);
+    public abstract void onUpdate(int delta);
 }

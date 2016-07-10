@@ -32,7 +32,7 @@ public class ScriptTask extends EngineTask {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         context.getScripts().forEach(s -> {
             if (!s.isInitialized())
                 initialize(s);

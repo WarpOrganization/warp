@@ -25,7 +25,7 @@ public class Pipeline {
         }
     }
 
-    public void update(long delta) {
+    public void update(int delta) {
         for (PipelineElement element : elements)
             element.update(delta);
     }

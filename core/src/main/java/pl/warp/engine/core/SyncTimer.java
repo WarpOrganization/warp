@@ -8,7 +8,7 @@ package pl.warp.engine.core;
 public class SyncTimer implements Timer {
     private int ups;
     private long lastUpdate;
-    private long delta;
+    private int delta;
     private Sync sync = new Sync();
 
     public SyncTimer(int ups) {
@@ -23,11 +23,11 @@ public class SyncTimer implements Timer {
 
     private void recalcDelta() {
         long time = System.currentTimeMillis();
-        this.delta = time - this.lastUpdate;
+        this.delta = (int) (time - this.lastUpdate);
         this.lastUpdate = time;
     }
 
-    public long getDelta() {
+    public int getDelta() {
         return delta;
     }
 

@@ -9,8 +9,8 @@ import pl.warp.engine.graphics.light.LightEnvironment;
 import pl.warp.engine.graphics.light.SceneLightObserver;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.pipeline.Source;
-import pl.warp.engine.graphics.material.MaterialProperty;
-import pl.warp.engine.graphics.mesh.MeshProperty;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
+import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.component.defaultprog.DefaultComponentProgram;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
@@ -48,7 +48,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         renderingFramebuffer.bindDraw();
         renderingFramebuffer.clean();
         cubemapRenderer.render(scene);
@@ -83,10 +83,10 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void destroyProperties(Component component) {
-        if (component.hasProperty(MeshProperty.MESH_PROPERTY_NAME))
-            component.<MeshProperty>getProperty(MeshProperty.MESH_PROPERTY_NAME).getMesh().unload();
-        if (component.hasProperty(MaterialProperty.MATERIAL_PROPERTY_NAME)) {
-            Material material = component.<MaterialProperty>getProperty(MaterialProperty.MATERIAL_PROPERTY_NAME).getMaterial();
+        if (component.hasProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME))
+            component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh().unload();
+        if (component.hasProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)) {
+            Material material = component.<GraphicsMaterialProperty>getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME).getMaterial();
             material.getMainTexture().delete();
             if (material.hasSpecularTexture()) material.getSpecularTexture().delete();
         }

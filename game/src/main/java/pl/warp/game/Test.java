@@ -23,10 +23,10 @@ import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
 import pl.warp.engine.graphics.light.LightProperty;
 import pl.warp.engine.graphics.material.Material;
-import pl.warp.engine.graphics.material.MaterialProperty;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.graphics.mesh.MeshProperty;
+import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
@@ -35,7 +35,7 @@ import pl.warp.engine.graphics.resource.texture.CubemapDecoder;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
-import pl.warp.engine.graphics.skybox.SkyboxProperty;
+import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
@@ -75,7 +75,7 @@ public class Test {
         private float lowestUPS = Float.MAX_VALUE;
 
         @Override
-        public void update(long delta) {
+        public void update(int delta) {
             sum += timer.getActualUPS();
             if (timer.getActualUPS() < lowestUPS || lowestUPS == 0)
                 lowestUPS = timer.getActualUPS();
@@ -111,16 +111,16 @@ public class Test {
             LightProperty property = new LightProperty(light);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
-            new MeshProperty(light, goatMesh);
-            MaterialProperty lightMaterial = new MaterialProperty(light, new Material(goatTexture));
+            new GraphicsMeshProperty(light, goatMesh);
+            GraphicsMaterialProperty lightMaterial = new GraphicsMaterialProperty(light, new Material(goatTexture));
             lightMaterial.getMaterial().setBrightness(100f);
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
 
-            new MeshProperty(controllableGoat, goatMesh);
+            new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f);
-            new MaterialProperty(controllableGoat, new Material(goatTexture));
+            new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
 
@@ -136,7 +136,7 @@ public class Test {
 
             CubemapDecoder.DecodedCubemap decodedCubemap = CubemapDecoder.decodeCubemap("pl/warp/game/stars");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
-            new SkyboxProperty(scene, cubemap);
+            new GraphicsSkyboxProperty(scene, cubemap);
         });
         graphicsThread.scheduleTask(fpsTask);
         RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
@@ -161,10 +161,10 @@ public class Test {
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
         for (int i = 0; i < 600; i++) {
             Component goat = new SimpleComponent(parent);
-            new MeshProperty(goat, goatMesh);
+            new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(4f);
-            new MaterialProperty(goat, material);
+            new GraphicsMaterialProperty(goat, material);
             new PhysicalBodyProperty(goat, 1f);
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;

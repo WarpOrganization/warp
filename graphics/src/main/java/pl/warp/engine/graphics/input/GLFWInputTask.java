@@ -28,7 +28,7 @@ public class GLFWInputTask extends EngineTask {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         input.update();
     }
 }
