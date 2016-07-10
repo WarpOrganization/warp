@@ -5,7 +5,6 @@ import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleListener;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -30,17 +29,11 @@ public class SceneLightObserver {
 
 
     private void handleLightAdded(LightAddedEvent event) {
-        for (SpotLight spotLight : event.getSpotLightsAdded())
-            lightEnvironment.addSpotLightSource(spotLight);
-        for (DirectionalSpotLight directionalLight : event.getDirectionalLightsAdded())
-            lightEnvironment.addDirectionalLightSource(directionalLight);
+        lightEnvironment.addSpotLightSource(event.getAddedLight());
     }
 
     private void handleLightRemoved(LightRemovedEvent event) {
-        for (SpotLight spotLight : event.getSpotLightsRemoved())
-            lightEnvironment.removeSpotLightSource(spotLight);
-        for (DirectionalSpotLight directionalLight : event.getDirectionalLightsRemoved())
-            lightEnvironment.removeDirectionalLightSource(directionalLight);
+        lightEnvironment.removeSpotLightSource(event.getRemovedLight());
     }
 
     private void addLights(Set<LightProperty> properties) {
@@ -48,8 +41,6 @@ public class SceneLightObserver {
             if (property.isEnabled()) {
                 for (SpotLight spotLight : property.getSpotLights())
                     lightEnvironment.addSpotLightSource(spotLight);
-                for (DirectionalSpotLight directionalLight : property.getDirectionalSpotLights())
-                    lightEnvironment.addDirectionalLightSource(directionalLight);
             }
     }
 

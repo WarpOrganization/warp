@@ -12,34 +12,19 @@ import java.util.List;
 public class LightEnvironment {
 
     private boolean lightEnabled = true;
-    private List<DirectionalSpotLight> directionalSpotLights = new ArrayList<>();
     private List<SpotLight> spotLights = new ArrayList<>();
-
-    public List<DirectionalSpotLight> getDirectionalSpotLights() {
-        return directionalSpotLights;
-    }
 
     public List<SpotLight> getSpotLights() {
         return spotLights;
     }
 
-    public void addDirectionalLightSource(DirectionalSpotLight directionalSpotLight) {
-        directionalSpotLights.add(directionalSpotLight);
-    }
-
-    public void removeDirectionalLightSource(DirectionalSpotLight light) {
-        if(!directionalSpotLights.remove(light))
-            throw new RendererException("Unable to remove directional light: " +
-                    "Given light is not present in the environment");
-    }
-
-    public void addSpotLightSource(SpotLight directionalSpotLight) {
-        spotLights.add(directionalSpotLight);
+    public void addSpotLightSource(SpotLight spotLightSource) {
+        spotLights.add(spotLightSource);
     }
 
     public void removeSpotLightSource(SpotLight light) {
         if(!spotLights.remove(light))
-            throw new RendererException("Unable to remove directional light: " +
+            throw new RendererException("Unable to remove spot light: " +
                     "Given light is not present in the environment");
     }
 

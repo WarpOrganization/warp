@@ -15,14 +15,13 @@ import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
-import pl.warp.engine.graphics.light.DirectionalSpotLight;
+import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.rendering.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.input.GLFWInputTask;
 import pl.warp.engine.graphics.light.LightProperty;
-import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
@@ -125,7 +124,7 @@ public class Test {
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
 
-           DirectionalSpotLight goatLight = new DirectionalSpotLight(
+           SpotLight goatLight = new SpotLight(
                     controllableGoat,
                     new Vector3f(0,0,1),
                     new Vector3f(0,0,1), 0.15f, 0.2f,
@@ -133,7 +132,7 @@ public class Test {
                     new Vector3f(0f,0f,0f),
                     0.1f, 0.1f);
             LightProperty directionalLightProperty = new LightProperty(controllableGoat);
-            directionalLightProperty.addDirectionalSpotLight(goatLight);
+            directionalLightProperty.addSpotLight(goatLight);
 
             CubemapDecoder.DecodedCubemap decodedCubemap = CubemapDecoder.decodeCubemap("pl/warp/game/stars");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -160,7 +159,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 600; i++) {
             Component goat = new SimpleComponent(parent);
             new MeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);

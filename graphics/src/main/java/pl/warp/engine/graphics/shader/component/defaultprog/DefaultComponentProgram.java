@@ -1,9 +1,8 @@
 package pl.warp.engine.graphics.shader.component.defaultprog;
 
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.DirectionalSpotLight;
-import pl.warp.engine.graphics.light.LightEnvironment;
 import pl.warp.engine.graphics.light.SpotLight;
+import pl.warp.engine.graphics.light.LightEnvironment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
@@ -23,12 +22,9 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
 
     private static final int MAIN_MATERIAL_TEXTURE_SAMPLER = 0;
 
-    private static final int MAX_SPOT_LIGHT_SOURCES = 10;
-    private static final int MAX_DIRECTIONAL_LIGHT_SOURCES = 25;
+    private static final int MAX_SPOT_LIGHT_SOURCES = 25;
 
     private static final String[] SPOT_LIGHT_FIELD_NAMES =
-            {"position", "color", "ambientColor", "attenuation", "gradient"};
-    private static final String[] DIRECTIONAL_LIGT_FIELD_NAMES =
             {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
 
     private int unifProjectionMatrix;
@@ -41,9 +37,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int unifMaterialShininess;
     private int unifLightEnabled;
     private int unifSpotLightCount;
-    private int unifDirectionalLightCount;
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
-    private int[][] unifDirectionalLightSources = new int[MAX_DIRECTIONAL_LIGHT_SOURCES][DIRECTIONAL_LIGT_FIELD_NAMES.length];
 
     public DefaultComponentProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER, OUT_NAMES);
@@ -53,7 +47,6 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private void loadLocations() {
         loadUniforms();
         loadSpotLightStructure();
-        loadDirectionalLightStructure();
         setupSamplers();
     }
 
@@ -68,7 +61,6 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         this.unifMaterialShininess = getUniformLocation("material.shininess");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
         this.unifSpotLightCount = getUniformLocation("numSpotLights");
-        this.unifDirectionalLightCount = getUniformLocation("numDirectionalLights");
     }
 
     private void loadSpotLightStructure() {
@@ -76,13 +68,6 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
             for (int j = 0; j < SPOT_LIGHT_FIELD_NAMES.length; j++)
                 this.unifSpotLightSources[i][j] =
                         getUniformLocation("spotLightSources[" + i + "]." + SPOT_LIGHT_FIELD_NAMES[j]);
-    }
-
-    private void loadDirectionalLightStructure() {
-        for (int i = 0; i < MAX_DIRECTIONAL_LIGHT_SOURCES; i++)
-            for (int j = 0; j < DIRECTIONAL_LIGT_FIELD_NAMES.length; j++)
-                this.unifDirectionalLightSources[i][j] =
-                        getUniformLocation("directionalLightSources[" + i + "]." + DIRECTIONAL_LIGT_FIELD_NAMES[j]);
     }
 
     private void setupSamplers() {
@@ -112,33 +97,23 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     public void useLightEnvironment(LightEnvironment environment) {
         setUniformb(unifLightEnabled, environment.isLightEnabled());
 
-        setUniformi(unifSpotLightCount, environment.getSpotLights().size());
         List<SpotLight> spotLights = environment.getSpotLights();
-        for (int i = 0; i < spotLights.size(); i++)
-            setSpotLight(unifSpotLightSources[i], spotLights.get(i));
-
-        setUniformi(unifDirectionalLightCount, environment.getDirectionalSpotLights().size());
-        List<DirectionalSpotLight> directionalSpotLights = environment.getDirectionalSpotLights();
-        for (int i = 0; i < directionalSpotLights.size(); i++)
-            setDirectionalLight(unifDirectionalLightSources[i], directionalSpotLights.get(i));
+        int j = 0;
+        for (SpotLight spotLight : spotLights)
+            if (spotLight.isEnabled())
+                setSpotLight(unifSpotLightSources[j++], spotLight);
+        setUniformi(unifSpotLightCount, j);
     }
+
 
     private void setSpotLight(int[] lightStruct, SpotLight light) {
         setUniformV3(lightStruct[SPOT_LIGHT_POSITION], light.getPosition());
+        setUniformV3(lightStruct[SPOT_LIGHT_CONE_DIRECTION], light.getDirection());
+        setUniformf(lightStruct[SPOT_LIGHT_CONE_ANGLE], light.getConeAngle());
+        setUniformf(lightStruct[SPOT_LIGHT_CONE_GRADIENT], light.getConeGradient());
         setUniformV3(lightStruct[SPOT_LIGHT_COLOR], light.getColor());
         setUniformV3(lightStruct[SPOT_LIGHT_AMBIENT_COLOR], light.getAmbientColor());
         setUniformf(lightStruct[SPOT_LIGHT_ATTENUATION], light.getAttenuation());
         setUniformf(lightStruct[SPOT_LIGHT_GRADIENT], light.getGradient());
-    }
-
-    private void setDirectionalLight(int[] lightStruct, DirectionalSpotLight light) {
-        setUniformV3(lightStruct[DIRECTIONAL_LIGHT_POSITION], light.getPosition());
-        setUniformV3(lightStruct[DIRECTIONAL_LIGHT_CONE_DIRECTION], light.getDirection());
-        setUniformf(lightStruct[DIRECTIONAL_LIGHT_CONE_ANGLE], light.getConeAngle());
-        setUniformf(lightStruct[DIRECTIONAL_LIGHT_CONE_GRADIENT], light.getConeGradient());
-        setUniformV3(lightStruct[DIRECTIONAL_LIGHT_COLOR], light.getColor());
-        setUniformV3(lightStruct[DIRECTIONAL_LIGHT_AMBIENT_COLOR], light.getAmbientColor());
-        setUniformf(lightStruct[DIRECTIONAL_LIGHT_ATTENUATION], light.getAttenuation());
-        setUniformf(lightStruct[DIRECTIONAL_LIGHT_GRADIENT], light.getGradient());
     }
 }
