@@ -40,7 +40,7 @@ public class PhysicsTask extends EngineTask {
     private ListenableParent parent;
     private Set<btPersistentManifold> activeCollisons;
 
-    public static final float ELASTICY = 1f;
+    public static final float ELASTICY = 0f;
 
     public PhysicsTask(ListenableParent parent) {
 
@@ -79,11 +79,12 @@ public class PhysicsTask extends EngineTask {
         collisionWorld.dispose();
     }
 
-    private Vector3f relativeSpeed = new Vector3f();
+    private Vector3f relativeVelocity = new Vector3f();
     private Vector3 contactPos = new Vector3();
     private Vector3f direction = new Vector3f();
     private Vector3f dot = new Vector3f();
-    private Vector3f distance = new Vector3f();
+    private Vector3f distance1 = new Vector3f();
+    private Vector3f distance2 = new Vector3f();
     private Vector3f upperPart = new Vector3f();
 
     @Override
@@ -97,43 +98,83 @@ public class PhysicsTask extends EngineTask {
             PhysicalBodyProperty physicalProperty2 = componentTreeMap.get(manifold.getBody1().getUserValue()).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             ColliderProperty colliderProperty1 = componentTreeMap.get(manifold.getBody0().getUserValue()).getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             ColliderProperty colliderProperty2 = componentTreeMap.get(manifold.getBody1().getUserValue()).getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-            Vector3f v = new Vector3f();
-
-
+                if(physicalProperty1.getTorque().length()==0&&physicalProperty1.getVelocity().length()!=0){
+                   System.out.println();
+                }
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
 
+            //distance vector for body 1
+            distance1.set(transformProperty1.getTranslation());
+            distance1.sub(contactPos.x, contactPos.y, contactPos.z);
+            //calculate pre-collision angular velocity of body 1
+            Vector3f angularVelocity1 = new Vector3f();
+            Vector3f angularVelocity2 = new Vector3f();
+            angularVelocity1.set(physicalProperty1.getTorque());
+            angularVelocity1.mul(distance1.length());
+
+
+            float interia1 = colliderProperty1.getCollider().getRadius() * colliderProperty1.getCollider().getRadius() * physicalProperty1.getMass();
+            float interia2 = colliderProperty2.getCollider().getRadius() * colliderProperty2.getCollider().getRadius() * physicalProperty2.getMass();
+
+            //direction from contact point co body 1 center
             direction.set(transformProperty1.getTranslation());
             direction.sub(contactPos.x, contactPos.y, contactPos.z);
             direction.normalize();
 
-            relativeSpeed.set(physicalProperty1.getVelocity());
-            relativeSpeed.sub(physicalProperty2.getVelocity());
-
-            upperPart.set(relativeSpeed);
-            upperPart.mul((1 + ELASTICY) * -1);
-            float up = upperPart.dot(direction);
-            float down = (1 / physicalProperty1.getMass()) + (1 / physicalProperty2.getMass());
-
-            float interia1 = colliderProperty1.getCollider().getRadius() * colliderProperty1.getCollider().getRadius() * physicalProperty1.getMass();
-            float interia2 = colliderProperty2.getCollider().getRadius() * colliderProperty2.getCollider().getRadius() * physicalProperty2.getMass();
-            distance.set(transformProperty1.getTranslation());
-            distance.sub(contactPos.x, contactPos.y, contactPos.z);
-            dot.set(distance);
+            //some magic
+            dot.set(distance1);
             dot.cross(direction);
-            dot.cross(distance);
-            down += dot.dot(direction) / interia1;
+            dot.cross(distance1);
+            float down = dot.dot(direction) / interia1;
 
-            distance.set(transformProperty2.getTranslation());
-            distance.sub(contactPos.x, contactPos.y, contactPos.z);
-            dot.set(distance);
+            //distance vector for body 2
+            distance2.set(transformProperty2.getTranslation());
+            distance2.sub(contactPos.x, contactPos.y, contactPos.z);
+
+            //pre-collision angular velocity of body 2
+            angularVelocity2.set(physicalProperty2.getTorque());
+            angularVelocity2.mul(distance2.length());
+
+            //more magic
+            dot.set(distance2);
             dot.cross(direction);
-            dot.cross(distance);
+            dot.cross(distance2);
             down += dot.dot(direction) / interia2;
 
+            //relative velocity of body 1 and 2
+            angularVelocity1.add(physicalProperty1.getVelocity());
+            angularVelocity2.add(physicalProperty2.getVelocity());
+            relativeVelocity.set(angularVelocity1);
+            relativeVelocity.sub(angularVelocity2);
+
+            //even more magic
+            upperPart.set(relativeVelocity);
+            upperPart.mul((1 + ELASTICY) * -1);
+            float up = upperPart.dot(direction);
+            down += (1 / physicalProperty1.getMass()) + (1 / physicalProperty2.getMass());
             float j = up / down;
+
+            Vector3f directionCopy = new Vector3f().set(direction);
+            Vector3f torqueChange = new Vector3f();
+
+            //torque change for body 1
+            torqueChange.set(distance1);
+            directionCopy.mul(j);
+            torqueChange.cross(directionCopy);
+            torqueChange.div(interia1);
+            physicalProperty1.addTorque(torqueChange);
+            //torque change for body 2
+            torqueChange.set(distance2);
+            torqueChange.cross(directionCopy);
+            torqueChange.div(interia2);
+            torqueChange.negate();
+
+            physicalProperty2.addTorque(torqueChange);
 
             physicalProperty1.applyForce(direction.mul(j));
             physicalProperty2.applyForce(direction.negate());
+
+
         });
     }
 

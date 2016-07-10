@@ -159,7 +159,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 600; i++) {
+        for (int i = 0; i < 1000; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);

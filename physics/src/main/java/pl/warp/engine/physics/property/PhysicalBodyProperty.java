@@ -35,6 +35,10 @@ public class PhysicalBodyProperty extends Property<Component> {
         torque.add(value);
     }
 
+    public void removeTorque(Vector3f value) {
+        torque.sub(value);
+    }
+
     public float getMass() {
         return mass;
     }
