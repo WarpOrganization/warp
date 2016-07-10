@@ -28,4 +28,8 @@ public interface Collider {
     btCollisionObject getCollisionObject();
 
     float getRadius();
+
+    void activate();
+
+    void deactivate();
 }

@@ -19,18 +19,22 @@ public class BasicCollider implements Collider {
     private Matrix4 transform;
     private int treeMapKey;
     private float radius;
+    private int callbackFilter;
+    private int callbackFlag;
 
-    public BasicCollider(btCollisionShape shape, Vector3f offset, float radius) {
+    public BasicCollider(btCollisionShape shape, Vector3f offset, float radius, int callbackFilter, int callbackFlag) {
+
         this.shape = shape;
         this.offset = offset;
         this.radius = radius;
+        this.callbackFilter = callbackFilter;
+        this.callbackFlag = callbackFlag;
         collisionObject = new btCollisionObject();
         collisionObject.setCollisionShape(shape);
         transform = new Matrix4(new Vector3(1, 1, 1), new Quaternion(), new Vector3(1, 1, 1));
         collisionObject.setWorldTransform(transform);
-        collisionObject.setContactCallbackFilter(1);
-        collisionObject.setContactCallbackFlag(1);
-
+        collisionObject.setContactCallbackFilter(callbackFilter);
+        collisionObject.setContactCallbackFlag(callbackFlag);
     }
 
     @Override
@@ -83,6 +87,18 @@ public class BasicCollider implements Collider {
     @Override
     public float getRadius() {
         return radius;
+    }
+
+    @Override
+    public void activate() {
+        collisionObject.setContactCallbackFilter(callbackFilter);
+        collisionObject.setContactCallbackFlag(callbackFlag);
+    }
+
+    @Override
+    public void deactivate() {
+        collisionObject.setContactCallbackFlag(1);
+        collisionObject.setContactCallbackFilter(0);
     }
 
     public void setRadius(float radius) {
