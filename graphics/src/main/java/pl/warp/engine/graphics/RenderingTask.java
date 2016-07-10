@@ -51,7 +51,7 @@ public class RenderingTask extends EngineTask {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         pipeline.update(delta);
         windowManager.updateWindow();
     }

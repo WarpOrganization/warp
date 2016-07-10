@@ -6,5 +6,5 @@ package pl.warp.engine.core;
  */
 public interface Timer {
     void await();
-    long getDelta();
+    int getDelta();
 }

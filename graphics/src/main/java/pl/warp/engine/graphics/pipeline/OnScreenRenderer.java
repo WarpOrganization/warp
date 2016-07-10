@@ -38,7 +38,7 @@ public class OnScreenRenderer implements Sink<MultisampleTexture2D> {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
         Framebuffer.SCREEN_FRAMEBUFFER.clean();
         identityProgram.use();

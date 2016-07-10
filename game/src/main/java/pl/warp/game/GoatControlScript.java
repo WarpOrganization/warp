@@ -45,7 +45,7 @@ public class GoatControlScript extends Script<Component> {
     }
 
     @Override
-    public void onUpdate(long delta) {
+    public void onUpdate(int delta) {
         updateDirections();
         move(delta);
         rotate(delta);
@@ -58,7 +58,7 @@ public class GoatControlScript extends Script<Component> {
         goatFullRotation.transform(upVector.set(UP_VECTOR)).negate();
     }
 
-    private void move(long delta) {
+    private void move(int delta) {
         if (input.isKeyDown(GLFW.GLFW_KEY_W))
             move(forwardVector, movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_S))
@@ -76,7 +76,7 @@ public class GoatControlScript extends Script<Component> {
         bodyProperty.applyForce(tmpForce.set(direction).mul(force));
     }
 
-    private void rotate(long delta) {
+    private void rotate(int delta) {
         Vector2f cursorPosDelta = input.getCursorPositionDelta();
         Vector2f rotation = new Vector2f();
         cursorPosDelta.mul(rotationSpeed * delta, rotation);

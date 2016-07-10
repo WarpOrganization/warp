@@ -68,7 +68,7 @@ vec3 getLight() {
 }
 
 float getDirectionCoeff(SpotLightSource source) {
-    if(source.coneAngle > 180) return 1.0f; // non-directional
+    if(source.coneAngle >= 180) return 1.0f; // non-directional
 
     vec3 direction = normalize(source.position - vPos3);
     float angle = acos(dot(direction, source.coneDirection));

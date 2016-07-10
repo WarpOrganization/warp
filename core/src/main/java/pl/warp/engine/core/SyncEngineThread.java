@@ -52,7 +52,7 @@ public class SyncEngineThread implements EngineThread {
     }
 
     protected void runUpdate() {
-        long delta = timer.getDelta();
+        int delta = timer.getDelta();
         for (EngineTask task : tasks)
             task.update(delta);
         executionStrategy.execute(scheduledRunnables);

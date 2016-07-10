@@ -87,7 +87,7 @@ public class PhysicsTask extends EngineTask {
     private Vector3f upperPart = new Vector3f();
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         collisionWorld.performDiscreteCollisionDetection();
         activeCollisons.forEach(manifold ->
         {

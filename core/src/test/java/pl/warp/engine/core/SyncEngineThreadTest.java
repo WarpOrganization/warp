@@ -15,7 +15,7 @@ public class SyncEngineThreadTest {
     @Test
     public void shouldInitScheduledTask() throws Exception {
         Timer timer = mock(Timer.class);
-        when(timer.getDelta()).thenReturn(0L);
+        when(timer.getDelta()).thenReturn(0);
         doNothing().when(timer).await();
         ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
         doNothing().when(strategy).execute(any());
@@ -30,7 +30,7 @@ public class SyncEngineThreadTest {
     @Test
     public void shouldRunScheduledTask() throws Exception {
         Timer timer = mock(Timer.class);
-        when(timer.getDelta()).thenReturn(42L);
+        when(timer.getDelta()).thenReturn(42);
         doNothing().when(timer).await();
         ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
         doNothing().when(strategy).execute(any());
@@ -39,13 +39,13 @@ public class SyncEngineThreadTest {
         EngineTask task = mock(EngineTask.class);
         engineThread.scheduleTask(task);
         engineThread.runUpdate();
-        verify(task, atLeast(1)).update(eq(42L));
+        verify(task, atLeast(1)).update(eq(42));
     }
 
     @Test
     public void shouldRunScheduledRunnables() throws Exception {
         Timer timer = mock(Timer.class);
-        when(timer.getDelta()).thenReturn(42L);
+        when(timer.getDelta()).thenReturn(42);
         doNothing().when(timer).await();
         ScheduledExecutionStrategy strategy = new RapidExecutionStrategy();
 
@@ -59,7 +59,7 @@ public class SyncEngineThreadTest {
     @Test
     public void shouldRunUpdateWhenRunning() throws Exception {
         Timer timer = mock(Timer.class);
-        when(timer.getDelta()).thenReturn(0L);
+        when(timer.getDelta()).thenReturn(0);
         doNothing().when(timer).await();
         ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
         doNothing().when(strategy).execute(any());

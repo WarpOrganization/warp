@@ -4,7 +4,7 @@ import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.shader.cubemap.CubemapProgram;
 import pl.warp.engine.graphics.skybox.Skybox;
-import pl.warp.engine.graphics.skybox.SkyboxProperty;
+import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 
 /**
@@ -24,8 +24,8 @@ public class SkyboxRenderer {
     }
 
     public void render(Scene scene) {
-        if (scene.hasEnabledProperty(SkyboxProperty.CUBEMAP_PROPERTY_NAME)) {
-            SkyboxProperty property = scene.getProperty(SkyboxProperty.CUBEMAP_PROPERTY_NAME);
+        if (scene.hasEnabledProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME)) {
+            GraphicsSkyboxProperty property = scene.getProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME);
             renderCubemap(property.getCubemap());
         }
     }

@@ -30,5 +30,5 @@ public abstract class EngineTask {
 
     protected abstract void onClose();
 
-    public abstract void update(long delta);
+    public abstract void update(int delta);
 }
