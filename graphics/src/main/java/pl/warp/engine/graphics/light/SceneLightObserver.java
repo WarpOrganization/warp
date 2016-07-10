@@ -13,12 +13,12 @@ import java.util.Set;
  */
 public class SceneLightObserver {
 
-    private LightEnvironment lightEnvironment;
+    private Environment environment;
     private Listener<Component, LightAddedEvent> lightAddedEventListener;
     private Listener<Component, LightRemovedEvent> lightRemovedEventListener;
 
-    public SceneLightObserver(Scene scene, LightEnvironment environment) {
-        this.lightEnvironment = environment;
+    public SceneLightObserver(Scene scene, Environment environment) {
+        this.environment = environment;
         this.lightAddedEventListener =
                 SimpleListener.createListener(scene, LightAddedEvent.LIGHT_ADDED_EVENT_NAME, this::handleLightAdded);
         this.lightRemovedEventListener =
@@ -29,18 +29,18 @@ public class SceneLightObserver {
 
 
     private void handleLightAdded(LightAddedEvent event) {
-        lightEnvironment.addSpotLightSource(event.getAddedLight());
+        environment.addSpotLightSource(event.getAddedLight());
     }
 
     private void handleLightRemoved(LightRemovedEvent event) {
-        lightEnvironment.removeSpotLightSource(event.getRemovedLight());
+        environment.removeSpotLightSource(event.getRemovedLight());
     }
 
     private void addLights(Set<LightProperty> properties) {
         for (LightProperty property : properties)
             if (property.isEnabled()) {
                 for (SpotLight spotLight : property.getSpotLights())
-                    lightEnvironment.addSpotLightSource(spotLight);
+                    environment.addSpotLightSource(spotLight);
             }
     }
 

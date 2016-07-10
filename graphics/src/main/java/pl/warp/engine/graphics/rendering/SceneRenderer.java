@@ -3,16 +3,11 @@ package pl.warp.engine.graphics.rendering;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.RenderingSettings;
-import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
-import pl.warp.engine.graphics.light.LightEnvironment;
-import pl.warp.engine.graphics.light.SceneLightObserver;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
-import pl.warp.engine.graphics.shader.ComponentRendererProgram;
-import pl.warp.engine.graphics.shader.component.defaultprog.DefaultComponentProgram;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
 import static org.lwjgl.opengl.GL30.GL_RGBA32F;
@@ -24,23 +19,16 @@ import static org.lwjgl.opengl.GL30.GL_RGBA32F;
 public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private Scene scene;
-    private Camera camera;
     private RenderingSettings settings;
     private MultisampleFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
-    private ComponentRendererProgram program;
-    private LightEnvironment light;
-    private SceneLightObserver observer;
-
-    private ComponentRenderer componentRenderer;
-    private SkyboxRenderer cubemapRenderer;
+    private Renderer[] renderers;
 
 
-    public SceneRenderer(Scene scene, Camera camera, RenderingSettings settings) {
+    public SceneRenderer(Scene scene, RenderingSettings settings, Renderer[] renderers) {
         this.scene = scene;
-        this.camera = camera;
         this.settings = settings;
-        this.light = new LightEnvironment();
+        this.renderers = renderers;
     }
 
     public Scene getScene() {
@@ -51,29 +39,24 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     public void update(int delta) {
         renderingFramebuffer.bindDraw();
         renderingFramebuffer.clean();
-        cubemapRenderer.render(scene);
-        program.use();
-        program.useCamera(camera);
-        program.useLightEnvironment(light);
-        componentRenderer.render(scene);
+        for (Renderer renderer : renderers)
+            renderer.render(scene, delta);
     }
 
 
     @Override
     public void init() {
+        for(Renderer renderer : renderers)
+            renderer.init();
         setupFramebuffer();
-        this.observer = new SceneLightObserver(scene, light);
-        this.program = new DefaultComponentProgram();
-        this.componentRenderer = new ComponentRenderer(program);
-        this.cubemapRenderer = new SkyboxRenderer(camera);
     }
 
     @Override
     public void destroy() {
-        observer.destroy();
+        for(Renderer renderer : renderers)
+            renderer.destroy();
         renderingFramebuffer.delete();
         outputTexture.delete();
-        program.delete();
         destroyComponent(scene);
     }
 

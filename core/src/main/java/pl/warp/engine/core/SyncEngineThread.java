@@ -60,7 +60,7 @@ public class SyncEngineThread implements EngineThread {
     }
 
     private void close() {
-        tasks.forEach(EngineTask::onClose);
+        tasks.forEach(EngineTask::close);
     }
 
     @Override

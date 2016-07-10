@@ -13,6 +13,7 @@ import pl.warp.engine.core.scene.listenable.ListenableParent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.light.SpotLight;
@@ -59,47 +60,23 @@ public class Test {
     private static final float MOV_SPEED = 0.2f;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
-    private static EngineTask fpsTask = new EngineTask() {
-        @Override
-        protected void onInit() {
-        }
-
-        @Override
-        protected void onClose() {
-        }
-
-        private int i = 0;
-
-
-        private float sum = 0;
-        private float lowestUPS = Float.MAX_VALUE;
-
-        @Override
-        public void update(int delta) {
-            sum += timer.getActualUPS();
-            if (timer.getActualUPS() < lowestUPS || lowestUPS == 0)
-                lowestUPS = timer.getActualUPS();
-            if (i++ % UPS_LOGGING_RATIO == 0) {
-                float averageUPS = sum / (float) UPS_LOGGING_RATIO;
-                logger.info("Average UPS: " + averageUPS + ", Lowest UPS: " + lowestUPS);
-                sum = 0;
-                lowestUPS = Float.MAX_VALUE;
-            }
-        }
-    };
     private static Random random = new Random();
 
     public static void main(String... args) {
 
         EngineContext context = new EngineContext();
         Scene scene = new Scene(context);
+        context.setScene(scene);
         Component root = new SimpleListenableParent(scene);
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 1000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 1f, 1));
-        GLFWInput input = new GLFWInput();
+        RenderingSettings settings = new RenderingSettings(60, WIDTH, HEIGHT);
+        Graphics graphics = new Graphics(context, camera, settings);
+        EngineThread graphicsThread = graphics.getThread();
         CameraScript cameraScript = new CameraScript(camera);
-        EngineThread graphicsThread = new SyncEngineThread(timer, new RapidExecutionStrategy());
+        GLFWInput input = new GLFWInput();
+
         graphicsThread.scheduleOnce(() -> {
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
             ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
@@ -124,12 +101,12 @@ public class Test {
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
 
-           SpotLight goatLight = new SpotLight(
+            SpotLight goatLight = new SpotLight(
                     controllableGoat,
-                    new Vector3f(0,0,1),
-                    new Vector3f(0,0,1), 0.15f, 0.2f,
-                    new Vector3f(5f,5f,5f),
-                    new Vector3f(0f,0f,0f),
+                    new Vector3f(0, 0, 1),
+                    new Vector3f(0, 0, 1), 0.15f, 0.2f,
+                    new Vector3f(5f, 5f, 5f),
+                    new Vector3f(0f, 0f, 0f),
                     0.1f, 0.1f);
             LightProperty directionalLightProperty = new LightProperty(controllableGoat);
             directionalLightProperty.addSpotLight(goatLight);
@@ -138,16 +115,13 @@ public class Test {
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             new GraphicsSkyboxProperty(scene, cubemap);
         });
-        graphicsThread.scheduleTask(fpsTask);
-        RenderingSettings settings = new RenderingSettings(WIDTH, HEIGHT);
-        Pipeline pipeline = PipelineBuilder.from(new SceneRenderer(scene, camera, settings)).to(new OnScreenRenderer());
-        GLFWWindowManager windowManager = new GLFWWindowManager(graphicsThread::interrupt);
-        graphicsThread.scheduleTask(new RenderingTask(context, new Display(WIDTH, HEIGHT), windowManager, pipeline));
-        graphicsThread.start();
-        EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
-        scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
-        graphicsThread.scheduleOnce(scriptsThread::start); //has to start after the window is created
+        graphicsThread.scheduleOnce(() -> {
+            EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+            scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
+            GLFWWindowManager windowManager = graphics.getWindowManager();
+            scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
+            scriptsThread.start(); //has to start after the window is created
+        });
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleOnce(() -> {
             new SharedLibraryLoader().load("gdx");
@@ -156,6 +130,7 @@ public class Test {
             physicsThread.scheduleTask(new PhysicsTask((ListenableParent) root));
         });
         graphicsThread.scheduleOnce(physicsThread::start);
+        graphics.create();
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
