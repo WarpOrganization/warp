@@ -18,16 +18,19 @@ public class BasicCollider implements Collider {
     private Vector3f offset;
     private Matrix4 transform;
     private int treeMapKey;
+    private float radius;
 
-    public BasicCollider(btCollisionShape shape, Vector3f offset) {
+    public BasicCollider(btCollisionShape shape, Vector3f offset, float radius) {
         this.shape = shape;
         this.offset = offset;
+        this.radius = radius;
         collisionObject = new btCollisionObject();
         collisionObject.setCollisionShape(shape);
         transform = new Matrix4(new Vector3(1, 1, 1), new Quaternion(), new Vector3(1, 1, 1));
         collisionObject.setWorldTransform(transform);
         collisionObject.setContactCallbackFilter(1);
         collisionObject.setContactCallbackFlag(1);
+
     }
 
     @Override
@@ -76,4 +79,14 @@ public class BasicCollider implements Collider {
     public btCollisionShape getShape() {
         return shape;
     }
+
+    @Override
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
 }

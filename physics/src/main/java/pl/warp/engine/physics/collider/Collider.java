@@ -26,4 +26,6 @@ public interface Collider {
     btCollisionShape getShape();
 
     btCollisionObject getCollisionObject();
+
+    float getRadius();
 }
