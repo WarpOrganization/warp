@@ -9,7 +9,7 @@ import java.util.List;
  * @author Jaca777
  *         Created 2016-06-30 at 13
  */
-public class LightEnvironment {
+public class Environment {
 
     private boolean lightEnabled = true;
     private List<SpotLight> spotLights = new ArrayList<>();

@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics.shader;
 
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.LightEnvironment;
+import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 
@@ -34,5 +34,5 @@ public abstract class ComponentRendererProgram extends Program{
     public abstract void useMaterial(Material material);
     public abstract void useCamera(Camera camera);
     public abstract void useMatrixStack(MatrixStack stack);
-    public abstract void useLightEnvironment(LightEnvironment environment);
+    public abstract void useLightEnvironment(Environment environment);
 }

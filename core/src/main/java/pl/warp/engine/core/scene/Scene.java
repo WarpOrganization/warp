@@ -10,8 +10,6 @@ import java.util.Set;
  *         Created 2016-06-25 at 16
  */
 public class Scene extends Component{
-
-
     public Scene(EngineContext context) {
         super(context);
     }

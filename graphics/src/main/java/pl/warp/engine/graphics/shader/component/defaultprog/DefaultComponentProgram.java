@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.shader.component.defaultprog;
 
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;
-import pl.warp.engine.graphics.light.LightEnvironment;
+import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
@@ -94,7 +94,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         setUniformMatrix4(unifRotationMatrix, stack.topRotationMatrix());
     }
 
-    public void useLightEnvironment(LightEnvironment environment) {
+    public void useLightEnvironment(Environment environment) {
         setUniformb(unifLightEnabled, environment.isLightEnabled());
 
         List<SpotLight> spotLights = environment.getSpotLights();
