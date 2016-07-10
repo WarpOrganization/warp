@@ -1,15 +1,8 @@
 #version 330
 precision highp float;
 
-struct SpotLightSource { //TODO merge with directional?
-    vec3 position;
-    vec3 color;
-    vec3 ambientColor;
-    float attenuation;
-    float gradient;
-};
 
-struct DirectionalLightSource {
+struct SpotLightSource {
     vec3 position;
     vec3 coneDirection;
     float coneAngle;
@@ -29,13 +22,9 @@ const float SPECULAR_EXPONENT = 100.0;
 
 uniform Material material;
 
-const int MAX_SPOT_LIGHTS = 10;
+const int MAX_SPOT_LIGHTS = 25;
 uniform SpotLightSource spotLightSources[MAX_SPOT_LIGHTS];
 uniform int numSpotLights;
-
-const int MAX_DIRECTIONAL_LIGHTS = 25;
-uniform DirectionalLightSource directionalLightSources[MAX_DIRECTIONAL_LIGHTS];
-uniform int numDirectionalLights;
 
 uniform bool lightEnabled;
 
@@ -49,87 +38,61 @@ in vec3 vEyeDir;
 
 out vec4 fragColor;
 
-vec3 getSpotLight();
-vec3 getDirectionalLight();
+vec3 getLight();
+float getDirectionCoeff(SpotLightSource source);
+float getAttenuation(SpotLightSource source);
+float getDiffuse(SpotLightSource source, vec3 lightDir, float directionCoeff);
+float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse);
 
 void main(void) {
-    if(lightEnabled) {
-        vec3 sumLight = getSpotLight() + getDirectionalLight();
-        fragColor = vec4(sumLight, 1) * texture(material.mainTexture, vTexCoord);
-    } else fragColor = texture(material.mainTexture, vTexCoord);
+    if(lightEnabled)
+        fragColor = vec4(getLight(), 1) * texture(material.mainTexture, vTexCoord);
+    else fragColor = texture(material.mainTexture, vTexCoord);
     fragColor.rgb *= material.brightness;
 }
 
-vec3 getDirectionalLight() {
+vec3 getLight() {
     vec3 totalLight = vec3(0);
-    for(int i = 0; i < numDirectionalLights; i++){
-        DirectionalLightSource source = directionalLightSources[i];
-
-        //Attenuation
-        float distance = length(source.position - vPos3);
-        float att = exp(-pow((distance * source.attenuation), source.gradient));
-        if(att < 0.01) continue;
-
-        vec3 direction = normalize(source.position - vPos3);
-        float angle = acos(dot(direction, source.coneDirection));
-        float directionCoeff;
-
-        if(angle < source.coneAngle)
-            directionCoeff = 1.0f;
-        else if(angle < source.coneAngle + source.coneGradient)
-            directionCoeff = 1.0f - (angle - source.coneAngle) / source.coneGradient;
-        else directionCoeff = 0.0f;
-
-        //Ambient
+    for(int i = 0; i < numSpotLights; i++){
+        SpotLightSource source = spotLightSources[i];
+        float directionCoeff = getDirectionCoeff(source);
+        float attenuation = getAttenuation(source);
+        if(attenuation < 0.01) continue;
         vec3 ambient = source.ambientColor;
-
-        //Diffuse
         vec3 lightDir = normalize(source.position - vPos3);
-        float diff = max(0, dot(vNormal, lightDir)) * directionCoeff;
-
-        //Specular
-        float specular = 0;
-        if(material.shininess > 0) {
-            vec3 reflection = normalize(reflect(-lightDir, vNormal));
-            float spec = max(0.0, dot(-vEyeDir, reflection));
-            float specVal = pow(spec, SPECULAR_EXPONENT);
-            specular = diff * specVal * material.shininess;
-        }
-
-        //Sum
-        totalLight += (((diff + specular) * source.color) + ambient) * att;
+        float diffuse = getDiffuse(source, lightDir, directionCoeff);
+        float specular = getSpecular(source, lightDir, diffuse);
+        totalLight += (((diffuse + specular) * source.color) + ambient) * attenuation;
     }
     return totalLight;
 }
 
-vec3 getSpotLight(){
-    vec3 totalLight = vec3(0);
-    for(int i = 0; i < numSpotLights; i++){
-        SpotLightSource source = spotLightSources[i];
+float getDirectionCoeff(SpotLightSource source) {
+    if(source.coneAngle > 180) return 1.0f; // non-directional
 
-        //Attenuation
-        float distance = length(source.position - vPos3);
-        float att = exp(-pow((distance * source.attenuation), source.gradient));
-        if(att < 0.01) continue;
+    vec3 direction = normalize(source.position - vPos3);
+    float angle = acos(dot(direction, source.coneDirection));
+    if(angle < source.coneAngle)
+        return 1.0f;
+    else if(angle < source.coneAngle + source.coneGradient)
+        return 1.0f - (angle - source.coneAngle) / source.coneGradient;
+    else return 0.0f;
+}
 
-        //Ambient
-        vec3 ambient = source.ambientColor;
+float getAttenuation(SpotLightSource source) {
+    float distance = length(source.position - vPos3);
+    return exp(-pow((distance * source.attenuation), source.gradient));
+}
 
-        //Diffuse
-        vec3 lightDir = normalize(source.position - vPos3);
-        float diff = max(0, dot(vNormal, lightDir));
+float getDiffuse(SpotLightSource source, vec3 lightDir, float directionCoeff) {
+     return max(0, dot(vNormal, lightDir)) * directionCoeff;
+}
 
-        //Specular
-        float specular = 0;
-        if(material.shininess > 0) {
-            vec3 reflection = normalize(reflect(-lightDir, vNormal));
-            float spec = max(0.0, dot(-vEyeDir, reflection));
-            float specVal = pow(spec, SPECULAR_EXPONENT);
-            specular = diff * specVal * material.shininess;
-        }
-
-        //Sum
-        totalLight += (((diff + specular) * source.color) + ambient) * att;
-    }
-    return totalLight;
+float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse) {
+    if(material.shininess > 0) {
+        vec3 reflection = normalize(reflect(-lightDir, vNormal));
+        float spec = max(0.0, dot(-vEyeDir, reflection));
+        float specVal = pow(spec, SPECULAR_EXPONENT);
+        return diffuse * specVal * material.shininess;
+    } else return 0.0;
 }

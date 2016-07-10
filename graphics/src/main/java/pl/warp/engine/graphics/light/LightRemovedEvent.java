@@ -9,20 +9,14 @@ import pl.warp.engine.core.scene.Event;
 public class LightRemovedEvent extends Event {
     public static String LIGHT_REMOVED_EVENT_NAME = "lightRemovedEvent";
 
-    private DirectionalSpotLight[] directionalLightsRemoved;
-    private SpotLight[] spotLightsRemoved;
+    private SpotLight removedLight;
 
-    public LightRemovedEvent(DirectionalSpotLight[] directionalLightsRemoved, SpotLight[] spotLightsAdded) {
+    public LightRemovedEvent(SpotLight removedLight) {
         super(LIGHT_REMOVED_EVENT_NAME);
-        this.directionalLightsRemoved = directionalLightsRemoved;
-        this.spotLightsRemoved = spotLightsAdded;
+        this.removedLight = removedLight;
     }
 
-    public DirectionalSpotLight[] getDirectionalLightsRemoved() {
-        return directionalLightsRemoved;
-    }
-
-    public SpotLight[] getSpotLightsRemoved() {
-        return spotLightsRemoved;
+    public SpotLight getRemovedLight() {
+        return removedLight;
     }
 }

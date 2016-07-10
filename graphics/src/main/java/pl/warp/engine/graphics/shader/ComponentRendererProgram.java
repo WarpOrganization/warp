@@ -13,21 +13,14 @@ import java.io.InputStream;
  */
 public abstract class ComponentRendererProgram extends Program{
 
-
     public static final int SPOT_LIGHT_POSITION = 0;
-    public static final int SPOT_LIGHT_COLOR = 1;
-    public static final int SPOT_LIGHT_AMBIENT_COLOR = 2;
-    public static final int SPOT_LIGHT_ATTENUATION = 3;
-    public static final int SPOT_LIGHT_GRADIENT = 4;
-
-    public static final int DIRECTIONAL_LIGHT_POSITION = 0;
-    public static final int DIRECTIONAL_LIGHT_CONE_DIRECTION = 1;
-    public static final int DIRECTIONAL_LIGHT_CONE_ANGLE = 2;
-    public static final int DIRECTIONAL_LIGHT_CONE_GRADIENT = 3;
-    public static final int DIRECTIONAL_LIGHT_COLOR = 4;
-    public static final int DIRECTIONAL_LIGHT_AMBIENT_COLOR = 5;
-    public static final int DIRECTIONAL_LIGHT_ATTENUATION = 6;
-    public static final int DIRECTIONAL_LIGHT_GRADIENT = 7;
+    public static final int SPOT_LIGHT_CONE_DIRECTION = 1;
+    public static final int SPOT_LIGHT_CONE_ANGLE = 2;
+    public static final int SPOT_LIGHT_CONE_GRADIENT = 3;
+    public static final int SPOT_LIGHT_COLOR = 4;
+    public static final int SPOT_LIGHT_AMBIENT_COLOR = 5;
+    public static final int SPOT_LIGHT_ATTENUATION = 6;
+    public static final int SPOT_LIGHT_GRADIENT = 7;
 
     public static final int[] ATTRIBUTES = {0, 1, 2}; //vertex, textureCoord, normal
     public static final int ATTR_VERTEX_LOCATION = 0;

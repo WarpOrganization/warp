@@ -1,8 +1,6 @@
 package pl.warp.engine.graphics.light;
 
 import pl.warp.engine.core.scene.Event;
-import pl.warp.engine.graphics.light.DirectionalSpotLight;
-import pl.warp.engine.graphics.light.SpotLight;
 
 /**
  * @author Jaca777
@@ -11,28 +9,14 @@ import pl.warp.engine.graphics.light.SpotLight;
 public class LightAddedEvent extends Event {
     public static String LIGHT_ADDED_EVENT_NAME = "lightAddedEvent";
 
-    private DirectionalSpotLight[] directionalLightsAdded;
-    private SpotLight[] spotLightsAdded;
+    private SpotLight addedLight;
 
-    public LightAddedEvent(DirectionalSpotLight[] directionalLightsAdded, SpotLight[] spotLightsAdded) {
+    public LightAddedEvent(SpotLight addedLight) {
         super(LIGHT_ADDED_EVENT_NAME);
-        this.directionalLightsAdded = directionalLightsAdded;
-        this.spotLightsAdded = spotLightsAdded;
+        this.addedLight = addedLight;
     }
 
-    public LightAddedEvent(DirectionalSpotLight light) {
-        this(new DirectionalSpotLight[]{light}, new SpotLight[0]);
-    }
-
-    public LightAddedEvent(SpotLight light) {
-        this(new DirectionalSpotLight[0], new SpotLight[]{light});
-    }
-
-    public DirectionalSpotLight[] getDirectionalLightsAdded() {
-        return directionalLightsAdded;
-    }
-
-    public SpotLight[] getSpotLightsAdded() {
-        return spotLightsAdded;
+    public SpotLight getAddedLight() {
+        return addedLight;
     }
 }
