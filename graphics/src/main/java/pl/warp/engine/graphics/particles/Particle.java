@@ -1,6 +1,9 @@
 package pl.warp.engine.graphics.particles;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import java.util.Objects;
 
 /**
  * @author Jaca777
@@ -9,11 +12,11 @@ import org.joml.Vector3f;
 public class Particle {
     private Vector3f position;
     private Vector3f velocity;
-    private Vector3f scale;
-    private Vector3f rotation;
+    private Vector2f scale;
+    private float rotation;
     private int timeToLive;
 
-    public Particle(Vector3f position, Vector3f velocity, Vector3f scale, Vector3f rotation, int timeToLive) {
+    public Particle(Vector3f position, Vector3f velocity, Vector2f scale, float rotation, int timeToLive) {
         this.position = position;
         this.velocity = velocity;
         this.scale = scale;
@@ -37,19 +40,19 @@ public class Particle {
         this.velocity = velocity;
     }
 
-    public Vector3f getScale() {
+    public Vector2f getScale() {
         return scale;
     }
 
-    public void setScale(Vector3f scale) {
+    public void setScale(Vector2f scale) {
         this.scale = scale;
     }
 
-    public Vector3f getRotation() {
+    public float getRotation() {
         return rotation;
     }
 
-    public void setRotation(Vector3f rotation) {
+    public void setRotation(float rotation) {
         this.rotation = rotation;
     }
 

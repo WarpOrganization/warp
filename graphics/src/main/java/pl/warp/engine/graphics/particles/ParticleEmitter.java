@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.particles;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -22,12 +21,12 @@ public class ParticleEmitter {
     }
 
     public void update(int delta) {
-        updateLifeTime(delta);
+        updateParticlesLifeTime(delta);
         emit(delta);
         animate(delta);
     }
 
-    private void updateLifeTime(int delta) {
+    private void updateParticlesLifeTime(int delta) {
         for (Particle particle : particles) {
             int ttl = particle.getTimeToLive() - delta;
             if (ttl > 0) particle.setTimeToLive(ttl);
@@ -41,10 +40,10 @@ public class ParticleEmitter {
         timeWithoutEmission += delta;
         int toEmitt = (int) Math.floor(timeWithoutEmission / emissionDelay);
         timeWithoutEmission -= emissionDelay * toEmitt;
-        emitParticles(toEmitt);
+        emitParticlesNumber(toEmitt);
     }
 
-    private void emitParticles(int number) {
+    private void emitParticlesNumber(int number) {
         for (int i = 0; i < number; i++)
             particles.add(factory.newParticle());
     }

@@ -1,23 +1,25 @@
 package pl.warp.engine.graphics.particles;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 /**
  * @author Jaca777
  *         Created 2016-07-10 at 14
  */
-public class SimpleParticleAnimator implements ParticleAnimator{
+public class SimpleParticleAnimator implements ParticleAnimator {
     private Vector3f acceleration;
-    private Vector3f scailingRate;
-    private Vector3f rotationRate;
+    private Vector2f scalingRate;
+    private float rotationRate;
 
-    public SimpleParticleAnimator(Vector3f acceleration, Vector3f scailingRate, Vector3f rotationRate) {
+    public SimpleParticleAnimator(Vector3f acceleration, Vector2f scalingRate, float rotationRate) {
         this.acceleration = acceleration;
-        this.scailingRate = scailingRate;
+        this.scalingRate = scalingRate;
         this.rotationRate = rotationRate;
     }
 
-    private Vector3f tempVector;
+    private Vector3f tempVector3;
+
     @Override
     public void animate(Particle particle, int delta) {
         updateVelocity(particle, delta);
@@ -26,18 +28,21 @@ public class SimpleParticleAnimator implements ParticleAnimator{
     }
 
     private void updateVelocity(Particle particle, int delta) {
-        Vector3f velocityDelta = acceleration.mul(delta, tempVector);
+        Vector3f velocityDelta = acceleration.mul(delta, tempVector3);
         particle.getVelocity().add(velocityDelta);
         particle.getPosition().add(particle.getVelocity());
     }
 
+    private Vector2f tempVector2 = new Vector2f();
+
     private void updateScale(Particle particle, int delta) {
-        Vector3f scaleDelta = scailingRate.mul(delta, tempVector);
+        Vector2f scaleDelta = scalingRate.mul(delta, tempVector2);
         particle.getScale().add(scaleDelta);
     }
 
     private void updateRotation(Particle particle, int delta) {
-        Vector3f rotationDelta = rotationRate.mul(delta, tempVector);
-        particle.getRotation().add(rotationDelta);
+        float rotationDelta = rotationRate * delta;
+        float rotation = particle.getRotation() + rotationDelta;
+        particle.setRotation(rotation);
     }
 }
