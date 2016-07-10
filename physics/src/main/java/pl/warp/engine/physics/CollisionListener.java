@@ -27,6 +27,7 @@ public class CollisionListener extends ContactListener {
     private Vector3f force = new Vector3f();
     private Vector3 contactPos = new Vector3();
     private Vector3f relativeSpeed = new Vector3f();
+
     @Override
     public void onContactStarted(btPersistentManifold manifold, boolean match0, boolean match1) {
         PhysicalBodyProperty property1 = componentTreeMap.get(manifold.getBody0().getUserValue()).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
@@ -53,4 +54,4 @@ public class CollisionListener extends ContactListener {
 
     }
 
-    }
+}

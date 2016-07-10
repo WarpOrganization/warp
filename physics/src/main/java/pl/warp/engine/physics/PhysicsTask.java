@@ -11,7 +11,7 @@ import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
 import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
-import pl.warp.engine.physics.property.BasicColliderProperty;
+import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
@@ -56,9 +56,9 @@ public class PhysicsTask extends EngineTask {
         sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
         parent.forEachChildren(component -> {
             if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
-                BasicColliderProperty property = new BasicColliderProperty(component, new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0));
-                property.getLogic().addToWorld(collisionWorld, counter);
-                componentTreeMap.put(counter,component);
+                ColliderProperty property = new ColliderProperty(component, new BasicCollider(new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0)));
+                property.getCollider().addToWorld(collisionWorld, counter);
+                componentTreeMap.put(counter, component);
                 counter++;
             }
         });
@@ -78,17 +78,16 @@ public class PhysicsTask extends EngineTask {
     public void update(long delta) {
         collisionWorld.performDiscreteCollisionDetection();
     }
-
     private void handleSceneEntered(ChildAddedEvent event) {
         ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.getLogic().addToWorld(collisionWorld, counter);
+        tmp.getCollider().addToWorld(collisionWorld, counter);
         componentTreeMap.put(counter, event.getAddedChild());
         counter++;
     }
 
     private void handleSceneLeft(ChildAddedEvent event) {
         ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.getLogic().removeFromWorld(collisionWorld);
-        componentTreeMap.remove(tmp.getLogic().getTreeMapKey());
+        tmp.getCollider().removeFromWorld(collisionWorld);
+        componentTreeMap.remove(tmp.getCollider().getTreeMapKey());
     }
 }
