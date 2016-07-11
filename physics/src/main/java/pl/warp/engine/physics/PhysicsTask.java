@@ -86,6 +86,8 @@ public class PhysicsTask extends EngineTask {
     private Vector3f distance1 = new Vector3f();
     private Vector3f distance2 = new Vector3f();
     private Vector3f upperPart = new Vector3f();
+    private Vector3f directionCopy = new Vector3f();
+    private Vector3f torqueChange = new Vector3f();
 
     @Override
     public void update(int delta) {
@@ -98,9 +100,7 @@ public class PhysicsTask extends EngineTask {
             PhysicalBodyProperty physicalProperty2 = componentTreeMap.get(manifold.getBody1().getUserValue()).getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             ColliderProperty colliderProperty1 = componentTreeMap.get(manifold.getBody0().getUserValue()).getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             ColliderProperty colliderProperty2 = componentTreeMap.get(manifold.getBody1().getUserValue()).getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-                if(physicalProperty1.getTorque().length()==0&&physicalProperty1.getVelocity().length()!=0){
-                   System.out.println();
-                }
+
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
 
             //distance vector for body 1
@@ -154,20 +154,21 @@ public class PhysicsTask extends EngineTask {
             down += (1 / physicalProperty1.getMass()) + (1 / physicalProperty2.getMass());
             float j = up / down;
 
-            Vector3f directionCopy = new Vector3f().set(direction);
-            Vector3f torqueChange = new Vector3f();
-
             //torque change for body 1
+            directionCopy.set(distance2).normalize();
             torqueChange.set(distance1);
             directionCopy.mul(j);
             torqueChange.cross(directionCopy);
             torqueChange.div(interia1);
+            torqueChange.negate();
+
             physicalProperty1.addTorque(torqueChange);
+
             //torque change for body 2
+            directionCopy.set(distance1).normalize();
             torqueChange.set(distance2);
             torqueChange.cross(directionCopy);
             torqueChange.div(interia2);
-            torqueChange.negate();
 
             physicalProperty2.addTorque(torqueChange);
 

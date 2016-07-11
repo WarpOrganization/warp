@@ -42,10 +42,10 @@ public class MovementTask extends EngineTask {
 
                 Vector3f torque = physicalBodyProperty.getTorque();
                 transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
-
                 if (isCollidable(component)) {
                     ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
                     colliderProperty.getCollider().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
+
                 }
             }
         });

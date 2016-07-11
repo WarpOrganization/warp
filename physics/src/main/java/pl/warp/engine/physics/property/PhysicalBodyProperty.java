@@ -28,7 +28,7 @@ public class PhysicalBodyProperty extends Property<Component> {
     }
 
     public void setTorque(Vector3f torque) {
-        this.torque = torque;
+        this.torque.set(torque);
     }
 
     public void addTorque(Vector3f value) {
