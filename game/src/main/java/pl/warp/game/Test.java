@@ -49,11 +49,11 @@ import java.util.Random;
 public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
-    private static final int WIDTH = 1024, HEIGHT = 720;
+    private static final int WIDTH = 1920, HEIGHT = 1080;
     private static final float ROT_SPEED = 0.006f;
     private static final float MOV_SPEED = 0.2f;
-    private static final float BRAKING_FORCE = 1;
-    private static final float ANGULAR_BRAKING_FORCE = 0.3f;
+    private static final float BRAKING_FORCE = 0.1f;
+    private static final float ANGULAR_BRAKING_FORCE = 0.04f;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();

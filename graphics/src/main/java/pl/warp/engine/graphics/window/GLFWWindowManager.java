@@ -84,7 +84,7 @@ public class GLFWWindowManager implements WindowManager {
         glfwSetWindowPos(
                 this.windowHandle,
                 (vidmode.width() - display.getWidth()) / 2,
-                (vidmode.height() - display.getWidth()) / 2
+                (vidmode.height() - display.getHeight()) / 2
         );
     }
 

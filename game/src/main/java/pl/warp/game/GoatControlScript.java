@@ -24,7 +24,6 @@ public class GoatControlScript extends Script<Component> {
     private float movementSpeed;
     private float rotationSpeed;
     private PhysicalBodyProperty bodyProperty;
-    private TransformProperty transformProperty;
     private GLFWInput input;
     private final float brakingForce;
     private final float angularBrakingForce;
@@ -45,13 +44,12 @@ public class GoatControlScript extends Script<Component> {
     @Override
     public void onInit() {
         this.bodyProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-        this.transformProperty = getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
 
     @Override
     public void onUpdate(int delta) {
         updateDirections();
-        angularBrake();
+        angularBrake(delta);
         move(delta);
         rotate(delta);
     }
@@ -73,7 +71,7 @@ public class GoatControlScript extends Script<Component> {
         if (input.isKeyDown(GLFW.GLFW_KEY_D))
             move(rightVector, -movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_SPACE))
-            brake();
+            brake(delta);
         //stop();
     }
 
@@ -97,7 +95,7 @@ public class GoatControlScript extends Script<Component> {
 
     private Vector3f brakingVector = new Vector3f();
 
-    private void brake() {
+    private void brake(int delta) {
         brakingVector.set(bodyProperty.getVelocity());
         if (brakingVector.length() > brakingForce / bodyProperty.getMass()) {
             brakingVector.normalize();
@@ -107,10 +105,11 @@ public class GoatControlScript extends Script<Component> {
             brakingVector.negate();
             brakingVector.mul(bodyProperty.getMass());
         }
+        brakingVector.mul(delta);
         bodyProperty.applyForce(brakingVector);
     }
 
-    private void angularBrake(){
+    private void angularBrake(int delta){
         brakingVector.set(bodyProperty.getTorque());
         if(brakingVector.length()>angularBrakingForce/bodyProperty.getInteria()){
             brakingVector.normalize();
@@ -120,6 +119,7 @@ public class GoatControlScript extends Script<Component> {
             brakingVector.negate();
             brakingVector.mul(bodyProperty.getInteria());
         }
+        brakingVector.mul(delta);
         bodyProperty.addTorque(brakingVector);
     }
 

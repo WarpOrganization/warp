@@ -1,6 +1,8 @@
 package pl.warp.engine.graphics.rendering;
 
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.graphics.math.MatrixStack;
 
 /**
  * @author Jaca777
