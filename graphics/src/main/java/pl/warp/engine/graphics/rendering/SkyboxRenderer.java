@@ -1,8 +1,10 @@
 package pl.warp.engine.graphics.rendering;
 
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.cubemap.CubemapProgram;
 import pl.warp.engine.graphics.skybox.Skybox;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
@@ -29,21 +31,23 @@ public class SkyboxRenderer implements Renderer {
     }
 
     @Override
-    public void render(Scene scene, int delta) {
-        setupRendering();
-        if (scene.hasEnabledProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME)) {
-            GraphicsSkyboxProperty property = scene.getProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME);
+    public void initRendering(int delta) {
+        cubemapProgram.use();
+        cubemapProgram.useCamera(camera);
+    }
+
+    @Override
+    public void render(Component component, MatrixStack stack) {
+        if (component.hasEnabledProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME)) {
+            GraphicsSkyboxProperty property = component.getProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME);
             renderCubemap(property.getCubemap());
         }
     }
 
-    private void setupRendering() {
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-    }
 
     private void renderCubemap(Cubemap cubemap) {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         cubemapProgram.use();
-        cubemapProgram.useCamera(camera);
         cubemapProgram.useCubemap(cubemap);
         skybox.render();
     }

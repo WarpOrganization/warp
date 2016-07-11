@@ -2,9 +2,11 @@ package pl.warp.engine.graphics.rendering;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.material.Material;
+import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
@@ -23,6 +25,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private MultisampleFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
     private Renderer[] renderers;
+    private MatrixStack matrixStack = new MatrixStack();
 
 
     public SceneRenderer(Scene scene, RenderingSettings settings, Renderer[] renderers) {
@@ -36,24 +39,62 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     @Override
-    public void update(int delta) {
-        renderingFramebuffer.bindDraw();
-        renderingFramebuffer.clean();
-        for (Renderer renderer : renderers)
-            renderer.render(scene, delta);
-    }
-
-
-    @Override
     public void init() {
-        for(Renderer renderer : renderers)
+        for (Renderer renderer : renderers)
             renderer.init();
         setupFramebuffer();
     }
 
     @Override
+    public void update(int delta) {
+        initRendering(delta);
+        render(scene);
+    }
+
+    private void initRendering(int delta) {
+        renderingFramebuffer.bindDraw();
+        renderingFramebuffer.clean();
+        for (Renderer renderer : renderers)
+            renderer.initRendering(delta);
+    }
+
+    private void render(Component component) {
+        matrixStack.push();
+        if(component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
+            applyTransformations(component);
+        renderComponent(component);
+        component.forEachChildren(this::render);
+        matrixStack.pop();
+    }
+
+    private void renderComponent(Component component) {
+        for (Renderer renderer : renderers)
+            renderer.render(component, matrixStack);
+    }
+
+    private void applyTransformations(Component component) { //translate, then rotate, then scale
+        TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        applyTranslation(property);
+        applyScale(property);
+        applyRotation(property);
+    }
+
+    private void applyScale(TransformProperty scale) {
+        matrixStack.scale(scale.getScale());
+    }
+
+    private void applyRotation(TransformProperty rotation) {
+        matrixStack.rotate(rotation.getRotation());
+    }
+
+    private void applyTranslation(TransformProperty translation) {
+        matrixStack.translate(translation.getTranslation());
+    }
+
+
+    @Override
     public void destroy() {
-        for(Renderer renderer : renderers)
+        for (Renderer renderer : renderers)
             renderer.destroy();
         renderingFramebuffer.delete();
         outputTexture.delete();

@@ -34,5 +34,5 @@ public abstract class ComponentRendererProgram extends Program{
     public abstract void useMaterial(Material material);
     public abstract void useCamera(Camera camera);
     public abstract void useMatrixStack(MatrixStack stack);
-    public abstract void useLightEnvironment(Environment environment);
+    public abstract void useEnviroment(Environment environment);
 }

@@ -1,21 +1,17 @@
 package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.*;
-import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.input.GLFWInput;
-import pl.warp.engine.graphics.input.GLFWInputTask;
 import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
-import pl.warp.engine.graphics.rendering.ComponentRenderer;
+import pl.warp.engine.graphics.rendering.MeshRenderer;
 import pl.warp.engine.graphics.rendering.Renderer;
 import pl.warp.engine.graphics.rendering.SceneRenderer;
 import pl.warp.engine.graphics.rendering.SkyboxRenderer;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
-import pl.warp.engine.graphics.window.WindowManager;
 
 /**
  * @author Jaca777
@@ -70,9 +66,9 @@ public class Graphics {
     }
 
     private Pipeline createPipeline() {
-        ComponentRenderer componentRenderer = new ComponentRenderer(mainViewCamera, environment);
+        MeshRenderer meshRenderer = new MeshRenderer(mainViewCamera, environment);
         SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
-        Renderer[] renderers = {skyboxRenderer, componentRenderer};
+        Renderer[] renderers = {skyboxRenderer, meshRenderer};
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), settings, renderers);
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
         return PipelineBuilder.from(sceneRenderer).to(onScreenRenderer);

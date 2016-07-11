@@ -10,6 +10,10 @@ import pl.warp.engine.graphics.math.MatrixStack;
  */
 public interface Renderer {
     void init();
-    void render(Scene scene, int delta);
+
+    void initRendering(int delta);
+
+    void render(Component component, MatrixStack stack);
+
     void destroy();
 }
