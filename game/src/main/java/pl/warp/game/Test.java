@@ -50,8 +50,10 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1024, HEIGHT = 720;
-    private static final float ROT_SPEED = 0.0002f;
+    private static final float ROT_SPEED = 0.006f;
     private static final float MOV_SPEED = 0.2f;
+    private static final float BRAKING_FORCE = 1;
+    private static final float ANGULAR_BRAKING_FORCE = 0.3f;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
@@ -90,10 +92,10 @@ public class Test {
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 2f);
+            new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
             new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
-            new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED);
+            new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ANGULAR_BRAKING_FORCE);
 
             SpotLight goatLight = new SpotLight(
                     controllableGoat,
@@ -134,7 +136,7 @@ public class Test {
             Material material = new Material(goatTexture);
             material.setShininess(4f);
             new GraphicsMaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1f);
+            new PhysicalBodyProperty(goat, 1f, 2.833f);
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;

@@ -113,8 +113,8 @@ public class PhysicsTask extends EngineTask {
             angularVelocity1.mul(distance1.length());
 
 
-            float interia1 = colliderProperty1.getCollider().getRadius() * colliderProperty1.getCollider().getRadius() * physicalProperty1.getMass();
-            float interia2 = colliderProperty2.getCollider().getRadius() * colliderProperty2.getCollider().getRadius() * physicalProperty2.getMass();
+            //float interia1 = colliderProperty1.getCollider().getRadius() * colliderProperty1.getCollider().getRadius() * physicalProperty1.getMass();
+            //float interia2 = colliderProperty2.getCollider().getRadius() * colliderProperty2.getCollider().getRadius() * physicalProperty2.getMass();
 
             //direction from contact point co body 1 center
             direction.set(transformProperty1.getTranslation());
@@ -125,7 +125,7 @@ public class PhysicsTask extends EngineTask {
             dot.set(distance1);
             dot.cross(direction);
             dot.cross(distance1);
-            float down = dot.dot(direction) / interia1;
+            float down = dot.dot(direction) / physicalProperty1.getInteria();
 
             //distance vector for body 2
             distance2.set(transformProperty2.getTranslation());
@@ -139,7 +139,7 @@ public class PhysicsTask extends EngineTask {
             dot.set(distance2);
             dot.cross(direction);
             dot.cross(distance2);
-            down += dot.dot(direction) / interia2;
+            down += dot.dot(direction) / physicalProperty2.getInteria();
 
             //relative velocity of body 1 and 2
             angularVelocity1.add(physicalProperty1.getVelocity());
@@ -159,7 +159,6 @@ public class PhysicsTask extends EngineTask {
             torqueChange.set(distance1);
             directionCopy.mul(j);
             torqueChange.cross(directionCopy);
-            torqueChange.div(interia1);
             torqueChange.negate();
 
             physicalProperty1.addTorque(torqueChange);
@@ -168,7 +167,6 @@ public class PhysicsTask extends EngineTask {
             directionCopy.set(distance1).normalize();
             torqueChange.set(distance2);
             torqueChange.cross(directionCopy);
-            torqueChange.div(interia2);
 
             physicalProperty2.addTorque(torqueChange);
 

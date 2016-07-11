@@ -17,10 +17,14 @@ public class PhysicalBodyProperty extends Property<Component> {
     private Vector3f torque = new Vector3f();
     private Vector3f velocity = new Vector3f();
     private float mass;
+    private float radius;
+    private float interia;
 
-    public PhysicalBodyProperty(Component owner, float mass) {
+    public PhysicalBodyProperty(Component owner, float mass, float radius) {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
         this.mass = mass;
+        this.radius = radius;
+        interia = mass * radius * radius;
     }
 
     public Vector3f getTorque() {
@@ -32,11 +36,11 @@ public class PhysicalBodyProperty extends Property<Component> {
     }
 
     public void addTorque(Vector3f value) {
-        torque.add(value);
+        torque.add(value.div(interia));
     }
 
     public void removeTorque(Vector3f value) {
-        torque.sub(value);
+        torque.sub(value.div(interia));
     }
 
     public float getMass() {
@@ -72,5 +76,9 @@ public class PhysicalBodyProperty extends Property<Component> {
 
     public void setVelocity(Vector3f velocity) {
         this.velocity = velocity;
+    }
+
+    public float getInteria() {
+        return interia;
     }
 }
