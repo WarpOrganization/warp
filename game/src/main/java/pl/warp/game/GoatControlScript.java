@@ -6,7 +6,6 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.math.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -26,19 +25,19 @@ public class GoatControlScript extends Script<Component> {
     private PhysicalBodyProperty bodyProperty;
     private GLFWInput input;
     private final float brakingForce;
-    private final float angularBrakingForce;
+    private final float arrowKeysRottationSpeed;
 
     private Vector3f forwardVector = new Vector3f();
     private Vector3f rightVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
 
-    public GoatControlScript(Component owner, GLFWInput input, float movementSpeed, float rotationSpeed, float brakingForce, float angularBrakingForce) {
+    public GoatControlScript(Component owner, GLFWInput input, float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRottationSpeed) {
         super(owner);
         this.movementSpeed = movementSpeed;
         this.rotationSpeed = rotationSpeed;
         this.input = input;
         this.brakingForce = brakingForce;
-        this.angularBrakingForce = angularBrakingForce;
+        this.arrowKeysRottationSpeed = arrowKeysRottationSpeed;
     }
 
     @Override
@@ -49,9 +48,10 @@ public class GoatControlScript extends Script<Component> {
     @Override
     public void onUpdate(int delta) {
         updateDirections();
-        angularBrake(delta);
+        desiredTorque.set(0, 0, 0);
         move(delta);
         rotate(delta);
+        moveAngular(delta);
     }
 
     private void updateDirections() {
@@ -72,13 +72,42 @@ public class GoatControlScript extends Script<Component> {
             move(rightVector, -movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_SPACE))
             brake(delta);
-        //stop();
+        if (input.isKeyDown(GLFW.GLFW_KEY_UP))
+            addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
+        if (input.isKeyDown(GLFW.GLFW_KEY_DOWN))
+            addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
+        if (input.isKeyDown(GLFW.GLFW_KEY_LEFT))
+            addDesiredTorque(0, arrowKeysRottationSpeed, 0);
+        if (input.isKeyDown(GLFW.GLFW_KEY_RIGHT))
+            addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
     }
 
     private Vector3f tmpForce = new Vector3f();
+    private Vector3f desiredTorque = new Vector3f();
 
     private void move(Vector3f direction, float force) {
         bodyProperty.applyForce(tmpForce.set(direction).mul(force));
+    }
+
+    private Vector3f torqueChange = new Vector3f();
+
+    private void moveAngular(float delta) {
+        if (desiredTorque.equals(bodyProperty.getTorque())) return;
+        torqueChange.set(bodyProperty.getTorque());
+        torqueChange.sub(desiredTorque);
+        torqueChange.negate();
+        if (torqueChange.length() > rotationSpeed * delta / bodyProperty.getInteria()) {
+            torqueChange.normalize();
+            torqueChange.mul(rotationSpeed);
+            torqueChange.mul(delta);
+        } else {
+            torqueChange.mul(bodyProperty.getInteria());
+        }
+        bodyProperty.addTorque(torqueChange);
+    }
+
+    private void addDesiredTorque(float x, float y, float z) {
+        desiredTorque.add(x, y, z);
     }
 
     private void rotate(int delta) {
@@ -107,20 +136,6 @@ public class GoatControlScript extends Script<Component> {
         }
         brakingVector.mul(delta);
         bodyProperty.applyForce(brakingVector);
-    }
-
-    private void angularBrake(int delta){
-        brakingVector.set(bodyProperty.getTorque());
-        if(brakingVector.length()>angularBrakingForce/bodyProperty.getInteria()){
-            brakingVector.normalize();
-            brakingVector.negate();
-            brakingVector.mul(angularBrakingForce);
-        }else {
-            brakingVector.negate();
-            brakingVector.mul(bodyProperty.getInteria());
-        }
-        brakingVector.mul(delta);
-        bodyProperty.addTorque(brakingVector);
     }
 
 }

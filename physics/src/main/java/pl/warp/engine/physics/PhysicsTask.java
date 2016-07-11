@@ -3,6 +3,7 @@ package pl.warp.engine.physics;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.*;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -40,7 +41,7 @@ public class PhysicsTask extends EngineTask {
     private ListenableParent parent;
     private Set<btPersistentManifold> activeCollisons;
 
-    public static final float ELASTICY = 0f;
+    public static final float ELASTICY = 0.1f;
 
     public PhysicsTask(ListenableParent parent) {
 
@@ -49,6 +50,7 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        new SharedLibraryLoader().load("gdx");
         Bullet.init();
         defaultCollisionConfiguration = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(defaultCollisionConfiguration);

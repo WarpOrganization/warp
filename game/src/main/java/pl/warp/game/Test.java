@@ -1,7 +1,5 @@
 package pl.warp.game;
 
-import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -49,11 +47,11 @@ import java.util.Random;
 public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
-    private static final int WIDTH = 1920, HEIGHT = 1080;
-    private static final float ROT_SPEED = 0.006f;
+    private static final int WIDTH = 1366, HEIGHT = 768;
+    private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f;
     private static final float BRAKING_FORCE = 0.1f;
-    private static final float ANGULAR_BRAKING_FORCE = 0.04f;
+    private static final float ARROWS_ROTATION_SPEED = 2f;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
@@ -95,7 +93,7 @@ public class Test {
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
             new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
-            new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ANGULAR_BRAKING_FORCE);
+            new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
 
             SpotLight goatLight = new SpotLight(
                     controllableGoat,
@@ -120,8 +118,6 @@ public class Test {
         });
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleOnce(() -> {
-            new SharedLibraryLoader().load("gdx");
-            Bullet.init();
             physicsThread.scheduleTask(new MovementTask(root));
             physicsThread.scheduleTask(new PhysicsTask((ListenableParent) root));
         });
