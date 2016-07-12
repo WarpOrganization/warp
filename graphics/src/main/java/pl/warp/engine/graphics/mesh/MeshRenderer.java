@@ -1,13 +1,12 @@
-package pl.warp.engine.graphics.rendering;
+package pl.warp.engine.graphics.mesh;
 
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.component.defaultprog.DefaultComponentProgram;
 
@@ -34,7 +33,7 @@ public class MeshRenderer implements Renderer {
     }
 
     @Override
-    public void initRendering(int delta) {
+    public void initRendering( int delta) {
         setupProgram();
     }
 

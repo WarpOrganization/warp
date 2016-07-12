@@ -16,25 +16,33 @@ import static org.lwjgl.opengl.GL30.GL_RENDERBUFFER;
  *         Created 2016-06-28 at 16
  */
 public class TextureFramebuffer extends Framebuffer{
+
     protected int depthBuff;
     protected Texture destTex;
-
 
     public TextureFramebuffer(Texture2D destTex) {
         super(GL30.glGenFramebuffers());
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, name);
 
         this.depthBuff = GL30.glGenRenderbuffers();
-        glBindRenderbuffer(GL_RENDERBUFFER, this.depthBuff);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, destTex.getWidth(), destTex.getHeight());
+        attachDepthBuffer(destTex.getWidth(), destTex.getHeight());
 
         this.destTex = destTex;
-        GL20.glDrawBuffers(BufferTools.toDirectBuffer(new int[]{GL_COLOR_ATTACHMENT0}));
-        GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.destTex.getTexture(), 0);
-        GL30.glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this.depthBuff);
+        attachTexture();
 
         int status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
         if (status != GL30.GL_FRAMEBUFFER_COMPLETE) throw new FramebufferException("Incomplete framebuffer: " + status);
+    }
+
+    private void attachDepthBuffer(int width, int height) {
+        glBindRenderbuffer(GL_RENDERBUFFER, this.depthBuff);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, width, height);
+    }
+
+    private void attachTexture() {
+        GL20.glDrawBuffers(BufferTools.toDirectBuffer(new int[]{GL_COLOR_ATTACHMENT0}));
+        GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.destTex.getTexture(), 0);
+        GL30.glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this.depthBuff);
     }
 
     protected TextureFramebuffer(Texture destTex, int name, int depthBuff) {
@@ -50,10 +58,8 @@ public class TextureFramebuffer extends Framebuffer{
     }
 
     public void resize(int w, int h) {
-        if (depthBuff != -1) {
-            glBindRenderbuffer(GL_RENDERBUFFER, this.depthBuff);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, w, h);
-        }
+        if (depthBuff != -1)
+            attachDepthBuffer(w, h);
         destTex.resize(w, h);
     }
 

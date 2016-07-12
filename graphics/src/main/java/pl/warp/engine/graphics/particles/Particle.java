@@ -63,4 +63,9 @@ public class Particle {
     public void setTimeToLive(int timeToLive) {
         this.timeToLive = timeToLive;
     }
+
+    public int getTextureIndex() {
+        //TODO
+        return 0;
+    }
 }

@@ -6,10 +6,8 @@ import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
-import pl.warp.engine.graphics.rendering.MeshRenderer;
-import pl.warp.engine.graphics.rendering.Renderer;
-import pl.warp.engine.graphics.rendering.SceneRenderer;
-import pl.warp.engine.graphics.rendering.SkyboxRenderer;
+import pl.warp.engine.graphics.mesh.MeshRenderer;
+import pl.warp.engine.graphics.skybox.SkyboxRenderer;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 

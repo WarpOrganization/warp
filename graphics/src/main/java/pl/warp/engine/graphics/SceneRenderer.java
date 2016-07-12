@@ -1,9 +1,8 @@
-package pl.warp.engine.graphics.rendering;
+package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.graphics.RenderingSettings;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;

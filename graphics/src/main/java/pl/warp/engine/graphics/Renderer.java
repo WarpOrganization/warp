@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.rendering;
+package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;

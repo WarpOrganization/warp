@@ -1,8 +1,5 @@
 package pl.warp.engine.graphics.particles;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Jaca777
  *         Created 2016-07-10 at 13
@@ -12,11 +9,12 @@ public class ParticleEmitter {
     private ParticleAnimator animator;
     private ParticleFactory factory;
     private float emissionDelay;
-    private List<Particle> particles = new ArrayList<>();
+    private ParticleEnvironment environment;
 
-    public ParticleEmitter(ParticleAnimator animator, ParticleFactory factory, float frequency) {
+    public ParticleEmitter(ParticleAnimator animator, ParticleFactory factory, ParticleEnvironment environment, float frequency) {
         this.animator = animator;
         this.factory = factory;
+        this.environment = environment;
         this.emissionDelay = 1000f / frequency;
     }
 
@@ -27,10 +25,10 @@ public class ParticleEmitter {
     }
 
     private void updateParticlesLifeTime(int delta) {
-        for (Particle particle : particles) {
+        for (Particle particle : environment.getParticles()) {
             int ttl = particle.getTimeToLive() - delta;
             if (ttl > 0) particle.setTimeToLive(ttl);
-            else particles.remove(particle);
+            else environment.removeParticle(particle);
         }
     }
 
@@ -45,11 +43,11 @@ public class ParticleEmitter {
 
     private void emitParticlesNumber(int number) {
         for (int i = 0; i < number; i++)
-            particles.add(factory.newParticle());
+            environment.addParticle(factory.newParticle());
     }
 
     private void animate(int delta) {
-        for (Particle particle : particles) {
+        for (Particle particle : environment.getParticles()) {
             animator.animate(particle, delta);
         }
     }

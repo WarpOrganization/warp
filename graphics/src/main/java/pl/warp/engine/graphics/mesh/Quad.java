@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
  * @author Jaca777
  *         Created 2015-06-25 at 14
  */
-public class Rect {
+public class Quad {
 
     private static final float[] VERTICES = new float[]{
             -1.0f, -1.0f, 0.0f, 1.0f,
@@ -39,7 +39,7 @@ public class Rect {
     private int texCoordBuffer;
     private int indexBuffer;
 
-    public Rect(int vertexAttr, int texCoordAttr) {
+    public Quad(int vertexAttr, int texCoordAttr) {
         this.vao = GL30.glGenVertexArrays();
 
         this.vertexBuffer = GL15.glGenBuffers();
