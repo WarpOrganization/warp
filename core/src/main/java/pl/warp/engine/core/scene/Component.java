@@ -26,7 +26,7 @@ public abstract class Component {
         this.context = parent.getContext();
     }
 
-    Component(EngineContext context) {
+    public Component(EngineContext context) {
         this.context = context;
     }
 
@@ -152,13 +152,13 @@ public abstract class Component {
         return allChildrenProperties.collect(Collectors.toSet());
     }
 
-    protected void addChild(Component child) {
+    public void addChild(Component child) {
         synchronized (children) {
             children.add(child);
         }
     }
 
-    protected void removeChild(Component child) {
+    public void removeChild(Component child) {
         synchronized (children) {
             if (children.contains(child))
                 children.remove(child);
