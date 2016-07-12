@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
+import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.texture.Texture;
 
 import java.io.IOException;
@@ -20,15 +21,15 @@ import java.nio.FloatBuffer;
  */
 public abstract class Program {
 
-    private int program;
-    private int vertexShader;
-    private int fragmentShader;
+    protected int program;
+    protected int vertexShader;
+    protected int fragmentShader;
 
     public Program(InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
         try {
             this.vertexShader = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
             this.fragmentShader = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
-            this.program = ShaderCompiler.createProgram(this.vertexShader, this.fragmentShader, outNames);
+            this.program = ShaderCompiler.createProgram(new int[]{this.vertexShader, this.fragmentShader}, outNames);
             GL20.glUseProgram(this.program);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -38,14 +39,18 @@ public abstract class Program {
     public Program(String vertexSource, String fragmentSource, String[] outNames) {
         int vS = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, vertexSource);
         int fS = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentSource);
-        this.program = ShaderCompiler.createProgram(vS, fS, outNames);
+        this.program = ShaderCompiler.createProgram(new int[]{vS, fS}, outNames);
         GL20.glUseProgram(this.program);
     }
 
-    public Program(int program) {
+    public Program(int program, int vertexShader, int fragmentShader) {
         this.program = program;
+        this.vertexShader = vertexShader;
+        this.fragmentShader = fragmentShader;
         GL20.glUseProgram(this.program);
     }
+
+    protected Program() {}
 
     /**
      * Binds the program.
@@ -158,4 +163,6 @@ public abstract class Program {
     public int getProgram() {
         return program;
     }
+
+
 }

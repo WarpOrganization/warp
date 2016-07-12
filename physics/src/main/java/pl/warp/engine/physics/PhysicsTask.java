@@ -64,7 +64,7 @@ public class PhysicsTask extends EngineTask {
         sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
         parent.forEachChildren(component -> {
             if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
-                ColliderProperty property = new ColliderProperty(component, new BasicCollider(new btBoxShape(new Vector3(2.833f, 0.6255f, 2.1465f)), new Vector3f(-0.067f, 0, 0), 2.833f, CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+                ColliderProperty property = new ColliderProperty(component, new BasicCollider(new btBoxShape(new Vector3(2.1465f, 0.6255f, 2.833f)), new Vector3f(-0.067f, 0, 0), 2.833f, CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
                 property.getCollider().addToWorld(collisionWorld, counter);
                 componentTreeMap.put(counter, component);
                 counter++;

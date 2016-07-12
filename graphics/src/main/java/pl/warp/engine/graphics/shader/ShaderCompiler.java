@@ -28,7 +28,7 @@ public class ShaderCompiler {
         if (log.contains("error")) {
             logger.error("Failed to compile shader " + shader + ". Cause: " + log);
             throw new ShaderCompilationException(log);
-        } else if(log.contains("warn")){
+        } else if (log.contains("warn")) {
             logger.warn("Warnings while compiling shader " + shader + ". Cause: " + log);
         }
         return shader;
@@ -37,29 +37,31 @@ public class ShaderCompiler {
     /**
      * Links shaders into a program.
      *
-     * @param vertexShader   Vertex shader's name.
-     * @param fragmentShader Fragment shader's name.
      * @return The program's name.
      */
-    public static int createProgram(int vertexShader, int fragmentShader, String[] outNames) {
+    public static int createProgram(int[] shaders, String[] outNames) {
         int program = glCreateProgram();
-        glAttachShader(program, vertexShader);
-        glAttachShader(program, fragmentShader);
+        for (int shader : shaders)
+            glAttachShader(program, shader);
         for (int i = 0; i < outNames.length; i++) {
             String name = outNames[i];
             GL30.glBindFragDataLocation(program, i, name);
         }
         glLinkProgram(program);
-        String log = glGetProgramInfoLog(program, glGetProgrami(program, GL_INFO_LOG_LENGTH));
-        if (log.isEmpty()) {
-            logger.info("Program " + program + " successfully linked.");
-        } else if (log.contains("error")) {
-            logger.error("Failed to link program " + program + ". Cause: " + log);
-            throw new ShaderCompilationException(log);
-        } else if(log.contains("warning")){
-            logger.warn("Warnings while linking program " + program + ". Cause: " + log);
-        }
+        checkProgramLinkInfo(program);
         return program;
     }
 
+    private static void checkProgramLinkInfo(int program) {
+        String info = glGetProgramInfoLog(program, glGetProgrami(program, GL_INFO_LOG_LENGTH));
+        if (info.isEmpty()) {
+            logger.info("Program " + program + " successfully linked.");
+        } else if (info.contains("error")) {
+            logger.error("Failed to link program " + program + ". Cause: " + info);
+            throw new ShaderCompilationException(info);
+        } else if (info.contains("warning")) {
+            logger.warn("Warnings while linking program " + program + ". Cause: " + info);
+        }
+    }
 }
+
