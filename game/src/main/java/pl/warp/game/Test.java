@@ -33,6 +33,7 @@ import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
+import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -119,7 +120,7 @@ public class Test {
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask((ListenableParent) root));
+            physicsThread.scheduleTask(new PhysicsTask((ListenableParent) root, new DefaultCollisionStrategy()));
         });
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
