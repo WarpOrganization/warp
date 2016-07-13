@@ -16,6 +16,8 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
  */
 public class GoatControlScript extends Script<Component> {
 
+    private static final float MOUSE_ROTATION_SPEED_FACTOR = 0.2f;
+
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(1, 0, 0);
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
@@ -113,7 +115,7 @@ public class GoatControlScript extends Script<Component> {
     private void rotate(int delta) {
         Vector2f cursorPosDelta = input.getCursorPositionDelta();
         Vector2f rotation = new Vector2f();
-        cursorPosDelta.mul(rotationSpeed * delta, rotation);
+        cursorPosDelta.mul(rotationSpeed * delta * MOUSE_ROTATION_SPEED_FACTOR, rotation);
         bodyProperty.addTorque(new Vector3f(-rotation.y, -rotation.x, 0));
     }
 

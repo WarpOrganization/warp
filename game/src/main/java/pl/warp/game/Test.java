@@ -1,6 +1,7 @@
 package pl.warp.game;
 
 import org.apache.log4j.Logger;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
@@ -23,6 +24,7 @@ import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.particles.*;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.CubemapDecoder;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
@@ -91,6 +93,11 @@ public class Test {
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
             Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
 
+/*            Component particleSource = new SimpleComponent(root);
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
+            ParticleFactory factory = new RandomSpreadingParticleFactory(0f, 10000, false, false);
+            new GraphicsParticleEmitterProperty(particleSource, new ParticleEmitter(animator, factory, 10));*/
+
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
             new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
@@ -107,6 +114,15 @@ public class Test {
                     0.1f, 0.1f);
             LightProperty directionalLightProperty = new LightProperty(controllableGoat);
             directionalLightProperty.addSpotLight(goatLight);
+
+            SpotLight laser = new SpotLight(
+                    controllableGoat,
+                    new Vector3f(0, 0, 1),
+                    new Vector3f(0, 0, 1), 0.001f, 0.002f,
+                    new Vector3f(0f, 30f, 0f),
+                    new Vector3f(0f, 0f, 0f),
+                    0f, 0f);
+            directionalLightProperty.addSpotLight(laser);
 
             CubemapDecoder.DecodedCubemap decodedCubemap = CubemapDecoder.decodeCubemap("pl/warp/game/stars");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());

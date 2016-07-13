@@ -15,7 +15,7 @@ public class GraphicsParticleEmitterProperty extends Property<Component> {
     public GraphicsParticleEmitterProperty(Component emitterComponent, ParticleEmitter emitter, Component environmentComponent) {
         super(emitterComponent, PARTICLES_EMITTER_PROPERTY_NAME);
         this.emitter = emitter;
-        this.environment = new ParticleEnvironment();
+        this.environment = emitter.getEnvironment();
         new GraphicsParticleEnvironmentProperty(environmentComponent, environment);
     }
 

@@ -72,9 +72,9 @@ public class ParticleRenderer implements Renderer {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionVBO);
         GL20.glVertexAttribPointer(ParticleProgram.POSITION_ATTR, 3, GL11.GL_FLOAT, false, 0, 0);
 
-        GL20.glEnableVertexAttribArray(ParticleProgram.TEXTURE_INDEX_ATTR);
+        GL20.glEnableVertexAttribArray(ParticleProgram.ROTATION_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, rotationVBO);
-        GL20.glVertexAttribPointer(ParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(ParticleProgram.ROTATION_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
 
         GL20.glEnableVertexAttribArray(ParticleProgram.TEXTURE_INDEX_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexVBO);
@@ -112,19 +112,22 @@ public class ParticleRenderer implements Renderer {
     private IntBuffer textureIndices = BufferUtils.createIntBuffer(MAX_PARTICLES_AMOUNT);
 
     private void updateVBOS(List<Particle> particles) {
-        flipBuffers();
+        clearBuffers();
+        int particleCounter = 0;
         for (Particle particle : particles) {
+            if (particleCounter > MAX_PARTICLES_AMOUNT) break;
             putPosition(particle.getPosition());
             putRotation(particle.getRotation());
             putTextureIndex(particle.getTextureIndex());
+            particleCounter++;
         }
         storeDataInVBOs();
     }
 
-    private void flipBuffers() {
-        positions.flip();
-        rotations.flip();
-        textureIndices.flip();
+    private void clearBuffers() {
+        positions.clear();
+        rotations.clear();
+        textureIndices.clear();
     }
 
 

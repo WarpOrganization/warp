@@ -18,7 +18,7 @@ public class SimpleParticleAnimator implements ParticleAnimator {
         this.rotationRate = rotationRate;
     }
 
-    private Vector3f tempVector3;
+    private Vector3f tempVector3 = new Vector3f();
 
     @Override
     public void animate(Particle particle, int delta) {

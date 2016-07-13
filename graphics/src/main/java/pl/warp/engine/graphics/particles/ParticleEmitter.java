@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.particles;
 
+import java.util.Iterator;
+
 /**
  * @author Jaca777
  *         Created 2016-07-10 at 13
@@ -11,10 +13,10 @@ public class ParticleEmitter {
     private float emissionDelay;
     private ParticleEnvironment environment;
 
-    public ParticleEmitter(ParticleAnimator animator, ParticleFactory factory, ParticleEnvironment environment, float frequency) {
+    public ParticleEmitter(ParticleAnimator animator, ParticleFactory factory, float frequency) {
         this.animator = animator;
         this.factory = factory;
-        this.environment = environment;
+        this.environment = new ParticleEnvironment();
         this.emissionDelay = 1000f / frequency;
     }
 
@@ -25,10 +27,11 @@ public class ParticleEmitter {
     }
 
     private void updateParticlesLifeTime(int delta) {
-        for (Particle particle : environment.getParticles()) {
+        for (Iterator<Particle> iterator = environment.getParticles().iterator(); iterator.hasNext(); ) {
+            Particle particle = iterator.next();
             int ttl = particle.getTimeToLive() - delta;
             if (ttl > 0) particle.setTimeToLive(ttl);
-            else environment.removeParticle(particle);
+            else iterator.remove();
         }
     }
 
@@ -50,5 +53,9 @@ public class ParticleEmitter {
         for (Particle particle : environment.getParticles()) {
             animator.animate(particle, delta);
         }
+    }
+
+    public ParticleEnvironment getEnvironment() {
+        return environment;
     }
 }
