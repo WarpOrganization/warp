@@ -18,15 +18,14 @@ public class BasicCollider implements Collider {
     private Vector3f offset;
     private Matrix4 transform;
     private int treeMapKey;
-    private float radius;
     private int callbackFilter;
     private int callbackFlag;
+    private boolean defaultCollisionHandling;
 
-    public BasicCollider(btCollisionShape shape, Vector3f offset, float radius, int callbackFilter, int callbackFlag) {
+    public BasicCollider(btCollisionShape shape, Vector3f offset, int callbackFilter, int callbackFlag) {
 
         this.shape = shape;
         this.offset = offset;
-        this.radius = radius;
         this.callbackFilter = callbackFilter;
         this.callbackFlag = callbackFlag;
         collisionObject = new btCollisionObject();
@@ -35,6 +34,7 @@ public class BasicCollider implements Collider {
         collisionObject.setWorldTransform(transform);
         collisionObject.setContactCallbackFilter(callbackFilter);
         collisionObject.setContactCallbackFlag(callbackFlag);
+        defaultCollisionHandling = true;
     }
 
     @Override
@@ -85,11 +85,6 @@ public class BasicCollider implements Collider {
     }
 
     @Override
-    public float getRadius() {
-        return radius;
-    }
-
-    @Override
     public void activate() {
         collisionObject.setContactCallbackFilter(callbackFilter);
         collisionObject.setContactCallbackFlag(callbackFlag);
@@ -101,8 +96,14 @@ public class BasicCollider implements Collider {
         collisionObject.setContactCallbackFilter(0);
     }
 
-    public void setRadius(float radius) {
-        this.radius = radius;
+    @Override
+    public void setDefaultCollisionHandling(boolean value) {
+        defaultCollisionHandling = value;
+    }
+
+    @Override
+    public boolean getDefaultCollisionHandling() {
+        return defaultCollisionHandling;
     }
 
 }

@@ -3,7 +3,6 @@ package pl.warp.engine.physics;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -13,7 +12,6 @@ import java.util.Set;
 public class CollisionListener extends ContactListener {
 
     private Set<btPersistentManifold> activeCollisons;
-
 
     public CollisionListener(Set<btPersistentManifold> activeCollisons) {
         super();

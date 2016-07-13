@@ -7,7 +7,6 @@ import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleComponent;
-import pl.warp.engine.core.scene.listenable.ListenableParent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptTask;
@@ -53,6 +52,7 @@ public class Test {
     private static final float MOV_SPEED = 0.2f;
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
+    private static final int GUN_COOLDOWN = 1000;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
@@ -89,12 +89,14 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
+            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
             new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh);
 
             SpotLight goatLight = new SpotLight(
                     controllableGoat,
@@ -120,10 +122,11 @@ public class Test {
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask((ListenableParent) root, new DefaultCollisionStrategy()));
+            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(root), root));
         });
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
+
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {

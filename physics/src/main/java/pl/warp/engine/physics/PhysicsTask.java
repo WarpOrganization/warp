@@ -7,17 +7,10 @@ import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Listener;
-import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
-import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
-import pl.warp.engine.core.scene.listenable.ListenableParent;
 import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by hubertus on 7/4/16.
@@ -25,25 +18,19 @@ import java.util.Set;
 
 public class PhysicsTask extends EngineTask {
 
-    private btCollisionWorld collisionWorld;
     private btCollisionDispatcher dispatcher;
     private btDbvtBroadphase dbvtBroadphase;
     private btDefaultCollisionConfiguration defaultCollisionConfiguration;
     private CollisionListener collisionListener;
 
-    private Listener<Component, ChildAddedEvent> sceneEnteredListener;
-    private Listener<Component, ChildRemovedEvent> sceneLeftEventListener;
-
-    private int counter = Integer.MIN_VALUE;
-    private ListenableParent parent;
     private CollisionStrategy collisionStrategy;
-    private Set<btPersistentManifold> activeCollisons;
+    private Component parent;
 
 
-    public PhysicsTask(ListenableParent parent, CollisionStrategy collisionStrategy) {
+    public PhysicsTask(CollisionStrategy collisionStrategy, Component parent) {
 
-        this.parent = parent;
         this.collisionStrategy = collisionStrategy;
+        this.parent = parent;
     }
 
     @Override
@@ -53,18 +40,13 @@ public class PhysicsTask extends EngineTask {
         defaultCollisionConfiguration = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(defaultCollisionConfiguration);
         dbvtBroadphase = new btDbvtBroadphase();
-        collisionWorld = new btCollisionWorld(dispatcher, dbvtBroadphase, defaultCollisionConfiguration);
-        activeCollisons = new HashSet<>();
-        collisionListener = new CollisionListener(activeCollisons);
+        collisionStrategy.setCollisionWorld(new btCollisionWorld(dispatcher, dbvtBroadphase, defaultCollisionConfiguration));
+        collisionListener = new CollisionListener(collisionStrategy.getCollisionsSet());
         collisionListener.enableOnAdded();
-        sceneEnteredListener = SimpleListener.createListener(parent, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, this::handleSceneEntered);
-        sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
         parent.forEachChildren(component -> {
             if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
-                ColliderProperty property = new ColliderProperty(component, new BasicCollider(new btBoxShape(new Vector3(2.1465f, 0.6255f, 2.833f)), new Vector3f(-0.067f, 0, 0), 2.833f, CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-                property.getCollider().addToWorld(collisionWorld, counter);
-                collisionStrategy.getComponentMap().put(counter, component);
-                counter++;
+                new ColliderProperty(component, new BasicCollider(new btBoxShape(new Vector3(2.1465f, 0.6255f, 2.833f)), new Vector3f(-0.067f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+                collisionStrategy.handleSceneEntered(new ChildAddedEvent(component));
             }
         });
     }
@@ -75,27 +57,12 @@ public class PhysicsTask extends EngineTask {
         dbvtBroadphase.dispose();
         defaultCollisionConfiguration.dispose();
         collisionListener.dispose();
-        collisionWorld.dispose();
+        collisionStrategy.dispose();
     }
 
 
     @Override
     public void update(int delta) {
-        collisionWorld.performDiscreteCollisionDetection();
-        activeCollisons.forEach(manifold ->
-                collisionStrategy.handleCollision(manifold));
-    }
-
-    private void handleSceneEntered(ChildAddedEvent event) {
-        ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.getCollider().addToWorld(collisionWorld, counter);
-        collisionStrategy.getComponentMap().put(counter, event.getAddedChild());
-        counter++;
-    }
-
-    private void handleSceneLeft(ChildAddedEvent event) {
-        ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        tmp.getCollider().removeFromWorld(collisionWorld);
-        collisionStrategy.getComponentMap().remove(tmp.getCollider().getTreeMapKey());
+        collisionStrategy.chceckCollisions();
     }
 }
