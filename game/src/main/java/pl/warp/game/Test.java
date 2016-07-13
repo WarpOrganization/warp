@@ -52,7 +52,7 @@ public class Test {
     private static final float MOV_SPEED = 0.2f;
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 1000;
+    private static final int GUN_COOLDOWN = 200;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
