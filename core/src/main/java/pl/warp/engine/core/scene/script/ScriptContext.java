@@ -1,7 +1,9 @@
 package pl.warp.engine.core.scene.script;
 
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.ComponentDeathEvent;
 import pl.warp.engine.core.scene.Script;
+import pl.warp.engine.core.scene.SimpleListener;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +20,15 @@ public class ScriptContext {
 
     public void addScript(Script<?> script) {
         scriptsToAdd.add(script);
+        createDeathListener(script);
+    }
+
+    private void createDeathListener(Script<?> script) {
+        SimpleListener.createListener(
+                script.getOwner(),
+                ComponentDeathEvent.COMPONENT_DEATH_EVENT_NAME,
+                (e) -> removeScript(script)
+        );
     }
 
     public void removeScript(Script<?> script) {

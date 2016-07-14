@@ -177,7 +177,7 @@ public abstract class Component {
     public void destroy() {
         if (hasParent())
             getParent().removeChild(this);
-        context.getScriptContext().removeComponentScripts(this);
+        triggerEvent(new ComponentDeathEvent(this));
     }
 
     public void forEachChildren(Consumer<Component> f) {
