@@ -17,6 +17,7 @@ public class ScriptTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        context.update();
         context.getScripts().forEach(s -> {
             if (s.isInitialized())
                 throw new IllegalStateException("Unable to initialize script - script has already been initialized." +
@@ -33,6 +34,7 @@ public class ScriptTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        context.update();
         context.getScripts().forEach(s -> {
             if (!s.isInitialized())
                 initialize(s);
