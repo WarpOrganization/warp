@@ -6,10 +6,9 @@ import pl.warp.engine.core.scene.Script;
 /**
  * Created by hubertus on 7/12/16.
  */
-public class BulletScript extends Script<Component>{
+public class BulletScript extends Script<Component> {
 
     private int life;
-
 
     public BulletScript(Component owner, int life) {
         super(owner);
@@ -18,14 +17,13 @@ public class BulletScript extends Script<Component>{
 
     @Override
     public void onInit() {
-
+;
     }
 
     @Override
     public void onUpdate(int delta) {
-        life-=delta;
-        if(life<0){
-            getOwner().getParent().removeChild(getOwner());
-        }
+        life -= delta;
+        if (life < 0)
+            getOwner().destroy();
     }
 }

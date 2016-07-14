@@ -18,7 +18,7 @@ public abstract class ListenableParent extends Component {
     }
 
     @Override
-    public void removeChild(Component child) {
+    protected void removeChild(Component child) {
         super.removeChild(child);
         triggerEvent(new ChildRemovedEvent(child));
     }

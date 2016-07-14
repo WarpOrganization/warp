@@ -30,8 +30,8 @@ public class GunScript extends Script<Component> {
     private Component root;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private static final float BULLET_SPEED = 50f;
-    private static final float BULLET_MASS = 1f;
+    private static final float BULLET_SPEED = 0.5f;
+    private static final float BULLET_MASS = 0.01f;
 
     private Mesh bulletMesh;
 
@@ -59,7 +59,6 @@ public class GunScript extends Script<Component> {
     }
 
     private void input() {
-
         if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
             shoot();
     }
@@ -89,8 +88,8 @@ public class GunScript extends Script<Component> {
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
             new PhysicalBodyProperty(bullet, BULLET_MASS, 0.128f).applyForce(direction);
             new ColliderProperty(bullet, new BasicCollider(new btBoxShape(new Vector3(0.128f, 0.128f, 0.128f)), new Vector3f(0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-            //new BulletScript(bullet,1000);
             root.addChild(bullet);
+            new BulletScript(bullet,1000);
         }
 
     }

@@ -54,7 +54,7 @@ public class Test {
     private static final float MOV_SPEED = 0.2f;
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 200;
+    private static final int GUN_COOLDOWN = 50;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
@@ -93,10 +93,10 @@ public class Test {
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
             Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
 
-/*            Component particleSource = new SimpleComponent(root);
+            Component particleSource = new SimpleComponent(root);
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
             ParticleFactory factory = new RandomSpreadingParticleFactory(0f, 10000, false, false);
-            new GraphicsParticleEmitterProperty(particleSource, new ParticleEmitter(animator, factory, 10));*/
+            new GraphicsParticleEmitterProperty(particleSource, new ParticleEmitter(animator, factory, 10));
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
@@ -146,7 +146,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 600; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);

@@ -21,7 +21,6 @@ public abstract class Component {
     private final List<Component> children = new ArrayList<>();
 
     public Component(Component parent) {
-        this.parent = parent;
         parent.addChild(this);
         this.context = parent.getContext();
     }
@@ -122,6 +121,10 @@ public abstract class Component {
         return parent != null;
     }
 
+    private void setParent(Component parent) {
+        this.parent = parent;
+    }
+
     /**
      * Returns children's components of type T. Children of children are traversed as well (and so on).
      * It's a bit slower than {@link #getChildrenProperties(String)}.
@@ -153,17 +156,28 @@ public abstract class Component {
     }
 
     public void addChild(Component child) {
-        synchronized (children) {
+        if (child.hasParent())
+            throw new IllegalStateException("Unable to add a child. The component already has a parent.");
+        else synchronized (children) {
             children.add(child);
+            child.setParent(this);
         }
     }
 
-    public void removeChild(Component child) {
+    protected void removeChild(Component child) {
         synchronized (children) {
-            if (children.contains(child))
+            if (children.contains(child)) {
                 children.remove(child);
+                child.setParent(null);
+            }
             else throw new ChildNotPresentException("Unable to remove a child.");
         }
+    }
+
+    public void destroy() {
+        if (hasParent())
+            getParent().removeChild(this);
+        context.getScriptContext().removeComponentScripts(this);
     }
 
     public void forEachChildren(Consumer<Component> f) {
