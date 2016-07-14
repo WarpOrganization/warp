@@ -63,6 +63,6 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        collisionStrategy.chceckCollisions();
+        collisionStrategy.checkCollisions();
     }
 }

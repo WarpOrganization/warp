@@ -180,7 +180,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     }
 
     @Override
-    public synchronized void chceckCollisions() {
+    public synchronized void checkCollisions() {
         collisionWorld.performDiscreteCollisionDetection();
         activeCollisons.forEach(this::handleCollision);
 

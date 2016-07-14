@@ -16,11 +16,11 @@ public interface CollisionStrategy {
 
     Set<btPersistentManifold> getCollisionsSet();
 
-    void chceckCollisions();
+    void checkCollisions();
 
     void handleSceneEntered(ChildAddedEvent event);
 
     void handleSceneLeft(ChildRemovedEvent event);
 
     void dispose();
-    }
+}

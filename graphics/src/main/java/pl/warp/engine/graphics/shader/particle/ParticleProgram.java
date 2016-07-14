@@ -24,6 +24,7 @@ public class ParticleProgram extends GeometryProgram {
 
     private int unifModelViewMatrix;
     private int unifProjectionMatrix;
+    private int unifCameraRotationMatrix;
 
     private Matrix4f cameraMatrix;
     private Matrix4f modelMatrix;
@@ -36,16 +37,20 @@ public class ParticleProgram extends GeometryProgram {
     private void loadUniforms() {
         this.unifModelViewMatrix = getUniformLocation("modelViewMatrix");
         this.unifProjectionMatrix = getUniformLocation("projectionMatrix");
+        this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
     }
 
     public void useMatrixStack(MatrixStack stack) {
         this.modelMatrix = stack.topMatrix();
         setModelViewMatrix();
+        if(cameraMatrix != null) setModelViewMatrix();
     }
 
     public void useCamera(Camera camera) {
         this.cameraMatrix = camera.getCameraMatrix();
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix());
+        setUniformMatrix4(unifCameraRotationMatrix, camera.getRotationMatrix());
+        if(modelMatrix != null) setModelViewMatrix();
     }
 
     private Matrix4f tmpResultMatrix = new Matrix4f();
