@@ -28,7 +28,7 @@ void main()
      // Vertex 4
     gl_TexCoord[0].stp = vec3(1.0, 1.0, textureIndex);
     gl_Position = pos;
-    gl_Position.xyzw += (particleRotation * vec2(1, 1));
+    gl_Position.xy += (particleRotation * vec2(1, 1));
     gl_Position = projectionMatrix * cameraRotationMatrix * gl_Position;
     EmitVertex();
 
