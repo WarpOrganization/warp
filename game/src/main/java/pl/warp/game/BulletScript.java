@@ -17,7 +17,7 @@ public class BulletScript extends Script<Component> {
 
     @Override
     public void onInit() {
-;
+
     }
 
     @Override

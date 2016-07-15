@@ -1,57 +1,33 @@
 package pl.warp.engine.physics;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Listener;
-import pl.warp.engine.core.scene.SimpleListener;
-import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
-import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Created by hubertus on 7/12/16.
  */
 public class DefaultCollisionStrategy implements CollisionStrategy {
 
-    private TreeMap<Integer, Component> componentTreeMap;
-    private btCollisionWorld collisionWorld;
-    private Set<btPersistentManifold> activeCollisons;
-
-    private Listener<Component, ChildAddedEvent> sceneEnteredListener;
-    private Listener<Component, ChildRemovedEvent> sceneLeftEventListener;
 
     private static final float ELASTICY = 0.1f;
-    private int counter = Integer.MIN_VALUE;
 
+    private PhysicsWorld world;
 
-    public DefaultCollisionStrategy(Component parent) {
-        componentTreeMap = new TreeMap<>();
-        activeCollisons = new HashSet<>();
-        sceneEnteredListener = SimpleListener.createListener(parent, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, this::handleSceneEntered);
-        sceneLeftEventListener = SimpleListener.createListener(parent, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, this::handleSceneLeft);
-    }
+    public void init(PhysicsWorld world) {
+        this.world = world;
+        result = new ClosestRayResultCallback(new Vector3(), new Vector3());
+        tmpTranslation = new Vector3f();
 
-    public void setCollisionWorld(btCollisionWorld collisionWorld) {
-        this.collisionWorld = collisionWorld;
-    }
-
-    @Override
-    public Set<btPersistentManifold> getCollisionsSet() {
-        return activeCollisons;
     }
 
     private Vector3f relativeVelocity = new Vector3f();
-    private Vector3 contactPos = new Vector3();
     private Vector3f direction = new Vector3f();
     private Vector3f dot = new Vector3f();
     private Vector3f distance1 = new Vector3f();
@@ -60,10 +36,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     private Vector3f directionCopy = new Vector3f();
     private Vector3f torqueChange = new Vector3f();
 
-    private synchronized void handleCollision(btPersistentManifold manifold) {
-
-        Component component1 = componentTreeMap.get(manifold.getBody0().getUserValue());
-        Component component2 = componentTreeMap.get(manifold.getBody1().getUserValue());
+    private void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos) {
 
         ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
@@ -73,9 +46,6 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-
-
-            manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
 
             //distance vector for body 1
             distance1.set(transformProperty1.getTranslation());
@@ -152,46 +122,52 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
         component2.triggerEvent(new CollisionEvent(component1, relativeVelocity.length()));
     }
 
+    ClosestRayResultCallback result;
+    Vector3f tmpTranslation;
+
+    @Override
+    public void performRayTests() {
+        synchronized (world) {
+            world.getRayTestColliders().forEach(collider -> {
+                result.setCollisionObject(null);
+                result.setClosestHitFraction(1f);
+                result.setRayFromWorld(collider.getLastPos());
+                result.setRayToWorld(collider.getCurrentPos());
+                world.getCollisionWorld().rayTest(collider.getLastPos(), collider.getCurrentPos(), result);
+                if (result.hasHit()) {
+                    result.getHitPointWorld(contactPos);
+                    TransformProperty property = collider.getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+                    PhysicalBodyProperty physicalBodyProperty = collider.getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+                    tmpTranslation.set(physicalBodyProperty.getVelocity());
+                    tmpTranslation.normalize();
+                    tmpTranslation.negate();
+                    tmpTranslation.mul(physicalBodyProperty.getRadius());
+                    tmpTranslation.add(contactPos.x, contactPos.y, contactPos.z);
+                    property.setTranslation(tmpTranslation);
+                    Component component;
+                    component = world.getComponent(result.getCollisionObject().getUserValue());
+                    calculateCollisionResponse(component, collider.getOwner(), contactPos);
+                }
+            });
+        }
+    }
+
+    private Vector3 contactPos = new Vector3();
+
+    @Override
+    public void handleCollision(btPersistentManifold manifold) {
+        Component component1;
+        Component component2;
+        synchronized (world) {
+            component1 = world.getComponent(manifold.getBody0().getUserValue());
+            component2 = world.getComponent(manifold.getBody1().getUserValue());
+        }
+        manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
+        calculateCollisionResponse(component1, component2, contactPos);
+    }
+
     private boolean isCollidable(ColliderProperty property) {
         return property.getCollider().getDefaultCollisionHandling();
-    }
-
-    public synchronized void handleSceneEntered(ChildAddedEvent event) {
-        if (event.getAddedChild().hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME)) {
-            ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-            tmp.getCollider().addToWorld(collisionWorld, counter);
-            componentTreeMap.put(counter, event.getAddedChild());
-            counter++;
-        }
-    }
-
-
-    public synchronized void handleSceneLeft(ChildRemovedEvent event) {
-        if (event.getRemovedChild().hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME)) {
-            ColliderProperty tmp = event.getRemovedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-            tmp.getCollider().removeFromWorld(collisionWorld);
-            componentTreeMap.remove(tmp.getCollider().getTreeMapKey());
-        }
-    }
-
-    @Override
-    public void dispose() {
-        collisionWorld.dispose();
-    }
-
-    @Override
-    public synchronized void chceckCollisions() {
-        collisionWorld.performDiscreteCollisionDetection();
-        activeCollisons.forEach(this::handleCollision);
-
-    }
-
-    public void addActivecCollision(btPersistentManifold manifold) {
-        activeCollisons.add(manifold);
-    }
-
-    public void removeActiveCollision(btPersistentManifold manifold) {
-        activeCollisons.remove(manifold);
     }
 
 }

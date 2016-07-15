@@ -1,7 +1,6 @@
 package pl.warp.game;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
@@ -12,8 +11,7 @@ import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.math.Transforms;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.physics.CollisionType;
-import pl.warp.engine.physics.collider.BasicCollider;
+import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
@@ -30,8 +28,8 @@ public class GunScript extends Script<Component> {
     private Component root;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private static final float BULLET_SPEED = 0.5f;
-    private static final float BULLET_MASS = 0.01f;
+    private static final float BULLET_SPEED = 1f;
+    private static final float BULLET_MASS = 0.001f;
 
     private Mesh bulletMesh;
 
@@ -71,6 +69,7 @@ public class GunScript extends Script<Component> {
     private Vector3f direction = new Vector3f();
     private Vector3f parentVelocity = new Vector3f();
     private Vector3f bulletTranslation = new Vector3f();
+    private Vector3 bulletTranslation2 = new Vector3();
 
     private void shoot() {
         if (timer <= 0) {
@@ -87,7 +86,8 @@ public class GunScript extends Script<Component> {
             new GraphicsMeshProperty(bullet, bulletMesh);
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
             new PhysicalBodyProperty(bullet, BULLET_MASS, 0.128f).applyForce(direction);
-            new ColliderProperty(bullet, new BasicCollider(new btBoxShape(new Vector3(0.128f, 0.128f, 0.128f)), new Vector3f(0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+            //new ColliderProperty(bullet, new BasicCollider(new btBoxShape(new Vector3(0.128f, 0.128f, 0.128f)),bullet, new Vector3f(0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+            new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x,bulletTranslation.y,bulletTranslation.z)));
             root.addChild(bullet);
             new BulletScript(bullet,1000);
         }

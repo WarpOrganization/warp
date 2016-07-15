@@ -81,4 +81,8 @@ public class PhysicalBodyProperty extends Property<Component> {
     public float getInteria() {
         return interia;
     }
+
+    public float getRadius() {
+        return radius;
+    }
 }

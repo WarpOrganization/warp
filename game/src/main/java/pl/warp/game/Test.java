@@ -54,7 +54,7 @@ public class Test {
     private static final float MOV_SPEED = 0.2f;
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 50;
+    private static final int GUN_COOLDOWN = 100;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
@@ -138,7 +138,7 @@ public class Test {
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(root), root));
+            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root));
         });
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
