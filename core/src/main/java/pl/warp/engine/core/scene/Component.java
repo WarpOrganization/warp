@@ -169,15 +169,15 @@ public abstract class Component {
             if (children.contains(child)) {
                 children.remove(child);
                 child.setParent(null);
-            }
-            else throw new ChildNotPresentException("Unable to remove a child.");
+            } else throw new ChildNotPresentException("Unable to remove a child.");
         }
     }
 
     public void destroy() {
         if (hasParent())
             getParent().removeChild(this);
-        context.getScriptContext().removeComponentScripts(this);
+        triggerEvent(new ComponentDeathEvent(this));
+        forEachChildren(Component::destroy);
     }
 
     public void forEachChildren(Consumer<Component> f) {

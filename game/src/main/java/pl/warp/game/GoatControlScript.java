@@ -57,7 +57,7 @@ public class GoatControlScript extends Script<Component> {
     }
 
     private void updateDirections() {
-        Quaternionf goatFullRotation = Transforms.getFullRotation(getOwner());
+        Quaternionf goatFullRotation = Transforms.getActualRotation(getOwner());
         goatFullRotation.transform(forwardVector.set(FORWARD_VECTOR));
         goatFullRotation.transform(rightVector.set(RIGHT_VECTOR)).negate();
         goatFullRotation.transform(upVector.set(UP_VECTOR)).negate();

@@ -64,7 +64,7 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public Matrix4f getCameraMatrix() {
-        return Transforms.getFullTransform(this).invert();
+        return Transforms.getActualTransform(this).invert();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public Matrix4f getRotationMatrix() {
-        return Transforms.getFullRotation(this).get(tempRotation).invert();
+        return Transforms.getActualRotation(this).get(tempRotation).invert();
     }
 
     private Vector3f forwardVector = new Vector3f();

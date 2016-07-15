@@ -23,11 +23,9 @@ import java.util.List;
  */
 public class ParticleRenderer implements Renderer {
 
-    public static final int MAX_PARTICLES_AMOUNT = 200;
+    public static final int MAX_PARTICLES_NUMBER = 200;
 
     private Camera camera;
-    private Environment environment;
-
     private ParticleProgram program;
 
     private int positionVBO;
@@ -36,9 +34,8 @@ public class ParticleRenderer implements Renderer {
     private int indexBuff;
     private int vao;
 
-    public ParticleRenderer(Camera camera, Environment environment) {
+    public ParticleRenderer(Camera camera) {
         this.camera = camera;
-        this.environment = environment;
     }
 
     @Override
@@ -56,9 +53,10 @@ public class ParticleRenderer implements Renderer {
     }
 
     private void createIndexBuffer() {
-        IntBuffer indices = BufferUtils.createIntBuffer(MAX_PARTICLES_AMOUNT);
-        for (int i = 0; i < MAX_PARTICLES_AMOUNT; i++)
+        IntBuffer indices = BufferUtils.createIntBuffer(MAX_PARTICLES_NUMBER);
+        for (int i = 0; i < MAX_PARTICLES_NUMBER; i++)
             indices.put(i);
+        indices.rewind();
         this.indexBuff = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
@@ -86,6 +84,7 @@ public class ParticleRenderer implements Renderer {
 
     @Override
     public void initRendering(int delta) {
+        program.use();
         program.useCamera(camera);
     }
 
@@ -100,22 +99,22 @@ public class ParticleRenderer implements Renderer {
     }
 
     private void renderParticles(List<Particle> particles, MatrixStack stack) {
+        program.use();
         program.useMatrixStack(stack);
-        program.useCamera(camera);
-        updateVBOS(particles);
         GL30.glBindVertexArray(vao);
-        GL11.glDrawElements(GL11.GL_POINTS, particles.size(), GL11.GL_UNSIGNED_INT, 0);
+        updateVBOS(particles);
+        GL11.glDrawElements(GL11.GL_POINTS, Math.max(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
     }
 
-    private FloatBuffer positions = BufferUtils.createFloatBuffer(MAX_PARTICLES_AMOUNT * 3);
-    private FloatBuffer rotations = BufferUtils.createFloatBuffer(MAX_PARTICLES_AMOUNT);
-    private IntBuffer textureIndices = BufferUtils.createIntBuffer(MAX_PARTICLES_AMOUNT);
+    private FloatBuffer positions = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 3);
+    private FloatBuffer rotations = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
+    private IntBuffer textureIndices = BufferUtils.createIntBuffer(MAX_PARTICLES_NUMBER);
 
     private void updateVBOS(List<Particle> particles) {
         clearBuffers();
         int particleCounter = 0;
         for (Particle particle : particles) {
-            if (particleCounter > MAX_PARTICLES_AMOUNT) break;
+            if (particleCounter > MAX_PARTICLES_NUMBER) break;
             putPosition(particle.getPosition());
             putRotation(particle.getRotation());
             putTextureIndex(particle.getTextureIndex());
@@ -146,8 +145,10 @@ public class ParticleRenderer implements Renderer {
     private void storeDataInVBOs() {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionVBO);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
+
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, rotationVBO);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, rotations, GL15.GL_DYNAMIC_DRAW);
+
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexVBO);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textureIndices, GL15.GL_DYNAMIC_DRAW);
     }
@@ -156,6 +157,7 @@ public class ParticleRenderer implements Renderer {
     @Override
     public void destroy() {
         GL15.glDeleteBuffers(new int[]{positionVBO, textureIndexVBO, rotationVBO, indexBuff});
+        GL30.glDeleteVertexArrays(vao);
         program.delete();
     }
 }

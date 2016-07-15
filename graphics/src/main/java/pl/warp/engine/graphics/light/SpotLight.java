@@ -65,7 +65,7 @@ public class SpotLight {
     private Vector3f tempPosition = new Vector3f();
 
     public Vector3f getPosition() {
-        Matrix4f fullTransform = Transforms.getFullTransform(owner);
+        Matrix4f fullTransform = Transforms.getActualTransform(owner);
         return fullTransform.transformPosition(relativePosition, tempPosition);
     }
 
@@ -76,7 +76,7 @@ public class SpotLight {
     private Vector3f tempDirection = new Vector3f();
 
     public Vector3f getDirection() {
-        Quaternionf fullRotation = Transforms.getFullRotation(owner);
+        Quaternionf fullRotation = Transforms.getActualRotation(owner);
         return fullRotation.transform(coneDirection, tempDirection);
     }
 

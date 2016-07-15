@@ -68,7 +68,7 @@ public class Graphics {
     private Pipeline createPipeline() {
         MeshRenderer meshRenderer = new MeshRenderer(mainViewCamera, environment);
         SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
-        ParticleRenderer particleRenderer = new ParticleRenderer(mainViewCamera, environment);
+        ParticleRenderer particleRenderer = new ParticleRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         Renderer[] renderers = {skyboxRenderer, meshRenderer, emitterRenderer, particleRenderer};
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), settings, renderers);
