@@ -86,9 +86,7 @@ public class PhysicsTask extends EngineTask {
     public synchronized void handleSceneLeft(ChildRemovedEvent event) {
         if (event.getRemovedChild().hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME)) {
             ColliderProperty tmp = event.getRemovedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-            synchronized (world) {
-                tmp.getCollider().removeFromWorld(world);
-            }
+            tmp.getCollider().removeFromWorld();
         }
     }
 

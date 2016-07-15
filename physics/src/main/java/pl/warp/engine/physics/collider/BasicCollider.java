@@ -8,6 +8,9 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.ComponentDeathEvent;
+import pl.warp.engine.core.scene.Listener;
+import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.physics.PhysicsWorld;
 
 /**
@@ -23,6 +26,9 @@ public class BasicCollider implements Collider {
     private int callbackFilter;
     private int callbackFlag;
     private boolean defaultCollisionHandling;
+    private PhysicsWorld world;
+
+    private Listener<Component, ComponentDeathEvent> deathListener;
 
     public BasicCollider(btCollisionShape shape, Component owner, Vector3f offset, int callbackFilter, int callbackFlag) {
 
@@ -38,6 +44,8 @@ public class BasicCollider implements Collider {
         collisionObject.setContactCallbackFilter(callbackFilter);
         collisionObject.setContactCallbackFlag(callbackFlag);
         defaultCollisionHandling = true;
+
+        deathListener = SimpleListener.createListener(owner, ComponentDeathEvent.COMPONENT_DEATH_EVENT_NAME, this::suicide);
     }
 
     @Override
@@ -46,12 +54,15 @@ public class BasicCollider implements Collider {
         treeMapKey = world.getCounter();
         world.addToCollisionWorld(collisionObject);
         world.addToComponentMap(owner);
+        this.world = world;
     }
 
     @Override
-    public void removeFromWorld(PhysicsWorld world) {
-        world.removeFromCollisionWorld(collisionObject);
-        world.removeFromComponentMap(treeMapKey);
+    public void removeFromWorld() {
+        synchronized (world) {
+            world.removeFromCollisionWorld(collisionObject);
+            world.removeFromComponentMap(treeMapKey);
+        }
     }
 
     @Override
@@ -84,4 +95,9 @@ public class BasicCollider implements Collider {
         return defaultCollisionHandling;
     }
 
+    private void suicide(ComponentDeathEvent event) {
+        removeFromWorld();
+        collisionObject.dispose();
+        shape.dispose();
+    }
 }

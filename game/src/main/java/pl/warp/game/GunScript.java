@@ -86,7 +86,6 @@ public class GunScript extends Script<Component> {
             new GraphicsMeshProperty(bullet, bulletMesh);
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
             new PhysicalBodyProperty(bullet, BULLET_MASS, 0.128f).applyForce(direction);
-            //new ColliderProperty(bullet, new BasicCollider(new btBoxShape(new Vector3(0.128f, 0.128f, 0.128f)),bullet, new Vector3f(0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
             new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x,bulletTranslation.y,bulletTranslation.z)));
             root.addChild(bullet);
             new BulletScript(bullet,1000);

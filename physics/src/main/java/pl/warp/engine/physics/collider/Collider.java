@@ -11,7 +11,7 @@ import pl.warp.engine.physics.PhysicsWorld;
 public interface Collider {
     void addToWorld(PhysicsWorld world);
 
-    void removeFromWorld(PhysicsWorld world);
+    void removeFromWorld();
 
     void setTransform(Vector3f translation, Quaternionf rotation);
 
