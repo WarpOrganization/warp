@@ -61,7 +61,7 @@ public class PhysicsWorld {
         return counter;
     }
 
-    public void addRayTest(PointCollider collider) {
+    public synchronized void addRayTest(PointCollider collider) {
         rayTests.add(collider);
     }
 
@@ -69,7 +69,7 @@ public class PhysicsWorld {
         rayTests.remove(collider);
     }
 
-    public Component getComponent(int key) {
+    public synchronized Component getComponent(int key) {
         return componentTreeMap.get(key);
     }
 
@@ -85,7 +85,8 @@ public class PhysicsWorld {
         return destroyedRayTests;
     }
 
-    public void clearDestroyedRayTests() {
+    public synchronized void cleanRayTests() {
+        rayTests.removeAll(destroyedRayTests);
         destroyedRayTests.clear();
     }
 

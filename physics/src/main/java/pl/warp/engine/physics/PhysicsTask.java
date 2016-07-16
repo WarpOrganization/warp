@@ -65,17 +65,17 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        world.cleanRayTests();
         synchronized (world) {
-        world.getRayTestColliders().removeAll(world.getDestroyedRayTests());
-        world.clearDestroyedRayTests();
             world.getCollisionWorld().performDiscreteCollisionDetection();
-        collisionStrategy.performRayTests();
         }
+        collisionStrategy.performRayTests();
+
         world.getActiveCollisions().forEach(manifold ->
                 collisionStrategy.handleCollision(manifold));
     }
 
-    public synchronized void handleSceneEntered(ChildAddedEvent event) {
+    public void handleSceneEntered(ChildAddedEvent event) {
         if (event.getAddedChild().hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME)) {
             ColliderProperty tmp = event.getAddedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             synchronized (world) {
@@ -85,7 +85,7 @@ public class PhysicsTask extends EngineTask {
     }
 
 
-    public synchronized void handleSceneLeft(ChildRemovedEvent event) {
+    public void handleSceneLeft(ChildRemovedEvent event) {
         if (event.getRemovedChild().hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME)) {
             ColliderProperty tmp = event.getRemovedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             tmp.getCollider().removeFromWorld();

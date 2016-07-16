@@ -5,9 +5,6 @@ import com.badlogic.gdx.math.Vector3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.ComponentDeathEvent;
-import pl.warp.engine.core.scene.Listener;
-import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.physics.PhysicsWorld;
 
 /**
@@ -21,14 +18,10 @@ public class PointCollider implements Collider {
     private boolean defaultCollisionHandling = true;
     private PhysicsWorld world;
 
-    private Listener<Component, ComponentDeathEvent> deathListener;
-
     public PointCollider(Component owner, Vector3 translation) {
         this.owner = owner;
         lastPos = new Vector3(translation);
         currentPos = new Vector3(translation);
-
-        deathListener = SimpleListener.createListener(owner, ComponentDeathEvent.COMPONENT_DEATH_EVENT_NAME, this::suicide);
 
     }
 
@@ -40,9 +33,7 @@ public class PointCollider implements Collider {
 
     @Override
     public void removeFromWorld() {
-        synchronized (world) {
-            world.addDestroyedRayTest(this);
-        }
+        world.addDestroyedRayTest(this);
     }
 
     @Override
@@ -84,7 +75,4 @@ public class PointCollider implements Collider {
         return owner;
     }
 
-    private void suicide(ComponentDeathEvent event){
-        removeFromWorld();
-    }
 }
