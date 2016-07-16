@@ -66,9 +66,11 @@ public class PhysicsTask extends EngineTask {
     @Override
     public void update(int delta) {
         synchronized (world) {
+        world.getRayTestColliders().removeAll(world.getDestroyedRayTests());
+        world.clearDestroyedRayTests();
             world.getCollisionWorld().performDiscreteCollisionDetection();
-        }
         collisionStrategy.performRayTests();
+        }
         world.getActiveCollisions().forEach(manifold ->
                 collisionStrategy.handleCollision(manifold));
     }

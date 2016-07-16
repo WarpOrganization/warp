@@ -4,10 +4,7 @@ import com.badlogic.gdx.physics.bullet.collision.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.physics.collider.PointCollider;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by hubertus on 7/14/16.
@@ -17,7 +14,8 @@ public class PhysicsWorld {
     private TreeMap<Integer, Component> componentTreeMap;
     private btCollisionWorld collisionWorld;
     private Set<btPersistentManifold> activeCollisons;
-    private ArrayList<PointCollider> rayTests;
+    private List<PointCollider> rayTests;
+    private List<PointCollider> destroyedRayTests;
 
     private btCollisionDispatcher dispatcher;
     private btDbvtBroadphase dbvtBroadphase;
@@ -30,12 +28,12 @@ public class PhysicsWorld {
         componentTreeMap = new TreeMap<>();
         activeCollisons = new HashSet<>();
         rayTests = new ArrayList<>();
+        destroyedRayTests = new ArrayList<>();
 
         defaultCollisionConfiguration = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(defaultCollisionConfiguration);
         dbvtBroadphase = new btDbvtBroadphase();
         collisionWorld = new btCollisionWorld(dispatcher, dbvtBroadphase, defaultCollisionConfiguration);
-
     }
 
     public btCollisionWorld getCollisionWorld() {
@@ -59,7 +57,7 @@ public class PhysicsWorld {
         componentTreeMap.remove(key);
     }
 
-    public int getCounter(){
+    public int getCounter() {
         return counter;
     }
 
@@ -75,12 +73,24 @@ public class PhysicsWorld {
         return componentTreeMap.get(key);
     }
 
-    public ArrayList<PointCollider> getRayTestColliders() {
+    public List<PointCollider> getRayTestColliders() {
         return rayTests;
     }
 
     public Set<btPersistentManifold> getActiveCollisions() {
         return activeCollisons;
+    }
+
+    public List<PointCollider> getDestroyedRayTests() {
+        return destroyedRayTests;
+    }
+
+    public void clearDestroyedRayTests() {
+        destroyedRayTests.clear();
+    }
+
+    public void addDestroyedRayTest(PointCollider collider) {
+        destroyedRayTests.add(collider);
     }
 
     public void dispose() {

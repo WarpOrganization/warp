@@ -41,7 +41,7 @@ public class PointCollider implements Collider {
     @Override
     public void removeFromWorld() {
         synchronized (world) {
-            world.removeRayTest(this);
+            world.addDestroyedRayTest(this);
         }
     }
 
