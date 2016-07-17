@@ -7,6 +7,7 @@ import pl.warp.engine.core.scene.SimpleListener;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.jar.Pack200;
 
 /**
  * @author Jaca777
@@ -18,9 +19,13 @@ public class ScriptContext {
     private Set<Script<?>> scriptsToAdd = new HashSet<>();
     private Set<Script<?>> scriptsToRemove = new HashSet<>();
 
+    private final Object scriptsMutex = new Object();
+
     public void addScript(Script<?> script) {
-        scriptsToAdd.add(script);
-        createDeathListener(script);
+        synchronized (scriptsMutex) {
+            scriptsToAdd.add(script);
+            createDeathListener(script);
+        }
     }
 
     private void createDeathListener(Script<?> script) {
@@ -32,7 +37,9 @@ public class ScriptContext {
     }
 
     public void removeScript(Script<?> script) {
-        scriptsToRemove.add(script);
+        synchronized (scriptsMutex) {
+            scriptsToRemove.add(script);
+        }
     }
 
     public Set<Script<?>> getScripts() {
@@ -40,10 +47,12 @@ public class ScriptContext {
     }
 
     public void update() {
-        scripts.addAll(scriptsToAdd);
-        if (!scripts.containsAll(scriptsToRemove))
-            throw new ScriptNotFoundException("Unable to remove a script.");
-        else scripts.removeAll(scriptsToRemove);
+        synchronized (scriptsMutex) {
+            scripts.addAll(scriptsToAdd);
+            if (!scripts.containsAll(scriptsToRemove))
+                throw new ScriptNotFoundException("Unable to remove a script.");
+            else scripts.removeAll(scriptsToRemove);
+        }
     }
 
     public void removeComponentScripts(Component component) {
