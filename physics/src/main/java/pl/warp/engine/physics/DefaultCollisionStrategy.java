@@ -103,7 +103,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             torqueChange.negate();
 
             if (isCollidable(collider1)) {
-                physicalProperty1.addTorque(torqueChange);
+                physicalProperty1.addTorque(torqueChange.negate());
                 physicalProperty1.applyForce(direction.mul(j));
             }
 
@@ -156,29 +156,6 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
                 calculateCollisionResponse(component, collider.getOwner(), contactPos);
             }
         }
-
-        /*synchronized (world) {
-            world.getRayTestColliders().forEach(collider -> {
-                result.setCollisionObject(null);
-                result.setClosestHitFraction(1f);
-                result.setRayFromWorld(collider.getLastPos());
-                result.setRayToWorld(collider.getCurrentPos());
-                world.getCollisionWorld().rayTest(collider.getLastPos(), collider.getCurrentPos(), result);
-                if (result.hasHit()) {
-                    result.getHitPointWorld(contactPos);
-                    TransformProperty property = collider.getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-                    PhysicalBodyProperty physicalBodyProperty = collider.getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-                    tmpTranslation.set(physicalBodyProperty.getVelocity());
-                    tmpTranslation.normalize();
-                    tmpTranslation.negate();
-                    tmpTranslation.mul(physicalBodyProperty.getRadius());
-                    tmpTranslation.add(contactPos.x, contactPos.y, contactPos.z);
-                    property.setTranslation(tmpTranslation);
-                    Component component;
-                    component = world.getComponent(result.getCollisionObject().getUserValue());
-                    calculateCollisionResponse(component, collider.getOwner(), contactPos);
-                }
-            });*/
     }
 
 
