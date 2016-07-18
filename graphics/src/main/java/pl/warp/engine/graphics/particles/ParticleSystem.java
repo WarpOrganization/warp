@@ -42,7 +42,6 @@ public class ParticleSystem {
         for (Particle particle : particles) {
             int textureIndex = (particle.getTimeToLive() * spriteSheet.getSize()) / particle.getTotalTimeToLive();
             particle.setTextureIndex(textureIndex);
-            System.out.println(textureIndex);
         }
     }
 
