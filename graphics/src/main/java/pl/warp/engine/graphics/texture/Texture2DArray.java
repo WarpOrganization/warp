@@ -66,6 +66,10 @@ public class Texture2DArray extends Texture {
         this.size = size;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     private static int genTexture2DArray(int internalformat, int format, int width, int height, int size, ByteBuffer[] data) {
         int texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D_ARRAY, texture);

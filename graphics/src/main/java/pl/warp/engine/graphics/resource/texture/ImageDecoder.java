@@ -108,8 +108,9 @@ public class ImageDecoder {
         ByteBuffer dataBuffer = data.getData();
         int width = data.getWidth();
         int height = data.getHeight();
+        int size = width * height;
         byte texelData[] = new byte[texelComponentsNumber];
-        for (int i = 0; i < dataBuffer.capacity(); i++) {
+        for (int i = 0; i < size; i++) {
             int x = i % width;
             int y = i / width;
             int column = (int) ((x / (float) width) * columns);

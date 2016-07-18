@@ -33,7 +33,7 @@ public class RandomSpreadingParticleFactory implements ParticleFactory {
         Vector3f velocity = genVelocity();
         Vector2f scale = randomizeScaleScalar ? genScale() : new Vector2f(1);
         float rotation = randomizeRotation ? genRotation() : 0;
-        return new Particle(position, velocity, scale, rotation, timeToLive);
+        return new Particle(position, velocity, scale, rotation, 0, timeToLive, timeToLive);
     }
 
 

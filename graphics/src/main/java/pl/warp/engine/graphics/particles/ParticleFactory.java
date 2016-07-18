@@ -6,4 +6,5 @@ package pl.warp.engine.graphics.particles;
  */
 public interface ParticleFactory {
     Particle newParticle();
+
 }

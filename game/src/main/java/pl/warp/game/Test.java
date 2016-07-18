@@ -34,6 +34,7 @@ import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
@@ -94,10 +95,11 @@ public class Test {
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
             Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
 
-            Component particleSource = new SimpleComponent(root);
+            ImageDataArray spritesheet = ImageDecoder.decodeSpritesheet(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
             ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 10000, false, false);
-            new GraphicsParticleEmitterProperty(light, new ParticleEmitter(animator, factory, 10));
+            new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 10, spritesheetTexture));
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);

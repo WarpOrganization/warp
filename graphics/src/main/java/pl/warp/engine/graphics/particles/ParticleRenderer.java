@@ -8,10 +8,10 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.shader.particle.ParticleProgram;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -90,17 +90,18 @@ public class ParticleRenderer implements Renderer {
 
     @Override
     public void render(Component component, MatrixStack stack) {
-        if (component.hasEnabledProperty(GraphicsParticleEnvironmentProperty.PARTICLE_ENVIRONMENT_PROPERTY_NAME)) {
-            GraphicsParticleEnvironmentProperty emitterProperty =
-                    component.getProperty(GraphicsParticleEnvironmentProperty.PARTICLE_ENVIRONMENT_PROPERTY_NAME);
-            ParticleEnvironment environment = emitterProperty.getEnvironment();
-            renderParticles(environment.getParticles(), stack);
+        if (component.hasEnabledProperty(GraphicsParticleSystemProperty.PARTICLE_SYSTEM_PROPERTY_NAME)) {
+            GraphicsParticleSystemProperty emitterProperty =
+                    component.getProperty(GraphicsParticleSystemProperty.PARTICLE_SYSTEM_PROPERTY_NAME);
+            ParticleSystem system = emitterProperty.getSystem();
+            renderParticles(system.getParticles(), system.getSpriteSheet(), stack);
         }
     }
 
-    private void renderParticles(List<Particle> particles, MatrixStack stack) {
+    private void renderParticles(List<Particle> particles, Texture2DArray spriteSheet, MatrixStack stack) {
         program.use();
         program.useMatrixStack(stack);
+        program.useSpriteSheet(spriteSheet);
         GL30.glBindVertexArray(vao);
         updateVBOS(particles);
         GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);

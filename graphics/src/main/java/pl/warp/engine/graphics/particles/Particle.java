@@ -14,13 +14,17 @@ public class Particle {
     private Vector3f velocity;
     private Vector2f scale;
     private float rotation;
+    private int textureIndex;
+    private final int totalTimeToLive;
     private int timeToLive;
 
-    public Particle(Vector3f position, Vector3f velocity, Vector2f scale, float rotation, int timeToLive) {
+    public Particle(Vector3f position, Vector3f velocity, Vector2f scale, float rotation, int textureIndex, int totalTimeToLive, int timeToLive) {
         this.position = position;
         this.velocity = velocity;
         this.scale = scale;
         this.rotation = rotation;
+        this.textureIndex = textureIndex;
+        this.totalTimeToLive = totalTimeToLive;
         this.timeToLive = timeToLive;
     }
 
@@ -56,6 +60,14 @@ public class Particle {
         this.rotation = rotation;
     }
 
+    public int getTextureIndex() {
+        return textureIndex;
+    }
+
+    public void setTextureIndex(int textureIndex) {
+        this.textureIndex = textureIndex;
+    }
+
     public int getTimeToLive() {
         return timeToLive;
     }
@@ -64,8 +76,7 @@ public class Particle {
         this.timeToLive = timeToLive;
     }
 
-    public int getTextureIndex() {
-        //TODO
-        return 0;
+    public int getTotalTimeToLive() {
+        return totalTimeToLive;
     }
 }

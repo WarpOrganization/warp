@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.particles;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Jaca777
@@ -8,36 +9,19 @@ import java.util.Iterator;
  */
 public class ParticleEmitter {
 
-    private ParticleAnimator animator;
     private ParticleFactory factory;
     private float emissionDelay;
-    private ParticleEnvironment environment;
+    private List<Particle> particles;
 
-    public ParticleEmitter(ParticleAnimator animator, ParticleFactory factory, float frequency) {
-        this.animator = animator;
+    public ParticleEmitter(ParticleFactory factory, float frequency, List<Particle> particles) {
         this.factory = factory;
-        this.environment = new ParticleEnvironment();
         this.emissionDelay = 1000f / frequency;
-    }
-
-    public void update(int delta) {
-        updateParticlesLifeTime(delta);
-        emit(delta);
-        animate(delta);
-    }
-
-    private void updateParticlesLifeTime(int delta) {
-        for (Iterator<Particle> iterator = environment.getParticles().iterator(); iterator.hasNext(); ) {
-            Particle particle = iterator.next();
-            int ttl = particle.getTimeToLive() - delta;
-            if (ttl > 0) particle.setTimeToLive(ttl);
-            else iterator.remove();
-        }
+        this.particles = particles;
     }
 
     private float timeWithoutEmission = 0;
 
-    private void emit(int delta) {
+    public void emit(int delta) {
         timeWithoutEmission += delta;
         int toEmitt = (int) Math.floor(timeWithoutEmission / emissionDelay);
         timeWithoutEmission -= emissionDelay * toEmitt;
@@ -46,15 +30,7 @@ public class ParticleEmitter {
 
     private void emitParticlesNumber(int number) {
         for (int i = 0; i < number; i++)
-            environment.addParticle(factory.newParticle());
+            particles.add(factory.newParticle());
     }
 
-    private void animate(int delta) {
-        for (Particle particle : environment.getParticles())
-            animator.animate(particle, delta);
-    }
-
-    public ParticleEnvironment getEnvironment() {
-        return environment;
-    }
 }

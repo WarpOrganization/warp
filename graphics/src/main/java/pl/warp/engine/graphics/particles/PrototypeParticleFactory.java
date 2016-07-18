@@ -24,8 +24,10 @@ public class PrototypeParticleFactory implements ParticleFactory {
         Vector3f velocity = new Vector3f(particle.getVelocity());
         Vector2f scale = new Vector2f(particle.getScale());
         float rotation = particle.getRotation();
+        int textureIndex = particle.getTextureIndex();
         int ttl = particle.getTimeToLive();
-        return new Particle(position, velocity, scale, rotation, ttl);
+        int tttl = particle.getTotalTimeToLive();
+        return new Particle(position, velocity, scale, rotation, textureIndex, tttl, ttl);
     }
 
 }

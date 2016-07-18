@@ -23,14 +23,14 @@ public class ParticleEmitterRenderer implements Renderer {
     }
 
     @Override
-    public void render(Component component, MatrixStack stack) {
-        if (component.hasEnabledProperty(GraphicsParticleEmitterProperty.PARTICLES_EMITTER_PROPERTY_NAME))
-            update(component.getProperty(GraphicsParticleEmitterProperty.PARTICLES_EMITTER_PROPERTY_NAME));
+    public void render(Component component, MatrixStack stack) { //TODO find another way, it's not a renderer.
+        if (component.hasEnabledProperty(GraphicsParticleSystemProperty.PARTICLE_SYSTEM_PROPERTY_NAME))
+            update(component.getProperty(GraphicsParticleSystemProperty.PARTICLE_SYSTEM_PROPERTY_NAME));
     }
 
-    private void update(GraphicsParticleEmitterProperty property) {
-        ParticleEmitter emitter = property.getEmitter();
-        emitter.update(delta);
+    private void update(GraphicsParticleSystemProperty property) {
+        ParticleSystem system = property.getSystem();
+        system.update(delta);
     }
 
     @Override

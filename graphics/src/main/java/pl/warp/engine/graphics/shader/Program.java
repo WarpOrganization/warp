@@ -9,6 +9,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.texture.Texture;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -163,6 +164,5 @@ public abstract class Program {
     public int getProgram() {
         return program;
     }
-
 
 }

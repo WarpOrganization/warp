@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.io.InputStream;
 
@@ -12,6 +13,8 @@ import java.io.InputStream;
  *         Created 2016-07-11 at 14
  */
 public class ParticleProgram extends GeometryProgram {
+
+    private static final int SPRITE_SHEET_SAMPLER = 0;
 
     public static final int POSITION_ATTR = 0;
     public static final int ROTATION_ATTR = 1;
@@ -43,20 +46,24 @@ public class ParticleProgram extends GeometryProgram {
     public void useMatrixStack(MatrixStack stack) {
         this.modelMatrix = stack.topMatrix();
         setModelViewMatrix();
-        if(cameraMatrix != null) setModelViewMatrix();
+        if (cameraMatrix != null) setModelViewMatrix();
     }
 
     public void useCamera(Camera camera) {
         this.cameraMatrix = camera.getCameraMatrix();
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix());
         setUniformMatrix4(unifCameraRotationMatrix, camera.getRotationMatrix());
-        if(modelMatrix != null) setModelViewMatrix();
+        if (modelMatrix != null) setModelViewMatrix();
     }
 
     private Matrix4f tmpResultMatrix = new Matrix4f();
+
     private void setModelViewMatrix() {
         cameraMatrix.mul(modelMatrix, tmpResultMatrix);
         setUniformMatrix4(unifModelViewMatrix, tmpResultMatrix);
     }
 
+    public void useSpriteSheet(Texture2DArray spriteSheet) {
+        useTexture(spriteSheet, SPRITE_SHEET_SAMPLER);
+    }
 }
