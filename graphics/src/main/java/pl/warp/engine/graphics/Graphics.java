@@ -70,7 +70,7 @@ public class Graphics {
         SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         ParticleRenderer particleRenderer = new ParticleRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
-        Renderer[] renderers = {skyboxRenderer, meshRenderer, emitterRenderer, particleRenderer};
+        Renderer[] renderers = {skyboxRenderer, particleRenderer, meshRenderer, emitterRenderer};
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), settings, renderers);
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
         return PipelineBuilder.from(sceneRenderer).to(onScreenRenderer);

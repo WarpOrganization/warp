@@ -99,6 +99,9 @@ public class ParticleRenderer implements Renderer {
     }
 
     private void renderParticles(List<Particle> particles, Texture2DArray spriteSheet, MatrixStack stack) {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         program.use();
         program.useMatrixStack(stack);
         program.useSpriteSheet(spriteSheet);
