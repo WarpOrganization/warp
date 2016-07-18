@@ -55,7 +55,7 @@ public class ParticleProgram extends GeometryProgram {
 
     private Matrix4f tmpResultMatrix = new Matrix4f();
     private void setModelViewMatrix() {
-        modelMatrix.mul(cameraMatrix, tmpResultMatrix);
+        cameraMatrix.mul(modelMatrix, tmpResultMatrix);
         setUniformMatrix4(unifModelViewMatrix, tmpResultMatrix);
     }
 

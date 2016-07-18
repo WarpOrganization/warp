@@ -2,7 +2,7 @@
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelMatrix;
-uniform mat4 rotationMatrix;
+uniform mat4 rotationMatrix;\
 uniform mat4 cameraMatrix;
 
 uniform vec3 cameraPos;
@@ -12,7 +12,7 @@ uniform mat4 mCameraMatrix;
 out vec3 vPos3;
 out vec3 vEyeDir;
 
-layout(location = 0) in vec4 inVertex;
+layout(location = 0) in vec3 inVertex;
 layout(location = 1) in vec2 inTexCoord; out vec2 vTexCoord;
 layout(location = 2) in vec3 inNormal; smooth out vec3 vNormal;
 
@@ -22,7 +22,7 @@ void main(void) {
 
     vNormal = calculateNormal();
 
-    vec4 vPos = modelMatrix * inVertex;
+    vec4 vPos = modelMatrix * vec4(inVertex, 1.0f);
     vPos3 = vPos.xyz / vPos.w;
     vEyeDir = normalize(vPos3 - cameraPos);
 

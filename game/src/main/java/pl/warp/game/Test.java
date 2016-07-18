@@ -54,7 +54,7 @@ public class Test {
     private static final float MOV_SPEED = 0.2f;
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 100;
+    private static final int GUN_COOLDOWN = 1;
     private static SyncTimer timer = new SyncTimer(100);
     private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
@@ -95,8 +95,8 @@ public class Test {
 
             Component particleSource = new SimpleComponent(root);
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0f, 10000, false, false);
-            new GraphicsParticleEmitterProperty(particleSource, new ParticleEmitter(animator, factory, 10));
+            ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 10000, false, false);
+            new GraphicsParticleEmitterProperty(light, new ParticleEmitter(animator, factory, 10));
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);

@@ -16,7 +16,7 @@ out vData {
 
 
 void main(void) {
-    gl_Position = modelViewMatrix * vec4(position, 1);
+    gl_Position = vec4(position, 1);
     pointData.rotation = mat2(
         cos(rotation), -sin(rotation),
         sin(rotation), cos(rotation));

@@ -38,10 +38,10 @@ public class RandomSpreadingParticleFactory implements ParticleFactory {
 
 
     private Vector3f genVelocity() {
-        float x = random.nextFloat();
-        float y = random.nextFloat();
-        float z = random.nextFloat();
-        return new Vector3f(x, y, z).mul(velocity);
+        float x = random.nextFloat() * 2 - 1;
+        float y = random.nextFloat() * 2 - 1;
+        float z = random.nextFloat() * 2 - 1;
+        return new Vector3f(x, y, z).normalize().mul(velocity);
     }
 
     private Vector2f genScale() {

@@ -72,7 +72,7 @@ public class VAOMesh extends Mesh {
      * 2 - normal attribute
      */
 
-    private static final int[] VAO_SIZES = {4, 2, 3};
+    private static final int[] VAO_SIZES = {3, 2, 3};
     private static final int[] VAO_TYPES = {GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_FLOAT};
 
     protected void createVAO() {

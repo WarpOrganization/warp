@@ -174,7 +174,7 @@ public class Mesh  {
      */
     public void bind() {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuff);
-        GL20.glVertexAttribPointer(attributes[0], 4, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(attributes[0], 3, GL11.GL_FLOAT, false, 0, 0);
         GL20.glEnableVertexAttribArray(attributes[0]);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, texCoordBuff);

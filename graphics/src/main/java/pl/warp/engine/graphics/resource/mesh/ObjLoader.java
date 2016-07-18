@@ -153,7 +153,7 @@ public class ObjLoader {
 
     public VAOMesh toVAOMesh(int[] attributes) {
         int size = this.vertices.length + hVertices.size();
-        float[] v = new float[size * 4];
+        float[] v = new float[size * 3];
         float[] t = new float[size * 2];
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
@@ -168,10 +168,9 @@ public class ObjLoader {
                 Vector3f pos = this.vertices[i].pos;
                 Vector2f texCoord = this.vertices[i].texCoord;
                 Vector3f normal = this.vertices[i].normal;
-                v[i * 4] = pos.x;
-                v[i * 4 + 1] = pos.y;
-                v[i * 4 + 2] = pos.z;
-                v[i * 4 + 3] = 1f;
+                v[i * 3] = pos.x;
+                v[i * 3 + 1] = pos.y;
+                v[i * 3 + 2] = pos.z;
                 t[i * 2] = texCoord.x;
                 t[i * 2 + 1] = 1 - texCoord.y;
                 n[i * 3] = normal.x;
@@ -183,10 +182,9 @@ public class ObjLoader {
             Vector3f pos = vertex.pos;
             Vector2f texCoord = vertex.texCoord;
             Vector3f normal = vertex.normal;
-            v[i * 4] = pos.x;
-            v[i * 4 + 1] = pos.y;
-            v[i * 4 + 2] = pos.z;
-            v[i * 4 + 3] = 1f;
+            v[i * 3] = pos.x;
+            v[i * 3 + 1] = pos.y;
+            v[i * 3 + 2] = pos.z;
             t[i * 2] = texCoord.x;
             t[i * 2 + 1] = 1 - texCoord.y;
             n[i * 3] = normal.x;

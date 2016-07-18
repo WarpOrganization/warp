@@ -53,7 +53,6 @@ public class CameraScript extends Script<Camera> {
             cameraTransform.move(delta);
         }
 
-
     }
 
 

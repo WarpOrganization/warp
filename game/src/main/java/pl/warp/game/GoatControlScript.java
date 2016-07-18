@@ -74,6 +74,8 @@ public class GoatControlScript extends Script<Component> {
             move(rightVector, -movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_SPACE))
             brake(delta);
+        if(input.isKeyDown(GLFW.GLFW_KEY_P))
+            stop();
         if (input.isKeyDown(GLFW.GLFW_KEY_UP))
             addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_DOWN))

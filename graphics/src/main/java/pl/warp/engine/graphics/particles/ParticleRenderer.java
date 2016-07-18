@@ -103,7 +103,7 @@ public class ParticleRenderer implements Renderer {
         program.useMatrixStack(stack);
         GL30.glBindVertexArray(vao);
         updateVBOS(particles);
-        GL11.glDrawElements(GL11.GL_POINTS, Math.max(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
     }
 
     private FloatBuffer positions = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 3);
@@ -120,6 +120,7 @@ public class ParticleRenderer implements Renderer {
             putTextureIndex(particle.getTextureIndex());
             particleCounter++;
         }
+        rewindBuffers();
         storeDataInVBOs();
     }
 
@@ -140,6 +141,12 @@ public class ParticleRenderer implements Renderer {
 
     private void putTextureIndex(int textureIndex) {
         textureIndices.put(textureIndex);
+    }
+
+    private void rewindBuffers() {
+        positions.rewind();
+        rotations.rewind();
+        textureIndices.rewind();
     }
 
     private void storeDataInVBOs() {

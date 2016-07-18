@@ -50,9 +50,8 @@ public class ParticleEmitter {
     }
 
     private void animate(int delta) {
-        for (Particle particle : environment.getParticles()) {
+        for (Particle particle : environment.getParticles())
             animator.animate(particle, delta);
-        }
     }
 
     public ParticleEnvironment getEnvironment() {

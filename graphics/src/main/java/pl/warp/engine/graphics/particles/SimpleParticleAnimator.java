@@ -28,9 +28,9 @@ public class SimpleParticleAnimator implements ParticleAnimator {
     }
 
     private void updateVelocity(Particle particle, int delta) {
-        Vector3f velocityDelta = acceleration.mul(delta, tempVector3);
-        particle.getVelocity().add(velocityDelta);
-        particle.getPosition().add(particle.getVelocity());
+//        Vector3f velocityDelta = acceleration.mul(delta, tempVector3);
+//        particle.getVelocity().add(velocityDelta);
+        particle.getPosition().add(particle.getVelocity().mul(delta, tempVector3));
     }
 
     private Vector2f tempVector2 = new Vector2f();
