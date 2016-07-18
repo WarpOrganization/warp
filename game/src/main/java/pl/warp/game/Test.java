@@ -26,7 +26,8 @@ import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.particles.*;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
-import pl.warp.engine.graphics.resource.texture.CubemapDecoder;
+import pl.warp.engine.graphics.resource.texture.ImageData;
+import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
@@ -76,8 +77,8 @@ public class Test {
 
         graphicsThread.scheduleOnce(() -> {
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
-            ImageDecoder.DecodedImage decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
-            Texture2D goatTexture = new Texture2D(decodedTexture.getW(), decodedTexture.getH(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
+            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
+            Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
             generateGOATS(root, goatMesh, goatTexture);
 
@@ -124,7 +125,7 @@ public class Test {
                     0f, 0f);
             directionalLightProperty.addSpotLight(laser);
 
-            CubemapDecoder.DecodedCubemap decodedCubemap = CubemapDecoder.decodeCubemap("pl/warp/game/stars");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             new GraphicsSkyboxProperty(scene, cubemap);
         });
