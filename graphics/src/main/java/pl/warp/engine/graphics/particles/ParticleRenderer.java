@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class ParticleRenderer implements Renderer {
 
-    public static final int MAX_PARTICLES_NUMBER = 200;
+    public static final int MAX_PARTICLES_NUMBER = 1000;
 
     private Camera camera;
     private ParticleProgram program;
@@ -113,7 +113,7 @@ public class ParticleRenderer implements Renderer {
 
     private void updateVBOS(List<Particle> particles) {
         clearBuffers();
-        int particleCounter = 0;
+        int particleCounter = 1;
         for (Particle particle : particles) {
             if (particleCounter > MAX_PARTICLES_NUMBER) break;
             putPosition(particle.getPosition());

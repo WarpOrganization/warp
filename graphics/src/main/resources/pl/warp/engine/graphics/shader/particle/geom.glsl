@@ -35,21 +35,21 @@ void main()
     EmitVertex();
 
     // Vertex 3
-    gl_TexCoord[0].stp = vec3(-1.0, 1.0, textureIndex);
+    gl_TexCoord[0].stp = vec3(0.0, 1.0, textureIndex);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(-1, 1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 2
-    gl_TexCoord[0].stp = vec3(1.0, -1.0, textureIndex);
+    gl_TexCoord[0].stp = vec3(1.0, 0.0, textureIndex);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(1, -1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 1
-    gl_TexCoord[0].stp = vec3(-1.0, -1.0, textureIndex);
+    gl_TexCoord[0].stp = vec3(0.0, 0.0, textureIndex);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(-1, -1));
     gl_Position = projectionMatrix * gl_Position;
