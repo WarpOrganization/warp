@@ -76,7 +76,7 @@ public class ParticleRenderer implements Renderer {
 
         GL20.glEnableVertexAttribArray(ParticleProgram.TEXTURE_INDEX_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexVBO);
-        GL20.glVertexAttribPointer(ParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_UNSIGNED_INT, false, 0, 0);
+        GL20.glVertexAttribPointer(ParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_INT, false, 0, 0);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
         GL30.glBindVertexArray(0);
@@ -100,7 +100,8 @@ public class ParticleRenderer implements Renderer {
 
     private void renderParticles(List<Particle> particles, Texture2DArray spriteSheet, MatrixStack stack) {
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDepthMask(false);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         program.use();
         program.useMatrixStack(stack);
         program.useSpriteSheet(spriteSheet);
@@ -143,7 +144,7 @@ public class ParticleRenderer implements Renderer {
     }
 
     private void putTextureIndex(int textureIndex) {
-        textureIndices.put(textureIndex);
+        textureIndices.put(0);
     }
 
     private void rewindBuffers() {

@@ -11,7 +11,7 @@ layout(location = 2) in int textureIndex;
 
 out vData {
     mat2 rotation;
-    int textureIndex;
+    float textureIndex;
 } pointData;
 
 

@@ -99,7 +99,7 @@ public class Test {
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
             ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 2000, false, false);
-            new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 100, spritesheetTexture));
+            new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 200, spritesheetTexture));
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);

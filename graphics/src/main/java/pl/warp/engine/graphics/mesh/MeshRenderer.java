@@ -49,15 +49,17 @@ public class MeshRenderer implements Renderer {
     private void renderMesh(Component component) {
         if (component.hasEnabledProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME))
             useMaterial(component.getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME));
-        enableDepthTest();
+        setupGL();
         Mesh mesh = component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh();
         mesh.bind();
         mesh.render();
         mesh.finalizeRendering();
     }
 
-    private void enableDepthTest() {
+    private void setupGL() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
 

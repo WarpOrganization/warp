@@ -14,7 +14,7 @@ layout (max_vertices = 4) out;
 
 in vData {
     mat2 rotation;
-    int textureIndex;
+    float textureIndex;
 } pointData[];
 
 mat2 toZRotation(mat4 rotation3D);
