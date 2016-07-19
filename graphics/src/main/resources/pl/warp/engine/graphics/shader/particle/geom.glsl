@@ -25,8 +25,6 @@ void main()
 {
     vec4 pos = gl_in[0].gl_Position;
     mat2 particleRotation = pointData[0].rotation;
-    mat2 cameraZRotation = toZRotation(cameraRotationMatrix);
-    mat2 rotation = cameraZRotation * particleRotation;
     textureIndex = pointData[0].textureIndex;
 
      // Vertex 4
@@ -58,13 +56,4 @@ void main()
     EmitVertex();
 
     EndPrimitive();
-}
-
-mat2 toZRotation(mat4 rotation4D) {
-    mat2 rotation;
-    rotation[0].xy = rotation4D[0].xy;
-    rotation[1].xy = rotation4D[1].xy;
-    float xRot = asin(rotation4D[2].y);
-    rotation[1].y /= cos(xRot);
-    return rotation;
 }
