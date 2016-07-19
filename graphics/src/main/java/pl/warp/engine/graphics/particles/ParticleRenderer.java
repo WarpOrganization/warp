@@ -76,7 +76,7 @@ public class ParticleRenderer implements Renderer {
 
         GL20.glEnableVertexAttribArray(ParticleProgram.TEXTURE_INDEX_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexVBO);
-        GL20.glVertexAttribPointer(ParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_INT, false, 0, 0);
+        GL20.glVertexAttribPointer(ParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
         GL30.glBindVertexArray(0);
@@ -112,7 +112,7 @@ public class ParticleRenderer implements Renderer {
 
     private FloatBuffer positions = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 3);
     private FloatBuffer rotations = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
-    private IntBuffer textureIndices = BufferUtils.createIntBuffer(MAX_PARTICLES_NUMBER);
+    private FloatBuffer textureIndices = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
 
     private void updateVBOS(List<Particle> particles) {
         clearBuffers();
@@ -144,7 +144,7 @@ public class ParticleRenderer implements Renderer {
     }
 
     private void putTextureIndex(int textureIndex) {
-        textureIndices.put(0);
+        textureIndices.put(textureIndex);
     }
 
     private void rewindBuffers() {

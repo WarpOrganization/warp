@@ -16,8 +16,7 @@ public class ParticleSystem {
     private ParticleEmitter emitter;
     private Texture2DArray spriteSheet;
 
-    public ParticleSystem(ParticleAnimator animator, ParticleFactory factory, float frequency, Texture2DArray spriteSheet) {
-        this.animator = animator;
+    public ParticleSystem(ParticleAnimator animator, ParticleFactory factory, float frequency, Texture2DArray spriteSheet) { this.animator = animator;
         this.emitter = new ParticleEmitter(factory, frequency, particles);
         this.spriteSheet = spriteSheet;
     }

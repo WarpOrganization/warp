@@ -12,6 +12,8 @@ layout (points) in;
 layout (triangle_strip) out;
 layout (max_vertices = 4) out;
 
+out float textureIndex;
+
 in vData {
     mat2 rotation;
     float textureIndex;
@@ -25,31 +27,31 @@ void main()
     mat2 particleRotation = pointData[0].rotation;
     mat2 cameraZRotation = toZRotation(cameraRotationMatrix);
     mat2 rotation = cameraZRotation * particleRotation;
-    float textureIndex = pointData[0].textureIndex;
+    textureIndex = pointData[0].textureIndex;
 
      // Vertex 4
-    gl_TexCoord[0].stp = vec3(1.0, 1.0, textureIndex);
+    gl_TexCoord[0].st = vec2(1.0, 1.0);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(1, 1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 3
-    gl_TexCoord[0].stp = vec3(0.0, 1.0, textureIndex);
+    gl_TexCoord[0].st = vec2(0.0, 1.0);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(-1, 1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 2
-    gl_TexCoord[0].stp = vec3(1.0, 0.0, textureIndex);
+    gl_TexCoord[0].st = vec2(1.0, 0.0);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(1, -1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 1
-    gl_TexCoord[0].stp = vec3(0.0, 0.0, textureIndex);
+    gl_TexCoord[0].st = vec2(0.0, 0.0);
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (particleRotation * vec2(-1, -1));
     gl_Position = projectionMatrix * gl_Position;

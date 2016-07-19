@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.resource.texture;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.BufferUtils;
 
 import java.io.IOException;
@@ -82,20 +83,27 @@ public class ImageDecoder {
         return new ImageDataArray(buffers, w, h);
     }
 
-    public static ImageDataArray decodeSpritesheet(InputStream src, PNGDecoder.Format format, int columns, int rows) {
+    public static ImageDataArray decodeSpriteSheet(InputStream src, PNGDecoder.Format format, int columns, int rows) {
         ImageData data = decodePNG(src, format);
         checkSize(columns, rows, data);
         int subimagesNumber = columns * rows;
         ByteBuffer[] buffers = new ByteBuffer[subimagesNumber];
-        initBuffers(buffers, data.getData().capacity());
+        int dataSize = data.getWidth() * data.getHeight() * format.getNumComponents();
+        initBuffers(buffers, dataSize);
         storeData(buffers, data, format.getNumComponents(), columns, rows);
-        rewindBuffers(buffers);
+        flipBuffers(buffers);
         return new ImageDataArray(buffers, data.getWidth() / columns, data.getHeight() / rows);
+    }
+
+    public static ImageDataArray decodeSpriteSheetReverse(InputStream src, PNGDecoder.Format format, int columns, int rows) {
+        ImageDataArray spritesheet = decodeSpriteSheet(src, format, columns, rows);
+        ArrayUtils.reverse(spritesheet.getData());
+        return spritesheet;
     }
 
     private static void checkSize(int columns, int rows, ImageData data) {
         if (data.getWidth() % columns > 0 || data.getHeight() % rows > 0)
-            throw new RuntimeException("Given spritesheet is not evenly dividable to " +
+            throw new RuntimeException("Given sprite sheet is not evenly dividable to " +
                     columns + " columns and " + rows + " rows");
     }
 
@@ -113,15 +121,15 @@ public class ImageDecoder {
         for (int i = 0; i < size; i++) {
             int x = i % width;
             int y = i / width;
-            int column = (int) ((x / (float) width) * columns);
-            int row = (int) ((y / (float) height) * rows);
+            int column = x * columns / width;
+            int row = y * rows / height;
             dataBuffer.get(texelData);
             buffers[columns * row + column].put(texelData);
         }
     }
 
-    private static void rewindBuffers(ByteBuffer[] buffers) {
+    private static void flipBuffers(ByteBuffer[] buffers) {
         for (ByteBuffer buffer : buffers)
-            buffer.rewind();
+            buffer.flip();
     }
 }
