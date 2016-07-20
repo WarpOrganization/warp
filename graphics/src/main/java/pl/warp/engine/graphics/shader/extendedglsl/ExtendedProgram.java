@@ -37,7 +37,7 @@ public class ExtendedProgram {
 
     public int getGeometryShader() {
         if (hasGeometryShader()) return geometryShader;
-        else throw new IllegalStateException("Unable to get a geometry shader, it's not attached to the program");
+        else throw new IllegalStateException("Unable to get a geometry shader, it's not attached to the program.");
     }
 
     public int getProgram() {
