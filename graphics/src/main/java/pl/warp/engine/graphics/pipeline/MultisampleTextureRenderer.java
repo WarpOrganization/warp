@@ -3,13 +3,11 @@ package pl.warp.engine.graphics.pipeline;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.RenderingSettings;
-import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
-import pl.warp.engine.graphics.shader.identitymultisample.IdentityMultisampleProgram;
+import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 import pl.warp.engine.graphics.texture.Texture2D;
-import pl.warp.engine.graphics.window.Display;
 
 /**
  * @author Jaca777
@@ -36,7 +34,7 @@ public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D,Tex
     }
 
     private void initOutput() {
-        this.outputTexture = new Texture2D(settings.getWidth(), settings.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
+        this.outputTexture = new Texture2D(settings.getWidth(), settings.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         this.destFramebuffer = new TextureFramebuffer(outputTexture);
     }
 
@@ -58,7 +56,7 @@ public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D,Tex
         identityProgram.useTexture(srcTexture);
         rect.bind();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_AMOUNT, GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);
         rect.unbind();
     }
 

@@ -8,7 +8,7 @@ import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
-import pl.warp.engine.graphics.shader.component.defaultprog.DefaultComponentProgram;
+import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultComponentProgram;
 
 /**
  * @author Jaca777

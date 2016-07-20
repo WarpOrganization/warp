@@ -1,29 +1,29 @@
-package pl.warp.engine.graphics.pipeline;
+package pl.warp.engine.graphics.postprocessing;
 
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
-import pl.warp.engine.graphics.shader.program.identity.IdentityProgram;
+import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
-import pl.warp.engine.graphics.texture.Texture2D;
+import pl.warp.engine.graphics.shader.program.hdr.HDRProgram;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 
 /**
  * @author Jaca777
- *         Created 2016-06-26 at 23
+ *         Created 2016-07-20 at 12
  */
-public class OnScreenRenderer implements Sink<Texture2D> {
+public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
 
-    private Texture2D srcTexture;
-    private IdentityProgram identityProgram;
+    private BloomRendererOutput src;
+    private HDRProgram hdrProgram;
     private Quad rect;
 
     @Override
     public void init() {
-        this.identityProgram = new IdentityProgram();
-        this.rect = new Quad(IdentityProgram.ATTR_VERTEX, IdentityProgram.ATTR_TEX_COORD);
+        this.hdrProgram = new HDRProgram();
+        this.rect = new Quad(IdentityMultisampleProgram.ATTR_VERTEX, IdentityMultisampleProgram.ATTR_TEX_COORD);
     }
 
     @Override
@@ -32,22 +32,20 @@ public class OnScreenRenderer implements Sink<Texture2D> {
     }
 
     @Override
-    public void setInput(Texture2D input) {
-        this.srcTexture = input;
+    public void setInput(BloomRendererOutput input) {
+        this.src = input;
     }
 
     @Override
     public void update(int delta) {
         Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
         Framebuffer.SCREEN_FRAMEBUFFER.clean();
-        identityProgram.use();
-        identityProgram.useTexture(srcTexture);
+        hdrProgram.use();
+        hdrProgram.useTexture(src.getScene());
         rect.bind();
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        GL11.glDisable(GL_DEPTH_TEST);
         GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);
         rect.unbind();
-        GL11.glEnable(GL_DEPTH_TEST);
     }
 
     @Override

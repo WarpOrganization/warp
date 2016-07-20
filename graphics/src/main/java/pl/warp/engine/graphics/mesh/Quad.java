@@ -32,7 +32,7 @@ public class Quad {
             0, 1, 2, 0, 2, 3
     };
 
-    public static final int INDICES_AMOUNT = INDICES.length;
+    public static final int INDICES_NUMBER = INDICES.length;
 
     private int vao;
     private int vertexBuffer;

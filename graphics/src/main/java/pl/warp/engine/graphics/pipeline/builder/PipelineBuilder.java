@@ -13,8 +13,8 @@ import java.util.Arrays;
  */
 public class PipelineBuilder<T extends Texture> {
 
-    private PipelineElement[] elements;
-    private Source<T> lastElem;
+    private final PipelineElement[] elements;
+    private final Source<T> lastElem;
 
     private PipelineBuilder(PipelineElement[] elements, Source<T> lastElem) {
         this.elements = elements;

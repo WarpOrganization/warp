@@ -22,22 +22,23 @@ public class Texture2D extends Texture {
 
     public Texture2D(int width, int height, int internalFormat, int format, boolean mipmap, ByteBuffer data) {
         super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), width, height, internalFormat, format, mipmap);
-        enableDefaultParams();
+        enableDefaultParams(mipmap);
     }
 
-    private void enableDefaultParams(){ //TODO sth with defaults
+    private void enableDefaultParams(boolean mipmap) { //TODO sth with defaults
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+        if (mipmap) GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+        else GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
     }
 
-    public void set(ByteBuffer data){
+    public void set(ByteBuffer data) {
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, GL11.GL_UNSIGNED_BYTE, data);
         if (mipmap) genMipmap();
     }
 
-    public void copy(Texture2D src){
+    public void copy(Texture2D src) {
         this.type = src.type;
         this.format = src.format;
         this.internalformat = src.internalformat;
@@ -47,7 +48,7 @@ public class Texture2D extends Texture {
         bind();
         GL11.glTexImage2D(this.type, 0, this.getInternalformat(), this.getWidth(), this.getHeight(), 0, this.getFormat(), GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
         GL43.glCopyImageSubData(src.getTexture(), src.getType(), 0, 0, 0, 0, this.texture, this.type, 0, 0, 0, 0, src.getWidth(), src.getHeight(), 1);
-        if(mipmap) genMipmap();
+        if (mipmap) genMipmap();
     }
 
     private static int genTexture2D(int target, int internalformat, int format, int width, int height, boolean mipmap, ByteBuffer data) {

@@ -22,6 +22,7 @@ public class Pipeline {
         for (int i = 1; i < elements.length; i++) {
             PipelineElement element = elements[i];
             ((Sink) element).setInput(((Source) lastElement).getOutput());
+            lastElement = element;
         }
     }
 
