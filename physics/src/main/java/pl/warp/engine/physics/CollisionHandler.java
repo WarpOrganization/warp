@@ -40,6 +40,7 @@ public class CollisionHandler {
             findContactPos(manifold);
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
             collisionStrategy.calculateCollisionResponse(component1,component2,contactPos);
+            redoSimulation();
         }
     }
 
@@ -47,10 +48,8 @@ public class CollisionHandler {
     Vector3f tmpTranslation;
     Vector3 contactPos;
 
-
-
     private void findContactPos(btPersistentManifold manifold) {
-        //TODO: polulate
+
     }
 
     private void assingValues(btPersistentManifold manifold) {

@@ -1,6 +1,7 @@
 package pl.warp.engine.physics;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.net.SyslogAppender;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
