@@ -18,12 +18,6 @@ public class ExtendedProgramCompiler {
     private String geometryShaderCode;
     private String fragmentShaderCode;
 
-    private int vertexShader;
-    private int geometryShader;
-    private int fragmentShader;
-    private int glslProgram;
-
-
     public ExtendedProgramCompiler(String vertexShaderCode, String fragmentShaderCode, ConstantField constants) {
         this.constants = constants;
         this.vertexShaderCode = vertexShaderCode;
@@ -35,7 +29,7 @@ public class ExtendedProgramCompiler {
     }
 
     public void compile() {
-        if(isComplete())
+        if (isComplete())
             throw new IllegalStateException("Program is not ready for compilation.");
         processConstants();
         compileGLSL();
@@ -53,25 +47,26 @@ public class ExtendedProgramCompiler {
     private String processConstants(String code) {
         String newCode = code;
         Matcher matcher = CONSTANT_EXPR_PATTERN.matcher(code);
-        while(matcher.find()) {
+        while (matcher.find()) {
             String constName = matcher.group(1);
-            if(!constants.isSet(constName))
+            if (!constants.isSet(constName))
                 throw new ProgramCompilationException("Unknown constant " + constName);
             newCode = newCode.replace(matcher.group(), constants.get(constName));
         }
         return newCode;
     }
 
-    private int compileGLSL() {
-        this.vertexShader = GLSLShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, vertexShaderCode);
-        this.fragmentShader = GLSLShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+    private ExtendedProgram compileGLSL() {
+        int vertexShader = GLSLShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = GLSLShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        int geometryShader = 0;
+        int glslProgram;
         String[] outNames = getOutput(fragmentShaderCode);
         if (hasGeometryShader()) {
-            this.geometryShader = GLSLShaderCompiler.compileShader(GL32.GL_GEOMETRY_SHADER, geometryShaderCode);
-            this.glslProgram = GLSLShaderCompiler.createProgram(new int[]{this.geometryShader, this.vertexShader, this.fragmentShader}, outNames);
-        }
-        this.glslProgram = GLSLShaderCompiler.createProgram(new int[]{this.vertexShader, this.fragmentShader}, outNames);
-        return glslProgram;
+            geometryShader = GLSLShaderCompiler.compileShader(GL32.GL_GEOMETRY_SHADER, geometryShaderCode);
+            glslProgram = GLSLShaderCompiler.createProgram(new int[]{geometryShader, vertexShader, fragmentShader}, outNames);
+        } else glslProgram = GLSLShaderCompiler.createProgram(new int[]{vertexShader, fragmentShader}, outNames);
+        return new ExtendedProgram(fragmentShader, vertexShader, geometryShader, glslProgram);
     }
 
     private static final Pattern OUTPUT_VAR_PATTERN = Pattern.compile("layout\\(location = (\\d*)\\) out \\w* \\w*;");
@@ -109,31 +104,7 @@ public class ExtendedProgramCompiler {
                 && fragmentShaderCode != null;
     }
 
-    public boolean isCompiled() {
-        return glslProgram > 0;
-    }
-
     public boolean hasGeometryShader() {
         return geometryShaderCode != null;
-    }
-
-    public int getGeometryShader() {
-        if (isCompiled()) return geometryShader;
-        else throw new IllegalStateException("Program has not been compiled yet.");
-    }
-
-    public int getVertexShader() {
-        if (isCompiled()) return vertexShader;
-        else throw new IllegalStateException("Program has not been compiled yet.");
-    }
-
-    public int getFragmentShader() {
-        if (isCompiled()) return fragmentShader;
-        else throw new IllegalStateException("Program has not been compiled yet.");
-    }
-
-    public int getGlslProgram() {
-        if (isCompiled()) return glslProgram;
-        else throw new IllegalStateException("Program has not been compiled yet.");
     }
 }
