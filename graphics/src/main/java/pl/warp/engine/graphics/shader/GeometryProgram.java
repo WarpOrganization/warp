@@ -3,6 +3,8 @@ package pl.warp.engine.graphics.shader;
 import com.google.common.io.CharStreams;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
+import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,25 +15,39 @@ import java.io.InputStreamReader;
  *         Created 2016-07-12 at 15
  */
 public class GeometryProgram extends Program {
-    private int geometryShader;
 
-    public GeometryProgram(InputStream geometryShader, InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
+    public GeometryProgram(InputStream vertexShader, InputStream fragmentShader, InputStream geometryShader, ConstantField field) {
+        this(toString(vertexShader), toString(fragmentShader), toString(geometryShader), field);
+    }
+
+    public GeometryProgram(InputStream vertexShader, InputStream fragmentShader, InputStream geometryShader) {
+        this(vertexShader, fragmentShader, geometryShader, ConstantField.EMPTY_CONSTANT_FIELD);
+    }
+
+    private static String toString(InputStream stream) {
         try {
-            this.geometryShader = ShaderCompiler.compileShader(GL32.GL_GEOMETRY_SHADER, CharStreams.toString(new InputStreamReader(geometryShader)));
-            this.vertexShader = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
-            this.fragmentShader = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
-            this.program = ShaderCompiler.createProgram(new int[]{this.geometryShader, this.vertexShader, this.fragmentShader}, outNames);
-            GL20.glUseProgram(this.program);
+            return CharStreams.toString(new InputStreamReader(stream));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public GeometryProgram(String vertexShader, String fragmentShader, String geometryShader, ConstantField field) {
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(vertexShader, fragmentShader, field);
+        compiler.useGeometryShader(geometryShader);
+        this.program = compiler.compile();
+        GL20.glUseProgram(this.program.getGLProgram());
+    }
+
+    public GeometryProgram(String vertexShader, String fragmentShader, String geometryShader) {
+        this(vertexShader, fragmentShader, geometryShader, ConstantField.EMPTY_CONSTANT_FIELD);
+    }
+
 
     @Override
     public void delete() {
-        GL20.glDetachShader(program, geometryShader);
+        GL20.glDetachShader(program.getGLProgram(), program.getGeometryShader());
         super.delete();
-        GL20.glDeleteShader(geometryShader);
+        GL20.glDeleteShader(program.getGeometryShader());
     }
 }

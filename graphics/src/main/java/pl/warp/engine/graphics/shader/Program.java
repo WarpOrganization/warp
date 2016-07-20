@@ -7,9 +7,10 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import pl.warp.engine.graphics.math.MatrixStack;
+import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture;
-import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,42 +23,47 @@ import java.nio.FloatBuffer;
  */
 public abstract class Program {
 
-    protected int program;
-    protected int vertexShader;
-    protected int fragmentShader;
+    protected ExtendedGLSLProgram program;
 
-    public Program(InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
+    public Program(InputStream vertexShader, InputStream fragmentShader, ConstantField field) {
+        this(toString(vertexShader), toString(fragmentShader), field);
+    }
+
+    public Program(InputStream vertexShader, InputStream fragmentShader) {
+        this(vertexShader, fragmentShader, ConstantField.EMPTY_CONSTANT_FIELD);
+    }
+
+    private static String toString(InputStream stream) {
         try {
-            this.vertexShader = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, CharStreams.toString(new InputStreamReader(vertexShader)));
-            this.fragmentShader = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, CharStreams.toString(new InputStreamReader(fragmentShader)));
-            this.program = ShaderCompiler.createProgram(new int[]{this.vertexShader, this.fragmentShader}, outNames);
-            GL20.glUseProgram(this.program);
+            return CharStreams.toString(new InputStreamReader(stream));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Program(String vertexSource, String fragmentSource, String[] outNames) {
-        int vS = ShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, vertexSource);
-        int fS = ShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentSource);
-        this.program = ShaderCompiler.createProgram(new int[]{vS, fS}, outNames);
-        GL20.glUseProgram(this.program);
+    public Program(String vertexShader, String fragmentShader, ConstantField field) {
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(vertexShader, fragmentShader, field);
+        this.program = compiler.compile();
+        GL20.glUseProgram(this.program.getGLProgram());
+    }
+
+    public Program(String vertexShader, String fragmentShader) {
+        this(vertexShader, fragmentShader, ConstantField.EMPTY_CONSTANT_FIELD);
     }
 
     public Program(int program, int vertexShader, int fragmentShader) {
-        this.program = program;
-        this.vertexShader = vertexShader;
-        this.fragmentShader = fragmentShader;
-        GL20.glUseProgram(this.program);
+        this.program = new ExtendedGLSLProgram(fragmentShader, vertexShader, program);
     }
 
-    protected Program() {}
+
+    protected Program() {
+    }
 
     /**
      * Binds the program.
      */
     public void use() {
-        GL20.glUseProgram(this.program);
+        GL20.glUseProgram(this.program.getGLProgram());
     }
 
     /**
@@ -77,19 +83,12 @@ public abstract class Program {
         }
     }
 
-    protected void setOutput(String[] outNames) {
-        for (int i = 0; i < outNames.length; i++) {
-            String name = outNames[i];
-            GL30.glBindFragDataLocation(program, i, name);
-        }
-    }
-
-    public void delete(){
-        GL20.glDetachShader(program, vertexShader);
-        GL20.glDetachShader(program, fragmentShader);
-        GL20.glDeleteProgram(program);
-        GL20.glDeleteShader(vertexShader);
-        GL20.glDeleteShader(fragmentShader);
+    public void delete() {
+        GL20.glDetachShader(program.getGLProgram(), program.getVertexShader());
+        GL20.glDetachShader(program.getGLProgram(), program.getFragmentShader());
+        GL20.glDeleteProgram(program.getGLProgram());
+        GL20.glDeleteShader(program.getVertexShader());
+        GL20.glDeleteShader(program.getFragmentShader());
     }
 
 
@@ -98,7 +97,7 @@ public abstract class Program {
      * @return Location of the attribute with the given name.
      */
     public int getAttributeLocation(String name) {
-        return GL20.glGetAttribLocation(program, name);
+        return GL20.glGetAttribLocation(program.getGLProgram(), name);
     }
 
     /**
@@ -106,7 +105,7 @@ public abstract class Program {
      * @return Location of the uniform with the given name.
      */
     public int getUniformLocation(String name) {
-        return GL20.glGetUniformLocation(program, name);
+        return GL20.glGetUniformLocation(program.getGLProgram(), name);
     }
 
     public void setUniformMatrix4(int location, FloatBuffer matrix) {
@@ -162,7 +161,7 @@ public abstract class Program {
     }
 
     public int getProgram() {
-        return program;
+        return program.getGLProgram();
     }
 
 }

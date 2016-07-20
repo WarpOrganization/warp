@@ -27,8 +27,8 @@ public abstract class ComponentRendererProgram extends Program{
     public static final int ATTR_TEXUTRE_COORD_LOCATION = 1;
     public static final int ATTR_NORMAL_LOCATION = 2;
 
-    public ComponentRendererProgram(InputStream vertexShader, InputStream fragmentShader, String[] outNames) {
-        super(vertexShader, fragmentShader, outNames);
+    public ComponentRendererProgram(InputStream vertexShader, InputStream fragmentShader) {
+        super(vertexShader, fragmentShader);
     }
 
     public abstract void useMaterial(Material material);
