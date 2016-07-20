@@ -81,8 +81,6 @@ public class Test {
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
-            generateGOATS(root, goatMesh, goatTexture);
-
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f);
@@ -100,6 +98,8 @@ public class Test {
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
             ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 400, true, true);
             new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 2000, spritesheetTexture));
+
+            generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
@@ -148,7 +148,7 @@ public class Test {
 
     }
 
-    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture) {
+    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2DArray spritesheetTexture) {
         for (int i = 0; i < 600; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
