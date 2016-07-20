@@ -23,7 +23,7 @@ public class RenderingTask extends EngineTask {
     private WindowManager windowManager;
     private Pipeline pipeline;
 
-    public RenderingTask(EngineContext context, Display display, WindowManager windowManager, Pipeline pipeline) {
+    public RenderingTask(EngineContext context, Display display, WindowManager windowManager, Pipeline pipeline) { //TODO resize listener
         this.display = display;
         this.windowManager = windowManager;
         this.pipeline = pipeline;

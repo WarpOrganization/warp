@@ -10,7 +10,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.Renderer;
-import pl.warp.engine.graphics.shader.particle.ParticleProgram;
+import pl.warp.engine.graphics.shader.program.particle.ParticleProgram;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.nio.FloatBuffer;

@@ -1,6 +1,7 @@
 #version 330
 
-attribute vec4 inVertex;
+layout(location = 0) in vec4 inVertex;
+
 uniform mat4 perspMatrix;
 uniform mat4 rotMatrix;
 

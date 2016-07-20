@@ -5,6 +5,7 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
+import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
@@ -72,8 +73,9 @@ public class Graphics {
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         Renderer[] renderers = {skyboxRenderer, particleRenderer, meshRenderer, emitterRenderer};
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), settings, renderers);
+        MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(settings);
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
-        return PipelineBuilder.from(sceneRenderer).to(onScreenRenderer);
+        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).to(onScreenRenderer);
     }
 
 

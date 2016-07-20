@@ -122,8 +122,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     @Override
     public void onResize(int newWidth, int newHeight) {
-        //TODO
-        throw new UnsupportedOperationException();
+        //
     }
 
     @Override

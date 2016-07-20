@@ -1,5 +1,5 @@
 #version 330
-precision highp float;
+precision mediump float;
 
 uniform sampler2DMS texture;
 uniform int samples;
