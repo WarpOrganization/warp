@@ -1,5 +1,7 @@
 package pl.warp.engine.physics;
 
+import org.apache.log4j.Logger;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -13,16 +15,22 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 public class MovementTask extends EngineTask {
 
     private Component parent;
-    private Vector3f tmpSpeed;
+    private Vector3f tmpVelocity;
+    private Vector3f tmpTorque;
+    private Quaternionf tmpRotation;
+    private static Logger logger = Logger.getLogger(MovementTask.class);
+
 
     public MovementTask(Component parent) {
-        tmpSpeed = new Vector3f();
+        tmpVelocity = new Vector3f();
+        tmpTorque = new Vector3f();
+        tmpRotation = new Quaternionf();
         this.parent = parent;
     }
 
     @Override
     protected void onInit() {
-
+        logger.info("Initializing movement task");
     }
 
     @Override
@@ -37,15 +45,24 @@ public class MovementTask extends EngineTask {
             if (isPhysicalBody(component) && isTransormable(component)) {
                 PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
                 TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-                tmpSpeed.set(physicalBodyProperty.getVelocity());
-                transformProperty.move(tmpSpeed.mul(fdelta));
-
-                Vector3f torque = physicalBodyProperty.getTorque();
-                transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
+                tmpVelocity.set(physicalBodyProperty.getVelocity());
+                tmpTorque.set(physicalBodyProperty.getTorque());
                 if (isCollidable(component)) {
                     ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-                    colliderProperty.getCollider().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
 
+                    physicalBodyProperty.setNextTickTranslation(tmpVelocity.mul(fdelta));
+                    physicalBodyProperty.setNextTickRotation(tmpTorque.mul(fdelta));
+
+                    tmpRotation.set(transformProperty.getRotation());
+                    tmpRotation.rotateLocalX(tmpTorque.x);
+                    tmpRotation.rotateLocalY(tmpTorque.y);
+                    tmpRotation.rotateLocalZ(tmpTorque.z);
+                    colliderProperty.getCollider().setTransform(tmpVelocity.add(transformProperty.getTranslation()), tmpRotation);
+                } else {
+                    transformProperty.move(tmpVelocity.mul(fdelta));
+
+                    Vector3f torque = physicalBodyProperty.getTorque();
+                    transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
                 }
             }
         });

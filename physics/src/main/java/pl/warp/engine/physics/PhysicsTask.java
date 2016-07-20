@@ -2,8 +2,9 @@ package pl.warp.engine.physics;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.collision.*;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -11,6 +12,7 @@ import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
 import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -21,8 +23,11 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 public class PhysicsTask extends EngineTask {
 
+    private static Logger logger = Logger.getLogger(PhysicsTask.class);
+
     private CollisionListener collisionListener;
 
+    private CollisionHandler collisionHandler;
     private CollisionStrategy collisionStrategy;
     private Component parent;
     private PhysicsWorld world;
@@ -39,6 +44,7 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        logger.info("initializing physics");
         new SharedLibraryLoader().load("gdx");
         Bullet.init();
         sceneEnteredListener = SimpleListener.createListener(parent, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, this::handleSceneEntered);
@@ -46,6 +52,7 @@ public class PhysicsTask extends EngineTask {
 
         world = new PhysicsWorld();
         collisionStrategy.init(world);
+        collisionHandler = new CollisionHandler(world, collisionStrategy);
 
         collisionListener = new CollisionListener(world.getActiveCollisions());
         collisionListener.enableOnAdded();
@@ -65,14 +72,9 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        world.cleanRayTests();
-        synchronized (world) {
-            world.getCollisionWorld().performDiscreteCollisionDetection();
-        }
-        collisionStrategy.performRayTests();
-
-        world.getActiveCollisions().forEach(manifold ->
-                collisionStrategy.handleCollision(manifold));
+        collisionHandler.updateCollisions(delta);
+        collisionHandler.performRayTests();
+        finalizeMovement();
     }
 
     public void handleSceneEntered(ChildAddedEvent event) {
@@ -90,6 +92,25 @@ public class PhysicsTask extends EngineTask {
             ColliderProperty tmp = event.getRemovedChild().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             tmp.getCollider().removeFromWorld();
         }
+    }
+
+    private void finalizeMovement() {
+        parent.forEachChildren(component -> {
+            if (isCollidable(component) && isPhysicalBody(component)) {
+                TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+                PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+                transformProperty.move(physicalBodyProperty.getNextTickTranslation());
+                transformProperty.rotate(physicalBodyProperty.getNextTickRotation().x, physicalBodyProperty.getNextTickRotation().y, physicalBodyProperty.getNextTickRotation().z);
+            }
+        });
+    }
+
+    private boolean isCollidable(Component component) {
+        return component.hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+    }
+
+    private boolean isPhysicalBody(Component component) {
+        return component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
     }
 
 }

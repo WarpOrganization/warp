@@ -23,8 +23,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
     public void init(PhysicsWorld world) {
         this.world = world;
-        result = new ClosestRayResultCallback(new Vector3(), new Vector3());
-        tmpTranslation = new Vector3f();
+
 
     }
 
@@ -37,7 +36,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     private Vector3f directionCopy = new Vector3f();
     private Vector3f torqueChange = new Vector3f();
 
-    private void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos) {
+    public void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos) {
 
         ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
@@ -121,41 +120,6 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
         component1.triggerEvent(new CollisionEvent(component2, relativeVelocity.length()));
         component2.triggerEvent(new CollisionEvent(component1, relativeVelocity.length()));
-    }
-
-    ClosestRayResultCallback result;
-    Vector3f tmpTranslation;
-
-    @Override
-    public void performRayTests() {
-
-        for (int i = 0; i < world.getRayTestColliders().size(); i++) {
-            PointCollider collider;
-            synchronized (world) {
-                collider = world.getRayTestColliders().get(i);
-            }
-            result.setCollisionObject(null);
-            result.setClosestHitFraction(1f);
-            result.setRayFromWorld(collider.getLastPos());
-            result.setRayToWorld(collider.getCurrentPos());
-            synchronized (world) {
-                world.getCollisionWorld().rayTest(collider.getLastPos(), collider.getCurrentPos(), result);
-            }
-            if (result.hasHit()) {
-                result.getHitPointWorld(contactPos);
-                TransformProperty property = collider.getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-                PhysicalBodyProperty physicalBodyProperty = collider.getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-                tmpTranslation.set(physicalBodyProperty.getVelocity());
-                tmpTranslation.normalize();
-                tmpTranslation.negate();
-                tmpTranslation.mul(physicalBodyProperty.getRadius());
-                tmpTranslation.add(contactPos.x, contactPos.y, contactPos.z);
-                property.setTranslation(tmpTranslation);
-                Component component;
-                component = world.getComponent(result.getCollisionObject().getUserValue());
-                calculateCollisionResponse(component, collider.getOwner(), contactPos);
-            }
-        }
     }
 
 

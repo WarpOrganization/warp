@@ -20,6 +20,9 @@ public class PhysicalBodyProperty extends Property<Component> {
     private float radius;
     private float interia;
 
+    private Vector3f nextTickTranslation;
+    private Vector3f nextTickRotation;
+
     public PhysicalBodyProperty(Component owner, float mass, float radius) {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
         this.mass = mass;
@@ -59,21 +62,6 @@ public class PhysicalBodyProperty extends Property<Component> {
         velocity.add(force.div(mass));
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PhysicalBodyProperty that = (PhysicalBodyProperty) o;
-        return Float.compare(that.mass, mass) == 0 &&
-                Objects.equals(torque, that.torque) &&
-                Objects.equals(velocity, that.velocity);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(torque, velocity, mass);
-    }
-
     public void setVelocity(Vector3f velocity) {
         this.velocity = velocity;
     }
@@ -84,5 +72,40 @@ public class PhysicalBodyProperty extends Property<Component> {
 
     public float getRadius() {
         return radius;
+    }
+
+    public Vector3f getNextTickTranslation() {
+        return nextTickTranslation;
+    }
+
+    public void setNextTickTranslation(Vector3f nextTickTranslation) {
+        this.nextTickTranslation = nextTickTranslation;
+    }
+
+    public Vector3f getNextTickRotation() {
+        return nextTickRotation;
+    }
+
+    public void setNextTickRotation(Vector3f nextTickRotation) {
+        this.nextTickRotation = nextTickRotation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PhysicalBodyProperty that = (PhysicalBodyProperty) o;
+        return Float.compare(that.mass, mass) == 0 &&
+                Float.compare(that.radius, radius) == 0 &&
+                Float.compare(that.interia, interia) == 0 &&
+                Objects.equals(torque, that.torque) &&
+                Objects.equals(velocity, that.velocity) &&
+                Objects.equals(nextTickTranslation, that.nextTickTranslation) &&
+                Objects.equals(nextTickRotation, that.nextTickRotation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(torque, velocity, mass, radius, interia, nextTickTranslation, nextTickRotation);
     }
 }
