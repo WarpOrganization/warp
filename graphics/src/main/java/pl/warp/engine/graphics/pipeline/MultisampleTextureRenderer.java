@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.pipeline;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import pl.warp.engine.graphics.RenderingSettings;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
@@ -15,14 +15,14 @@ import pl.warp.engine.graphics.texture.Texture2D;
  */
 public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D,Texture2D> {
 
-    private RenderingSettings settings;
+    private RenderingConfig settings;
     private MultisampleTexture2D srcTexture;
     private TextureFramebuffer destFramebuffer;
     private Texture2D outputTexture;
     private IdentityMultisampleProgram identityProgram;
     private Quad rect;
 
-    public MultisampleTextureRenderer(RenderingSettings settings) {
+    public MultisampleTextureRenderer(RenderingConfig settings) {
         this.settings = settings;
     }
 

@@ -22,14 +22,14 @@ public class Graphics {
 
     private EngineContext context;
     private Camera mainViewCamera;
-    private RenderingSettings settings;
+    private RenderingConfig settings;
 
     private SyncEngineThread thread;
     private Display display;
     private GLFWWindowManager windowManager;
     private Environment environment;
 
-    public Graphics(EngineContext context, Camera mainViewCamera, RenderingSettings settings) {
+    public Graphics(EngineContext context, Camera mainViewCamera, RenderingConfig settings) {
         this.context = context;
         this.mainViewCamera = mainViewCamera;
         this.settings = settings;
@@ -87,7 +87,7 @@ public class Graphics {
         return context;
     }
 
-    public RenderingSettings getSettings() {
+    public RenderingConfig getSettings() {
         return settings;
     }
 

@@ -5,7 +5,7 @@ import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
-import pl.warp.engine.graphics.shader.program.hdr.HDRProgram;
+import pl.warp.engine.graphics.shader.program.postprocessing.hdr.HDRProgram;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -41,7 +41,8 @@ public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
         Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
         Framebuffer.SCREEN_FRAMEBUFFER.clean();
         hdrProgram.use();
-        hdrProgram.useTexture(src.getScene());
+        hdrProgram.useSceneTexture(src.getScene());
+        hdrProgram.useBloomTexture(src.getBloom());
         rect.bind();
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);

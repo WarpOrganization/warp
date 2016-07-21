@@ -4,13 +4,13 @@ package pl.warp.engine.graphics;
  * @author Jaca777
  *         Created 2016-06-29 at 21
  */
-public class RenderingSettings {
+public class RenderingConfig {
 
     private int fps;
     private int width, height;
     private int renderingSamples = 4;
 
-    public RenderingSettings(int fps, int width, int height) {
+    public RenderingConfig(int fps, int width, int height) {
         this.fps = fps;
         this.width = width;
         this.height = height;
@@ -32,7 +32,7 @@ public class RenderingSettings {
         return renderingSamples;
     }
 
-    public RenderingSettings setRenderingSamples(int renderingSamples) {
+    public RenderingConfig setRenderingSamples(int renderingSamples) {
         this.renderingSamples = renderingSamples;
         return this;
     }
