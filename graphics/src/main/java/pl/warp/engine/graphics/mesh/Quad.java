@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.mesh;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -69,6 +70,10 @@ public class Quad {
 
     public void bind() {
         GL30.glBindVertexArray(vao);
+    }
+
+    public void draw() {
+        GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);
     }
 
     public void destroy() {

@@ -4,7 +4,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
+import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Flow;
+import pl.warp.engine.graphics.shader.program.postprocessing.bloomdetection.BloomDetectionProgram;
+import pl.warp.engine.graphics.shader.program.postprocessing.gaussianblur.GaussianBlurProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 /**
@@ -24,6 +27,10 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     private TextureFramebuffer verticalBlurFramebuffer;
     private TextureFramebuffer blurredBloomFramebuffer;
 
+    private BloomDetectionProgram bloomDetectionProgram;
+    private GaussianBlurProgram gaussianBlurProgram;
+    private Quad quad;
+
     private RenderingConfig config;
 
     public BloomRenderer(RenderingConfig config) {
@@ -32,13 +39,51 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     @Override
     public void update(int delta) {
-
+        detectBloom();
+        blur();
     }
+
+    private void detectBloom() {
+        bloomDetectionFramebuffer.bindDraw();
+        bloomDetectionFramebuffer.clean();
+        bloomDetectionProgram.use();
+        bloomDetectionProgram.useTexture(input);
+        quad.bind();
+        quad.draw();
+    }
+
+    private void blur() {
+        blurVertically();
+        blurHorizontally();
+    }
+
+    private void blurVertically() {
+        verticalBlurFramebuffer.bindDraw();
+        verticalBlurFramebuffer.clean();
+        quad.bind();
+        gaussianBlurProgram.use();
+        gaussianBlurProgram.useTexture(bloomDetectionTexture);
+        gaussianBlurProgram.setStage(GaussianBlurProgram.GaussianBlurStage.VERTICAL);
+        quad.draw();
+    }
+
+    private void blurHorizontally() {
+        blurredBloomFramebuffer.bindDraw();
+        blurredBloomFramebuffer.clean();
+        quad.bind();
+        gaussianBlurProgram.use();
+        gaussianBlurProgram.useTexture(verticalBlurTexture);
+        gaussianBlurProgram.setStage(GaussianBlurProgram.GaussianBlurStage.HORIZONTAL);
+        quad.draw();
+    }
+
 
     @Override
     public void init() {
         createTextures();
         createFramebuffers();
+        createPrograms();
+        this.quad = new Quad(BloomDetectionProgram.ATTR_VERTEX, BloomDetectionProgram.ATTR_TEX_COORD);
         this.output = new BloomRendererOutput(input, blurredBloomTexture);
     }
 
@@ -50,18 +95,29 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     private void createFramebuffers() {
         this.bloomDetectionFramebuffer = new TextureFramebuffer(bloomDetectionTexture);
+        this.verticalBlurFramebuffer = new TextureFramebuffer(verticalBlurTexture);
+        this.blurredBloomFramebuffer = new TextureFramebuffer(blurredBloomTexture);
+    }
+
+    private void createPrograms() {
+        this.bloomDetectionProgram = new BloomDetectionProgram();
+        this.gaussianBlurProgram = new GaussianBlurProgram(config);
     }
 
     @Override
     public void destroy() {
-        //TODO
-        throw new UnsupportedOperationException();
+        this.bloomDetectionFramebuffer.delete();
+        this.verticalBlurFramebuffer.delete();
+        this.blurredBloomFramebuffer.delete();
+        this.bloomDetectionProgram.delete();
+        this.gaussianBlurProgram.delete();
+        this.quad.destroy();
     }
 
     @Override
     public void onResize(int newWidth, int newHeight) {
         this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
-        this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
+        this.verticalBlurFramebuffer.resize(newWidth, newHeight);
         this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
     }
 

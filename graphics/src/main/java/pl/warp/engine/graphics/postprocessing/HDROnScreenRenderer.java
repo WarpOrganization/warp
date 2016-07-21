@@ -44,7 +44,6 @@ public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
         hdrProgram.useSceneTexture(src.getScene());
         hdrProgram.useBloomTexture(src.getBloom());
         rect.bind();
-        GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);
         rect.unbind();
     }
