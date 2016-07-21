@@ -6,6 +6,7 @@ import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 
 import java.io.InputStream;
 import java.util.List;
@@ -22,6 +23,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private static final int MAIN_MATERIAL_TEXTURE_SAMPLER = 0;
 
     private static final int MAX_SPOT_LIGHT_SOURCES = 25;
+    private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MAX_SPOT_LIGHT_SOURCES);
 
     private static final String[] SPOT_LIGHT_FIELD_NAMES =
             {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
@@ -39,7 +41,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
 
     public DefaultComponentProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(VERTEX_SHADER, FRAGMENT_SHADER, CONSTANT_FIELD);
         loadLocations();
     }
 
