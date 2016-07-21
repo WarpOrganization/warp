@@ -71,7 +71,7 @@ public class Graphics {
         SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         ParticleRenderer particleRenderer = new ParticleRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
-        Renderer[] renderers = {skyboxRenderer, particleRenderer, meshRenderer, emitterRenderer};
+        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleRenderer, emitterRenderer};
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), settings, renderers);
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(settings);
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
