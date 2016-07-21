@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
  *         Created 2016-07-20 at 18
  */
 public class ExtendedGLSLProgramCompilerTest {
+    
     @Test
     public void shouldProcessConstants() throws Exception {
         ConstantField constantField = new ConstantField()
