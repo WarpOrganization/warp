@@ -20,8 +20,8 @@ public class PhysicalBodyProperty extends Property<Component> {
     private float radius;
     private float interia;
 
-    private Vector3f nextTickTranslation;
-    private Vector3f nextTickRotation;
+    private Vector3f nextTickTranslation = new Vector3f();
+    private Vector3f nextTickRotation = new Vector3f();
 
     public PhysicalBodyProperty(Component owner, float mass, float radius) {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
@@ -79,7 +79,7 @@ public class PhysicalBodyProperty extends Property<Component> {
     }
 
     public void setNextTickTranslation(Vector3f nextTickTranslation) {
-        this.nextTickTranslation = nextTickTranslation;
+        this.nextTickTranslation.set(nextTickTranslation);
     }
 
     public Vector3f getNextTickRotation() {
@@ -87,7 +87,7 @@ public class PhysicalBodyProperty extends Property<Component> {
     }
 
     public void setNextTickRotation(Vector3f nextTickRotation) {
-        this.nextTickRotation = nextTickRotation;
+        this.nextTickRotation.set(nextTickRotation);
     }
 
     @Override
