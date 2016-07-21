@@ -3,8 +3,8 @@ precision highp float;
 
 uniform sampler2D sceneTex;
 uniform sampler2D bloomTex;
-uniform float bloomLevel = 1.0;
-uniform float exposure = 1.0;
+uniform float bloomLevel;
+uniform float exposure;
 
 in vec2 vTexCoord;
 

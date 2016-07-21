@@ -111,6 +111,7 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     private void createPrograms() {
         this.bloomDetectionProgram = new BloomDetectionProgram();
+        bloomDetectionProgram.setThreshold(config.getBloomThreshold());
         this.gaussianBlurProgram = new GaussianBlurProgram(config);
     }
 

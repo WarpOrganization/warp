@@ -76,7 +76,7 @@ public class Graphics {
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), config, renderers);
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
         BloomRenderer bloomRenderer = new BloomRenderer(config);
-        HDROnScreenRenderer onScreenRenderer = new HDROnScreenRenderer();
+        HDROnScreenRenderer onScreenRenderer = new HDROnScreenRenderer(config);
         return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(bloomRenderer).to(onScreenRenderer);
     }
 

@@ -4,7 +4,7 @@ precision highp float;
 uniform sampler2D tex;
 in vec2 vTexCoord;
 
-uniform float threshold = 0.7;
+uniform float threshold;
 uniform bool cutOff = true;
 
 layout(location = 0) out vec4 fragColor;

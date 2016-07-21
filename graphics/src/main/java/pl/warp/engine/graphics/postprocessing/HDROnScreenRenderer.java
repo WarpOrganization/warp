@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.postprocessing;
 
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Sink;
@@ -16,13 +17,21 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
  */
 public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
 
+    private RenderingConfig config;
+
     private BloomRendererOutput src;
     private HDRProgram hdrProgram;
     private Quad rect;
 
+    public HDROnScreenRenderer(RenderingConfig config) {
+        this.config = config;
+    }
+
     @Override
     public void init() {
         this.hdrProgram = new HDRProgram();
+        this.hdrProgram.setBloomLevel(config.getBloomLevel());
+        this.hdrProgram.setExposure(config.getExposure());
         this.rect = new Quad(IdentityMultisampleProgram.ATTR_VERTEX, IdentityMultisampleProgram.ATTR_TEX_COORD);
     }
 
