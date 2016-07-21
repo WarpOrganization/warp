@@ -44,7 +44,6 @@ public class ExtendedGLSLProgramCompilerTest {
                     "void main(void) {\n" +
                     "    fragColor = texture(cube, vTexCoord);\n" +
                     "}";
-
     @Test
     public void shouldRecognizeOutput() throws Exception {
         ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, null);
