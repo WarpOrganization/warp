@@ -9,7 +9,7 @@ public class RenderingConfig {
     private int fps;
     private int width, height;
     private int renderingSamples = 4;
-    private int bloomCycles = 4;
+    private int bloomIterations = 5;
 
     public RenderingConfig(int fps, int width, int height) {
         this.fps = fps;
@@ -38,7 +38,12 @@ public class RenderingConfig {
         return this;
     }
 
-    public int getBloomCycles() {
-        return bloomCycles;
+    public RenderingConfig setBloomIterations(int bloomIterations) {
+        this.bloomIterations = bloomIterations;
+        return this;
+    }
+
+    public int getBloomIterations() {
+        return bloomIterations;
     }
 }

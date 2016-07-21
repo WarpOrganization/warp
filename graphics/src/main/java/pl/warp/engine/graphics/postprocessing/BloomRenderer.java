@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.postprocessing;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
@@ -41,8 +40,8 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     @Override
     public void update(int delta) {
         detectBloom();
-        blur(input);
-        for(int i = 1; i < config.getBloomCycles(); i++) {
+        blur(bloomDetectionTexture);
+        for(int i = 1; i < config.getBloomIterations(); i++) {
             blur(blurredBloomTexture);
         }
     }
