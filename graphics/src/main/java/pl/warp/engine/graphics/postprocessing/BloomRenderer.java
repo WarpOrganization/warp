@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.postprocessing;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
@@ -40,7 +41,10 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     @Override
     public void update(int delta) {
         detectBloom();
-        blur();
+        blur(input);
+        for(int i = 1; i < config.getBloomCycles(); i++) {
+            blur(blurredBloomTexture);
+        }
     }
 
     private void detectBloom() {
@@ -52,27 +56,27 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
         quad.draw();
     }
 
-    private void blur() {
-        blurVertically();
-        blurHorizontally();
+    private void blur(Texture2D texture) {
+        blurVertically(texture);
+        blurHorizontally(verticalBlurTexture);
     }
 
-    private void blurVertically() {
+    private void blurVertically(Texture2D texture) {
         verticalBlurFramebuffer.bindDraw();
         verticalBlurFramebuffer.clean();
         quad.bind();
         gaussianBlurProgram.use();
-        gaussianBlurProgram.useTexture(bloomDetectionTexture);
+        gaussianBlurProgram.useTexture(texture);
         gaussianBlurProgram.setStage(GaussianBlurProgram.GaussianBlurStage.VERTICAL);
         quad.draw();
     }
 
-    private void blurHorizontally() {
+    private void blurHorizontally(Texture2D texture) {
         blurredBloomFramebuffer.bindDraw();
         blurredBloomFramebuffer.clean();
         quad.bind();
         gaussianBlurProgram.use();
-        gaussianBlurProgram.useTexture(verticalBlurTexture);
+        gaussianBlurProgram.useTexture(texture);
         gaussianBlurProgram.setStage(GaussianBlurProgram.GaussianBlurStage.HORIZONTAL);
         quad.draw();
     }
@@ -90,7 +94,14 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     private void createTextures() {
         this.bloomDetectionTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         this.verticalBlurTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        setupBlurTexture(verticalBlurTexture);
         this.blurredBloomTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        setupBlurTexture(blurredBloomTexture);
+    }
+
+    private void setupBlurTexture(Texture2D verticalBlurTexture) {
+        verticalBlurTexture.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+        verticalBlurTexture.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
     }
 
     private void createFramebuffers() {

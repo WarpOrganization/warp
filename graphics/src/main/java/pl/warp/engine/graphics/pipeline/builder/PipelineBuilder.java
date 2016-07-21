@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Jaca777
  *         Created 2016-06-30 at 14
  */
-public class PipelineBuilder<T extends Texture> {
+public class PipelineBuilder<T> {
 
     private final PipelineElement[] elements;
     private final Source<T> lastElem;
@@ -21,11 +21,11 @@ public class PipelineBuilder<T extends Texture> {
         this.lastElem = lastElem;
     }
 
-    public static <T extends Texture> PipelineBuilder<T> from(Source<T> source) {
+    public static <T> PipelineBuilder<T> from(Source<T> source) {
         return new PipelineBuilder<>(new PipelineElement[]{source}, source);
     }
 
-    public <O extends Texture> PipelineBuilder<O> via(Flow<T, O> flow) {
+    public <O> PipelineBuilder<O> via(Flow<T, O> flow) {
         return new PipelineBuilder<>(ArrayUtils.add(elements, flow), flow);
     }
 

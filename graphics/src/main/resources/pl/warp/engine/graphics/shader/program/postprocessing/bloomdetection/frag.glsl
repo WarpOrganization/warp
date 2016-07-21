@@ -1,4 +1,4 @@
-#version 150
+#version 330
 precision highp float;
 
 uniform sampler2D tex;

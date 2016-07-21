@@ -9,6 +9,7 @@ public class RenderingConfig {
     private int fps;
     private int width, height;
     private int renderingSamples = 4;
+    private int bloomCycles = 4;
 
     public RenderingConfig(int fps, int width, int height) {
         this.fps = fps;
@@ -35,5 +36,9 @@ public class RenderingConfig {
     public RenderingConfig setRenderingSamples(int renderingSamples) {
         this.renderingSamples = renderingSamples;
         return this;
+    }
+
+    public int getBloomCycles() {
+        return bloomCycles;
     }
 }

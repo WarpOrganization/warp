@@ -58,6 +58,10 @@ public abstract class Texture {
         if (mipmap) genMipmap();
     }
 
+    public void setParameter(int paramName, int param) {
+        GL11.glTexParameteri(type, paramName, param);
+    }
+
     protected void genMipmap() {
         glGenerateMipmap(this.type);
     }

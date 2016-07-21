@@ -1,9 +1,8 @@
-#version 150
+#version 330
 precision highp float;
 
 uniform sampler2D tex;
-in vec2 vTexCoord;
-in vec2 blurCoords[11];
+smooth in vec2 blurCoords[11];
 
 layout(location = 0) out vec4 fragColor;
 

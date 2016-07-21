@@ -6,10 +6,11 @@ import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
-import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
+import pl.warp.engine.graphics.postprocessing.BloomRenderer;
+import pl.warp.engine.graphics.postprocessing.HDROnScreenRenderer;
 import pl.warp.engine.graphics.skybox.SkyboxRenderer;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
@@ -22,22 +23,22 @@ public class Graphics {
 
     private EngineContext context;
     private Camera mainViewCamera;
-    private RenderingConfig settings;
+    private RenderingConfig config;
 
     private SyncEngineThread thread;
     private Display display;
     private GLFWWindowManager windowManager;
     private Environment environment;
 
-    public Graphics(EngineContext context, Camera mainViewCamera, RenderingConfig settings) {
+    public Graphics(EngineContext context, Camera mainViewCamera, RenderingConfig config) {
         this.context = context;
         this.mainViewCamera = mainViewCamera;
-        this.settings = settings;
+        this.config = config;
         createThread();
     }
 
     private void createThread() {
-        this.thread = new SyncEngineThread(new SyncTimer(settings.getFps()), new OnePerUpdateExecutionStrategy());
+        this.thread = new SyncEngineThread(new SyncTimer(config.getFps()), new OnePerUpdateExecutionStrategy());
     }
 
     public void create() {
@@ -48,7 +49,7 @@ public class Graphics {
     }
 
     private void createWindow() {
-        this.display = new Display(settings.getWidth(), settings.getHeight());
+        this.display = new Display(config.getWidth(), config.getHeight());
         this.windowManager = new GLFWWindowManager(this.thread::interrupt);
         WindowTask windowTask = new WindowTask(windowManager, display);
         thread.scheduleTask(windowTask);
@@ -72,10 +73,11 @@ public class Graphics {
         ParticleRenderer particleRenderer = new ParticleRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleRenderer, emitterRenderer};
-        SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), settings, renderers);
-        MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(settings);
-        OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
-        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).to(onScreenRenderer);
+        SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), config, renderers);
+        MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
+        BloomRenderer bloomRenderer = new BloomRenderer(config);
+        HDROnScreenRenderer onScreenRenderer = new HDROnScreenRenderer();
+        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(bloomRenderer).to(onScreenRenderer);
     }
 
 
@@ -87,8 +89,8 @@ public class Graphics {
         return context;
     }
 
-    public RenderingConfig getSettings() {
-        return settings;
+    public RenderingConfig getConfig() {
+        return config;
     }
 
     public GLFWWindowManager getWindowManager() {
