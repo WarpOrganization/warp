@@ -1,8 +1,10 @@
 package pl.warp.engine.graphics.postprocessing;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.pipeline.Flow;
-import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 /**
@@ -22,6 +24,12 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     private TextureFramebuffer verticalBlurFramebuffer;
     private TextureFramebuffer blurredBloomFramebuffer;
 
+    private RenderingConfig config;
+
+    public BloomRenderer(RenderingConfig config) {
+        this.config = config;
+    }
+
     @Override
     public void update(int delta) {
 
@@ -29,7 +37,19 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     @Override
     public void init() {
-        this.output = new BloomRendererOutput(input);
+        createTextures();
+        createFramebuffers();
+        this.output = new BloomRendererOutput(input, blurredBloomTexture);
+    }
+
+    private void createTextures() {
+        this.bloomDetectionTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.verticalBlurTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.blurredBloomTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+    }
+
+    private void createFramebuffers() {
+        this.bloomDetectionFramebuffer = new TextureFramebuffer(bloomDetectionTexture);
     }
 
     @Override
@@ -40,8 +60,9 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     @Override
     public void onResize(int newWidth, int newHeight) {
-        //TODO
-        throw new UnsupportedOperationException();
+        this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
+        this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
+        this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
     }
 
     @Override
@@ -52,5 +73,6 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     @Override
     public void setInput(Texture2D input) {
         this.input = input;
+        output.setScene(input);
     }
 }
