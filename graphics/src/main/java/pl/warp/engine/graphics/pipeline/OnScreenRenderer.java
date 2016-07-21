@@ -6,7 +6,6 @@ import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.shader.program.identity.IdentityProgram;
 import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 
