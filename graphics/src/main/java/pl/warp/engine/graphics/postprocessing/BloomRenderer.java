@@ -86,7 +86,7 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
         createTextures();
         createFramebuffers();
         createPrograms();
-        this.quad = new Quad(BloomDetectionProgram.ATTR_VERTEX, BloomDetectionProgram.ATTR_TEX_COORD);
+        this.quad = new Quad();
         this.output = new BloomRendererOutput(input, blurredBloomTexture);
     }
 

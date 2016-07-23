@@ -22,7 +22,7 @@ public class OnScreenRenderer implements Sink<Texture2D> {
     @Override
     public void init() {
         this.identityProgram = new IdentityProgram();
-        this.rect = new Quad(IdentityProgram.ATTR_VERTEX, IdentityProgram.ATTR_TEX_COORD);
+        this.rect = new Quad();
     }
 
     @Override

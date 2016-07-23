@@ -103,8 +103,7 @@ public class GLFWWindowManager implements WindowManager {
 
     @Override
     public void resize(int w, int h) {
-        //TODO
-        throw new UnsupportedOperationException();
+
     }
 
     @Override

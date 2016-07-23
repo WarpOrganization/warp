@@ -83,7 +83,7 @@ public class Test {
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.1f, 0.1f, 0.1f), 0.1f, 0.1f);
+            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.4f, 0.4f, 0.4f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
             new GraphicsMeshProperty(light, goatMesh);
             GraphicsMaterialProperty lightMaterial = new GraphicsMaterialProperty(light, new Material(goatTexture));
@@ -127,7 +127,7 @@ public class Test {
                     0f, 0f);
             directionalLightProperty.addSpotLight(laser);
 
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars2");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             new GraphicsSkyboxProperty(scene, cubemap);
         });

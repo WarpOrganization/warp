@@ -29,7 +29,7 @@ public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D,Tex
     @Override
     public void init() {
         this.identityProgram = new IdentityMultisampleProgram();
-        this.rect = new Quad(IdentityMultisampleProgram.ATTR_VERTEX, IdentityMultisampleProgram.ATTR_TEX_COORD);
+        this.rect = new Quad();
         initOutput();
     }
 

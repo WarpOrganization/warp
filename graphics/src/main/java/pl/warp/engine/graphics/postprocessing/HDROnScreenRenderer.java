@@ -32,7 +32,7 @@ public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
         this.hdrProgram = new HDRProgram();
         this.hdrProgram.setBloomLevel(config.getBloomLevel());
         this.hdrProgram.setExposure(config.getExposure());
-        this.rect = new Quad(IdentityMultisampleProgram.ATTR_VERTEX, IdentityMultisampleProgram.ATTR_TEX_COORD);
+        this.rect = new Quad();
     }
 
     @Override
