@@ -12,7 +12,7 @@ public class RenderingConfig {
     private int bloomIterations = 5;
     private float exposure = 2f;
     private float bloomLevel = 0.5f;
-    private float bloomThreshold = 1f;
+    private float bloomThreshold = 1.2f;
 
     public RenderingConfig(int fps, int width, int height) {
         this.fps = fps;

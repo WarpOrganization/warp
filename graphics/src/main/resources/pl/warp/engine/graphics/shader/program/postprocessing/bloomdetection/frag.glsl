@@ -20,6 +20,10 @@ void main(void){
         else discard;
     } else fragColor = color * brightness;
 
+    fragColor.r -= min(fragColor.r, 0.2126 * threshold);
+    fragColor.g -= min(fragColor.g, 0.7152 * threshold);
+    fragColor.b -= min(fragColor.b, 0.0722 * threshold);
+
     float maxElem = maxElem(fragColor.rgb);
     if(maxElem > maxBrightness)
         fragColor *= (maxBrightness / maxElem);
