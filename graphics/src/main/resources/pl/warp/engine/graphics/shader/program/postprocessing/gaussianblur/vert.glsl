@@ -12,7 +12,10 @@ void main(void) {
     gl_Position = inVertex;
     vec2 centerTexCoord = gl_Position.xy * 0.5 + 0.5;
     float pixelSize = 1.0 / displaySize;
-    for(int i = -7; i < 7; i++) {
-        blurCoords[i + 7] = centerTexCoord + blurDirection * pixelSize * i;
+    for(int i = -7; i <= 7; i++) {
+        vec2 coord = centerTexCoord + blurDirection * pixelSize * i;
+        coord.x = clamp(coord.x, 0.001, 0.999);
+        coord.y = clamp(coord.y, 0.001, 0.999);
+        blurCoords[i + 7] = coord;
     }
 }

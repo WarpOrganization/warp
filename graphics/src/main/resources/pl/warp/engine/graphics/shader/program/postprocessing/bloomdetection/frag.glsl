@@ -6,8 +6,11 @@ in vec2 vTexCoord;
 
 uniform float threshold;
 uniform bool cutOff = true;
+uniform float maxBrightness = 3.0;
 
 layout(location = 0) out vec4 fragColor;
+
+float maxElem(vec3 vec);
 
 void main(void){
     vec4 color = texture(tex, vTexCoord);
@@ -16,4 +19,12 @@ void main(void){
         if(brightness > threshold) fragColor = color;
         else discard;
     } else fragColor = color * brightness;
+
+    float maxElem = maxElem(fragColor.rgb);
+    if(maxElem > maxBrightness)
+        fragColor *= (maxBrightness / maxElem);
+}
+
+float maxElem(vec3 vec) {
+    return max(vec.r, max(vec.g, vec.b));
 }
