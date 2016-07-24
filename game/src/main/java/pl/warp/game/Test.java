@@ -68,7 +68,7 @@ public class Test {
         context.setScene(scene);
         Component root = new SimpleListenableParent(scene);
         Component controllableGoat = new SimpleComponent(root);
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(60, 0.01f, 1000f, WIDTH, HEIGHT));
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 1000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 1f, 1));
         RenderingConfig settings = new RenderingConfig(60, WIDTH, HEIGHT);
         Graphics graphics = new Graphics(context, camera, settings);
