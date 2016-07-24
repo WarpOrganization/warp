@@ -83,7 +83,7 @@ public class Test {
 
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.4f, 0.4f, 0.4f), 0.1f, 0.1f);
+            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
             new GraphicsMeshProperty(light, goatMesh);
             GraphicsMaterialProperty lightMaterial = new GraphicsMaterialProperty(light, new Material(goatTexture));

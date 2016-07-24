@@ -2,7 +2,7 @@
 precision mediump float;
 
 uniform samplerCube cube;
-uniform float brightness = 1.2;
+uniform float brightness = 1.0;
 in vec3 vTexCoord;
 
 layout(location = 0) out vec4 fragColor;
