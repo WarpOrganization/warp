@@ -13,7 +13,7 @@ public class PhysicsWorld {
 
     private TreeMap<Integer, Component> componentTreeMap;
     private btCollisionWorld collisionWorld;
-    private Set<btPersistentManifold> activeCollisons;
+    private List<btPersistentManifold> activeCollisons;
     private List<PointCollider> rayTests;
     private List<PointCollider> destroyedRayTests;
 
@@ -26,7 +26,7 @@ public class PhysicsWorld {
 
     public PhysicsWorld() {
         componentTreeMap = new TreeMap<>();
-        activeCollisons = new HashSet<>();
+        activeCollisons = new ArrayList<>();
         rayTests = new ArrayList<>();
         destroyedRayTests = new ArrayList<>();
 
@@ -77,7 +77,7 @@ public class PhysicsWorld {
         return rayTests;
     }
 
-    public Set<btPersistentManifold> getActiveCollisions() {
+    public List<btPersistentManifold> getActiveCollisions() {
         return activeCollisons;
     }
 

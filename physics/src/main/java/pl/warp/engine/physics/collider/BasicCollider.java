@@ -73,9 +73,9 @@ public class BasicCollider implements Collider {
     }
 
     @Override
-    public void addTransform(Vector3f translation, Quaternion rotation) {
+    public void addTransform(Vector3f translation, Quaternionf rotation) {
         transform.translate(translation.x, translation.y, translation.z);
-        transform.rotate(rotation);
+        transform.rotate(rotation.x,rotation.y,rotation.z,rotation.w);
         collisionObject.setWorldTransform(transform);
     }
 
@@ -88,6 +88,11 @@ public class BasicCollider implements Collider {
     @Override
     public void setDefaultCollisionHandling(boolean value) {
         defaultCollisionHandling = value;
+    }
+
+    @Override
+    public btCollisionObject getCollisionObject() {
+        return collisionObject;
     }
 
     @Override

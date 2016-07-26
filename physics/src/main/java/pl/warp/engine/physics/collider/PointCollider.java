@@ -2,6 +2,7 @@ package pl.warp.engine.physics.collider;
 
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
@@ -43,7 +44,7 @@ public class PointCollider implements Collider {
     }
 
     @Override
-    public void addTransform(Vector3f translation, Quaternion rotation) {
+    public void addTransform(Vector3f translation, Quaternionf rotation) {
         lastPos.set(currentPos);
         currentPos.add(translation.x, translation.y, translation.z);
     }
@@ -56,6 +57,11 @@ public class PointCollider implements Collider {
     @Override
     public void setDefaultCollisionHandling(boolean value) {
         defaultCollisionHandling = value;
+    }
+
+    @Override
+    public btCollisionObject getCollisionObject() {
+        return null;
     }
 
     @Override

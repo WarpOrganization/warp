@@ -1,6 +1,7 @@
 package pl.warp.engine.physics.collider;
 
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.physics.PhysicsWorld;
@@ -15,11 +16,13 @@ public interface Collider {
 
     void setTransform(Vector3f translation, Quaternionf rotation);
 
-    void addTransform(Vector3f translation, Quaternion rotation);
+    void addTransform(Vector3f translation, Quaternionf rotation);
 
     void dispose();
 
     void setDefaultCollisionHandling(boolean value);
+
+    btCollisionObject getCollisionObject();
 
     boolean getDefaultCollisionHandling();
 }
