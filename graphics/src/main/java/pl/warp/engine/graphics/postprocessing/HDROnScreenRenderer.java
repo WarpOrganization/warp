@@ -1,11 +1,12 @@
 package pl.warp.engine.graphics.postprocessing;
 
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
-import pl.warp.engine.graphics.shader.program.hdr.HDRProgram;
+import pl.warp.engine.graphics.shader.program.postprocessing.hdr.HDRProgram;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -16,14 +17,22 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
  */
 public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
 
+    private RenderingConfig config;
+
     private BloomRendererOutput src;
     private HDRProgram hdrProgram;
     private Quad rect;
 
+    public HDROnScreenRenderer(RenderingConfig config) {
+        this.config = config;
+    }
+
     @Override
     public void init() {
         this.hdrProgram = new HDRProgram();
-        this.rect = new Quad(IdentityMultisampleProgram.ATTR_VERTEX, IdentityMultisampleProgram.ATTR_TEX_COORD);
+        this.hdrProgram.setBloomLevel(config.getBloomLevel());
+        this.hdrProgram.setExposure(config.getExposure());
+        this.rect = new Quad();
     }
 
     @Override
@@ -41,9 +50,9 @@ public class HDROnScreenRenderer implements Sink<BloomRendererOutput> {
         Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
         Framebuffer.SCREEN_FRAMEBUFFER.clean();
         hdrProgram.use();
-        hdrProgram.useTexture(src.getScene());
+        hdrProgram.useSceneTexture(src.getScene());
+        hdrProgram.useBloomTexture(src.getBloom());
         rect.bind();
-        GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);
         rect.unbind();
     }

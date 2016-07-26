@@ -22,8 +22,7 @@ const float SPECULAR_EXPONENT = 100.0;
 
 uniform Material material;
 
-const int MAX_SPOT_LIGHTS = 25;
-uniform SpotLightSource spotLightSources[MAX_SPOT_LIGHTS];
+uniform SpotLightSource spotLightSources[$MAX_LIGHTS$];
 uniform int numSpotLights;
 
 uniform bool lightEnabled;

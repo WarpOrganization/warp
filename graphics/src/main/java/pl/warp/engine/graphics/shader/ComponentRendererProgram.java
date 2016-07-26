@@ -4,6 +4,7 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
+import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 
 import java.io.InputStream;
 
@@ -29,6 +30,10 @@ public abstract class ComponentRendererProgram extends Program{
 
     public ComponentRendererProgram(InputStream vertexShader, InputStream fragmentShader) {
         super(vertexShader, fragmentShader);
+    }
+
+    public ComponentRendererProgram(InputStream vertexShader, InputStream fragmentShader, ConstantField field) {
+        super(vertexShader, fragmentShader, field);
     }
 
     public abstract void useMaterial(Material material);

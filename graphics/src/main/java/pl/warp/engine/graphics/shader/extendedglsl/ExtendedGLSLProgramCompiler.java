@@ -20,9 +20,6 @@ public class ExtendedGLSLProgramCompiler {
     private String fragmentShaderCode;
 
     public ExtendedGLSLProgramCompiler(String vertexShaderCode, String fragmentShaderCode, ConstantField constants) {
-        Objects.requireNonNull(vertexShaderCode);
-        Objects.requireNonNull(fragmentShaderCode);
-        Objects.requireNonNull(constants);
         this.constants = constants;
         this.vertexShaderCode = vertexShaderCode;
         this.fragmentShaderCode = fragmentShaderCode;

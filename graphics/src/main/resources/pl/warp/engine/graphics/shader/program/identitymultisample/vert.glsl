@@ -2,9 +2,9 @@
 precision mediump float;
 
 layout(location = 0) in vec4 inVertex;
-layout(location = 1) in vec2 inTexCoord; out vec2 vTexCoord;
+out vec2 vTexCoord;
 
 void main(void) {
-    vTexCoord = inTexCoord;
     gl_Position = inVertex;
+    vTexCoord = gl_Position.xy * 0.5 + vec2(0.5);
 }

@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
  *         Created 2016-07-20 at 18
  */
 public class ExtendedGLSLProgramCompilerTest {
+    
     @Test
     public void shouldProcessConstants() throws Exception {
         ConstantField constantField = new ConstantField()
@@ -44,7 +45,6 @@ public class ExtendedGLSLProgramCompilerTest {
                     "void main(void) {\n" +
                     "    fragColor = texture(cube, vTexCoord);\n" +
                     "}";
-
     @Test
     public void shouldRecognizeOutput() throws Exception {
         ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, null);

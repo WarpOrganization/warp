@@ -20,14 +20,14 @@ import static org.lwjgl.opengl.GL30.GL_RGBA32F;
 public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private Scene scene;
-    private RenderingSettings settings;
+    private RenderingConfig settings;
     private MultisampleFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
     private Renderer[] renderers;
     private MatrixStack matrixStack = new MatrixStack();
 
 
-    public SceneRenderer(Scene scene, RenderingSettings settings, Renderer[] renderers) {
+    public SceneRenderer(Scene scene, RenderingConfig settings, Renderer[] renderers) {
         this.scene = scene;
         this.settings = settings;
         this.renderers = renderers;
@@ -71,7 +71,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
             renderer.render(component, matrixStack);
     }
 
-    private void applyTransformations(Component component) { //translate, then rotate, then scale
+    private void applyTransformations(Component component) {
         TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         applyTranslation(property);
         applyScale(property);

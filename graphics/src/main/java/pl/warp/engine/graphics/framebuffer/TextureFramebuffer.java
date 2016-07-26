@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL30.GL_RENDERBUFFER;
  * @author Jaca777
  *         Created 2016-06-28 at 16
  */
-public class TextureFramebuffer extends Framebuffer{
+public class TextureFramebuffer extends Framebuffer {
 
     protected int depthBuff;
     protected Texture destTex;
@@ -82,5 +82,6 @@ public class TextureFramebuffer extends Framebuffer{
     public void delete() {
         super.delete();
         GL30.glDeleteRenderbuffers(this.depthBuff);
+        destTex.delete();
     }
 }

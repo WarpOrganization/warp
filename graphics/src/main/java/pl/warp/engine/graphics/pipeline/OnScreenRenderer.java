@@ -6,7 +6,6 @@ import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.shader.program.identity.IdentityProgram;
 import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 
@@ -23,7 +22,7 @@ public class OnScreenRenderer implements Sink<Texture2D> {
     @Override
     public void init() {
         this.identityProgram = new IdentityProgram();
-        this.rect = new Quad(IdentityProgram.ATTR_VERTEX, IdentityProgram.ATTR_TEX_COORD);
+        this.rect = new Quad();
     }
 
     @Override
