@@ -7,6 +7,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Actor;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public abstract class Camera extends Actor {
 
     public abstract Matrix4f getCameraMatrix();
 
-    public abstract Matrix4f getProjectionMatrix();
+    public abstract ProjectionMatrix getProjectionMatrix();
 
     public abstract Matrix4f getRotationMatrix();
 

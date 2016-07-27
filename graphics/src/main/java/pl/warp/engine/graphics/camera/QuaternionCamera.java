@@ -68,8 +68,8 @@ public class QuaternionCamera extends Camera {
     }
 
     @Override
-    public Matrix4f getProjectionMatrix() {
-        return projection.getMatrix();
+    public ProjectionMatrix getProjectionMatrix() {
+        return projection;
     }
 
     private Matrix4f tempRotation = new Matrix4f();

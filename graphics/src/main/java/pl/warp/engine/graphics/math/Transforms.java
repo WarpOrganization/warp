@@ -39,5 +39,18 @@ public class Transforms {
             return parentRotation.mul(rotation);
         } else return rotation;
     }
+
+    public static Vector3f getActualPosition(Component component, Vector3f dest) {
+        dest.zero();
+        for (Component comp = component; comp != null; comp = comp.getParent()) {
+            if (comp.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
+                TransformProperty property = comp.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+                dest.add(property.getTranslation());
+                dest.mul(property.getScale());
+                dest.rotate(property.getRotation());
+            }
+        }
+        return dest;
+    }
 }
 

@@ -85,7 +85,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     @Override
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
-        setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix());
+        setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
         setUniformV3(unifCameraPos, camera.getPosition());
     }
 

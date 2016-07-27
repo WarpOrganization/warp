@@ -50,7 +50,7 @@ public class ParticleProgram extends GeometryProgram {
 
     public void useCamera(Camera camera) {
         this.cameraMatrix = camera.getCameraMatrix();
-        setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix());
+        setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
         setUniformMatrix4(unifCameraRotationMatrix, camera.getRotationMatrix());
         if (modelMatrix != null) setModelViewMatrix();
     }

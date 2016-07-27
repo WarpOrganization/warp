@@ -113,7 +113,6 @@ public abstract class Component {
      * @throws IllegalStateException if parent is not present
      */
     public Component getParent() {
-        if (parent == null) throw new IllegalStateException("This component has no parent");
         return parent;
     }
 

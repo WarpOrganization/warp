@@ -6,11 +6,11 @@ import pl.warp.engine.graphics.texture.Texture2DArray;
  * @author Jaca777
  *         Created 2016-07-25 at 12
  */
-public class LensFlares {
+public class LensFlare {
     private Texture2DArray lensTextures;
-    private Flare[] flares;
+    private SingleFlare[] flares;
 
-    public LensFlares(Texture2DArray lensTextures, Flare[] flares) {
+    public LensFlare(Texture2DArray lensTextures, SingleFlare[] flares) {
         this.lensTextures = lensTextures;
         this.flares = flares;
     }
@@ -19,7 +19,7 @@ public class LensFlares {
         return lensTextures;
     }
 
-    public Flare[] getFlares() {
+    public SingleFlare[] getFlares() {
         return flares;
     }
 }

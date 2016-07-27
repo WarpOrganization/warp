@@ -57,8 +57,6 @@ public class Test {
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 1;
-    private static SyncTimer timer = new SyncTimer(100);
-    private static final int UPS_LOGGING_RATIO = 100;
     private static Random random = new Random();
 
     public static void main(String... args) {
@@ -150,7 +148,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2DArray spritesheetTexture) {
-        for (int i = 0; i < 600; i++) {
+        for (int i = 0; i < 1000; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);

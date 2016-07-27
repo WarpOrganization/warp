@@ -12,17 +12,14 @@ import java.util.List;
 public class GraphicsLensFlareProperty extends Property<Component> {
     public static final String LENS_FLARE_PROPERTY_NAME = "lensFlare";
 
-    private List<Flare> flares;
+    private LensFlare flare;
 
-    public GraphicsLensFlareProperty(Component owner) {
+    public GraphicsLensFlareProperty(Component owner, LensFlare flare) {
         super(owner, LENS_FLARE_PROPERTY_NAME);
+        this.flare = flare;
     }
 
-    public void addFlare(Flare flare) {
-        flares.add(flare);
-    }
-
-    public List<Flare> getFlares() {
-        return flares;
+    public LensFlare getFlare() {
+        return flare;
     }
 }

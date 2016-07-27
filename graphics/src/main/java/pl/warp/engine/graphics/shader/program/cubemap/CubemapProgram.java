@@ -34,7 +34,7 @@ public class CubemapProgram extends Program {
 
 
     public void useCamera(Camera camera) {
-        setUniformMatrix4(unifPerspMatrix, camera.getProjectionMatrix());
+        setUniformMatrix4(unifPerspMatrix, camera.getProjectionMatrix().getMatrix());
         setUniformMatrix4(unifRotMatrix, camera.getRotationMatrix());
     }
 
