@@ -20,6 +20,8 @@ import pl.warp.engine.graphics.window.GLFWWindowManager;
  */
 public class Graphics {
 
+    private static final int UPS_SAMPLE_SIZE = 50;
+
     private EngineContext context;
     private Camera mainViewCamera;
     private RenderingConfig config;
@@ -98,5 +100,9 @@ public class Graphics {
 
     public Environment getEnvironment() {
         return environment;
+    }
+
+    public void enableUpsLogging() {
+        thread.scheduleTask(new UPSCounterTask(UPS_SAMPLE_SIZE, true));
     }
 }
