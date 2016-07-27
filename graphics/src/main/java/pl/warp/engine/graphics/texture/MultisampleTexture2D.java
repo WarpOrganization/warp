@@ -12,8 +12,8 @@ import static org.lwjgl.opengl.GL11.glGenTextures;
 public class MultisampleTexture2D extends Texture {
     private int samples;
 
-    public MultisampleTexture2D(int width, int height, int internalformat, int samples) {
-        super(GL32.GL_TEXTURE_2D_MULTISAMPLE, genTextureMultisample2D(width, height, samples, internalformat), width, height, internalformat, -1, false);
+    public MultisampleTexture2D(int width, int height, int internalformat, int format, int samples) {
+        super(GL32.GL_TEXTURE_2D_MULTISAMPLE, genTextureMultisample2D(width, height, samples, internalformat), width, height, internalformat, format, false);
         this.samples = samples;
     }
 

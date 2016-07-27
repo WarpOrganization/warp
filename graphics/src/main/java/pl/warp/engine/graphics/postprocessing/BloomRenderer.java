@@ -63,20 +63,20 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     private void blurVertically(Texture2D texture) {
         verticalBlurFramebuffer.bindDraw();
         verticalBlurFramebuffer.clean();
-        quad.bind();
         gaussianBlurProgram.use();
         gaussianBlurProgram.useTexture(texture);
         gaussianBlurProgram.setStage(GaussianBlurProgram.GaussianBlurStage.VERTICAL);
+        quad.bind();
         quad.draw();
     }
 
     private void blurHorizontally(Texture2D texture) {
         blurredBloomFramebuffer.bindDraw();
         blurredBloomFramebuffer.clean();
-        quad.bind();
         gaussianBlurProgram.use();
         gaussianBlurProgram.useTexture(texture);
         gaussianBlurProgram.setStage(GaussianBlurProgram.GaussianBlurStage.HORIZONTAL);
+        quad.bind();
         quad.draw();
     }
 
@@ -99,8 +99,8 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     }
 
     private void setupBlurTexture(Texture2D verticalBlurTexture) {
-        verticalBlurTexture.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-        verticalBlurTexture.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+        verticalBlurTexture.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        verticalBlurTexture.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
     }
 
     private void createFramebuffers() {

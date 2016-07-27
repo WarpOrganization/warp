@@ -4,6 +4,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.SimpleListener;
+import pl.warp.engine.graphics.Environment;
 
 import java.util.Set;
 

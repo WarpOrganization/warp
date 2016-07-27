@@ -80,7 +80,6 @@ public class GLFWWindowManager implements WindowManager {
 
     private void centerWindow(Display display) {
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
         glfwSetWindowPos(
                 this.windowHandle,
                 (vidmode.width() - display.getWidth()) / 2,

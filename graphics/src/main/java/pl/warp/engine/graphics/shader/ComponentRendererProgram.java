@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics.shader;
 
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.Environment;
+import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;

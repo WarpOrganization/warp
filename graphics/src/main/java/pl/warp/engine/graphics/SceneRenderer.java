@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -116,13 +118,13 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void setupFramebuffer() {
-        this.outputTexture = new MultisampleTexture2D(settings.getWidth(), settings.getHeight(), GL_RGBA32F, settings.getRenderingSamples());
+        this.outputTexture = new MultisampleTexture2D(settings.getWidth(), settings.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
         this.renderingFramebuffer = new MultisampleFramebuffer(outputTexture);
     }
 
     @Override
     public void onResize(int newWidth, int newHeight) {
-        //
+        this.renderingFramebuffer.resize(newWidth, newHeight);
     }
 
     @Override

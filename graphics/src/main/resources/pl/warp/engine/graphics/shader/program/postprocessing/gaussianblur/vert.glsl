@@ -1,21 +1,15 @@
 #version 330
+precision highp float;
 
 layout(location = 0) in vec4 inVertex;
 
-smooth out vec2 blurCoords[15];
-
-uniform vec2 blurDirection;
-
 uniform int displaySize;
+
+flat out float pixelSize;
+smooth out vec2 texCoord;
 
 void main(void) {
     gl_Position = inVertex;
-    vec2 texCoord = gl_Position.xy * 0.5 + 0.5;
-    float pixelSize = 1.0 / displaySize;
-    for(int i = -7; i <= 7; i++) {
-        vec2 coord = texCoord + blurDirection * pixelSize * i;
-        coord.x = clamp(coord.x, 0.001, 0.999);
-        coord.y = clamp(coord.y, 0.001, 0.999);
-        blurCoords[i + 7] = coord;
-    }
+    texCoord = gl_Position.xy * 0.5 + 0.5;
+    pixelSize = 1.0 / displaySize;
 }

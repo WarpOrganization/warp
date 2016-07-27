@@ -2,7 +2,6 @@ package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.Environment;
 import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;

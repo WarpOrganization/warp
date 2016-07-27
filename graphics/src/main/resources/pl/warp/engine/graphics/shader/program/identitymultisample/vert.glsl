@@ -1,5 +1,5 @@
 #version 330
-precision mediump float;
+precision highp float;
 
 layout(location = 0) in vec4 inVertex;
 out vec2 vTexCoord;

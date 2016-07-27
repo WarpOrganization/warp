@@ -1,6 +1,8 @@
-package pl.warp.engine.graphics.light;
+package pl.warp.engine.graphics;
 
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.RendererException;
+import pl.warp.engine.graphics.light.SpotLight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Environment {
 
     private boolean lightEnabled = true;
     private List<SpotLight> spotLights = new ArrayList<>();
+    private List<Component> lensFlareComponents = new ArrayList<>();
 
     public List<SpotLight> getSpotLights() {
         return spotLights;
@@ -23,7 +26,7 @@ public class Environment {
     }
 
     public void removeSpotLightSource(SpotLight light) {
-        if(!spotLights.remove(light))
+        if (!spotLights.remove(light))
             throw new RendererException("Unable to remove spot light: " +
                     "Given light is not present in the environment");
     }
@@ -34,5 +37,17 @@ public class Environment {
 
     public void setLightEnabled(boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
+    }
+
+    public List<Component> getLensFlareComponents() {
+        return lensFlareComponents;
+    }
+
+    public void addLensFlareComponent(Component component) {
+        lensFlareComponents.add(component);
+    }
+
+    public void resetLensFlareComponents() {
+        lensFlareComponents.clear();
     }
 }

@@ -11,7 +11,7 @@ layout(location = 0) out vec4 fragColor;
 void main(void) {
     ivec2 size = textureSize(texture);
     ivec2 iTexCoord = ivec2(floor(size * vTexCoord));
-    vec4 color = vec4(0,0,0,1);
+    vec4 color = vec4(0);
     for(int i = 0; i < samples; i++){
         fragColor.rgb += texelFetch(texture, iTexCoord, i).rgb;
     }

@@ -25,6 +25,8 @@ void main(void){
     float maxElem = maxElem(fragColor.rgb);
     if(maxElem > maxBrightness)
         fragColor *= (maxBrightness / maxElem);
+
+    fragColor.a = 1.0f;
 }
 
 float maxElem(vec3 vec) {

@@ -3,7 +3,7 @@ package pl.warp.engine.graphics.mesh;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.Environment;
+import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.Renderer;
