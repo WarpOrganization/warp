@@ -24,7 +24,6 @@ public class CollisionHandler {
     private PhysicsWorld world;
     private CollisionStrategy collisionStrategy;
 
-    private int delta;
     private Component component1;
     private Component component2;
     private Vector3 contactPos = new Vector3();
@@ -39,8 +38,7 @@ public class CollisionHandler {
     }
 
 
-    public void updateCollisions(int delta) {
-        this.delta = delta;
+    public void updateCollisions() {
         world.getCollisionWorld().performDiscreteCollisionDetection();
         world.getActiveCollisions().forEach(manifold -> {
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
@@ -49,18 +47,6 @@ public class CollisionHandler {
             findContactPos(manifold);
         });
     }
-
-    ClosestRayResultCallback result;
-    Vector3f tmpTranslation;
-    Vector3f stepTranslation1 = new Vector3f();
-    Vector3f stepTranslation2 = new Vector3f();
-    Quaternionf stepRotation1 = new Quaternionf();
-    Quaternionf stepRotation2 = new Quaternionf();
-    Vector3f tmp = new Vector3f();
-    CollisionObjectWrapper wrapper1 = new CollisionObjectWrapper(new btCollisionObject());
-    CollisionObjectWrapper wrapper2 = new CollisionObjectWrapper(new btCollisionObject());
-    btCollisionConfiguration collisionConfiguration = new btDefaultCollisionConfiguration();
-    btCollisionDispatcher dispatcher = new btCollisionDispatcher(collisionConfiguration);
 
     private void findContactPos(btPersistentManifold manifold) {
         Component component1;
@@ -105,7 +91,6 @@ public class CollisionHandler {
             currentDistance = manifold.getContactPoint(i).getDistance();
             if(maxDistance>currentDistance){
                 maxDistance = currentDistance;
-                //contactPos.set(manifold.getContactPoint(0).getW)
             }
         }
         return maxDistance;
@@ -119,9 +104,8 @@ public class CollisionHandler {
         }
     }
 
-    private void redoSimulation() {
-
-    }
+    ClosestRayResultCallback result;
+    Vector3f tmpTranslation;
 
     public void performRayTests() {
         for (int i = 0; i < world.getRayTestColliders().size(); i++) {
