@@ -46,6 +46,7 @@ public class CollisionHandler {
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
             assingValues(manifold);
             collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
+            findContactPos(manifold);
         });
     }
 
@@ -77,7 +78,24 @@ public class CollisionHandler {
         ColliderProperty colliderProperty2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
 
         float distance = findLongestDistance(manifold);
+        Vector3f direction1 = new Vector3f();
+        Vector3f direction2 = new Vector3f();
 
+        direction1.set(transformProperty1.getTranslation());
+        direction1.sub(contactPos.x, contactPos.y, contactPos.z);
+        direction1.normalize();
+        direction1.mul(distance/2).negate();
+
+        direction2.set(transformProperty2.getTranslation());
+        direction2.sub(contactPos.x, contactPos.y, contactPos.z);
+        direction2.normalize();
+        direction1.mul(distance/2).negate();
+
+        transformProperty1.move(physicalBodyProperty1.getNextTickTranslation().add(direction1));
+        transformProperty2.move(physicalBodyProperty2.getNextTickTranslation().add(direction2));
+
+        colliderProperty1.getCollider().setTransform(transformProperty1.getTranslation(), transformProperty1.getRotation());
+        colliderProperty2.getCollider().setTransform(transformProperty2.getTranslation(), transformProperty2.getRotation());
     }
 
     private float findLongestDistance(btPersistentManifold manifold){
