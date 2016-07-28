@@ -1,4 +1,4 @@
-group 'pl.syzygy'
+group 'pl.warp'
 version '0.1'
 
 apply plugin: 'java'

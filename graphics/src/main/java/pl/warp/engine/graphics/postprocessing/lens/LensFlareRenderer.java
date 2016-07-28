@@ -35,29 +35,30 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         }
     }
 
+    private Vector4f tempVec4 = new Vector4f();
     private Vector3f tempVec3 = new Vector3f();
-    private Matrix3f tempMat3 = new Matrix3f();
     private Vector2f tempVec2 = new Vector2f();
 
     private void renderFlare(Component component, LensFlare flare) {
-        Vector3f flarePosition = Transforms.getActualPosition(component, tempVec3);
-        ProjectionMatrix projectionMatrix = camera.getProjectionMatrix();
-        Vector3f flareScreenPos = flarePosition.mul(projectionMatrix.getMatrix().get3x3(tempMat3));
+        Vector4f flarePosition = tempVec4.set(Transforms.getActualPosition(component, tempVec3), 1.0f);
+        Vector4f flareCameraPos = flarePosition.mul(camera.getCameraMatrix());
+        Matrix4f projectionMatrix = camera.getProjectionMatrix().getMatrix();
+        Vector4f flareScreenPos = flareCameraPos.mul(projectionMatrix);
         if (isInRange(flareScreenPos))
             renderFlare(flareScreenPos, flare);
     }
 
-    private boolean isInRange(Vector3f pos) {
+    private boolean isInRange(Vector4f pos) {
         return pos.x > -1.0f && pos.x < 1.0f &&
                 pos.y > -1.0f && pos.y < 1.0f &&
-                pos.z > 0.0f && pos.z < 1.0f ;
+                pos.z > 0.0f && pos.z < 1.0f;
     }
 
-    private void renderFlare(Vector3f flareScreenPositon, LensFlare flare) {
-        Vector2f flare2DPos = tempVec2.set(flareScreenPositon.x, flareScreenPositon.y);
+    private void renderFlare(Vector4f flareScreenPosition, LensFlare flare) {
+        Vector2f flare2DPos = tempVec2.set(flareScreenPosition.x, flareScreenPosition.y);
         float distance = flare2DPos.length();
         Vector2f direction = flare2DPos.normalize();
-        for(SingleFlare singleFlare : flare.getFlares())
+        for (SingleFlare singleFlare : flare.getFlares())
             renderSingleFlare(singleFlare, direction, distance);
     }
 
