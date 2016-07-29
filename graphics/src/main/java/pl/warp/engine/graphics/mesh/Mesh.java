@@ -15,12 +15,15 @@ import java.util.Objects;
  *         Created 21.12.14 at 18:51
  */
 public class Mesh  {
+    public static final int INDEX_ATTRIBUTE = 0;
+    public static final int TEX_COORD_ATTRIBUTE = 1;
+    public static final int NORMAL_ATTRIBUTE = 2;
+
     protected int vertexBuff = -1,
             texCoordBuff = -1,
             normalBuff = -1,
             indexBuff = -1;
     protected int indices = -1;
-    protected int[] attributes;
 
     /**
      * @param vertices Buffer containing vertices
@@ -28,16 +31,11 @@ public class Mesh  {
      * @param normals Buffer containing normals
      * @param indices Buffer containing indices
      * @param numElements Number of elements
-     * @param attributes Array consisting of the attributes' locations. Organization:
-     *      0 - vertex attribute
-     *      1 - texture coordinate attribute
-     *      2 - normal attribute
      */
-    public Mesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements, int[] attributes) {
+    public Mesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements) {
         loadBuffers(vertices, texCoords, normals, indices);
 
         this.indices = numElements;
-        this.attributes = attributes;
     }
 
     protected void loadBuffers(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices){
@@ -68,16 +66,12 @@ public class Mesh  {
      * @param texCoords Array consisting of texture coordinates.
      * @param normals Array consisting of normals
      * @param indices Array consisting of indices
-     * @param attributes Array consisting of the attributes' locations. Organization:
-     *      0 - vertex attribute
-     *      1 - texture coordinate attribute
-     *      2 - normal attribute
      */
-    public Mesh(float[] vertices, float[] texCoords, float[] normals, int[] indices, int[] attributes) {
+    public Mesh(float[] vertices, float[] texCoords, float[] normals, int[] indices) {
         this((vertices == null) ? null : BufferTools.toDirectBuffer(vertices),
                 (texCoords == null) ? null : BufferTools.toDirectBuffer(texCoords),
                 (normals == null) ? null : BufferTools.toDirectBuffer(normals),
-                BufferTools.toDirectBuffer(indices), indices.length, attributes);
+                BufferTools.toDirectBuffer(indices), indices.length);
     }
 
     /**
@@ -86,18 +80,13 @@ public class Mesh  {
      * @param normalBuff Normal buffer name.
      * @param indexBuff Index buffer name.
      * @param indices Number of elements.
-     * @param attributes Array consisting of the attributes' locations. Organization:
-     *      0 - vertex attribute
-     *      1 - texture coordinate attribute
-     *      2 - normal attribute
      */
-    public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices, int[] attributes) {
+    public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices) {
         this.vertexBuff = vertexBuff;
         this.texCoordBuff = texCoordBuff;
         this.normalBuff = normalBuff;
         this.indexBuff = indexBuff;
         this.indices = indices;
-        this.attributes = attributes;
     }
 
     /**
@@ -174,16 +163,16 @@ public class Mesh  {
      */
     public void bind() {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuff);
-        GL20.glVertexAttribPointer(attributes[0], 3, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(attributes[0]);
+        GL20.glVertexAttribPointer(INDEX_ATTRIBUTE, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glEnableVertexAttribArray(0);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, texCoordBuff);
-        GL20.glVertexAttribPointer(attributes[1], 2, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(attributes[1]);
+        GL20.glVertexAttribPointer(TEX_COORD_ATTRIBUTE, 2, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glEnableVertexAttribArray(TEX_COORD_ATTRIBUTE);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, normalBuff);
-        GL20.glVertexAttribPointer(attributes[2], 3, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(attributes[2]);
+        GL20.glVertexAttribPointer(NORMAL_ATTRIBUTE, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glEnableVertexAttribArray(NORMAL_ATTRIBUTE);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
     }

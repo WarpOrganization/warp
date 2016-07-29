@@ -76,7 +76,7 @@ public class Test {
         GLFWInput input = new GLFWInput();
 
         graphicsThread.scheduleOnce(() -> {
-            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
+            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
@@ -90,7 +90,7 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
-            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh(ComponentRendererProgram.ATTRIBUTES);
+            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh();
 
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());

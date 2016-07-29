@@ -1,9 +1,7 @@
 package pl.warp.engine.graphics.mesh;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.utility.BufferTools;
 
@@ -41,7 +39,7 @@ public class Quad {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, BufferTools.toDirectBuffer(INDICES), GL15.GL_STATIC_DRAW);
 
-        this.vao = new VAO(new int[]{vertexBuffer}, indexBuffer, new int[]{0}, new int[]{4}, new int[]{GL_FLOAT});
+        this.vao = new VAO(new int[]{vertexBuffer}, indexBuffer, new int[]{4}, new int[]{GL_FLOAT});
     }
 
     public void bind() {

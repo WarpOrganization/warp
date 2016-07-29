@@ -141,24 +141,24 @@ public class ObjLoader {
         }
     }
 
-    public Mesh toMesh(int[] attributes) {
+    public Mesh toMesh() {
         int size = this.vertices.length + hVertices.size();
         float[] v = new float[size * 4];
         float[] t = new float[size * 2];
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
         load(v, t, n, indices);
-        return new Mesh(v, t, n, indices, attributes);
+        return new Mesh(v, t, n, indices);
     }
 
-    public VAOMesh toVAOMesh(int[] attributes) {
+    public VAOMesh toVAOMesh() {
         int size = this.vertices.length + hVertices.size();
         float[] v = new float[size * 3];
         float[] t = new float[size * 2];
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
         load(v, t, n, indices);
-        return new VAOMesh(v, t, n, indices, attributes);
+        return new VAOMesh(v, t, n, indices);
     }
 
     private void load(float[] v, float[] t, float[] n, int[] indices) {

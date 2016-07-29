@@ -1,16 +1,22 @@
 package pl.warp.engine.graphics.postprocessing.lens;
 
 import org.joml.*;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.math.Transforms;
-import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 import pl.warp.engine.graphics.mesh.VAO;
 import pl.warp.engine.graphics.pipeline.Flow;
+import pl.warp.engine.graphics.shader.program.particle.ParticleProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +26,8 @@ import java.util.List;
  */
 public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
+    public static final int MAX_FLARES = 100;
+
     private Camera camera;
     private Environment environment;
 
@@ -27,6 +35,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private TextureFramebuffer framebuffer;
 
     private List<VAO> vaos = new ArrayList<>();
+    private int indexBuffer;
 
     public LensFlareRenderer(Camera camera, Environment environment) {
         this.camera = camera;
@@ -54,13 +63,20 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     private void removeVAO() {
         VAO vaoToRemove = vaos.get(vaos.size());
-        vaoToRemove.destroy();
+        vaoToRemove.destroyExceptIndex();
         vaos.remove(vaoToRemove);
     }
 
 
     private void createVAO() {
-
+        int offset = GL15.glGenBuffers();
+        int scale = GL15.glGenBuffers();
+        int textureIndex = GL15.glGenBuffers();
+        VAO vao = new VAO(new int[]{offset, scale, textureIndex},
+                indexBuffer,
+                new int[]{1,1,1},
+                new int[]{GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_INT});
+        this.vaos.add(vao);
     }
 
 
@@ -100,11 +116,23 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void init() {
         this.framebuffer = new TextureFramebuffer(scene);
+        createIndexBuffer();
+    }
+
+    private void createIndexBuffer() {
+        this.indexBuffer = GL15.glGenBuffers();
+        IntBuffer indices = BufferUtils.createIntBuffer(MAX_FLARES);
+        for (int i = 0; i < MAX_FLARES; i++)
+            indices.put(i);
+        indices.rewind();
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
     }
 
     @Override
     public void destroy() {
-
+        while (!vaos.isEmpty()) removeVAO();
+        GL15.glDeleteBuffers(indexBuffer);
     }
 
     @Override

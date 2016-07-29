@@ -2,8 +2,6 @@ package pl.warp.engine.graphics.mesh;
 
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import java.nio.FloatBuffer;
@@ -18,18 +16,18 @@ public class VAOMesh extends Mesh {
     protected VAO vao;
 
     /**
-     * @see Mesh#Mesh(float[], float[], float[], int[], int[])
+     * @see Mesh#Mesh(float[], float[], float[], int[])
      */
-    public VAOMesh(float[] vertices, float[] texCoords, float[] normals, int[] indices, int[] attributes) {
-        super(vertices, texCoords, normals, indices, attributes);
+    public VAOMesh(float[] vertices, float[] texCoords, float[] normals, int[] indices) {
+        super(vertices, texCoords, normals, indices);
         this.vao = createVAO();
     }
 
     /**
-     * @see Mesh#Mesh(FloatBuffer, FloatBuffer, FloatBuffer, IntBuffer, int, int[])
+     * @see Mesh#Mesh(FloatBuffer, FloatBuffer, FloatBuffer, IntBuffer, int)
      */
-    public VAOMesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements, int[] attributes) {
-        super(vertices, texCoords, normals, indices, numElements, attributes);
+    public VAOMesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements) {
+        super(vertices, texCoords, normals, indices, numElements);
         this.vao = createVAO();
     }
 
@@ -51,7 +49,7 @@ public class VAOMesh extends Mesh {
     private static final int[] VAO_TYPES = {GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_FLOAT};
 
     protected VAO createVAO() {
-        return new VAO(new int[]{this.vertexBuff, this.texCoordBuff, this.normalBuff}, indexBuff, attributes, VAO_SIZES, VAO_TYPES);
+        return new VAO(new int[]{this.vertexBuff, this.texCoordBuff, this.normalBuff}, indexBuff, VAO_SIZES, VAO_TYPES);
     }
 
     @Override
