@@ -7,8 +7,12 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.math.Transforms;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
+import pl.warp.engine.graphics.mesh.VAO;
 import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.texture.Texture2D;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jaca777
@@ -22,6 +26,8 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private Texture2D scene;
     private TextureFramebuffer framebuffer;
 
+    private List<VAO> vaos = new ArrayList<>();
+
     public LensFlareRenderer(Camera camera, Environment environment) {
         this.camera = camera;
         this.environment = environment;
@@ -29,11 +35,34 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     @Override
     public void update(int delta) {
+        int flareComponentsNumber = environment.getLensFlareComponents().size();
+        if (vaos.size() != flareComponentsNumber)
+            setVAOsNumber(flareComponentsNumber);
         for (Component component : environment.getLensFlareComponents()) {
             GraphicsLensFlareProperty property = component.getProperty(GraphicsLensFlareProperty.LENS_FLARE_PROPERTY_NAME);
             renderFlare(component, property.getFlare());
         }
     }
+
+    private void setVAOsNumber(int vaosNumber) {
+        while (vaos.size() != vaosNumber) {
+            if (vaosNumber > vaos.size()) removeVAO();
+            else if (vaosNumber < vaos.size()) createVAO();
+        }
+    }
+
+
+    private void removeVAO() {
+        VAO vaoToRemove = vaos.get(vaos.size());
+        vaoToRemove.destroy();
+        vaos.remove(vaoToRemove);
+    }
+
+
+    private void createVAO() {
+
+    }
+
 
     private Vector4f tempVec4 = new Vector4f();
     private Vector3f tempVec3 = new Vector3f();
@@ -58,14 +87,14 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         Vector2f flare2DPos = tempVec2.set(flareScreenPosition.x, flareScreenPosition.y);
         float distance = flare2DPos.length();
         Vector2f direction = flare2DPos.normalize();
-        for (SingleFlare singleFlare : flare.getFlares())
+        for (SingleFlare singleFlare : flare.getFlares()) {
             renderSingleFlare(singleFlare, direction, distance);
+        }
     }
 
     private void renderSingleFlare(SingleFlare singleFlare, Vector2f direction, float distance) {
 
     }
-
 
 
     @Override

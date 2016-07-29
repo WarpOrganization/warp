@@ -28,33 +28,24 @@ public class Quad {
 
     public static final int INDICES_NUMBER = INDICES.length;
 
-    private int vao;
-    private int vertexBuffer;
-    private int indexBuffer;
+    private VAO vao;
 
     public Quad() {
-        this.vao = GL30.glGenVertexArrays();
 
-        this.vertexBuffer = GL15.glGenBuffers();
+        int vertexBuffer = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, BufferTools.toDirectBuffer(VERTICES), GL15.GL_STATIC_DRAW);
 
 
-        this.indexBuffer = GL15.glGenBuffers();
+        int indexBuffer = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, BufferTools.toDirectBuffer(INDICES), GL15.GL_STATIC_DRAW);
 
-        GL30.glBindVertexArray(vao);
-        GL20.glEnableVertexAttribArray(0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer);
-        GL20.glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
-
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        GL30.glBindVertexArray(0);
+        this.vao = new VAO(new int[]{vertexBuffer}, indexBuffer, new int[]{0}, new int[]{4}, new int[]{GL_FLOAT});
     }
 
     public void bind() {
-        GL30.glBindVertexArray(vao);
+        vao.bind();
     }
 
     public void draw() {
@@ -62,8 +53,7 @@ public class Quad {
     }
 
     public void destroy() {
-        GL30.glDeleteVertexArrays(vao);
-        GL15.glDeleteBuffers(new int[]{vertexBuffer, indexBuffer});
+        vao.destroy();
     }
 
     public void unbind() {
