@@ -4,8 +4,6 @@ import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
@@ -13,7 +11,7 @@ import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.math.Transforms;
 import pl.warp.engine.graphics.mesh.VAO;
 import pl.warp.engine.graphics.pipeline.Flow;
-import pl.warp.engine.graphics.shader.program.particle.ParticleProgram;
+import pl.warp.engine.graphics.shader.program.lens.LensProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 import java.nio.IntBuffer;
@@ -26,7 +24,7 @@ import java.util.List;
  */
 public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
-    public static final int MAX_FLARES = 100;
+    public static final int MAX_FLARES_NUMBER = 100;
 
     private Camera camera;
     private Environment environment;
@@ -34,8 +32,13 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private Texture2D scene;
     private TextureFramebuffer framebuffer;
 
-    private List<VAO> vaos = new ArrayList<>();
+    private LensProgram program;
+    private List<FlareData> data = new ArrayList<>();
     private int indexBuffer;
+    private int offsetBuffer;
+    private int scaleBuffer;
+    private int textureIndexBuffer;
+    private VAO vao;
 
     public LensFlareRenderer(Camera camera, Environment environment) {
         this.camera = camera;
@@ -45,38 +48,41 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void update(int delta) {
         int flareComponentsNumber = environment.getLensFlareComponents().size();
-        if (vaos.size() != flareComponentsNumber)
-            setVAOsNumber(flareComponentsNumber);
-        for (Component component : environment.getLensFlareComponents()) {
+        if (data.size() != flareComponentsNumber)
+            setDataBuffersNumber(flareComponentsNumber);
+        List<Component> lensFlareComponents = environment.getLensFlareComponents();
+        for (int i = 0; i < lensFlareComponents.size(); i++) {
+            Component component = lensFlareComponents.get(i);
             GraphicsLensFlareProperty property = component.getProperty(GraphicsLensFlareProperty.LENS_FLARE_PROPERTY_NAME);
-            renderFlare(component, property.getFlare());
+            renderFlare(i, component, property.getFlare());
         }
     }
 
-    private void setVAOsNumber(int vaosNumber) {
-        while (vaos.size() != vaosNumber) {
-            if (vaosNumber > vaos.size()) removeVAO();
-            else if (vaosNumber < vaos.size()) createVAO();
+    private void setDataBuffersNumber(int buffersNumber) {
+        while (data.size() != buffersNumber) {
+            if (buffersNumber > data.size()) createDataBuffer();
+            else if (buffersNumber < data.size()) removeDataBuffer();
         }
     }
 
-
-    private void removeVAO() {
-        VAO vaoToRemove = vaos.get(vaos.size());
-        vaoToRemove.destroyExceptIndex();
-        vaos.remove(vaoToRemove);
+    private void createDataBuffer() {
+        FlareData data = new FlareData(MAX_FLARES_NUMBER);
+        this.data.add(data);
     }
 
+    private void removeDataBuffer() {
+        FlareData data = this.data.get(this.data.size());
+        this.data.remove(data);
+    }
 
     private void createVAO() {
-        int offset = GL15.glGenBuffers();
-        int scale = GL15.glGenBuffers();
-        int textureIndex = GL15.glGenBuffers();
-        VAO vao = new VAO(new int[]{offset, scale, textureIndex},
+        this.offsetBuffer = GL15.glGenBuffers();
+        this.scaleBuffer = GL15.glGenBuffers();
+        this.textureIndexBuffer = GL15.glGenBuffers();
+        this.vao = new VAO(new int[]{offsetBuffer, scaleBuffer, textureIndexBuffer},
                 indexBuffer,
-                new int[]{1,1,1},
+                new int[]{1, 1, 1},
                 new int[]{GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_INT});
-        this.vaos.add(vao);
     }
 
 
@@ -84,13 +90,14 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private Vector3f tempVec3 = new Vector3f();
     private Vector2f tempVec2 = new Vector2f();
 
-    private void renderFlare(Component component, LensFlare flare) {
+    private void renderFlare(int index, Component component, LensFlare flare) {
         Vector4f flarePosition = tempVec4.set(Transforms.getActualPosition(component, tempVec3), 1.0f);
         Vector4f flareCameraPos = flarePosition.mul(camera.getCameraMatrix());
         Matrix4f projectionMatrix = camera.getProjectionMatrix().getMatrix();
-        Vector4f flareScreenPos = flareCameraPos.mul(projectionMatrix);
-        if (isInRange(flareScreenPos))
-            renderFlare(flareScreenPos, flare);
+        Vector4f flareProjectionPos = flareCameraPos.mul(projectionMatrix);
+        Vector2f flareScreenPos = tempVec2.set(flareProjectionPos.x, flareProjectionPos.y);
+        if (isInRange(flareProjectionPos))
+            renderFlare(index, flareScreenPos, flare);
     }
 
     private boolean isInRange(Vector4f pos) {
@@ -99,30 +106,46 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
                 pos.z > 0.0f && pos.z < 1.0f;
     }
 
-    private void renderFlare(Vector4f flareScreenPosition, LensFlare flare) {
-        Vector2f flare2DPos = tempVec2.set(flareScreenPosition.x, flareScreenPosition.y);
-        float distance = flare2DPos.length();
-        Vector2f direction = flare2DPos.normalize();
-        for (SingleFlare singleFlare : flare.getFlares()) {
-            renderSingleFlare(singleFlare, direction, distance);
+    private void renderFlare(int index, Vector2f sourceScreenPos, LensFlare flare) {
+        SingleFlare[] flares = flare.getFlares();
+        FlareData data = this.data.get(index);
+        data.clear();
+        int size = flares.length;
+        for (SingleFlare singleFlare : flares) {
+            data.store(singleFlare);
         }
+        data.flip();
+        setVAOData(data);
+        program.use();
+        program.useSourcePos(sourceScreenPos);
+        vao.bind();
+        GL11.glDrawElements(GL11.GL_POINTS, size, GL11.GL_UNSIGNED_INT, 0);
+        vao.unbind();
     }
 
-    private void renderSingleFlare(SingleFlare singleFlare, Vector2f direction, float distance) {
 
+    private void setVAOData(FlareData data) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, offsetBuffer);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getOffsets(), GL15.GL_DYNAMIC_DRAW);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, scaleBuffer);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getScales(), GL15.GL_DYNAMIC_DRAW);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexBuffer);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getTextureIndices(), GL15.GL_DYNAMIC_DRAW);
     }
 
 
     @Override
     public void init() {
+        this.program = new LensProgram();
         this.framebuffer = new TextureFramebuffer(scene);
+        createVAO();
         createIndexBuffer();
     }
 
     private void createIndexBuffer() {
         this.indexBuffer = GL15.glGenBuffers();
-        IntBuffer indices = BufferUtils.createIntBuffer(MAX_FLARES);
-        for (int i = 0; i < MAX_FLARES; i++)
+        IntBuffer indices = BufferUtils.createIntBuffer(MAX_FLARES_NUMBER);
+        for (int i = 0; i < MAX_FLARES_NUMBER; i++)
             indices.put(i);
         indices.rewind();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -131,8 +154,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     @Override
     public void destroy() {
-        while (!vaos.isEmpty()) removeVAO();
-        GL15.glDeleteBuffers(indexBuffer);
+        vao.destroy();
     }
 
     @Override
@@ -150,4 +172,6 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         this.scene = input;
         this.framebuffer = new TextureFramebuffer(input);
     }
+
+
 }

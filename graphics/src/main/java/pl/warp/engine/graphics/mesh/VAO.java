@@ -42,6 +42,10 @@ public class VAO {
         GL30.glBindVertexArray(vao);
     }
 
+    public void unbind() {
+        GL30.glBindVertexArray(0);
+    }
+
     public void destroyExceptIndex() {
         GL30.glDeleteVertexArrays(vao);
         for(int buffer : buffers)
