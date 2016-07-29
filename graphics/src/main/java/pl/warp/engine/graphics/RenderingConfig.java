@@ -9,7 +9,7 @@ public class RenderingConfig {
     private int fps;
     private int width, height;
     private int renderingSamples = 4;
-    private int bloomIterations = 5;
+    private int bloomIterations = 2;
     private float exposure = 3f;
     private float bloomLevel = 1f;
     private float bloomThreshold = 1.0f;

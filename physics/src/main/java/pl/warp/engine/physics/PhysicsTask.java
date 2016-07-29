@@ -102,8 +102,10 @@ public class PhysicsTask extends EngineTask {
             if (isCollidable(component) && isPhysicalBody(component)) {
                 TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
                 PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+                ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
                 transformProperty.move(physicalBodyProperty.getNextTickTranslation());
                 transformProperty.rotate(physicalBodyProperty.getNextTickRotation().x, physicalBodyProperty.getNextTickRotation().y, physicalBodyProperty.getNextTickRotation().z);
+                colliderProperty.getCollider().setTransform(transformProperty.getTranslation(), transformProperty.getRotation());
             }
         });
     }

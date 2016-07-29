@@ -52,9 +52,9 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1800, HEIGHT = 1060;
-    private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.2f;
-    private static final float BRAKING_FORCE = 0.1f;
+    private static final float ROT_SPEED = 0.05f*200;
+    private static final float MOV_SPEED = 0.2f*200;
+    private static final float BRAKING_FORCE = 0.1f*200;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 1;
     private static Random random = new Random();
@@ -101,7 +101,7 @@ public class Test {
             generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 1f, 2.833f);
+            new PhysicalBodyProperty(controllableGoat, 200f, 2.833f);
             new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);

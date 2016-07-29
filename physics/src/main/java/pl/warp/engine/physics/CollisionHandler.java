@@ -1,14 +1,11 @@
 package pl.warp.engine.physics;
 
-import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.*;
-import org.joml.Quaternionf;
+import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
+import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.physics.collider.Collider;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -19,7 +16,7 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 public class CollisionHandler {
 
-    private static final float ACCURACY = 0.1f;
+    private static final float COLLISION_MARGIN = 0.15f;
 
     private PhysicsWorld world;
     private CollisionStrategy collisionStrategy;
@@ -43,8 +40,8 @@ public class CollisionHandler {
         world.getActiveCollisions().forEach(manifold -> {
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
             assingValues(manifold);
-            collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
             findContactPos(manifold);
+            collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
         });
     }
 
@@ -67,35 +64,79 @@ public class CollisionHandler {
         Vector3f direction1 = new Vector3f();
         Vector3f direction2 = new Vector3f();
 
-        direction1.set(transformProperty1.getTranslation());
-        direction1.sub(contactPos.x, contactPos.y, contactPos.z);
-        direction1.normalize();
-        direction1.mul(distance/2).negate();
+        //distance is always >0
+        if (distance < -COLLISION_MARGIN) {
+            distance += COLLISION_MARGIN;
+            if (!isMoving(physicalBodyProperty1) && !isMoving(physicalBodyProperty2)) {
+                direction1.set(transformProperty1.getTranslation());
+                direction1.sub(contactPos.x, contactPos.y, contactPos.z);
+                direction1.normalize();
+                direction1.mul(distance / 2).negate();
 
-        direction2.set(transformProperty2.getTranslation());
-        direction2.sub(contactPos.x, contactPos.y, contactPos.z);
-        direction2.normalize();
-        direction1.mul(distance/2).negate();
+                direction2.set(transformProperty2.getTranslation());
+                direction2.sub(contactPos.x, contactPos.y, contactPos.z);
+                direction2.normalize();
+                direction1.mul(distance / 2).negate();
 
-        transformProperty1.move(physicalBodyProperty1.getNextTickTranslation().add(direction1));
-        transformProperty2.move(physicalBodyProperty2.getNextTickTranslation().add(direction2));
+                physicalBodyProperty1.getNextTickTranslation().add(physicalBodyProperty1.getNextTickTranslation().add(direction1));
+                physicalBodyProperty2.getNextTickTranslation().add(physicalBodyProperty2.getNextTickTranslation().add(direction2));
 
-        colliderProperty1.getCollider().setTransform(transformProperty1.getTranslation(), transformProperty1.getRotation());
-        colliderProperty2.getCollider().setTransform(transformProperty2.getTranslation(), transformProperty2.getRotation());
+            }
+
+            if (isMoving(physicalBodyProperty1) && isApproaching(transformProperty1.getTranslation(), transformProperty2.getTranslation(), physicalBodyProperty1.getNextTickTranslation())) {
+                moveBack(physicalBodyProperty1, distance);
+            }
+            if (isMoving(physicalBodyProperty2) && isApproaching(transformProperty2.getTranslation(), transformProperty1.getTranslation(), physicalBodyProperty2.getNextTickTranslation())) {
+                moveBack(physicalBodyProperty2, distance);
+            }
+        }
     }
 
-    private float findLongestDistance(btPersistentManifold manifold){
-        float maxDistance=0;
+    private boolean isMoving(PhysicalBodyProperty property) {
+        return !(property.getNextTickTranslation().length() == 0 && property.getNextTickRotation().length() == 0);
+    }
+
+    private void moveBack(PhysicalBodyProperty physicalBodyProperty, float distance) {
+        Vector3f direction = new Vector3f();
+
+        if (physicalBodyProperty.getNextTickTranslation().length() > -distance) {
+            physicalBodyProperty.getNextTickTranslation().normalize(direction);
+            direction.mul(distance);
+        } else {
+            direction.set(physicalBodyProperty.getNextTickTranslation()).negate();
+        }
+        physicalBodyProperty.getNextTickTranslation().add(direction);
+        //Vector3f velocity = new Vector3f().set(physicalBodyProperty.getNextTickTranslation());
+        //velocity.sub(contactPos.x, contactPos.y, contactPos.z);
+        //velocity.normalize().mul(distance);
+        //velocity.negate();
+        //physicalBodyProperty.applyForce(velocity);
+    }
+
+    private float findLongestDistance(btPersistentManifold manifold) {
+        float maxDistance = 0;
         float currentDistance;
-        for(int i = 0; i< manifold.getNumContacts();i++){
+        for (int i = 0; i < manifold.getNumContacts(); i++) {
             currentDistance = manifold.getContactPoint(i).getDistance();
-            if(maxDistance>currentDistance){
+            if (maxDistance > currentDistance) {
                 maxDistance = currentDistance;
             }
         }
         return maxDistance;
     }
 
+    Vector3f tmp = new Vector3f();
+
+    private boolean isApproaching(Vector3f pos1, Vector3f pos2, Vector3f velocity) {
+        tmp.set(pos1);
+        tmp.sub(pos2);
+        float distance1 = (float) Math.sqrt((tmp.x * tmp.x) + (tmp.y * tmp.y) + (tmp.z * tmp.z));
+        tmp.set(pos1);
+        tmp.add(velocity);
+        tmp.sub(pos2);
+        float distance2 = (float) Math.sqrt((tmp.x * tmp.x) + (tmp.y * tmp.y) + (tmp.z * tmp.z));
+        return distance1 > distance2;
+    }
 
     private void assingValues(btPersistentManifold manifold) {
         synchronized (world) {
