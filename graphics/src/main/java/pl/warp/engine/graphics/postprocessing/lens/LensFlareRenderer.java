@@ -63,13 +63,9 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     }
 
     private void renderSingleFlare(SingleFlare singleFlare, Vector2f direction, float distance) {
-        float visiblity = getVisibility(distance);
-        //TODO
+
     }
 
-    private float getVisibility(float distance) {
-        return 1.0f - (distance / 2f);
-    }
 
 
     @Override

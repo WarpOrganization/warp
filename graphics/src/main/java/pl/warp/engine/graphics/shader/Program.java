@@ -1,10 +1,7 @@
 package pl.warp.engine.graphics.shader;
 
 import com.google.common.io.CharStreams;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
@@ -146,6 +143,10 @@ public abstract class Program {
 
     public void setUniformV2(int location, float v1, float v2) {
         GL20.glUniform2f(location, v1, v2);
+    }
+
+    public void setUniformV2(int location, Vector2f vector) {
+        setUniformV2(location, vector.x, vector.y);
     }
 
     public void setUniformV3(int location, float v1, float v2, float v3) {
