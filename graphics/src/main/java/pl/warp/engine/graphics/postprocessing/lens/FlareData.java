@@ -44,9 +44,9 @@ class FlareData {
         textureIndices.put(singleFlare.getTextureIndex());
     }
 
-    public void flip() {
-        offsets.flip();
-        scales.flip();
-        textureIndices.flip();
+    public void rewind() {
+        offsets.rewind();
+        scales.rewind();
+        textureIndices.rewind();
     }
 }

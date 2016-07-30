@@ -1,8 +1,11 @@
 package pl.warp.engine.graphics;
 
 import org.apache.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.MemoryUtil;
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.window.Display;
@@ -49,6 +52,9 @@ public class RenderingTask extends EngineTask {
     @Override
     public void update(int delta) {
         pipeline.update(delta);
+        GLErrors.checkOGLErrors();
     }
+
+
 
 }

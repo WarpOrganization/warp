@@ -8,8 +8,8 @@ layout (points) in;
 layout (triangle_strip) out;
 layout (max_vertices = 4) out;
 
-out int textureIndex;
-out float visiblity;
+flat out int textureIndex;
+flat out float visibility;
 
 in vData {
     float scale;
@@ -19,10 +19,10 @@ in vData {
 
 void main()
 {
-    vec4 pos = vec4(0);//gl_in[0].gl_Position;
-    float scale = 1.0;//pointData[0].scale;
+    vec4 pos = gl_in[0].gl_Position;
+    float scale = pointData[0].scale;
     textureIndex = pointData[0].textureIndex;
-    visiblity = pointData[0].visibility;
+    visibility = pointData[0].visibility;
 
      // Vertex 4
     gl_TexCoord[0].st = vec2(1.0, 1.0);

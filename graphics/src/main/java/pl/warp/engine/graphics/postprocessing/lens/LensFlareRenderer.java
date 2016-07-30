@@ -119,7 +119,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         data.clear();
         for (SingleFlare singleFlare : flares)
             data.store(singleFlare);
-        data.flip();
+        data.rewind();
         setVAOData(data);
     }
 
@@ -135,8 +135,8 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
         GL11.glDrawElements(GL11.GL_POINTS, size, GL11.GL_UNSIGNED_INT, 0);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         vao.unbind();
     }
 
@@ -144,8 +144,10 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private void setVAOData(FlareData data) {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, offsetBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getOffsets(), GL15.GL_DYNAMIC_DRAW);
+
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, scaleBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getScales(), GL15.GL_DYNAMIC_DRAW);
+
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getTextureIndices(), GL15.GL_DYNAMIC_DRAW);
     }
@@ -154,8 +156,8 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void init() {
         this.program = new LensProgram();
-        createVAO();
         createIndexBuffer();
+        createVAO();
     }
 
     private void createIndexBuffer() {
