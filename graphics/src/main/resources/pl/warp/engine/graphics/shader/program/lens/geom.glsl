@@ -14,15 +14,15 @@ out float visiblity;
 in vData {
     float scale;
     int textureIndex;
-    float visiblity;
+    float visibility;
 } pointData[];
 
 void main()
 {
-    vec4 pos = gl_in[0].gl_Position;
-    float scale = pointData[0].scale;
+    vec4 pos = vec4(0);//gl_in[0].gl_Position;
+    float scale = 1.0;//pointData[0].scale;
     textureIndex = pointData[0].textureIndex;
-    visiblity = pointData[0].visiblity;
+    visiblity = pointData[0].visibility;
 
      // Vertex 4
     gl_TexCoord[0].st = vec2(1.0, 1.0);

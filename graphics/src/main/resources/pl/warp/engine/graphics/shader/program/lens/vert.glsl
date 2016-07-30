@@ -1,6 +1,6 @@
 #version 330
 
-precision mediump float;
+precision highp float;
 
 uniform vec2 sourcePos;
 
@@ -11,7 +11,7 @@ layout(location = 2) in int textureIndex;
 out vData {
     float scale;
     int textureIndex;
-    float visiblity;
+    float visibility;
 } pointData;
 
 float getVisibility();
@@ -20,10 +20,10 @@ void main(void) {
     pointData.visibility = getVisibility();
     pointData.scale = scale;
     pointData.textureIndex = textureIndex;
-    gl_Position = sourcePos * offset;
+    gl_Position.xy = sourcePos * offset;
 }
 
 float getVisibility() {
     float distance = length(sourcePos);
-    return 1.0f - (distance / 2f);
+    return 1.0 - (distance / 2);
 }

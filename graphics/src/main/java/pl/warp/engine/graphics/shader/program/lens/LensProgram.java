@@ -2,8 +2,10 @@ package pl.warp.engine.graphics.shader.program.lens;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import pl.warp.engine.graphics.shader.GeometryProgram;
 import pl.warp.engine.graphics.shader.Program;
 import pl.warp.engine.graphics.texture.Texture2D;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.io.InputStream;
 
@@ -11,8 +13,9 @@ import java.io.InputStream;
  * @author Jaca777
  *         Created 2016-07-29 at 13
  */
-public class LensProgram extends Program {
+public class LensProgram extends GeometryProgram {
     private static InputStream FRAGMENT_SHADER = LensProgram.class.getResourceAsStream("frag.glsl");
+    private static InputStream GEOMETRY_SHADER = LensProgram.class.getResourceAsStream("geom.glsl");
     private static InputStream VERTEX_SHADER = LensProgram.class.getResourceAsStream("vert.glsl");
 
     private static final int TEXTURE_SAMPLER = 0;
@@ -25,7 +28,7 @@ public class LensProgram extends Program {
     private int unifSourceColor;
 
     public LensProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER);
         loadUniforms();
     }
 
@@ -34,7 +37,7 @@ public class LensProgram extends Program {
         this.unifSourceColor = getUniformLocation("sourceColor");
     }
 
-    public void useTexture(Texture2D texture) {
+    public void useTexture(Texture2DArray texture) {
         useTexture(texture, TEXTURE_SAMPLER);
     }
 

@@ -25,6 +25,9 @@ import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
+import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
+import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
@@ -52,9 +55,9 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1800, HEIGHT = 1060;
-    private static final float ROT_SPEED = 0.05f*200;
-    private static final float MOV_SPEED = 0.2f*200;
-    private static final float BRAKING_FORCE = 0.1f*200;
+    private static final float ROT_SPEED = 0.05f * 200;
+    private static final float MOV_SPEED = 0.2f * 200;
+    private static final float BRAKING_FORCE = 0.1f * 200;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 1;
     private static Random random = new Random();
@@ -97,6 +100,13 @@ public class Test {
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
             ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 400, true, true);
             new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 2000, spritesheetTexture));
+
+            ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 2, 1);
+            Texture2DArray lensTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
+            SingleFlare flare1 = new SingleFlare(0.5f, 1, 0.1f);
+            SingleFlare flare2 = new SingleFlare(0.5f, 0, 0.1f);
+            LensFlare flare = new LensFlare(lensTexture, new SingleFlare[]{flare1, flare2});
+            new GraphicsLensFlareProperty(light, flare);
 
             generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);
 

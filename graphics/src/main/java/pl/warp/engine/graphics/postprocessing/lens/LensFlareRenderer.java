@@ -95,12 +95,14 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         Vector4f flareCameraPos = flarePosition.mul(camera.getCameraMatrix());
         Matrix4f projectionMatrix = camera.getProjectionMatrix().getMatrix();
         Vector4f flareProjectionPos = flareCameraPos.mul(projectionMatrix);
-        Vector2f flareScreenPos = tempVec2.set(flareProjectionPos.x, flareProjectionPos.y);
-        if (isInRange(flareProjectionPos))
+        Vector3f actualProjectionPos = tempVec3.set(flareProjectionPos.x, flareProjectionPos.y, flareProjectionPos.z)
+                .div(flareProjectionPos.w);
+        Vector2f flareScreenPos = tempVec2.set(actualProjectionPos.x, actualProjectionPos.y);
+        if (isInRange(actualProjectionPos))
             renderFlare(index, flareScreenPos, flare);
     }
 
-    private boolean isInRange(Vector4f pos) {
+    private boolean isInRange(Vector3f pos) {
         return pos.x > -1.0f && pos.x < 1.0f &&
                 pos.y > -1.0f && pos.y < 1.0f &&
                 pos.z > 0.0f && pos.z < 1.0f;
@@ -109,17 +111,32 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private void renderFlare(int index, Vector2f sourceScreenPos, LensFlare flare) {
         SingleFlare[] flares = flare.getFlares();
         FlareData data = this.data.get(index);
+        loadVAO(flares, data);
+        renderVAO(flares.length, sourceScreenPos, flare);
+    }
+
+    private void loadVAO(SingleFlare[] flares, FlareData data) {
         data.clear();
-        int size = flares.length;
-        for (SingleFlare singleFlare : flares) {
+        for (SingleFlare singleFlare : flares)
             data.store(singleFlare);
-        }
         data.flip();
         setVAOData(data);
+    }
+
+    private void renderVAO(int size, Vector2f sourceScreenPos, LensFlare flare) {
+        framebuffer.bindDraw();
         program.use();
         program.useSourcePos(sourceScreenPos);
+        program.useTexture(flare.getLensTextures());
+        program.useSourceColor(flare.getColor());
         vao.bind();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false);
+        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
         GL11.glDrawElements(GL11.GL_POINTS, size, GL11.GL_UNSIGNED_INT, 0);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
         vao.unbind();
     }
 
@@ -137,7 +154,6 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void init() {
         this.program = new LensProgram();
-        this.framebuffer = new TextureFramebuffer(scene);
         createVAO();
         createIndexBuffer();
     }

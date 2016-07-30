@@ -12,8 +12,11 @@ import pl.warp.engine.graphics.math.MatrixStack;
 public class LensEnviromentFlareRenderer implements Renderer{
     
     private Environment environment;
-    
-    
+
+    public LensEnviromentFlareRenderer(Environment environment) {
+        this.environment = environment;
+    }
+
     @Override
     public void init() {
     }
