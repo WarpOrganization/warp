@@ -45,9 +45,9 @@ public class Transforms {
         for (Component comp = component; comp != null; comp = comp.getParent()) {
             if (comp.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
                 TransformProperty property = comp.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-                dest.add(property.getTranslation());
-                dest.mul(property.getScale());
                 dest.rotate(property.getRotation());
+                dest.mul(property.getScale());
+                dest.add(property.getTranslation());
             }
         }
         return dest;
