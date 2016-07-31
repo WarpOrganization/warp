@@ -106,7 +106,9 @@ public class Test {
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
             SingleFlare flare1 = new SingleFlare(0.5f, 1, 0.02f);
             SingleFlare flare2 = new SingleFlare(-0.1f, 0, 0.02f);
-            LensFlare flare = new LensFlare(lensTexture, new SingleFlare[]{flare1, flare2});
+            SingleFlare flare3 = new SingleFlare(0.52f, 0, 0.05f);
+            SingleFlare flare4 = new SingleFlare(0.2f, 1, 0.02f);
+            LensFlare flare = new LensFlare(lensTexture, new SingleFlare[]{flare1, flare2, flare3, flare4});
             new GraphicsLensFlareProperty(light, flare);
 
             generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);
