@@ -23,9 +23,9 @@ public class LensProgram extends GeometryProgram {
     public static final int ATTR_OFFSET = 0;
     public static final int ATTR_SCALE = 1;
     public static final int ATTR_TEXTURE_INDEX = 2;
+    public static final int ATTR_FLARE_COLOR = 3;
 
     private int unifSourcePos;
-    private int unifSourceColor;
     private int unifScreenSize;
 
     public LensProgram() {
@@ -35,7 +35,6 @@ public class LensProgram extends GeometryProgram {
 
     private void loadUniforms() {
         this.unifSourcePos = getUniformLocation("sourcePos");
-        this.unifSourceColor = getUniformLocation("sourceColor");
         this.unifScreenSize = getUniformLocation("screenSize");
     }
 
@@ -51,7 +50,4 @@ public class LensProgram extends GeometryProgram {
         setUniformV2(unifScreenSize, width, height);
     }
 
-    public void useSourceColor(Vector3f color) {
-        setUniformV3(unifSourceColor, color);
-    }
 }

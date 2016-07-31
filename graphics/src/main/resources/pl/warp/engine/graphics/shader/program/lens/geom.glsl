@@ -12,11 +12,13 @@ layout (max_vertices = 4) out;
 
 flat out int textureIndex;
 flat out float visibility;
+out vec3 flareColor;
 
 in vData {
     float scale;
     int textureIndex;
     float visibility;
+    vec3 flareColor;
 } pointData[];
 
 void main()
@@ -25,6 +27,7 @@ void main()
     float scale = pointData[0].scale;
     textureIndex = pointData[0].textureIndex;
     visibility = pointData[0].visibility;
+    flareColor = pointData[0].flareColor;
     vec2 screenRatio = normalize(screenSize);
 
      // Vertex 4

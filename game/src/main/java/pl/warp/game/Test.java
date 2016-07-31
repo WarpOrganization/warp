@@ -104,11 +104,19 @@ public class Test {
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
-            SingleFlare flare1 = new SingleFlare(0.5f, 1, 0.02f);
-            SingleFlare flare2 = new SingleFlare(-0.1f, 0, 0.02f);
-            SingleFlare flare3 = new SingleFlare(0.52f, 0, 0.05f);
-            SingleFlare flare4 = new SingleFlare(0.2f, 1, 0.02f);
-            LensFlare flare = new LensFlare(lensTexture, new SingleFlare[]{flare1, flare2, flare3, flare4});
+            SingleFlare[] flares = new SingleFlare[]{
+                    new SingleFlare(0.75f, 0, 0.08f, new Vector3f(1)),
+                    new SingleFlare(0.1f, 1, 0.02f, new Vector3f(1)),
+                    new SingleFlare(-0.2f, 0, 0.06f, new Vector3f(1)),
+                    new SingleFlare(-0.4f, 1, 0.08f, new Vector3f(1)),
+                    new SingleFlare(-0.5f, 1, 0.05f, new Vector3f(1)),
+                    new SingleFlare(-0.6f, 1, 0.08f, new Vector3f(1)),
+                    new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(0.5f, 0.5f, 2f)),
+                    new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(2f, 0.5f, 2f)),
+                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(0f, 0.5f, 2.5f)),
+                    new SingleFlare(0.2f, 1, 0.25f, new Vector3f(2f, 0.5f, 0.5f)),
+            };
+            LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
 
             generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);

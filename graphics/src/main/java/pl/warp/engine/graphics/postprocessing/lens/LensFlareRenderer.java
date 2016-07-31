@@ -40,6 +40,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private int offsetBuffer;
     private int scaleBuffer;
     private int textureIndexBuffer;
+    private int flareColorBuffer;
     private VAO vao;
 
     public LensFlareRenderer(Camera camera, Environment environment, RenderingConfig config) {
@@ -82,10 +83,11 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         this.offsetBuffer = GL15.glGenBuffers();
         this.scaleBuffer = GL15.glGenBuffers();
         this.textureIndexBuffer = GL15.glGenBuffers();
-        this.vao = new VAO(new int[]{offsetBuffer, scaleBuffer, textureIndexBuffer},
+        this.flareColorBuffer = GL15.glGenBuffers();
+        this.vao = new VAO(new int[]{offsetBuffer, scaleBuffer, textureIndexBuffer, flareColorBuffer},
                 indexBuffer,
-                new int[]{1, 1, 1},
-                new int[]{GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_INT});
+                new int[]{1, 1, 1, 3},
+                new int[]{GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_INT, GL11.GL_FLOAT});
     }
 
 
@@ -131,7 +133,6 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         program.use();
         program.useSourcePos(sourceScreenPos);
         program.useTexture(flare.getLensTextures());
-        program.useSourceColor(flare.getColor());
         vao.bind();
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
@@ -153,6 +154,9 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureIndexBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getTextureIndices(), GL15.GL_DYNAMIC_DRAW);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, flareColorBuffer);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data.getFlareColors(), GL15.GL_DYNAMIC_DRAW);
     }
 
 
