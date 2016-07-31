@@ -49,9 +49,6 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
 
-            if(physicalProperty1.getMass()>10||physicalProperty2.getMass()>10){
-                //
-            }
 
             //distance vector for body 1
             distance1.set(transformProperty1.getTranslation());
@@ -108,7 +105,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             torqueChange.negate();
 
             if (isCollidable(collider1)) {
-                physicalProperty1.addTorque(torqueChange.negate());
+                physicalProperty1.addTorque(torqueChange.negate().mul(2));
                 physicalProperty1.applyForce(direction.mul(j));
             }
 
@@ -118,7 +115,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             torqueChange.cross(directionCopy);
 
             if (isCollidable(collider2)) {
-                physicalProperty2.addTorque(torqueChange);
+                physicalProperty2.addTorque(torqueChange.mul(2));
                 physicalProperty2.applyForce(direction.negate());
             }
         }

@@ -112,7 +112,7 @@ public class CollisionHandler {
         //velocity.sub(contactPos.x, contactPos.y, contactPos.z);
         //velocity.normalize().mul(distance);
         //velocity.negate();
-        //physicalBodyProperty.applyForce(velocity);
+        physicalBodyProperty.applyForce(direction.mul(physicalBodyProperty.getMass()));
     }
 
     private float findLongestDistance(btPersistentManifold manifold) {
