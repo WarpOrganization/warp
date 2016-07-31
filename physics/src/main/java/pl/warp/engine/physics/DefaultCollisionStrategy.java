@@ -11,6 +11,8 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
+import java.util.function.Consumer;
+
 /**
  * Created by hubertus on 7/12/16.
  */
@@ -46,6 +48,10 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+
+            if(physicalProperty1.getMass()>10||physicalProperty2.getMass()>10){
+                //
+            }
 
             //distance vector for body 1
             distance1.set(transformProperty1.getTranslation());
@@ -105,7 +111,6 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
                 physicalProperty1.addTorque(torqueChange.negate());
                 physicalProperty1.applyForce(direction.mul(j));
             }
-
 
             //torque change for body 2
             directionCopy.set(distance1).normalize();

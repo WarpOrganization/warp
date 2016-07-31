@@ -122,7 +122,7 @@ public class Test {
             generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 200f, 2.833f);
+            new PhysicalBodyProperty(controllableGoat, 2f*200, 2.833f);
             new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
@@ -169,7 +169,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2DArray spritesheetTexture) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);

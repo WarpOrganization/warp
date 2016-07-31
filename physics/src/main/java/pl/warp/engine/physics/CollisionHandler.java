@@ -59,6 +59,8 @@ public class CollisionHandler {
         PhysicalBodyProperty physicalBodyProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         ColliderProperty colliderProperty1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         ColliderProperty colliderProperty2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+        physicalBodyProperty1.setTorque(new Vector3f());
+        physicalBodyProperty2.setTorque(new Vector3f());
 
         float distance = findLongestDistance(manifold);
         Vector3f direction1 = new Vector3f();
