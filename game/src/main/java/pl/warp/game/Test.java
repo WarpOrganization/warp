@@ -111,10 +111,10 @@ public class Test {
                     new SingleFlare(-0.4f, 1, 0.08f, new Vector3f(1)),
                     new SingleFlare(-0.5f, 1, 0.05f, new Vector3f(1)),
                     new SingleFlare(-0.6f, 1, 0.08f, new Vector3f(1)),
-                    new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(0.5f, 0.5f, 2f)),
-                    new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(2f, 0.5f, 2f)),
-                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(0f, 0.5f, 2.5f)),
-                    new SingleFlare(0.2f, 1, 0.25f, new Vector3f(2f, 0.5f, 0.5f)),
+                    new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(2f, 0.5f, 2f)),
+                    new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(0.5f, 0.5f, 2f)),
+                    new SingleFlare(0.2f, 1, 0.25f, new Vector3f(0.5f, 2f, 0.5f)),
+                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(2f, 0.5f, 0.5f)),
             };
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
@@ -147,7 +147,7 @@ public class Test {
                     0f, 0f);
             directionalLightProperty.addSpotLight(laser);
 
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars2");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             new GraphicsSkyboxProperty(scene, cubemap);
         });
