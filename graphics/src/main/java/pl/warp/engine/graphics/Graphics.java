@@ -5,11 +5,12 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
+import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
-import pl.warp.engine.graphics.postprocessing.HDROnScreenRenderer;
+import pl.warp.engine.graphics.postprocessing.HDRRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensEnviromentFlareRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 import pl.warp.engine.graphics.skybox.SkyboxRenderer;
@@ -81,8 +82,9 @@ public class Graphics {
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
         BloomRenderer bloomRenderer = new BloomRenderer(config);
         LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment, config);
-        HDROnScreenRenderer onScreenRenderer = new HDROnScreenRenderer(config);
-        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(flareRenderer).via(bloomRenderer).to(onScreenRenderer);
+        HDRRenderer hdrRenderer = new HDRRenderer(config);
+        OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
+        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(bloomRenderer).via(hdrRenderer).via(flareRenderer).to(onScreenRenderer);
     }
 
 
