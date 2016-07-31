@@ -51,8 +51,8 @@ public class GaussianBlurProgram extends Program {
     public GaussianBlurProgram(RenderingConfig config) {
         super(VERTEX_SHADER, FRAGMENT_SHADER);
         loadUniforms();
-        GaussianBlurStage.HORIZONTAL.setDisplaySize(config::getWidth);
-        GaussianBlurStage.VERTICAL.setDisplaySize(config::getHeight);
+        GaussianBlurStage.HORIZONTAL.setDisplaySize(config::getDisplayWidth);
+        GaussianBlurStage.VERTICAL.setDisplaySize(config::getDisplayHeight);
     }
 
     private void loadUniforms() {

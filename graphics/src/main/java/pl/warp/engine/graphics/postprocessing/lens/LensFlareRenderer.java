@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.math.Transforms;
@@ -28,6 +29,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     private Camera camera;
     private Environment environment;
+    private RenderingConfig config;
 
     private Texture2D scene;
     private TextureFramebuffer framebuffer;
@@ -40,9 +42,10 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private int textureIndexBuffer;
     private VAO vao;
 
-    public LensFlareRenderer(Camera camera, Environment environment) {
+    public LensFlareRenderer(Camera camera, Environment environment, RenderingConfig config) {
         this.camera = camera;
         this.environment = environment;
+        this.config = config;
     }
 
     @Override
@@ -156,6 +159,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void init() {
         this.program = new LensProgram();
+        program.useScreenSize(config.getDisplayWidth(), config.getDisplayHeight());
         createIndexBuffer();
         createVAO();
     }
@@ -177,7 +181,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     @Override
     public void onResize(int newWidth, int newHeight) {
-
+        program.useScreenSize(newWidth, newHeight);
     }
 
     @Override

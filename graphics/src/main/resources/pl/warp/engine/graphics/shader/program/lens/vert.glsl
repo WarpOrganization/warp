@@ -21,9 +21,10 @@ void main(void) {
     pointData.scale = scale;
     pointData.textureIndex = textureIndex;
     gl_Position.xy = sourcePos * offset;
+    gl_Position.w = 1;
 }
 
 float getVisibility() {
     float distance = length(sourcePos);
-    return 1.0 - (distance / 2);
+    return 0.5 - (distance / 2);
 }

@@ -102,10 +102,10 @@ public class Test {
             ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 400, true, true);
             new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 2000, spritesheetTexture));
 
-            ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 2, 1);
+            ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
-            SingleFlare flare1 = new SingleFlare(0.5f, 1, 0.1f);
-            SingleFlare flare2 = new SingleFlare(0.5f, 0, 0.1f);
+            SingleFlare flare1 = new SingleFlare(0.5f, 1, 0.02f);
+            SingleFlare flare2 = new SingleFlare(-0.1f, 0, 0.02f);
             LensFlare flare = new LensFlare(lensTexture, new SingleFlare[]{flare1, flare2});
             new GraphicsLensFlareProperty(light, flare);
 

@@ -34,7 +34,7 @@ public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D,Tex
     }
 
     private void initOutput() {
-        this.outputTexture = new Texture2D(settings.getWidth(), settings.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.outputTexture = new Texture2D(settings.getDisplayWidth(), settings.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         this.destFramebuffer = new TextureFramebuffer(outputTexture);
     }
 

@@ -13,8 +13,6 @@ import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
-import static org.lwjgl.opengl.GL30.GL_RGBA32F;
-
 /**
  * @author Jaca777
  *         Created 2016-06-29 at 21
@@ -118,7 +116,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void setupFramebuffer() {
-        this.outputTexture = new MultisampleTexture2D(settings.getWidth(), settings.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
+        this.outputTexture = new MultisampleTexture2D(settings.getDisplayWidth(), settings.getDisplayHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
         this.renderingFramebuffer = new MultisampleFramebuffer(outputTexture);
     }
 

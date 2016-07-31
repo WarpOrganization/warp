@@ -14,5 +14,4 @@ void main(void) {
     fragColor = texture2DArray(textures, vec3(gl_TexCoord[0].st, textureIndex)) * visibility;
     fragColor.rgb *= sourceColor;
     fragColor.a = 1.0;
-    fragColor = vec4(1);
 }

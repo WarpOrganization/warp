@@ -7,17 +7,17 @@ package pl.warp.engine.graphics;
 public class RenderingConfig {
 
     private int fps;
-    private int width, height;
+    private int displayWidth, displayHeight;
     private int renderingSamples = 4;
     private int bloomIterations = 2;
     private float exposure = 3f;
     private float bloomLevel = 1f;
     private float bloomThreshold = 1.0f;
 
-    public RenderingConfig(int fps, int width, int height) {
+    public RenderingConfig(int fps, int displayWidth, int displayHeight) {
         this.fps = fps;
-        this.width = width;
-        this.height = height;
+        this.displayWidth = displayWidth;
+        this.displayHeight = displayHeight;
     }
 
     public int getFps() {
@@ -29,21 +29,21 @@ public class RenderingConfig {
         return this;
     }
 
-    public int getWidth() {
-        return width;
+    public int getDisplayWidth() {
+        return displayWidth;
     }
 
-    public RenderingConfig setWidth(int width) {
-        this.width = width;
+    public RenderingConfig setDisplayWidth(int displayWidth) {
+        this.displayWidth = displayWidth;
         return this;
     }
 
-    public int getHeight() {
-        return height;
+    public int getDisplayHeight() {
+        return displayHeight;
     }
 
-    public RenderingConfig setHeight(int height) {
-        this.height = height;
+    public RenderingConfig setDisplayHeight(int displayHeight) {
+        this.displayHeight = displayHeight;
         return this;
     }
 

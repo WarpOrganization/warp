@@ -52,7 +52,7 @@ public class Graphics {
     }
 
     private void createWindow() {
-        this.display = new Display(config.getWidth(), config.getHeight());
+        this.display = new Display(config.getDisplayWidth(), config.getDisplayHeight());
         this.windowManager = new GLFWWindowManager(this.thread::interrupt);
         WindowTask windowTask = new WindowTask(windowManager, display);
         thread.scheduleTask(windowTask);
@@ -80,7 +80,7 @@ public class Graphics {
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), config, renderers);
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
         BloomRenderer bloomRenderer = new BloomRenderer(config);
-        LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment);
+        LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment, config);
         HDROnScreenRenderer onScreenRenderer = new HDROnScreenRenderer(config);
         return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(flareRenderer).via(bloomRenderer).to(onScreenRenderer);
     }

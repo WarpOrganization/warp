@@ -91,10 +91,10 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     }
 
     private void createTextures() {
-        this.bloomDetectionTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
-        this.verticalBlurTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.bloomDetectionTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.verticalBlurTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(verticalBlurTexture);
-        this.blurredBloomTexture = new Texture2D(config.getWidth(), config.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.blurredBloomTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(blurredBloomTexture);
     }
 

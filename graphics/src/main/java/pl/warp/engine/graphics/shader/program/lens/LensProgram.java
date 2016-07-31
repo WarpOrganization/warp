@@ -26,6 +26,7 @@ public class LensProgram extends GeometryProgram {
 
     private int unifSourcePos;
     private int unifSourceColor;
+    private int unifScreenSize;
 
     public LensProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER);
@@ -33,8 +34,9 @@ public class LensProgram extends GeometryProgram {
     }
 
     private void loadUniforms() {
-        this.unifSourcePos = getUniformLocation("sourceDir");
+        this.unifSourcePos = getUniformLocation("sourcePos");
         this.unifSourceColor = getUniformLocation("sourceColor");
+        this.unifScreenSize = getUniformLocation("screenSize");
     }
 
     public void useTexture(Texture2DArray texture) {
@@ -43,6 +45,10 @@ public class LensProgram extends GeometryProgram {
 
     public void useSourcePos(Vector2f sourcePos) {
         setUniformV2(unifSourcePos, sourcePos);
+    }
+
+    public void useScreenSize(int width, int height){
+        setUniformV2(unifScreenSize, width, height);
     }
 
     public void useSourceColor(Vector3f color) {
