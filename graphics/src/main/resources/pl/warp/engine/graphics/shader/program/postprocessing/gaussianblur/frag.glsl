@@ -9,7 +9,7 @@ smooth in vec2 texCoord;
 
 layout(location = 0) out vec4 fragColor;
 
-const float[8] weights = {0.034619, 0.044859, 0.055857, 0.066833, 0.076841, 0.084894, 0.090126, 0.09194};
+const float[8] weights = float[](0.034619, 0.044859, 0.055857, 0.066833, 0.076841, 0.084894, 0.090126, 0.09194);
 
 void main(void){
 	fragColor = vec4(0.0);
