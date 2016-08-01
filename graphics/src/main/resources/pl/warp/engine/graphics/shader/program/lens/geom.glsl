@@ -13,6 +13,7 @@ layout (max_vertices = 4) out;
 flat out int textureIndex;
 flat out float visibility;
 out vec3 flareColor;
+smooth out vec2 texCoord;
 
 in vData {
     float scale;
@@ -31,25 +32,25 @@ void main()
     vec2 screenRatio = normalize(screenSize);
 
      // Vertex 4
-    gl_TexCoord[0].st = vec2(1.0, 1.0);
+    texCoord = vec2(1.0, 1.0);
     gl_Position = pos;
     gl_Position.xy += (scale * vec2(1, 1)) / screenRatio;
     EmitVertex();
 
     // Vertex 3
-    gl_TexCoord[0].st = vec2(0.0, 1.0);
+    texCoord = vec2(0.0, 1.0);
     gl_Position = pos;
     gl_Position.xy += (scale * vec2(-1, 1)) / screenRatio;
     EmitVertex();
 
     // Vertex 2
-    gl_TexCoord[0].st = vec2(1.0, 0.0);
+    texCoord = vec2(1.0, 0.0);
     gl_Position = pos;
     gl_Position.xy += (scale * vec2(1, -1)) / screenRatio;
     EmitVertex();
 
     // Vertex 1
-    gl_TexCoord[0].st = vec2(0.0, 0.0);
+    texCoord = vec2(0.0, 0.0);
     gl_Position = pos;
     gl_Position.xy += (scale * vec2(-1, -1)) / screenRatio;
     EmitVertex();
