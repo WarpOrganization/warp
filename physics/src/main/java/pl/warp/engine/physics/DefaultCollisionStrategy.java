@@ -1,17 +1,13 @@
 package pl.warp.engine.physics;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-
-import java.util.function.Consumer;
 
 /**
  * Created by hubertus on 7/12/16.
@@ -19,7 +15,7 @@ import java.util.function.Consumer;
 public class DefaultCollisionStrategy implements CollisionStrategy {
 
 
-    private static final float ELASTICY = 0.1f;
+    private static final float ELASTICY = 1f;
 
     private PhysicsWorld world;
 
@@ -109,7 +105,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             torqueChange.negate();
 
             if (isCollidable(collider1)) {
-                physicalProperty1.addTorque(torqueChange.negate().mul(2));
+                physicalProperty1.addTorque(torqueChange.negate());
                 physicalProperty1.applyForce(direction.mul(j));
             }
 
@@ -119,7 +115,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             torqueChange.cross(directionCopy);
 
             if (isCollidable(collider2)) {
-                physicalProperty2.addTorque(torqueChange.mul(2));
+                physicalProperty2.addTorque(torqueChange);
                 physicalProperty2.applyForce(direction.negate());
             }
         }

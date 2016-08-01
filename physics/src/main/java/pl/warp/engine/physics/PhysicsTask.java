@@ -1,12 +1,10 @@
 package pl.warp.engine.physics;
 
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.log4j.Logger;
-import org.apache.log4j.net.SyslogAppender;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -33,15 +31,17 @@ public class PhysicsTask extends EngineTask {
     private CollisionStrategy collisionStrategy;
     private Component parent;
     private PhysicsWorld world;
+    private RayTester rayTester;
 
     private Listener<Component, ChildAddedEvent> sceneEnteredListener;
     private Listener<Component, ChildRemovedEvent> sceneLeftEventListener;
 
 
-    public PhysicsTask(CollisionStrategy collisionStrategy, Component parent) {
+    public PhysicsTask(CollisionStrategy collisionStrategy, Component parent, RayTester rayTester) {
 
         this.collisionStrategy = collisionStrategy;
         this.parent = parent;
+        this.rayTester = rayTester;
     }
 
     @Override
@@ -56,6 +56,7 @@ public class PhysicsTask extends EngineTask {
         collisionStrategy.init(world);
         collisionHandler = new CollisionHandler(world, collisionStrategy);
         collisionListener = new CollisionListener(world);
+        rayTester.init(world);
 
         parent.forEachChildren(component -> {
             if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
@@ -76,6 +77,7 @@ public class PhysicsTask extends EngineTask {
         collisionHandler.updateCollisions();
         collisionHandler.performRayTests();
         finalizeMovement();
+        rayTester.update();
         //world.getActiveCollisions().clear();
     }
 
@@ -117,4 +119,7 @@ public class PhysicsTask extends EngineTask {
         return component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
     }
 
+    public RayTester getRayTester() {
+        return rayTester;
+    }
 }

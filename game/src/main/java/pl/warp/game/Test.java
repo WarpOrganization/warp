@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL45;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
@@ -34,7 +33,6 @@ import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
-import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
@@ -43,6 +41,7 @@ import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
+import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import java.util.Random;
@@ -56,9 +55,9 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1800, HEIGHT = 1060;
-    private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.2f;
-    private static final float BRAKING_FORCE = 0.1f;
+    private static final float ROT_SPEED = 0.05f*200;
+    private static final float MOV_SPEED = 0.2f*200;
+    private static final float BRAKING_FORCE = 0.1f*200;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
     private static Random random = new Random();
@@ -125,7 +124,7 @@ public class Test {
             generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
+            new PhysicalBodyProperty(controllableGoat, 2f*200, 2.833f);
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(controllableGoat, material);
@@ -155,9 +154,10 @@ public class Test {
             scriptsThread.start(); //has to start after the window is created
         });
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(100), new RapidExecutionStrategy());
+        RayTester rayTester = new RayTester();
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root));
+            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
         });
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
