@@ -15,10 +15,13 @@ struct SpotLightSource {
 
 struct Material {
     sampler2D mainTexture;
+    sampler2D brightnessTexture;
+    bool hasBrightnessTexture;
     float brightness;
     float shininess;
 };
 const float SPECULAR_EXPONENT = 100.0;
+const float BRIGHTNESS_TEXTURE_MULTIPLIER = 3.0;
 
 uniform Material material;
 
@@ -42,12 +45,15 @@ float getDirectionCoeff(SpotLightSource source);
 float getAttenuation(SpotLightSource source);
 float getDiffuse(SpotLightSource source, vec3 lightDir, float directionCoeff);
 float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse);
+void applyBrightnessTexture();
 
 void main(void) {
     if(lightEnabled)
         fragColor = vec4(getLight(), 1) * texture(material.mainTexture, vTexCoord);
     else fragColor = texture(material.mainTexture, vTexCoord);
     fragColor.rgb *= material.brightness;
+    if(material.hasBrightnessTexture)
+        applyBrightnessTexture();
 }
 
 vec3 getLight() {
@@ -94,4 +100,9 @@ float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse) {
         float specVal = pow(spec, SPECULAR_EXPONENT);
         return diffuse * specVal * material.shininess;
     } else return 0.0;
+}
+
+void applyBrightnessTexture() {
+    vec3 fragBrightness = texture(material.brightnessTexture, vTexCoord).rgb * BRIGHTNESS_TEXTURE_MULTIPLIER;
+    fragColor.rgb += fragBrightness;
 }

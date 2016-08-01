@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Material {
 
     private Texture2D mainTexture;
-    private Texture2D specularTexture;
+    private Texture2D brightnessTexture;
     private float brightness = 1.0f;
     private float shininess = 0.1f;
 
@@ -28,16 +28,16 @@ public class Material {
         this.mainTexture = mainTexture;
     }
 
-    public Texture2D getSpecularTexture() {
-        return specularTexture;
+    public Texture2D getBrightnessTexture() {
+        return brightnessTexture;
     }
 
-    public void setSpecularTexture(Texture2D specularTexture) {
-        this.specularTexture = specularTexture;
+    public void setBrightnessTexture(Texture2D brightnessTexture) {
+        this.brightnessTexture = brightnessTexture;
     }
 
-    public boolean hasSpecularTexture() {
-        return specularTexture != null;
+    public boolean hasBrightnessTexture() {
+        return brightnessTexture != null;
     }
 
     public float getBrightness() {

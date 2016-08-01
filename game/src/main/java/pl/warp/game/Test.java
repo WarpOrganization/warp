@@ -119,11 +119,16 @@ public class Test {
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
 
-            generateGOATS(root, goatMesh, goatTexture, spritesheetTexture);
+            ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
+            Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
+
+            generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 2f, 2.833f);
-            new GraphicsMaterialProperty(controllableGoat, new Material(goatTexture));
+            Material material = new Material(goatTexture);
+            material.setBrightnessTexture(brightnessTexture);
+            new GraphicsMaterialProperty(controllableGoat, material);
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
             new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh);
@@ -168,12 +173,13 @@ public class Test {
 
     }
 
-    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2DArray spritesheetTexture) {
+    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
         for (int i = 0; i < 1000; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(4f);
+            material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
             new PhysicalBodyProperty(goat, 1f, 2.833f);
             float x = random.nextFloat() * 200 - 100f;

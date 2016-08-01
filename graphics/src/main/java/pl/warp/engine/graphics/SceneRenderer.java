@@ -111,7 +111,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         if (component.hasProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)) {
             Material material = component.<GraphicsMaterialProperty>getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME).getMaterial();
             material.getMainTexture().delete();
-            if (material.hasSpecularTexture()) material.getSpecularTexture().delete();
+            if (material.hasBrightnessTexture()) material.getBrightnessTexture().delete();
         }
     }
 

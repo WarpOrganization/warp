@@ -21,6 +21,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private static final InputStream FRAGMENT_SHADER = DefaultComponentProgram.class.getResourceAsStream("frag.glsl");
 
     private static final int MAIN_MATERIAL_TEXTURE_SAMPLER = 0;
+    private static final int MATERIAL_BRIGHTNESS_TEXTURE = 1;
 
     private static final int MAX_SPOT_LIGHT_SOURCES = 25;
     private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MAX_SPOT_LIGHT_SOURCES);
@@ -36,6 +37,8 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int unifMainTexture;
     private int unifMaterialBrightness;
     private int unifMaterialShininess;
+    private int unifMaterialHasBrightnessTexture;
+    private int unifMaterialBrightnessTexture;
     private int unifLightEnabled;
     private int unifSpotLightCount;
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
@@ -60,6 +63,8 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         this.unifMainTexture = getUniformLocation("material.mainTexture");
         this.unifMaterialBrightness = getUniformLocation("material.brightness");
         this.unifMaterialShininess = getUniformLocation("material.shininess");
+        this.unifMaterialHasBrightnessTexture = getUniformLocation("material.hasBrightnessTexture");
+        this.unifMaterialBrightnessTexture = getUniformLocation("material.brightnessTexture");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
         this.unifSpotLightCount = getUniformLocation("numSpotLights");
     }
@@ -73,6 +78,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
 
     private void setupSamplers() {
         setUniformi(unifMainTexture, MAIN_MATERIAL_TEXTURE_SAMPLER);
+        setUniformi(unifMaterialBrightnessTexture, MATERIAL_BRIGHTNESS_TEXTURE);
     }
 
     @Override
@@ -80,6 +86,10 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         useTexture(material.getMainTexture(), MAIN_MATERIAL_TEXTURE_SAMPLER);
         setUniformf(unifMaterialBrightness, material.getBrightness());
         setUniformf(unifMaterialShininess, material.getShininess());
+        if (material.hasBrightnessTexture()) {
+            setUniformb(unifMaterialHasBrightnessTexture, true);
+            useTexture(material.getBrightnessTexture(), MATERIAL_BRIGHTNESS_TEXTURE);
+        } else setUniformb(unifMaterialHasBrightnessTexture, false);
     }
 
     @Override
