@@ -71,7 +71,7 @@ public class Test {
         Component root = new SimpleListenableParent(scene);
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 1000f, WIDTH, HEIGHT));
-        camera.move(new Vector3f(0, 1f, 1));
+        camera.move(new Vector3f(0, 5f, 10f));
         RenderingConfig settings = new RenderingConfig(60, WIDTH, HEIGHT);
         Graphics graphics = new Graphics(context, camera, settings);
         EngineThread graphicsThread = graphics.getThread();
@@ -80,8 +80,8 @@ public class Test {
         GLFWInput input = new GLFWInput();
 
         graphicsThread.scheduleOnce(() -> {
-            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("drone_1.obj")).toVAOMesh();
-            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("drone_1.png"), PNGDecoder.Format.RGBA);
+            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj")).toVAOMesh();
+            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
             Component light = new SimpleComponent(root);
