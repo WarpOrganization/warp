@@ -13,19 +13,23 @@ import java.util.Set;
 
 public class CollisionListener extends ContactListener {
 
-    private List<btPersistentManifold> activeCollisons;
+    private PhysicsWorld world;
 
-    public CollisionListener(List<btPersistentManifold> activeCollisons) {
+    public CollisionListener(PhysicsWorld world) {
         super();
-        this.activeCollisons = activeCollisons;
+        this.world = world;
     }
 
     @Override
     public void onContactStarted(btPersistentManifold manifold, boolean match0, boolean match1) {
-        activeCollisons.add(manifold);
+        synchronized (world) {
+            world.getActiveCollisions().add(manifold);
+        }
     }
 
     public void onContactEnded(btPersistentManifold manifold) {
-        activeCollisons.remove(manifold);
+        synchronized (world) {
+            world.getActiveCollisions().remove(manifold);
+        }
     }
 }

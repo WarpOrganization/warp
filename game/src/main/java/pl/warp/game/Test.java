@@ -99,7 +99,7 @@ public class Test {
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0.1f, 400, true, true);
+            ParticleFactory factory = new RandomSpreadingParticleFactory(0.05f, 800, true, true);
             new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 2000, spritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -131,7 +131,7 @@ public class Test {
             new GraphicsMaterialProperty(controllableGoat, material);
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
-            new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh);
+            new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, controllableGoat);
 
             SpotLight goatLight = new SpotLight(
                     controllableGoat,
@@ -142,15 +142,6 @@ public class Test {
                     0.1f, 0.1f);
             LightProperty directionalLightProperty = new LightProperty(controllableGoat);
             directionalLightProperty.addSpotLight(goatLight);
-
-            SpotLight laser = new SpotLight(
-                    controllableGoat,
-                    new Vector3f(0, 0, 1),
-                    new Vector3f(0, 0, 1), 0.001f, 0.002f,
-                    new Vector3f(0f, 30f, 0f),
-                    new Vector3f(0f, 0f, 0f),
-                    0f, 0f);
-            directionalLightProperty.addSpotLight(laser);
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -163,7 +154,7 @@ public class Test {
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
             scriptsThread.start(); //has to start after the window is created
         });
-        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(100), new RapidExecutionStrategy());
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
             physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root));
@@ -174,7 +165,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 300; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);

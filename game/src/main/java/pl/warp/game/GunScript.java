@@ -11,6 +11,7 @@ import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.math.Transforms;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -26,6 +27,8 @@ public class GunScript extends Script<Component> {
     private TransformProperty transformProperty;
     private PhysicalBodyProperty physicalProperty;
     private Component root;
+    private Texture2DArray explosionSpritesheet;
+    private Component playerShip;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final float BULLET_SPEED = 1f;
@@ -34,12 +37,14 @@ public class GunScript extends Script<Component> {
     private Mesh bulletMesh;
 
 
-    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh) {
+    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Component playerShip) {
         super(owner);
         this.cooldown = cooldown;
         this.input = input;
         this.root = root;
         this.bulletMesh = bulletMesh;
+        this.explosionSpritesheet = explosionSpritesheet;
+        this.playerShip = playerShip;
     }
 
     @Override
@@ -86,9 +91,9 @@ public class GunScript extends Script<Component> {
             new GraphicsMeshProperty(bullet, bulletMesh);
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
             new PhysicalBodyProperty(bullet, BULLET_MASS, 0.128f).applyForce(direction);
-            new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x,bulletTranslation.y,bulletTranslation.z)));
+            new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z)));
             root.addChild(bullet);
-            new BulletScript(bullet,1000);
+            new BulletScript(bullet, 1000, explosionSpritesheet, playerShip);
         }
 
     }

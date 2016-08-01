@@ -19,6 +19,7 @@ public abstract class Component {
     private final Map<String, Property> properties = new TreeMap<>();
     private final Set<Listener> listeners = new HashSet<>();
     private final List<Component> children = new ArrayList<>();
+    private boolean alive = true;
 
     public Component(Component parent) {
         parent.addChild(this);
@@ -172,11 +173,15 @@ public abstract class Component {
         }
     }
 
-    public void destroy() {
-        if (hasParent())
-            getParent().removeChild(this);
-        triggerEvent(new ComponentDeathEvent(this));
-        forEachChildren(Component::destroy);
+    public synchronized void destroy() {
+        if (alive) {
+            if (hasParent())
+                getParent().removeChild(this);
+            triggerEvent(new ComponentDeathEvent(this));
+            forEachChildren(Component::destroy);
+            alive = false;
+        } else throw new IllegalStateException("The component has already been destroyed.");
+
     }
 
     public void forEachChildren(Consumer<Component> f) {

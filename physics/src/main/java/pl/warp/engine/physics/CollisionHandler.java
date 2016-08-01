@@ -26,7 +26,6 @@ public class CollisionHandler {
     private Vector3 contactPos = new Vector3();
 
     public CollisionHandler(PhysicsWorld world, CollisionStrategy collisionStrategy) {
-
         this.world = world;
         this.collisionStrategy = collisionStrategy;
         result = new ClosestRayResultCallback(new Vector3(), new Vector3());
@@ -36,14 +35,17 @@ public class CollisionHandler {
 
 
     public void updateCollisions() {
-        world.getCollisionWorld().performDiscreteCollisionDetection();
-        world.getActiveCollisions().forEach(manifold -> {
-            manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
-            assingValues(manifold);
-            collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
-            findContactPos(manifold);
-        });
+        synchronized (world) {
+            world.getCollisionWorld().performDiscreteCollisionDetection();
+            world.getActiveCollisions().forEach(manifold -> {
+                manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
+                assingValues(manifold);
+                collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
+                findContactPos(manifold);
+            });
+        }
     }
+
     private Vector3f direction1 = new Vector3f();
     private Vector3f direction2 = new Vector3f();
 
@@ -97,7 +99,9 @@ public class CollisionHandler {
     private boolean isMoving(PhysicalBodyProperty property) {
         return !(property.getNextTickTranslation().length() == 0 && property.getNextTickRotation().length() == 0);
     }
+
     private Vector3f direction = new Vector3f();
+
     private void moveBack(PhysicalBodyProperty physicalBodyProperty, float distance) {
 
 
