@@ -40,10 +40,12 @@ public class CollisionHandler {
         world.getActiveCollisions().forEach(manifold -> {
             manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
             assingValues(manifold);
-            findContactPos(manifold);
             collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
+            findContactPos(manifold);
         });
     }
+    private Vector3f direction1 = new Vector3f();
+    private Vector3f direction2 = new Vector3f();
 
     private void findContactPos(btPersistentManifold manifold) {
         Component component1;
@@ -59,12 +61,10 @@ public class CollisionHandler {
         PhysicalBodyProperty physicalBodyProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         ColliderProperty colliderProperty1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         ColliderProperty colliderProperty2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        physicalBodyProperty1.setTorque(new Vector3f());
-        physicalBodyProperty2.setTorque(new Vector3f());
+
 
         float distance = findLongestDistance(manifold);
-        Vector3f direction1 = new Vector3f();
-        Vector3f direction2 = new Vector3f();
+
 
         //distance is always >0
         if (distance < -COLLISION_MARGIN) {
@@ -97,9 +97,9 @@ public class CollisionHandler {
     private boolean isMoving(PhysicalBodyProperty property) {
         return !(property.getNextTickTranslation().length() == 0 && property.getNextTickRotation().length() == 0);
     }
-
+    private Vector3f direction = new Vector3f();
     private void moveBack(PhysicalBodyProperty physicalBodyProperty, float distance) {
-        Vector3f direction = new Vector3f();
+
 
         if (physicalBodyProperty.getNextTickTranslation().length() > -distance) {
             physicalBodyProperty.getNextTickTranslation().normalize(direction);
@@ -108,10 +108,6 @@ public class CollisionHandler {
             direction.set(physicalBodyProperty.getNextTickTranslation()).negate();
         }
         physicalBodyProperty.getNextTickTranslation().add(direction);
-        //Vector3f velocity = new Vector3f().set(physicalBodyProperty.getNextTickTranslation());
-        //velocity.sub(contactPos.x, contactPos.y, contactPos.z);
-        //velocity.normalize().mul(distance);
-        //velocity.negate();
         physicalBodyProperty.applyForce(direction.mul(physicalBodyProperty.getMass()));
     }
 
@@ -127,7 +123,7 @@ public class CollisionHandler {
         return maxDistance;
     }
 
-    Vector3f tmp = new Vector3f();
+    private Vector3f tmp = new Vector3f();
 
     private boolean isApproaching(Vector3f pos1, Vector3f pos2, Vector3f velocity) {
         tmp.set(pos1);
@@ -147,8 +143,8 @@ public class CollisionHandler {
         }
     }
 
-    ClosestRayResultCallback result;
-    Vector3f tmpTranslation;
+    private ClosestRayResultCallback result;
+    private Vector3f tmpTranslation;
 
     public void performRayTests() {
         for (int i = 0; i < world.getRayTestColliders().size(); i++) {

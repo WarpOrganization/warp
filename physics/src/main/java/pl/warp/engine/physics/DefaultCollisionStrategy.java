@@ -37,6 +37,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     private Vector3f upperPart = new Vector3f();
     private Vector3f directionCopy = new Vector3f();
     private Vector3f torqueChange = new Vector3f();
+    private Vector3f emptyVector = new Vector3f();
 
     public void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos) {
 
@@ -48,6 +49,9 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+
+            physicalProperty1.setTorque(emptyVector);
+            physicalProperty2.setTorque(emptyVector);
 
 
             //distance vector for body 1
