@@ -50,7 +50,7 @@ public class CameraScript extends Script<Camera> {
         if (diff.length() > 1) {
             Vector3f delta = diff.normalize().mul(SPEED);
             actualDistance.add(delta);
-            cameraTransform.move(delta);
+            //cameraTransform.move(delta);
         }
 
     }
