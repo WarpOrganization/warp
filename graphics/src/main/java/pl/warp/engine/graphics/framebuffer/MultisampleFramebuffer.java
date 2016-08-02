@@ -22,6 +22,7 @@ public class MultisampleFramebuffer extends TextureFramebuffer {
         attachDepthBuffer(destTex);
         attachTexture(destTex);
         int status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+        if(status == GL30.GL_FRAMEBUFFER_UNSUPPORTED) throw new FramebufferException("Frame buffers not supported");
         if(status != GL30.GL_FRAMEBUFFER_COMPLETE) throw new FramebufferException("Incomplete framebuffer: " + status);
     }
 
