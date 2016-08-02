@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 /**
  * @author Jaca777
@@ -27,6 +28,8 @@ public class GLErrors {
                 return "Stack underflow.";
             case GL11.GL_OUT_OF_MEMORY:
                 return "Out of memory.";
+            case GL30.GL_INVALID_FRAMEBUFFER_OPERATION:
+                return "Invalid framebuffer operation.";
             default:
                 return "Unknown error code " + error + ".";
         }
