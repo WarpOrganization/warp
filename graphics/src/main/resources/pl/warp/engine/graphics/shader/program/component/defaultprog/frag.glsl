@@ -46,6 +46,7 @@ float getAttenuation(SpotLightSource source);
 float getDiffuse(SpotLightSource source, vec3 lightDir, float directionCoeff);
 float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse);
 void applyBrightnessTexture();
+bool isNan(vec3 vec);
 
 void main(void) {
     if(lightEnabled)
@@ -53,6 +54,7 @@ void main(void) {
     else fragColor = texture(material.mainTexture, vTexCoord);
     fragColor.rgb *= material.brightness;
     if(material.hasBrightnessTexture) applyBrightnessTexture();
+    if(isNan(fragColor.rgb)) discard;
 }
 
 vec3 getLight() {
@@ -104,4 +106,8 @@ float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse) {
 void applyBrightnessTexture() {
     vec3 fragBrightness = texture(material.brightnessTexture, vTexCoord).rgb * BRIGHTNESS_TEXTURE_MULTIPLIER;
     fragColor.rgb += fragBrightness;
+}
+
+bool isNan(vec3 vec) {
+    return (!(fragColor.r < 1000000.0)) || (!(fragColor.g < 1000000.0)) || (!(fragColor.b < 1000000.0));
 }

@@ -55,9 +55,9 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final int WIDTH = 1800, HEIGHT = 1060;
-    private static final float ROT_SPEED = 0.05f*200;
-    private static final float MOV_SPEED = 0.2f*200;
-    private static final float BRAKING_FORCE = 0.1f*200;
+    private static final float ROT_SPEED = 0.05f;
+    private static final float MOV_SPEED = 0.2f;
+    private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
     private static Random random = new Random();
@@ -70,12 +70,12 @@ public class Test {
         Component root = new SimpleListenableParent(scene);
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 1000f, WIDTH, HEIGHT));
-        camera.move(new Vector3f(0, 5f, 10f));
+        camera.move(new Vector3f(0, 4f, 15f));
         RenderingConfig settings = new RenderingConfig(60, WIDTH, HEIGHT);
         Graphics graphics = new Graphics(context, camera, settings);
         EngineThread graphicsThread = graphics.getThread();
         graphics.enableUpsLogging();
-        CameraScript cameraScript = new CameraScript(camera);
+        //CameraScript cameraScript = new CameraScript(camera);
         GLFWInput input = new GLFWInput();
 
         graphicsThread.scheduleOnce(() -> {
@@ -124,7 +124,7 @@ public class Test {
             generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 2f*200, 2.833f);
+            new PhysicalBodyProperty(controllableGoat, 1f, 2.833f);
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(controllableGoat, material);

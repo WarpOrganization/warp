@@ -13,6 +13,7 @@ layout(location = 0) out vec4 fragColor;
 
 float maxElem(vec3 vec);
 float minElem(vec3 vec);
+bool isNan(vec3 vec);
 
 void main(void){
     vec4 color = texture(tex, vTexCoord);
@@ -28,7 +29,6 @@ void main(void){
     if(maxElem > maxBrightness)
         fragColor *= (maxBrightness / maxElem);
 
-    if(!(fragColor.r < 1000000.0)) discard;
 
     fragColor.a = 1.0f;
 }
