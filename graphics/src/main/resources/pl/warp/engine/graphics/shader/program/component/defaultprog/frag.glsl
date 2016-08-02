@@ -52,8 +52,7 @@ void main(void) {
         fragColor = vec4(getLight(), 1) * texture(material.mainTexture, vTexCoord);
     else fragColor = texture(material.mainTexture, vTexCoord);
     fragColor.rgb *= material.brightness;
-    if(material.hasBrightnessTexture)
-        applyBrightnessTexture();
+    if(material.hasBrightnessTexture) applyBrightnessTexture();
 }
 
 vec3 getLight() {

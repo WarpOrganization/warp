@@ -42,13 +42,12 @@ public class MeshRenderer implements Renderer {
         if (component.hasEnabledProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME)) {
             program.use();
             program.useMatrixStack(stack);
+            program.useComponent(component);
             renderMesh(component);
         }
     }
 
     private void renderMesh(Component component) {
-        if (component.hasEnabledProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME))
-            useMaterial(component.getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME));
         setupGL();
         Mesh mesh = component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh();
         mesh.bind();
@@ -72,9 +71,5 @@ public class MeshRenderer implements Renderer {
     @Override
     public void destroy() {
         program.delete();
-    }
-
-    private void useMaterial(GraphicsMaterialProperty property) {
-        program.useMaterial(property.getMaterial());
     }
 }

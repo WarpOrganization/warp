@@ -15,5 +15,6 @@ layout(location = 0) out vec4 fragColor;
 void main(void) {
     fragColor = texture2DArray(textures, vec3(texCoord, textureIndex)) * visibility;
     fragColor.rgb *= flareColor;
+    if(fragColor.r < 0.0f || fragColor.g < 0.0f || fragColor.b < 0.0f) discard;
     fragColor.a = 1.0;
 }

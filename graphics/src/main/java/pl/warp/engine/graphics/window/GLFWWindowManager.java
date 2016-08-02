@@ -30,7 +30,7 @@ public class GLFWWindowManager implements WindowManager {
         setupCloseCallbackCallback();
         centerWindow(display);
         makeOGLContext();
-        //enableVSync();
+        enableVSync();
         showWindow();
         glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }

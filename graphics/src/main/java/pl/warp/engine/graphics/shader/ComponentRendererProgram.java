@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.shader;
 
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.material.Material;
@@ -36,8 +37,13 @@ public abstract class ComponentRendererProgram extends Program{
         super(vertexShader, fragmentShader, field);
     }
 
-    public abstract void useMaterial(Material material);
+    public abstract void useComponent(Component component);
     public abstract void useCamera(Camera camera);
     public abstract void useMatrixStack(MatrixStack stack);
     public abstract void useEnviroment(Environment environment);
+
+    public void update(int delta) {
+
+    }
+
 }

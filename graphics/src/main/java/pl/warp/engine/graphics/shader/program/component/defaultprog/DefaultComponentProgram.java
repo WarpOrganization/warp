@@ -1,8 +1,10 @@
 package pl.warp.engine.graphics.shader.program.component.defaultprog;
 
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.Environment;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
@@ -82,7 +84,14 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     }
 
     @Override
-    public void useMaterial(Material material) {
+    public void useComponent(Component component) {
+        if (component.hasEnabledProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)) {
+            GraphicsMaterialProperty property = component.getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME);
+            useMaterial(property.getMaterial());
+        }
+    }
+
+    private void useMaterial(Material material) {
         useTexture(material.getMainTexture(), MAIN_MATERIAL_TEXTURE_SAMPLER);
         setUniformf(unifMaterialBrightness, material.getBrightness());
         setUniformf(unifMaterialShininess, material.getShininess());
