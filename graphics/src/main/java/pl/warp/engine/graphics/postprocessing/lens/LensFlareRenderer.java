@@ -166,6 +166,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
         program.useScreenSize(config.getDisplayWidth(), config.getDisplayHeight());
         createIndexBuffer();
         createVAO();
+        GL11.glEnable(GL11.GL_BLEND);
     }
 
     private void createIndexBuffer() {
