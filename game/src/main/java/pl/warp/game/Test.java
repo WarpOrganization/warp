@@ -153,7 +153,7 @@ public class Test {
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
             scriptsThread.start(); //has to start after the window is created
         });
-        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(100), new RapidExecutionStrategy());
+        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
