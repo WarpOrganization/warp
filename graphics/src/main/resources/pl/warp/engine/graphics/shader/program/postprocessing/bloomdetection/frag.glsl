@@ -7,10 +7,13 @@ in vec2 vTexCoord;
 uniform float threshold;
 uniform bool cutOff = true;
 uniform float maxBrightness = 3.0;
+uniform float minBrightness = 0.01;
 
 layout(location = 0) out vec4 fragColor;
 
 float maxElem(vec3 vec);
+float minElem(vec3 vec);
+bool isNan(vec3 vec);
 
 void main(void){
     vec4 color = texture(tex, vTexCoord);
@@ -26,9 +29,14 @@ void main(void){
     if(maxElem > maxBrightness)
         fragColor *= (maxBrightness / maxElem);
 
+
     fragColor.a = 1.0f;
 }
 
 float maxElem(vec3 vec) {
     return max(vec.r, max(vec.g, vec.b));
+}
+
+float minElem(vec3 vec) {
+    return min(vec.r, min(vec.g, vec.b));
 }

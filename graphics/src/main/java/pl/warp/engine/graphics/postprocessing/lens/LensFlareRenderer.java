@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.postprocessing.lens;
 
+import org.apache.log4j.Logger;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -24,6 +25,8 @@ import java.util.List;
  *         Created 2016-07-25 at 12
  */
 public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
+
+    private static final Logger logger = Logger.getLogger(LensFlareRenderer.class);
 
     public static final int MAX_FLARES_NUMBER = 100;
 
@@ -162,10 +165,13 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     @Override
     public void init() {
+        logger.info("Initializing lens flare renderer...");
         this.program = new LensProgram();
-        program.useScreenSize(config.getDisplayWidth(), config.getDisplayHeight());
+        program.useScreenSize(config.getDisplay().getWidth(), config.getDisplay().getHeight());
         createIndexBuffer();
         createVAO();
+        GL11.glEnable(GL11.GL_BLEND);
+        logger.info("Lens flare renderer initialized.");
     }
 
     private void createIndexBuffer() {
@@ -181,6 +187,8 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void destroy() {
         vao.destroy();
+        framebuffer.delete();
+        logger.info("Lens flare renderer destroyed.");
     }
 
     @Override

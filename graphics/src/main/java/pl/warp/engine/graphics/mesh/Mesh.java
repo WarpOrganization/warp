@@ -1,11 +1,13 @@
 package pl.warp.engine.graphics.mesh;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import pl.warp.engine.graphics.utility.BufferTools;
 
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Objects;
@@ -14,7 +16,7 @@ import java.util.Objects;
  * @author Jaca777
  *         Created 21.12.14 at 18:51
  */
-public class Mesh  {
+public class Mesh {
     public static final int INDEX_ATTRIBUTE = 0;
     public static final int TEX_COORD_ATTRIBUTE = 1;
     public static final int NORMAL_ATTRIBUTE = 2;
@@ -23,22 +25,28 @@ public class Mesh  {
             texCoordBuff = -1,
             normalBuff = -1,
             indexBuff = -1;
-    protected int indices = -1;
+    protected int indices = -1,
+            vertices = -1;
 
     /**
-     * @param vertices Buffer containing vertices
-     * @param texCoords Buffer containing texture coordinates
-     * @param normals Buffer containing normals
-     * @param indices Buffer containing indices
-     * @param numElements Number of elements
+     * @param verticesNum Buffer containing vertices
+     * @param texCoords   Buffer containing texture coordinates
+     * @param normals     Buffer containing normals
+     * @param indicesNum  Buffer containing indices
+     * @param indicesNum  Number of elements
      */
-    public Mesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements) {
+    public Mesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int indicesNum, int verticesNum) {
         loadBuffers(vertices, texCoords, normals, indices);
+        this.indices = indicesNum;
+        this.vertices = verticesNum;
 
-        this.indices = numElements;
     }
 
-    protected void loadBuffers(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices){
+    public Mesh(int indices, int vertices) {
+        this(GL15.glGenBuffers(), GL15.glGenBuffers(), GL15.glGenBuffers(), GL15.glGenBuffers(), indices, vertices);
+    }
+
+    protected void loadBuffers(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices) {
         Objects.requireNonNull(vertices, "Vertex buffer can't be null");
         Objects.requireNonNull(indices, "Index buffer can't be null");
 
@@ -62,31 +70,33 @@ public class Mesh  {
     }
 
     /**
-     * @param vertices Array consisting of vertices
+     * @param vertices  Array consisting of vertices
      * @param texCoords Array consisting of texture coordinates.
-     * @param normals Array consisting of normals
-     * @param indices Array consisting of indices
+     * @param normals   Array consisting of normals
+     * @param indices   Array consisting of indices
      */
     public Mesh(float[] vertices, float[] texCoords, float[] normals, int[] indices) {
-        this((vertices == null) ? null : BufferTools.toDirectBuffer(vertices),
-                (texCoords == null) ? null : BufferTools.toDirectBuffer(texCoords),
-                (normals == null) ? null : BufferTools.toDirectBuffer(normals),
-                BufferTools.toDirectBuffer(indices), indices.length);
+        this(BufferTools.toDirectBuffer(vertices),
+                BufferTools.toDirectBuffer(texCoords),
+                BufferTools.toDirectBuffer(normals),
+                BufferTools.toDirectBuffer(indices),
+                indices.length, vertices.length / 3);
     }
 
     /**
-     * @param vertexBuff Vertex buffer name.
+     * @param vertexBuff   Vertex buffer name.
      * @param texCoordBuff Texture coordinate buffer name.
-     * @param normalBuff Normal buffer name.
-     * @param indexBuff Index buffer name.
-     * @param indices Number of elements.
+     * @param normalBuff   Normal buffer name.
+     * @param indexBuff    Index buffer name.
+     * @param indices      Number of elements.
      */
-    public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices) {
+    public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices, int vertices) {
         this.vertexBuff = vertexBuff;
         this.texCoordBuff = texCoordBuff;
         this.normalBuff = normalBuff;
         this.indexBuff = indexBuff;
         this.indices = indices;
+        this.vertices = vertices;
     }
 
     /**
@@ -177,14 +187,14 @@ public class Mesh  {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
     }
 
-    public void finalizeRendering(){
+    public void finalizeRendering() {
         //Do nothing
     }
 
     /**
      * Calls OpenGL draw function.
      */
-    public void render(){
+    public void render() {
         GL11.glDrawElements(GL11.GL_TRIANGLES, indices, GL11.GL_UNSIGNED_INT, 0);
     }
 
@@ -192,7 +202,7 @@ public class Mesh  {
     /**
      * Binds each vbo and draws mesh.
      */
-    public void draw(){
+    public void draw() {
         bind();
         render();
         finalizeRendering();
@@ -202,11 +212,56 @@ public class Mesh  {
     /**
      * Unloads vbos.
      */
-    public void unload(){
+    public void unload() {
         GL15.glDeleteBuffers(vertexBuff);
         GL15.glDeleteBuffers(texCoordBuff);
         GL15.glDeleteBuffers(normalBuff);
         GL15.glDeleteBuffers(indexBuff);
     }
 
+    private FloatBuffer tempVertexData;
+
+    public synchronized void setVertexData(float[] vertices) {
+        if (tempVertexData == null) tempVertexData = BufferUtils.createFloatBuffer(indices * 3);
+        tempVertexData.clear();
+        FloatBuffer data = tempVertexData.put(vertices);
+        setBufferData(vertexBuff, data);
+    }
+
+    private FloatBuffer tempTexCoordData;
+
+    public synchronized void setTexCoordData(float[] texCoords) {
+        if (tempTexCoordData == null) tempTexCoordData = BufferUtils.createFloatBuffer(indices * 2);
+        tempTexCoordData.clear();
+        FloatBuffer data = tempTexCoordData.put(texCoords);
+        setBufferData(texCoordBuff, data);
+    }
+
+    private FloatBuffer tempNormalData;
+
+    public synchronized void setNormalData(float[] normals) {
+        if (tempNormalData == null) tempNormalData = BufferUtils.createFloatBuffer(indices * 3);
+        tempNormalData.clear();
+        FloatBuffer data = tempNormalData.put(normals);
+        setBufferData(normalBuff, data);
+    }
+
+    private IntBuffer tempIndicesData;
+
+    public synchronized void setIndexData(int[] indices) {
+        if (tempIndicesData == null) tempIndicesData = BufferUtils.createIntBuffer(this.indices);
+        tempIndicesData.clear();
+        IntBuffer data = tempIndicesData.put(indices);
+        setBufferData(indexBuff, data);
+    }
+
+    private void setBufferData(int buffer, FloatBuffer data) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, buffer);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data, GL15.GL_STATIC_DRAW);
+    }
+
+    private void setBufferData(int buffer, IntBuffer data) {
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, buffer);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data, GL15.GL_STATIC_DRAW);
+    }
 }

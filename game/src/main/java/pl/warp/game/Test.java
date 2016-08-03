@@ -3,10 +3,12 @@ package pl.warp.game;
 import org.apache.log4j.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -22,8 +24,10 @@ import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
+import pl.warp.engine.graphics.mesh.GraphicsCustomRendererProgramProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.Sphere;
 import pl.warp.engine.graphics.particles.*;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
@@ -37,12 +41,14 @@ import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
+import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.game.program.star.StarProgram;
 
 import java.util.Random;
 
@@ -54,9 +60,10 @@ import java.util.Random;
 public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
-    private static final int WIDTH = 1800, HEIGHT = 1060;
-    private static final float ROT_SPEED = 0.1f;
-    private static final float MOV_SPEED = 0.2f;
+    private static final boolean FULLSCREEN = true;
+    private static final int WIDTH = 1920, HEIGHT = 1080;
+    private static final float ROT_SPEED = 0.05f * 0.5f;
+    private static final float MOV_SPEED = 0.2f * 0.5f;
     private static final float BRAKING_FORCE = 0.1f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
@@ -68,14 +75,15 @@ public class Test {
         Scene scene = new Scene(context);
         context.setScene(scene);
         Component root = new SimpleListenableParent(scene);
+
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 1000f, WIDTH, HEIGHT));
-        camera.move(new Vector3f(0, 5f, 10f));
-        RenderingConfig settings = new RenderingConfig(60, WIDTH, HEIGHT);
+        camera.move(new Vector3f(0, 4f, 15f));
+        RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
         Graphics graphics = new Graphics(context, camera, settings);
         EngineThread graphicsThread = graphics.getThread();
         graphics.enableUpsLogging();
-        CameraScript cameraScript = new CameraScript(camera);
+        //CameraScript cameraScript = new CameraScript(camera);
         GLFWInput input = new GLFWInput();
 
         graphicsThread.scheduleOnce(() -> {
@@ -83,23 +91,15 @@ public class Test {
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
+            Sphere sphere = new Sphere(10, 50, 50);
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
-            new GraphicsMeshProperty(light, goatMesh);
-            GraphicsMaterialProperty lightMaterial = new GraphicsMaterialProperty(light, new Material(goatTexture));
-            lightMaterial.getMaterial().setBrightness(100f);
+            new GraphicsMeshProperty(light, sphere);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
+            lightSourceTransform.move(new Vector3f(100f, 100f, 100f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
-            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh();
-
-            ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
-            Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0.05f, 800, true, true);
-            new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 2000, spritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -123,13 +123,18 @@ public class Test {
 
             generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
+            ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
+
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 2f, 6.7f);
+            new PhysicalBodyProperty(controllableGoat, 1f, 6.7f);
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(controllableGoat, material);
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+
+            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh();
             new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, controllableGoat);
 
             SpotLight goatLight = new SpotLight(
@@ -153,14 +158,31 @@ public class Test {
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
             scriptsThread.start(); //has to start after the window is created
         });
-        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(100), new RapidExecutionStrategy());
+        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
         physicsThread.scheduleOnce(() -> {
             physicsThread.scheduleTask(new MovementTask(root));
             physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
         });
+
+        new Script(root) {
+            @Override
+            public void onInit() {
+
+            }
+
+            @Override
+            public void onUpdate(int delta) {
+                if (input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+                    graphicsThread.scheduleOnce(graphicsThread::interrupt);
+                    physicsThread.scheduleOnce(physicsThread::interrupt);
+                }
+            }
+        };
+
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
+
 
     }
 

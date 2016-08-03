@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.particles;
 
+import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -10,6 +11,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.Renderer;
+import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 import pl.warp.engine.graphics.shader.program.particle.ParticleProgram;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 
@@ -22,6 +24,8 @@ import java.util.List;
  *         Created 2016-07-11 at 13
  */
 public class ParticleRenderer implements Renderer {
+
+    private static final Logger logger = Logger.getLogger(LensFlareRenderer.class);
 
     public static final int MAX_PARTICLES_NUMBER = 1000;
 
@@ -40,8 +44,10 @@ public class ParticleRenderer implements Renderer {
 
     @Override
     public void init() {
+        logger.info("Initializing particle renderer...");
         this.program = new ParticleProgram();
         initBuffers();
+        logger.info("Particle renderer initialized...");
     }
 
     private void initBuffers() {
@@ -90,9 +96,9 @@ public class ParticleRenderer implements Renderer {
 
     @Override
     public void render(Component component, MatrixStack stack) {
-        if (component.hasEnabledProperty(GraphicsParticleSystemProperty.PARTICLE_SYSTEM_PROPERTY_NAME)) {
-            GraphicsParticleSystemProperty emitterProperty =
-                    component.getProperty(GraphicsParticleSystemProperty.PARTICLE_SYSTEM_PROPERTY_NAME);
+        if (component.hasEnabledProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)) {
+            GraphicsParticleEmitterProperty emitterProperty =
+                    component.getProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
             ParticleSystem system = emitterProperty.getSystem();
             renderParticles(system.getParticles(), system.getSpriteSheet(), stack);
         }
@@ -170,5 +176,6 @@ public class ParticleRenderer implements Renderer {
         GL15.glDeleteBuffers(new int[]{positionVBO, textureIndexVBO, rotationVBO, indexBuff});
         GL30.glDeleteVertexArrays(vao);
         program.delete();
+        logger.info("Particle renderer destroyed.");
     }
 }

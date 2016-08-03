@@ -5,12 +5,15 @@ package pl.warp.engine.graphics.window;
  *         Created 2016-06-25 at 21
  */
 public class Display {
+
+    private boolean fullscreen;
     private boolean visible = true;
     private boolean resizable = false;
     private int width;
     private int height;
 
-    public Display(int width, int height) {
+    public Display(boolean fullscreen, int width, int height) {
+        this.fullscreen = fullscreen;
         this.width = width;
         this.height = height;
     }
@@ -48,6 +51,15 @@ public class Display {
 
     public Display setHeight(int height) {
         this.height = height;
+        return this;
+    }
+
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    public Display setFullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
         return this;
     }
 }

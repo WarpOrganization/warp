@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.postprocessing;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
@@ -20,6 +21,8 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
  */
 public class HDRRenderer implements Flow<BloomRendererOutput, Texture2D> {
 
+    private static final Logger logger = Logger.getLogger(HDRRenderer.class);
+
     private RenderingConfig config;
 
     private BloomRendererOutput src;
@@ -35,17 +38,22 @@ public class HDRRenderer implements Flow<BloomRendererOutput, Texture2D> {
 
     @Override
     public void init() {
+        logger.info("Initializing HDR renderer...");
         this.hdrProgram = new HDRProgram();
         this.hdrProgram.setBloomLevel(config.getBloomLevel());
         this.hdrProgram.setExposure(config.getExposure());
         this.rect = new Quad();
-        this.outputTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL11.GL_RGB16, GL11.GL_RGB, false, null);
+        this.outputTexture = new Texture2D(config.getDisplay().getWidth(), config.getDisplay().getHeight(), GL11.GL_RGB16, GL11.GL_RGB, false, null);
         this.destFramebuffer = new TextureFramebuffer(outputTexture);
+        logger.info("HDR renderer initialized.");
     }
 
     @Override
     public void destroy() {
         rect.destroy();
+        destFramebuffer.delete();
+        hdrProgram.delete();
+        logger.info("HDR renderer destroyed.");
     }
 
     @Override

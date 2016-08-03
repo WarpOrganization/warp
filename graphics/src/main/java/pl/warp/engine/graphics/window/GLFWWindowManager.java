@@ -30,7 +30,7 @@ public class GLFWWindowManager implements WindowManager {
         setupCloseCallbackCallback();
         centerWindow(display);
         makeOGLContext();
-        //enableVSync();
+        enableVSync();
         showWindow();
         glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
@@ -50,7 +50,8 @@ public class GLFWWindowManager implements WindowManager {
     }
 
     private void createHandle(Display display) {
-        this.windowHandle = glfwCreateWindow(display.getWidth(), display.getHeight(), "Warp Engine Demo", NULL, NULL);
+        long monitor = display.isFullscreen() ? glfwGetPrimaryMonitor() : NULL;
+        this.windowHandle = glfwCreateWindow(display.getWidth(), display.getHeight(), "Warp Engine Demo", monitor, NULL);
         if (this.windowHandle == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
     }
@@ -96,7 +97,6 @@ public class GLFWWindowManager implements WindowManager {
             e.printStackTrace();
         } finally {
             glfwTerminate();
-            glfwSetErrorCallback(null).free();
         }
     }
 

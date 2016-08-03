@@ -14,6 +14,7 @@ layout(location = 0) out vec4 fragColor;
 void main(void) {
     vec4 bloom = texture(bloomTex, vTexCoord) * bloomLevel;
     vec4 scene = texture(sceneTex, vTexCoord);
-    vec4 color = bloom + scene;
-    fragColor = 1 - exp2(-color * exposure);
+    vec3 color = scene.rgb + bloom.rgb;
+    fragColor.rgb = 1 - exp2(-color * exposure);
+    fragColor.a = 1.0;
 }

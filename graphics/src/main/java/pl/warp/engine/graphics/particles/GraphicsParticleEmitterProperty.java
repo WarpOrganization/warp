@@ -7,12 +7,12 @@ import pl.warp.engine.core.scene.Property;
  * @author Jaca777
  *         Created 2016-06-29 at 20
  */
-public class GraphicsParticleSystemProperty extends Property<Component> {
-    public static final String PARTICLE_SYSTEM_PROPERTY_NAME = "particleSystem";
+public class GraphicsParticleEmitterProperty extends Property<Component> {
+    public static final String PARTICLE_EMITTER_PROPERTY_NAME = "particleEmitter";
     private ParticleSystem system;
 
-    public GraphicsParticleSystemProperty(Component owner, ParticleSystem system) {
-        super(owner, PARTICLE_SYSTEM_PROPERTY_NAME);
+    public GraphicsParticleEmitterProperty(Component owner, ParticleSystem system) {
+        super(owner, PARTICLE_EMITTER_PROPERTY_NAME);
         this.system = system;
     }
 
