@@ -51,7 +51,7 @@ public class BulletScript extends Script<Component> {
             component.getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             new DupaProperty(component);
-            new GraphicsParticleSystemProperty(component, new ParticleSystem(animator, factory, 500, explosionSpritesheet));
+            new GraphicsParticleEmitterProperty(component, new ParticleSystem(animator, factory, 500, explosionSpritesheet));
             executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
         }
     }

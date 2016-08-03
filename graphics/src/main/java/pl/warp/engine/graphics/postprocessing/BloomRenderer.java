@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.postprocessing;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.RenderingConfig;
@@ -15,6 +16,8 @@ import pl.warp.engine.graphics.texture.Texture2D;
  *         Created 2016-07-20 at 12
  */
 public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
+
+    private static final Logger logger = Logger.getLogger(BloomRenderer.class);
 
     private Texture2D input;
     private BloomRendererOutput output;
@@ -83,18 +86,20 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     @Override
     public void init() {
+        logger.info("Initializing bloom renderer...");
         createTextures();
         createFramebuffers();
         createPrograms();
         this.quad = new Quad();
         this.output = new BloomRendererOutput(input, blurredBloomTexture);
+        logger.info("Bloom renderer initialized.");
     }
 
     private void createTextures() {
-        this.bloomDetectionTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
-        this.verticalBlurTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.bloomDetectionTexture = new Texture2D(config.getDisplay().getWidth(), config.getDisplay().getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.verticalBlurTexture = new Texture2D(config.getDisplay().getWidth(), config.getDisplay().getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(verticalBlurTexture);
-        this.blurredBloomTexture = new Texture2D(config.getDisplayWidth(), config.getDisplayHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.blurredBloomTexture = new Texture2D(config.getDisplay().getWidth(), config.getDisplay().getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(blurredBloomTexture);
     }
 
@@ -123,6 +128,7 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
         this.bloomDetectionProgram.delete();
         this.gaussianBlurProgram.delete();
         this.quad.destroy();
+        logger.info("Bloom renderer destroyed.");
     }
 
     @Override

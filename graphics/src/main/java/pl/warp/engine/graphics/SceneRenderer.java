@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
@@ -18,6 +19,9 @@ import pl.warp.engine.graphics.texture.MultisampleTexture2D;
  *         Created 2016-06-29 at 21
  */
 public class SceneRenderer implements Source<MultisampleTexture2D> {
+
+    private static final Logger logger = Logger.getLogger(SceneRenderer.class);
+
 
     private Scene scene;
     private RenderingConfig settings;
@@ -39,9 +43,13 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     @Override
     public void init() {
+        logger.info("Initializing scene renderer...");
+        logger.info("Initializing component renderer...");
         for (Renderer renderer : renderers)
             renderer.init();
+        logger.info("Setting up scene renderer framebuffers.");
         setupFramebuffer();
+        logger.info("Scene renderer initialized.");
     }
 
     @Override
@@ -95,9 +103,11 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     public void destroy() {
         for (Renderer renderer : renderers)
             renderer.destroy();
+        logger.info("Component renderers destroyed.");
         renderingFramebuffer.delete();
         outputTexture.delete();
         destroyComponent(scene);
+        logger.info("Scene renderer destroyed.");
     }
 
     private void destroyComponent(Component component) {
@@ -116,7 +126,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void setupFramebuffer() {
-        this.outputTexture = new MultisampleTexture2D(settings.getDisplayWidth(), settings.getDisplayHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
+        this.outputTexture = new MultisampleTexture2D(settings.getDisplay().getWidth(), settings.getDisplay().getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
         this.renderingFramebuffer = new MultisampleFramebuffer(outputTexture);
     }
 

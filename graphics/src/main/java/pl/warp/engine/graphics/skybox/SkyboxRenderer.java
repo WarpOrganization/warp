@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.skybox;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Renderer;
@@ -14,6 +15,8 @@ import pl.warp.engine.graphics.texture.Cubemap;
  */
 public class SkyboxRenderer implements Renderer {
 
+    private static final Logger logger = Logger.getLogger(SkyboxRenderer.class);
+
     private CubemapProgram cubemapProgram;
     private Skybox skybox;
     private Camera camera;
@@ -24,8 +27,10 @@ public class SkyboxRenderer implements Renderer {
 
     @Override
     public void init() {
+        logger.info("Initializing skybox renderer...");
         this.cubemapProgram = new CubemapProgram();
         this.skybox = new Skybox();
+        logger.info("Skybox renderer initialized.");
     }
 
     @Override
@@ -54,5 +59,6 @@ public class SkyboxRenderer implements Renderer {
     public void destroy() {
         skybox.delete();
         cubemapProgram.delete();
+        logger.info("Skybox renderer destroyed.");
     }
 }

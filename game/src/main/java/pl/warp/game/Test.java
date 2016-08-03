@@ -3,10 +3,12 @@ package pl.warp.game;
 import org.apache.log4j.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -39,6 +41,7 @@ import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
+import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
@@ -57,7 +60,8 @@ import java.util.Random;
 public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
-    private static final int WIDTH = 1800, HEIGHT = 1060;
+    private static final boolean FULLSCREEN = true;
+    private static final int WIDTH = 1920, HEIGHT = 1080;
     private static final float ROT_SPEED = 0.05f * 0.5f;
     private static final float MOV_SPEED = 0.2f * 0.5f;
     private static final float BRAKING_FORCE = 0.1f;
@@ -71,10 +75,11 @@ public class Test {
         Scene scene = new Scene(context);
         context.setScene(scene);
         Component root = new SimpleListenableParent(scene);
+
         Component controllableGoat = new SimpleComponent(root);
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 1000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 4f, 15f));
-        RenderingConfig settings = new RenderingConfig(60, WIDTH, HEIGHT);
+        RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
         Graphics graphics = new Graphics(context, camera, settings);
         EngineThread graphicsThread = graphics.getThread();
         graphics.enableUpsLogging();
@@ -95,7 +100,6 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(100f, 100f, 100f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
-            new GraphicsCustomRendererProgramProperty(light, new StarProgram());
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -160,8 +164,25 @@ public class Test {
             physicsThread.scheduleTask(new MovementTask(root));
             physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
         });
+
+        new Script(root) {
+            @Override
+            public void onInit() {
+
+            }
+
+            @Override
+            public void onUpdate(int delta) {
+                if (input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+                    graphicsThread.scheduleOnce(graphicsThread::interrupt);
+                    physicsThread.scheduleOnce(physicsThread::interrupt);
+                }
+            }
+        };
+
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
+
 
     }
 
