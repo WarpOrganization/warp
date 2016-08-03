@@ -23,16 +23,16 @@ public class VAOMesh extends Mesh {
         this.vao = createVAO();
     }
 
-    public VAOMesh(int indices) {
-        super(indices);
+    public VAOMesh(int indices, int vertices) {
+        super(indices, vertices);
         this.vao = new VAO(new int[]{vertexBuff, normalBuff, texCoordBuff}, indexBuff, VAO_SIZES, VAO_TYPES);
     }
 
     /**
-     * @see Mesh#Mesh(FloatBuffer, FloatBuffer, FloatBuffer, IntBuffer, int)
+     * @see Mesh#Mesh(FloatBuffer, FloatBuffer, FloatBuffer, IntBuffer, int, int)
      */
-    public VAOMesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements) {
-        super(vertices, texCoords, normals, indices, numElements);
+    public VAOMesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numIndices, int numVertices) {
+        super(vertices, texCoords, normals, indices, numIndices, numVertices);
         this.vao = createVAO();
     }
 

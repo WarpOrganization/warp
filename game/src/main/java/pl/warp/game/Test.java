@@ -22,8 +22,10 @@ import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
+import pl.warp.engine.graphics.mesh.GraphicsCustomRendererProgramProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.Sphere;
 import pl.warp.engine.graphics.particles.*;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
@@ -43,6 +45,7 @@ import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.game.program.star.StarProgram;
 
 import java.util.Random;
 
@@ -83,23 +86,16 @@ public class Test {
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
+            Sphere sphere = new Sphere(10, 50, 50);
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
-            new GraphicsMeshProperty(light, goatMesh);
-            GraphicsMaterialProperty lightMaterial = new GraphicsMaterialProperty(light, new Material(goatTexture));
-            lightMaterial.getMaterial().setBrightness(100f);
+            new GraphicsMeshProperty(light, sphere);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(50f, 50f, 50f));
+            lightSourceTransform.move(new Vector3f(100f, 100f, 100f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
-            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh();
-
-            ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
-            Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0.05f, 800, true, true);
-            new GraphicsParticleSystemProperty(light, new ParticleSystem(animator, factory, 2000, spritesheetTexture));
+            new GraphicsCustomRendererProgramProperty(light, new StarProgram());
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -123,6 +119,9 @@ public class Test {
 
             generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
+            ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
+
             new GraphicsMeshProperty(controllableGoat, goatMesh);
             new PhysicalBodyProperty(controllableGoat, 1f, 2.833f);
             Material material = new Material(goatTexture);
@@ -130,6 +129,8 @@ public class Test {
             new GraphicsMaterialProperty(controllableGoat, material);
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+
+            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh();
             new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, controllableGoat);
 
             SpotLight goatLight = new SpotLight(

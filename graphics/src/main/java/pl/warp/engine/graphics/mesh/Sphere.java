@@ -1,21 +1,7 @@
 package pl.warp.engine.graphics.mesh;
 
-
 /**
- * Copyright 2013 Dennis Ippel
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
-/**
- * @author Dennis Ippel, Jaca777
+ * @author Jaca777
  *         Created 2016-08-03 at 00
  */
 public class Sphere extends VAOMesh {
@@ -25,21 +11,19 @@ public class Sphere extends VAOMesh {
     private int segmentsH;
 
     public Sphere(float radius, int segmentsW, int segmentsH) {
-        super((segmentsW + 1) * (segmentsH + 1));
+        super(2 * segmentsW * (segmentsH - 1) * 3, (segmentsW + 1) * (segmentsH + 1));
         this.radius = radius;
         this.segmentsW = segmentsW;
         this.segmentsH = segmentsH;
-        createSphere();
+        create();
     }
 
 
-    protected void createSphere() {
-        int numVertices = indices;
-        int numIndices = 2 * segmentsW * (segmentsH - 1) * 3;
+    protected void create() {
 
-        float[] vertices = new float[numVertices * 3];
-        float[] normals = new float[numVertices * 3];
-        int[] indices = new int[numIndices];
+        float[] vertices = new float[this.vertices * 3];
+        float[] normals = new float[this.vertices * 3];
+        int[] indices = new int[this.indices];
 
         int i, j;
         int vertIndex = 0, index = 0;

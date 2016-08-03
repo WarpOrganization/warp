@@ -40,7 +40,7 @@ public abstract class ComponentRendererProgram extends Program{
     public abstract void useComponent(Component component);
     public abstract void useCamera(Camera camera);
     public abstract void useMatrixStack(MatrixStack stack);
-    public abstract void useEnviroment(Environment environment);
+    public abstract void useEnvironment(Environment environment);
 
     public void update(int delta) {
 

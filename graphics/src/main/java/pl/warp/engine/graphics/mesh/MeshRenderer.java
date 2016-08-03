@@ -5,7 +5,6 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultComponentProgram;
@@ -16,7 +15,7 @@ import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultCompo
  */
 public class MeshRenderer implements Renderer {
 
-    private ComponentRendererProgram program;
+    private ComponentRendererProgram defaultProgram;
     private Camera camera;
     private Environment environment;
 
@@ -27,24 +26,35 @@ public class MeshRenderer implements Renderer {
 
     @Override
     public void init() {
-        this.program = new DefaultComponentProgram();
+        this.defaultProgram = new DefaultComponentProgram();
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
     }
 
     @Override
-    public void initRendering( int delta) {
+    public void initRendering(int delta) {
         setupProgram();
     }
 
     @Override
     public void render(Component component, MatrixStack stack) {
         if (component.hasEnabledProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME)) {
+            ComponentRendererProgram program = getProgram(component);
             program.use();
+            program.useCamera(camera);
+            program.useEnvironment(environment);
             program.useMatrixStack(stack);
             program.useComponent(component);
             renderMesh(component);
         }
+    }
+
+    private ComponentRendererProgram getProgram(Component component) {
+        if (component.hasEnabledProperty(GraphicsCustomRendererProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME)) {
+            GraphicsCustomRendererProgramProperty property =
+                    component.getProperty(GraphicsCustomRendererProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
+            return property.getProgram();
+        } else return this.defaultProgram;
     }
 
     private void renderMesh(Component component) {
@@ -63,13 +73,13 @@ public class MeshRenderer implements Renderer {
 
 
     private void setupProgram() {
-        program.use();
-        program.useCamera(camera);
-        program.useEnviroment(environment);
+        defaultProgram.use();
+        defaultProgram.useCamera(camera);
+        defaultProgram.useEnvironment(environment);
     }
 
     @Override
     public void destroy() {
-        program.delete();
+        defaultProgram.delete();
     }
 }

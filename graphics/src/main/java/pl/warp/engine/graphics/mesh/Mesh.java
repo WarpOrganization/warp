@@ -25,23 +25,25 @@ public class Mesh {
             texCoordBuff = -1,
             normalBuff = -1,
             indexBuff = -1;
-    protected int indices = -1;
+    protected int indices = -1,
+            vertices = -1;
 
     /**
-     * @param vertices    Buffer containing vertices
+     * @param verticesNum Buffer containing vertices
      * @param texCoords   Buffer containing texture coordinates
      * @param normals     Buffer containing normals
-     * @param indices     Buffer containing indices
-     * @param numElements Number of elements
+     * @param indicesNum  Buffer containing indices
+     * @param indicesNum  Number of elements
      */
-    public Mesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int numElements) {
+    public Mesh(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices, int indicesNum, int verticesNum) {
         loadBuffers(vertices, texCoords, normals, indices);
+        this.indices = indicesNum;
+        this.vertices = verticesNum;
 
-        this.indices = numElements;
     }
 
-    public Mesh(int indices) {
-        this(GL15.glGenBuffers(), GL15.glGenBuffers(), GL15.glGenBuffers(), GL15.glGenBuffers(), indices);
+    public Mesh(int indices, int vertices) {
+        this(GL15.glGenBuffers(), GL15.glGenBuffers(), GL15.glGenBuffers(), GL15.glGenBuffers(), indices, vertices);
     }
 
     protected void loadBuffers(FloatBuffer vertices, FloatBuffer texCoords, FloatBuffer normals, IntBuffer indices) {
@@ -74,10 +76,11 @@ public class Mesh {
      * @param indices   Array consisting of indices
      */
     public Mesh(float[] vertices, float[] texCoords, float[] normals, int[] indices) {
-        this((vertices == null) ? null : BufferTools.toDirectBuffer(vertices),
-                (texCoords == null) ? null : BufferTools.toDirectBuffer(texCoords),
-                (normals == null) ? null : BufferTools.toDirectBuffer(normals),
-                BufferTools.toDirectBuffer(indices), indices.length);
+        this(BufferTools.toDirectBuffer(vertices),
+                BufferTools.toDirectBuffer(texCoords),
+                BufferTools.toDirectBuffer(normals),
+                BufferTools.toDirectBuffer(indices),
+                indices.length, vertices.length / 3);
     }
 
     /**
@@ -87,12 +90,13 @@ public class Mesh {
      * @param indexBuff    Index buffer name.
      * @param indices      Number of elements.
      */
-    public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices) {
+    public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices, int vertices) {
         this.vertexBuff = vertexBuff;
         this.texCoordBuff = texCoordBuff;
         this.normalBuff = normalBuff;
         this.indexBuff = indexBuff;
         this.indices = indices;
+        this.vertices = vertices;
     }
 
     /**
@@ -218,8 +222,8 @@ public class Mesh {
     private FloatBuffer tempVertexData;
 
     public synchronized void setVertexData(float[] vertices) {
-        if(tempVertexData == null) tempVertexData  = BufferUtils.createFloatBuffer(indices * 3);
-        tempVertexData.reset();
+        if (tempVertexData == null) tempVertexData = BufferUtils.createFloatBuffer(indices * 3);
+        tempVertexData.clear();
         FloatBuffer data = tempVertexData.put(vertices);
         setBufferData(vertexBuff, data);
     }
@@ -227,7 +231,8 @@ public class Mesh {
     private FloatBuffer tempTexCoordData;
 
     public synchronized void setTexCoordData(float[] texCoords) {
-        if(tempTexCoordData == null) tempTexCoordData  = BufferUtils.createFloatBuffer(indices * 2);
+        if (tempTexCoordData == null) tempTexCoordData = BufferUtils.createFloatBuffer(indices * 2);
+        tempTexCoordData.clear();
         FloatBuffer data = tempTexCoordData.put(texCoords);
         setBufferData(texCoordBuff, data);
     }
@@ -235,7 +240,8 @@ public class Mesh {
     private FloatBuffer tempNormalData;
 
     public synchronized void setNormalData(float[] normals) {
-        if(tempNormalData == null) tempNormalData  = BufferUtils.createFloatBuffer(indices * 3);
+        if (tempNormalData == null) tempNormalData = BufferUtils.createFloatBuffer(indices * 3);
+        tempNormalData.clear();
         FloatBuffer data = tempNormalData.put(normals);
         setBufferData(normalBuff, data);
     }
@@ -243,7 +249,8 @@ public class Mesh {
     private IntBuffer tempIndicesData;
 
     public synchronized void setIndexData(int[] indices) {
-        if(tempIndicesData == null) tempIndicesData  = BufferUtils.createIntBuffer(this.indices);
+        if (tempIndicesData == null) tempIndicesData = BufferUtils.createIntBuffer(this.indices);
+        tempIndicesData.clear();
         IntBuffer data = tempIndicesData.put(indices);
         setBufferData(indexBuff, data);
     }

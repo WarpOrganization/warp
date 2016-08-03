@@ -114,7 +114,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         setUniformMatrix4(unifRotationMatrix, stack.topRotationMatrix());
     }
 
-    public void useEnviroment(Environment environment) {
+    public void useEnvironment(Environment environment) {
         setUniformb(unifLightEnabled, environment.isLightEnabled());
 
         List<SpotLight> spotLights = environment.getSpotLights();
