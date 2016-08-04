@@ -6,13 +6,11 @@ package pl.warp.engine.graphics.mesh;
  */
 public class Sphere extends VAOMesh {
 
-    private float radius;
     private int segmentsW;
     private int segmentsH;
 
-    public Sphere(float radius, int segmentsW, int segmentsH) {
+    public Sphere(int segmentsW, int segmentsH) {
         super(2 * segmentsW * (segmentsH - 1) * 3, (segmentsW + 1) * (segmentsH + 1));
-        this.radius = radius;
         this.segmentsW = segmentsW;
         this.segmentsH = segmentsH;
         create();
@@ -27,12 +25,12 @@ public class Sphere extends VAOMesh {
 
         int i, j;
         int vertIndex = 0, index = 0;
-        final float normLen = 1.0f / radius;
+        final float normLen = 1.0f;
 
         for (j = 0; j <= segmentsH; ++j) {
             float horAngle = (float) (Math.PI * j / segmentsH);
-            float z = radius * (float) Math.cos(horAngle);
-            float ringRadius = radius * (float) Math.sin(horAngle);
+            float z = (float) Math.cos(horAngle);
+            float ringRadius = (float) Math.sin(horAngle);
 
             for (i = 0; i <= segmentsW; ++i) {
                 float verAngle = (float) (2.0f * Math.PI * i / segmentsW);
