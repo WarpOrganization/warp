@@ -1,40 +1,32 @@
-package pl.warp.game.program.star;
+package pl.warp.game.program.gas;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.light.SpotLight;
-import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
-import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
-import pl.warp.engine.graphics.shader.Program;
-import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
-import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultComponentProgram;
-import pl.warp.engine.graphics.shader.program.cubemap.CubemapProgram;
-import pl.warp.engine.graphics.texture.Cubemap;
 
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * @author Jaca777
  *         Created 2016-08-03 at 01
  */
-public class StarProgram extends ComponentRendererProgram {
+public class GasPlanetProgram extends ComponentRendererProgram {
 
-    private static final InputStream VERTEX_SHADER = StarProgram.class.getResourceAsStream("vert.glsl");
-    private static final InputStream FRAGMENT_SHADER = StarProgram.class.getResourceAsStream("frag.glsl");
+    private static final int TEXTURE_SAMPLER = 0;
+
+    private static final InputStream VERTEX_SHADER = GasPlanetProgram.class.getResourceAsStream("vert.glsl");
+    private static final InputStream FRAGMENT_SHADER = GasPlanetProgram.class.getResourceAsStream("frag.glsl");
 
     private int unifProjectionMatrix;
     private int unifModelMatrix;
     private int unifRotationMatrix;
     private int unifCameraMatrix;
     private int unifCameraPos;
-    private int unifTemperature;
+    private int unifColor;
 
-    public StarProgram() {
+    public GasPlanetProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER);
         loadLocations();
     }
@@ -49,7 +41,7 @@ public class StarProgram extends ComponentRendererProgram {
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
-        this.unifTemperature = getUniformLocation("temperature");
+        this.unifColor = getUniformLocation("color");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package pl.warp.game;
 
 import org.apache.log4j.Logger;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -28,7 +27,6 @@ import pl.warp.engine.graphics.mesh.GraphicsCustomRendererProgramProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.Sphere;
-import pl.warp.engine.graphics.particles.*;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -48,7 +46,7 @@ import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.program.star.StarProgram;
+import pl.warp.game.program.gas.GasPlanetProgram;
 
 import java.util.Random;
 
@@ -98,8 +96,9 @@ public class Test {
             property.addSpotLight(spotLight);
             new GraphicsMeshProperty(light, sphere);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(100f, 100f, 100f));
+            lightSourceTransform.move(new Vector3f(0f, 10f, 10f));
             lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
+            new GraphicsCustomRendererProgramProperty(light, new GasPlanetProgram());
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());

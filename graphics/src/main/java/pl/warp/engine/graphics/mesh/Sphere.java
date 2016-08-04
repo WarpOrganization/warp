@@ -71,6 +71,7 @@ public class Sphere extends VAOMesh {
                 }
             }
         }
+
         int numUvs = (segmentsH + 1) * (segmentsW + 1) * 2;
         float[] textureCoords = new float[numUvs];
         numUvs = 0;

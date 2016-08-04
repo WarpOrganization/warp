@@ -32,7 +32,7 @@ public class MeshRenderer implements Renderer {
     public void init() {
         logger.info("Initializing mesh renderer...");
         this.defaultProgram = new DefaultComponentProgram();
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
         logger.info("Mesh renderer initialized.");
     }
@@ -66,9 +66,7 @@ public class MeshRenderer implements Renderer {
     private void renderMesh(Component component) {
         setupGL();
         Mesh mesh = component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh();
-        mesh.bind();
-        mesh.render();
-        mesh.finalizeRendering();
+        mesh.draw();
     }
 
     private void setupGL() {

@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.texture.Texture;
 import pl.warp.engine.graphics.texture.Texture2D;
+import pl.warp.engine.graphics.texture.TextureShape2D;
 import pl.warp.engine.graphics.utility.BufferTools;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -18,9 +19,9 @@ import static org.lwjgl.opengl.GL30.GL_RENDERBUFFER;
 public class TextureFramebuffer extends Framebuffer {
 
     protected int depthBuff;
-    protected Texture destTex;
+    protected TextureShape2D destTex;
 
-    public TextureFramebuffer(Texture2D destTex) {
+    public TextureFramebuffer(TextureShape2D destTex) {
         super(GL30.glGenFramebuffers());
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, name);
 
@@ -45,13 +46,13 @@ public class TextureFramebuffer extends Framebuffer {
         GL30.glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this.depthBuff);
     }
 
-    protected TextureFramebuffer(Texture destTex, int name, int depthBuff) {
+    protected TextureFramebuffer(TextureShape2D destTex, int name, int depthBuff) {
         super(name);
         this.depthBuff = depthBuff;
         this.destTex = destTex;
     }
 
-    protected TextureFramebuffer(Texture destTex, int name) {
+    protected TextureFramebuffer(TextureShape2D destTex, int name) {
         super(name);
         this.depthBuff = -1;
         this.destTex = destTex;
@@ -71,7 +72,7 @@ public class TextureFramebuffer extends Framebuffer {
         GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, name);
     }
 
-    public Texture getDestTex() {
+    public TextureShape2D getDestTex() {
         return destTex;
     }
 

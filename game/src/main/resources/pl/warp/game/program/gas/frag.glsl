@@ -11,9 +11,17 @@ float noise(vec4 position, int octaves, float frequency, float persistence);
 
 void main() {
     vec4 position = vec4(onSpherePos, unDT);
-    float n = (noise(position, 4, 40.0, 0.7) + 1.0) * 0.5;
-    float total = n;
-    fragColor = vec4(/*total, total, total,*/ 1.0);
+
+    float n = (noise(position, 4, 8.0, 0.7) + 1.0) * 0.5;
+    float s = 0.3;
+    float frequency = 0.001;
+    float t1 = snoise(position * frequency) - s;
+    float t2 = snoise((position) * frequency) - s;
+    float ss = (max(t1, 0.0) * max(t2, 0.0)) * 2.0;
+
+    // Accumulate total noise
+    float total = n - ss;
+    fragColor = vec4(total, total, total, 1.0);
 }
 
 float noise(vec4 position, int octaves, float frequency, float persistence) {

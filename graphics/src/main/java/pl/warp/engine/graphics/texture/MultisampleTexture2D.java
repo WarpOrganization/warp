@@ -9,19 +9,16 @@ import static org.lwjgl.opengl.GL11.glGenTextures;
  * @author Jaca777
  *         Created 07.04.15 at 13:39
  */
-public class MultisampleTexture2D extends Texture {
+public class MultisampleTexture2D extends TextureShape2D {
     private int samples;
+    private int width;
+    private int height;
 
     public MultisampleTexture2D(int width, int height, int internalformat, int format, int samples) {
-        super(GL32.GL_TEXTURE_2D_MULTISAMPLE, genTextureMultisample2D(width, height, samples, internalformat), width, height, internalformat, format, false);
+        super(GL32.GL_TEXTURE_2D_MULTISAMPLE, genTextureMultisample2D(width, height, samples, internalformat), internalformat, format, false);
         this.samples = samples;
-    }
-
-    @Override
-    public void resize(int w, int h) {
-        this.width = w;
-        this.height = h;
-        GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, samples, internalformat, width, height, true);
+        this.width = width;
+        this.height = height;
     }
 
     public int getSamples() {
@@ -39,5 +36,22 @@ public class MultisampleTexture2D extends Texture {
         glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
         GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, samples, internalformat, width, height, true);
         return texture;
+    }
+
+    @Override
+    public void resize(int w, int h) {
+        this.width = w;
+        this.height = h;
+        GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, samples, internalformat, width, height, true);
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
     }
 }

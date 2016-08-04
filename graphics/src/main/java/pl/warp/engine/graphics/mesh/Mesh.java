@@ -222,36 +222,44 @@ public class Mesh {
     private FloatBuffer tempVertexData;
 
     public synchronized void setVertexData(float[] vertices) {
-        if (tempVertexData == null) tempVertexData = BufferUtils.createFloatBuffer(indices * 3);
+        if (tempVertexData == null || tempVertexData.capacity() < this.vertices * 3)
+            tempVertexData = BufferUtils.createFloatBuffer(this.vertices * 3);
         tempVertexData.clear();
         FloatBuffer data = tempVertexData.put(vertices);
+        data.rewind();
         setBufferData(vertexBuff, data);
     }
 
     private FloatBuffer tempTexCoordData;
 
     public synchronized void setTexCoordData(float[] texCoords) {
-        if (tempTexCoordData == null) tempTexCoordData = BufferUtils.createFloatBuffer(indices * 2);
+        if (tempTexCoordData == null || tempTexCoordData.capacity() < vertices * 2)
+            tempTexCoordData = BufferUtils.createFloatBuffer(vertices * 2);
         tempTexCoordData.clear();
         FloatBuffer data = tempTexCoordData.put(texCoords);
+        data.rewind();
         setBufferData(texCoordBuff, data);
     }
 
     private FloatBuffer tempNormalData;
 
     public synchronized void setNormalData(float[] normals) {
-        if (tempNormalData == null) tempNormalData = BufferUtils.createFloatBuffer(indices * 3);
+        if (tempNormalData == null || tempNormalData.capacity() < vertices * 3)
+            tempNormalData = BufferUtils.createFloatBuffer(vertices * 3);
         tempNormalData.clear();
         FloatBuffer data = tempNormalData.put(normals);
+        data.rewind();
         setBufferData(normalBuff, data);
     }
 
     private IntBuffer tempIndicesData;
 
     public synchronized void setIndexData(int[] indices) {
-        if (tempIndicesData == null) tempIndicesData = BufferUtils.createIntBuffer(this.indices);
+        if (tempIndicesData == null || tempIndicesData.capacity() < this.indices)
+            tempIndicesData = BufferUtils.createIntBuffer(this.indices);
         tempIndicesData.clear();
         IntBuffer data = tempIndicesData.put(indices);
+        data.rewind();
         setBufferData(indexBuff, data);
     }
 
