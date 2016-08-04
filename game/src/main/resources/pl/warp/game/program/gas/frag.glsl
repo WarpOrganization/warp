@@ -1,19 +1,35 @@
 #version 400
 precision highp float;
 
-uniform float unDT = 1.0f;
+uniform sampler1D colors;
+uniform int time = 1;
 in vec3 onSpherePos;
+in vec3 normal;
 
 layout(location = 0) out vec4 fragColor;
 
 float snoise(vec4 v);
 float noise(vec4 position, int octaves, float frequency, float persistence);
+float ridgedNoise(vec4 position, int octaves, float frequency, float persistence);
 
 void main() {
-    vec4 position = vec4(onSpherePos, unDT);
-    float n = (noise(position, 4, 40.0, 0.7) + 1.0) * 0.5;
-    float total = n;
-    fragColor = vec4(/*total, total, total,*/ 1.0);
+    float texCoord = onSpherePos.y * 0.5 + 0.5;
+    vec4 noisePos = vec4(onSpherePos, time * 0.000005);
+
+    float s = 0.4;
+    float t1 = snoise(noisePos * 2.0) - s;
+    float t2 = snoise((noisePos + 800.0) * 2.0) - s;
+    float t3 = snoise((noisePos + 1600.0) * 2.0) - s;
+    float threshold = max(t1 * t2 * t3, 0.0) * 2;
+
+    float n1 = noise(noisePos, 5, 10.0, 0.8) * 0.01;
+    float n2 = ridgedNoise(noisePos, 5,  5.0, 0.75) * 0.015 - 0.01;
+    float n3 = snoise(noisePos) * threshold;
+    float n = n1 + n2 + n3;
+    float newTexCoord = texCoord + n;
+    vec3 color = texture(colors, newTexCoord).rgb;
+    fragColor.rgb = color;
+    fragColor.a = 1.0;
 }
 
 float noise(vec4 position, int octaves, float frequency, float persistence) {
@@ -38,6 +54,30 @@ float noise(vec4 position, int octaves, float frequency, float persistence) {
     // Scale the result by the maximum amplitude
     return total / maxAmplitude;
 }
+
+float ridgedNoise(vec4 position, int octaves, float frequency, float persistence) {
+    float total = 0.0; // Total value so far
+    float maxAmplitude = 0.0; // Accumulates highest theoretical amplitude
+    float amplitude = 1.0;
+    for (int i = 0; i < octaves; i++) {
+
+        // Get the noise sample
+        total += ((1.0 - abs(snoise(position * frequency))) * 2.0 - 1.0) * amplitude;
+
+        // Make the wavelength twice as small
+        frequency *= 2.0;
+
+        // Add to our maximum possible amplitude
+        maxAmplitude += amplitude;
+
+        // Reduce amplitude according to persistence for the next octave
+        amplitude *= persistence;
+    }
+
+    // Scale the result by the maximum amplitude
+    return total / maxAmplitude;
+}
+
 vec4 mod289(vec4 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0; }
 
@@ -78,8 +118,7 @@ vec4 grad4(float j, vec4 ip)
 // (sqrt(5) - 1)/4 = F4, used once below
 #define F4 0.309016994374947451
 
-float snoise(vec4 v)
-  {
+float snoise(vec4 v) {
   const vec4  C = vec4( 0.138196601125011,  // (5 - sqrt(5))/20  G4
                         0.276393202250021,  // 2 * G4
                         0.414589803375032,  // 3 * G4

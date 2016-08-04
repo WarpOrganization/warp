@@ -1,9 +1,7 @@
 package pl.warp.engine.graphics.texture;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL43;
-import pl.warp.engine.graphics.texture.Texture;
 
 import java.nio.ByteBuffer;
 
@@ -15,13 +13,26 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
  * @author Jaca777
  *         Created 2016-06-27 at 01
  */
-public class Texture2D extends Texture {
+public class Texture2D extends TextureShape2D {
+
+    private int width, height;
+
+    public Texture2D(int type, int texture, int internalformat, int format, boolean mipmap, int width, int height) {
+        super(type, texture, internalformat, format, mipmap);
+        this.width = width;
+        this.height = height;
+    }
+
     protected Texture2D(int texture, int width, int height, int internalFormat, int format, boolean mipmap) {
-        super(GL11.GL_TEXTURE_2D, texture, width, height, internalFormat, format, mipmap);
+        super(GL11.GL_TEXTURE_2D, texture, internalFormat, format, mipmap);
+        this.width = width;
+        this.height = height;
     }
 
     public Texture2D(int width, int height, int internalFormat, int format, boolean mipmap, ByteBuffer data) {
-        super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), width, height, internalFormat, format, mipmap);
+        super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), internalFormat, format, mipmap);
+        this.width = width;
+        this.height = height;
         enableDefaultParams(mipmap);
     }
 
@@ -57,5 +68,24 @@ public class Texture2D extends Texture {
         glTexImage2D(target, 0, internalformat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         if (mipmap) glGenerateMipmap(target);
         return texture;
+    }
+
+    @Override
+    public void resize(int w, int h) {
+        this.width = w;
+        this.height = h;
+        GL11.glTexImage2D(this.type, 0, this.internalformat, w, h, 0,
+                this.format, GL11.GL_BYTE, (ByteBuffer) null);
+        if (mipmap) genMipmap();
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
     }
 }

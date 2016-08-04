@@ -17,18 +17,14 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 public abstract class Texture {
     protected int type,
             texture,
-            width,
-            height,
             internalformat,
             format;
 
     protected boolean mipmap;
 
-    public Texture(int type, int texture, int width, int height, int internalformat, int format, boolean mipmap) {
+    public Texture(int type, int texture, int internalformat, int format, boolean mipmap) {
         this.type = type;
         this.texture = texture;
-        this.width = width;
-        this.height = height;
         this.internalformat = internalformat;
         this.format = format;
         this.mipmap = mipmap;
@@ -50,13 +46,6 @@ public abstract class Texture {
         return GL.getCapabilities().GL_EXT_texture_filter_anisotropic;
     }
 
-    public void resize(int w, int h) {
-        this.width = w;
-        this.height = h;
-        GL11.glTexImage2D(this.type, 0, this.internalformat, w, h, 0,
-                this.format, GL11.GL_BYTE, (ByteBuffer) null);
-        if (mipmap) genMipmap();
-    }
 
     public void setParameter(int paramName, int param) {
         GL11.glTexParameteri(type, paramName, param);
@@ -92,14 +81,6 @@ public abstract class Texture {
 
     public int getFormat() {
         return format;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public boolean isMipmap() {

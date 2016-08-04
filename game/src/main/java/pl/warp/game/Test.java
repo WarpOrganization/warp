@@ -39,6 +39,7 @@ import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
+import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
@@ -48,7 +49,7 @@ import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.program.star.StarProgram;
+import pl.warp.game.program.gas.GasPlanetProgram;
 
 import java.util.Random;
 
@@ -60,8 +61,8 @@ import java.util.Random;
 public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
-    private static final boolean FULLSCREEN = true;
-    private static final int WIDTH = 1920, HEIGHT = 1080;
+    private static final boolean FULLSCREEN = false;
+    private static final int WIDTH = 1560, HEIGHT = 920;
     private static final float ROT_SPEED = 0.05f * 0.5f;
     private static final float MOV_SPEED = 0.2f * 0.5f;
     private static final float BRAKING_FORCE = 0.1f;
@@ -77,7 +78,7 @@ public class Test {
         Component root = new SimpleListenableParent(scene);
 
         Component controllableGoat = new SimpleComponent(root);
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 1000f, WIDTH, HEIGHT));
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 2000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 4f, 15f));
         RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
         Graphics graphics = new Graphics(context, camera, settings);
@@ -91,15 +92,17 @@ public class Test {
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
-            Sphere sphere = new Sphere(10, 50, 50);
+            ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            Texture2DArray lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
-            new GraphicsMeshProperty(light, sphere);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(100f, 100f, 100f));
-            lightSourceTransform.scale(new Vector3f(0.25f, 0.25f, 0.25f));
+            lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
+            ParticleFactory factory = new RandomSpreadingParticleFactory(0.02f, 300, true, true);
+            new GraphicsParticleEmitterProperty(light, new ParticleSystem(animator, factory, 500, lightSpritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -117,6 +120,26 @@ public class Test {
             };
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
+
+
+
+            Component gasSphere = new SimpleComponent(root);
+            Sphere sphere = new Sphere(50, 50);
+            new GraphicsMeshProperty(gasSphere, sphere);
+            ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
+            Texture1D colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
+            GasPlanetProgram gasProgram = new GasPlanetProgram(colorsTexture);
+            new GraphicsCustomRendererProgramProperty(gasSphere, gasProgram);
+            TransformProperty gasSphereSourceTransform = new TransformProperty(gasSphere);
+            gasSphereSourceTransform.move(new Vector3f(-1000f, 0f, -500f));
+            gasSphereSourceTransform.scale(new Vector3f(700.0f));
+            graphicsThread.scheduleTask(new SimpleEngineTask() {
+                @Override
+                public void update(int delta) {
+                    gasProgram.use();
+                    gasProgram.update(delta);
+                }
+            });
 
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());

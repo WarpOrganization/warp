@@ -16,20 +16,23 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
  *         Created 20.12.14 at 21:53
  */
 public class Texture2DArray extends Texture {
+    private int width;
+    private int height;
     private int size;
 
     protected Texture2DArray(int texture, int width, int height, int size, int internalformat, int format, boolean mipmap) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, texture, width, height, internalformat, format, mipmap);
+        super(GL30.GL_TEXTURE_2D_ARRAY, texture, internalformat, format, mipmap);
         this.size = size;
+        this.width = width;
+        this.height = height;
     }
-
 
     public Texture2DArray(int width, int height, int size, ByteBuffer[] data) {
         this(width, height, size, data, GL11.GL_RGBA, GL11.GL_RGBA);
     }
 
     public Texture2DArray(int width, int height, int size, ByteBuffer[] data, int internalformat, int format) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, genTexture2DArray(internalformat, format, width, height, size, data), width, height, internalformat, format, true);
+        super(GL30.GL_TEXTURE_2D_ARRAY, genTexture2DArray(internalformat, format, width, height, size, data), internalformat, format, true);
         GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -39,8 +42,10 @@ public class Texture2DArray extends Texture {
     }
 
     public Texture2DArray(int texture, int width, int height, boolean mipmap, int size) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, texture, width, height, GL11.GL_RGBA, GL11.GL_RGBA, mipmap);
+        super(GL30.GL_TEXTURE_2D_ARRAY, texture, GL11.GL_RGBA, GL11.GL_RGBA, mipmap);
         this.size = size;
+        this.width = width;
+        this.height = height;
     }
 
     /**
@@ -52,7 +57,6 @@ public class Texture2DArray extends Texture {
         if (mipmap) glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
     }
 
-    @Override
     public void resize(int w, int h) {
         this.resize(w,h,size);
         if(mipmap) glGenerateMipmap(this.type);
@@ -79,5 +83,13 @@ public class Texture2DArray extends Texture {
         }
         glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
         return texture;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

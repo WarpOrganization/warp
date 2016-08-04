@@ -38,10 +38,4 @@ public class MultisampleFramebuffer extends TextureFramebuffer {
         GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL32.GL_TEXTURE_2D_MULTISAMPLE, this.destTex.getTexture(), 0);
     }
 
-    @Override
-    public void resize(int w, int h) {
-        glBindRenderbuffer(GL_RENDERBUFFER, this.depthBuff);
-        GL30.glRenderbufferStorageMultisample(GL_RENDERBUFFER, ((MultisampleTexture2D) destTex).getSamples(), GL_DEPTH_COMPONENT32F, w, h);
-    }
-
 }

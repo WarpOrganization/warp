@@ -15,15 +15,21 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
  *         Created 20.12.14 at 21:53
  */
 public class Cubemap extends Texture{
+    private int width;
+    private int height;
+
     public Cubemap(int type, int texture, int width, int height, int internalformat, int format, boolean mipmap) {
-        super(type, texture, width, height, internalformat, format, mipmap);
+        super(type, texture, internalformat, format, mipmap);
+        this.width = width;
+        this.height = height;
     }
 
     public Cubemap(int width, int height, ByteBuffer[] data) {
-        super(GL13.GL_TEXTURE_CUBE_MAP, genCubemap(GL11.GL_RGBA, GL11.GL_RGBA, width, height, data), width, height, GL11.GL_RGBA, GL11.GL_RGBA, false);
+        super(GL13.GL_TEXTURE_CUBE_MAP, genCubemap(GL11.GL_RGBA, GL11.GL_RGBA, width, height, data), GL11.GL_RGBA, GL11.GL_RGBA, false);
+        this.width = width;
+        this.height = height;
     }
 
-    @Override
     public void resize(int w, int h) {
         bind();
         for (int i = 0; i < 6; i++) {

@@ -66,9 +66,7 @@ public class MeshRenderer implements Renderer {
     private void renderMesh(Component component) {
         setupGL();
         Mesh mesh = component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh();
-        mesh.bind();
-        mesh.render();
-        mesh.finalizeRendering();
+        mesh.draw();
     }
 
     private void setupGL() {

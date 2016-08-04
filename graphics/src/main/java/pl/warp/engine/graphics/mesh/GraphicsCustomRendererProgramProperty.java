@@ -13,7 +13,7 @@ public class GraphicsCustomRendererProgramProperty extends Property<Component> {
     private ComponentRendererProgram program;
 
     public GraphicsCustomRendererProgramProperty(Component owner, ComponentRendererProgram program) {
-        super(owner);
+        super(owner, CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
         this.program = program;
     }
 
