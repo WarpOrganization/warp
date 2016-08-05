@@ -152,7 +152,8 @@ public class Test {
             new GraphicsMeshProperty(ring, ringMesh);
             new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram(null));
             ImageData ringColorsData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ring_colors.png"), PNGDecoder.Format.RGBA);
-            Texture1D ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, ringColorsData.getData());
+            Texture1D ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, true, ringColorsData.getData());
+            ringColors.enableAnisotropy(4);
             new PlanetaryRingProperty(ring, startR, endR, ringColors);
 
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
