@@ -54,6 +54,7 @@ import pl.warp.game.program.gas.GasPlanetProgram;
 import pl.warp.game.program.ring.PlanetaryRingProgram;
 import pl.warp.game.program.ring.PlanetaryRingProperty;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -134,7 +135,7 @@ public class Test {
             GasPlanetProgram gasProgram = new GasPlanetProgram(colorsTexture);
             new GraphicsCustomRendererProgramProperty(gasSphere, gasProgram);
             TransformProperty gasSphereSourceTransform = new TransformProperty(gasSphere);
-            gasSphereSourceTransform.move(new Vector3f(-1200f, 0f, -500f));
+            gasSphereSourceTransform.move(new Vector3f(-1200f, -200f, -500f));
             gasSphereSourceTransform.scale(new Vector3f(1000.0f));
             graphicsThread.scheduleTask(new SimpleEngineTask() {
                 @Override
@@ -144,11 +145,15 @@ public class Test {
                 }
             });
 
+            float startR = 1.5f;
+            float endR = 3.0f;
             Component ring = new SimpleComponent(gasSphere);
-            Ring ringMesh = new Ring(20, 1.5f, 2.5f);
+            Ring ringMesh = new Ring(20, startR, endR);
             new GraphicsMeshProperty(ring, ringMesh);
             new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram(null));
-            new PlanetaryRingProperty(ring, 1.5f, 2.5f);
+            ImageData ringColorsData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ring_colors.png"), PNGDecoder.Format.RGBA);
+            Texture1D ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, ringColorsData.getData());
+            new PlanetaryRingProperty(ring, startR, endR, ringColors);
 
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());

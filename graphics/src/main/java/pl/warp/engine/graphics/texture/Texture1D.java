@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 public class Texture1D extends Texture {
     public Texture1D(int size, int internalformat, int format, boolean mipmap, ByteBuffer data) {
         super(GL11.GL_TEXTURE_1D, genTexture1D(internalformat, format, size, mipmap, data), internalformat, format, mipmap);
+        enableAnisotropy(4);
     }
 
     private static int genTexture1D(int internalformat, int format, int size, boolean mipmap, ByteBuffer data) {
@@ -26,9 +27,9 @@ public class Texture1D extends Texture {
     }
 
     private static void enableDefaultParams(boolean mipmap) { //TODO sth with defaults
-        GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        if (mipmap) GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_NEAREST);
-        else GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        if (mipmap) GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+        else GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
     }
 }

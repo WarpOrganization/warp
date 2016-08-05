@@ -1,6 +1,7 @@
 #version 400
 precision highp float;
 
+uniform sampler1D ringColors;
 uniform float ringStart;
 uniform float ringEnd;
 
@@ -11,5 +12,6 @@ layout(location = 0) out vec4 fragColor;
 void main() {
     float distance = length(onRingPos);
     if(distance < ringStart || distance > ringEnd) discard;
-    fragColor = vec4(1.0);
+    float texturePos = distance - ringStart;
+    fragColor = texture1D(ringColors, texturePos);
 }

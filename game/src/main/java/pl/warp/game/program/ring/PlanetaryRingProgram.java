@@ -56,6 +56,7 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
             PlanetaryRingProperty property = component.getProperty(PlanetaryRingProperty.PLANETARY_RING_PROPERTY_NAME);
             setUniformf(unifRingStart, property.getStartRadius());
             setUniformf(unifRingEnd, property.getEndRadius());
+            useTexture(property.getRingColors(), COLORS_TEXTURE_SAMPLER);
         } else throw new IllegalStateException("Unable to render component without PlanetaryRingProperty enabled property.");
     }
 
