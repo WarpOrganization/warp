@@ -32,9 +32,8 @@ public class Ring extends VAOMesh {
         IntBuffer indices = BufferUtils.createIntBuffer(this.indices);
         for(int i = 0; i < divisions; i++) {
             float angle = (float) (2 * Math.PI * (i / (float) divisions));
-            System.out.println(angle);
-            float xDir = (float) Math.sin(angle);
-            float zDir = (float) Math.cos(angle);
+            float xDir = (float) Math.cos(angle);
+            float zDir = (float) Math.sin(angle);
             vertices.put(xDir * startRadius)
                     .put(0.0f)
                     .put(zDir * startRadius);
@@ -42,7 +41,7 @@ public class Ring extends VAOMesh {
                     .put(0.0f)
                     .put(zDir * endRadius);
 
-            int offset = i * 4;
+            int offset = i * 2;
             indices.put(offset)
                     .put(offset + 1)
                     .put(offset + 2);
