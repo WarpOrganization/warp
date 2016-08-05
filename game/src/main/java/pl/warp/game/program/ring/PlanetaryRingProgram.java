@@ -1,4 +1,4 @@
-package pl.warp.game.program.gas;
+package pl.warp.game.program.ring;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;

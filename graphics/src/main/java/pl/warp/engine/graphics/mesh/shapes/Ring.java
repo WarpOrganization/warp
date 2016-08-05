@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.mesh.shapes;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.graphics.mesh.VAOMesh;
 
@@ -25,14 +26,15 @@ public class Ring extends VAOMesh {
     }
 
     private void createShape() {
-        FloatBuffer vertices = FloatBuffer.allocate(this.vertices * 3);
-        FloatBuffer texCoords  = FloatBuffer.allocate(this.vertices * 2);
-        FloatBuffer normals  = FloatBuffer.allocate(this.vertices * 3);
-        IntBuffer indices = IntBuffer.allocate(this.indices);
+        FloatBuffer vertices = BufferUtils.createFloatBuffer(this.vertices * 3);
+        FloatBuffer texCoords  = BufferUtils.createFloatBuffer(this.vertices * 2);
+        FloatBuffer normals  = BufferUtils.createFloatBuffer(this.vertices * 3);
+        IntBuffer indices = BufferUtils.createIntBuffer(this.indices);
         for(int i = 0; i < divisions; i++) {
             float angle = (float) (2 * Math.PI * (i / (float) divisions));
-            float xDir = (float) Math.cos(angle);
-            float zDir = (float) Math.sin(angle);
+            System.out.println(angle);
+            float xDir = (float) Math.sin(angle);
+            float zDir = (float) Math.cos(angle);
             vertices.put(xDir * startRadius)
                     .put(0.0f)
                     .put(zDir * startRadius);

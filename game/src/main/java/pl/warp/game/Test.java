@@ -51,7 +51,7 @@ import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.program.gas.GasPlanetProgram;
-import pl.warp.game.program.gas.PlanetaryRingProgram;
+import pl.warp.game.program.ring.PlanetaryRingProgram;
 
 import java.util.Random;
 
@@ -144,7 +144,7 @@ public class Test {
             });
 
             Component ring = new SimpleComponent(gasSphere);
-            Ring ringMesh = new Ring(20, 1.5f, 3f);
+            Ring ringMesh = new Ring(20, 1.5f, 2.5f);
             new GraphicsMeshProperty(ring, ringMesh);
             new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram(null));
 
