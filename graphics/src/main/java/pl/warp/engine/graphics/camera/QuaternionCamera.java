@@ -1,11 +1,10 @@
 package pl.warp.engine.graphics.camera;
 
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.graphics.math.Transforms;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 
 /**

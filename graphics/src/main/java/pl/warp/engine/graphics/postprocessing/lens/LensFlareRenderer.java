@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
-import pl.warp.engine.graphics.math.Transforms;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.mesh.VAO;
 import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.shader.program.lens.LensProgram;

@@ -62,7 +62,7 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 1560, HEIGHT = 920;
+    private static final int WIDTH = 1560, HEIGHT = 860;
     private static final float ROT_SPEED = 0.05f * 0.5f;
     private static final float MOV_SPEED = 0.2f * 0.5f;
     private static final float BRAKING_FORCE = 0.1f;
@@ -78,7 +78,7 @@ public class Test {
         Component root = new SimpleListenableParent(scene);
 
         Component controllableGoat = new SimpleComponent(root);
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 2000f, WIDTH, HEIGHT));
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 4f, 15f));
         RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
         Graphics graphics = new Graphics(context, camera, settings);
@@ -101,8 +101,8 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0.02f, 300, true, true);
-            new GraphicsParticleEmitterProperty(light, new ParticleSystem(animator, factory, 500, lightSpritesheetTexture));
+            ParticleFactory factory = new RandomSpreadingParticleFactory(0.02f, 600, true, true);
+            new GraphicsParticleEmitterProperty(light, new ParticleSystem(animator, factory, 1000, lightSpritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -131,8 +131,8 @@ public class Test {
             GasPlanetProgram gasProgram = new GasPlanetProgram(colorsTexture);
             new GraphicsCustomRendererProgramProperty(gasSphere, gasProgram);
             TransformProperty gasSphereSourceTransform = new TransformProperty(gasSphere);
-            gasSphereSourceTransform.move(new Vector3f(-1000f, 0f, -500f));
-            gasSphereSourceTransform.scale(new Vector3f(700.0f));
+            gasSphereSourceTransform.move(new Vector3f(-1200f, 0f, -500f));
+            gasSphereSourceTransform.scale(new Vector3f(1000.0f));
             graphicsThread.scheduleTask(new SimpleEngineTask() {
                 @Override
                 public void update(int delta) {

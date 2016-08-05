@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.graphics.input.GLFWInput;
-import pl.warp.engine.graphics.math.Transforms;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**

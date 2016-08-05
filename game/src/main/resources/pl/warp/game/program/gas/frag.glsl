@@ -28,8 +28,7 @@ void main() {
     float n = n1 + n2 + n3;
     float newTexCoord = clamp(texCoord + n, 0.005, 0.995);
     vec3 color = texture(colors, newTexCoord).rgb;
-    float brightness =0.6/* 1.0 - max(((abs(onSpherePos.y) - 0.3) * 1.2), 0.0)*/;
-    fragColor.rgb = color * brightness;
+    fragColor.rgb = color;
     fragColor.a = 1.0;
 }
 
