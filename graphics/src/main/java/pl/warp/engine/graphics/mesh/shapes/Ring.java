@@ -26,17 +26,19 @@ public class Ring extends VAOMesh {
 
     private void createShape() {
         FloatBuffer vertices = FloatBuffer.allocate(this.vertices * 3);
+        FloatBuffer texCoords  = FloatBuffer.allocate(this.vertices * 2);
+        FloatBuffer normals  = FloatBuffer.allocate(this.vertices * 3);
         IntBuffer indices = IntBuffer.allocate(this.indices);
         for(int i = 0; i < divisions; i++) {
             float angle = (float) (2 * Math.PI * (i / (float) divisions));
             float xDir = (float) Math.cos(angle);
-            float yDir = (float) Math.sin(angle);
+            float zDir = (float) Math.sin(angle);
             vertices.put(xDir * startRadius)
-                    .put(yDir * startRadius)
-                    .put(0.0f);
+                    .put(0.0f)
+                    .put(zDir * startRadius);
             vertices.put(xDir * endRadius)
-                    .put(yDir * endRadius)
-                    .put(0.0f);
+                    .put(0.0f)
+                    .put(zDir * endRadius);
 
             int offset = i * 4;
             indices.put(offset)
@@ -51,6 +53,8 @@ public class Ring extends VAOMesh {
         indices.flip();
 
         setVertexData(vertices);
+        setTexCoordData(texCoords);
+        setNormalData(normals);
         setIndexData(indices);
     }
 

@@ -27,6 +27,7 @@ import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.GraphicsCustomRendererProgramProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.particles.*;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
@@ -50,6 +51,7 @@ import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.program.gas.GasPlanetProgram;
+import pl.warp.game.program.gas.PlanetaryRingProgram;
 
 import java.util.Random;
 
@@ -140,6 +142,11 @@ public class Test {
                     gasProgram.update(delta);
                 }
             });
+
+            Component ring = new SimpleComponent(gasSphere);
+            Ring ringMesh = new Ring(20, 1.5f, 3f);
+            new GraphicsMeshProperty(ring, ringMesh);
+            new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram(null));
 
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
