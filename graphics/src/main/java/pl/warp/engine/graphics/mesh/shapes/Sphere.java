@@ -1,4 +1,6 @@
-package pl.warp.engine.graphics.mesh;
+package pl.warp.engine.graphics.mesh.shapes;
+
+import pl.warp.engine.graphics.mesh.VAOMesh;
 
 /**
  * @author Jaca777
@@ -13,11 +15,12 @@ public class Sphere extends VAOMesh {
         super(2 * segmentsW * (segmentsH - 1) * 3, (segmentsW + 1) * (segmentsH + 1));
         this.segmentsW = segmentsW;
         this.segmentsH = segmentsH;
-        create();
+        createShape();
     }
 
 
-    protected void create() {
+    //Based on Android code.
+    protected void createShape() {
 
         float[] vertices = new float[this.vertices * 3];
         float[] normals = new float[this.vertices * 3];

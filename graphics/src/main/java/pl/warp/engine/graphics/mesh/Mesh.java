@@ -230,6 +230,10 @@ public class Mesh {
         setBufferData(vertexBuff, data);
     }
 
+    public synchronized void setVertexData(FloatBuffer vertices) {
+        setBufferData(vertexBuff, vertices);
+    }
+
     private FloatBuffer tempTexCoordData;
 
     public synchronized void setTexCoordData(float[] texCoords) {
@@ -239,6 +243,10 @@ public class Mesh {
         FloatBuffer data = tempTexCoordData.put(texCoords);
         data.rewind();
         setBufferData(texCoordBuff, data);
+    }
+
+    public synchronized void setTexCoordData(FloatBuffer texCoords) {
+        setBufferData(texCoordBuff, texCoords);
     }
 
     private FloatBuffer tempNormalData;
@@ -252,6 +260,11 @@ public class Mesh {
         setBufferData(normalBuff, data);
     }
 
+
+    public synchronized void setNormalData(FloatBuffer normals) {
+        setBufferData(normalBuff, normals);
+    }
+
     private IntBuffer tempIndicesData;
 
     public synchronized void setIndexData(int[] indices) {
@@ -261,6 +274,10 @@ public class Mesh {
         IntBuffer data = tempIndicesData.put(indices);
         data.rewind();
         setBufferData(indexBuff, data);
+    }
+
+    public synchronized void setIndexData(IntBuffer indices) {
+        setBufferData(indexBuff, indices);
     }
 
     private void setBufferData(int buffer, FloatBuffer data) {
