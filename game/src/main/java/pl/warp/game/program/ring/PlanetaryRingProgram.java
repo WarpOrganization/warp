@@ -26,6 +26,8 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
     private int unifRotationMatrix;
     private int unifCameraMatrix;
     private int unifCameraPos;
+    private int unifRingStart;
+    private int unifRingEnd;
 
     public PlanetaryRingProgram(Texture1D ringColorsTexture) {
         super(VERTEX_SHADER, FRAGMENT_SHADER);
@@ -43,11 +45,18 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
+        this.unifRingStart = getUniformLocation("ringStart");
+        this.unifRingEnd = getUniformLocation("ringEnd");
     }
 
     @Override
     public void useComponent(Component component) {
-       //useTexture(colorsTexture, COLORS_TEXTURE_SAMPLER);
+        //useTexture(colorsTexture, COLORS_TEXTURE_SAMPLER);
+        if(component.hasEnabledProperty(PlanetaryRingProperty.PLANETARY_RING_PROPERTY_NAME)){
+            PlanetaryRingProperty property = component.getProperty(PlanetaryRingProperty.PLANETARY_RING_PROPERTY_NAME);
+            setUniformf(unifRingStart, property.getStartRadius());
+            setUniformf(unifRingEnd, property.getEndRadius());
+        } else throw new IllegalStateException("Unable to render component without PlanetaryRingProperty enabled property.");
     }
 
     @Override
@@ -62,6 +71,7 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
         setUniformMatrix4(unifModelMatrix, stack.topMatrix());
         setUniformMatrix4(unifRotationMatrix, stack.topRotationMatrix());
     }
+
     @Override
     public void useEnvironment(Environment environment) {
 

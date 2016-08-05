@@ -21,16 +21,21 @@ public class Ring extends VAOMesh {
         super(divisions * 6, divisions * 2);
         this.divisions = divisions;
         this.startRadius = startRadius;
-        this.endRadius = endRadius;
+        this.endRadius = calculateEndRadius(divisions, endRadius);
         createShape();
+    }
+
+    private float calculateEndRadius(int divisions, float endMeshRadius) {
+        float angle = (float) (Math.PI / divisions); //2PI / divisions / 2
+        return (float) (endMeshRadius / Math.cos(angle));
     }
 
     private void createShape() {
         FloatBuffer vertices = BufferUtils.createFloatBuffer(this.vertices * 3);
-        FloatBuffer texCoords  = BufferUtils.createFloatBuffer(this.vertices * 2);
-        FloatBuffer normals  = BufferUtils.createFloatBuffer(this.vertices * 3);
+        FloatBuffer texCoords = BufferUtils.createFloatBuffer(this.vertices * 2);
+        FloatBuffer normals = BufferUtils.createFloatBuffer(this.vertices * 3);
         IntBuffer indices = BufferUtils.createIntBuffer(this.indices);
-        for(int i = 0; i < divisions; i++) {
+        for (int i = 0; i < divisions; i++) {
             float angle = (float) (2 * Math.PI * (i / (float) divisions));
             float xDir = (float) Math.cos(angle);
             float zDir = (float) Math.sin(angle);
@@ -42,12 +47,13 @@ public class Ring extends VAOMesh {
                     .put(zDir * endRadius);
 
             int offset = i * 2;
+            int nextQuadOffset = (offset + 2 < divisions * 2) ? offset + 2 : 0;
             indices.put(offset)
                     .put(offset + 1)
-                    .put(offset + 2);
+                    .put(nextQuadOffset);
             indices.put(offset + 1)
-                    .put(offset + 2)
-                    .put(offset + 3);
+                    .put(nextQuadOffset)
+                    .put(nextQuadOffset + 1);
         }
 
         vertices.flip();

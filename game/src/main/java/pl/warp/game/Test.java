@@ -52,6 +52,7 @@ import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.program.gas.GasPlanetProgram;
 import pl.warp.game.program.ring.PlanetaryRingProgram;
+import pl.warp.game.program.ring.PlanetaryRingProperty;
 
 import java.util.Random;
 
@@ -147,6 +148,7 @@ public class Test {
             Ring ringMesh = new Ring(20, 1.5f, 2.5f);
             new GraphicsMeshProperty(ring, ringMesh);
             new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram(null));
+            new PlanetaryRingProperty(ring, 1.5f, 2.5f);
 
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
