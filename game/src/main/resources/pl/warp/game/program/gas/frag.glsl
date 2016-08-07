@@ -8,7 +8,7 @@ in vec3 normal;
 
 layout(location = 0) out vec4 fragColor;
 
-#include "util/noise"
+#include "util/noise4d"
 
 void main() {
     float texCoord = onSpherePos.y * 0.5 + 0.5;
