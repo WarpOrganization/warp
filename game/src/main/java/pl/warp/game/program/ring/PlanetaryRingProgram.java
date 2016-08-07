@@ -1,5 +1,6 @@
 package pl.warp.game.program.ring;
 
+import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
@@ -24,21 +25,17 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
     private static final String VERTEX_SHADER = "ring/vert";
     private static final String FRAGMENT_SHADER = "ring/frag";
 
-    private Texture1D ringColorsTexture;
-
     private int unifProjectionMatrix;
     private int unifModelMatrix;
     private int unifRotationMatrix;
     private int unifCameraMatrix;
-    private int unifCameraPos;
     private int unifRingStart;
     private int unifRingEnd;
 
-    public PlanetaryRingProgram(Texture1D ringColorsTexture) {
+    public PlanetaryRingProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
-        this.ringColorsTexture = ringColorsTexture;
         loadLocations();
     }
 
@@ -51,7 +48,6 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
         this.unifModelMatrix = getUniformLocation("modelMatrix");
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
-        this.unifCameraPos = getUniformLocation("cameraPos");
         this.unifRingStart = getUniformLocation("ringStart");
         this.unifRingEnd = getUniformLocation("ringEnd");
     }
@@ -72,7 +68,6 @@ public class PlanetaryRingProgram extends ComponentRendererProgram {
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
-        setUniformV3(unifCameraPos, camera.getPosition());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package pl.warp.game.program.gas;
 
+import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
@@ -63,11 +64,13 @@ public class GasPlanetProgram extends ComponentRendererProgram {
         useTexture(colorsTexture, COLORS_TEXTURE_SAMPLER);
     }
 
+    private Vector3f tmpVector = new Vector3f();
+
     @Override
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
-        setUniformV3(unifCameraPos, camera.getPosition());
+        setUniformV3(unifCameraPos, camera.getPosition(tmpVector));
     }
 
     @Override

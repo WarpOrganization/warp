@@ -4,7 +4,6 @@ precision highp float;
 uniform sampler1D ringColors;
 uniform float ringStart;
 uniform float ringEnd;
-uniform vec3 cameraPos;
 
 smooth in vec3 onRingPos;
 smooth in vec3 worldPos;
@@ -19,8 +18,4 @@ void main() {
     float texturePos = distance - ringStart;
     fragColor = texture1D(ringColors, texturePos);
     if(fragColor.a < 0.05f) discard;
-
-    fragColor.a -= snoise(onRingPos * 400) * 0.3;
-    if(fragColor.a < 0.05f) discard;
-
 }

@@ -150,7 +150,7 @@ public class Test {
             Component ring = new SimpleComponent(gasSphere);
             Ring ringMesh = new Ring(20, startR, endR);
             new GraphicsMeshProperty(ring, ringMesh);
-            new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram(null));
+            new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram());
             ImageData ringColorsData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ring_colors.png"), PNGDecoder.Format.RGBA);
             Texture1D ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, true, ringColorsData.getData());
             ringColors.enableAnisotropy(4);

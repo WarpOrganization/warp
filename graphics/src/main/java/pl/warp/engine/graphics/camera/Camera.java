@@ -32,7 +32,7 @@ public abstract class Camera extends Actor {
 
     public abstract void rotateZ(float angleInRadians);
 
-    public abstract Vector3f getPosition();
+    public abstract Vector3f getPosition(Vector3f dest);
 
     public abstract Matrix4f getCameraMatrix();
 
