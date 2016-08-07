@@ -7,6 +7,7 @@ import org.lwjgl.opengl.*;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
+import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture;
 
 import java.io.IOException;
@@ -22,39 +23,24 @@ public abstract class Program {
 
     protected ExtendedGLSLProgram program;
 
-    public Program(InputStream vertexShader, InputStream fragmentShader, ConstantField field) {
-        this(toString(vertexShader), toString(fragmentShader), field);
-    }
-
-    public Program(InputStream vertexShader, InputStream fragmentShader) {
-        this(vertexShader, fragmentShader, ConstantField.EMPTY_CONSTANT_FIELD);
-    }
-
-    private static String toString(InputStream stream) {
-        try {
-            return CharStreams.toString(new InputStreamReader(stream));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Program(String vertexShader, String fragmentShader, ConstantField field) {
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(vertexShader, fragmentShader, field);
-        this.program = compiler.compile();
+    public Program(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
+        this.program = compiler.compile(vertexShaderName, fragmentShaderName);
         GL20.glUseProgram(this.program.getGLProgram());
-    }
-
-    public Program(String vertexShader, String fragmentShader) {
-        this(vertexShader, fragmentShader, ConstantField.EMPTY_CONSTANT_FIELD);
     }
 
     public Program(int program, int vertexShader, int fragmentShader) {
         this.program = new ExtendedGLSLProgram(fragmentShader, vertexShader, program);
     }
 
+    public Program(String programName) {
+        this(programName + "/vert", programName + "/frag",
+                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
+    }
+
 
     protected Program() {
     }
+
 
     /**
      * Binds the program.

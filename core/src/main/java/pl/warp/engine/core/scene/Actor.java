@@ -11,5 +11,5 @@ public abstract class Actor extends Component {
         super(parent);
     }
 
-    public abstract Vector3f getPosition();
+    public abstract Vector3f getPosition(Vector3f dest);
 }

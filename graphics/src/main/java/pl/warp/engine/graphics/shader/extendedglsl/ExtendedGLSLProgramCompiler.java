@@ -1,10 +1,13 @@
 package pl.warp.engine.graphics.shader.extendedglsl;
 
+import com.google.common.io.CharStreams;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import pl.warp.engine.graphics.shader.GLSLShaderCompiler;
 
-import java.util.Objects;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,32 +18,52 @@ import java.util.regex.Pattern;
 public class ExtendedGLSLProgramCompiler {
 
     private ConstantField constants;
-    private String vertexShaderCode;
-    private String geometryShaderCode;
-    private String fragmentShaderCode;
+    private ProgramLoader programLoader;
 
-    public ExtendedGLSLProgramCompiler(String vertexShaderCode, String fragmentShaderCode, ConstantField constants) {
+    public ExtendedGLSLProgramCompiler(ConstantField constants, ProgramLoader programLoader) {
         this.constants = constants;
-        this.vertexShaderCode = vertexShaderCode;
-        this.fragmentShaderCode = fragmentShaderCode;
+        this.programLoader = programLoader;
     }
 
-    public void useGeometryShader(String code) {
-        this.geometryShaderCode = code;
+    public ExtendedGLSLProgram compile(String vertexShaderName, String fragmentShaderName, String geometryShaderName) {
+        String vertexShaderCode = programLoader.loadProgram(vertexShaderName);
+        if (vertexShaderCode == null) throw new RuntimeException("Vertex shader not found: " + vertexShaderName);
+        String glslVertexCode = process(vertexShaderCode);
+        String fragmentShaderCode = programLoader.loadProgram(fragmentShaderName);
+        if (fragmentShaderCode == null) throw new RuntimeException("Fragment shader not found: " + fragmentShaderName);
+        String glslFragmentCode = process(fragmentShaderCode);
+        String geometryShaderCode = programLoader.loadProgram(geometryShaderName);
+        String glslGeometryCode = (geometryShaderCode != null) ? process(geometryShaderCode) : null;
+        return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode);
     }
 
-    public ExtendedGLSLProgram compile() {
-        if (!isComplete())
-            throw new IllegalStateException("Program is not ready for compilation.");
-        processConstants();
-        return compileGLSL();
+    public ExtendedGLSLProgram compile(String vertexShaderCode, String fragmentShaderCode) {
+        return compile(vertexShaderCode, fragmentShaderCode, null);
     }
 
-    protected void processConstants() {
-        vertexShaderCode = processConstants(vertexShaderCode);
-        if (hasGeometryShader())
-            geometryShaderCode = processConstants(geometryShaderCode);
-        fragmentShaderCode = processConstants(fragmentShaderCode);
+    protected String process(String code) {
+        String preprocessed = preprocess(code);
+        return processConstants(preprocessed);
+    }
+
+    private static final Pattern INCLUDE_EXPR_PATTERN = Pattern.compile("#include \"(.*)\"");
+
+    protected String preprocess(String code) {
+        String newCode = code;
+        Matcher matcher = INCLUDE_EXPR_PATTERN.matcher(code);
+        while (matcher.find()) {
+            String programName = matcher.group(1);
+            String programCode = findProgram(programName);
+            newCode = newCode.replace(matcher.group(), programCode);
+        }
+        return newCode;
+    }
+
+    private String findProgram(String moduleName) {
+        String code = programLoader.loadProgram(moduleName);
+        if (code == null)
+            throw new ProgramCompilationException("Unable to resolve program to include: " + moduleName);
+        else return code;
     }
 
     private static final Pattern CONSTANT_EXPR_PATTERN = Pattern.compile("\\$(\\w*)\\$");
@@ -57,13 +80,13 @@ public class ExtendedGLSLProgramCompiler {
         return newCode;
     }
 
-    private ExtendedGLSLProgram compileGLSL() {
+    private ExtendedGLSLProgram compileGLSL(String vertexShaderCode, String fragmentShaderCode, String geometryShaderCode) {
         int vertexShader = GLSLShaderCompiler.compileShader(GL20.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = GLSLShaderCompiler.compileShader(GL20.GL_FRAGMENT_SHADER, fragmentShaderCode);
         int geometryShader = 0;
         int glslProgram;
         String[] outNames = getOutput(fragmentShaderCode);
-        if (hasGeometryShader()) {
+        if (geometryShaderCode != null) {
             geometryShader = GLSLShaderCompiler.compileShader(GL32.GL_GEOMETRY_SHADER, geometryShaderCode);
             glslProgram = GLSLShaderCompiler.createProgram(new int[]{geometryShader, vertexShader, fragmentShader}, outNames);
         } else glslProgram = GLSLShaderCompiler.createProgram(new int[]{vertexShader, fragmentShader}, outNames);
@@ -100,44 +123,8 @@ public class ExtendedGLSLProgramCompiler {
         return count;
     }
 
-    public boolean isComplete() {
-        return vertexShaderCode != null
-                && fragmentShaderCode != null;
-    }
-
-    public boolean hasGeometryShader() {
-        return geometryShaderCode != null;
-    }
-
-    public ConstantField getConstants() {
-        return constants;
-    }
-
-    public void setConstants(ConstantField constants) {
-        this.constants = constants;
-    }
-
-    public String getVertexShaderCode() {
-        return vertexShaderCode;
-    }
-
-    public void setVertexShaderCode(String vertexShaderCode) {
-        this.vertexShaderCode = vertexShaderCode;
-    }
-
-    public String getGeometryShaderCode() {
-        return geometryShaderCode;
-    }
-
-    public void setGeometryShaderCode(String geometryShaderCode) {
-        this.geometryShaderCode = geometryShaderCode;
-    }
-
-    public String getFragmentShaderCode() {
-        return fragmentShaderCode;
-    }
-
-    public void setFragmentShaderCode(String fragmentShaderCode) {
-        this.fragmentShaderCode = fragmentShaderCode;
+    public <T> ExtendedGLSLProgramCompiler setConstant(String name, T value) {
+        constants.set(name, value);
+        return this;
     }
 }

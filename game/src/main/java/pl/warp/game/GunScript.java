@@ -8,7 +8,7 @@ import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.input.GLFWInput;
-import pl.warp.engine.graphics.math.Transforms;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.texture.Texture2DArray;

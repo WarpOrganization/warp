@@ -4,6 +4,8 @@ import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.io.InputStream;
@@ -20,9 +22,7 @@ public class ParticleProgram extends GeometryProgram {
     public static final int ROTATION_ATTR = 1;
     public static final int TEXTURE_INDEX_ATTR = 2;
 
-    private static final InputStream FRAGMENT_SHADER = ParticleProgram.class.getResourceAsStream("frag.glsl");
-    private static final InputStream VERTEX_SHADER = ParticleProgram.class.getResourceAsStream("vert.glsl");
-    private static final InputStream GEOMETRY_SHADER = ParticleProgram.class.getResourceAsStream("geom.glsl");
+    private static final String PROGRAM_NAME = "particle";
 
     private int unifModelViewMatrix;
     private int unifProjectionMatrix;
@@ -32,7 +32,7 @@ public class ParticleProgram extends GeometryProgram {
     private Matrix4f modelMatrix;
 
     public ParticleProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER);
+        super(PROGRAM_NAME);
         loadUniforms();
     }
 

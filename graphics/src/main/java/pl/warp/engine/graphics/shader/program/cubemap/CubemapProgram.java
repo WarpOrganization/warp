@@ -2,10 +2,8 @@ package pl.warp.engine.graphics.shader.program.cubemap;
 
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.shader.Program;
-import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultComponentProgram;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Cubemap;
-
-import java.io.InputStream;
 
 /**
  * @author Jaca777
@@ -14,8 +12,7 @@ import java.io.InputStream;
 public class CubemapProgram extends Program {
 
     private static final int CUBEMAP_SAMPLER = 0;
-    private static final InputStream VERTEX_SHADER = CubemapProgram.class.getResourceAsStream("vert.glsl");
-    private static final InputStream FRAGMENT_SHADER = CubemapProgram.class.getResourceAsStream("frag.glsl");
+    private static final String PROGRAM_NAME = "cubemap";
 
     public static final int ATTR_VERTEX = 0;
 
@@ -23,7 +20,7 @@ public class CubemapProgram extends Program {
     private int unifRotMatrix;
 
     public CubemapProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(PROGRAM_NAME);
         loadUniforms();
     }
 

@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.shader.program.component.defaultprog;
 
+import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;
@@ -9,6 +10,8 @@ import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
+import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 
 import java.io.InputStream;
 import java.util.List;
@@ -19,8 +22,8 @@ import java.util.List;
  */
 public class DefaultComponentProgram extends ComponentRendererProgram {
 
-    private static final InputStream VERTEX_SHADER = DefaultComponentProgram.class.getResourceAsStream("vert.glsl");
-    private static final InputStream FRAGMENT_SHADER = DefaultComponentProgram.class.getResourceAsStream("frag.glsl");
+    private static final String VERTEX_SHADER = "component/defaultprog/vert";
+    private static final String FRAGMENT_SHADER = "component/defaultprog/frag";
 
     private static final int MAIN_MATERIAL_TEXTURE_SAMPLER = 0;
     private static final int MATERIAL_BRIGHTNESS_TEXTURE = 1;
@@ -46,7 +49,8 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
 
     public DefaultComponentProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER, CONSTANT_FIELD);
+        super(VERTEX_SHADER, FRAGMENT_SHADER,
+                new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
         loadLocations();
     }
 
@@ -101,11 +105,12 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         } else setUniformb(unifMaterialHasBrightnessTexture, false);
     }
 
+    private Vector3f tmpVector = new Vector3f();
     @Override
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
-        setUniformV3(unifCameraPos, camera.getPosition());
+        setUniformV3(unifCameraPos, camera.getPosition(tmpVector));
     }
 
     @Override

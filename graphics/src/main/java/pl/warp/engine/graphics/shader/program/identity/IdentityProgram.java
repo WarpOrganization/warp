@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.shader.program.identity;
 
 import pl.warp.engine.graphics.shader.Program;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 import java.io.InputStream;
@@ -11,8 +12,7 @@ import java.io.InputStream;
  */
 public class IdentityProgram extends Program {
 
-    private static InputStream FRAGMENT_SHADER = IdentityProgram.class.getResourceAsStream("frag.glsl");
-    private static InputStream VERTEX_SHADER = IdentityProgram.class.getResourceAsStream("vert.glsl");
+    private static final String PROGRAM_NAME = "identity";
 
     private static final int TEXTURE_SAMPLER = 0;
 
@@ -20,7 +20,7 @@ public class IdentityProgram extends Program {
     public static final int ATTR_TEX_COORD = 1;
 
     public IdentityProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(PROGRAM_NAME);
     }
 
     public void useTexture(Texture2D texture) {

@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.shader.program.postprocessing.bloomdetection;
 
 import pl.warp.engine.graphics.shader.Program;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 import java.io.InputStream;
@@ -11,8 +12,7 @@ import java.io.InputStream;
  */
 public class BloomDetectionProgram extends Program {
 
-    private static InputStream FRAGMENT_SHADER = BloomDetectionProgram.class.getResourceAsStream("frag.glsl");
-    private static InputStream VERTEX_SHADER = BloomDetectionProgram.class.getResourceAsStream("vert.glsl");
+    private static String PROGRAM_NAME = "postprocessing/bloomdetection";
 
     private static final int TEXTURE_SAMPLER = 0;
 
@@ -23,7 +23,7 @@ public class BloomDetectionProgram extends Program {
     private int unifCutOff;
 
     public BloomDetectionProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(PROGRAM_NAME);
         loadUniforms();
     }
 

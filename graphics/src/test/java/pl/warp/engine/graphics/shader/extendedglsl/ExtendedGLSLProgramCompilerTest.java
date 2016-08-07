@@ -15,7 +15,7 @@ public class ExtendedGLSLProgramCompilerTest {
         ConstantField constantField = new ConstantField()
                 .set("foo", 2)
                 .set("bar", 3);
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, constantField);
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(constantField, null);
         String sample = "foo bar \"$foo$,\n ab$bar$c\n\n $foo$";
         String result = compiler.processConstants(sample);
         String expectedResult = "foo bar \"2,\n ab3c\n\n 2";
@@ -27,7 +27,7 @@ public class ExtendedGLSLProgramCompilerTest {
         ConstantField constantField = new ConstantField()
                 .set("foo", 2)
                 .set("bar", 3);
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, constantField);
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(constantField, null);
         String sample = "foo bar \"$abc$,\n ab$bar$c\n\n $foo$";
         compiler.processConstants(sample);
     }
@@ -47,7 +47,7 @@ public class ExtendedGLSLProgramCompilerTest {
                     "}";
     @Test
     public void shouldRecognizeOutput() throws Exception {
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, null);
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null);
         String[] output = compiler.getOutput(SOME_GLSL_CODE);
         String[] expectedOutput = {"fragColor", "someColor"};
         assertArrayEquals(expectedOutput, output);
@@ -69,7 +69,7 @@ public class ExtendedGLSLProgramCompilerTest {
 
     @Test(expected = ProgramCompilationException.class)
     public void shouldFailIfLocationUnexpected() throws Exception {
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, null);
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null);
         compiler.getOutput(SOME_STRANGE_GLSL_CODE);
     }
 
@@ -89,7 +89,7 @@ public class ExtendedGLSLProgramCompilerTest {
 
     @Test(expected = ProgramCompilationException.class)
     public void shouldFailIfLocationDuplicated() throws Exception {
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null, null);
+        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(null, null);
         compiler.getOutput(YET_ANOTHER_STRANGE_GLSL_CODE);
     }
 
