@@ -3,6 +3,7 @@ package pl.warp.engine.graphics.shader.program.postprocessing.gaussianblur;
 import org.joml.Vector2f;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.shader.Program;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 import java.io.InputStream;
@@ -37,9 +38,7 @@ public class GaussianBlurProgram extends Program {
         }
     }
 
-    private static InputStream FRAGMENT_SHADER = GaussianBlurProgram.class.getResourceAsStream("frag.glsl");
-    private static InputStream VERTEX_SHADER = GaussianBlurProgram.class.getResourceAsStream("vert.glsl");
-
+    private static String PROGRAM_NAME = "postprocessing/gaussianblur";
     private static final int TEXTURE_SAMPLER = 0;
 
     public static final int ATTR_VERTEX = 0;
@@ -49,7 +48,7 @@ public class GaussianBlurProgram extends Program {
     private int unifDisplaySize;
 
     public GaussianBlurProgram(RenderingConfig config) {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(PROGRAM_NAME);
         loadUniforms();
         GaussianBlurStage.HORIZONTAL.setDisplaySize(() -> config.getDisplay().getHeight());
         GaussianBlurStage.VERTICAL.setDisplaySize(() -> config.getDisplay().getHeight());

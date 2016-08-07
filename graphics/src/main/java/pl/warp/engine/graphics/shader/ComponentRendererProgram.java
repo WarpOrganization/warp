@@ -6,6 +6,7 @@ import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 
 import java.io.InputStream;
 
@@ -29,12 +30,8 @@ public abstract class ComponentRendererProgram extends Program{
     public static final int ATTR_TEXUTRE_COORD_LOCATION = 1;
     public static final int ATTR_NORMAL_LOCATION = 2;
 
-    public ComponentRendererProgram(InputStream vertexShader, InputStream fragmentShader) {
-        super(vertexShader, fragmentShader);
-    }
-
-    public ComponentRendererProgram(InputStream vertexShader, InputStream fragmentShader, ConstantField field) {
-        super(vertexShader, fragmentShader, field);
+    public ComponentRendererProgram(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
+        super(vertexShaderName, fragmentShaderName, compiler);
     }
 
     public abstract void useComponent(Component component);

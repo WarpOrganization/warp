@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
+import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,12 +17,8 @@ import java.io.InputStreamReader;
  */
 public class GeometryProgram extends Program {
 
-    public GeometryProgram(InputStream vertexShader, InputStream fragmentShader, InputStream geometryShader, ConstantField field) {
-        this(toString(vertexShader), toString(fragmentShader), toString(geometryShader), field);
-    }
-
-    public GeometryProgram(InputStream vertexShader, InputStream fragmentShader, InputStream geometryShader) {
-        this(vertexShader, fragmentShader, geometryShader, ConstantField.EMPTY_CONSTANT_FIELD);
+    public GeometryProgram(String vertexShaderName, String fragmentShaderName, InputStream geometryShader, ExtendedGLSLProgramCompiler compiler) {
+        this(vertexShaderName, fragmentShaderName, toString(geometryShader), compiler);
     }
 
     private static String toString(InputStream stream) {
@@ -32,17 +29,15 @@ public class GeometryProgram extends Program {
         }
     }
 
-    public GeometryProgram(String vertexShader, String fragmentShader, String geometryShader, ConstantField field) {
-        ExtendedGLSLProgramCompiler compiler = new ExtendedGLSLProgramCompiler(vertexShader, fragmentShader, field);
-        compiler.useGeometryShader(geometryShader);
-        this.program = compiler.compile();
+    public GeometryProgram(String vertexShader, String fragmentShader, String geometryShader, ExtendedGLSLProgramCompiler compiler) {
+        this.program = compiler.compile(vertexShader, fragmentShader, geometryShader);
         GL20.glUseProgram(this.program.getGLProgram());
     }
 
-    public GeometryProgram(String vertexShader, String fragmentShader, String geometryShader) {
-        this(vertexShader, fragmentShader, geometryShader, ConstantField.EMPTY_CONSTANT_FIELD);
+    public GeometryProgram(String programName) {
+        this(programName + "/vert", programName + "/frag", programName + "/geom",
+                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
     }
-
 
     @Override
     public void delete() {

@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.shader.program.identitymultisample;
 
 import pl.warp.engine.graphics.shader.Program;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.program.identity.IdentityProgram;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
@@ -11,9 +12,7 @@ import java.io.InputStream;
  *         Created 2016-07-03 at 22
  */
 public class IdentityMultisampleProgram extends Program {
-    private static InputStream FRAGMENT_SHADER = IdentityMultisampleProgram.class.getResourceAsStream("frag.glsl");
-    private static InputStream VERTEX_SHADER = IdentityMultisampleProgram.class.getResourceAsStream("vert.glsl");
-
+    private static final String PROGRAM_NAME = "identitymultisample";
 
     public static final int ATTR_VERTEX = 0;
     public static final int ATTR_TEX_COORD = 1;
@@ -22,7 +21,7 @@ public class IdentityMultisampleProgram extends Program {
     private int unifSamples;
 
     public IdentityMultisampleProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(PROGRAM_NAME);
         this.unifSamples = getUniformLocation("samples");
     }
 

@@ -146,7 +146,7 @@ public class Test {
             });
 
             float startR = 1.5f;
-            float endR = 3.0f;
+            float endR = 2.5f;
             Component ring = new SimpleComponent(gasSphere);
             Ring ringMesh = new Ring(20, startR, endR);
             new GraphicsMeshProperty(ring, ringMesh);
@@ -220,8 +220,6 @@ public class Test {
 
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
-
-
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
@@ -229,7 +227,7 @@ public class Test {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
-            material.setShininess(4f);
+            material.setShininess(20f);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
             new PhysicalBodyProperty(goat, 1f, 2.833f);

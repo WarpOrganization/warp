@@ -14,4 +14,5 @@ void main() {
     if(distance < ringStart || distance > ringEnd) discard;
     float texturePos = distance - ringStart;
     fragColor = texture1D(ringColors, texturePos);
+    if(fragColor.a < 0.05f) discard;
 }

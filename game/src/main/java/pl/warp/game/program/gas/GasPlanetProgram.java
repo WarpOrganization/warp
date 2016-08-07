@@ -5,6 +5,10 @@ import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
+import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
+import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture1D;
 
 import java.io.InputStream;
@@ -17,8 +21,9 @@ public class GasPlanetProgram extends ComponentRendererProgram {
 
     private static final int COLORS_TEXTURE_SAMPLER = 0;
 
-    private static final InputStream VERTEX_SHADER = GasPlanetProgram.class.getResourceAsStream("vert.glsl");
-    private static final InputStream FRAGMENT_SHADER = GasPlanetProgram.class.getResourceAsStream("frag.glsl");
+    private static final String PROGRAM_PATH = "pl/warp/game/program/";
+    private static final String VERTEX_SHADER = "gas/vert";
+    private static final String FRAGMENT_SHADER = "gas/frag";
 
     private Texture1D colorsTexture;
     private int time;
@@ -32,7 +37,9 @@ public class GasPlanetProgram extends ComponentRendererProgram {
     private int unifColor;
 
     public GasPlanetProgram(Texture1D colorsTexture) {
-        super(VERTEX_SHADER, FRAGMENT_SHADER);
+        super(VERTEX_SHADER, FRAGMENT_SHADER,
+                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
+                        new ExternalProgramLoader(PROGRAM_PATH)));
         this.colorsTexture = colorsTexture;
         loadLocations();
     }
@@ -69,7 +76,7 @@ public class GasPlanetProgram extends ComponentRendererProgram {
         setUniformMatrix4(unifRotationMatrix, stack.topRotationMatrix());
     }
 
-    public void update(int delta){
+    public void update(int delta) {
         time += delta;
         setUniformi(unifTime, time);
     }
