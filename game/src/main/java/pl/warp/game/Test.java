@@ -106,7 +106,7 @@ public class Test {
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
             ParticleFactory factory = new RandomSpreadingParticleFactory(0.02f, 600, true, true);
-            new GraphicsParticleEmitterProperty(light, new ParticleSystem(animator, factory, 1000, lightSpritesheetTexture));
+            new GraphicsParticleEmitterProperty(light, new ParticleSystem(animator, factory, 2000, lightSpritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -117,10 +117,10 @@ public class Test {
                     new SingleFlare(-0.4f, 1, 0.08f, new Vector3f(1)),
                     new SingleFlare(-0.5f, 1, 0.05f, new Vector3f(1)),
                     new SingleFlare(-0.6f, 1, 0.08f, new Vector3f(1)),
-                    new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(2f, 0.5f, 2f)),
-                    new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(0.5f, 0.5f, 2f)),
-                    new SingleFlare(0.2f, 1, 0.25f, new Vector3f(0.5f, 2f, 0.5f)),
-                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(2f, 0.5f, 0.5f)),
+                    new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(1)),
+                    new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(1)),
+                    new SingleFlare(0.2f, 1, 0.25f, new Vector3f(1)),
+                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f)),
             };
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
@@ -134,14 +134,15 @@ public class Test {
             Texture1D colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
             GasPlanetProgram gasProgram = new GasPlanetProgram(colorsTexture);
             new GraphicsCustomRendererProgramProperty(gasSphere, gasProgram);
-            TransformProperty gasSphereSourceTransform = new TransformProperty(gasSphere);
-            gasSphereSourceTransform.move(new Vector3f(-1200f, -200f, -500f));
-            gasSphereSourceTransform.scale(new Vector3f(1000.0f));
+            TransformProperty gasSphereTransform = new TransformProperty(gasSphere);
+            gasSphereTransform.move(new Vector3f(-1200f, -200f, -500f));
+            gasSphereTransform.scale(new Vector3f(1000.0f));
             graphicsThread.scheduleTask(new SimpleEngineTask() {
                 @Override
                 public void update(int delta) {
                     gasProgram.use();
                     gasProgram.update(delta);
+                    gasSphereTransform.rotateY(delta * 0.00001f);
                 }
             });
 
