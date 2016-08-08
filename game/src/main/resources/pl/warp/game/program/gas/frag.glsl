@@ -18,9 +18,9 @@ void main() {
     float t1 = snoise(noisePos * 2.0) - s;
     float t2 = snoise((noisePos + 800.0) * 2.0) - s;
     float t3 = snoise((noisePos + 1600.0) * 2.0) - s;
-    float threshold = max(t1 * t2 * t3, 0.0) * 2;
+    float threshold = max(t1 * t2 * t3, 0.0);
 
-    float n1 = noise(noisePos, 5, 20.0, 0.8) * 0.01;
+    float n1 = noise(noisePos, 7, 20.0, 0.8) * 0.01;
     float n2 = ridgedNoise(noisePos, 5,  5.0, 0.75) * 0.015 - 0.01;
     float n3 = snoise(noisePos) * threshold;
     float n = n1 + n2 + n3;

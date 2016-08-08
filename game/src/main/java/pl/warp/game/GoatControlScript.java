@@ -84,6 +84,10 @@ public class GoatControlScript extends Script<Component> {
             addDesiredTorque(0, arrowKeysRottationSpeed, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_RIGHT))
             addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
+        if(input.isKeyDown(GLFW.GLFW_KEY_Q))
+            addDesiredTorque(0, 0, arrowKeysRottationSpeed);
+        if(input.isKeyDown(GLFW.GLFW_KEY_E))
+            addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
     }
 
     private Vector3f tmpForce = new Vector3f();
