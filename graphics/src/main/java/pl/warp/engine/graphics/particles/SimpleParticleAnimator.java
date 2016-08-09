@@ -7,7 +7,7 @@ import org.joml.Vector3f;
  * @author Jaca777
  *         Created 2016-07-10 at 14
  */
-public class SimpleParticleAnimator implements ParticleAnimator {
+public class SimpleParticleAnimator implements ParticleAnimator<Particle> {
     private Vector3f acceleration;
     private Vector2f scalingRate;
     private float rotationRate;

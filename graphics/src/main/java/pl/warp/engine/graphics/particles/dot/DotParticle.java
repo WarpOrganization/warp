@@ -9,6 +9,7 @@ import pl.warp.engine.graphics.particles.Particle;
  *         Created 2016-08-08 at 19
  */
 public class DotParticle extends Particle {
+
     private Vector3f color;
     private float gradient;
 

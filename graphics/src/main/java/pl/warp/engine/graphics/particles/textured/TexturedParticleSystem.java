@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class TexturedParticleSystem extends ParticleSystem {
 
-
     private LinkedList<TexturedParticle> particles;
     private Texture2DArray spriteSheet;
 
