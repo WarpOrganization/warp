@@ -5,6 +5,8 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.*;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.textured.TexturedParticle;
+import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
@@ -47,11 +49,11 @@ public class BulletScript extends Script<Component> {
         Component component = event.getSecondComponent();
         if (component != playerShip && !component.hasProperty(DupaProperty.class)) {
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0.02f, 300, true, true);
+            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.02f, 300, true, true);
             component.getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             new DupaProperty(component);
-            new GraphicsParticleEmitterProperty(component, new ParticleSystem(animator, factory, 500, explosionSpritesheet));
+            new GraphicsParticleEmitterProperty(component, new TexturedParticleSystem(animator, factory, 500, explosionSpritesheet));
             executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
         }
     }

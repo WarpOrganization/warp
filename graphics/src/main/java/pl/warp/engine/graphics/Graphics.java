@@ -3,7 +3,7 @@ package pl.warp.engine.graphics;
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
-import pl.warp.engine.graphics.particles.ParticleRenderer;
+import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
@@ -74,10 +74,10 @@ public class Graphics {
     private Pipeline createPipeline() {
         MeshRenderer meshRenderer = new MeshRenderer(mainViewCamera, environment);
         SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
-        ParticleRenderer particleRenderer = new ParticleRenderer(mainViewCamera);
+        ParticleSystemRenderer particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         LensEnviromentFlareRenderer enviromentFlareRenderer = new LensEnviromentFlareRenderer(environment);
-        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleRenderer, emitterRenderer, enviromentFlareRenderer};
+        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, enviromentFlareRenderer};
         SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), config, renderers);
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
         BloomRenderer bloomRenderer = new BloomRenderer(config);

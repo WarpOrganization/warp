@@ -1,20 +1,16 @@
-package pl.warp.engine.graphics.shader.program.particle;
+package pl.warp.engine.graphics.shader.program.particle.dot;
 
 import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2DArray;
-
-import java.io.InputStream;
 
 /**
  * @author Jaca777
  *         Created 2016-07-11 at 14
  */
-public class ParticleProgram extends GeometryProgram {
+public class DotParticleProgram extends GeometryProgram {
 
     private static final int SPRITE_SHEET_SAMPLER = 0;
 
@@ -22,7 +18,7 @@ public class ParticleProgram extends GeometryProgram {
     public static final int ROTATION_ATTR = 1;
     public static final int TEXTURE_INDEX_ATTR = 2;
 
-    private static final String PROGRAM_NAME = "particle";
+    private static final String PROGRAM_NAME = "particle/dot";
 
     private int unifModelViewMatrix;
     private int unifProjectionMatrix;
@@ -31,7 +27,7 @@ public class ParticleProgram extends GeometryProgram {
     private Matrix4f cameraMatrix;
     private Matrix4f modelMatrix;
 
-    public ParticleProgram() {
+    public DotParticleProgram() {
         super(PROGRAM_NAME);
         loadUniforms();
     }

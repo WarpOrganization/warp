@@ -2,24 +2,25 @@ package pl.warp.engine.graphics.particles;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 
 /**
  * @author Jaca777
  *         Created 2016-07-10 at 15
  */
-public class PrototypeParticleFactory implements ParticleFactory {
-    private Particle prototype;
+public class PrototypeTexturedParticleFactory implements ParticleFactory<TexturedParticle> {
+    private TexturedParticle prototype;
 
-    public PrototypeParticleFactory(Particle prototype) {
+    public PrototypeTexturedParticleFactory(TexturedParticle prototype) {
         this.prototype = prototype;
     }
 
     @Override
-    public Particle newParticle() {
+    public TexturedParticle newParticle() {
         return copy(prototype);
     }
 
-    private Particle copy(Particle particle) {
+    private TexturedParticle copy(TexturedParticle particle) {
         Vector3f position = new Vector3f(particle.getPosition());
         Vector3f velocity = new Vector3f(particle.getVelocity());
         Vector2f scale = new Vector2f(particle.getScale());
@@ -27,7 +28,7 @@ public class PrototypeParticleFactory implements ParticleFactory {
         int textureIndex = particle.getTextureIndex();
         int ttl = particle.getTimeToLive();
         int tttl = particle.getTotalTimeToLive();
-        return new Particle(position, velocity, scale, rotation, textureIndex, tttl, ttl);
+        return new TexturedParticle(position, velocity, scale, rotation, textureIndex, tttl, ttl);
     }
 
 }

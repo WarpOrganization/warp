@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.particles;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 
 import java.util.Random;
 
@@ -9,7 +10,7 @@ import java.util.Random;
  * @author Jaca777
  *         Created 2016-07-10 at 15
  */
-public class RandomSpreadingParticleFactory implements ParticleFactory {
+public class RandomSpreadingTexturedParticleFactory implements ParticleFactory<TexturedParticle>  {
 
     public static final float RANDOM_SCALE_THRESHOLD = 0.4f;
 
@@ -20,7 +21,7 @@ public class RandomSpreadingParticleFactory implements ParticleFactory {
 
     private Random random = new Random();
 
-    public RandomSpreadingParticleFactory(float velocity, int timeToLive, boolean randomizeRotation, boolean randomizeScaleScalar) {
+    public RandomSpreadingTexturedParticleFactory(float velocity, int timeToLive, boolean randomizeRotation, boolean randomizeScaleScalar) {
         this.velocity = velocity;
         this.timeToLive = timeToLive;
         this.randomizeRotation = randomizeRotation;
@@ -28,12 +29,12 @@ public class RandomSpreadingParticleFactory implements ParticleFactory {
     }
 
     @Override
-    public Particle newParticle() {
+    public TexturedParticle newParticle() {
         Vector3f position = new Vector3f();
         Vector3f velocity = genVelocity();
         Vector2f scale = randomizeScaleScalar ? genScale() : new Vector2f(1);
         float rotation = randomizeRotation ? genRotation() : 0;
-        return new Particle(position, velocity, scale, rotation, 0, timeToLive, timeToLive);
+        return new TexturedParticle(position, velocity, scale, rotation, timeToLive, timeToLive, timeToLive);
     }
 
 
