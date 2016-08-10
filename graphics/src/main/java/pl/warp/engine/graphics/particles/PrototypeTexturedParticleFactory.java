@@ -23,7 +23,7 @@ public class PrototypeTexturedParticleFactory implements ParticleFactory<Texture
     private TexturedParticle copy(TexturedParticle particle) {
         Vector3f position = new Vector3f(particle.getPosition());
         Vector3f velocity = new Vector3f(particle.getVelocity());
-        Vector2f scale = new Vector2f(particle.getScale());
+        float scale = particle.getScale();
         float rotation = particle.getRotation();
         int textureIndex = particle.getTextureIndex();
         int ttl = particle.getTimeToLive();

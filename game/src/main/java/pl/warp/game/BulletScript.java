@@ -48,7 +48,7 @@ public class BulletScript extends Script<Component> {
     private void onCollision(CollisionEvent event) {
         Component component = event.getSecondComponent();
         if (component != playerShip && !component.hasProperty(DupaProperty.class)) {
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
             ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.02f, 300, true, true);
             component.getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();

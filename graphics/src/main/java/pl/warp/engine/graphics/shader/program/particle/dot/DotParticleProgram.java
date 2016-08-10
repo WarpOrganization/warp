@@ -12,11 +12,10 @@ import pl.warp.engine.graphics.texture.Texture2DArray;
  */
 public class DotParticleProgram extends GeometryProgram {
 
-    private static final int SPRITE_SHEET_SAMPLER = 0;
-
     public static final int POSITION_ATTR = 0;
-    public static final int ROTATION_ATTR = 1;
-    public static final int TEXTURE_INDEX_ATTR = 2;
+    public static final int COLOR_ATTR = 1;
+    public static final int GRADIENT_ATTR = 2;
+    public static final int SCALE_ATTR = 3;
 
     private static final String PROGRAM_NAME = "particle/dot";
 
@@ -56,9 +55,5 @@ public class DotParticleProgram extends GeometryProgram {
     private void setModelViewMatrix() {
         cameraMatrix.mul(modelMatrix, tmpResultMatrix);
         setUniformMatrix4(unifModelViewMatrix, tmpResultMatrix);
-    }
-
-    public void useSpriteSheet(Texture2DArray spriteSheet) {
-        useTexture(spriteSheet, SPRITE_SHEET_SAMPLER);
     }
 }

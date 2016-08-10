@@ -32,7 +32,7 @@ public class RandomSpreadingTexturedParticleFactory implements ParticleFactory<T
     public TexturedParticle newParticle() {
         Vector3f position = new Vector3f();
         Vector3f velocity = genVelocity();
-        Vector2f scale = randomizeScaleScalar ? genScale() : new Vector2f(1);
+        float scale = randomizeScaleScalar ? genScale() : 1.0f;
         float rotation = randomizeRotation ? genRotation() : 0;
         return new TexturedParticle(position, velocity, scale, rotation, timeToLive, timeToLive, timeToLive);
     }
@@ -45,10 +45,9 @@ public class RandomSpreadingTexturedParticleFactory implements ParticleFactory<T
         return new Vector3f(x, y, z).normalize().mul(velocity);
     }
 
-    private Vector2f genScale() {
+    private float genScale() {
         float delta = RANDOM_SCALE_THRESHOLD * random.nextFloat();
-        float scale = 1.0f - RANDOM_SCALE_THRESHOLD / 2 + delta;
-        return new Vector2f(scale);
+        return 1.0f - RANDOM_SCALE_THRESHOLD / 2 + delta;
     }
 
     private float genRotation() {

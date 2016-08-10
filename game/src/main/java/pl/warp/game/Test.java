@@ -105,7 +105,7 @@ public class Test {
             property.addSpotLight(spotLight);
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
             ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.02f, 600, true, true);
             new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 2000, lightSpritesheetTexture));
 

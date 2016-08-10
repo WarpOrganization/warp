@@ -12,7 +12,7 @@ public class TexturedParticle extends Particle {
 
     private int textureIndex;
 
-    public TexturedParticle(Vector3f position, Vector3f velocity, Vector2f scale, float rotation, int totalTimeToLive, int timeToLive, int textureIndex) {
+    public TexturedParticle(Vector3f position, Vector3f velocity, float scale, float rotation, int totalTimeToLive, int timeToLive, int textureIndex) {
         super(position, velocity, scale, rotation, totalTimeToLive, timeToLive);
         this.textureIndex = textureIndex;
     }

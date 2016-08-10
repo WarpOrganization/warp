@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.particles.dot;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -9,7 +10,6 @@ import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 import pl.warp.engine.graphics.shader.program.particle.dot.DotParticleProgram;
 import pl.warp.engine.graphics.shader.program.particle.textured.TexturedParticleProgram;
 
@@ -28,7 +28,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     private DotParticleProgram program;
 
     private int positionVBO;
-    private int rotationVBO;
+    private int scaleVBO;
     private int colorVBO;
     private int gradientVBO;
     private int indexBuff;
@@ -41,7 +41,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
 
     private void initBuffers() {
         this.positionVBO = GL15.glGenBuffers();
-        this.rotationVBO = GL15.glGenBuffers();
+        this.scaleVBO = GL15.glGenBuffers();
         this.colorVBO = GL15.glGenBuffers();
         this.gradientVBO = GL15.glGenBuffers();
         createIndexBuffer();
@@ -62,21 +62,21 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
 
-        GL20.glEnableVertexAttribArray(TexturedParticleProgram.POSITION_ATTR);
+        GL20.glEnableVertexAttribArray(DotParticleProgram.POSITION_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionVBO);
         GL20.glVertexAttribPointer(TexturedParticleProgram.POSITION_ATTR, 3, GL11.GL_FLOAT, false, 0, 0);
 
-        GL20.glEnableVertexAttribArray(TexturedParticleProgram.ROTATION_ATTR);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, rotationVBO);
-        GL20.glVertexAttribPointer(TexturedParticleProgram.ROTATION_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
-
-        GL20.glEnableVertexAttribArray(TexturedParticleProgram.TEXTURE_INDEX_ATTR);
+        GL20.glEnableVertexAttribArray(DotParticleProgram.COLOR_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorVBO);
-        GL20.glVertexAttribPointer(TexturedParticleProgram.TEXTURE_INDEX_ATTR, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(TexturedParticleProgram.TEXTURE_INDEX_ATTR, 4, GL11.GL_FLOAT, false, 0, 0);
 
-        GL20.glEnableVertexAttribArray(TexturedParticleProgram.TEXTURE_INDEX_ATTR);
+        GL20.glEnableVertexAttribArray(DotParticleProgram.GRADIENT_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, gradientVBO);
         GL20.glVertexAttribPointer(TexturedParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
+
+        GL20.glEnableVertexAttribArray(DotParticleProgram.SCALE_ATTR);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, scaleVBO);
+        GL20.glVertexAttribPointer(TexturedParticleProgram.ROTATION_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
         GL30.glBindVertexArray(0);
@@ -103,9 +103,9 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     }
 
     private FloatBuffer positions = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 3);
-    private FloatBuffer rotations = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
-    private FloatBuffer colors = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 3);
+    private FloatBuffer colors = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 4);
     private FloatBuffer gradients = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
+    private FloatBuffer scales = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
 
     private void updateVBOS(List<DotParticle> particles) {
         clearBuffers();
@@ -113,9 +113,9 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         for (DotParticle particle : particles) {
             if (particleCounter > MAX_PARTICLES_NUMBER) break;
             putPosition(particle.getPosition());
-            putRotation(particle.getRotation());
             putColor(particle.getColor());
             putGradient(particle.getGradient());
+            putScale(particle.getScale());
             particleCounter++;
         }
         rewindBuffers();
@@ -124,7 +124,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
 
     private void clearBuffers() {
         positions.clear();
-        rotations.clear();
+        scales.clear();
         colors.clear();
         gradients.clear();
     }
@@ -134,21 +134,21 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         positions.put(position.x).put(position.y).put(position.z);
     }
 
-    private void putRotation(float rotation) {
-        rotations.put(rotation);
-    }
-
-    private void putColor(Vector3f color) {
-        colors.put(color.x).put(color.y).put(color.z);
+    private void putColor(Vector4f color) {
+        colors.put(color.x).put(color.y).put(color.z).put(color.w);
     }
 
     private void putGradient(float gradient) {
-        rotations.put(gradient);
+        scales.put(gradient);
+    }
+
+    private void putScale(float rotation) {
+        scales.put(rotation);
     }
 
     private void rewindBuffers() {
         positions.rewind();
-        rotations.rewind();
+        scales.rewind();
         colors.rewind();
         gradients.rewind();
     }
@@ -157,8 +157,8 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionVBO);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
 
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, rotationVBO);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, rotations, GL15.GL_DYNAMIC_DRAW);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, scaleVBO);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, scales, GL15.GL_DYNAMIC_DRAW);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorVBO);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorVBO, GL15.GL_DYNAMIC_DRAW);
@@ -169,7 +169,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
 
 
     public void destroy() {
-        GL15.glDeleteBuffers(new int[]{positionVBO, rotationVBO, colorVBO, gradientVBO, indexBuff});
+        GL15.glDeleteBuffers(new int[]{positionVBO, scaleVBO, colorVBO, gradientVBO, indexBuff});
         GL30.glDeleteVertexArrays(vao);
         program.delete();
     }

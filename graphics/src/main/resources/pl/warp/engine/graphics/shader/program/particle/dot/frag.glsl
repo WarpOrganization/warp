@@ -3,13 +3,15 @@
 
 precision mediump float;
 
-uniform sampler2DArray textures;
-
-in float textureIndex;
-smooth in vec2 texCoord;
+smooth in vec2 coord;
+flat in vec4 color;
+flat in float gradient;
 
 layout(location = 0) out vec4 fragColor;
 
 void main(void) {
-    fragColor = texture2DArray(textures, vec3(texCoord, textureIndex));
+    float distance = length(coord);
+    if(distance > 1.0) discard;
+    else if(distance < (1.0 - gradient) || gradient < 0.001) fragColor = color;
+    else fragColor = color * ((1.0 - distance) / gradient);
 }
