@@ -1,26 +1,22 @@
-package pl.warp.engine.graphics.particles;
+package pl.warp.engine.graphics.particles.textured;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
+import pl.warp.engine.graphics.particles.PrototypeParticleFactory;
+
+import javax.xml.soap.Text;
 
 /**
  * @author Jaca777
- *         Created 2016-07-10 at 15
+ *         Created 2016-08-10 at 13
  */
-public class PrototypeTexturedParticleFactory implements ParticleFactory<TexturedParticle> {
-    private TexturedParticle prototype;
+public class PrototypeTexturedParticleFactory extends PrototypeParticleFactory<TexturedParticle> {
 
     public PrototypeTexturedParticleFactory(TexturedParticle prototype) {
-        this.prototype = prototype;
+        super(prototype);
     }
 
     @Override
-    public TexturedParticle newParticle() {
-        return copy(prototype);
-    }
-
-    private TexturedParticle copy(TexturedParticle particle) {
+    public TexturedParticle copy(TexturedParticle particle) {
         Vector3f position = new Vector3f(particle.getPosition());
         Vector3f velocity = new Vector3f(particle.getVelocity());
         float scale = particle.getScale();

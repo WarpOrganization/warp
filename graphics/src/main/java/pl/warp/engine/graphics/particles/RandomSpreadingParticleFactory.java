@@ -10,7 +10,7 @@ import java.util.Random;
  * @author Jaca777
  *         Created 2016-07-10 at 15
  */
-public class RandomSpreadingTexturedParticleFactory implements ParticleFactory<TexturedParticle>  {
+public abstract class RandomSpreadingParticleFactory<T extends Particle> implements ParticleFactory<T> {
 
     public static final float RANDOM_SCALE_THRESHOLD = 0.4f;
 
@@ -21,7 +21,7 @@ public class RandomSpreadingTexturedParticleFactory implements ParticleFactory<T
 
     private Random random = new Random();
 
-    public RandomSpreadingTexturedParticleFactory(float velocity, int timeToLive, boolean randomizeRotation, boolean randomizeScaleScalar) {
+    public RandomSpreadingParticleFactory(float velocity, int timeToLive, boolean randomizeRotation, boolean randomizeScaleScalar) {
         this.velocity = velocity;
         this.timeToLive = timeToLive;
         this.randomizeRotation = randomizeRotation;
@@ -29,13 +29,15 @@ public class RandomSpreadingTexturedParticleFactory implements ParticleFactory<T
     }
 
     @Override
-    public TexturedParticle newParticle() {
+    public T newParticle() {
         Vector3f position = new Vector3f();
         Vector3f velocity = genVelocity();
         float scale = randomizeScaleScalar ? genScale() : 1.0f;
         float rotation = randomizeRotation ? genRotation() : 0;
-        return new TexturedParticle(position, velocity, scale, rotation, timeToLive, timeToLive, timeToLive);
+        return newParticle(position, velocity, scale, rotation, timeToLive);
     }
+
+    public abstract T newParticle(Vector3f position, Vector3f velocity, float scale, float rotation, int ttl);
 
 
     private Vector3f genVelocity() {

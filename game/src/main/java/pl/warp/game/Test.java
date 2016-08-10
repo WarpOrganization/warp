@@ -1,7 +1,6 @@
 package pl.warp.game;
 
 import org.apache.log4j.Logger;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -30,6 +29,7 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.textured.RandomSpreadingTexturedParticleFactory;
 import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
