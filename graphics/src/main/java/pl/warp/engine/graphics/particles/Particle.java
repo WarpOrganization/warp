@@ -9,21 +9,19 @@ import java.util.Objects;
  * @author Jaca777
  *         Created 2016-07-10 at 14
  */
-public class Particle {
+public abstract class Particle  {
     private Vector3f position;
     private Vector3f velocity;
-    private Vector2f scale;
+    private float scale;
     private float rotation;
-    private int textureIndex;
     private final int totalTimeToLive;
     private int timeToLive;
 
-    public Particle(Vector3f position, Vector3f velocity, Vector2f scale, float rotation, int textureIndex, int totalTimeToLive, int timeToLive) {
+    public Particle(Vector3f position, Vector3f velocity, float scale, float rotation, int totalTimeToLive, int timeToLive) {
         this.position = position;
         this.velocity = velocity;
         this.scale = scale;
         this.rotation = rotation;
-        this.textureIndex = textureIndex;
         this.totalTimeToLive = totalTimeToLive;
         this.timeToLive = timeToLive;
     }
@@ -44,11 +42,11 @@ public class Particle {
         this.velocity = velocity;
     }
 
-    public Vector2f getScale() {
+    public float getScale() {
         return scale;
     }
 
-    public void setScale(Vector2f scale) {
+    public void setScale(float scale) {
         this.scale = scale;
     }
 
@@ -58,14 +56,6 @@ public class Particle {
 
     public void setRotation(float rotation) {
         this.rotation = rotation;
-    }
-
-    public int getTextureIndex() {
-        return textureIndex;
-    }
-
-    public void setTextureIndex(int textureIndex) {
-        this.textureIndex = textureIndex;
     }
 
     public int getTimeToLive() {

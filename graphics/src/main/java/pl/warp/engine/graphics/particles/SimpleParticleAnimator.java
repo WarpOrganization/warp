@@ -7,12 +7,12 @@ import org.joml.Vector3f;
  * @author Jaca777
  *         Created 2016-07-10 at 14
  */
-public class SimpleParticleAnimator implements ParticleAnimator {
+public class SimpleParticleAnimator implements ParticleAnimator<Particle> {
     private Vector3f acceleration;
-    private Vector2f scalingRate;
+    private float scalingRate;
     private float rotationRate;
 
-    public SimpleParticleAnimator(Vector3f acceleration, Vector2f scalingRate, float rotationRate) {
+    public SimpleParticleAnimator(Vector3f acceleration, float scalingRate, float rotationRate) {
         this.acceleration = acceleration;
         this.scalingRate = scalingRate;
         this.rotationRate = rotationRate;
@@ -36,8 +36,8 @@ public class SimpleParticleAnimator implements ParticleAnimator {
     private Vector2f tempVector2 = new Vector2f();
 
     private void updateScale(Particle particle, int delta) {
-        Vector2f scaleDelta = scalingRate.mul(delta, tempVector2);
-        particle.getScale().add(scaleDelta);
+        float scaleDelta = scalingRate * delta;
+        particle.setScale(particle.getScale() + scaleDelta);
     }
 
     private void updateRotation(Particle particle, int delta) {

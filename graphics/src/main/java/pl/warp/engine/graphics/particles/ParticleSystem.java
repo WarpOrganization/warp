@@ -1,35 +1,33 @@
 package pl.warp.engine.graphics.particles;
 
-import pl.warp.engine.graphics.texture.Texture2DArray;
+import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Jaca777
- *         Created 2016-07-12 at 14
+ *         Created 2016-08-08 at 20
  */
-public class ParticleSystem {
+public abstract class ParticleSystem {
 
-    private LinkedList<Particle> particles = new LinkedList<>();
-    private ParticleAnimator animator;
     private ParticleEmitter emitter;
-    private Texture2DArray spriteSheet;
+    private ParticleAnimator animator;
 
-    public ParticleSystem(ParticleAnimator animator, ParticleFactory factory, float frequency, Texture2DArray spriteSheet) { this.animator = animator;
-        this.emitter = new ParticleEmitter(factory, frequency, particles);
-        this.spriteSheet = spriteSheet;
+    public ParticleSystem(ParticleEmitter emitter, ParticleAnimator animator) {
+        this.emitter = emitter;
+        this.animator = animator;
     }
 
     public void update(int delta) {
         updateParticleLifeTimes(delta);
-        updateTextures();
         emitParticles(delta);
         animateParticles(delta);
+        onUpdate(delta);
     }
 
     private void updateParticleLifeTimes(int delta) {
-        for (Iterator<Particle> iterator = particles.iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends Particle> iterator = getParticles().iterator(); iterator.hasNext(); ) {
             Particle particle = iterator.next();
             int ttl = particle.getTimeToLive() - delta;
             if (ttl > 0) particle.setTimeToLive(ttl);
@@ -37,35 +35,19 @@ public class ParticleSystem {
         }
     }
 
-    private void updateTextures() {
-        for (Particle particle : particles) {
-            int textureIndex = (particle.getTimeToLive() * spriteSheet.getSize()) / particle.getTotalTimeToLive();
-            particle.setTextureIndex(textureIndex);
-        }
+    private void animateParticles(int delta) {
+        for (Particle particle : getParticles())
+            animator.animate(particle, delta);
     }
+
+    public abstract void onUpdate(int delta);
+
 
     private void emitParticles(int delta) {
         emitter.emit(delta);
     }
 
-    private void animateParticles(int delta) {
-        for (Particle particle : particles)
-            animator.animate(particle, delta);
-    }
+    public abstract List<? extends Particle> getParticles();
 
-    public void addParticle(Particle particle) {
-        particles.add(particle);
-    }
-
-    public void removeParticle(Particle particle) {
-        particles.remove(particle);
-    }
-
-    public LinkedList<Particle> getParticles() {
-        return particles;
-    }
-
-    public Texture2DArray getSpriteSheet() {
-        return spriteSheet;
-    }
+    public abstract ParticleType getParticleType();
 }

@@ -1,7 +1,6 @@
 package pl.warp.game;
 
 import org.apache.log4j.Logger;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -30,6 +29,9 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.textured.RandomSpreadingTexturedParticleFactory;
+import pl.warp.engine.graphics.particles.textured.TexturedParticle;
+import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -54,7 +56,6 @@ import pl.warp.game.program.gas.GasPlanetProgram;
 import pl.warp.game.program.ring.PlanetaryRingProgram;
 import pl.warp.game.program.ring.PlanetaryRingProperty;
 
-import java.awt.*;
 import java.util.Random;
 
 /**
@@ -104,9 +105,9 @@ public class Test {
             property.addSpotLight(spotLight);
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), new Vector2f(0), 0);
-            ParticleFactory factory = new RandomSpreadingParticleFactory(0.02f, 600, true, true);
-            new GraphicsParticleEmitterProperty(light, new ParticleSystem(animator, factory, 2000, lightSpritesheetTexture));
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
+            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.02f, 600, true, true);
+            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 2000, lightSpritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -124,9 +125,6 @@ public class Test {
             };
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
-
-
-
             Component gasSphere = new SimpleComponent(root);
             Sphere sphere = new Sphere(50, 50);
             new GraphicsMeshProperty(gasSphere, sphere);

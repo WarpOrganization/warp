@@ -1,19 +1,18 @@
 package pl.warp.engine.graphics.particles;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author Jaca777
  *         Created 2016-07-10 at 13
  */
-public class ParticleEmitter {
+public class ParticleEmitter <T extends Particle> {
 
-    private ParticleFactory factory;
+    private ParticleFactory<T> factory;
     private float emissionDelay;
-    private List<Particle> particles;
+    private List<T> particles;
 
-    public ParticleEmitter(ParticleFactory factory, float frequency, List<Particle> particles) {
+    public ParticleEmitter(ParticleFactory<T> factory, float frequency, List<T> particles) {
         this.factory = factory;
         this.emissionDelay = 1000f / frequency;
         this.particles = particles;
