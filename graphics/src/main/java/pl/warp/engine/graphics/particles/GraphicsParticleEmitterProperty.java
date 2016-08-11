@@ -10,9 +10,9 @@ import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
  */
 public class GraphicsParticleEmitterProperty extends Property<Component> {
     public static final String PARTICLE_EMITTER_PROPERTY_NAME = "particleEmitter";
-    private TexturedParticleSystem system;
+    private ParticleSystem system;
 
-    public GraphicsParticleEmitterProperty(Component owner, TexturedParticleSystem system) {
+    public GraphicsParticleEmitterProperty(Component owner, ParticleSystem system) {
         super(owner, PARTICLE_EMITTER_PROPERTY_NAME);
         this.system = system;
     }

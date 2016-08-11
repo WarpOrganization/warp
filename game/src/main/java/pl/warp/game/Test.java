@@ -2,6 +2,7 @@ package pl.warp.game;
 
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
@@ -29,6 +30,9 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingDotParticleFactory;
 import pl.warp.engine.graphics.particles.textured.RandomSpreadingTexturedParticleFactory;
 import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
@@ -106,8 +110,8 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.02f, 600, true, true);
-            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 2000, lightSpritesheetTexture));
+            ParticleFactory<DotParticle> factory = new RandomSpreadingDotParticleFactory(0.002f, 5000, true, true, new Vector4f(1.0f), 0.5f);
+            new GraphicsParticleEmitterProperty(light, new DotParticleSystem(animator, factory, 100));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -187,6 +191,21 @@ public class Test {
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             new GraphicsSkyboxProperty(scene, cubemap);
+
+            Component frigate = new SimpleComponent(root);
+            Mesh friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate-1-heavy.obj")).toVAOMesh();
+            ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate-1-heavy.png"), PNGDecoder.Format.RGBA);
+            Texture2D frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
+            Material frigateMaterial = new Material(frigateTexture);
+            frigateMaterial.setShininess(10);
+            ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate-1-heavy-brightness.png"), PNGDecoder.Format.RGBA);
+            Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
+            frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
+            new GraphicsMeshProperty(frigate, friageMesh);
+            new GraphicsMaterialProperty(frigate, frigateMaterial);
+            TransformProperty transformProperty = new TransformProperty(frigate);
+            transformProperty.move(new Vector3f(100, 0, 0));
+            transformProperty.rotateY((float) (Math.PI / 2));
         });
         graphicsThread.scheduleOnce(() -> {
             EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());

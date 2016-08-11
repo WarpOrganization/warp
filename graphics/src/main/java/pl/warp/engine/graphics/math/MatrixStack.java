@@ -34,8 +34,8 @@ public class MatrixStack {
         this(DEFAULT_DEPTH);
     }
 
-    private void fill(){
-        for(int i = 0; i < this.size; i++) {
+    private void fill() {
+        for (int i = 0; i < this.size; i++) {
             matrixStack[i][MATRIX] = new Matrix4f();
             matrixStack[i][R_MATRIX] = new Matrix4f();
         }
@@ -60,17 +60,19 @@ public class MatrixStack {
 
     /**
      * Translates the topMatrix matrix of the stack.
+     *
      * @param x
      * @param y
      * @param z
      */
     public void translate(float x, float y, float z) {
-        tempVector.set(x,y,z);
+        tempVector.set(x, y, z);
         matrixStack[top][MATRIX].translate(tempVector);
     }
 
     /**
      * Translates the topMatrix matrix of the stack.
+     *
      * @param vector
      */
     public void translate(Vector3f vector) {
@@ -79,13 +81,14 @@ public class MatrixStack {
 
     /**
      * Rotates the topMatrix matrix of the stack.
+     *
      * @param rad Rotation angle in radians.
      * @param x
      * @param y
      * @param z
      */
     public void rotate(float rad, float x, float y, float z) {
-        tempVector.set(x,y,z);
+        tempVector.set(x, y, z);
         matrixStack[top][MATRIX].rotate(rad, tempVector);
         matrixStack[top][R_MATRIX].rotate(rad, tempVector);
     }
@@ -97,6 +100,7 @@ public class MatrixStack {
 
     /**
      * Scales the topMatrix matrix of the stack.
+     *
      * @param x X scale.
      * @param y Y scale.
      * @param z Z scale.
@@ -113,11 +117,13 @@ public class MatrixStack {
     /**
      * Multiplies the top stack by @matrix.
      * IT DOESN'T AFFECT THE ROTATION MATRIX.
+     *
      * @param matrix
      */
-    public void mul(Matrix4f matrix){
+    public void mul(Matrix4f matrix) {
         matrixStack[top][MATRIX].mul(matrix, matrixStack[top][MATRIX]);
     }
+
     /**
      * @return A direct FloatBuffer containing the topMatrix matrix.
      */
@@ -146,7 +152,7 @@ public class MatrixStack {
     /**
      * @return A rotation matrix of the topMatrix matrix.
      */
-    public Matrix4f topRotationMatrix(){
+    public Matrix4f topRotationMatrix() {
         return matrixStack[top][R_MATRIX];
     }
 
@@ -157,7 +163,7 @@ public class MatrixStack {
     /**
      * Immutable MatrixStack containing only one, identity matrix.
      */
-    private static final MatrixStack IDENTITY_STACK = new MatrixStack(1){
+    public static final MatrixStack IDENTITY_STACK = new MatrixStack(1) {
         @Override
         public void push() {
             throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.push()");

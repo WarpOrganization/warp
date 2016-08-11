@@ -64,19 +64,19 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
 
         GL20.glEnableVertexAttribArray(DotParticleProgram.POSITION_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionVBO);
-        GL20.glVertexAttribPointer(TexturedParticleProgram.POSITION_ATTR, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(DotParticleProgram.POSITION_ATTR, 3, GL11.GL_FLOAT, false, 0, 0);
 
         GL20.glEnableVertexAttribArray(DotParticleProgram.COLOR_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorVBO);
-        GL20.glVertexAttribPointer(TexturedParticleProgram.TEXTURE_INDEX_ATTR, 4, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(DotParticleProgram.COLOR_ATTR, 4, GL11.GL_FLOAT, false, 0, 0);
 
         GL20.glEnableVertexAttribArray(DotParticleProgram.GRADIENT_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, gradientVBO);
-        GL20.glVertexAttribPointer(TexturedParticleProgram.TEXTURE_INDEX_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(DotParticleProgram.GRADIENT_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
 
         GL20.glEnableVertexAttribArray(DotParticleProgram.SCALE_ATTR);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, scaleVBO);
-        GL20.glVertexAttribPointer(TexturedParticleProgram.ROTATION_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(DotParticleProgram.SCALE_ATTR, 1, GL11.GL_FLOAT, false, 0, 0);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuff);
         GL30.glBindVertexArray(0);
@@ -93,7 +93,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         List<DotParticle> particles = system.getParticles();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
         program.use();
         program.useMatrixStack(stack);
         GL30.glBindVertexArray(vao);
@@ -139,7 +139,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     }
 
     private void putGradient(float gradient) {
-        scales.put(gradient);
+        gradients.put(gradient);
     }
 
     private void putScale(float rotation) {
