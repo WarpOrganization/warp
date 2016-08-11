@@ -53,7 +53,7 @@ public class DotParticleProgram extends GeometryProgram {
     private Matrix4f tmpResultMatrix = new Matrix4f();
 
     private void setModelViewMatrix() {
-        cameraMatrix.mul(modelMatrix, tmpResultMatrix);
-        setUniformMatrix4(unifModelViewMatrix, tmpResultMatrix);
+        Matrix4f modelViewMatrix = cameraMatrix.mul(modelMatrix, tmpResultMatrix);
+        setUniformMatrix4(unifModelViewMatrix, modelViewMatrix);
     }
 }

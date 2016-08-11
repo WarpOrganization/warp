@@ -40,8 +40,8 @@ public abstract class ParticleSystem {
             animator.animate(particle, delta);
     }
 
-    public abstract void onUpdate(int delta);
-
+    public void onUpdate(int delta) {
+    }
 
     private void emitParticles(int delta) {
         emitter.emit(delta);
