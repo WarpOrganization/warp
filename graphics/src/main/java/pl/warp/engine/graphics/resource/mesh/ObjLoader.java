@@ -59,7 +59,7 @@ public class ObjLoader {
     private static final String NORMAL = "vn";
     private static final String FACE = "f";
 
-    public static ObjLoader read(InputStream objFile) {
+    public static ObjLoader read(InputStream objFile, boolean smooth) {
         ObjLoader obj = new ObjLoader();
         List<Vector3f> vertices = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
@@ -95,9 +95,9 @@ public class ObjLoader {
                     continue;
                 }
                 String[] faceData = line.split(" ");
-                obj.processVertex(faceData[1].split("/"), vertices, normals, texCoords);
-                obj.processVertex(faceData[2].split("/"), vertices, normals, texCoords);
-                obj.processVertex(faceData[3].split("/"), vertices, normals, texCoords);
+                obj.processVertex(faceData[1].split("/"), vertices, normals, texCoords, smooth);
+                obj.processVertex(faceData[2].split("/"), vertices, normals, texCoords, smooth);
+                obj.processVertex(faceData[3].split("/"), vertices, normals, texCoords, smooth);
                 line = reader.readLine();
             }
 
@@ -121,14 +121,14 @@ public class ObjLoader {
     }
 
 
-    public void processVertex(String[] vertexData, List<Vector3f> verticesList, List<Vector3f> normalsList, List<Vector2f> texCoordsList) {
+    public void processVertex(String[] vertexData, List<Vector3f> verticesList, List<Vector3f> normalsList, List<Vector2f> texCoordsList, boolean smooth) {
         int pointer = Integer.parseInt(vertexData[0]) - 1;
         Vector3f pos = verticesList.get(pointer);
         Vector2f texCoord = texCoordsList.get(Integer.parseInt(vertexData[1]) - 1);
         Vector3f normal = normalsList.get(Integer.parseInt(vertexData[2]) - 1);
         if (this.vertices[pointer] != null) {
             Vertex v = this.vertices[pointer];
-            if (v.mix(texCoord, normal)) {
+            if (smooth && v.mix(texCoord, normal)) {
                 this.indices.add(pointer);
             } else {
                 Vertex vertex = new Vertex(pos, texCoord, normal);
