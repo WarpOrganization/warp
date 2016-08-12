@@ -97,7 +97,7 @@ public class Test {
         GLFWInput input = new GLFWInput();
 
         graphicsThread.scheduleOnce(() -> {
-            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj")).toVAOMesh();
+            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
@@ -175,7 +175,7 @@ public class Test {
             new TransformProperty(controllableGoat);
             new GoatControlScript(controllableGoat, input, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
 
-            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj")).toVAOMesh();
+            Mesh bulletMesh = ObjLoader.read(GunScript.class.getResourceAsStream("bullet.obj"), false).toVAOMesh();
             new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, controllableGoat);
 
             SpotLight goatLight = new SpotLight(
@@ -193,11 +193,11 @@ public class Test {
             new GraphicsSkyboxProperty(scene, cubemap);
 
             Component frigate = new SimpleComponent(root);
-            Mesh friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate-1-heavy.obj")).toVAOMesh();
+            Mesh friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate-1-heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate-1-heavy.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
             Material frigateMaterial = new Material(frigateTexture);
-            frigateMaterial.setShininess(10);
+            frigateMaterial.setShininess(20);
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate-1-heavy-brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
