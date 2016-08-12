@@ -1,14 +1,10 @@
 package pl.warp.engine.graphics.shader;
 
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.Environment;
-import pl.warp.engine.graphics.material.Material;
+import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
-
-import java.io.InputStream;
 
 /**
  * @author Jaca777

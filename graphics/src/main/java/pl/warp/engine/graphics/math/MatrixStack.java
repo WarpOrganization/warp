@@ -3,8 +3,6 @@ package pl.warp.engine.graphics.math;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.lwjgl.BufferUtils;
-import pl.warp.engine.graphics.utility.BufferTools;
 
 import java.nio.FloatBuffer;
 

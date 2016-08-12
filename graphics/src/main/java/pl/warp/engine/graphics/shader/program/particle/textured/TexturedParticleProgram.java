@@ -4,11 +4,7 @@ import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2DArray;
-
-import java.io.InputStream;
 
 /**
  * @author Jaca777

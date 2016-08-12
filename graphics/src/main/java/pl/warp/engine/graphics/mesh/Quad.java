@@ -3,7 +3,7 @@ package pl.warp.engine.graphics.mesh;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
-import pl.warp.engine.graphics.utility.BufferTools;
+import pl.warp.engine.graphics.math.BufferTools;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 

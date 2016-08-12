@@ -2,9 +2,9 @@ package pl.warp.engine.graphics.shader.program.component.defaultprog;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;
-import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
@@ -13,7 +13,6 @@ import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**

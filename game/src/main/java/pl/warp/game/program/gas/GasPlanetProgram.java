@@ -9,10 +9,7 @@ import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
-import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture1D;
-
-import java.io.InputStream;
 
 /**
  * @author Jaca777

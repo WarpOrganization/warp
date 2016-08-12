@@ -4,7 +4,6 @@ import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
-import pl.warp.engine.graphics.texture.Texture2DArray;
 
 /**
  * @author Jaca777

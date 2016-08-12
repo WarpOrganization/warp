@@ -3,12 +3,10 @@ package pl.warp.engine.graphics.particles;
 import org.apache.log4j.Logger;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.Renderer;
+import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.dot.DotParticleRenderer;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
 import pl.warp.engine.graphics.particles.textured.TexturedParticleRenderer;
-import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 
 /**

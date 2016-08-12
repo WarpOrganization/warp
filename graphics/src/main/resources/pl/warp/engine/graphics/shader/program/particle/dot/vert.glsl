@@ -10,7 +10,7 @@ layout(location = 1) in vec4 color;
 layout(location = 2) in float gradient;
 layout(location = 3) in float scale;
 
-out vData {
+flat out vData {
     vec4 color;
     float scale;
     float gradient;

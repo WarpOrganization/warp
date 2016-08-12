@@ -1,9 +1,8 @@
 package pl.warp.engine.graphics.particles;
 
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.Renderer;
-import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
+import pl.warp.engine.graphics.math.MatrixStack;
 
 /**
  * @author Jaca777

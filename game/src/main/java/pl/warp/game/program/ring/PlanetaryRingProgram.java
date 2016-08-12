@@ -1,6 +1,5 @@
 package pl.warp.game.program.ring;
 
-import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
@@ -9,10 +8,6 @@ import pl.warp.engine.graphics.shader.ComponentRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
-import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
-import pl.warp.engine.graphics.texture.Texture1D;
-
-import java.io.InputStream;
 
 /**
  * @author Jaca777

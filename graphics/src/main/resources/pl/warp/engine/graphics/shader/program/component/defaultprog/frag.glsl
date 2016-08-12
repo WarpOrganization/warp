@@ -98,8 +98,8 @@ float getSpecular(SpotLightSource source, vec3 lightDir, float diffuse) {
     if(material.shininess > 0) {
         vec3 reflection = normalize(reflect(-lightDir, vNormal));
         float spec = max(0.0, dot(-vEyeDir, reflection));
-        float specVal = pow(spec, SPECULAR_EXPONENT);
-        return diffuse * specVal * material.shininess;
+        float specVal = pow(spec, SPECULAR_EXPONENT / material.shininess);
+        return diffuse * specVal * material.shininess / 10;
     } else return 0.0;
 }
 

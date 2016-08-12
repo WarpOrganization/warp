@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.particles;
 
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
 
 /**
  * @author Jaca777

@@ -12,6 +12,7 @@ import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
@@ -110,8 +111,8 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-            ParticleFactory<DotParticle> factory = new RandomSpreadingDotParticleFactory(0.002f, 5000, true, true, new Vector4f(1.0f), 0.5f);
-            new GraphicsParticleEmitterProperty(light, new DotParticleSystem(animator, factory, 100));
+            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.002f, 5000, true, true);
+            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 100, lightSpritesheetTexture));
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -205,7 +206,8 @@ public class Test {
             new GraphicsMaterialProperty(frigate, frigateMaterial);
             TransformProperty transformProperty = new TransformProperty(frigate);
             transformProperty.move(new Vector3f(100, 0, 0));
-            transformProperty.rotateY((float) (Math.PI / 2));
+            transformProperty.rotateY((float) -(Math.PI / 2));
+            transformProperty.scale(new Vector3f(3));
         });
         graphicsThread.scheduleOnce(() -> {
             EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());

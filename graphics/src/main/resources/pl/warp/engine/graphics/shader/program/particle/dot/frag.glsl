@@ -3,7 +3,7 @@
 precision mediump float;
 
 smooth in vec2 coord;
-in vec4 color;
+flat in vec4 color;
 in float gradient;
 
 layout(location = 0) out vec4 fragColor;
