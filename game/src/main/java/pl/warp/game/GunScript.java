@@ -7,10 +7,13 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.graphics.input.GLFWInput;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
+import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
@@ -28,6 +31,7 @@ public class GunScript extends Script<Component> {
     private PhysicalBodyProperty physicalProperty;
     private Component root;
     private Texture2DArray explosionSpritesheet;
+    private Material bulletMaterial;
     private Component playerShip;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
@@ -37,12 +41,14 @@ public class GunScript extends Script<Component> {
     private Mesh bulletMesh;
 
 
-    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Component playerShip) {
+    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Texture2D bulletTexture, Component playerShip) {
         super(owner);
         this.cooldown = cooldown;
         this.input = input;
         this.root = root;
         this.bulletMesh = bulletMesh;
+        this.bulletMaterial = new Material(bulletTexture);
+        this.bulletMaterial.setBrightnessTexture(bulletTexture);
         this.explosionSpritesheet = explosionSpritesheet;
         this.playerShip = playerShip;
     }
@@ -89,11 +95,12 @@ public class GunScript extends Script<Component> {
 
             Component bullet = new SimpleComponent(getContext());
             new GraphicsMeshProperty(bullet, bulletMesh);
+            new GraphicsMaterialProperty(bullet, bulletMaterial);
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
             new PhysicalBodyProperty(bullet, BULLET_MASS, 0.128f).applyForce(direction);
             new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z)));
             root.addChild(bullet);
-            new BulletScript(bullet, 1000, explosionSpritesheet, playerShip);
+            new BulletScript(bullet, 10000, explosionSpritesheet, playerShip);
         }
 
     }
