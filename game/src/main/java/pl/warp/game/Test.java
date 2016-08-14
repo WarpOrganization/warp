@@ -72,9 +72,9 @@ public class Test {
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
     private static final int WIDTH = 1560, HEIGHT = 860;
-    private static final float ROT_SPEED = 0.05f * 0.5f;
-    private static final float MOV_SPEED = 0.2f * 0.5f;
-    private static final float BRAKING_FORCE = 0.1f;
+    private static final float ROT_SPEED = 0.05f;
+    private static final float MOV_SPEED = 0.2f;
+    private static final float BRAKING_FORCE = 0.2f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
     private static Random random = new Random();
