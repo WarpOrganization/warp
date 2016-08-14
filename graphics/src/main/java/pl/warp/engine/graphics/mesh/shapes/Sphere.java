@@ -10,12 +10,18 @@ public class Sphere extends VAOMesh {
 
     private int segmentsW;
     private int segmentsH;
+    private float scale;
 
-    public Sphere(int segmentsW, int segmentsH) {
+    public Sphere(int segmentsW, int segmentsH, float scale) {
         super(2 * segmentsW * (segmentsH - 1) * 3, (segmentsW + 1) * (segmentsH + 1));
         this.segmentsW = segmentsW;
         this.segmentsH = segmentsH;
+        this.scale = scale;
         createShape();
+    }
+
+    public Sphere(int segmentsW, int segmentsH) {
+        this(segmentsW, segmentsH, 1.0f);
     }
 
 
@@ -28,7 +34,6 @@ public class Sphere extends VAOMesh {
 
         int i, j;
         int vertIndex = 0, index = 0;
-        final float normLen = 1.0f;
 
         for (j = 0; j <= segmentsH; ++j) {
             float horAngle = (float) (Math.PI * j / segmentsH);
@@ -40,12 +45,12 @@ public class Sphere extends VAOMesh {
                 float x = ringRadius * (float) Math.cos(verAngle);
                 float y = ringRadius * (float) Math.sin(verAngle);
 
-                normals[vertIndex] = x * normLen;
-                vertices[vertIndex++] = x;
-                normals[vertIndex] = z * normLen;
-                vertices[vertIndex++] = z;
-                normals[vertIndex] = y * normLen;
-                vertices[vertIndex++] = y;
+                normals[vertIndex] = x;
+                vertices[vertIndex++] = x * scale;
+                normals[vertIndex] = z;
+                vertices[vertIndex++] = z * scale;
+                normals[vertIndex] = y;
+                vertices[vertIndex++] = y * scale;
 
                 if (i > 0 && j > 0) {
                     int a = (segmentsW + 1) * j + i;

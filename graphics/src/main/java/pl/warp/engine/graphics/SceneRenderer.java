@@ -7,11 +7,11 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.pipeline.Source;
-import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
 /**

@@ -13,10 +13,10 @@ layout (triangle_strip) out;
 layout (max_vertices = 4) out;
 
 smooth out vec2 coord;
-out vec4 color;
+flat out vec4 color;
 out float gradient;
 
-in vData {
+flat in vData {
     vec4 color;
     float scale;
     float gradient;

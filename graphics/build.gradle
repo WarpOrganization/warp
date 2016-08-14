@@ -13,7 +13,6 @@ repositories {
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile 'org.lwjgl:lwjgl:3.0.1-SNAPSHOT'
     compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-windows"
     compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-linux"

@@ -11,7 +11,6 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.shader.program.particle.dot.DotParticleProgram;
-import pl.warp.engine.graphics.shader.program.particle.textured.TexturedParticleProgram;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
