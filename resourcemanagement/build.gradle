@@ -1,0 +1,29 @@
+group 'pl.warp'
+version '0.1'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    compile 'org.lwjgl:lwjgl:3.0.1-SNAPSHOT'
+    compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-windows"
+    compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-linux"
+
+    compile group: 'com.badlogicgames.gdx', name: 'gdx-bullet', version: '1.9.3'
+    compile group: 'com.badlogicgames.gdx', name: 'gdx-bullet-platform', version: '1.9.3', classifier: 'natives-desktop'
+    compile group: 'com.badlogicgames.gdx', name: 'gdx-platform', version: '1.9.3', classifier: 'natives-desktop'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+
+    compile project(':core')
+    compile project(':physics')
+    compile project(':graphics')
+
+    testCompile 'junit:junit:4.12'
+}
+
