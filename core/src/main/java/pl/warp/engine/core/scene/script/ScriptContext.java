@@ -35,7 +35,7 @@ public class ScriptContext {
         );
     }
 
-    public void removeScript(Script<?> script) { //TODO Script not found
+    public void removeScript(Script<?> script) {
         synchronized (scriptContextMutex) {
             scriptsToRemove.add(script);
         }

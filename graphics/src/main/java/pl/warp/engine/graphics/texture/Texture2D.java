@@ -15,6 +15,9 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
  */
 public class Texture2D extends TextureShape2D {
 
+    private static final int DEFAULT_TEXTURE_WRAP_METHOD = GL11.GL_REPEAT;
+    private static final int DEFAULT_TEXTURE_RESIZE_FILTER = GL11.GL_LINEAR;
+
     private int width, height;
 
     public Texture2D(int type, int texture, int internalformat, int format, boolean mipmap, int width, int height) {
@@ -33,15 +36,14 @@ public class Texture2D extends TextureShape2D {
         super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), internalFormat, format, mipmap);
         this.width = width;
         this.height = height;
-        enableDefaultParams(mipmap);
+        setDefaultParams(mipmap);
     }
 
-    private void enableDefaultParams(boolean mipmap) { //TODO sth with defaults
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        if (mipmap) GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-        else GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+    private void setDefaultParams(boolean mipmap) {
+        setParameter(GL11.GL_TEXTURE_MAG_FILTER, DEFAULT_TEXTURE_RESIZE_FILTER);
+        setParameter(GL11.GL_TEXTURE_MIN_FILTER, mipmap ? GL11.GL_LINEAR_MIPMAP_LINEAR : DEFAULT_TEXTURE_RESIZE_FILTER);
+        setParameter(GL11.GL_TEXTURE_WRAP_S, DEFAULT_TEXTURE_WRAP_METHOD);
+        setParameter(GL11.GL_TEXTURE_WRAP_T, DEFAULT_TEXTURE_WRAP_METHOD);
     }
 
     public void set(ByteBuffer data) {

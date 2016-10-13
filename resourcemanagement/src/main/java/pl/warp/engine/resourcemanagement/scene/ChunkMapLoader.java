@@ -13,6 +13,13 @@ public class ChunkMapLoader {
 
     private ChunkMap chunkMap;
     private Component actorComponent;
+    private ChunkLoader loader;
+
+    public ChunkMapLoader(ChunkMap chunkMap, Component actorComponent, ChunkLoader loader) {
+        this.chunkMap = chunkMap;
+        this.actorComponent = actorComponent;
+        this.loader = loader;
+    }
 
     public void update() {
         loadChunks();
@@ -46,7 +53,7 @@ public class ChunkMapLoader {
     }
 
     private void loadChunks(Vector3i actorPositionDelta) {
-
+        
     }
 
 

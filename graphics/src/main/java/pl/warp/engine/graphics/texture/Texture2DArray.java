@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL30;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_REPEAT;
 import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
@@ -16,6 +18,10 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
  *         Created 20.12.14 at 21:53
  */
 public class Texture2DArray extends Texture {
+
+    private static final int DEFAULT_TEXTURE_WRAP_METHOD = GL_REPEAT;
+    private static final int DEFAULT_TEXTURE_RESIZE_FILTER = GL_LINEAR;
+
     private int width;
     private int height;
     private int size;
@@ -33,12 +39,16 @@ public class Texture2DArray extends Texture {
 
     public Texture2DArray(int width, int height, int size, ByteBuffer[] data, int internalformat, int format) {
         super(GL30.GL_TEXTURE_2D_ARRAY, genTexture2DArray(internalformat, format, width, height, size, data), internalformat, format, true);
-        GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        GL11.glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         this.size = size;
+        setDefaultParams();
+    }
+
+    private void setDefaultParams() {
+        setParameter(GL_TEXTURE_MAG_FILTER, DEFAULT_TEXTURE_RESIZE_FILTER);
+        setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        setParameter(GL_TEXTURE_WRAP_S, DEFAULT_TEXTURE_WRAP_METHOD);
+        setParameter(GL_TEXTURE_WRAP_T, DEFAULT_TEXTURE_WRAP_METHOD);
+        setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     }
 
     public Texture2DArray(int texture, int width, int height, boolean mipmap, int size) {
