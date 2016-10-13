@@ -4,19 +4,42 @@ version '0.1'
 apply plugin: 'java'
 apply plugin: 'maven'
 
+
 repositories {
     mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+import org.gradle.internal.os.OperatingSystem
+
+switch ( OperatingSystem.current() ) {
+    case OperatingSystem.WINDOWS:
+        project.ext.lwjglNatives = "natives-windows"
+        break
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.lwjglNatives = "natives-macos"
+        break
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'org.lwjgl:lwjgl:3.0.1-SNAPSHOT'
-    compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-windows"
-    compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-linux"
     compile project(':core')
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    // LWJGL dependencies START
+    compile "org.lwjgl:lwjgl:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl-egl:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl-glfw:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl-jawt:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl-openal:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl-opencl:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl-opengl:3.0.1-SNAPSHOT"
+    // LWJGL natives
+    runtime "org.lwjgl:lwjgl:3.0.1-SNAPSHOT:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-glfw:3.0.1-SNAPSHOT:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:3.0.1-SNAPSHOT:${lwjglNatives}"
+    // LWJGL dependencies END
 
     testCompile 'junit:junit:4.12'
 }
