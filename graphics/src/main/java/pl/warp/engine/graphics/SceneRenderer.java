@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.scene;
+package pl.warp.engine.graphics;
 
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -6,8 +6,6 @@ import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.graphics.Renderer;
-import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
