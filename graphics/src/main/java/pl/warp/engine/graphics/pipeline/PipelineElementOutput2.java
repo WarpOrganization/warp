@@ -27,7 +27,7 @@ public abstract class PipelineElementOutput2<T, S> extends PipelineElementOutput
     }
 
     @Override
-    protected <R> PipelineElementOutput1<R> newOutput(R firstOutput) {
+    protected <R> PipelineElementOutput2<R, S> newOutput(R firstOutput) {
         return newOutput(firstOutput, secondOutput);
     }
 
