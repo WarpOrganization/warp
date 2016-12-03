@@ -56,6 +56,12 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     public void update(int delta) {
         initRendering(delta);
         render(scene);
+        finalizeRendering();
+    }
+
+    private void finalizeRendering() {
+        for (Renderer renderer : renderers)
+            renderer.performOrderedRenderingStep();
     }
 
     private void initRendering(int delta) {

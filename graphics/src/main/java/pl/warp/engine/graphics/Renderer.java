@@ -15,4 +15,7 @@ public interface Renderer {
     void render(Component component, MatrixStack stack);
 
     void destroy();
+
+    default void performOrderedRenderingStep() {
+    }
 }

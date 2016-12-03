@@ -2,8 +2,8 @@ package pl.warp.engine.graphics.particles;
 
 import org.apache.log4j.Logger;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.Renderer;
+import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.dot.DotParticleRenderer;
 import pl.warp.engine.graphics.particles.textured.TexturedParticleRenderer;
@@ -22,6 +22,8 @@ public class ParticleSystemRenderer implements Renderer {
     private Camera camera;
     private DotParticleRenderer dotParticleRenderer;
     private TexturedParticleRenderer texturedParticleRenderer;
+
+
 
     public ParticleSystemRenderer(Camera camera) {
         this.camera = camera;
@@ -66,6 +68,5 @@ public class ParticleSystemRenderer implements Renderer {
     public void destroy() {
         texturedParticleRenderer.destroy();
     }
-
 
 }
