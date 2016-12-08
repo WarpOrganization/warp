@@ -8,6 +8,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
+import pl.warp.engine.physics.property.GravityAffectedBodyProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -24,6 +25,7 @@ public class CollisionHandler {
     private Component component1;
     private Component component2;
     private Vector3 contactPos = new Vector3();
+    private Vector3 normal = new Vector3();
 
     public CollisionHandler(PhysicsWorld world, CollisionStrategy collisionStrategy) {
         this.world = world;
@@ -31,6 +33,7 @@ public class CollisionHandler {
         result = new ClosestRayResultCallback(new Vector3(), new Vector3());
         tmpTranslation = new Vector3f();
         contactPos = new Vector3();
+        rayTestNormal = new Vector3();
     }
 
 
@@ -39,15 +42,39 @@ public class CollisionHandler {
             world.getCollisionWorld().performDiscreteCollisionDetection();
             world.getActiveCollisions().forEach(manifold -> {
                 manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
+                manifold.getContactPoint(0).getNormalWorldOnB(normal);
                 assingValues(manifold);
-                collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
-                findContactPos(manifold);
+                //collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
+                //findContactPos(manifold);
+                processCollision(manifold);
             });
         }
     }
 
+    private void processCollision(btPersistentManifold manifold) {
+        if (isGravityAffected(component1) && !isGravityAffected(component2)) {
+            processGravityBodiesIntersection(component1, component2, manifold);
+        } else if (isGravityAffected(component2) && !isGravityAffected(component1)) {
+            processGravityBodiesIntersection(component2, component1, manifold);
+        } else {
+            collisionStrategy.calculateCollisionResponse(component1, component2, contactPos, normal);
+            findContactPos(manifold);
+        }
+    }
+
+    private boolean isGravityAffected(Component component) {
+        return component.hasEnabledProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
+    }
+
+    private void processGravityBodiesIntersection(Component component1, Component component2, btPersistentManifold manifold) {
+        GravityAffectedBodyProperty bodyProperty = component1.getProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
+        bodyProperty.stand();
+    }
+
     private Vector3f direction1 = new Vector3f();
     private Vector3f direction2 = new Vector3f();
+    private Vector3f translation1 = new Vector3f();
+    private Vector3f translation2 = new Vector3f();
 
     private void findContactPos(btPersistentManifold manifold) {
         Component component1;
@@ -63,12 +90,12 @@ public class CollisionHandler {
         PhysicalBodyProperty physicalBodyProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         ColliderProperty colliderProperty1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         ColliderProperty colliderProperty2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-
+        //Transforms
 
         float distance = findLongestDistance(manifold);
 
 
-        //distance is always >0
+        //distance is always > 0
         if (distance < -COLLISION_MARGIN) {
             distance += COLLISION_MARGIN;
             if (!isMoving(physicalBodyProperty1) && !isMoving(physicalBodyProperty2)) {
@@ -149,6 +176,7 @@ public class CollisionHandler {
 
     private ClosestRayResultCallback result;
     private Vector3f tmpTranslation;
+    private Vector3 rayTestNormal;
 
     public void performRayTests() {
         for (int i = 0; i < world.getRayTestColliders().size(); i++) {
@@ -175,7 +203,8 @@ public class CollisionHandler {
                 property.setTranslation(tmpTranslation);
                 Component component;
                 component = world.getComponent(result.getCollisionObject().getUserValue());
-                collisionStrategy.calculateCollisionResponse(component, collider.getOwner(), contactPos);
+                result.getHitNormalWorld(rayTestNormal);
+                collisionStrategy.calculateCollisionResponse(component, collider.getOwner(), contactPos, rayTestNormal);
             }
         }
     }

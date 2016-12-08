@@ -1,13 +1,13 @@
 package pl.warp.engine.physics;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.net.SyslogAppender;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.property.ColliderProperty;
+import pl.warp.engine.physics.property.GravityAffectedBodyProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -38,7 +38,8 @@ public class MovementTask extends EngineTask {
     protected void onClose() {
 
     }
-
+    //TODO standing to false
+    //TODO implement matrixstack
     @Override
     public void update(int delta) {
         float fdelta = (float) delta / 1000;
@@ -53,7 +54,6 @@ public class MovementTask extends EngineTask {
 
                     physicalBodyProperty.setNextTickTranslation(tmpVelocity.mul(fdelta));
                     physicalBodyProperty.setNextTickRotation(tmpTorque.mul(fdelta));
-
                     tmpRotation.set(transformProperty.getRotation());
                     tmpRotation.rotateLocalX(tmpTorque.x);
                     tmpRotation.rotateLocalY(tmpTorque.y);
@@ -79,5 +79,9 @@ public class MovementTask extends EngineTask {
 
     private boolean isCollidable(Component component) {
         return component.hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+    }
+
+    private boolean isGravityAffected(Component component){
+        return component.hasEnabledProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
     }
 }

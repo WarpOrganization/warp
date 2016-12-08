@@ -64,7 +64,7 @@ public class BulletScript extends Script<Component> {
     }
 
     //TODO REMOVE AS SOON AS DISABLING COLLIDER WORKS
-    private static class DupaProperty extends Property {
+    private static class DupaProperty extends Property {//xd
         public DupaProperty(Component parent) {
             super(parent);
         }

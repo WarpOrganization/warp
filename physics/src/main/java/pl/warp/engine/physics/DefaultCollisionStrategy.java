@@ -26,7 +26,6 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     }
 
     private Vector3f relativeVelocity = new Vector3f();
-    private Vector3f direction = new Vector3f();
     private Vector3f dot = new Vector3f();
     private Vector3f distance1 = new Vector3f();
     private Vector3f distance2 = new Vector3f();
@@ -34,8 +33,9 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     private Vector3f directionCopy = new Vector3f();
     private Vector3f torqueChange = new Vector3f();
     private Vector3f emptyVector = new Vector3f();
+    private Vector3f normal = new Vector3f();
 
-    public void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos) {
+    public void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos, Vector3 collisionNormal) {
 
         ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
@@ -46,9 +46,10 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
 
-            physicalProperty1.setTorque(emptyVector);
-            physicalProperty2.setTorque(emptyVector);
+            //physicalProperty1.setTorque(emptyVector);
+            //physicalProperty2.setTorque(emptyVector);
 
+            normal.set(collisionNormal.x, collisionNormal.y, collisionNormal.z);
 
             //distance vector for body 1
             distance1.set(transformProperty1.getTranslation());
@@ -59,16 +60,11 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             angularVelocity1.set(physicalProperty1.getTorque());
             angularVelocity1.mul(distance1.length());
 
-            //direction from contact point co body 1 center
-            direction.set(transformProperty1.getTranslation());
-            direction.sub(contactPos.x, contactPos.y, contactPos.z);
-            direction.normalize();
-
             //some magic
             dot.set(distance1);
-            dot.cross(direction);
+            dot.cross(normal);
             dot.cross(distance1);
-            float down = dot.dot(direction) / physicalProperty1.getInteria();
+            float down = dot.dot(normal) / physicalProperty1.getInteria();
 
             //distance vector for body 2
             distance2.set(transformProperty2.getTranslation());
@@ -80,9 +76,9 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
             //more magic
             dot.set(distance2);
-            dot.cross(direction);
+            dot.cross(normal);
             dot.cross(distance2);
-            down += dot.dot(direction) / physicalProperty2.getInteria();
+            down += dot.dot(normal) / physicalProperty2.getInteria();
 
             //relative velocity of body 1 and 2
             angularVelocity1.add(physicalProperty1.getVelocity());
@@ -93,7 +89,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             //even more magic
             upperPart.set(relativeVelocity);
             upperPart.mul((1 + ELASTICY) * -1);
-            float up = upperPart.dot(direction);
+            float up = upperPart.dot(normal);
             down += (1 / physicalProperty1.getMass()) + (1 / physicalProperty2.getMass());
             float j = up / down;
 
@@ -106,7 +102,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
             if (isCollidable(collider1)) {
                 physicalProperty1.addTorque(torqueChange.negate());
-                physicalProperty1.applyForce(direction.mul(j));
+                physicalProperty1.applyForce(normal.mul(j));
             }
 
             //torque change for body 2
@@ -116,7 +112,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
             if (isCollidable(collider2)) {
                 physicalProperty2.addTorque(torqueChange);
-                physicalProperty2.applyForce(direction.negate());
+                physicalProperty2.applyForce(normal.negate());
             }
         }
 
@@ -127,6 +123,8 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
     private Vector3 contactPos = new Vector3();
 
+    //can't remember if it was meant to be used somewhere
+/*
     @Override
     public void handleCollision(btPersistentManifold manifold) {
         Component component1;
@@ -136,6 +134,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
         manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
         calculateCollisionResponse(component1, component2, contactPos);
     }
+*/
 
     private boolean isCollidable(ColliderProperty property) {
         return property.getCollider().getDefaultCollisionHandling();

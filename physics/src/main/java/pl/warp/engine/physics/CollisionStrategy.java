@@ -8,9 +8,10 @@ import pl.warp.engine.core.scene.Component;
  * Created by hubertus on 7/12/16.
  */
 public interface CollisionStrategy {
-    void handleCollision(btPersistentManifold manifold);
 
-    void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos);
+    //void handleCollision(btPersistentManifold manifold);
+
+    void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos, Vector3 collisionNormal);
 
     void init(PhysicsWorld world);
 }

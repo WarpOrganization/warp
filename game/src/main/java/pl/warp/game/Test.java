@@ -163,6 +163,17 @@ public class Test {
 
             generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
+            /*Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
+            ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
+            Texture2D floorTexture = new Texture2D(decodedFloorTexture.getWidth(), decodedFloorTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedFloorTexture.getData());
+            Material floorMaterial = new Material(floorTexture);
+
+            Component floor = new SimpleComponent(root);
+            new GraphicsMeshProperty(floor, floorMesh);
+            new GraphicsMaterialProperty(floor,floorMaterial);
+            new TransformProperty(floor);
+            new PhysicalBodyProperty(floor, 100, 100);*/
+
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
