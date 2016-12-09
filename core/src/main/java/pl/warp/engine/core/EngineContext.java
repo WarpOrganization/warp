@@ -5,11 +5,11 @@ import pl.warp.engine.core.scene.script.ScriptContext;
 
 /**
  * @author Jaca777
- *         Created 2016-06-26 at 15
+ *         Created 2016-12-04 at 14
  */
 public class EngineContext {
     private Scene scene;
-    private ScriptContext scriptContext = new ScriptContext();
+    private ScriptContext scriptContext;
 
     public Scene getScene() {
         return scene;
@@ -21,5 +21,9 @@ public class EngineContext {
 
     public ScriptContext getScriptContext() {
         return scriptContext;
+    }
+
+    public void setScriptContext(ScriptContext scriptContext) {
+        this.scriptContext = scriptContext;
     }
 }

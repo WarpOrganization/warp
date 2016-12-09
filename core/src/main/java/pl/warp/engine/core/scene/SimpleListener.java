@@ -25,7 +25,6 @@ public class SimpleListener<T extends Component, U extends Event> extends Listen
         this.handler.accept(event);
     }
 
-    //Reveals side effects.
     public static <T extends Component, U extends Event> SimpleListener createListener(T owner, String eventTypeName, Consumer<U> handler) {
         return new SimpleListener(owner, eventTypeName, handler);
     }

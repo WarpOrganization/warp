@@ -8,18 +8,20 @@ public abstract class Property<T extends Component> {
 
     private T owner;
     private String name;
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     public Property(T owner) {
         this.owner = owner;
         this.name = getClass().getName();
         owner.addProperty(this);
+        enable();
     }
 
     public Property(T owner, String name) {
         this.owner = owner;
         this.name = name;
         owner.addProperty(this);
+        enable();
     }
 
     public T getOwner() {

@@ -5,12 +5,10 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.*;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.core.scene.SimpleComponent;
+import pl.warp.engine.core.scene.*;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.core.scene.script.ScriptContext;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
@@ -83,6 +81,7 @@ public class Test {
         EngineContext context = new EngineContext();
         Scene scene = new Scene(context);
         context.setScene(scene);
+        context.setScriptContext(new ScriptContext());
         Component root = new SimpleListenableParent(scene);
 
         Component controllableGoat = new SimpleComponent(root);
@@ -100,17 +99,7 @@ public class Test {
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
-            ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
-            Texture2DArray lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
-            Component light = new SimpleComponent(root);
-            LightProperty property = new LightProperty(light);
-            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
-            property.addSpotLight(spotLight);
-            TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.002f, 5000, true, true);
-            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 100, lightSpritesheetTexture));
+
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -126,8 +115,21 @@ public class Test {
                     new SingleFlare(0.2f, 1, 0.25f, new Vector3f(1)),
                     new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f)),
             };
+
+            ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            Texture2DArray lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
+            Component light = new SimpleComponent(root);
+            LightProperty property = new LightProperty(light);
+            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
+            property.addSpotLight(spotLight);
+            TransformProperty lightSourceTransform = new TransformProperty(light);
+            lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
+            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.002f, 5000, true, true);
+            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 100, lightSpritesheetTexture));
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
+
             Component gasSphere = new SimpleComponent(root);
             Sphere sphere = new Sphere(50, 50);
             new GraphicsMeshProperty(gasSphere, sphere);
@@ -220,6 +222,8 @@ public class Test {
             transformProperty.move(new Vector3f(100, 0, 0));
             transformProperty.rotateY((float) -(Math.PI / 2));
             transformProperty.scale(new Vector3f(3));
+
+
         });
         graphicsThread.scheduleOnce(() -> {
             EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
