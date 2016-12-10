@@ -39,6 +39,7 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
 
     @Override
     public void update(int delta) {
+        outputTexture.clear();
         GL11.glGetTexImage(srcTexture.getTexture(), 0, srcTexture.getFormat(), srcTexture.getType(), outputTexture);
     }
 
@@ -51,5 +52,9 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
         int texelSize = Textures.getTexelSizeInBytes(textureInternalformat);
         int textureSize = width * height * texelSize;
         this.outputTexture = BufferUtils.createByteBuffer(textureSize);
+    }
+
+    public ByteBuffer getOutputTexture() {
+        return outputTexture;
     }
 }
