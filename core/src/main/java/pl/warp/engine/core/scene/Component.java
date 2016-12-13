@@ -34,7 +34,6 @@ public abstract class Component {
     }
 
 
-
     /**
      * Finds a property of a given type. It's not as fast as {@link #getProperty(String)}.
      *
