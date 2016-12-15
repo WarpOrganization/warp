@@ -9,6 +9,7 @@ public abstract class Property<T extends Component> {
     private T owner;
     private String name;
     private boolean enabled = false;
+    private boolean triggerStateEvents = false;
 
     public Property(T owner) {
         this.owner = owner;
@@ -24,6 +25,7 @@ public abstract class Property<T extends Component> {
         enable();
     }
 
+
     public T getOwner() {
         return owner;
     }
@@ -36,11 +38,17 @@ public abstract class Property<T extends Component> {
         return enabled;
     }
 
+    public void setTriggerStateEvents(boolean triggerStateEvents) {
+        this.triggerStateEvents = triggerStateEvents;
+    }
+
     public void enable() {
         this.enabled = true;
+        if(triggerStateEvents) owner.triggerEvent(new PropertyEnabledEvent<>(this));
     }
 
     public void disable() {
         this.enabled = false;
+        if(triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent<>(this));
     }
 }

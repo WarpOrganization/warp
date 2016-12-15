@@ -52,8 +52,7 @@ public class PropertyLoader {
     }
 
     private Stream<Pair<Constructor, Class[]>> combineWithDataTypes(Stream<Constructor> constructors) {
-        return constructors
-                .map(p -> Pair.of(p, getPropertyParameters(p)));
+        return constructors.map(p -> Pair.of(p, getPropertyParameters(p)));
     }
 
     private Stream<Constructor> findConstructor(Class[] types, Stream<Pair<Constructor, Class[]>> constructorParamTypes) {

@@ -4,9 +4,6 @@ import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.metadata.ComponentMetadata;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Jaca777
  *         Created 2016-12-13 at 19
@@ -34,13 +31,11 @@ public class ComponentLoader {
     }
 
     private void loadChildren(ComponentMetadata metadata, Component component) {
-        Set<Component> children = new HashSet<>();
         metadata.forEachChildren(md -> {
             if (md instanceof ComponentMetadata) {
                 Component child = loadComponentMetadata((ComponentMetadata) md);
-                children.add(child);
+                component.addChild(child);
             }
         });
-        children.forEach(component::addChild); // prevents deadlock
     }
 }
