@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
@@ -36,29 +37,30 @@ public class CollisionHandler {
         rayTestNormal = new Vector3();
     }
 
-
     public void updateCollisions() {
         synchronized (world) {
             world.getCollisionWorld().performDiscreteCollisionDetection();
             world.getActiveCollisions().forEach(manifold -> {
+                //for(int i =0;i<manifold.getNumContacts();i++){
                 manifold.getContactPoint(0).getPositionWorldOnA(contactPos);
                 manifold.getContactPoint(0).getNormalWorldOnB(normal);
                 assingValues(manifold);
                 //collisionStrategy.calculateCollisionResponse(component1, component2, contactPos);
                 //findContactPos(manifold);
-                processCollision(manifold);
+                processCollision(component1, component2, manifold);
+                //}
             });
         }
     }
 
-    private void processCollision(btPersistentManifold manifold) {
+    private void processCollision(Component component1, Component component2, btPersistentManifold manifold) {
         if (isGravityAffected(component1) && !isGravityAffected(component2)) {
-            processGravityBodiesIntersection(component1, component2, manifold);
+            processGravityBodiesIntersection(manifold);
         } else if (isGravityAffected(component2) && !isGravityAffected(component1)) {
-            processGravityBodiesIntersection(component2, component1, manifold);
+            processGravityBodiesIntersection(manifold);
         } else {
             collisionStrategy.calculateCollisionResponse(component1, component2, contactPos, normal);
-            findContactPos(manifold);
+            //findContactPos(manifold);
         }
     }
 
@@ -66,7 +68,7 @@ public class CollisionHandler {
         return component.hasEnabledProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
     }
 
-    private void processGravityBodiesIntersection(Component component1, Component component2, btPersistentManifold manifold) {
+    private void processGravityBodiesIntersection(btPersistentManifold manifold) {
         GravityAffectedBodyProperty bodyProperty = component1.getProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
         bodyProperty.stand();
     }
@@ -115,10 +117,10 @@ public class CollisionHandler {
             }
 
             if (isMoving(physicalBodyProperty1) && isApproaching(transformProperty1.getTranslation(), transformProperty2.getTranslation(), physicalBodyProperty1.getNextTickTranslation())) {
-                moveBack(physicalBodyProperty1, distance);
+                //moveBack(physicalBodyProperty1, distance);
             }
             if (isMoving(physicalBodyProperty2) && isApproaching(transformProperty2.getTranslation(), transformProperty1.getTranslation(), physicalBodyProperty2.getNextTickTranslation())) {
-                moveBack(physicalBodyProperty2, distance);
+                //moveBack(physicalBodyProperty2, distance);
             }
         }
     }

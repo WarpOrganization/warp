@@ -72,8 +72,8 @@ public class Test {
     private static final boolean FULLSCREEN = false;
     private static final int WIDTH = 1560, HEIGHT = 860;
     private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.2f;
-    private static final float BRAKING_FORCE = 0.2f;
+    private static final float MOV_SPEED = 0.2f*10;
+    private static final float BRAKING_FORCE = 0.2f*10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
     private static Random random = new Random();
@@ -178,7 +178,8 @@ public class Test {
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 1f, 6.7f);
+
+            new PhysicalBodyProperty(controllableGoat, 10f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(controllableGoat, material);
@@ -255,14 +256,15 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 100; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(20f);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1f, 6.7f);
+            //TODO refactor
+            new PhysicalBodyProperty(goat, (float)Math.random()*1000f,10.772f / 2, 1.8f / 2, 13.443f / 2);
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;

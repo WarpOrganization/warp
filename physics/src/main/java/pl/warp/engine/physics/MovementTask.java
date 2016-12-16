@@ -48,7 +48,7 @@ public class MovementTask extends EngineTask {
                 PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
                 TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
                 tmpVelocity.set(physicalBodyProperty.getVelocity());
-                tmpTorque.set(physicalBodyProperty.getTorque());
+                tmpTorque.set(physicalBodyProperty.getAngularVelocity());
                 if (isCollidable(component)) {
                     ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
 
@@ -58,11 +58,12 @@ public class MovementTask extends EngineTask {
                     tmpRotation.rotateLocalX(tmpTorque.x);
                     tmpRotation.rotateLocalY(tmpTorque.y);
                     tmpRotation.rotateLocalZ(tmpTorque.z);
+                    physicalBodyProperty.recalculateInteriaTensor(tmpRotation);
                     colliderProperty.getCollider().setTransform(tmpVelocity.add(transformProperty.getTranslation()), tmpRotation);
                 } else {
                     transformProperty.move(tmpVelocity.mul(fdelta));
 
-                    Vector3f torque = physicalBodyProperty.getTorque();
+                    Vector3f torque = physicalBodyProperty.getAngularVelocity();
                     transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
                 }
             }

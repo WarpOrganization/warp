@@ -49,6 +49,7 @@ public class GoatControlScript extends Script<Component> {
 
     @Override
     public void onUpdate(int delta) {
+        //System.out.println(bodyProperty.getVelocity());
         updateDirections();
         desiredTorque.set(0, 0, 0);
         move(delta);
@@ -74,20 +75,20 @@ public class GoatControlScript extends Script<Component> {
             move(rightVector, -movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_SPACE))
             brake(delta);
-        if(input.isKeyDown(GLFW.GLFW_KEY_P))
+        if (input.isKeyDown(GLFW.GLFW_KEY_P))
             stop();
         if (input.isKeyDown(GLFW.GLFW_KEY_UP))
-            addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
+        addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_DOWN))
-            addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
+        addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_LEFT))
-            addDesiredTorque(0, arrowKeysRottationSpeed, 0);
+        addDesiredTorque(0, arrowKeysRottationSpeed, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_RIGHT))
-            addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
+        addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
         if(input.isKeyDown(GLFW.GLFW_KEY_Q))
-            addDesiredTorque(0, 0, arrowKeysRottationSpeed);
+        addDesiredTorque(0, 0, arrowKeysRottationSpeed);
         if(input.isKeyDown(GLFW.GLFW_KEY_E))
-            addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
+        addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
     }
 
     private Vector3f tmpForce = new Vector3f();
@@ -100,18 +101,16 @@ public class GoatControlScript extends Script<Component> {
     private Vector3f torqueChange = new Vector3f();
 
     private void moveAngular(float delta) {
-        if (desiredTorque.equals(bodyProperty.getTorque())) return;
-        torqueChange.set(bodyProperty.getTorque());
+        if (desiredTorque.equals(bodyProperty.getAngularVelocity())) return;
+        torqueChange.set(bodyProperty.getAngularVelocity());
         torqueChange.sub(desiredTorque);
         torqueChange.negate();
-        if (torqueChange.length() > rotationSpeed * delta / bodyProperty.getInteria()) {
+        if (torqueChange.length() > rotationSpeed * delta) {
             torqueChange.normalize();
             torqueChange.mul(rotationSpeed);
             torqueChange.mul(delta);
-        } else {
-            torqueChange.mul(bodyProperty.getInteria());
         }
-        bodyProperty.addTorque(torqueChange);
+        bodyProperty.addAngularVelocity(torqueChange);
     }
 
     private void addDesiredTorque(float x, float y, float z) {
@@ -119,15 +118,15 @@ public class GoatControlScript extends Script<Component> {
     }
 
     private void rotate(int delta) {
-        Vector2f cursorPosDelta = input.getCursorPositionDelta();
+  /*      Vector2f cursorPosDelta = input.getCursorPositionDelta();
         Vector2f rotation = new Vector2f();
         cursorPosDelta.mul(rotationSpeed * delta * MOUSE_ROTATION_SPEED_FACTOR, rotation);
-        bodyProperty.addTorque(new Vector3f(-rotation.y, -rotation.x, 0));
-    }
+        bodyProperty.addAngularVelocity(new Vector3f(-rotation.y, -rotation.x, 0));
+  */  }
 
     private void stop() {
         bodyProperty.setVelocity(new Vector3f(0));
-        bodyProperty.setTorque(new Vector3f(0));
+        bodyProperty.setAngularVelocity(new Vector3f(0));
     }
 
     private Vector3f brakingVector = new Vector3f();
