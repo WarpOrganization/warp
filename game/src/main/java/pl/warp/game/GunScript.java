@@ -97,8 +97,7 @@ public class GunScript extends Script<Component> {
             new GraphicsMeshProperty(bullet, bulletMesh);
             new GraphicsMaterialProperty(bullet, bulletMaterial);
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
-            //TODO refactor
-            //new PhysicalBodyProperty(bullet, BULLET_MASS, 0.128f).applyForce(direction);
+            new PhysicalBodyProperty(bullet, BULLET_MASS, 0.1f, 0.1f,0.1f).applyForce(direction);
             new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z)));
             root.addChild(bullet);
             new BulletScript(bullet, 10000, explosionSpritesheet, playerShip);

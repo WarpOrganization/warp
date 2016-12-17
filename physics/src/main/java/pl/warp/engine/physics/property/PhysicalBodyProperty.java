@@ -30,7 +30,6 @@ public class PhysicalBodyProperty extends Property<Component> {
         super(owner, PHYSICAL_BODY_PROPERTY_NAME);
         this.mass = mass;
         this.radius = radius;
-        //TODO fix
         inertia.set((zLength * zLength + yLength * yLength) * mass / 12, 0, 0,
                 0, (zLength * zLength + xLength * xLength) * mass / 12, 0,
                 0, 0, (xLength * xLength + yLength * yLength) * mass / 12).invert();

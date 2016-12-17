@@ -13,5 +13,7 @@ public interface CollisionStrategy {
 
     void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos, Vector3 collisionNormal);
 
+    void preventIntersection(Component component1, Component component2, Vector3 contactPos, Vector3 collisionNormal, float penetrationDepth);
+
     void init(PhysicsWorld world);
 }

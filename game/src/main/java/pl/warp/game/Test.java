@@ -256,7 +256,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
@@ -264,7 +264,7 @@ public class Test {
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
             //TODO refactor
-            new PhysicalBodyProperty(goat, (float)Math.random()*1000f,10.772f / 2, 1.8f / 2, 13.443f / 2);
+            new PhysicalBodyProperty(goat, 1000f,10.772f / 2, 1.8f / 2, 13.443f / 2);
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;
