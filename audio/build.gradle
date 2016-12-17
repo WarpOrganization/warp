@@ -32,5 +32,6 @@ dependencies {
 
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    compile project(':core')
     testCompile 'junit:junit:4.12'
 }

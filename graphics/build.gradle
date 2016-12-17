@@ -24,21 +24,23 @@ switch ( OperatingSystem.current() ) {
         break
 }
 
+project.ext.lwjglVersion = "3.1.0"
+
 dependencies {
     compile project(':core')
     compile 'org.slf4j:slf4j-api:1.7.12'
     // LWJGL dependencies START
-    compile "org.lwjgl:lwjgl:3.0.1-SNAPSHOT"
-    compile "org.lwjgl:lwjgl-egl:3.0.1-SNAPSHOT"
-    compile "org.lwjgl:lwjgl-glfw:3.0.1-SNAPSHOT"
-    compile "org.lwjgl:lwjgl-jawt:3.0.1-SNAPSHOT"
-    compile "org.lwjgl:lwjgl-openal:3.0.1-SNAPSHOT"
-    compile "org.lwjgl:lwjgl-opencl:3.0.1-SNAPSHOT"
-    compile "org.lwjgl:lwjgl-opengl:3.0.1-SNAPSHOT"
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-egl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-jawt:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
     // LWJGL natives
-    runtime "org.lwjgl:lwjgl:3.0.1-SNAPSHOT:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-glfw:3.0.1-SNAPSHOT:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-openal:3.0.1-SNAPSHOT:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
     // LWJGL dependencies END
 
     testCompile 'junit:junit:4.12'

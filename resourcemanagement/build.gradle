@@ -11,9 +11,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.lwjgl:lwjgl:3.0.1-SNAPSHOT'
-    compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-windows"
-    compile "org.lwjgl:lwjgl-platform:3.0.1-SNAPSHOT:natives-linux"
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-windows"
+    compile "org.lwjgl:lwjgl-platform:${lwjglVersion}:natives-linux"
 
     compile group: 'com.badlogicgames.gdx', name: 'gdx-bullet', version: '1.9.3'
     compile group: 'com.badlogicgames.gdx', name: 'gdx-bullet-platform', version: '1.9.3', classifier: 'natives-desktop'
