@@ -1,5 +1,7 @@
 package pl.warp.engine.core.scene;
 
+
+
 import pl.warp.engine.core.EngineContext;
 
 import java.util.*;
@@ -18,7 +20,7 @@ public abstract class Component {
     private EngineContext context;
     private final Map<String, Property> properties = new TreeMap<>();
     private final Set<Listener> listeners = new HashSet<>();
-    private final List<Component> children = new ArrayList<>();
+    private final List<Component> children = new LinkedList<>();
     private boolean alive = true;
 
     public Component(Component parent) {
@@ -26,9 +28,11 @@ public abstract class Component {
         this.context = parent.getContext();
     }
 
+
     public Component(EngineContext context) {
         this.context = context;
     }
+
 
     /**
      * Finds a property of a given type. It's not as fast as {@link #getProperty(String)}.

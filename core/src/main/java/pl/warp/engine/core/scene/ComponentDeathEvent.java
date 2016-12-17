@@ -7,14 +7,14 @@ package pl.warp.engine.core.scene;
 public class ComponentDeathEvent extends Event {
     public static final String COMPONENT_DEATH_EVENT_NAME = "componentDeath";
 
-    private Component victim;
+    private Component component;
 
-    public ComponentDeathEvent(Component victim) {
+    public ComponentDeathEvent(Component component) {
         super(COMPONENT_DEATH_EVENT_NAME);
-        this.victim = victim;
+        this.component = component;
     }
 
-    public Component getVictim() {
-        return victim;
+    public Component getComponent() {
+        return component;
     }
 }

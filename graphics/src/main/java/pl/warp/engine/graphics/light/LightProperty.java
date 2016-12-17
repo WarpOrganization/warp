@@ -1,6 +1,5 @@
 package pl.warp.engine.graphics.light;
 
-import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
@@ -16,12 +15,6 @@ public class LightProperty extends Property<Component> {
     private Set<SpotLight> spotLights = new HashSet<>();
 
     public static final String LIGHT_PROPERTY_NAME = "lightProperty";
-
-    public LightProperty(Component owner, Set<SpotLight> spotLights) {
-        super(owner);
-        this.spotLights = spotLights;
-        triggerAllAddedEvent();
-    }
 
     public LightProperty(Component owner) {
         super(owner);
@@ -43,6 +36,7 @@ public class LightProperty extends Property<Component> {
     }
 
     private void triggerAllAddedEvent() {
+        if(spotLights == null) return;
         for (SpotLight light : spotLights)
             getOwner().triggerOnRoot(new LightAddedEvent(light));
     }
