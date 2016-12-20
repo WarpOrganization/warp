@@ -3,15 +3,18 @@ package pl.warp.engine.audio;
 import pl.warp.engine.core.EngineTask;
 
 /**
- * Created by hubertus on 17.12.16.
+ * Created by huber on 20.12.2016.
  */
-public class AudioTask extends EngineTask {
+public class AudioPosUpdateTask extends EngineTask {
 
-int source;
     private AudioContext context;
+
+    public AudioPosUpdateTask(AudioContext audioContext) {
+        this.context = audioContext;
+    }
+
     @Override
     protected void onInit() {
-        context = new AudioContext();
 
     }
 
@@ -23,9 +26,5 @@ int source;
     @Override
     public void update(int delta) {
 
-    }
-
-    public AudioContext getContext() {
-        return context;
     }
 }
