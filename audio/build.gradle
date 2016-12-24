@@ -2,13 +2,6 @@ group 'pl.warp'
 version '0.1'
 
 apply plugin: 'java'
-apply plugin: 'maven'
-
-
-repositories {
-    mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-}
 
 import org.gradle.internal.os.OperatingSystem
 
@@ -26,23 +19,19 @@ switch ( OperatingSystem.current() ) {
 
 project.ext.lwjglVersion = "3.1.0"
 
-dependencies {
-    compile project(':core')
-    compile 'org.slf4j:slf4j-api:1.7.12'
-    // LWJGL dependencies START
-    compile "org.lwjgl:lwjgl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-egl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-jawt:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
-    // LWJGL natives
-    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
-    // LWJGL dependencies END
-
-    testCompile 'junit:junit:4.12'
+repositories {
+    jcenter()
+    mavenCentral()
 }
 
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.12'
+
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    compile project(':core')
+    testCompile 'junit:junit:4.12'
+}

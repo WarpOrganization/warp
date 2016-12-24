@@ -1,14 +1,11 @@
 package pl.warp.engine.physics;
 
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 
-import java.util.List;
-import java.util.Set;
-
 /**
- * Created by hubertus on 7/3/16.
+ * @author Hubertus
+ *         Created 7/3/16
  */
 
 public class CollisionListener extends ContactListener {

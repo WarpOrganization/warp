@@ -4,7 +4,8 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Event;
 
 /**
- * Created by hubertus on 7/12/16.
+ * @author Hubertus
+ *         Created 7/12/16
  */
 public class CollisionEvent extends Event {
 

@@ -5,7 +5,8 @@ import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.physics.collider.Collider;
 
 /**
- * Created by hubertus on 7/3/16.
+ * @author Hubertus
+ *         Created 7/3/16
  */
 public class ColliderProperty extends Property<Component> {
     public static final String COLLIDER_PROPERTY_NAME = "collider";

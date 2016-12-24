@@ -4,7 +4,8 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 /**
- * Created by hubertus on 12.08.16.
+ * @author Hubertus
+ *         Created 12.08.16
  */
 public abstract class PhysicalProperty extends Property<Component>{
 

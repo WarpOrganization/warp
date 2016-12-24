@@ -4,8 +4,12 @@ import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
-import pl.warp.engine.core.scene.*;
+import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.Script;
+import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptContext;
@@ -70,8 +74,8 @@ public class Test {
     private static final boolean FULLSCREEN = false;
     private static final int WIDTH = 1560, HEIGHT = 860;
     private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.2f;
-    private static final float BRAKING_FORCE = 0.2f;
+    private static final float MOV_SPEED = 0.2f * 10;
+    private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
     private static Random random = new Random();
@@ -93,12 +97,14 @@ public class Test {
         graphics.enableUpsLogging();
         //CameraScript cameraScript = new CameraScript(camera);
         GLFWInput input = new GLFWInput();
+        AudioContext audioContext = new AudioContext();
+        audioContext.setListener(new Listener(controllableGoat));
+        AudioManager audioManager = new AudioManager(audioContext);
 
         graphicsThread.scheduleOnce(() -> {
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
-
 
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -180,7 +186,8 @@ public class Test {
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
             new GraphicsMeshProperty(controllableGoat, goatMesh);
-            new PhysicalBodyProperty(controllableGoat, 1f, 6.7f);
+
+            new PhysicalBodyProperty(controllableGoat, 10f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(controllableGoat, material);
@@ -191,7 +198,7 @@ public class Test {
             ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
             Texture2D bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
 
-            new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, bulletTexture, controllableGoat);
+            new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, bulletTexture, controllableGoat, audioManager);
 
             SpotLight goatLight = new SpotLight(
                     controllableGoat,
@@ -239,6 +246,15 @@ public class Test {
             physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
         });
 
+        EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        audioThread.scheduleOnce(() -> {
+            audioThread.scheduleTask(new AudioTask(audioContext));
+            audioManager.loadFiles("/pl/warp/game/sound");
+            audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
+
+        });
+        audioThread.start();
+
         new Script(root) {
             @Override
             public void onInit() {
@@ -259,14 +275,14 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 10; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(20f);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1f, 6.7f);
+            new PhysicalBodyProperty(goat, 1000f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
             float x = random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;

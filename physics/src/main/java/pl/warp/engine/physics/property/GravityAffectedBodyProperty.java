@@ -5,7 +5,8 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 /**
- * Created by hubertus on 05.08.16.
+ * @author Hubertus
+ *         Created 05.08.16
  */
 public class GravityAffectedBodyProperty extends Property<Component> {
 
