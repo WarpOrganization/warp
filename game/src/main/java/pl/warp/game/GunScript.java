@@ -3,6 +3,7 @@ package pl.warp.game;
 import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
@@ -24,6 +25,7 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
  */
 public class GunScript extends Script<Component> {
 
+    private final Component owner;
     private int cooldown;
     private final GLFWInput input;
     private int timer;
@@ -32,6 +34,7 @@ public class GunScript extends Script<Component> {
     private Component root;
     private Texture2DArray explosionSpritesheet;
     private Material bulletMaterial;
+    private final AudioManager audioManager;
     private Component playerShip;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
@@ -41,13 +44,15 @@ public class GunScript extends Script<Component> {
     private Mesh bulletMesh;
 
 
-    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Texture2D bulletTexture, Component playerShip) {
+    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Texture2D bulletTexture, Component playerShip, AudioManager audioManager) {
         super(owner);
+        this.owner = owner;
         this.cooldown = cooldown;
         this.input = input;
         this.root = root;
         this.bulletMesh = bulletMesh;
         this.bulletMaterial = new Material(bulletTexture);
+        this.audioManager = audioManager;
         this.bulletMaterial.setBrightnessTexture(bulletTexture);
         this.explosionSpritesheet = explosionSpritesheet;
         this.playerShip = playerShip;
@@ -70,6 +75,7 @@ public class GunScript extends Script<Component> {
     private void input() {
         if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
             shoot();
+        else shot = false;
     }
 
     private void cooldown(int delta) {
@@ -81,8 +87,13 @@ public class GunScript extends Script<Component> {
     private Vector3f parentVelocity = new Vector3f();
     private Vector3f bulletTranslation = new Vector3f();
     private Vector3 bulletTranslation2 = new Vector3();
+    private boolean shot = false;
 
     private void shoot() {
+        if (!shot) {
+            audioManager.playSingle(owner, "gun");
+            shot = true;
+        }
         if (timer <= 0) {
             timer = cooldown;
             Transforms.getActualRotation(getOwner()).transform(direction.set(FORWARD_VECTOR));
@@ -97,7 +108,7 @@ public class GunScript extends Script<Component> {
             new GraphicsMeshProperty(bullet, bulletMesh);
             new GraphicsMaterialProperty(bullet, bulletMaterial);
             new TransformProperty(bullet).setTranslation(new Vector3f(bulletTranslation));
-            new PhysicalBodyProperty(bullet, BULLET_MASS, 0.1f, 0.1f,0.1f).applyForce(direction);
+            new PhysicalBodyProperty(bullet, BULLET_MASS, 0.1f, 0.1f, 0.1f).applyForce(direction);
             new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z)));
             root.addChild(bullet);
             new BulletScript(bullet, 10000, explosionSpritesheet, playerShip);
