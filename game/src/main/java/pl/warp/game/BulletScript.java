@@ -16,7 +16,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by hubertus on 7/12/16.
+ * @author Hubertus
+ *         Created 7/12/16
  */
 public class BulletScript extends Script<Component> {
 

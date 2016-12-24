@@ -1,7 +1,8 @@
 package pl.warp.engine.audio.command;
 
 /**
- * Created by hubertus on 22.12.16.
+ * @author Hubertus
+ *         Created 22.12.16
  */
 public class StopCommand {
 }

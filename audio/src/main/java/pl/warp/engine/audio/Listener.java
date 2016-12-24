@@ -4,7 +4,8 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 
 /**
- * Created by hubertus on 23.12.16.
+ * @author Hubertus
+ *         Created 23.12.16
  */
 public class Listener {
     private Component component;

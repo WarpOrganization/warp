@@ -4,7 +4,8 @@ import pl.warp.engine.audio.AudioContext;
 import pl.warp.engine.audio.AudioSource;
 
 /**
- * Created by hubertus on 22.12.16.
+ * @author Hubertus
+ *         Created 22.12.16
  */
 public class PauseCommand implements Command{
 

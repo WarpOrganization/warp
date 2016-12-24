@@ -8,7 +8,8 @@ import pl.warp.engine.core.scene.properties.Transforms;
 import static org.lwjgl.openal.AL10.*;
 
 /**
- * Created by hubertus on 20.12.2016.
+ * @author Hubertus
+ *         Created 20.12.2016
  */
 public class AudioPosUpdateTask extends EngineTask {
 

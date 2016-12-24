@@ -10,7 +10,8 @@ import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
- * Created by hubertus on 7/12/16.
+ * @author Hubertus
+ *         Created 7/12/16
  */
 //TODO cleanup
 public class DefaultCollisionStrategy implements CollisionStrategy {

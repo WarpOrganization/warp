@@ -14,7 +14,8 @@ import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.physics.PhysicsWorld;
 
 /**
- * Created by hubertus on 7/9/16.
+ * @author Hubertus
+ *         Created 7/9/16
  */
 public class BasicCollider implements Collider {
     private final btCollisionShape shape;

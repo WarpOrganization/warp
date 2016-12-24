@@ -1,6 +1,5 @@
 package pl.warp.engine.physics.collider;
 
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import org.joml.Quaternionf;
@@ -9,7 +8,8 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.physics.PhysicsWorld;
 
 /**
- * Created by hubertus on 7/13/16.
+ * @author Hubertus
+ *         Created 7/13/16
  */
 public class PointCollider implements Collider {
 

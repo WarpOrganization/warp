@@ -6,7 +6,8 @@ import pl.warp.engine.core.scene.Component;
 import static org.lwjgl.openal.AL10.*;
 
 /**
- * Created by hubertus on 22.12.16.
+ * @author Hubertus
+ *         Created 22.12.16
  */
 public class AudioSource {
     private Vector3f offset;

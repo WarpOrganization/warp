@@ -5,7 +5,8 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 
 /**
- * Created by hubertus on 01.08.16.
+ * @author Hubertus
+ *         Created 01.08.16
  */
 public class RaytestTask {
     private Vector3 startPos = new Vector3();

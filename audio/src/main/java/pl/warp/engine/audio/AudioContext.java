@@ -8,7 +8,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by hubertus on 20.12.2016.
+ * @author Hubertus
+ *         Created 20.12.2016
  */
 public class AudioContext {
 

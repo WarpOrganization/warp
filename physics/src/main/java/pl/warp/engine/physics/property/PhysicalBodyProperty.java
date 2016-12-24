@@ -9,7 +9,8 @@ import pl.warp.engine.core.scene.Property;
 import java.util.Objects;
 
 /**
- * Created by hubertus on 7/4/16.
+ * @author Hubertus
+ *         Created 7/4/16
  */
 
 public class PhysicalBodyProperty extends Property<Component> {

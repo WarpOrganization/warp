@@ -11,7 +11,8 @@ import pl.warp.engine.physics.property.GravityAffectedBodyProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
- * Created by hubertus on 7/7/16.
+ * @author Hubertus
+ *         Created 7/7/16
  */
 public class MovementTask extends EngineTask {
 

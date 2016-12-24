@@ -5,7 +5,8 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 /**
- * Created by huber on 20.12.2016.
+ * @author Hubertus
+ *         Created 20.12.2016
  */
 public class SoundSourceProperty extends Property {
 

@@ -18,7 +18,8 @@ import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
- * Created by hubertus on 7/4/16.
+ * @author Hubertus
+ *         Created 7/4/16
  */
 
 public class PhysicsTask extends EngineTask {

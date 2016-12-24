@@ -7,7 +7,8 @@ import pl.warp.engine.physics.collider.PointCollider;
 import java.util.*;
 
 /**
- * Created by hubertus on 7/14/16.
+ * @author Hubertus
+ *         Created 7/14/16
  */
 public class PhysicsWorld {
 

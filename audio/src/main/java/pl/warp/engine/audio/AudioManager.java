@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 /**
- * Created by hubertus on 22.12.16.
+ * @author Hubertus
+ *         Created 22.12.16
  */
 public class AudioManager {
 

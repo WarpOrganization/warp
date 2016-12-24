@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by hubertus on 01.08.16.
+ * @author Hubertus
+ *         Created 01.08.16
  */
 public class RayTester {
 

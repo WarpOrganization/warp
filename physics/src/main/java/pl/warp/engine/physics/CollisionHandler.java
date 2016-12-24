@@ -3,18 +3,16 @@ package pl.warp.engine.physics;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
 import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
-import org.joml.Matrix3f;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.collider.PointCollider;
-import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.GravityAffectedBodyProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
- * Created by Hubertus on 2016-07-19.
+ * @author Hubertus
+ *         Created 2016-07-19
  */
 
 public class CollisionHandler {

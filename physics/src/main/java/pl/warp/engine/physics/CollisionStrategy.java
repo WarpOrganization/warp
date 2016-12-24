@@ -1,11 +1,11 @@
 package pl.warp.engine.physics;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
 import pl.warp.engine.core.scene.Component;
 
 /**
- * Created by hubertus on 7/12/16.
+ * @author Hubertus
+ *         Created 7/12/16
  */
 public interface CollisionStrategy {
 
