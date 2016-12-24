@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.metadata;
+package pl.warp.engine.core.metadata;
 
 /**
  * @author Jaca777

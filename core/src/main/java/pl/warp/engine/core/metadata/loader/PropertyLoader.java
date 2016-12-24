@@ -1,10 +1,10 @@
-package pl.warp.engine.graphics.metadata.loader;
+package pl.warp.engine.core.metadata.loader;
 
 import org.apache.commons.lang3.tuple.Pair;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.graphics.metadata.Metadata;
-import pl.warp.engine.graphics.metadata.PropertyMetadata;
+import pl.warp.engine.core.metadata.Metadata;
+import pl.warp.engine.core.metadata.PropertyMetadata;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

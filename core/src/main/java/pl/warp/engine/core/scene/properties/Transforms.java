@@ -26,19 +26,19 @@ public class Transforms {
         matrix.rotate(transform.getRotation());
     }
 
-    public static Quaternionf getActualRotation(Component component) {
+    public static Quaternionf getAbsoluteRotation(Component component) {
         Quaternionf rotation = new Quaternionf();
         if (component.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
             TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             rotation.set(property.getRotation());
         }
         if (component.hasParent()) {
-            Quaternionf parentRotation = getActualRotation(component.getParent());
+            Quaternionf parentRotation = getAbsoluteRotation(component.getParent());
             return parentRotation.mul(rotation);
         } else return rotation;
     }
 
-    public static Vector3f getActualPosition(Component component, Vector3f dest) {
+    public static Vector3f getAbsolutePosition(Component component, Vector3f dest) {
         dest.zero();
         for (Component comp = component; comp != null; comp = comp.getParent()) {
             if (comp.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {

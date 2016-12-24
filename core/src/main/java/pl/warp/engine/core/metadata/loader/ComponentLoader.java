@@ -1,8 +1,8 @@
-package pl.warp.engine.graphics.metadata.loader;
+package pl.warp.engine.core.metadata.loader;
 
 import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.metadata.ComponentMetadata;
+import pl.warp.engine.core.metadata.ComponentMetadata;
 
 /**
  * @author Jaca777

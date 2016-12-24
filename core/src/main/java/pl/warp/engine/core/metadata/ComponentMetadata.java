@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.metadata;
+package pl.warp.engine.core.metadata;
 
 import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
