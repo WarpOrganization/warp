@@ -47,7 +47,7 @@ public class AudioPosUpdateTask extends EngineTask {
     private float[] orientation = new float[6];
 
     private void updateDirections() {
-        Quaternionf fullRotation = Transforms.getActualRotation(context.getListener().getComponent());
+        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getListener().getComponent());
         fullRotation.transform(forwardVector.set(FORWARD_VECTOR));
         fullRotation.transform(upVector.set(UP_VECTOR));
         orientation[0] = forwardVector.x;
@@ -59,7 +59,7 @@ public class AudioPosUpdateTask extends EngineTask {
     }
 
     private void updateListener() {
-        Transforms.getActualPosition(context.getListener().getComponent(), listenerPosVector);
+        Transforms.getAbsolutePosition(context.getListener().getComponent(), listenerPosVector);
         listenerPosVector.add(context.getListener().getOffset());
         alListener3f(AL_POSITION, listenerPosVector.x, listenerPosVector.y, listenerPosVector.z);
         alListenerfv(AL_ORIENTATION, orientation);
@@ -70,7 +70,7 @@ public class AudioPosUpdateTask extends EngineTask {
             AudioSource source = context.getPlaying().get(i);
             if (alGetSourcei(source.getId(), AL_SOURCE_STATE) == AL_PLAYING) {
                 if (source.isPlaying()) {
-                    Transforms.getActualPosition(source.getOwner(), posVector);
+                    Transforms.getAbsolutePosition(source.getOwner(), posVector);
                     posVector.add(source.getOffset());
                     alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
                 }
