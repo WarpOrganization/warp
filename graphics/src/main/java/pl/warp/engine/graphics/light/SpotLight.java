@@ -76,7 +76,7 @@ public class SpotLight {
     private Vector3f tempDirection = new Vector3f();
 
     public Vector3f getDirection() {
-        Quaternionf fullRotation = Transforms.getActualRotation(owner);
+        Quaternionf fullRotation = Transforms.getAbsoluteRotation(owner);
         return fullRotation.transform(coneDirection, tempDirection);
     }
 

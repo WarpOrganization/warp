@@ -99,7 +99,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private Vector2f tempVec2 = new Vector2f();
 
     private void renderFlare(int index, Component component, LensFlare flare) {
-        Vector4f flarePosition = tempVec4.set(Transforms.getActualPosition(component, tempVec3), 1.0f);
+        Vector4f flarePosition = tempVec4.set(Transforms.getAbsolutePosition(component, tempVec3), 1.0f);
         Vector4f flareCameraPos = flarePosition.mul(camera.getCameraMatrix());
         Matrix4f projectionMatrix = camera.getProjectionMatrix().getMatrix();
         Vector4f flareProjectionPos = flareCameraPos.mul(projectionMatrix);

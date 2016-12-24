@@ -85,7 +85,7 @@ public class GunScript extends Script<Component> {
     private void shoot() {
         if (timer <= 0) {
             timer = cooldown;
-            Transforms.getActualRotation(getOwner()).transform(direction.set(FORWARD_VECTOR));
+            Transforms.getAbsoluteRotation(getOwner()).transform(direction.set(FORWARD_VECTOR));
             bulletTranslation.set(direction);
             bulletTranslation.mul(3.5f);
             bulletTranslation.add(transformProperty.getTranslation());
