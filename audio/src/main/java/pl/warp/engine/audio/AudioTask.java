@@ -1,10 +1,15 @@
 package pl.warp.engine.audio;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
 import pl.warp.engine.core.EngineTask;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+
+import static org.lwjgl.openal.AL10.*;
+import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.openal.SOFTHRTF.*;
 
 /**
  * @author Hubertus
@@ -47,9 +52,16 @@ public class AudioTask extends EngineTask {
     private void initOpenAL(){
         device = ALC10.alcOpenDevice((ByteBuffer) null);
         ALCCapabilities deviceCaps = ALC.createCapabilities(device);
-        long alcContext = ALC10.alcCreateContext(device, (IntBuffer) null);
-        ALC10.alcMakeContextCurrent(alcContext);
+        long alcContext = alcCreateContext(device, (IntBuffer) null);
+        alcMakeContextCurrent(alcContext);
         AL.createCapabilities(deviceCaps);
-        AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
+        IntBuffer attr = BufferUtils.createIntBuffer(10)
+                .put(ALC_HRTF_SOFT)
+                .put(ALC_TRUE)
+                .put(0);
+        attr.flip();
+        alcResetDeviceSOFT(device, attr);
+
+        alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
     }
 }
