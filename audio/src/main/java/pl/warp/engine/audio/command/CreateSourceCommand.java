@@ -3,6 +3,9 @@ package pl.warp.engine.audio.command;
 import pl.warp.engine.audio.AudioContext;
 import pl.warp.engine.audio.AudioSource;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import static org.lwjgl.openal.AL10.alGenSources;
 
 /**
@@ -12,7 +15,6 @@ import static org.lwjgl.openal.AL10.alGenSources;
 public class CreateSourceCommand implements Command {
 
     private AudioSource source;
-
 
     public CreateSourceCommand(AudioSource source) {
         this.source = source;

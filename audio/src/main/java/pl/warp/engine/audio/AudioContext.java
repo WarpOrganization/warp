@@ -16,6 +16,7 @@ public class AudioContext {
     private AudioListener audioListener;
     private List<AudioSource> sourceList;
     private List<AudioSource> playing;
+    private List<AudioSource> musicSources;
     private BlockingQueue<Command> commandsQueue;
     private SoundBank soundBank;
 
@@ -24,6 +25,7 @@ public class AudioContext {
         playing = new ArrayList<>();
         commandsQueue = new ArrayBlockingQueue<Command>(10000);
         soundBank = new SoundBank();
+        musicSources = new ArrayList<>();
     }
 
     void putCommand(Command cmd) {
@@ -56,5 +58,9 @@ public class AudioContext {
 
     public SoundBank getSoundBank() {
         return soundBank;
+    }
+
+    public List<AudioSource> getMusicSources() {
+        return musicSources;
     }
 }
