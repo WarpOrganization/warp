@@ -16,10 +16,17 @@ public class AudioSource {
     private boolean isRelative;
     private boolean isPersistent;
 
-    public AudioSource(Component owner, Vector3f offset, boolean isRelative, boolean isPersistent){
+    public AudioSource(Component owner, Vector3f offset, boolean isPersistent){
         this.owner = owner;
         this.offset = offset;
-        this.isRelative = isRelative;
+        this.isRelative = false;
+        this.isPersistent = isPersistent;
+    }
+
+    public AudioSource(Vector3f offset, boolean isPersistent){
+        this.owner = owner;
+        this.offset = offset;
+        this.isRelative = true;
         this.isPersistent = isPersistent;
     }
 

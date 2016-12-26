@@ -22,8 +22,14 @@ public class AudioManager {
         this.audioContext = audioContext;
     }
 
-    public AudioSource createPersistentSource(Component component, Vector3f offset, boolean isRelative) {
-        AudioSource source = new AudioSource(component, offset, isRelative, true);
+    public AudioSource createPersistentSource(Component owner, Vector3f offset) {
+        AudioSource source = new AudioSource(owner, offset, true);
+        audioContext.putCommand(new CreateSourceCommand(source));
+        return source;
+    }
+
+    public AudioSource createPersistentSource(Vector3f offset) {
+        AudioSource source = new AudioSource(offset, true);
         audioContext.putCommand(new CreateSourceCommand(source));
         return source;
     }
@@ -34,13 +40,23 @@ public class AudioManager {
 
     private Vector3f emptyVector = new Vector3f();
 
-    //TODO optional relativity
+    public void playSingleRelative(String soundName) {
+        playSingle(new AudioSource(emptyVector, false), soundName);
+    }
+
+    public void playSingleRelative(String soundName, Vector3f offset) {
+        playSingle(new AudioSource(offset, false), soundName);
+    }
+
     public void playSingle(Component owner, String soundName) {
-        playSingle(owner, soundName, emptyVector);
+        playSingle(new AudioSource(owner, emptyVector, false), soundName);
     }
 
     public void playSingle(Component owner, String soundName, Vector3f offset) {
-        AudioSource source = new AudioSource(owner, offset, true, false);
+        playSingle(new AudioSource(owner, offset, false), soundName);
+    }
+
+    private void playSingle(AudioSource source, String soundName) {
         audioContext.putCommand(new CreateSourceCommand(source));
         audioContext.putCommand(new PlayCommand(source, soundName));
     }

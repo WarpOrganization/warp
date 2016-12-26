@@ -7,16 +7,16 @@ import pl.warp.engine.core.scene.Component;
  * @author Hubertus
  *         Created 23.12.16
  */
-public class Listener {
+public class AudioListener {
     private Component component;
     private Vector3f offset;
 
-    public Listener(Component component, Vector3f offset) {
+    public AudioListener(Component component, Vector3f offset) {
         this.component = component;
         this.offset = offset;
     }
 
-    public Listener(Component component){
+    public AudioListener(Component component){
         this.component = component;
         offset = new Vector3f();
     }

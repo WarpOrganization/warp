@@ -13,7 +13,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class AudioContext {
 
-    private Listener listener;
+    private AudioListener audioListener;
     private List<AudioSource> sourceList;
     private List<AudioSource> playing;
     private BlockingQueue<Command> commandsQueue;
@@ -46,12 +46,12 @@ public class AudioContext {
         return commandsQueue;
     }
 
-    public Listener getListener() {
-        return listener;
+    public AudioListener getAudioListener() {
+        return audioListener;
     }
 
-    public void setListener(Listener listener) {
-        this.listener = listener;
+    public void setAudioListener(AudioListener audioListener) {
+        this.audioListener = audioListener;
     }
 
     public SoundBank getSoundBank() {

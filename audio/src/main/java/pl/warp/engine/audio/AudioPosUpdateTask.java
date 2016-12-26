@@ -47,7 +47,7 @@ public class AudioPosUpdateTask extends EngineTask {
     private float[] orientation = new float[6];
 
     private void updateDirections() {
-        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getListener().getComponent());
+        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getAudioListener().getComponent());
         fullRotation.transform(forwardVector.set(FORWARD_VECTOR));
         fullRotation.transform(upVector.set(UP_VECTOR));
         orientation[0] = forwardVector.x;
@@ -59,8 +59,8 @@ public class AudioPosUpdateTask extends EngineTask {
     }
 
     private void updateListener() {
-        Transforms.getAbsolutePosition(context.getListener().getComponent(), listenerPosVector);
-        listenerPosVector.add(context.getListener().getOffset());
+        Transforms.getAbsolutePosition(context.getAudioListener().getComponent(), listenerPosVector);
+        listenerPosVector.add(context.getAudioListener().getOffset());
         alListener3f(AL_POSITION, listenerPosVector.x, listenerPosVector.y, listenerPosVector.z);
         alListenerfv(AL_ORIENTATION, orientation);
     }
@@ -68,15 +68,14 @@ public class AudioPosUpdateTask extends EngineTask {
     private void updateSources() {
         for (int i = 0; i < context.getPlaying().size(); i++) {
             AudioSource source = context.getPlaying().get(i);
-            if (alGetSourcei(source.getId(), AL_SOURCE_STATE) == AL_PLAYING) {
-                if (source.isPlaying()) {
-                    Transforms.getAbsolutePosition(source.getOwner(), posVector);
-                    posVector.add(source.getOffset());
-                    alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
-                }
+            if (source.isPlaying()) {
+                if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
+                else posVector.set(0, 0, 0);
+                posVector.add(source.getOffset());
+                alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
             } else {
                 context.getPlaying().remove(i);
-                if(!source.isPersistent()){
+                if (!source.isPersistent()) {
                     source.dispose();
                 }
             }

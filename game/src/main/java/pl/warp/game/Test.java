@@ -98,7 +98,7 @@ public class Test {
         //CameraScript cameraScript = new CameraScript(camera);
         GLFWInput input = new GLFWInput();
         AudioContext audioContext = new AudioContext();
-        audioContext.setListener(new Listener(controllableGoat));
+        audioContext.setAudioListener(new AudioListener(controllableGoat));
         AudioManager audioManager = new AudioManager(audioContext);
 
         graphicsThread.scheduleOnce(() -> {
