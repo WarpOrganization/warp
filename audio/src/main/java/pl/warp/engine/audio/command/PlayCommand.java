@@ -15,7 +15,6 @@ public class PlayCommand implements Command {
     private final String soundName;
 
     public PlayCommand(AudioSource source, String soundName) {
-
         this.source = source;
         this.soundName = soundName;
     }

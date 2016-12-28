@@ -36,12 +36,14 @@ public class AudioTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+
         while (!context.getCommandsQueue().isEmpty()){
             try {
                 context.getCommandsQueue().take().execute(context);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
