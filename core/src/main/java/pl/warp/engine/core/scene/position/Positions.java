@@ -45,16 +45,17 @@ public class Positions {
         }
     }
 
-    private static Vector3f getPositionRelativeToParent(Component child, Component parent, int unit, Vector3f dest) {
+    public static Vector3f getPositionRelativeToParent(Component child, Component parent, int unit, Vector3f dest) {
         PositionProperty property = getPositionProperty(child);
         return property.getStrategy().getPosition(parent, unit, dest);
     }
 
-    private static Vector3f getPositionRelativeToNeighbour(Component a, Component aRel, Component b, Component bRel, int unit, Vector3f dest) {
+    public static Vector3f getPositionRelativeToNeighbour(Component a, Component aRel, Component b, Component bRel, int unit, Vector3f dest) {
         getPositionRelativeToParent(a, aRel, unit, dest);
         float x = dest.x;
         float y = dest.y;
         float z = dest.z;
+        dest.zero();
         getPositionRelativeToParent(b, bRel, unit, dest);
         dest.sub(x, y, z);
         return dest;
@@ -91,13 +92,13 @@ public class Positions {
                 currentACompWithPos = currentAComp;
             if (hasPosition(currentBComp))
                 currentBCompWithPos = currentBComp;
-            if (currentAComp.getParent() == currentAComp.getParent()) {
+            if (currentAComp.getParent() == currentBComp.getParent()) {
                 if (Objects.isNull(currentACompWithPos) || Objects.isNull(currentBCompWithPos))
                     throw new ScenePositionException("Components don't have a position property.");
                 else return Pair.of(currentACompWithPos, currentBCompWithPos);
             } else {
                 currentAComp = currentAComp.getParent();
-                currentAComp = currentAComp.getParent();
+                currentBComp = currentBComp.getParent();
             }
         }
         throw new ScenePositionException("Components don't belong to the same scene");

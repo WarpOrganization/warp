@@ -20,6 +20,7 @@ public class PositionProperty extends ObservableProperty<Component> {
         this.strategy = strategy;
         this.position = observablePosition;
         this.unit = unit;
+        strategy.initialize(this);
     }
 
     public PositionProperty(Component owner, Vector3f initialPosition, PositionCalculationStrategy strategy, int unit) {
