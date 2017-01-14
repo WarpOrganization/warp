@@ -2,6 +2,7 @@ package pl.warp.game;
 
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.audio.*;
@@ -34,9 +35,9 @@ import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.textured.RandomSpreadingTexturedParticleFactory;
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
-import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -131,8 +132,8 @@ public class Test {
             TransformProperty lightSourceTransform = new TransformProperty(light);
             lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.002f, 5000, true, true);
-            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 100, lightSpritesheetTexture));
+            ParticleFactory<DotParticle> factory = new RandomSpreadingDotParticleFactory(0.002f, 5000, false, false,  new Vector4f(1.0f), 1.0f);
+            new GraphicsParticleEmitterProperty(light, new DotParticleSystem(animator, factory, 100));
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
 
@@ -232,8 +233,8 @@ public class Test {
 
 
         });
+        EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
-            EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
             scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
             GLFWWindowManager windowManager = graphics.getWindowManager();
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
@@ -264,6 +265,7 @@ public class Test {
             @Override
             public void onUpdate(int delta) {
                 if (input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+                    scriptsThread.scheduleOnce(scriptsThread::interrupt);
                     graphicsThread.scheduleOnce(graphicsThread::interrupt);
                     physicsThread.scheduleOnce(physicsThread::interrupt);
                 }

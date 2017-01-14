@@ -2,15 +2,22 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1233.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="891.0" prefWidth="1294.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
         <menus>
@@ -34,27 +41,61 @@
       <AnchorPane layoutY="27.0" prefHeight="34.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
          <children>
             <Separator layoutY="32.0" prefHeight="0.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0" />
-            <Button layoutX="14.0" layoutY="5.0" mnemonicParsing="false" text="Button" />
+            <Button fx:id="runButton" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" onAction="#onRunGame" text="Run" />
          </children>
       </AnchorPane>
-      <SplitPane dividerPositions="0.12997562956945571, 0.8716490658001624" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
+      <SplitPane dividerPositions="0.1586687306501548, 0.8312693498452013" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="149.0" text="Component properties:" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="14.0" />
+                  <ListView fx:id="propertiesList" layoutX="14.0" layoutY="31.0" prefHeight="200.0" prefWidth="172.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="31.0" />
+                  <HBox layoutX="14.0" layoutY="231.0" />
+                  <Label layoutX="15.0" layoutY="285.0" text="Property data:" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="285.0" />
+                  <TableView fx:id="propertyData" layoutX="14.0" layoutY="302.0" prefHeight="447.0" prefWidth="172.0" AnchorPane.bottomAnchor="82.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="302.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="C1" />
+                      <TableColumn prefWidth="75.0" text="C2" />
+                    </columns>
+                  </TableView>
+                  <Button fx:id="addPropertyButton" layoutX="15.0" layoutY="239.0" mnemonicParsing="false" onAction="#onAddProperty" prefHeight="25.0" prefWidth="75.0" text="Add" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="239.0" />
+                  <Button fx:id="removePropertyButton" layoutX="111.0" layoutY="239.0" mnemonicParsing="false" onAction="#onRemoveProperty" prefHeight="25.0" prefWidth="75.0" text="Remove" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="239.0" />
+               </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <SplitPane dividerPositions="0.8427260812581914" orientation="VERTICAL" prefHeight="765.0" prefWidth="859.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Canvas height="640.0" layoutX="46.0" layoutY="48.0" width="907.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0" />
+                              <Canvas fx:id="sceneView" height="696.0" layoutX="147.0" layoutY="126.0" width="863.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <TextArea fx:id="logOutput" prefHeight="117.0" prefWidth="905.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children></AnchorPane>
                     </items>
                   </SplitPane>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="765.0" prefWidth="580.0" />
+            <AnchorPane prefHeight="765.0" prefWidth="580.0">
+               <children>
+                  <SplitPane dividerPositions="0.4416775884665793" layoutX="-35.0" layoutY="116.0" orientation="VERTICAL" prefHeight="765.0" prefWidth="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <TreeView fx:id="sceneTree" layoutX="14.0" layoutY="98.0" prefHeight="334.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ListView fx:id="componentList" layoutX="6.0" layoutY="29.0" prefHeight="394.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
+                              <TextField layoutX="2.0" layoutY="2.0" promptText="Search..." />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children></AnchorPane>
         </items>
       </SplitPane>
    </children>
