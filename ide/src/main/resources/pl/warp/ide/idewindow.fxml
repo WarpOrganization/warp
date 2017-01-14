@@ -9,8 +9,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
@@ -48,18 +46,9 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="149.0" text="Component properties:" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="14.0" />
-                  <ListView fx:id="propertiesList" layoutX="14.0" layoutY="31.0" prefHeight="200.0" prefWidth="172.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="31.0" />
                   <HBox layoutX="14.0" layoutY="231.0" />
-                  <Label layoutX="15.0" layoutY="285.0" text="Property data:" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="285.0" />
-                  <TableView fx:id="propertyData" layoutX="14.0" layoutY="302.0" prefHeight="447.0" prefWidth="172.0" AnchorPane.bottomAnchor="82.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="302.0">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                    </columns>
-                  </TableView>
-                  <Button fx:id="addPropertyButton" layoutX="15.0" layoutY="239.0" mnemonicParsing="false" onAction="#onAddProperty" prefHeight="25.0" prefWidth="75.0" text="Add" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="239.0" />
-                  <Button fx:id="removePropertyButton" layoutX="111.0" layoutY="239.0" mnemonicParsing="false" onAction="#onRemoveProperty" prefHeight="25.0" prefWidth="75.0" text="Remove" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="239.0" />
+                  <Label layoutX="14.0" layoutY="6.0" text="Project" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="6.0" />
+                  <TreeView fx:id="projectTree" layoutX="1.0" layoutY="29.0" prefHeight="802.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -89,8 +78,11 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <ListView fx:id="componentList" layoutX="6.0" layoutY="29.0" prefHeight="394.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
+                              <ListView fx:id="componentList" layoutX="6.0" layoutY="29.0" prefHeight="401.0" prefWidth="213.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
                               <TextField layoutX="2.0" layoutY="2.0" promptText="Search..." />
+                              <Button fx:id="editComponent" layoutX="2.0" layoutY="434.0" mnemonicParsing="false" onAction="#onEditComponent" text="Edit" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="434.0" />
+                              <Button fx:id="deleteComponent" layoutX="112.0" layoutY="434.0" mnemonicParsing="false" onAction="#onDeleteComponent" text="Delete" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="112.0" AnchorPane.topAnchor="434.0" />
+                              <Button fx:id="createComponent" layoutX="51.0" layoutY="434.0" mnemonicParsing="false" onAction="#onCreateComponent" text="Create" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="51.0" AnchorPane.topAnchor="434.0" />
                            </children>
                         </AnchorPane>
                     </items>

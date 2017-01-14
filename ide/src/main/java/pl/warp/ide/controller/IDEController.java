@@ -4,7 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TreeView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -15,20 +18,16 @@ import java.util.ResourceBundle;
  */
 public class IDEController implements Initializable{
 
+
+
     @FXML
     private Button runButton;
 
     @FXML
-    private ListView<?> propertiesList;
+    private TreeView<?> projectTree;
 
     @FXML
-    private TableView<?> propertyData;
-
-    @FXML
-    private Button addPropertyButton;
-
-    @FXML
-    private Button removePropertyButton;
+    private Canvas sceneView;
 
     @FXML
     private TextArea logOutput;
@@ -40,7 +39,13 @@ public class IDEController implements Initializable{
     private ListView<?> componentList;
 
     @FXML
-    private Canvas sceneView;
+    private Button editComponent;
+
+    @FXML
+    private Button deleteComponent;
+
+    @FXML
+    private Button createComponent;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,12 +53,17 @@ public class IDEController implements Initializable{
     }
 
     @FXML
-    void onAddProperty(ActionEvent event) {
+    void onCreateComponent(ActionEvent event) {
 
     }
 
     @FXML
-    void onRemoveProperty(ActionEvent event) {
+    void onDeleteComponent(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onEditComponent(ActionEvent event) {
 
     }
 
@@ -61,5 +71,6 @@ public class IDEController implements Initializable{
     void onRunGame(ActionEvent event) {
 
     }
+
 
 }
