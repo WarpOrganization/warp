@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
+import pl.warp.engine.core.scene.Component;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,8 +17,7 @@ import java.util.ResourceBundle;
  * @author Jaca777
  *         Created 2017-01-14 at 18
  */
-public class IDEController implements Initializable{
-
+public class IDEController implements Initializable {
 
 
     @FXML
@@ -33,7 +33,7 @@ public class IDEController implements Initializable{
     private TextArea logOutput;
 
     @FXML
-    private TreeView<?> sceneTree;
+    private TreeView<Component> sceneTree;
 
     @FXML
     private ListView<?> componentList;
@@ -47,23 +47,40 @@ public class IDEController implements Initializable{
     @FXML
     private Button createComponent;
 
+    private ComponentController componentController;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        componentController = new ComponentController(sceneTree);
     }
 
     @FXML
     void onCreateComponent(ActionEvent event) {
-
+        componentController.onAddComponent();
     }
 
     @FXML
-    void onDeleteComponent(ActionEvent event) {
-
+    void onRemoveComponent(ActionEvent event) {
+        componentController.onRemoveComponent();
     }
 
     @FXML
     void onEditComponent(ActionEvent event) {
+        componentController.onEditComponent();
+    }
+
+    @FXML
+    void onCreateRepoComponent(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onDeleteRepoComponent(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onEditRepoComponent(ActionEvent event) {
 
     }
 
