@@ -5,6 +5,10 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.ai.AITask;
+import pl.warp.engine.ai.behaviourTree.BehaviourTree;
+import pl.warp.engine.ai.behaviourTree.SequenceNode;
+import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
@@ -58,6 +62,7 @@ import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.game.ai.SpinLeaf;
 import pl.warp.game.program.gas.GasPlanetProgram;
 import pl.warp.game.program.ring.PlanetaryRingProgram;
 import pl.warp.game.program.ring.PlanetaryRingProperty;
@@ -73,7 +78,7 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 1560, HEIGHT = 860;
+    private static final int WIDTH = 1280, HEIGHT = 720;
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
@@ -255,7 +260,11 @@ public class Test {
 
         });
         audioThread.start();
-
+        EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        aiThread.scheduleOnce(()->{
+            aiThread.scheduleTask(new AITask(root));
+        });
+        aiThread.start();
         new Script(root) {
             @Override
             public void onInit() {
@@ -290,6 +299,10 @@ public class Test {
             float z = random.nextFloat() * 200 - 100f;
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
+            SequenceNode basenode = new SequenceNode();
+            basenode.addChildren(new SpinLeaf());
+            BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
+            new AIProperty(goat, behaviourTree);
         }
     }
 }
