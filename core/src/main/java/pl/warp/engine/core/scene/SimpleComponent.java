@@ -16,5 +16,4 @@ public class SimpleComponent extends Component {
         super(parent);
     }
 
-
 }

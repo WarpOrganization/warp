@@ -16,7 +16,7 @@ public class BigVectorN implements BigVector {
     private BigNumber x, y, z;
 
     public BigVectorN(int n, long[] ratios) {
-        this.levels = n;//tesdt
+        this.levels = n;
         this.ratios = ratios;
         initCoords();
     }

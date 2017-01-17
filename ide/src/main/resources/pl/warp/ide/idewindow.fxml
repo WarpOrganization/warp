@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="891.0" prefWidth="1294.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="891.0" prefWidth="1294.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
         <menus>
@@ -47,7 +47,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <HBox layoutX="14.0" layoutY="231.0" />
-                  <Label layoutX="14.0" layoutY="6.0" text="Project" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="6.0" />
+                  <Label layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="186.0" text="Project" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="6.0" />
                   <TreeView fx:id="projectTree" layoutX="1.0" layoutY="29.0" prefHeight="802.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -80,9 +80,9 @@
                            <children>
                               <ListView fx:id="componentList" layoutX="6.0" layoutY="29.0" prefHeight="401.0" prefWidth="213.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
                               <TextField layoutX="2.0" layoutY="2.0" promptText="Search..." />
-                              <Button fx:id="editComponent" layoutX="2.0" layoutY="434.0" mnemonicParsing="false" onAction="#onEditComponent" text="Edit" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="434.0" />
-                              <Button fx:id="deleteComponent" layoutX="112.0" layoutY="434.0" mnemonicParsing="false" onAction="#onDeleteComponent" text="Delete" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="112.0" AnchorPane.topAnchor="434.0" />
-                              <Button fx:id="createComponent" layoutX="51.0" layoutY="434.0" mnemonicParsing="false" onAction="#onCreateComponent" text="Create" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="51.0" AnchorPane.topAnchor="434.0" />
+                              <Button fx:id="editComponent" layoutX="2.0" layoutY="434.0" mnemonicParsing="false" onAction="#onEditComponent" prefHeight="25.0" prefWidth="51.0" text="Edit" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="2.0" />
+                              <Button fx:id="deleteComponent" layoutX="134.0" layoutY="434.0" mnemonicParsing="false" onAction="#onDeleteComponent" prefHeight="25.0" prefWidth="65.0" text="Delete" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="14.0" />
+                              <Button fx:id="createComponent" layoutX="56.0" layoutY="434.0" mnemonicParsing="false" onAction="#onCreateComponent" prefHeight="25.0" prefWidth="76.0" text="Create" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="81.0" />
                            </children>
                         </AnchorPane>
                     </items>

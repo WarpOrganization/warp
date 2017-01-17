@@ -4,6 +4,7 @@ import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.SimpleComponent;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * @author Jaca777
  *         Created 2016-12-10 at 12
  */
-public class ComponentMetadata extends Component {
+public class ComponentMetadata extends Component implements Serializable {
 
     private Set<PropertyMetadata> propertyMetadata = new HashSet<>();
 
