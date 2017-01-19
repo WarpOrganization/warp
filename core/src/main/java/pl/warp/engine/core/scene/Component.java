@@ -1,7 +1,6 @@
 package pl.warp.engine.core.scene;
 
 
-
 import pl.warp.engine.core.EngineContext;
 
 import java.util.*;
@@ -71,6 +70,12 @@ public abstract class Component {
 
     public boolean hasEnabledProperty(String name) {
         return hasProperty(name) && getProperty(name).isEnabled();
+    }
+
+    public Set<Property> getProperties() {
+        return properties.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toSet());
     }
 
     /**

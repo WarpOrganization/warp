@@ -12,17 +12,9 @@ import java.util.Set;
  * @author Jaca777
  *         Created 2016-12-10 at 12
  */
-public class ComponentMetadata extends Component implements Serializable {
+public class ComponentMetadata implements Serializable {
 
     private Set<PropertyMetadata> propertyMetadata = new HashSet<>();
-
-    public ComponentMetadata(Component parent) {
-        super(parent);
-    }
-
-    public ComponentMetadata(EngineContext context) {
-        super(context);
-    }
 
     public void addProperty(PropertyMetadata propertyMetadata) {
         this.propertyMetadata.add(propertyMetadata);
