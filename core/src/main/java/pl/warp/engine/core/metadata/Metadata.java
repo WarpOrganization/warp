@@ -4,8 +4,25 @@ package pl.warp.engine.core.metadata;
  * @author Jaca777
  *         Created 2016-12-10 at 12
  */
-public interface Metadata <T> {
-    Class<T> getType();
-    T getValue();
-    void setValue(T t);
+public class Metadata <T> {
+    private Class<T> type;
+    private T value;
+
+    public Metadata(Class<T> type, T value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    public Class<T> getType() {
+        return type;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
 }
+
