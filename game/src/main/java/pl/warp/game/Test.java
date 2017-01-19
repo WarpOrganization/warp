@@ -2,7 +2,6 @@ package pl.warp.game;
 
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.ai.AITask;
@@ -39,9 +38,11 @@ import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingDotParticleFactory;
+import pl.warp.engine.graphics.particles.textured.RandomSpreadingTexturedParticleFactory;
+import pl.warp.engine.graphics.particles.textured.TexturedParticle;
+import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
+import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
+import pl.warp.engine.graphics.pipeline.output.OutputTexture2DRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -62,10 +63,10 @@ import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.ai.SpinLeaf;
 import pl.warp.game.program.gas.GasPlanetProgram;
 import pl.warp.game.program.ring.PlanetaryRingProgram;
 import pl.warp.game.program.ring.PlanetaryRingProperty;
+import pl.warp.ide.controller.IDEController;
 
 import java.util.Random;
 
@@ -73,12 +74,13 @@ import java.util.Random;
  * @author Jaca777
  *         Created 2016-06-27 at 14
  *         CANCER CODE, ONLY FOR TESTING
+ *         TODO KILL IT WITH FIRE
  */
 public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 1280, HEIGHT = 720;
+    private static final int WIDTH = 1720, HEIGHT = 920;
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
@@ -98,7 +100,11 @@ public class Test {
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, WIDTH, HEIGHT));
         camera.move(new Vector3f(0, 4f, 15f));
         RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
-        Graphics graphics = new Graphics(context, camera, settings);
+
+        OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
+        IDEController.INPUT = outputRenderer.getOutput();
+        OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
+        Graphics graphics = new Graphics(context, onScreenRenderer, camera, settings);
         EngineThread graphicsThread = graphics.getThread();
         graphics.enableUpsLogging();
         //CameraScript cameraScript = new CameraScript(camera);
@@ -132,13 +138,13 @@ public class Test {
             Texture2DArray lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
             Component light = new SimpleComponent(root);
             LightProperty property = new LightProperty(light);
-            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
+            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f).mul(4), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
             TransformProperty lightSourceTransform = new TransformProperty(light);
-            lightSourceTransform.move(new Vector3f(30f, 0f, 0f));
+            lightSourceTransform.move(new Vector3f(1500f, 40000f, 0f));
             ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-            ParticleFactory<DotParticle> factory = new RandomSpreadingDotParticleFactory(0.002f, 5000, false, false,  new Vector4f(1.0f), 1.0f);
-            new GraphicsParticleEmitterProperty(light, new DotParticleSystem(animator, factory, 100));
+            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.008f, 1000, true, true);
+            new GraphicsParticleEmitterProperty(light, new TexturedParticleSystem(animator, factory, 1000, lightSpritesheetTexture));
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(light, flare);
 
@@ -175,7 +181,6 @@ public class Test {
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
 
-            generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
             /*Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
             ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
@@ -191,7 +196,8 @@ public class Test {
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
-            new GraphicsMeshProperty(controllableGoat, goatMesh);
+            GraphicsMeshProperty graphicsMeshProperty = new GraphicsMeshProperty(controllableGoat, goatMesh);
+            graphicsMeshProperty.disable(); // makes goat invisible
 
             new PhysicalBodyProperty(controllableGoat, 10f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
             Material material = new Material(goatTexture);
@@ -206,7 +212,7 @@ public class Test {
 
             new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, bulletTexture, controllableGoat, audioManager);
 
-            SpotLight goatLight = new SpotLight(
+            /*SpotLight goatLight = new SpotLight(
                     controllableGoat,
                     new Vector3f(0, 0, 1),
                     new Vector3f(0, 0, 1), 0.15f, 0.2f,
@@ -214,13 +220,13 @@ public class Test {
                     new Vector3f(0f, 0f, 0f),
                     0.1f, 0.1f);
             LightProperty directionalLightProperty = new LightProperty(controllableGoat);
-            directionalLightProperty.addSpotLight(goatLight);
+            directionalLightProperty.addSpotLight(goatLight);*/
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             new GraphicsSkyboxProperty(scene, cubemap);
 
-            Component frigate = new SimpleComponent(root);
+
             Mesh friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
@@ -229,13 +235,14 @@ public class Test {
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
+/*            Component frigate = new SimpleComponent(root);
             new GraphicsMeshProperty(frigate, friageMesh);
             new GraphicsMaterialProperty(frigate, frigateMaterial);
             TransformProperty transformProperty = new TransformProperty(frigate);
             transformProperty.move(new Vector3f(100, 0, 0));
             transformProperty.rotateY((float) -(Math.PI / 2));
-            transformProperty.scale(new Vector3f(3));
-
+            transformProperty.scale(new Vector3f(3));*/
+            generateGOATS(root, friageMesh, frigateTexture, frigateBrightnessTexture);
 
         });
         EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
@@ -286,7 +293,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1500; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
@@ -294,13 +301,14 @@ public class Test {
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
             new PhysicalBodyProperty(goat, 1000f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
-            float x = random.nextFloat() * 200 - 100f;
-            float y = random.nextFloat() * 200 - 100f;
-            float z = random.nextFloat() * 200 - 100f;
+            float x = 2000 + random.nextFloat() * 4000 - 2000f;
+            float y = random.nextFloat() * 3000 - 1000f;
+            float z = random.nextFloat() * 4000 - 2000f;
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
+            transformProperty.scale(new Vector3f(2f));
             SequenceNode basenode = new SequenceNode();
-            basenode.addChildren(new SpinLeaf());
+          //  basenode.addChildren(new SpinLeaf());
             BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
             new AIProperty(goat, behaviourTree);
         }

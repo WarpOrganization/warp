@@ -28,6 +28,8 @@ project.ext.lwjglVersion = "3.1.0"
 
 dependencies {
     compile project(':core')
+
+
     compile 'org.slf4j:slf4j-api:1.7.12'
     // LWJGL dependencies START
     compile "org.lwjgl:lwjgl:${lwjglVersion}"

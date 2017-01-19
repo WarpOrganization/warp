@@ -2,18 +2,19 @@ package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.mesh.MeshRenderer;
 import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
-import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
+import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
-import pl.warp.engine.graphics.mesh.MeshRenderer;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
 import pl.warp.engine.graphics.postprocessing.HDRRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensEnviromentFlareRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 import pl.warp.engine.graphics.skybox.SkyboxRenderer;
+import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 
@@ -28,14 +29,16 @@ public class Graphics {
     private EngineContext context;
     private Camera mainViewCamera;
     private RenderingConfig config;
+    private Sink<Texture2D> output;
 
     private SyncEngineThread thread;
     private Display display;
     private GLFWWindowManager windowManager;
     private Environment environment;
 
-    public Graphics(EngineContext context, Camera mainViewCamera, RenderingConfig config) {
+    public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
         this.context = context;
+        this.output = output;
         this.mainViewCamera = mainViewCamera;
         this.config = config;
         createThread();
@@ -83,8 +86,7 @@ public class Graphics {
         BloomRenderer bloomRenderer = new BloomRenderer(config);
         LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment, config);
         HDRRenderer hdrRenderer = new HDRRenderer(config);
-        OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
-        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(bloomRenderer).via(hdrRenderer).via(flareRenderer).to(onScreenRenderer);
+        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(bloomRenderer).via(hdrRenderer).via(flareRenderer).to(output);
     }
 
 

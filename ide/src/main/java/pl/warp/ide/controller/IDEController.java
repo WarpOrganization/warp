@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
+import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutput;
+import pl.warp.ide.graphics.SceneViewRenderer;
 import pl.warp.engine.core.scene.Component;
 
 import java.net.URL;
@@ -47,15 +49,21 @@ public class IDEController implements Initializable {
     @FXML
     private Button createComponent;
 
+    private SceneViewRenderer sceneViewRenderer;
+
+    public static RenderingPipelineOutput INPUT; //TODO REMOVE - really bad and temporary solution
+
     private ComponentController componentController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.sceneViewRenderer = new SceneViewRenderer(sceneView, INPUT);
+        this.sceneViewRenderer.startRendering();
         componentController = new ComponentController(sceneTree);
     }
 
     @FXML
-    void onCreateComponent(ActionEvent event) {
+    void onAddComponent(ActionEvent event) {
         componentController.onAddComponent();
     }
 

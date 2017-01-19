@@ -11,6 +11,9 @@ import pl.warp.ide.controller.IDEController;
  *         Created 2016-12-04 at 11
  */
 public class Launcher extends Application {
+
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         IDEController controller = new IDEController();

@@ -31,11 +31,11 @@ public class ComponentLoader {
     }
 
     private void loadChildren(ComponentMetadata metadata, Component component) {
-        metadata.forEachChildren(md -> {
+/*        metadata.get(md -> {
             if (md instanceof ComponentMetadata) {
                 Component child = loadComponentMetadata((ComponentMetadata) md);
                 component.addChild(child);
             }
-        });
+        });*/ //TODO
     }
 }

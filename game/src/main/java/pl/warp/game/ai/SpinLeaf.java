@@ -24,6 +24,12 @@ public class SpinLeaf extends LeafNode {
     }
 
     @Override
+    public void addChild(Node node) {
+        //TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int tick(Ticker ticker) {
         Component owner = (Component) ticker.getData("owner");
         PhysicalBodyProperty property = owner.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);

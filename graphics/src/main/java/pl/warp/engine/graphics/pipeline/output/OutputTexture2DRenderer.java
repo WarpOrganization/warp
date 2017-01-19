@@ -1,9 +1,8 @@
-package pl.warp.engine.graphics.pipeline;
+package pl.warp.engine.graphics.pipeline.output;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.graphics.mesh.Quad;
-import pl.warp.engine.graphics.shader.program.identity.IdentityProgram;
+import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Textures;
 
@@ -16,19 +15,21 @@ import java.nio.ByteBuffer;
 public class OutputTexture2DRenderer implements Sink<Texture2D> {
 
     private Texture2D srcTexture;
-    private IdentityProgram identityProgram;
-    private Quad rect;
     private ByteBuffer outputTexture;
+    private final RenderingPipelineOutput output;
+
+
+    public OutputTexture2DRenderer() {
+        this.output = new RenderingPipelineOutput();
+    }
 
     @Override
     public void init() {
-        this.identityProgram = new IdentityProgram();
-        this.rect = new Quad();
+
     }
 
     @Override
     public void destroy() {
-        rect.destroy();
     }
 
     @Override
@@ -39,8 +40,13 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
 
     @Override
     public void update(int delta) {
-        outputTexture.clear();
-        GL11.glGetTexImage(srcTexture.getTexture(), 0, srcTexture.getFormat(), srcTexture.getType(), outputTexture);
+        synchronized (output) {
+            outputTexture.clear();
+            srcTexture.bind();
+            GL11.glGetTexImage(srcTexture.getType(), 0, srcTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, outputTexture);
+            outputTexture.rewind();
+        }
+        this.output.update(outputTexture);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
         this.outputTexture = BufferUtils.createByteBuffer(textureSize);
     }
 
-    public ByteBuffer getOutputTexture() {
-        return outputTexture;
+    public RenderingPipelineOutput getOutput() {
+        return output;
     }
 }

@@ -36,4 +36,9 @@ public class MoveLeaf extends LeafNode{
     public void onEnter(Ticker ticker) {
 
     }
+
+    @Override
+    public void addChild(Node node) {
+
+    }
 }
