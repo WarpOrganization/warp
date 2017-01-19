@@ -8,7 +8,9 @@ import java.util.ArrayList;
  */
 public abstract class CompositeNode extends Node{
     protected ArrayList<Node> children = new ArrayList<>();
-    public synchronized void addChildren(Node node){
+
+    @Override
+    public synchronized void addChild(Node node){
         children.add(node);
     }
 }

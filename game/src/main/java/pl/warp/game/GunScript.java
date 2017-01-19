@@ -39,7 +39,7 @@ public class GunScript extends Script<Component> {
     private Component playerShip;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private static final float BULLET_SPEED = 1f;
+    private static final float BULLET_SPEED = 10f;
     private static final float BULLET_MASS = 0.01f;
 
     private Mesh bulletMesh;

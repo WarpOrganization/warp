@@ -30,4 +30,6 @@ public abstract class Node {
     public abstract void onOpen(Ticker ticker);
 
     public abstract void onEnter(Ticker ticker);
+
+    public abstract void addChild(Node node);
 }

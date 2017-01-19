@@ -7,6 +7,11 @@ package pl.warp.engine.ai.behaviourTree;
 public abstract class DecoratorNode extends Node {
     protected Node child;
 
+    @Override
+    public void addChild(Node child){
+        this.child = child;
+    }
+
     public Node getChild() {
         return child;
     }

@@ -27,7 +27,7 @@ public class SpinLeaf extends LeafNode {
     public int tick(Ticker ticker) {
         Component owner = (Component) ticker.getData("owner");
         PhysicalBodyProperty property = owner.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-        property.addAngularVelocity(new Vector3f((float) Math.random(), (float) Math.random(), (float) Math.random()));
+        property.addAngularVelocity(new Vector3f((float) Math.random()/1000, (float) Math.random()/1000, (float) Math.random()/1000));
         return Node.SUCCESS;
     }
 }
