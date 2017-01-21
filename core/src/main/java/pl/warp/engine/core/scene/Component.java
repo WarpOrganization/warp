@@ -68,6 +68,10 @@ public abstract class Component {
         return properties.containsKey(name);
     }
 
+    public <T extends Property> Optional<T> getPropertyIfExists(String name){
+        return hasProperty(name) ? Optional.of(getProperty(name)) : Optional.empty();
+    }
+
     public boolean hasEnabledProperty(String name) {
         return hasProperty(name) && getProperty(name).isEnabled();
     }
