@@ -10,6 +10,7 @@ import pl.warp.ide.controller.IDEController;
 import pl.warp.ide.scene.ComponentDescriptor;
 import pl.warp.ide.scene.SceneLoader;
 import pl.warp.ide.scene.descriptor.CustomDescriptorRepository;
+import pl.warp.ide.scene.descriptor.DefaultNameSupplier;
 
 /**
  * @author Jaca777
@@ -32,10 +33,20 @@ public class Launcher extends Application {
     }
 
     private CustomDescriptorRepository loadCustomDescriptorRepository() {
-        ComponentDescriptor scene = new ComponentDescriptor("Scene", () -> new ImageView(new Image(Launcher.class.getResourceAsStream("icons\\Scene.png"))));
-        ComponentDescriptor drawable = new ComponentDescriptor("Drawable Component", () -> new ImageView(new Image(Launcher.class.getResourceAsStream("icons\\Drawable.png"))));
-        ComponentDescriptor component = new ComponentDescriptor("Component", () -> new ImageView(new Image(Launcher.class.getResourceAsStream("icons\\Component.png"))));
-        return new CustomDescriptorRepository(scene, drawable, component);
+        ComponentDescriptor sceneDesc = new ComponentDescriptor(
+                new DefaultNameSupplier("Scene"),
+                () -> getImage("icons\\Scene.png"));
+        ComponentDescriptor drawableDesc = new ComponentDescriptor(
+                new DefaultNameSupplier("Drawable Component"),
+                () -> getImage("icons\\Drawable.png"));
+        ComponentDescriptor componentDesc = new ComponentDescriptor(
+                new DefaultNameSupplier("Component"),
+                () -> getImage("icons\\Component.png"));
+        return new CustomDescriptorRepository(sceneDesc, drawableDesc, componentDesc);
+    }
+
+    private ImageView getImage(String name) {
+        return new ImageView(new Image(Launcher.class.getResourceAsStream(name)));
     }
 
     public static void main(String... args) throws Exception {

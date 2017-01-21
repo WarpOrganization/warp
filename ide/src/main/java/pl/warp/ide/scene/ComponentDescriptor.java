@@ -1,26 +1,28 @@
 package pl.warp.ide.scene;
 
 import javafx.scene.Node;
+import pl.warp.engine.core.scene.Component;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
  * Created by user on 2017-01-17.
  */
 public class ComponentDescriptor {
-    private String name;
-    private Supplier<Node> image;
+    private Function<Component, String> nameSupplier;
+    private Supplier<Node> imageSupplier;
 
-    public ComponentDescriptor(String name, Supplier<Node> image) {
-        this.name = name;
-        this.image = image;
+    public ComponentDescriptor(Function<Component, String> nameSupplier, Supplier<Node> imageSupplier) {
+        this.nameSupplier = nameSupplier;
+        this.imageSupplier = imageSupplier;
     }
 
-    public String getName() {
-        return name;
+    public String createName(Component component) {
+        return nameSupplier.apply(component);
     }
 
     public Node createImage() {
-        return image.get();
+        return imageSupplier.get();
     }
 }

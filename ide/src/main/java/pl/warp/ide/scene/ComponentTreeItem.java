@@ -10,7 +10,7 @@ public class ComponentTreeItem<T extends Component> extends TreeItem<ComponentIt
     private ComponentDescriptor desc;
 
     public ComponentTreeItem(T component, ComponentDescriptor desc) {
-        super(new ComponentItem<>(component, desc.getName()), desc.createImage());
+        super(new ComponentItem<>(component, desc.createName(component)), desc.createImage());
         this.desc = desc;
     }
 

@@ -11,10 +11,7 @@ import pl.warp.engine.ai.behaviourTree.SequenceNode;
 import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.core.scene.SimpleComponent;
+import pl.warp.engine.core.scene.*;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptContext;
@@ -95,13 +92,16 @@ public class Test {
 
         EngineContext context = new EngineContext();
         Scene scene = new Scene(context);
+        new NameProperty(scene, "Test universe");
         IDEController.SCENE = scene;
         context.setScene(scene);
         context.setScriptContext(new ScriptContext());
         Component root = new SimpleListenableParent(scene);
-
+        new NameProperty(root, "Root");
         Component controllableGoat = new SimpleComponent(root);
+        new NameProperty(controllableGoat, "Player ship");
         Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, WIDTH, HEIGHT));
+        new NameProperty(camera, "Camera");
         camera.move(new Vector3f(0, 4f, 15f));
         RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
 
@@ -140,6 +140,7 @@ public class Test {
 
 
             Component gasSphere = new SimpleComponent(root);
+            new NameProperty(gasSphere, "Jupiter");
             Sphere sphere = new Sphere(50, 50);
             new GraphicsMeshProperty(gasSphere, sphere);
             ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
@@ -161,6 +162,7 @@ public class Test {
             float startR = 1.5f;
             float endR = 2.5f;
             Component ring = new SimpleComponent(gasSphere);
+            new NameProperty(ring, "Jupiter ring");
             Ring ringMesh = new Ring(20, startR, endR);
             new GraphicsMeshProperty(ring, ringMesh);
             new GraphicsCustomRendererProgramProperty(ring, new PlanetaryRingProgram());
@@ -188,6 +190,7 @@ public class Test {
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
             Component light = new SimpleComponent(root);
+            new NameProperty(light, "Particles");
             LightProperty property = new LightProperty(light);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
             property.addSpotLight(spotLight);
@@ -231,6 +234,7 @@ public class Test {
             new GraphicsSkyboxProperty(scene, cubemap);
 
             Component frigate = new SimpleComponent(root);
+            new NameProperty(frigate, "Frigate");
             Mesh friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
@@ -306,6 +310,7 @@ public class Test {
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
         for (int i = 0; i < 10; i++) {
             Component goat = new SimpleComponent(parent);
+            new NameProperty(goat, "Ship " + i);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(20f);
