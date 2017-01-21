@@ -95,8 +95,8 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
         program.use();
         program.useMatrixStack(stack);
-        GL30.glBindVertexArray(vao);
         updateVBOS(particles);
+        GL30.glBindVertexArray(vao);
         GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
         GL30.glBindVertexArray(0);
     }

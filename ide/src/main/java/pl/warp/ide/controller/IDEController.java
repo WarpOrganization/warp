@@ -8,9 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
-import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutput;
+import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler;
 import pl.warp.ide.graphics.SceneViewRenderer;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.ide.scene.ComponentItem;
+import pl.warp.ide.scene.SceneLoader;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +24,11 @@ import java.util.ResourceBundle;
  */
 public class IDEController implements Initializable {
 
+    private SceneLoader sceneLoader;
+
+    public IDEController(SceneLoader sceneLoader) {
+        this.sceneLoader = sceneLoader;
+    }
 
     @FXML
     private Button runButton;
@@ -35,7 +43,7 @@ public class IDEController implements Initializable {
     private TextArea logOutput;
 
     @FXML
-    private TreeView<Component> sceneTree;
+    private TreeView<ComponentItem<Component>> sceneTree;
 
     @FXML
     private ListView<?> componentList;
@@ -51,7 +59,8 @@ public class IDEController implements Initializable {
 
     private SceneViewRenderer sceneViewRenderer;
 
-    public static RenderingPipelineOutput INPUT; //TODO REMOVE - really bad and temporary solution
+    public static RenderingPipelineOutputHandler INPUT; //TODO REMOVE - really bad and temporary solution
+    public static Scene SCENE; //TODO REMOVE - really bad and temporary solution
 
     private ComponentController componentController;
 
@@ -59,7 +68,7 @@ public class IDEController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.sceneViewRenderer = new SceneViewRenderer(sceneView, INPUT);
         this.sceneViewRenderer.startRendering();
-        componentController = new ComponentController(sceneTree);
+        componentController = new ComponentController(sceneTree, SCENE, sceneLoader);
     }
 
     @FXML

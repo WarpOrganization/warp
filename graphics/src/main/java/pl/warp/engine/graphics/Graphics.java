@@ -113,4 +113,8 @@ public class Graphics {
     public void enableUpsLogging() {
         thread.scheduleTask(new UPSCounterTask(UPS_SAMPLE_SIZE, true));
     }
+
+    public void closeWindow() {
+        windowManager.closeWindow();
+    }
 }

@@ -1,5 +1,6 @@
 package pl.warp.engine.core.scene.listenable;
 
+import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
 
 /**
@@ -7,6 +8,10 @@ import pl.warp.engine.core.scene.Component;
  *         Created 2016-07-07 at 01
  */
 public abstract class ListenableParent extends Component {
+    public ListenableParent(EngineContext context) {
+        super(context);
+    }
+
     public ListenableParent(Component parent) {
         super(parent);
     }

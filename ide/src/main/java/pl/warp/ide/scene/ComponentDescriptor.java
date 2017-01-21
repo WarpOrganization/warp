@@ -2,14 +2,16 @@ package pl.warp.ide.scene;
 
 import javafx.scene.Node;
 
+import java.util.function.Supplier;
+
 /**
  * Created by user on 2017-01-17.
  */
 public class ComponentDescriptor {
     private String name;
-    private Node image;
+    private Supplier<Node> image;
 
-    public ComponentDescriptor(String name, Node image) {
+    public ComponentDescriptor(String name, Supplier<Node> image) {
         this.name = name;
         this.image = image;
     }
@@ -18,7 +20,7 @@ public class ComponentDescriptor {
         return name;
     }
 
-    public Node getImage() {
-        return image;
+    public Node createImage() {
+        return image.get();
     }
 }

@@ -3,10 +3,10 @@ package pl.warp.ide.graphics;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelFormat;
-import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutput;
-
-import java.nio.ByteBuffer;
+import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler;
+import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler.RenderingPipelineOutput;
 
 /**
  * @author Jaca777
@@ -14,9 +14,9 @@ import java.nio.ByteBuffer;
  */
 public class SceneViewRenderer {
     private Canvas canvas;
-    private final RenderingPipelineOutput pipelineOutput;
+    private final RenderingPipelineOutputHandler pipelineOutput;
 
-    public SceneViewRenderer(Canvas canvas, RenderingPipelineOutput pipelineOutput) {
+    public SceneViewRenderer(Canvas canvas, RenderingPipelineOutputHandler pipelineOutput) {
         this.canvas = canvas;
         this.pipelineOutput = pipelineOutput;
     }
@@ -25,20 +25,17 @@ public class SceneViewRenderer {
         pipelineOutput.addOutputListener(this::drawScene);
     }
 
-    public void drawScene(ByteBuffer scene) {
+    public void drawScene(RenderingPipelineOutput scene) {
         Platform.runLater(() -> drawOnCanvas(canvas, scene));
     }
 
-    private byte[] dataArray;
 
-    private void drawOnCanvas(Canvas canvas, ByteBuffer data) {
+    private void drawOnCanvas(Canvas canvas, RenderingPipelineOutput output) {
         synchronized (pipelineOutput) {
-            canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            if (dataArray == null || dataArray.length != data.limit() )
-                dataArray = new byte[data.limit()];
-            data.get(dataArray);
-            canvas.getGraphicsContext2D().getPixelWriter().setPixels(0, 0,
-                    (int) canvas.getWidth(), (int) canvas.getHeight(), PixelFormat.getByteRgbInstance(), dataArray, 0, 0);
+            GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+            graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            graphicsContext2D.getPixelWriter().setPixels(0, 0,
+                    (int) canvas.getWidth(), (int) canvas.getHeight(), PixelFormat.getByteRgbInstance(), output.getData(), output.getWidth() * 3);
         }
     }
 }

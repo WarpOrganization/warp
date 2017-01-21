@@ -8,6 +8,10 @@ import pl.warp.engine.core.scene.Component;
  *         Created 2016-07-08 at 01
  */
 public class SimpleListenableParent extends ListenableParent{
+    public SimpleListenableParent(EngineContext context) {
+        super(context);
+    }
+
     public SimpleListenableParent(Component parent) {
         super(parent);
     }

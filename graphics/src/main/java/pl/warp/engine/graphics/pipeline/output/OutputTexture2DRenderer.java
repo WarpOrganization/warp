@@ -15,12 +15,12 @@ import java.nio.ByteBuffer;
 public class OutputTexture2DRenderer implements Sink<Texture2D> {
 
     private Texture2D srcTexture;
-    private ByteBuffer outputTexture;
-    private final RenderingPipelineOutput output;
-
+    private ByteBuffer outputData;
+    private final RenderingPipelineOutputHandler output;
+    private int width, height;
 
     public OutputTexture2DRenderer() {
-        this.output = new RenderingPipelineOutput();
+        this.output = new RenderingPipelineOutputHandler();
     }
 
     @Override
@@ -35,32 +35,36 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
     @Override
     public void setInput(Texture2D input) {
         this.srcTexture = input;
-        initializeBuffer(input.getHeight(), input.getWidth(), input.getInternalformat());
+        this.width = input.getWidth();
+        this.height = input.getHeight();
+        initializeBuffer(width, height, input.getInternalformat());
     }
 
     @Override
     public void update(int delta) {
         synchronized (output) {
-            outputTexture.clear();
+            outputData.clear();
             srcTexture.bind();
-            GL11.glGetTexImage(srcTexture.getType(), 0, srcTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, outputTexture);
-            outputTexture.rewind();
+            GL11.glGetTexImage(srcTexture.getType(), 0, srcTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, outputData);
+            outputData.rewind();
         }
-        this.output.update(outputTexture);
+        this.output.update(outputData, width, height);
     }
 
     @Override
     public void onResize(int newWidth, int newHeight) {
+        this.width = newWidth;
+        this.height = newHeight;
         initializeBuffer(newWidth, newHeight, srcTexture.getInternalformat());
     }
 
     private void initializeBuffer(int width, int height, int textureInternalformat) {
         int texelSize = Textures.getTexelSizeInBytes(textureInternalformat);
         int textureSize = width * height * texelSize;
-        this.outputTexture = BufferUtils.createByteBuffer(textureSize);
+        this.outputData = BufferUtils.createByteBuffer(textureSize);
     }
 
-    public RenderingPipelineOutput getOutput() {
+    public RenderingPipelineOutputHandler getOutput() {
         return output;
     }
 }
