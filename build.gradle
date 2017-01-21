@@ -22,5 +22,7 @@ jar {
     subprojects.each { subproject ->
         from subproject.sourceSets.main.output.classesDir
         from subproject.sourceSets.main.output.resourcesDir
+        from { subproject.configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     }
+
 }
