@@ -39,7 +39,8 @@
       <AnchorPane layoutY="27.0" prefHeight="34.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
          <children>
             <Separator layoutY="32.0" prefHeight="0.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0" />
-            <Button fx:id="runButton" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" onAction="#onRunGame" text="Run" />
+            <Button fx:id="runButton" layoutX="14.0" layoutY="4.0" mnemonicParsing="false" onAction="#onRunGame" text="Run" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="4.0" />
+            <Button layoutX="1237.0" layoutY="4.0" mnemonicParsing="false" onAction="#onReloadScene" text="Reload scene" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
          </children>
       </AnchorPane>
       <SplitPane dividerPositions="0.1586687306501548, 0.8312693498452013" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">

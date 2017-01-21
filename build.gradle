@@ -12,3 +12,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+def mainProjects = [':ai',':audio',':core',':game',':graphics',":ide",":physics",":resourcemanagement"]
+task oneJar( type: Jar , dependsOn: mainProjects.collect{ it+":compileJava"}) {
+    baseName = 'name of jar'
+    from files(mainProjects.collect{ project(it).sourceSets.main.output })
+}

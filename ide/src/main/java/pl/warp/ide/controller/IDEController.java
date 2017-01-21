@@ -87,6 +87,11 @@ public class IDEController implements Initializable {
     }
 
     @FXML
+    public void onReloadScene(ActionEvent event) {
+        componentController.onReloadScene();
+    }
+
+    @FXML
     void onCreateRepoComponent(ActionEvent event) {
 
     }

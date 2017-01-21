@@ -6,6 +6,8 @@ import pl.warp.engine.core.scene.Scene;
 import pl.warp.ide.scene.ComponentItem;
 import pl.warp.ide.scene.SceneLoader;
 
+import java.util.Objects;
+
 /**
  * Created by user on 2017-01-17.
  */
@@ -27,8 +29,7 @@ public class ComponentController {
     private void initialize() {
         loader.loadScene(scene, sceneTree);
         sceneTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-                selectedComponentItem = newValue.getValue()
-        );
+                selectedComponentItem = Objects.isNull(newValue) ? null : newValue.getValue());
     }
 
     public void onAddComponent() {
@@ -41,5 +42,9 @@ public class ComponentController {
 
     public void onRemoveComponent() {
 
+    }
+
+    public void onReloadScene() {
+        loader.loadScene(scene, sceneTree);
     }
 }

@@ -71,7 +71,7 @@ public class Positions {
     }
 
     public static boolean hasPositionUnit(Component component, int unit) {
-        return !hasPosition(component) || getPositionProperty(component).getUnit() != unit;
+        return hasPosition(component) && getPositionProperty(component).getUnit() == unit;
     }
 
     private static Pair<Component, Component> getComponentsWithPosWithMutualParent(Component a, Component b) {

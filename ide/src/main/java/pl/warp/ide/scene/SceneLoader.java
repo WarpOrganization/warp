@@ -1,7 +1,6 @@
 package pl.warp.ide.scene;
 
 import javafx.application.Platform;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
@@ -11,46 +10,52 @@ import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
 import pl.warp.ide.scene.descriptor.DescriptorRepository;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by user on 2017-01-17.
  */
 public class SceneLoader {
 
-    private DescriptorRepository descRepository;
+    private static final int RELOAD_DELAY = 2000;
 
-    public SceneLoader(DescriptorRepository iconsRepository) {
-        this.descRepository = iconsRepository;
+    private volatile boolean sceneChanged = false;
+
+    private DescriptorRepository descRepository;
+    private Scene scene;
+    private TreeView<ComponentItem<Component>> sceneTree;
+    private ScheduledThreadPoolExecutor scheduledExecutor = new ScheduledThreadPoolExecutor(1);
+
+    public SceneLoader(DescriptorRepository descRepository) {
+        this.descRepository = descRepository;
     }
 
     public void loadScene(Scene scene, TreeView<ComponentItem<Component>> sceneTree) {
+        this.scene = scene;
+        this.sceneTree = sceneTree;
         ComponentTreeItem<Component> sceneItem = new ComponentTreeItem<>(scene, descRepository.getDesc(scene));
         sceneTree.setRoot(sceneItem);
-        scene.forEachChildren(c -> loadComponent(sceneItem, c, sceneTree));
+        scene.forEachChildren(c -> loadComponent(sceneItem, c));
+        scheduledExecutor.schedule(() -> {
+            if (sceneChanged) {
+                sceneChanged = false;
+                Platform.runLater(() -> loadScene(scene, sceneTree));
+            }
+        }, RELOAD_DELAY, TimeUnit.MILLISECONDS);
     }
 
-    private void loadComponent(ComponentTreeItem<Component> parent, Component component, TreeView<ComponentItem<Component>> sceneTree) {
+    private void loadComponent(ComponentTreeItem<Component> parent, Component component) {
         ComponentTreeItem<Component> item = new ComponentTreeItem<>(component, descRepository.getDesc(component));
         if (ListenableParent.class.isAssignableFrom(component.getClass()))
-            createListener(component, parent, sceneTree);
+            createListener(component);
         parent.getChildren().add(item);
-        component.forEachChildren(c -> loadComponent(item, c, sceneTree));
+        component.forEachChildren(c -> loadComponent(item, c));
     }
 
-    private void createListener(Component component, ComponentTreeItem<Component> parent, TreeView<ComponentItem<Component>> sceneTree) {
-        SimpleListener.<ChildAddedEvent>createListener(component, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, (c) -> reload(parent, sceneTree));
-        SimpleListener.<ChildRemovedEvent>createListener(component, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, (c) -> reload(parent, sceneTree));
+    private void createListener(Component component) {
+        SimpleListener.<ChildAddedEvent>createListener(component, ChildAddedEvent.CHILD_ADDED_EVENT_NAME, (c) -> sceneChanged = true);
+        SimpleListener.<ChildRemovedEvent>createListener(component, ChildRemovedEvent.CHILD_REMOVED_EVENT_NAME, (c) -> sceneChanged = true);
     }
 
-    private void reload(ComponentTreeItem<Component> parent, TreeView<ComponentItem<Component>> sceneTree) {
-        Platform.runLater(() -> {
-            parent.getChildren().clear();
-            TreeItem<ComponentItem<Component>> parentParent = parent.getParent();
-            if (parentParent == null)
-                loadScene((Scene) parent.getValue().getComponent(), sceneTree);
-            else {
-                Component parentComponent = parent.getValue().getComponent();
-                loadComponent((ComponentTreeItem<Component>) parentParent, parentComponent, sceneTree);
-            }
-        });
-    }
 }
