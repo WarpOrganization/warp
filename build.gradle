@@ -12,8 +12,15 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-def mainProjects = [':ai',':audio',':core',':game',':graphics',":ide",":physics",":resourcemanagement"]
-task combineJars( type: Jar , dependsOn: mainProjects.collect{ it+":build"}) {
+subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
+jar.dependsOn subprojects.tasks['classes']
+jar {
     baseName = 'warp'
-    from files(mainProjects.collect{ project(it).sourceSets.main.output })
+    manifest {
+        attributes 'Main-Class': 'pl.warp.game.Test'
+    }
+    subprojects.each { subproject ->
+        from subproject.sourceSets.main.output.classesDir
+        from subproject.sourceSets.main.output.resourcesDir
+    }
 }
