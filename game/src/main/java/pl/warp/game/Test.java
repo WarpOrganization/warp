@@ -197,7 +197,6 @@ public class Test {
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
             GraphicsMeshProperty graphicsMeshProperty = new GraphicsMeshProperty(controllableGoat, goatMesh);
-            graphicsMeshProperty.disable(); // makes goat invisible
 
             new PhysicalBodyProperty(controllableGoat, 10f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
             Material material = new Material(goatTexture);
