@@ -26,3 +26,9 @@ jar {
     }
 
 }
+
+subprojects {
+    test {
+        reports.junitXml.enabled = false
+    }
+}
