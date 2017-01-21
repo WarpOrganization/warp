@@ -1,4 +1,4 @@
-package pl.warp.engine.audio.playList;
+package pl.warp.engine.audio.playlist;
 
 /**
  * @author Hubertus

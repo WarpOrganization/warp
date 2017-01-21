@@ -2,7 +2,7 @@ package pl.warp.engine.audio.command;
 
 import pl.warp.engine.audio.AudioContext;
 import pl.warp.engine.audio.MusicSource;
-import pl.warp.engine.audio.playList.PlayList;
+import pl.warp.engine.audio.playlist.PlayList;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.AL10.AL_FALSE;

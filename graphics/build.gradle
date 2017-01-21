@@ -10,20 +10,7 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-import org.gradle.internal.os.OperatingSystem
-
-switch ( OperatingSystem.current() ) {
-    case OperatingSystem.WINDOWS:
-        project.ext.lwjglNatives = "natives-windows"
-        break
-    case OperatingSystem.LINUX:
-        project.ext.lwjglNatives = "natives-linux"
-        break
-    case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = "natives-macos"
-        break
-}
-
+project.ext.lwjglNatives = "natives-${platform}"
 project.ext.lwjglVersion = "3.1.0"
 
 dependencies {
