@@ -17,7 +17,7 @@ jar.dependsOn subprojects.tasks['classes']
 jar {
     baseName = "warp-${platform}"
     manifest {
-        attributes 'Main-Class': 'pl.warp.game.Test'
+        attributes 'Main-Class': 'pl.warp.game.TestApp'
     }
     subprojects.each { subproject ->
         from subproject.sourceSets.main.output.classesDir
@@ -27,7 +27,9 @@ jar {
 
 }
 
+
 subprojects {
+
     test {
         reports.junitXml.enabled = false
     }

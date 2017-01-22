@@ -9,8 +9,6 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.reactivex', name: 'rxjava', version: '1.2.3'
-    compile group: 'io.reactivex', name: 'rxjavafx', version: '0.3.0'
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile project(':core')
     compile project(':physics')

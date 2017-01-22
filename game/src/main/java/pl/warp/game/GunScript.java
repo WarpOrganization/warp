@@ -39,6 +39,7 @@ public class GunScript extends Script<Component> {
     private Component playerShip;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
+    private static final Vector3f RIGHT_VECTOR = new Vector3f(-1, 0, 0);
     private static final float BULLET_SPEED = 10f;
     private static final float BULLET_MASS = 0.01f;
 
@@ -85,6 +86,7 @@ public class GunScript extends Script<Component> {
 
 
     private Vector3f direction = new Vector3f();
+    private Vector3f direction2 = new Vector3f();
     private Vector3f parentVelocity = new Vector3f();
     private Vector3f bulletTranslation = new Vector3f();
     private Vector3 bulletTranslation2 = new Vector3();
@@ -97,10 +99,13 @@ public class GunScript extends Script<Component> {
         }
         if (timer <= 0) {
             timer = cooldown;
+
             Transforms.getAbsoluteRotation(getOwner()).transform(direction.set(FORWARD_VECTOR));
+            Transforms.getAbsoluteRotation(getOwner()).transform(direction2.set(RIGHT_VECTOR));
             bulletTranslation.set(direction);
-            bulletTranslation.mul(3.5f);
+            bulletTranslation.mul(0.5f);
             bulletTranslation.add(transformProperty.getTranslation());
+            bulletTranslation.add(direction2.mul(3.0f));
             direction.mul(BULLET_SPEED);
             parentVelocity.set(physicalProperty.getVelocity());
             direction.add(parentVelocity.mul(BULLET_MASS));

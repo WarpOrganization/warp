@@ -5,6 +5,8 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.ai.AITask;
+import pl.warp.engine.ai.behaviourTree.BehaviourTree;
+import pl.warp.engine.ai.behaviourTree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
 import pl.warp.engine.ai.property.AIProperty;
@@ -86,7 +88,7 @@ public class Test {
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 5;
+    private static final int GUN_COOLDOWN = 70;
     private static Random random = new Random();
 
     public static void main(String... args) {
@@ -195,7 +197,8 @@ public class Test {
             new GraphicsMeshProperty(floor, floorMesh);
             new GraphicsMaterialProperty(floor,floorMaterial);
             new TransformProperty(floor);
-            new PhysicalBodyProperty(floor, 100, 100);*/
+            new PhysicalBodyProperty(floor, 100, 100, 100, 100);
+*/
 
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray spritesheetTexture = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
@@ -215,15 +218,15 @@ public class Test {
 
             new GunScript(controllableGoat, GUN_COOLDOWN, input, root, bulletMesh, spritesheetTexture, bulletTexture, controllableGoat, audioManager);
 
-            /*SpotLight goatLight = new SpotLight(
+            SpotLight goatLight = new SpotLight(
                     controllableGoat,
                     new Vector3f(0, 0, 1),
-                    new Vector3f(0, 0, 1), 0.15f, 0.2f,
-                    new Vector3f(5f, 5f, 5f),
+                    new Vector3f(0, 0, 1), 0.30f, 0.3f,
+                    new Vector3f(0.5f),
                     new Vector3f(0f, 0f, 0f),
                     0.1f, 0.1f);
             LightProperty directionalLightProperty = new LightProperty(controllableGoat);
-            directionalLightProperty.addSpotLight(goatLight);*/
+            directionalLightProperty.addSpotLight(goatLight);
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/game/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -241,6 +244,7 @@ public class Test {
             Component frigate = new SimpleComponent(root);
             new GraphicsMeshProperty(frigate, friageMesh);
             new GraphicsMaterialProperty(frigate, frigateMaterial);
+            new PhysicalBodyProperty(frigate, 20.0f, 38.365f * 3, 15.1f * 3, 11.9f  * 3);
             TransformProperty transformProperty = new TransformProperty(frigate);
             transformProperty.move(new Vector3f(100, 0, 0));
             transformProperty.rotateY((float) -(Math.PI / 2));
@@ -309,14 +313,16 @@ public class Test {
             material.setShininess(20f);
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
-            new PhysicalBodyProperty(goat, 1000f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
-            float x = random.nextFloat() * 100f;
-            float y = random.nextFloat() * 100f;
-            float z = random.nextFloat() * 100f;
+            new PhysicalBodyProperty(goat, 10f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
+            float x = 10 + random.nextFloat() * 200 - 100f;
+            float y = random.nextFloat() * 200 - 100f;
+            float z = random.nextFloat() * 200 - 100f;
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
-            transformProperty.scale(new Vector3f(2f));
-            new AIProperty(goat, builder.build(goat));
+            SequenceNode basenode = new SequenceNode();
+          //  basenode.addChildren(new SpinLeaf());
+            BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
+            new AIProperty(goat, behaviourTree);
         }
     }
 }

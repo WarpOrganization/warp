@@ -49,16 +49,20 @@ public class TestApp extends Application {
 
         grid.add(new Label("Rendering samples:"), 0, 0);
         grid.add(renderingSamples, 1, 0);
+        grid.add(new Label("Affects performance"), 2, 0);
         grid.add(new Label("Bloom iterations:"), 0, 1);
         grid.add(bloomIters, 1, 1);
+        grid.add(new Label("Affects performance"), 2, 1);
         grid.add(new Label("Bloom level:"), 0, 2);
         grid.add(bloomLevel, 1, 2);
         grid.add(new Label("Exposure:"), 0, 3);
         grid.add(exposure, 1, 3);
         grid.add(new Label("Display width:"), 0, 4);
         grid.add(displayWidth, 1, 4);
+        grid.add(new Label("Affects performance"), 2, 4);
         grid.add(new Label("Display height:"), 0, 5);
         grid.add(displayHeight, 1, 5);
+        grid.add(new Label("Affects performance"), 2, 5);
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == runButtonType) {
