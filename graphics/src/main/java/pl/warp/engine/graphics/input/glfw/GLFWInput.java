@@ -51,13 +51,13 @@ public class GLFWInput implements Input {
             return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
-                keyboardKeys[key] = true;
+                keyboardKeys[keyStroke] = true;
                 break;
             case GLFW.GLFW_RELEASE:
-                keyboardKeys[key] = false;
+                keyboardKeys[keyStroke] = false;
                 break;
             case GLFW.GLFW_REPEAT:
-                keyboardKeys[key] = true;
+                keyboardKeys[keyStroke] = true;
                 break;
         }
     }
@@ -68,13 +68,13 @@ public class GLFWInput implements Input {
             return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
-                mouseButtons[button] = true;
+                mouseButtons[buttonCode] = true;
                 break;
             case GLFW.GLFW_RELEASE:
-                mouseButtons[button] = false;
+                mouseButtons[buttonCode] = false;
                 break;
             case GLFW.GLFW_REPEAT:
-                mouseButtons[button] = true;
+                mouseButtons[buttonCode] = true;
                 break;
         }
     }

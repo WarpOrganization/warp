@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.input.glfw;
 
 
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -19,7 +18,7 @@ public class GLFWKeyMapper {
     public static int toKeyCode(int glfwKey){
         int stroke = toKeyStrokeUnprintable(glfwKey);
         if(stroke == PRINTABLE)
-            return KeyStroke.getKeyStroke((char) stroke).getKeyCode();
+            return KeyEvent.getExtendedKeyCodeForChar(glfwKey);
         else return stroke;
     }
 

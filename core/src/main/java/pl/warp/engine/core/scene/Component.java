@@ -138,6 +138,10 @@ public abstract class Component {
         this.parent = parent;
     }
 
+    public Component getChild(int index) {
+        return children.get(index);
+    }
+
     /**
      * Returns children's components of type T. Children of children are traversed as well (and so on).
      * It's a bit slower than {@link #getChildrenProperties(String)}.

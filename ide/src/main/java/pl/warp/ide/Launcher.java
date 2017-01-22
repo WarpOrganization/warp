@@ -10,6 +10,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.ide.controller.IDEController;
+import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentLook;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 import pl.warp.ide.scene.tree.descriptor.ComponentTypeLook;
@@ -25,7 +26,7 @@ public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         CustomLookRepository descriptorRepository = loadCustomLookRepository();
-        IDEController controller = new IDEController(new SceneTreeLoader(descriptorRepository));
+        IDEController controller = new IDEController(new SceneTreeLoader(descriptorRepository), new JavaFxInput());
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);

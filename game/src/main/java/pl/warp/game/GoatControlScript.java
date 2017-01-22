@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
  */
 public class GoatControlScript extends Script<Component> {
 
-    private static final float MOUSE_ROTATION_SPEED_FACTOR = 0.2f;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(1, 0, 0);
@@ -47,7 +46,6 @@ public class GoatControlScript extends Script<Component> {
 
     @Override
     public void onUpdate(int delta) {
-        //System.out.println(bodyProperty.getVelocity());
         updateDirections();
         desiredTorque.set(0, 0, 0);
         move(delta);

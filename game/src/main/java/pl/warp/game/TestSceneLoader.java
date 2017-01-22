@@ -73,39 +73,58 @@ public class TestSceneLoader implements SceneLoader {
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
 
-    private EngineThread graphicsThread;
+    private boolean loaded = false;
+
     private RenderingConfig config;
     private EngineContext context;
-    private AudioManager audioManager;
+    private AudioManager audioManager;;
+    private Scene scene;
+    private Component root;
+    private Component controllableGoat;
+    private Camera camera;
 
-    public TestSceneLoader(EngineThread graphicsThread, RenderingConfig config, EngineContext context, AudioManager audioManager) {
-        this.graphicsThread = graphicsThread;
+
+    public TestSceneLoader(RenderingConfig config, EngineContext context, AudioManager audioManager) {
         this.config = config;
         this.context = context;
+        this.audioManager = audioManager;
     }
 
     @Override
-    public Scene loadScene() {
-
-        Scene scene = new Scene(context);
+    public void loadScene() {
+        scene = new Scene(context);
         new NameProperty(scene, "Test universe");
         IDEController.SCENE = scene;
         context.setScene(scene);
+
         context.setScriptContext(new ScriptContext());
-        Component root = new SimpleListenableParent(scene);
+
+        root = new SimpleListenableParent(scene);
         new NameProperty(root, "Root");
-        Component controllableGoat = new SimpleComponent(root);
+
+        controllableGoat = new SimpleComponent(root);
         new NameProperty(controllableGoat, "Player ship");
+
         Display display = config.getDisplay();
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
+
+        camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
         new NameProperty(camera, "Camera");
         camera.move(new Vector3f(0, 4f, 15f));
 
+        loaded = true;
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    @Override
+    public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
-
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
             Texture2DArray lensTexture = new Texture2DArray(lensSpritesheet.getWidth(), lensSpritesheet.getHeight(), lensSpritesheet.getArraySize(), lensSpritesheet.getData());
@@ -236,9 +255,16 @@ public class TestSceneLoader implements SceneLoader {
 
 
         });
+    }
+
+
+    public Scene getScene() {
         return scene;
     }
 
+    public Camera getCamera() {
+        return camera;
+    }
 
     private static void generateShips(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
         Random random = new Random();

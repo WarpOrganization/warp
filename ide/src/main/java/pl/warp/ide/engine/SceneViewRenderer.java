@@ -1,4 +1,4 @@
-package pl.warp.ide.graphics;
+package pl.warp.ide.engine;
 
 
 import javafx.application.Platform;

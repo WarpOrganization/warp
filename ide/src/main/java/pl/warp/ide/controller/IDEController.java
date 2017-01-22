@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler;
-import pl.warp.ide.graphics.SceneViewRenderer;
+import pl.warp.ide.engine.SceneViewRenderer;
 import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentItem;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
