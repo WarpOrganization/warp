@@ -1,12 +1,13 @@
 package pl.warp.engine.ai.loader;
 
 import org.xml.sax.SAXException;
+import pl.warp.engine.ai.behaviourTree.BehaviourTree;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Hubertus
@@ -15,18 +16,18 @@ import java.io.IOException;
 public class BehaviourTreeLoader {
 
     public static BehaviourTreeBuilder loadXML(String path) {
-
-        File file = new File(BehaviourTreeLoader.class.getClassLoader().getResource(path).getFile());
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        BehaviourTreeBuilder behaviourTreeBuilder = new BehaviourTreeBuilder();
         try {
+            InputStream stream = BehaviourTree.class.getClassLoader().getResourceAsStream(path);
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            BehaviourTreeBuilder behaviourTreeBuilder = new BehaviourTreeBuilder();
             SAXParser saxParser = factory.newSAXParser();
             XMLHandler handler = new XMLHandler(behaviourTreeBuilder);
-            saxParser.parse(file, handler);
+            saxParser.parse(stream, handler);
+            return behaviourTreeBuilder;
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
-        return behaviourTreeBuilder;
+       return null;
     }
 
 }

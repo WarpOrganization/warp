@@ -8,10 +8,10 @@ import java.util.ArrayList;
  */
 public abstract class PlayList {
 
-    ArrayList<String> files = new ArrayList<>();
+    ArrayList<String> paths = new ArrayList<>();
 
     public void add(String path){
-        files.add(path);
+        paths.add(path);
     }
 
     public abstract String getNextFile();

@@ -8,6 +8,6 @@ public class PlayRandomPlayList extends PlayList {
 
     @Override
     public String getNextFile() {
-        return files.get((int) (Math.random() * files.size()));
+        return paths.get((int) (Math.random() * paths.size()));
     }
 }

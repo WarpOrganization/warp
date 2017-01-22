@@ -10,8 +10,8 @@ public class PlayOneByOnePlayList extends PlayList {
 
     @Override
     public String getNextFile() {
-        if (current == files.size() - 1) current = 0;
+        if (current == paths.size() - 1) current = 0;
         else current++;
-        return files.get(current);
+        return paths.get(current);
     }
 }

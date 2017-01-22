@@ -39,7 +39,7 @@ public class MusicSource extends AudioSource {
 
     public void loadNew(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(MusicSource.class.getResource(path));
+            stream = AudioSystem.getAudioInputStream(MusicSource.class.getResourceAsStream(path));
             format = stream.getFormat();
             openALFormat = SoundBank.getOpenALFormat(format);
             sampleRate = format.getSampleRate();

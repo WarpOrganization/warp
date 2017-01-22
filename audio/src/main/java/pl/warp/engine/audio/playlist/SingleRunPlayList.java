@@ -11,6 +11,6 @@ public class SingleRunPlayList extends PlayList {
     @Override
     public String getNextFile() {
         current++;
-        return current >= files.size() ? null : files.get(current);
+        return current >= paths.size() ? null : paths.get(current);
     }
 }
