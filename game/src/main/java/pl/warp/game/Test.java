@@ -80,7 +80,6 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 1720, HEIGHT = 920;
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
@@ -89,6 +88,10 @@ public class Test {
     private static Random random = new Random();
 
     public static void main(String... args) {
+        runTest(new RenderingConfig(60, new Display(FULLSCREEN, 1720, 920)));
+    }
+
+    public static void runTest(RenderingConfig settings) {
 
         EngineContext context = new EngineContext();
         Scene scene = new Scene(context);
@@ -97,10 +100,9 @@ public class Test {
         Component root = new SimpleListenableParent(scene);
 
         Component controllableGoat = new SimpleComponent(root);
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, WIDTH, HEIGHT));
+        Display display = settings.getDisplay();
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
         camera.move(new Vector3f(0, 4f, 15f));
-        RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
-
         OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
         IDEController.INPUT = outputRenderer.getOutput();
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
