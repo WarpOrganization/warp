@@ -2,7 +2,6 @@ package pl.warp.game;
 
 import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
@@ -18,6 +17,8 @@ import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+
+import java.awt.event.KeyEvent;
 
 /**
  * @author Hubertus
@@ -71,7 +72,7 @@ public class GunScript extends Script<Component> {
     }
 
     private void input() {
-        if (getContext().getInput().isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
+        if (getContext().getInput().isKeyDown(KeyEvent.VK_CONTROL))
             shoot();
         else shot = false;
     }

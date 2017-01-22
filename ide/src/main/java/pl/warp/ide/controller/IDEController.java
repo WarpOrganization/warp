@@ -8,10 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler;
 import pl.warp.ide.graphics.SceneViewRenderer;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentItem;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 
@@ -25,9 +28,11 @@ import java.util.ResourceBundle;
 public class IDEController implements Initializable {
 
     private SceneTreeLoader sceneLoader;
+    private JavaFxInput input;
 
-    public IDEController(SceneTreeLoader sceneTreeLoader) {
-        this.sceneLoader = sceneTreeLoader;
+    public IDEController(SceneTreeLoader sceneLoader, JavaFxInput input) {
+        this.sceneLoader = sceneLoader;
+        this.input = input;
     }
 
     @FXML
@@ -89,6 +94,31 @@ public class IDEController implements Initializable {
     @FXML
     public void onReloadScene(ActionEvent event) {
         componentController.onReloadScene();
+    }
+
+    @FXML
+    void okKeyReleased(KeyEvent event) {
+        input.onKeyReleased(event);
+    }
+
+    @FXML
+    void onKeyPressed(KeyEvent event) {
+        input.onKeyPressed(event);
+    }
+
+    @FXML
+    void onMouseMoved(MouseEvent event) {
+        input.onMouseMoved(event);
+    }
+
+    @FXML
+    void onMousePressed(MouseEvent event) {
+        input.onMousePressed(event);
+    }
+
+    @FXML
+    void onMouseReleased(MouseEvent event) {
+        input.onMouseReleased(event);
     }
 
     @FXML

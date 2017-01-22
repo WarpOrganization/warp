@@ -2,12 +2,13 @@ package pl.warp.game;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+
+import java.awt.event.KeyEvent;
 
 /**
  * @author Jaca777
@@ -63,29 +64,29 @@ public class GoatControlScript extends Script<Component> {
 
     private void move(int delta) {
         Input input = getContext().getInput();
-        if (input.isKeyDown(GLFW.GLFW_KEY_W))
+        if (input.isKeyDown(KeyEvent.VK_W))
             move(forwardVector, movementSpeed * delta);
-        if (input.isKeyDown(GLFW.GLFW_KEY_S))
+        if (input.isKeyDown(KeyEvent.VK_S))
             move(forwardVector, -movementSpeed * delta);
-        if (input.isKeyDown(GLFW.GLFW_KEY_A))
+        if (input.isKeyDown(KeyEvent.VK_A))
             move(rightVector, movementSpeed * delta);
-        if (input.isKeyDown(GLFW.GLFW_KEY_D))
+        if (input.isKeyDown(KeyEvent.VK_D))
             move(rightVector, -movementSpeed * delta);
-        if (input.isKeyDown(GLFW.GLFW_KEY_SPACE))
+        if (input.isKeyDown(KeyEvent.VK_SPACE))
             brake(delta);
-        if (input.isKeyDown(GLFW.GLFW_KEY_P))
+        if (input.isKeyDown(KeyEvent.VK_P))
             stop();
-        if (input.isKeyDown(GLFW.GLFW_KEY_UP))
+        if (input.isKeyDown(KeyEvent.VK_UP))
         addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
-        if (input.isKeyDown(GLFW.GLFW_KEY_DOWN))
+        if (input.isKeyDown(KeyEvent.VK_DOWN))
         addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
-        if (input.isKeyDown(GLFW.GLFW_KEY_LEFT))
+        if (input.isKeyDown(KeyEvent.VK_LEFT))
         addDesiredTorque(0, arrowKeysRottationSpeed, 0);
-        if (input.isKeyDown(GLFW.GLFW_KEY_RIGHT))
+        if (input.isKeyDown(KeyEvent.VK_RIGHT))
         addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
-        if(input.isKeyDown(GLFW.GLFW_KEY_Q))
+        if(input.isKeyDown(KeyEvent.VK_Q))
         addDesiredTorque(0, 0, arrowKeysRottationSpeed);
-        if(input.isKeyDown(GLFW.GLFW_KEY_E))
+        if(input.isKeyDown(KeyEvent.VK_E))
         addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
     }
 

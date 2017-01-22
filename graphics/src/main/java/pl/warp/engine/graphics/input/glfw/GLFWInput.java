@@ -79,6 +79,7 @@ public class GLFWInput implements Input {
         }
     }
 
+    @Override
     public void update() {
         updateMousePos();
     }
@@ -89,19 +90,22 @@ public class GLFWInput implements Input {
         this.cursorPosition = currentCursorPos;
     }
 
-
+    @Override
     public Vector2f getCursorPosition() {
         return cursorPosition;
     }
 
+    @Override
     public Vector2f getCursorPositionDelta() {
         return cursorPositionDelta;
     }
 
+    @Override
     public boolean isKeyDown(int key) {
         return keyboardKeys[key];
     }
 
+    @Override
     public boolean isMouseButtonDown(int button) {
         return mouseButtons[button];
     }

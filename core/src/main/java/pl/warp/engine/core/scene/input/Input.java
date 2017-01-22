@@ -7,7 +7,6 @@ import org.joml.Vector2f;
  *         Created 2017-01-22 at 11
  */
 public interface Input {
-    void update();
 
     Vector2f getCursorPosition();
 
@@ -17,5 +16,6 @@ public interface Input {
 
     boolean isMouseButtonDown(int button);
 
-    void destroy();
+    void update();
+
 }
