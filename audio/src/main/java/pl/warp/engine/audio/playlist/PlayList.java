@@ -14,5 +14,5 @@ public abstract class PlayList {
         files.add(path);
     }
 
-    abstract String GetNextFile();
+    public abstract String getNextFile();
 }

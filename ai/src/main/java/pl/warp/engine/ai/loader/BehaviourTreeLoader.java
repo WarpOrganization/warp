@@ -15,11 +15,8 @@ import java.io.IOException;
 public class BehaviourTreeLoader {
 
     public static BehaviourTreeBuilder loadXML(String path) {
-        File input = new File(path);
-        return loadXML(input);
-    }
 
-    public static BehaviourTreeBuilder loadXML(File file) {
+        File file = new File(BehaviourTreeLoader.class.getClassLoader().getResource(path).getFile());
         SAXParserFactory factory = SAXParserFactory.newInstance();
         BehaviourTreeBuilder behaviourTreeBuilder = new BehaviourTreeBuilder();
         try {
@@ -31,4 +28,5 @@ public class BehaviourTreeLoader {
         }
         return behaviourTreeBuilder;
     }
+
 }

@@ -17,11 +17,12 @@ public class MoveLeaf extends LeafNode{
 
     @Override
     public int tick(Ticker ticker) {
+        System.out.println("asd");
         Component owner = (Component) ticker.getData("owner");
         PhysicalBodyProperty property = owner.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-        if(property.getVelocity().length()<1){
+        if(property.getVelocity().length()<100){
             vel.set(property.getVelocity());
-            vel.normalize().mul((float) (Math.random()));
+            vel.normalize().mul((float) (Math.random()*100));
             property.applyForce(vel);
         }
         return Node.SUCCESS;

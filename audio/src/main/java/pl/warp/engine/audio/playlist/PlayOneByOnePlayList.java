@@ -9,7 +9,7 @@ public class PlayOneByOnePlayList extends PlayList {
     int current = -1;
 
     @Override
-    String GetNextFile() {
+    public String getNextFile() {
         if (current == files.size() - 1) current = 0;
         else current++;
         return files.get(current);

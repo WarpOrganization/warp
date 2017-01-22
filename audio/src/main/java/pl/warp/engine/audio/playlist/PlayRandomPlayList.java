@@ -7,7 +7,7 @@ package pl.warp.engine.audio.playlist;
 public class PlayRandomPlayList extends PlayList {
 
     @Override
-    String GetNextFile() {
+    public String getNextFile() {
         return files.get((int) (Math.random() * files.size()));
     }
 }

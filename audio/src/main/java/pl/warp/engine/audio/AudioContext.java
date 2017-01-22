@@ -14,18 +14,16 @@ import java.util.concurrent.BlockingQueue;
 public class AudioContext {
 
     private AudioListener audioListener;
-    private List<AudioSource> sourceList;
     private List<AudioSource> playing;
-    private List<AudioSource> musicSources;
+    private List<MusicSource> musicPlaying;
     private BlockingQueue<Command> commandsQueue;
     private SoundBank soundBank;
 
     public AudioContext() {
-        sourceList = new ArrayList<>();
         playing = new ArrayList<>();
         commandsQueue = new ArrayBlockingQueue<Command>(10000);
         soundBank = new SoundBank();
-        musicSources = new ArrayList<>();
+        musicPlaying = new ArrayList<>();
     }
 
     void putCommand(Command cmd) {
@@ -38,10 +36,6 @@ public class AudioContext {
 
     public List<AudioSource> getPlaying() {
         return playing;
-    }
-
-    protected List<AudioSource> getRegisteredSources() {
-        return sourceList;
     }
 
     public BlockingQueue<Command> getCommandsQueue() {
@@ -60,7 +54,7 @@ public class AudioContext {
         return soundBank;
     }
 
-    public List<AudioSource> getMusicSources() {
-        return musicSources;
+    public List<MusicSource> getMusicPlaying() {
+        return musicPlaying;
     }
 }

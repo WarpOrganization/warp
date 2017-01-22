@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class SoundBank {
     TreeMap<String, Integer> sounds = new TreeMap<>();
 
-    public int getSound(String soundName){
+    public int getSound(String soundName) {
         return sounds.get(soundName);
     }
 
@@ -44,8 +44,7 @@ public class SoundBank {
         }
         Stream<Path> walk = Files.walk(myPath, 1);
 
-        final int MONO = 1;
-        final int STEREO = 2;
+
         ArrayList<String> files = new ArrayList<>();
         Iterator<Path> it = walk.iterator();
         it.next();
@@ -62,29 +61,7 @@ public class SoundBank {
 
             AudioFormat format = stream.getFormat();
 
-            int openALFormat = -1;
-            switch (format.getChannels()) {
-                case MONO:
-                    switch (format.getSampleSizeInBits()) {
-                        case 8:
-                            openALFormat = AL10.AL_FORMAT_MONO8;
-                            break;
-                        case 16:
-                            openALFormat = AL10.AL_FORMAT_MONO16;
-                            break;
-                    }
-                    break;
-                case STEREO:
-                    switch (format.getSampleSizeInBits()) {
-                        case 8:
-                            openALFormat = AL10.AL_FORMAT_STEREO8;
-                            break;
-                        case 16:
-                            openALFormat = AL10.AL_FORMAT_STEREO16;
-                            break;
-                    }
-                    break;
-            }
+            int openALFormat = getOpenALFormat(format);
 
             byte[] b = IOUtils.toByteArray(stream);
             ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
@@ -93,5 +70,34 @@ public class SoundBank {
             AL10.alBufferData(buffer.get(i), openALFormat, data, (int) format.getSampleRate());
             sounds.put(FilenameUtils.removeExtension(new File(files.get(i)).getName()), buffer.get(i));
         }
+    }
+
+    public static int getOpenALFormat(AudioFormat format){
+        final int MONO = 1;
+        final int STEREO = 2;
+        int openALFormat = -1;
+        switch (format.getChannels()) {
+            case MONO:
+                switch (format.getSampleSizeInBits()) {
+                    case 8:
+                        openALFormat = AL10.AL_FORMAT_MONO8;
+                        break;
+                    case 16:
+                        openALFormat = AL10.AL_FORMAT_MONO16;
+                        break;
+                }
+                break;
+            case STEREO:
+                switch (format.getSampleSizeInBits()) {
+                    case 8:
+                        openALFormat = AL10.AL_FORMAT_STEREO8;
+                        break;
+                    case 16:
+                        openALFormat = AL10.AL_FORMAT_STEREO16;
+                        break;
+                }
+                break;
+        }
+        return openALFormat;
     }
 }

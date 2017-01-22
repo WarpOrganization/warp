@@ -5,10 +5,12 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.ai.AITask;
-import pl.warp.engine.ai.behaviourTree.BehaviourTree;
-import pl.warp.engine.ai.behaviourTree.SequenceNode;
+import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
+import pl.warp.engine.ai.loader.BehaviourTreeLoader;
 import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.audio.*;
+import pl.warp.engine.audio.playlist.PlayList;
+import pl.warp.engine.audio.playlist.PlayRandomPlayList;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
@@ -234,14 +236,14 @@ public class Test {
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
-/*            Component frigate = new SimpleComponent(root);
+            Component frigate = new SimpleComponent(root);
             new GraphicsMeshProperty(frigate, friageMesh);
             new GraphicsMaterialProperty(frigate, frigateMaterial);
             TransformProperty transformProperty = new TransformProperty(frigate);
             transformProperty.move(new Vector3f(100, 0, 0));
             transformProperty.rotateY((float) -(Math.PI / 2));
-            transformProperty.scale(new Vector3f(3));*/
-            generateGOATS(root, friageMesh, frigateTexture, frigateBrightnessTexture);
+            transformProperty.scale(new Vector3f(3));
+            generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
 
         });
         EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
@@ -261,7 +263,7 @@ public class Test {
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         audioThread.scheduleOnce(() -> {
             audioThread.scheduleTask(new AudioTask(audioContext));
-            audioManager.loadFiles("/pl/warp/game/sound");
+            audioManager.loadFiles("/pl/warp/game/sound/effects");
             audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
 
         });
@@ -269,6 +271,11 @@ public class Test {
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         aiThread.scheduleOnce(()->{
             aiThread.scheduleTask(new AITask(root));
+            PlayList playList = new PlayRandomPlayList();
+            playList.add("/pl/warp/game/sound/music/Stellardrone-Light_Years-05_In_Time.wav");
+            playList.add("/pl/warp/game/sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
+            MusicSource musicSource = audioManager.createMusicSource(new Vector3f(), playList);
+            audioManager.play(musicSource);
         });
         aiThread.start();
         new Script(root) {
@@ -292,7 +299,8 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        for (int i = 0; i < 1500; i++) {
+        BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("pl/warp/game/ai/droneAI.xml");
+        for (int i = 0; i < 10; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
@@ -300,16 +308,13 @@ public class Test {
             material.setBrightnessTexture(brightnessTexture);
             new GraphicsMaterialProperty(goat, material);
             new PhysicalBodyProperty(goat, 1000f, 10.772f / 2, 1.8f / 2, 13.443f / 2);
-            float x = 2000 + random.nextFloat() * 4000 - 2000f;
-            float y = random.nextFloat() * 3000 - 1000f;
-            float z = random.nextFloat() * 4000 - 2000f;
+            float x = random.nextFloat() * 100f;
+            float y = random.nextFloat() * 100f;
+            float z = random.nextFloat() * 100f;
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
             transformProperty.scale(new Vector3f(2f));
-            SequenceNode basenode = new SequenceNode();
-          //  basenode.addChildren(new SpinLeaf());
-            BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
-            new AIProperty(goat, behaviourTree);
+            new AIProperty(goat, builder.build(goat));
         }
     }
 }
