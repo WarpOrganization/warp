@@ -8,7 +8,7 @@ import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
 import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
-import pl.warp.ide.scene.descriptor.DescriptorRepository;
+import pl.warp.ide.scene.descriptor.ComponentLookRepository;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -22,12 +22,12 @@ public class SceneLoader {
 
     private volatile boolean sceneChanged = false;
 
-    private DescriptorRepository descRepository;
+    private ComponentLookRepository descRepository;
     private Scene scene;
     private TreeView<ComponentItem<Component>> sceneTree;
     private ScheduledThreadPoolExecutor scheduledExecutor = new ScheduledThreadPoolExecutor(1);
 
-    public SceneLoader(DescriptorRepository descRepository) {
+    public SceneLoader(ComponentLookRepository descRepository) {
         this.descRepository = descRepository;
     }
 

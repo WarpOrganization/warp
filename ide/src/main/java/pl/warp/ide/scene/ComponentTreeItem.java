@@ -7,14 +7,14 @@ import pl.warp.engine.core.scene.Component;
  * Created by user on 2017-01-17.
  */
 public class ComponentTreeItem<T extends Component> extends TreeItem<ComponentItem<T>> {
-    private ComponentDescriptor desc;
+    private ComponentLook desc;
 
-    public ComponentTreeItem(T component, ComponentDescriptor desc) {
-        super(new ComponentItem<>(component, desc.createName(component)), desc.createImage());
-        this.desc = desc;
+    public ComponentTreeItem(T component, ComponentLook look) {
+        super(new ComponentItem<>(component, look.createName(component)), look.createImage());
+        this.desc = look;
     }
 
-    public ComponentDescriptor getDesc() {
+    public ComponentLook getDesc() {
         return desc;
     }
 }

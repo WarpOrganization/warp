@@ -6,11 +6,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.ide.controller.IDEController;
-import pl.warp.ide.scene.ComponentDescriptor;
+import pl.warp.ide.scene.ComponentLook;
 import pl.warp.ide.scene.SceneLoader;
-import pl.warp.ide.scene.descriptor.CustomDescriptorRepository;
+import pl.warp.ide.scene.descriptor.CustomLookRepository;
 import pl.warp.ide.scene.descriptor.DefaultNameSupplier;
+import pl.warp.ide.scene.descriptor.ComponentTypeLook;
 
 /**
  * @author Jaca777
@@ -21,7 +25,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        CustomDescriptorRepository descriptorRepository = loadCustomDescriptorRepository();
+        CustomLookRepository descriptorRepository = loadCustomLookRepository();
         IDEController controller = new IDEController(new SceneLoader(descriptorRepository));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
@@ -32,17 +36,36 @@ public class Launcher extends Application {
         primaryStage.show();
     }
 
-    private CustomDescriptorRepository loadCustomDescriptorRepository() {
-        ComponentDescriptor sceneDesc = new ComponentDescriptor(
+    private CustomLookRepository loadCustomLookRepository() {
+        ComponentLook sceneLook = new ComponentLook(
                 new DefaultNameSupplier("Scene"),
                 () -> getImage("icons\\Scene.png"));
-        ComponentDescriptor drawableDesc = new ComponentDescriptor(
+        ComponentLook cameraLook = new ComponentLook(
+                new DefaultNameSupplier("Camera"),
+                () -> getImage("icons\\Camera.png"));
+        ComponentLook drawableLook = new ComponentLook(
                 new DefaultNameSupplier("Drawable Component"),
                 () -> getImage("icons\\Drawable.png"));
-        ComponentDescriptor componentDesc = new ComponentDescriptor(
+        ComponentLook componentLook = new ComponentLook(
                 new DefaultNameSupplier("Component"),
                 () -> getImage("icons\\Component.png"));
-        return new CustomDescriptorRepository(sceneDesc, drawableDesc, componentDesc);
+        return new CustomLookRepository(
+                new ComponentTypeLook(this::isScene, sceneLook),
+                new ComponentTypeLook(this::isCamera, cameraLook),
+                new ComponentTypeLook(this::isDrawableModel, drawableLook),
+                new ComponentTypeLook(c -> true, componentLook));
+    }
+
+    private Boolean isScene(Component component) {
+        return component instanceof pl.warp.engine.core.scene.Scene;
+    }
+
+    private Boolean isCamera(Component component) {
+        return Camera.class.isAssignableFrom(component.getClass());
+    }
+
+    private boolean isDrawableModel(Component component) {
+        return component.hasProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME);
     }
 
     private ImageView getImage(String name) {
