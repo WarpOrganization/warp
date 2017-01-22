@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.ai.AITask;
-import pl.warp.engine.ai.behaviourTree.BehaviourTree;
 import pl.warp.engine.ai.behaviourTree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
@@ -321,8 +320,8 @@ public class Test {
             transformProperty.move(new Vector3f(x, y, z));
             SequenceNode basenode = new SequenceNode();
           //  basenode.addChildren(new SpinLeaf());
-            BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
-            new AIProperty(goat, behaviourTree);
+            //BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
+            new AIProperty(goat, builder.build(goat));
         }
     }
 }
