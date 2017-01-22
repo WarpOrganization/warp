@@ -18,9 +18,6 @@ dependencies {
 
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
-    compile group: 'javazoom', name: 'jlayer', version: '1.0.1'
-    compile group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5-1'
-    compile group: 'com.googlecode.soundlibs', name: 'tritonus-share', version: '0.3.7.4'
 
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
