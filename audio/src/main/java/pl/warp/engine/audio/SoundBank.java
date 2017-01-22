@@ -11,13 +11,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -34,14 +34,13 @@ public class SoundBank {
     }
 
     public void loadDir(String path) throws URISyntaxException, IOException, UnsupportedAudioFileException {
-        URI uri = SoundBank.class.getResource(path).toURI();
-        Path myPath;
-        if (uri.getScheme().equals("jar")) {
+        Path myPath = Paths.get(path);
+        /*if (uri.getScheme().equals("jar")) {
             FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
             myPath = fileSystem.getPath(path);
         } else {
             myPath = Paths.get(uri);
-        }
+        }*/
         Stream<Path> walk = Files.walk(myPath, 1);
 
 
@@ -57,7 +56,8 @@ public class SoundBank {
         AL10.alGenBuffers(buffer);
 
         for (int i = 0; i < files.size(); i++) {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(SoundBank.class.getResourceAsStream(path + File.separator + FilenameUtils.getName(files.get(i))));
+            AudioInputStream stream = AudioSystem.getAudioInputStream(new File(path + File.separator + FilenameUtils.getName(files.get(i))));
+                    /*AudioSystem.getAudioInputStream(SoundBank.class.getResourceAsStream(path + File.separator + FilenameUtils.getName(files.get(i))));*/
 
             AudioFormat format = stream.getFormat();
 

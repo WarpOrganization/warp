@@ -8,6 +8,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -39,7 +40,8 @@ public class MusicSource extends AudioSource {
 
     public void loadNew(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(MusicSource.class.getResourceAsStream(path));
+            stream = AudioSystem.getAudioInputStream(new File(path));
+                    /*AudioSystem.getAudioInputStream(MusicSource.class.getResourceAsStream(path));*/
             format = stream.getFormat();
             openALFormat = SoundBank.getOpenALFormat(format);
             sampleRate = format.getSampleRate();

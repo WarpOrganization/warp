@@ -269,7 +269,7 @@ public class Test {
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         audioThread.scheduleOnce(() -> {
             audioThread.scheduleTask(new AudioTask(audioContext));
-            audioManager.loadFiles("/pl/warp/game/sound/effects");
+            audioManager.loadFiles("data/sound/effects");
             audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
 
         });
@@ -278,8 +278,8 @@ public class Test {
         aiThread.scheduleOnce(()->{
             aiThread.scheduleTask(new AITask(root));
             PlayList playList = new PlayRandomPlayList();
-            playList.add("/pl/warp/game/sound/music/Stellardrone-Light_Years-05_In_Time.wav");
-            playList.add("/pl/warp/game/sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
+            playList.add("data/sound/music/Stellardrone-Light_Years-05_In_Time.wav");
+            playList.add("data/sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
             MusicSource musicSource = audioManager.createMusicSource(new Vector3f(), playList);
             audioManager.play(musicSource);
         });
@@ -305,7 +305,7 @@ public class Test {
     }
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
-        BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("pl/warp/game/ai/droneAI.xml");
+        BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         for (int i = 0; i < 10; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
