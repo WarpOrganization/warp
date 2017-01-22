@@ -12,8 +12,8 @@ import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler;
 import pl.warp.ide.graphics.SceneViewRenderer;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.ide.scene.ComponentItem;
-import pl.warp.ide.scene.SceneLoader;
+import pl.warp.ide.scene.tree.ComponentItem;
+import pl.warp.ide.scene.tree.SceneTreeLoader;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,10 +24,10 @@ import java.util.ResourceBundle;
  */
 public class IDEController implements Initializable {
 
-    private SceneLoader sceneLoader;
+    private SceneTreeLoader sceneLoader;
 
-    public IDEController(SceneLoader sceneLoader) {
-        this.sceneLoader = sceneLoader;
+    public IDEController(SceneTreeLoader sceneTreeLoader) {
+        this.sceneLoader = sceneTreeLoader;
     }
 
     @FXML

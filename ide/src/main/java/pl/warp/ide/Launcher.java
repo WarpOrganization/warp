@@ -10,11 +10,11 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.ide.controller.IDEController;
-import pl.warp.ide.scene.ComponentLook;
-import pl.warp.ide.scene.SceneLoader;
-import pl.warp.ide.scene.descriptor.CustomLookRepository;
-import pl.warp.ide.scene.descriptor.DefaultNameSupplier;
-import pl.warp.ide.scene.descriptor.ComponentTypeLook;
+import pl.warp.ide.scene.tree.ComponentLook;
+import pl.warp.ide.scene.tree.SceneTreeLoader;
+import pl.warp.ide.scene.tree.descriptor.ComponentTypeLook;
+import pl.warp.ide.scene.tree.descriptor.CustomLookRepository;
+import pl.warp.ide.scene.tree.descriptor.DefaultNameSupplier;
 
 /**
  * @author Jaca777
@@ -22,11 +22,10 @@ import pl.warp.ide.scene.descriptor.ComponentTypeLook;
  */
 public class Launcher extends Application {
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         CustomLookRepository descriptorRepository = loadCustomLookRepository();
-        IDEController controller = new IDEController(new SceneLoader(descriptorRepository));
+        IDEController controller = new IDEController(new SceneTreeLoader(descriptorRepository));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);

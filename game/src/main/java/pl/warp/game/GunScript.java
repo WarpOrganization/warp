@@ -9,7 +9,6 @@ import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
-import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
@@ -28,7 +27,6 @@ public class GunScript extends Script<Component> {
 
     private final Component owner;
     private int cooldown;
-    private final GLFWInput input;
     private int timer;
     private TransformProperty transformProperty;
     private PhysicalBodyProperty physicalProperty;
@@ -45,11 +43,10 @@ public class GunScript extends Script<Component> {
     private Mesh bulletMesh;
 
 
-    public GunScript(Component owner, int cooldown, GLFWInput input, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Texture2D bulletTexture, Component playerShip, AudioManager audioManager) {
+    public GunScript(Component owner, int cooldown, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Texture2D bulletTexture, Component playerShip, AudioManager audioManager) {
         super(owner);
         this.owner = owner;
         this.cooldown = cooldown;
-        this.input = input;
         this.root = root;
         this.bulletMesh = bulletMesh;
         this.bulletMaterial = new Material(bulletTexture);
@@ -74,7 +71,7 @@ public class GunScript extends Script<Component> {
     }
 
     private void input() {
-        if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
+        if (getContext().getInput().isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
             shoot();
         else shot = false;
     }

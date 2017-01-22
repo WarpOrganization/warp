@@ -1,27 +1,25 @@
 package pl.warp.game;
 
-import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.ai.AITask;
 import pl.warp.engine.ai.behaviourTree.BehaviourTree;
 import pl.warp.engine.ai.behaviourTree.SequenceNode;
 import pl.warp.engine.ai.property.AIProperty;
-import pl.warp.engine.audio.*;
-import pl.warp.engine.core.*;
-import pl.warp.engine.core.scene.*;
+import pl.warp.engine.audio.AudioManager;
+import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.EngineThread;
+import pl.warp.engine.core.SimpleEngineTask;
+import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.NameProperty;
+import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.listenable.SimpleListenableParent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptContext;
-import pl.warp.engine.core.scene.script.ScriptTask;
-import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
-import pl.warp.engine.graphics.input.glfw.GLFWInput;
-import pl.warp.engine.graphics.input.glfw.GLFWInputTask;
 import pl.warp.engine.graphics.light.LightProperty;
 import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
@@ -39,8 +37,6 @@ import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
 import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
 import pl.warp.engine.graphics.particles.dot.RandomSpreadingDotParticleFactory;
-import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
-import pl.warp.engine.graphics.pipeline.output.OutputTexture2DRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -55,42 +51,42 @@ import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.engine.graphics.window.GLFWWindowManager;
-import pl.warp.engine.physics.DefaultCollisionStrategy;
-import pl.warp.engine.physics.MovementTask;
-import pl.warp.engine.physics.PhysicsTask;
-import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.ai.SpinLeaf;
 import pl.warp.game.program.gas.GasPlanetProgram;
 import pl.warp.game.program.ring.PlanetaryRingProgram;
 import pl.warp.game.program.ring.PlanetaryRingProperty;
-import pl.warp.ide.Launcher;
 import pl.warp.ide.controller.IDEController;
+import pl.warp.ide.scene.SceneLoader;
 
 import java.util.Random;
 
 /**
  * @author Jaca777
- *         Created 2016-06-27 at 14
- *         CANCER CODE, ONLY FOR TESTING
- *         TODO KILL IT WITH FIRE
+ *         Created 2017-01-22 at 11
  */
-public class Test {
+public class TestSceneLoader implements SceneLoader {
 
-    private static Logger logger = Logger.getLogger(Test.class);
-    private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 864, HEIGHT = 697;
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 5;
-    private static Random random = new Random();
 
-    public static void main(String... args) {
+    private EngineThread graphicsThread;
+    private RenderingConfig config;
+    private EngineContext context;
+    private AudioManager audioManager;
 
-        EngineContext context = new EngineContext();
+    public TestSceneLoader(EngineThread graphicsThread, RenderingConfig config, EngineContext context, AudioManager audioManager) {
+        this.graphicsThread = graphicsThread;
+        this.config = config;
+        this.context = context;
+    }
+
+    @Override
+    public Scene loadScene() {
+
         Scene scene = new Scene(context);
         new NameProperty(scene, "Test universe");
         IDEController.SCENE = scene;
@@ -100,22 +96,10 @@ public class Test {
         new NameProperty(root, "Root");
         Component controllableGoat = new SimpleComponent(root);
         new NameProperty(controllableGoat, "Player ship");
-        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, WIDTH, HEIGHT));
+        Display display = config.getDisplay();
+        Camera camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
         new NameProperty(camera, "Camera");
         camera.move(new Vector3f(0, 4f, 15f));
-        RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
-
-        OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
-        IDEController.INPUT = outputRenderer.getOutput();
-        OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
-        Graphics graphics = new Graphics(context, outputRenderer, camera, settings);
-        EngineThread graphicsThread = graphics.getThread();
-        graphics.enableUpsLogging();
-        //CameraScript cameraScript = new CameraScript(camera);
-        GLFWInput input = new GLFWInput();
-        AudioContext audioContext = new AudioContext();
-        audioContext.setAudioListener(new AudioListener(controllableGoat));
-        AudioManager audioManager = new AudioManager(audioContext);
 
         graphicsThread.scheduleOnce(() -> {
             Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
@@ -174,7 +158,7 @@ public class Test {
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
 
-            generateGOATS(root, goatMesh, goatTexture, brightnessTexture);
+            generateShips(root, goatMesh, goatTexture, brightnessTexture);
 
             /*Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
             ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
@@ -250,65 +234,14 @@ public class Test {
             transformProperty.rotateY((float) -(Math.PI / 2));
             transformProperty.scale(new Vector3f(3));
 
-            context.setInput(input);
 
         });
-        EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        graphicsThread.scheduleOnce(() -> {
-            scriptsThread.scheduleTask(new ScriptTask(context.getScriptContext()));
-            GLFWWindowManager windowManager = graphics.getWindowManager();
-            scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
-            scriptsThread.start(); //has to start after the window is created
-        });
-        EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        RayTester rayTester = new RayTester();
-        physicsThread.scheduleOnce(() -> {
-            physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
-        });
-
-        EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        audioThread.scheduleOnce(() -> {
-            audioThread.scheduleTask(new AudioTask(audioContext));
-            audioManager.loadFiles("/pl/warp/game/sound");
-            audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
-
-        });
-        audioThread.start();
-        EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        aiThread.scheduleOnce(()->{
-            aiThread.scheduleTask(new AITask(root));
-            new Thread(() -> {
-                try {
-                    Launcher.main(args);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
-        aiThread.start();
-        new Script(root) {
-            @Override
-            public void onInit() {
-
-            }
-
-            @Override
-            public void onUpdate(int delta) {
-                if (input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
-                    scriptsThread.scheduleOnce(scriptsThread::interrupt);
-                    graphicsThread.scheduleOnce(graphicsThread::interrupt);
-                    physicsThread.scheduleOnce(physicsThread::interrupt);
-                }
-            }
-        };
-
-        graphicsThread.scheduleOnce(physicsThread::start);
-
-        graphics.create();
+        return scene;
     }
 
-    private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
+
+    private static void generateShips(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
+        Random random = new Random();
         for (int i = 0; i < 10; i++) {
             Component goat = new SimpleComponent(parent);
             new NameProperty(goat, "Ship " + i);

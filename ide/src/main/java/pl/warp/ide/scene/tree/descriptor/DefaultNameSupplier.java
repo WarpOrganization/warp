@@ -1,4 +1,4 @@
-package pl.warp.ide.scene.descriptor;
+package pl.warp.ide.scene.tree.descriptor;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;

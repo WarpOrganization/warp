@@ -1,8 +1,8 @@
-package pl.warp.ide.scene.descriptor;
+package pl.warp.ide.scene.tree.descriptor;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
-import pl.warp.ide.scene.ComponentLook;
+import pl.warp.ide.scene.tree.ComponentLook;
 
 import java.util.Arrays;
 import java.util.List;

@@ -4,8 +4,8 @@ import javafx.scene.control.TreeView;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
-import pl.warp.ide.scene.ComponentItem;
-import pl.warp.ide.scene.SceneLoader;
+import pl.warp.ide.scene.tree.ComponentItem;
+import pl.warp.ide.scene.tree.SceneTreeLoader;
 
 /**
  * Created by user on 2017-01-17.
@@ -13,11 +13,11 @@ import pl.warp.ide.scene.SceneLoader;
 public class ComponentController {
     private TreeView<ComponentItem<Component>> sceneTree;
     private Scene scene;
-    private SceneLoader loader;
+    private SceneTreeLoader loader;
     private Component selectedComponent;
 
 
-    public ComponentController(TreeView<ComponentItem<Component>> sceneTree, Scene scene, SceneLoader loader) {
+    public ComponentController(TreeView<ComponentItem<Component>> sceneTree, Scene scene, SceneTreeLoader loader) {
         this.sceneTree = sceneTree;
         this.loader = loader;
         this.scene = scene;

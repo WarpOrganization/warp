@@ -1,12 +1,11 @@
 package pl.warp.game;
 
 import org.joml.Quaternionf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.graphics.input.GLFWInput;
+import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
@@ -25,7 +24,6 @@ public class GoatControlScript extends Script<Component> {
     private float movementSpeed;
     private float rotationSpeed;
     private PhysicalBodyProperty bodyProperty;
-    private GLFWInput input;
     private final float brakingForce;
     private final float arrowKeysRottationSpeed;
 
@@ -33,11 +31,10 @@ public class GoatControlScript extends Script<Component> {
     private Vector3f rightVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
 
-    public GoatControlScript(Component owner, GLFWInput input, float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRottationSpeed) {
+    public GoatControlScript(Component owner,float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRottationSpeed) {
         super(owner);
         this.movementSpeed = movementSpeed;
         this.rotationSpeed = rotationSpeed;
-        this.input = input;
         this.brakingForce = brakingForce;
         this.arrowKeysRottationSpeed = arrowKeysRottationSpeed;
     }
@@ -65,6 +62,7 @@ public class GoatControlScript extends Script<Component> {
     }
 
     private void move(int delta) {
+        Input input = getContext().getInput();
         if (input.isKeyDown(GLFW.GLFW_KEY_W))
             move(forwardVector, movementSpeed * delta);
         if (input.isKeyDown(GLFW.GLFW_KEY_S))

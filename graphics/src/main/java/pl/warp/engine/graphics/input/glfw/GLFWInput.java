@@ -1,7 +1,11 @@
-package pl.warp.engine.graphics.input;
+package pl.warp.engine.graphics.input.glfw;
 
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
+import pl.warp.engine.core.scene.input.Input;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * @author Jaca777
@@ -9,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
  */
 
 @SuppressWarnings("Duplicates") //srsly intellij?
-public class GLFWInput {
+public class GLFWInput implements Input {
 
     private long windowHandle;
 
@@ -42,7 +46,8 @@ public class GLFWInput {
     }
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
-        if (key == -1)
+        int keyStroke = GLFWKeyMapper.toKeyCode(key);
+        if (keyStroke == KeyEvent.VK_UNDEFINED)
             return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
@@ -58,7 +63,8 @@ public class GLFWInput {
     }
 
     private void mouseButtonAction(long window, int button, int action, int mods) {
-        if (button == -1)
+        int buttonCode = GLFWKeyMapper.toButtonCode(button);
+        if (buttonCode == MouseEvent.NOBUTTON)
             return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:

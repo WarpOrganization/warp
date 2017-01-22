@@ -1,4 +1,4 @@
-package pl.warp.ide.scene;
+package pl.warp.ide.scene.tree;
 
 import javafx.scene.control.TreeItem;
 import pl.warp.engine.core.scene.Component;

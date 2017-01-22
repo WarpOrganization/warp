@@ -1,7 +1,7 @@
-package pl.warp.ide.scene.descriptor;
+package pl.warp.ide.scene.tree.descriptor;
 
 import pl.warp.engine.core.scene.Component;
-import pl.warp.ide.scene.ComponentLook;
+import pl.warp.ide.scene.tree.ComponentLook;
 
 /**
  * Created by user on 2017-01-17.

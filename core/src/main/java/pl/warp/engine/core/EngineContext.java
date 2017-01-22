@@ -1,6 +1,7 @@
 package pl.warp.engine.core;
 
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptContext;
 
 /**
@@ -10,6 +11,7 @@ import pl.warp.engine.core.scene.script.ScriptContext;
 public class EngineContext {
     private Scene scene;
     private ScriptContext scriptContext;
+    private Input input;
 
     public Scene getScene() {
         return scene;
@@ -25,5 +27,13 @@ public class EngineContext {
 
     public void setScriptContext(ScriptContext scriptContext) {
         this.scriptContext = scriptContext;
+    }
+
+    public Input getInput() {
+        return input;
+    }
+
+    public void setInput(Input input) {
+        this.input = input;
     }
 }

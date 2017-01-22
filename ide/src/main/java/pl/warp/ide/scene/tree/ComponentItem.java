@@ -1,4 +1,4 @@
-package pl.warp.ide.scene;
+package pl.warp.ide.scene.tree;
 
 import pl.warp.engine.core.scene.Component;
 
