@@ -361,9 +361,9 @@ public class Test {
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
             SequenceNode basenode = new SequenceNode();
-            //  basenode.addChildren(new SpinLeaf());
-            BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
-            new AIProperty(goat, behaviourTree);
+          //  basenode.addChildren(new SpinLeaf());
+            //BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
+            new AIProperty(goat, builder.build(goat));
         }
     }
 }
