@@ -1,5 +1,6 @@
 package pl.warp.game;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -72,6 +73,11 @@ import pl.warp.game.program.ring.PlanetaryRingProgram;
 import pl.warp.game.program.ring.PlanetaryRingProperty;
 import pl.warp.ide.controller.IDEController;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
 import java.util.Random;
 
 /**
@@ -91,11 +97,13 @@ public class Test {
     private static final int GUN_COOLDOWN = 70;
     private static Random random = new Random();
 
-    public static void main(String... args) {
+    public static void main(String... args) throws IOException {
         runTest(new RenderingConfig(60, new Display(FULLSCREEN, 1720, 920)));
     }
 
-    public static void runTest(RenderingConfig settings) {
+    public static void runTest(RenderingConfig settings) throws IOException {
+
+        unpackResources();
 
         EngineContext context = new EngineContext();
         Scene scene = new Scene(context);
@@ -244,7 +252,7 @@ public class Test {
             Component frigate = new SimpleComponent(root);
             new GraphicsMeshProperty(frigate, friageMesh);
             new GraphicsMaterialProperty(frigate, frigateMaterial);
-            new PhysicalBodyProperty(frigate, 20.0f, 38.365f * 3, 15.1f * 3, 11.9f  * 3);
+            new PhysicalBodyProperty(frigate, 20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3);
             TransformProperty transformProperty = new TransformProperty(frigate);
             transformProperty.move(new Vector3f(100, 0, 0));
             transformProperty.rotateY((float) -(Math.PI / 2));
@@ -275,7 +283,7 @@ public class Test {
         });
         audioThread.start();
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        aiThread.scheduleOnce(()->{
+        aiThread.scheduleOnce(() -> {
             aiThread.scheduleTask(new AITask(root));
             PlayList playList = new PlayRandomPlayList();
             playList.add("data/sound/music/Stellardrone-Light_Years-05_In_Time.wav");
@@ -304,6 +312,39 @@ public class Test {
         graphics.create();
     }
 
+    private static void unpackResources() throws IOException {
+        String path = Test.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String decodedPath = URLDecoder.decode(path, "UTF-8");
+        File jarFile = new File(decodedPath);
+        String parent = jarFile.getParent();
+        String dataPath = parent + File.separator + "data";
+        if (!new File(dataPath).exists()) {
+            FileOutputStream fileOutputStream = getFileOutputStream(dataPath + "" + File.separator + "sound" + File.separator + "effects" + File.separator + "gun.wav");
+            InputStream gun = Test.class.getResourceAsStream("sound/effects/gun.wav");
+            IOUtils.copy(gun, fileOutputStream);
+
+            FileOutputStream fileOutputStream2 = getFileOutputStream(dataPath + "" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
+            InputStream music1 = Test.class.getResourceAsStream("sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
+            IOUtils.copy(music1, fileOutputStream2);
+
+            FileOutputStream fileOutputStream3 = getFileOutputStream(dataPath + "" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
+            InputStream music2 = Test.class.getResourceAsStream("sound/music/Stellardrone-Light_Years-05_In_Time.wav");
+            IOUtils.copy(music2, fileOutputStream3);
+
+            FileOutputStream fileOutputStream4 = getFileOutputStream(dataPath + "" + File.separator + "ai" + File.separator + "droneAI.xml");
+            InputStream ai = Test.class.getResourceAsStream("ai/droneAI.xml");
+            IOUtils.copy(ai, fileOutputStream4);
+        }
+    }
+
+    private static FileOutputStream getFileOutputStream(String decodedPath) throws IOException {
+        File file = new File(decodedPath);
+        new File(file.getParent()).mkdirs();
+        file.createNewFile();
+        return new FileOutputStream(file);
+    }
+
+
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         for (int i = 0; i < 10; i++) {
@@ -320,7 +361,7 @@ public class Test {
             TransformProperty transformProperty = new TransformProperty(goat);
             transformProperty.move(new Vector3f(x, y, z));
             SequenceNode basenode = new SequenceNode();
-          //  basenode.addChildren(new SpinLeaf());
+            //  basenode.addChildren(new SpinLeaf());
             BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
             new AIProperty(goat, behaviourTree);
         }
