@@ -6,6 +6,7 @@ package pl.warp.engine.core;
  */
 public interface EngineThread {
     void scheduleOnce(Runnable runnable);
+
     void scheduleTask(EngineTask task);
     void start();
     void interrupt();

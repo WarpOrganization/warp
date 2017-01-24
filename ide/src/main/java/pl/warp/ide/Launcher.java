@@ -13,9 +13,9 @@ import pl.warp.ide.controller.IDEController;
 import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentLook;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
-import pl.warp.ide.scene.tree.descriptor.ComponentTypeLook;
-import pl.warp.ide.scene.tree.descriptor.CustomLookRepository;
-import pl.warp.ide.scene.tree.descriptor.DefaultNameSupplier;
+import pl.warp.ide.scene.tree.look.ComponentTypeLook;
+import pl.warp.ide.scene.tree.look.CustomLookRepository;
+import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
 
 /**
  * @author Jaca777

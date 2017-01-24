@@ -8,7 +8,7 @@ import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.listenable.ChildAddedEvent;
 import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
-import pl.warp.ide.scene.tree.descriptor.ComponentLookRepository;
+import pl.warp.ide.scene.tree.look.ComponentLookRepository;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;

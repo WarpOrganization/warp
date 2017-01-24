@@ -30,6 +30,8 @@ dependencies {
     compile project(':physics')
     compile project(':graphics')
     compile project(':core')
+    compile project(':audio')
+    compile project(':ai')
     testCompile 'junit:junit:4.12'
 }
 

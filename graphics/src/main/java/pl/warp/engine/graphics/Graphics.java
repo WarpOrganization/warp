@@ -11,7 +11,7 @@ import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
 import pl.warp.engine.graphics.postprocessing.HDRRenderer;
-import pl.warp.engine.graphics.postprocessing.lens.LensEnviromentFlareRenderer;
+import pl.warp.engine.graphics.postprocessing.lens.LensEnvironmentFlareRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 import pl.warp.engine.graphics.skybox.SkyboxRenderer;
 import pl.warp.engine.graphics.texture.Texture2D;
@@ -75,18 +75,38 @@ public class Graphics {
     }
 
     private Pipeline createPipeline() {
+        SceneRenderer sceneRenderer = getSceneRenderer();
+        MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
+        PipelineBuilder<Texture2D> pipeline = PipelineBuilder
+                .from(sceneRenderer)
+                .via(textureRenderer);
+        if(config.isBloomEnabled()) pipeline = createBloom(pipeline);
+        if(config.areLensEnabled()) pipeline = createFlares(pipeline);
+        return pipeline.to(output);
+    }
+
+    private SceneRenderer getSceneRenderer() {
         MeshRenderer meshRenderer = new MeshRenderer(mainViewCamera, environment);
         SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         ParticleSystemRenderer particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
-        LensEnviromentFlareRenderer enviromentFlareRenderer = new LensEnviromentFlareRenderer(environment);
-        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, enviromentFlareRenderer};
-        SceneRenderer sceneRenderer = new SceneRenderer(context.getScene(), config, renderers);
-        MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
+        LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
+
+        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, environmentFlareRenderer};
+        return new SceneRenderer(context.getScene(), config, renderers);
+    }
+
+    private PipelineBuilder<Texture2D> createBloom(PipelineBuilder<Texture2D>  builder) {
         BloomRenderer bloomRenderer = new BloomRenderer(config);
-        LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment, config);
         HDRRenderer hdrRenderer = new HDRRenderer(config);
-        return PipelineBuilder.from(sceneRenderer).via(textureRenderer).via(bloomRenderer).via(hdrRenderer).via(flareRenderer).to(output);
+        return builder
+                .via(bloomRenderer)
+                .via(hdrRenderer);
+    }
+
+    private PipelineBuilder<Texture2D> createFlares(PipelineBuilder<Texture2D> builder) {
+        LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment, config);
+        return builder.via(flareRenderer);
     }
 
 

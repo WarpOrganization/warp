@@ -13,6 +13,8 @@ public class RenderingConfig {
     private int renderingSamples = 5;
     private int bloomIterations = 5;
     private float exposure = 4f;
+    private boolean bloom = true;
+    private boolean lens = true;
     private float bloomLevel = 1f;
     private float bloomThreshold = 1.0f;
 
@@ -78,5 +80,21 @@ public class RenderingConfig {
 
     public Display getDisplay() {
         return display;
+    }
+
+    public boolean isBloomEnabled() {
+        return bloom;
+    }
+
+    public void setBloom(boolean bloom) {
+        this.bloom = bloom;
+    }
+
+    public boolean areLensEnabled() {
+        return lens;
+    }
+
+    public void setLens(boolean lens) {
+        this.lens = lens;
     }
 }

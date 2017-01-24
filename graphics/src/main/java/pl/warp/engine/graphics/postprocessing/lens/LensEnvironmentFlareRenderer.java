@@ -9,11 +9,11 @@ import pl.warp.engine.graphics.math.MatrixStack;
  * @author Jaca777
  *         Created 2016-07-25 at 12
  */
-public class LensEnviromentFlareRenderer implements Renderer{
+public class LensEnvironmentFlareRenderer implements Renderer{
     
     private Environment environment;
 
-    public LensEnviromentFlareRenderer(Environment environment) {
+    public LensEnvironmentFlareRenderer(Environment environment) {
         this.environment = environment;
     }
 
