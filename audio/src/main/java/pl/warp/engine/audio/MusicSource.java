@@ -2,6 +2,7 @@ package pl.warp.engine.audio;
 
 import org.joml.Vector3f;
 import pl.warp.engine.audio.playlist.PlayList;
+import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
 
 import javax.sound.sampled.AudioFormat;
@@ -40,8 +41,7 @@ public class MusicSource extends AudioSource {
 
     public void loadNew(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(new File(path));
-                    /*AudioSystem.getAudioInputStream(MusicSource.class.getResourceAsStream(path));*/
+            stream = AudioSystem.getAudioInputStream(new File(EngineContext.GAME_DIR_PATH + path));
             format = stream.getFormat();
             openALFormat = SoundBank.getOpenALFormat(format);
             sampleRate = format.getSampleRate();
@@ -83,7 +83,7 @@ public class MusicSource extends AudioSource {
         return currentCycles;
     }
 
-    public void incrementCurrentCycles(){
+    public void incrementCurrentCycles() {
         currentCycles++;
     }
 
@@ -95,7 +95,7 @@ public class MusicSource extends AudioSource {
         doneReading = true;
     }
 
-    public void keepReading(){
+    public void keepReading() {
         doneReading = false;
     }
 }

@@ -4,6 +4,7 @@ package pl.warp.engine.core;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.script.ScriptContext;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -13,12 +14,13 @@ import java.net.URLDecoder;
  */
 public class EngineContext {
 
-    public static final String JAR_LOCATION = getJarLocation();
+    public static final String GAME_DIR_PATH = getGameDirPath();
 
-    private static String getJarLocation() {
+    private static String getGameDirPath() {
         try {
             String path = EngineContext.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-            return URLDecoder.decode(path, "UTF-8");
+            File jarFile = new File(URLDecoder.decode(path, "UTF-8"));
+            return jarFile.getParent() + File.separator;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

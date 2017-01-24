@@ -1,6 +1,7 @@
 package pl.warp.engine.ai.loader;
 
 import org.xml.sax.SAXException;
+import pl.warp.engine.core.EngineContext;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -18,7 +19,7 @@ public class BehaviourTreeLoader {
 
     public static BehaviourTreeBuilder loadXML(String path) {
         try {
-            InputStream stream = new FileInputStream(new File(path));
+            InputStream stream = new FileInputStream(new File(EngineContext.GAME_DIR_PATH + path));
             SAXParserFactory factory = SAXParserFactory.newInstance();
             BehaviourTreeBuilder behaviourTreeBuilder = new BehaviourTreeBuilder();
             SAXParser saxParser = factory.newSAXParser();

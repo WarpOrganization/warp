@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
+import pl.warp.engine.core.EngineContext;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -34,13 +35,7 @@ public class SoundBank {
     }
 
     public void loadDir(String path) throws URISyntaxException, IOException, UnsupportedAudioFileException {
-        Path myPath = Paths.get(path);
-        /*if (uri.getScheme().equals("jar")) {
-            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
-            myPath = fileSystem.getPath(path);
-        } else {
-            myPath = Paths.get(uri);
-        }*/
+        Path myPath = Paths.get(EngineContext.GAME_DIR_PATH + path);
         Stream<Path> walk = Files.walk(myPath, 1);
 
 
@@ -72,7 +67,7 @@ public class SoundBank {
         }
     }
 
-    public static int getOpenALFormat(AudioFormat format){
+    public static int getOpenALFormat(AudioFormat format) {
         final int MONO = 1;
         final int STEREO = 2;
         int openALFormat = -1;

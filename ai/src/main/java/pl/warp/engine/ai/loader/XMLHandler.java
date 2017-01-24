@@ -31,22 +31,15 @@ public class XMLHandler extends DefaultHandler {
             stack.peek().setPath(path);
             builder.setBaseNode(stack.peek());
         } else if (qName.equalsIgnoreCase("node")) {
-            if (hasEnded) {
-                stack.pop();
-                stack.push(new NodeBuilder());
-                stack.peek().setPath(path);
-            } else {
                 NodeBuilder node = new NodeBuilder();
                 node.setPath(path);
                 stack.peek().getChildren().add(node);
                 stack.push(node);
-            }
-            hasEnded = false;
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        hasEnded = true;
+        stack.pop();
     }
 }
