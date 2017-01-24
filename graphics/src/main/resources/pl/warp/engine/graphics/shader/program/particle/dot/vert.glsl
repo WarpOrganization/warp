@@ -10,16 +10,14 @@ layout(location = 1) in vec4 color;
 layout(location = 2) in float gradient;
 layout(location = 3) in float scale;
 
-flat out vData {
-    vec4 color;
-    float scale;
-    float gradient;
-} pointData;
+out vec4 vColor;
+out float vScale;
+out float vGradient;
 
 
 void main(void) {
     gl_Position = vec4(position, 1);
-    pointData.color = color;
-    pointData.gradient = gradient;
-    pointData.scale = scale;
+    vColor = color;
+    vScale = gradient;
+    vGradient = scale;
 }

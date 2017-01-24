@@ -16,21 +16,19 @@ smooth out vec2 coord;
 flat out vec4 color;
 out float gradient;
 
-flat in vData {
-    vec4 color;
-    float scale;
-    float gradient;
-} pointData[];
+in vec4 vColor[];
+in float vScale[];
+in float vGradient[];
 
 void main()
 {
     vec4 pos = gl_in[0].gl_Position;
-    gradient = pointData[0].gradient;
-    float scale = pointData[0].scale;
+    gradient = vGradient[0];
+    float scale = vScale[0];
 
      // Vertex 4
     coord = vec2(1.0, 1.0);
-    color = pointData[0].color;
+    color = vColor[0];
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += (vec2(1, 1) * scale);
     gl_Position = projectionMatrix * gl_Position;
@@ -38,7 +36,7 @@ void main()
 
     // Vertex 3
     coord = vec2(-1.0, 1.0);
-    color = pointData[0].color;
+    color = vColor[0];
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += vec2(-1, 1) * scale;
     gl_Position = projectionMatrix * gl_Position;
@@ -46,7 +44,7 @@ void main()
 
     // Vertex 2
     coord = vec2(1.0, -1.0);
-    color = pointData[0].color;
+    color = vColor[0];
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += vec2(1, -1) * scale;
     gl_Position = projectionMatrix * gl_Position;
@@ -54,7 +52,7 @@ void main()
 
     // Vertex 1
     coord = vec2(-1.0, -1.0);
-    color = pointData[0].color;
+    color = vColor[0];
     gl_Position = modelViewMatrix * pos;
     gl_Position.xy += vec2(-1, -1) * scale;
     gl_Position = projectionMatrix * gl_Position;

@@ -15,20 +15,18 @@ flat out float visibility;
 out vec3 flareColor;
 smooth out vec2 texCoord;
 
-in vData {
-    float scale;
-    int textureIndex;
-    float visibility;
-    vec3 flareColor;
-} pointData[];
+in float vScale[];
+in int vTextureIndex[];
+in float vVisibility[];
+in vec3 vFlareColor[];
 
 void main()
 {
     vec4 pos = gl_in[0].gl_Position;
-    float scale = pointData[0].scale;
-    textureIndex = pointData[0].textureIndex;
-    visibility = pointData[0].visibility;
-    flareColor = pointData[0].flareColor;
+    float scale = vScale[0];
+    textureIndex = vTextureIndex[0];
+    visibility = vVisibility[0];
+    flareColor = vFlareColor[0];
     vec2 screenRatio = normalize(screenSize);
 
      // Vertex 4
