@@ -285,8 +285,8 @@ public class Test {
         aiThread.scheduleOnce(() -> {
             aiThread.scheduleTask(new AITask(root));
             PlayList playList = new PlayRandomPlayList();
-            playList.add("data/sound/music/Stellardrone-Light_Years-05_In_Time.wav");
             playList.add("data/sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
+            playList.add("data/sound/music/Stellardrone-Light_Years-05_In_Time.wav");
             MusicSource musicSource = audioManager.createMusicSource(new Vector3f(), playList);
             audioManager.play(musicSource);
         });
