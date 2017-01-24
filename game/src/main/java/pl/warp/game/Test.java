@@ -77,6 +77,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -346,7 +347,10 @@ public class Test {
 
     private static void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
-        for (int i = 0; i < 10; i++) {
+        ArrayList<Component> team1 = new ArrayList<>();
+        ArrayList<Component> team2 = new ArrayList<>();
+        int nOfGoats = 10;
+        for (int i = 0; i < nOfGoats; i++) {
             Component goat = new SimpleComponent(parent);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
@@ -361,7 +365,14 @@ public class Test {
             transformProperty.move(new Vector3f(x, y, z));
             SequenceNode basenode = new SequenceNode();
           //  basenode.addChildren(new SpinLeaf());
-            //BehaviourTree behaviourTree = new BehaviourTree(basenode, goat);
+            //BehaviourTree behaviourTree = builder.build(goat);
+            if(i<nOfGoats/2){
+                new DroneProperty(goat,5,1, team2);
+                team1.add(goat);
+            }else {
+                new DroneProperty(goat,5,1, team1);
+                team2.add(goat);
+            }
             new AIProperty(goat, builder.build(goat));
         }
     }

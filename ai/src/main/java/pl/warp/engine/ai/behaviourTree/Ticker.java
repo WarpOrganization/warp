@@ -9,10 +9,10 @@ import java.util.HashMap;
 public class Ticker {
 
     private BehaviourTree tree;
-    private HashMap data;
+    private HashMap<String, Object> data;
     private int currentTick = Integer.MIN_VALUE;
 
-    public Ticker(BehaviourTree behaviourTree, HashMap data) {
+    public Ticker(BehaviourTree behaviourTree, HashMap<String, Object> data) {
 
         this.tree = behaviourTree;
         this.data = data;
@@ -46,4 +46,7 @@ public class Ticker {
         return data.get(key);
     }
 
+    public void setData(Object value, String key){
+        data.put(key, value);
+    }
 }
