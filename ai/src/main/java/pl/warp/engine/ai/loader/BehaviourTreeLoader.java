@@ -19,7 +19,6 @@ public class BehaviourTreeLoader {
     public static BehaviourTreeBuilder loadXML(String path) {
         try {
             InputStream stream = new FileInputStream(new File(path));
-                    /*BehaviourTree.class.getClassLoader().getResourceAsStream(path);*/
             SAXParserFactory factory = SAXParserFactory.newInstance();
             BehaviourTreeBuilder behaviourTreeBuilder = new BehaviourTreeBuilder();
             SAXParser saxParser = factory.newSAXParser();

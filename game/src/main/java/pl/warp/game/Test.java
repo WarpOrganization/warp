@@ -6,7 +6,6 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.ai.AITask;
-import pl.warp.engine.ai.behaviourTree.BehaviourTree;
 import pl.warp.engine.ai.behaviourTree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
@@ -90,7 +89,7 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final float ROT_SPEED = 0.05f;
+    private static final float ROT_SPEED = 0.2f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;

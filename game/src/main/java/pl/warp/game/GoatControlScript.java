@@ -1,13 +1,12 @@
 package pl.warp.game;
 
 import org.joml.Quaternionf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.graphics.input.GLFWInput;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -49,7 +48,6 @@ public class GoatControlScript extends Script<Component> {
 
     @Override
     public void onUpdate(int delta) {
-        //System.out.println(bodyProperty.getVelocity());
         updateDirections();
         desiredTorque.set(0, 0, 0);
         move(delta);
@@ -78,17 +76,17 @@ public class GoatControlScript extends Script<Component> {
         if (input.isKeyDown(GLFW.GLFW_KEY_P))
             stop();
         if (input.isKeyDown(GLFW.GLFW_KEY_UP))
-        addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
+            addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_DOWN))
-        addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
+            addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_LEFT))
-        addDesiredTorque(0, arrowKeysRottationSpeed, 0);
+            addDesiredTorque(0, arrowKeysRottationSpeed, 0);
         if (input.isKeyDown(GLFW.GLFW_KEY_RIGHT))
-        addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
-        if(input.isKeyDown(GLFW.GLFW_KEY_Q))
-        addDesiredTorque(0, 0, arrowKeysRottationSpeed);
-        if(input.isKeyDown(GLFW.GLFW_KEY_E))
-        addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
+            addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
+        if (input.isKeyDown(GLFW.GLFW_KEY_Q))
+            addDesiredTorque(0, 0, arrowKeysRottationSpeed);
+        if (input.isKeyDown(GLFW.GLFW_KEY_E))
+            addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
     }
 
     private Vector3f tmpForce = new Vector3f();
@@ -105,12 +103,14 @@ public class GoatControlScript extends Script<Component> {
         torqueChange.set(bodyProperty.getAngularVelocity());
         torqueChange.sub(desiredTorque);
         torqueChange.negate();
-        if (torqueChange.length() > rotationSpeed * delta) {
+        if (torqueChange.length() > rotationSpeed * delta / bodyProperty.getUniversalRotationInertia()) {
             torqueChange.normalize();
             torqueChange.mul(rotationSpeed);
             torqueChange.mul(delta);
+        } else {
+            torqueChange.mul(bodyProperty.getUniversalRotationInertia());
         }
-        bodyProperty.addAngularVelocity(torqueChange);
+        bodyProperty.addAngularVelocity(torqueChange.div(bodyProperty.getUniversalRotationInertia()));
     }
 
     private void addDesiredTorque(float x, float y, float z) {
@@ -122,7 +122,8 @@ public class GoatControlScript extends Script<Component> {
         Vector2f rotation = new Vector2f();
         cursorPosDelta.mul(rotationSpeed * delta * MOUSE_ROTATION_SPEED_FACTOR, rotation);
         bodyProperty.addAngularVelocity(new Vector3f(-rotation.y, -rotation.x, 0));
-  */  }
+  */
+    }
 
     private void stop() {
         bodyProperty.setVelocity(new Vector3f(0));
