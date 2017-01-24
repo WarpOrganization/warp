@@ -15,18 +15,16 @@ layout (max_vertices = 4) out;
 out float textureIndex;
 smooth out vec2 texCoord;
 
-in vData {
-    mat2 rotation;
-    float textureIndex;
-} pointData[];
+flat in mat2 vRotation[];
+flat in float vTextureIndex[];
 
 mat2 toZRotation(mat4 rotation3D);
 
 void main()
 {
     vec4 pos = gl_in[0].gl_Position;
-    mat2 particleRotation = pointData[0].rotation;
-    textureIndex = pointData[0].textureIndex;
+    mat2 particleRotation = vRotation[0];
+    textureIndex = vTextureIndex[0];
 
      // Vertex 4
     texCoord = vec2(1.0, 1.0);
