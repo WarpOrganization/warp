@@ -51,8 +51,7 @@ public class SoundBank {
         AL10.alGenBuffers(buffer);
 
         for (int i = 0; i < files.size(); i++) {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(new File(path + File.separator + FilenameUtils.getName(files.get(i))));
-                    /*AudioSystem.getAudioInputStream(SoundBank.class.getResourceAsStream(path + File.separator + FilenameUtils.getName(files.get(i))));*/
+            AudioInputStream stream = AudioSystem.getAudioInputStream(new File(EngineContext.GAME_DIR_PATH + path + File.separator + FilenameUtils.getName(files.get(i))));
 
             AudioFormat format = stream.getFormat();
 
