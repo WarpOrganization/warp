@@ -17,7 +17,6 @@ dependencies {
     compile project(':physics')
     compile project(':audio')
     compile project(':ai')
-    compile project(':ide')
 
     testCompile 'junit:junit:4.12'
 }

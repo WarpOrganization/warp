@@ -94,7 +94,6 @@ public class TestSceneLoader implements SceneLoader {
     public void loadScene() {
         scene = new Scene(context);
         new NameProperty(scene, "Test universe");
-        IDEController.SCENE = scene;
         context.setScene(scene);
 
         context.setScriptContext(new ScriptContext());

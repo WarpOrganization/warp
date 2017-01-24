@@ -7,10 +7,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.window.Display;
 import pl.warp.ide.controller.IDEController;
+import pl.warp.ide.engine.EngineIDEInitializer;
 import pl.warp.ide.input.JavaFxInput;
+import pl.warp.ide.scene.SceneLoader;
 import pl.warp.ide.scene.tree.ComponentLook;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 import pl.warp.ide.scene.tree.look.ComponentTypeLook;
@@ -23,10 +27,17 @@ import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
  */
 public class Launcher extends Application {
 
+    public static final int FPS = 40;
+    public static SceneLoader SCENE_LOADER; //TODO remove - for testing only
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        CustomLookRepository descriptorRepository = loadCustomLookRepository();
-        IDEController controller = new IDEController(new SceneTreeLoader(descriptorRepository), new JavaFxInput());
+        CustomLookRepository lookRepo = loadCustomLookRepository();
+        RenderingConfig config = new RenderingConfig(FPS, new Display(false, -1, -1));
+        JavaFxInput javaFxInput = new JavaFxInput();
+        EngineIDEInitializer ideInitializer = new EngineIDEInitializer(SCENE_LOADER, config, javaFxInput);
+
+        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), new JavaFxInput(), ideInitializer, SCENE_LOADER.getScene());
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);

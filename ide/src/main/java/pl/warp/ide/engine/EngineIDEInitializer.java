@@ -25,20 +25,17 @@ import pl.warp.ide.scene.SceneLoader;
 public class EngineIDEInitializer {
 
     private SceneLoader loader;
-    private Canvas destCanvas;
     private SceneViewRenderer sceneViewRenderer;
     private RenderingConfig config;
     private Input input;
 
-    public EngineIDEInitializer(SceneLoader loader, Canvas destCanvas, RenderingConfig config, Input input) {
+    public EngineIDEInitializer(SceneLoader loader, RenderingConfig config, Input input) {
         this.loader = loader;
-        this.destCanvas = destCanvas;
         this.config = config;
         this.input = input;
-
     }
 
-    public void start(){
+    public void start(Canvas destCanvas){
         EngineContext context = new EngineContext();
         OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
         this.sceneViewRenderer = new SceneViewRenderer(destCanvas, outputRenderer.getOutput());

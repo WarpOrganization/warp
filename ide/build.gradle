@@ -32,6 +32,7 @@ dependencies {
     compile project(':core')
     compile project(':audio')
     compile project(':ai')
+    compile project(':game')
     testCompile 'junit:junit:4.12'
 }
 
