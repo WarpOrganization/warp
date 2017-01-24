@@ -16,9 +16,9 @@ smooth out vec2 coord;
 flat out vec4 color;
 out float gradient;
 
-in vec4 vColor[];
-in float vScale[];
-in float vGradient[];
+flat in vec4 vColor[];
+flat in float vScale[];
+flat in float vGradient[];
 
 void main()
 {

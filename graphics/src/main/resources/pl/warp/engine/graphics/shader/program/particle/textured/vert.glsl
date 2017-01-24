@@ -9,8 +9,8 @@ layout(location = 0) in vec3 position;
 layout(location = 1) in float rotation;
 layout(location = 2) in float textureIndex;
 
-out mat2 vRotation;
-out float vTextureIndex;
+flat out mat2 vRotation;
+flat out float vTextureIndex;
 
 
 void main(void) {

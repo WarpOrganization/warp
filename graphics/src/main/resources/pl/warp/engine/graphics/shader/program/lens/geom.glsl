@@ -15,10 +15,10 @@ flat out float visibility;
 out vec3 flareColor;
 smooth out vec2 texCoord;
 
-in float vScale[];
-in int vTextureIndex[];
-in float vVisibility[];
-in vec3 vFlareColor[];
+flat in float vScale[];
+flat in int vTextureIndex[];
+flat in float vVisibility[];
+flat in vec3 vFlareColor[];
 
 void main()
 {

@@ -9,10 +9,10 @@ layout(location = 1) in float scale;
 layout(location = 2) in int textureIndex;
 layout(location = 3) in vec3 flareColor;
 
-out float vScale;
-out int vTextureIndex;
-out float vVisibility;
-out vec3 vFlareColor;
+flat out float vScale;
+flat out int vTextureIndex;
+flat out float vVisibility;
+flat out vec3 vFlareColor;
 
 float getVisibility();
 

@@ -15,8 +15,8 @@ layout (max_vertices = 4) out;
 out float textureIndex;
 smooth out vec2 texCoord;
 
-in mat2 vRotation[];
-in float vTextureIndex[];
+flat in mat2 vRotation[];
+flat in float vTextureIndex[];
 
 mat2 toZRotation(mat4 rotation3D);
 

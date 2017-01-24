@@ -10,9 +10,9 @@ layout(location = 1) in vec4 color;
 layout(location = 2) in float gradient;
 layout(location = 3) in float scale;
 
-out vec4 vColor;
-out float vScale;
-out float vGradient;
+flat out vec4 vColor;
+flat out float vScale;
+flat out float vGradient;
 
 
 void main(void) {
