@@ -1,11 +1,11 @@
 package pl.warp.engine.core;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Jaca777
@@ -24,6 +24,7 @@ public class SyncEngineThreadTest {
         EngineTask task = mock(EngineTask.class);
         engineThread.scheduleTask(task);
         engineThread.start();
+        Thread.sleep(50);
         verify(task).init();
     }
 
@@ -74,7 +75,7 @@ public class SyncEngineThreadTest {
         EngineTask task = mock(EngineTask.class);
         engineThread.scheduleTask(task);
         engineThread.start();
-        Thread.sleep(50);
+        Thread.sleep(100);
         assertTrue(flag.get());
     }
 

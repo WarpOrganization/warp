@@ -102,12 +102,14 @@ public class GoatControlScript extends Script<Component> {
         torqueChange.set(bodyProperty.getAngularVelocity());
         torqueChange.sub(desiredTorque);
         torqueChange.negate();
-        if (torqueChange.length() > rotationSpeed * delta) {
+        if (torqueChange.length() > rotationSpeed * delta / bodyProperty.getUniversalRotationInertia()) {
             torqueChange.normalize();
             torqueChange.mul(rotationSpeed);
             torqueChange.mul(delta);
+        } else {
+            torqueChange.mul(bodyProperty.getUniversalRotationInertia());
         }
-        bodyProperty.addAngularVelocity(torqueChange);
+        bodyProperty.addAngularVelocity(torqueChange.div(bodyProperty.getUniversalRotationInertia()));
     }
 
     private void addDesiredTorque(float x, float y, float z) {
@@ -119,7 +121,8 @@ public class GoatControlScript extends Script<Component> {
         Vector2f rotation = new Vector2f();
         cursorPosDelta.mul(rotationSpeed * delta * MOUSE_ROTATION_SPEED_FACTOR, rotation);
         bodyProperty.addAngularVelocity(new Vector3f(-rotation.y, -rotation.x, 0));
-  */  }
+  */
+    }
 
     private void stop() {
         bodyProperty.setVelocity(new Vector3f(0));

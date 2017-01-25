@@ -1,8 +1,8 @@
 package pl.warp.engine.audio;
 
 import org.joml.Vector3f;
-import pl.warp.engine.audio.command.CreateSourceCommand;
-import pl.warp.engine.audio.command.PlayCommand;
+import pl.warp.engine.audio.command.*;
+import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.core.scene.Component;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -34,8 +34,32 @@ public class AudioManager {
         return source;
     }
 
+    public MusicSource createMusicSource(Component owner, Vector3f offset, PlayList playlist) {
+        MusicSource source = new MusicSource(owner, offset, true, playlist);
+        audioContext.putCommand(new CreateMusicSourceCommand(source));
+        return source;
+    }
+
+    public MusicSource createMusicSource(Vector3f offset, PlayList playList) {
+        MusicSource source = new MusicSource(offset, true, playList);
+        audioContext.putCommand(new CreateMusicSourceCommand(source));
+        return source;
+    }
+
     public void play(AudioSource source, String soundName) {
         audioContext.putCommand(new PlayCommand(source, soundName));
+    }
+
+    public void play(MusicSource source){
+        audioContext.putCommand(new PlayMusicCommand(source));
+    }
+
+    public void pause(AudioSource source){
+        audioContext.putCommand(new PauseCommand(source));
+    }
+
+    public void deleteSorce(AudioSource source){
+        audioContext.putCommand(new DisposeSourceCommand(source));
     }
 
     private Vector3f emptyVector = new Vector3f();

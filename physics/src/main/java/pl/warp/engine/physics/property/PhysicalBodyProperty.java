@@ -21,6 +21,8 @@ public class PhysicalBodyProperty extends Property<Component> {
     private Vector3f velocity = new Vector3f();
     private float mass;
     private float radius;
+    //I'm not sure if it's a good idea or overly easy workaroud
+    private float universalRotationInertia;
     private Matrix3f inertia = new Matrix3f();
     private Matrix3f inertiaRotated = new Matrix3f();
 
@@ -35,6 +37,7 @@ public class PhysicalBodyProperty extends Property<Component> {
                 0, (zLength * zLength + xLength * xLength) * mass / 12, 0,
                 0, 0, (xLength * xLength + yLength * yLength) * mass / 12).invert();
         inertiaRotated.set(inertia);
+        universalRotationInertia = (2f * mass / 5f) * (xLength + yLength + zLength) / 3f * (xLength + yLength + zLength) / 3f;
     }
 
     public void recalculateInteriaTensor(Quaternionf rotation) {
@@ -125,5 +128,13 @@ public class PhysicalBodyProperty extends Property<Component> {
     @Override
     public int hashCode() {
         return Objects.hash(angularVelocity, velocity, mass, radius, inertia, nextTickTranslation, nextTickRotation);
+    }
+
+    public float getUniversalRotationInertia() {
+        return universalRotationInertia;
+    }
+
+    public void setUniversalRotationInertia(float universalRotationInertia) {
+        this.universalRotationInertia = universalRotationInertia;
     }
 }

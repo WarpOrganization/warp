@@ -1,5 +1,5 @@
 group 'pl.warp'
-version '0.1'
+version '0.1.2'
 
 apply plugin: 'java'
 
@@ -8,23 +8,7 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-import org.gradle.internal.os.OperatingSystem
-
-switch ( OperatingSystem.current() ) {
-    case OperatingSystem.WINDOWS:
-        project.ext.lwjglNatives = "natives-windows"
-        break
-    case OperatingSystem.LINUX:
-        project.ext.lwjglNatives = "natives-linux"
-        break
-    case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = "natives-macos"
-        break
-}
-
 dependencies {
-    compile group: 'io.reactivex', name: 'rxjava', version: '1.2.3'
-    compile group: 'io.reactivex', name: 'rxjavafx', version: '0.3.0'
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile project(':core')
     compile project(':physics')

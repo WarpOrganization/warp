@@ -1,5 +1,5 @@
 group 'pl.warp'
-version '0.1'
+version '0.1.2'
 
 apply plugin: 'java'
 
@@ -12,8 +12,25 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-def mainProjects = [':ai',':audio',':core',':game',':graphics',":ide",":physics",":resourcemanagement"]
-task oneJar( type: Jar , dependsOn: mainProjects.collect{ it+":compileJava"}) {
-    baseName = 'name of jar'
-    from files(mainProjects.collect{ project(it).sourceSets.main.output })
+subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
+jar.dependsOn subprojects.tasks['classes']
+jar {
+    baseName = "warp-${platform}"
+    manifest {
+        attributes 'Main-Class': 'pl.warp.game.TestApp'
+    }
+    subprojects.each { subproject ->
+        from subproject.sourceSets.main.output.classesDir
+        from subproject.sourceSets.main.output.resourcesDir
+        from { subproject.configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+
+}
+
+
+subprojects {
+
+    test {
+        reports.junitXml.enabled = false
+    }
 }

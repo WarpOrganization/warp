@@ -1,7 +1,5 @@
 package pl.warp.engine.graphics.particles;
 
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +11,7 @@ public abstract class ParticleSystem {
 
     private ParticleEmitter emitter;
     private ParticleAnimator animator;
+    private boolean emit = true;
 
     public ParticleSystem(ParticleEmitter emitter, ParticleAnimator animator) {
         this.emitter = emitter;
@@ -44,10 +43,14 @@ public abstract class ParticleSystem {
     }
 
     private void emitParticles(int delta) {
-        emitter.emit(delta);
+        if(emit) emitter.emit(delta);
     }
 
     public abstract List<? extends Particle> getParticles();
 
     public abstract ParticleType getParticleType();
+
+    public void setEmit(boolean emit) {
+        this.emit = emit;
+    }
 }

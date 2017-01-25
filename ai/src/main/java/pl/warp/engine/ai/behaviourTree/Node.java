@@ -9,6 +9,8 @@ public abstract class Node {
     public static final int SUCCESS = 1;
     public static final int FAILURE = 2;
     public static final int RUNNING = 3;
+
+    public static final String OWNER_KEY = "owner";
     private boolean isOpen = false;
     private int tickOpened = 0;
 

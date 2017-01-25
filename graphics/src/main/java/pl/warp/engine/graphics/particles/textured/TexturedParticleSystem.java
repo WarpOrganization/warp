@@ -1,10 +1,8 @@
 package pl.warp.engine.graphics.particles.textured;
 
 import pl.warp.engine.graphics.particles.*;
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,4 +47,5 @@ public class TexturedParticleSystem extends ParticleSystem {
     public Texture2DArray getSpriteSheet() {
         return spriteSheet;
     }
+
 }

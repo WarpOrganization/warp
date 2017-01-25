@@ -69,10 +69,7 @@ public class AudioPosUpdateTask extends EngineTask {
         for (int i = 0; i < context.getPlaying().size(); i++) {
             AudioSource source = context.getPlaying().get(i);
             if (source.isPlaying()) {
-                if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
-                else posVector.set(0, 0, 0);
-                posVector.add(source.getOffset());
-                alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
+                updateSourcePos(source);
             } else {
                 context.getPlaying().remove(i);
                 if (!source.isPersistent()) {
@@ -80,5 +77,28 @@ public class AudioPosUpdateTask extends EngineTask {
                 }
             }
         }
+        for (int i = 0; i < context.getMusicPlaying().size(); i++) {
+            MusicSource source = context.getMusicPlaying().get(i);
+            if (source.isPlaying()) {
+                updateSourcePos(source);
+            }
+            if(source.isDoneReading()) {
+                String next = source.getPlayList().getNextFile();
+                if (next == null) {
+                    context.getMusicPlaying().remove(i);
+                } else {
+                    source.loadNew(next);
+                    source.keepReading();
+                }
+            }
+        }
+    }
+
+    private void updateSourcePos(AudioSource source) {
+        if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
+        else posVector.set(0, 0, 0);
+        posVector.add(source.getOffset());
+        alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
+
     }
 }

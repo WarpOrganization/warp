@@ -12,11 +12,11 @@ public class BehaviourTreeBuilder {
     private NodeBuilder baseNode;
 
 
-    public BehaviourTree build(Component owner){
+    public BehaviourTree build(Component owner) {
         BehaviourTree tree = null;
 
         try {
-            tree = new BehaviourTree(baseNode.build(),owner);
+            tree = new BehaviourTree(baseNode.build(), owner);
         } catch (Exception e) {
             e.printStackTrace();
         }
