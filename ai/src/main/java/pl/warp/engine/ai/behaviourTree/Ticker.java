@@ -14,7 +14,6 @@ public class Ticker {
     private int delta;
 
     public Ticker(BehaviourTree behaviourTree, HashMap<String, Object> data) {
-
         this.tree = behaviourTree;
         this.data = data;
     }

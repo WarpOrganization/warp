@@ -28,11 +28,13 @@ public class GLFWWindowManager implements WindowManager {
         configureHints(display);
         createHandle(display);
         setupCloseCallbackCallback();
-        centerWindow(display);
         makeOGLContext();
-        enableVSync();
-        showWindow();
-        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        if(display.isVisible()) {
+            centerWindow(display);
+            showWindow();
+            enableVSync();
+            glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        } else glfwHideWindow(windowHandle);
     }
 
     private void initGLFW() {
