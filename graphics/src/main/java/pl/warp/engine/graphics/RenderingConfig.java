@@ -12,7 +12,7 @@ public class RenderingConfig {
     private Display display;
     private int renderingSamples = 5;
     private int bloomIterations = 5;
-    private float exposure = 4f;
+    private float exposure = 1.4f;
     private boolean bloom = true;
     private boolean lens = true;
     private float bloomLevel = 1f;

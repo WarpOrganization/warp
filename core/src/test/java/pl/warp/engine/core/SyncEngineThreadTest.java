@@ -12,21 +12,6 @@ import static org.mockito.Mockito.*;
  *         Created 2016-06-25 at 13
  */
 public class SyncEngineThreadTest {
-    @Test
-    public void shouldInitScheduledTask() throws Exception {
-        Timer timer = mock(Timer.class);
-        when(timer.getDelta()).thenReturn(0);
-        doNothing().when(timer).await();
-        ScheduledExecutionStrategy strategy = mock(ScheduledExecutionStrategy.class);
-        doNothing().when(strategy).execute(any());
-
-        SyncEngineThread engineThread = new SyncEngineThread(timer, strategy);
-        EngineTask task = mock(EngineTask.class);
-        engineThread.scheduleTask(task);
-        engineThread.start();
-        Thread.sleep(50);
-        verify(task).init();
-    }
 
     @Test
     public void shouldRunScheduledTask() throws Exception {

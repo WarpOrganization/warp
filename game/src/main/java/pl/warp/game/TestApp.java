@@ -39,7 +39,7 @@ public class TestApp extends Application {
         bloomLevel.setShowTickLabels(true);
         bloomLevel.setMajorTickUnit(1.0);
 
-        Slider exposure = new Slider(0.0, 8.0, 2.8);
+        Slider exposure = new Slider(0.0, 8.0, 1.85);
         exposure.setShowTickMarks(true);
         exposure.setShowTickLabels(true);
         exposure.setMajorTickUnit(2.0);

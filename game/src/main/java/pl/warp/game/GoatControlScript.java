@@ -31,12 +31,12 @@ public class GoatControlScript extends Script<Component> {
     private Vector3f rightVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
 
-    public GoatControlScript(Component owner,float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRottationSpeed) {
+    public GoatControlScript(Component owner,float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRotationSpeed) {
         super(owner);
         this.movementSpeed = movementSpeed;
         this.rotationSpeed = rotationSpeed;
         this.brakingForce = brakingForce;
-        this.arrowKeysRottationSpeed = arrowKeysRottationSpeed;
+        this.arrowKeysRottationSpeed = arrowKeysRotationSpeed;
     }
 
     @Override

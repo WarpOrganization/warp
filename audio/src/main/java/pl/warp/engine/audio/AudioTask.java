@@ -7,6 +7,7 @@ import pl.warp.engine.core.EngineTask;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Queue;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.ALC10.*;
@@ -47,7 +48,6 @@ public class AudioTask extends EngineTask {
             }
         }
         loadBuffers();
-
     }
 
     public AudioContext getContext() {
@@ -62,11 +62,11 @@ public class AudioTask extends EngineTask {
             int n = alGetSourcei(source.getId(), AL_BUFFERS_PROCESSED);
             for (int j = 0; j < n; j++) source.getBuffers().offer(alSourceUnqueueBuffers(source.getId()));
             while (!source.getBuffers().isEmpty()) {
-                int buffer = source.getBuffers().poll();
+                Queue<Integer> buffers = source.getBuffers();
+                int buffer = buffers.poll();
                 if (!source.isDoneReading()) {
                     try {
                         if (source.getStream().read(b) != -1) {
-                            //System.out.println(Arrays.toString(b));
                             ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
                             data.flip();
                             alBufferData(buffer, source.getOpenALFormat(), data, (int) source.getSampleRate());

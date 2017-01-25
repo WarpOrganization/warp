@@ -6,15 +6,18 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.graphics.GraphicsSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.window.Display;
+import pl.warp.game.TestSceneLoader;
 import pl.warp.ide.controller.IDEController;
-import pl.warp.ide.engine.EngineIDEInitializer;
+import pl.warp.ide.engine.IDEInitializer;
+import pl.warp.ide.engine.SceneViewRenderer;
 import pl.warp.ide.input.JavaFxInput;
-import pl.warp.ide.scene.SceneLoader;
 import pl.warp.ide.scene.tree.ComponentLook;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 import pl.warp.ide.scene.tree.look.ComponentTypeLook;
@@ -28,16 +31,19 @@ import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
 public class Launcher extends Application {
 
     public static final int FPS = 40;
-    public static SceneLoader SCENE_LOADER; //TODO remove - for testing only
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         CustomLookRepository lookRepo = loadCustomLookRepository();
         RenderingConfig config = new RenderingConfig(FPS, new Display(false, -1, -1));
         JavaFxInput javaFxInput = new JavaFxInput();
-        EngineIDEInitializer ideInitializer = new EngineIDEInitializer(SCENE_LOADER, config, javaFxInput);
+        EngineContext context = new EngineContext();
+        SceneViewRenderer renderer = new SceneViewRenderer();
+        GraphicsSceneLoader sceneLoader = getSceneLoader(config, context);
+        IDEInitializer ideInitializer = new IDEInitializer(sceneLoader, renderer, config, context, javaFxInput);
 
-        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), new JavaFxInput(), ideInitializer, SCENE_LOADER.getScene());
+        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), new JavaFxInput(), ideInitializer);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);
@@ -81,6 +87,10 @@ public class Launcher extends Application {
 
     private ImageView getImage(String name) {
         return new ImageView(new Image(Launcher.class.getResourceAsStream(name)));
+    }
+
+    private GraphicsSceneLoader getSceneLoader(RenderingConfig config, EngineContext context) { //TODO remove - temporary
+        return new TestSceneLoader(config, context);
     }
 
     public static void main(String... args) throws Exception {

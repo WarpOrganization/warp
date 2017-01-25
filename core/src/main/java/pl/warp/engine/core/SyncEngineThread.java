@@ -16,6 +16,7 @@ public class SyncEngineThread implements EngineThread {
     private Timer timer;
     private ScheduledExecutionStrategy executionStrategy;
     private boolean running;
+    private Thread engineThread;
 
     public SyncEngineThread(Timer timer, ScheduledExecutionStrategy executionStrategy) {
         this.timer = timer;
@@ -29,18 +30,17 @@ public class SyncEngineThread implements EngineThread {
 
     @Override
     public void scheduleTask(EngineTask task) {
-        tasks.add(task);
-        if (isRunning() && !task.isInitialized()) task.init();
+        if (running) scheduleOnce(() -> tasks.add(task));
+        else tasks.add(task);
     }
 
     @Override
     public void start() {
-        Thread engineThread = new Thread(this::startEngine);
+        engineThread = new Thread(this::startEngine);
         engineThread.start();
     }
 
     private void startEngine() {
-        tasks.forEach(EngineTask::init);
         running = true;
         loop();
         close();
@@ -53,8 +53,10 @@ public class SyncEngineThread implements EngineThread {
 
     protected void runUpdate() {
         int delta = timer.getDelta();
-        for (EngineTask task : tasks)
+        for (EngineTask task : tasks) {
+            if (!task.isInitialized()) task.init();
             task.update(delta);
+        }
         executionStrategy.execute(scheduledRunnables);
         timer.await();
     }

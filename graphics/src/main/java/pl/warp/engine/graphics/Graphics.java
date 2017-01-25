@@ -91,7 +91,6 @@ public class Graphics {
         ParticleSystemRenderer particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
-
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, environmentFlareRenderer};
         return new SceneRenderer(context.getScene(), config, renderers);
     }
@@ -136,5 +135,9 @@ public class Graphics {
 
     public void closeWindow() {
         windowManager.closeWindow();
+    }
+
+    public Sink<Texture2D> getOutput() {
+        return output;
     }
 }

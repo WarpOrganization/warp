@@ -1,13 +1,13 @@
 package pl.warp.engine.graphics.pipeline;
 
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.shader.program.identity.IdentityProgram;
-import pl.warp.engine.graphics.shader.program.identitymultisample.IdentityMultisampleProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
+
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 
 /**
  * @author Jaca777
@@ -15,13 +15,19 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
  */
 public class OnScreenRenderer implements Sink<Texture2D> {
 
+    private RenderingConfig config;
     private Texture2D srcTexture;
     private IdentityProgram identityProgram;
     private Quad rect;
 
+    public OnScreenRenderer(RenderingConfig config) {
+        this.config = config;
+    }
+
     @Override
     public void init() {
         this.identityProgram = new IdentityProgram();
+        this.identityProgram.setExposure(config.getExposure());
         this.rect = new Quad();
     }
 

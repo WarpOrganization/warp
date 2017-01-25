@@ -36,6 +36,7 @@ public class SoundBank {
 
     public void loadDir(String path) throws URISyntaxException, IOException, UnsupportedAudioFileException {
         Path myPath = Paths.get(EngineContext.GAME_DIR_PATH + path);
+        System.out.println(EngineContext.GAME_DIR_PATH + path);
         Stream<Path> walk = Files.walk(myPath, 1);
 
 

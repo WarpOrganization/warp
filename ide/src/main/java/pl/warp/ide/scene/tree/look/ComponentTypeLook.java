@@ -19,7 +19,7 @@ public class ComponentTypeLook {
     }
 
     public boolean applies(Component c) {
-        return typeFilter.apply(c);
+        return c != null && typeFilter.apply(c);
     }
 
     public ComponentLook getDescriptor() {

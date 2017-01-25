@@ -26,7 +26,7 @@ public class CustomLookRepository implements ComponentLookRepository {
                 .stream()
                 .filter(f -> f.applies(component))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("No type descriptor found."))
+                .orElseThrow(() -> new RuntimeException("No type descriptor found for component " + component + "."))
                 .getDescriptor();
     }
 

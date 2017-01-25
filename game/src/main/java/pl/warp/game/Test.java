@@ -1,31 +1,31 @@
 package pl.warp.game;
 
 import org.apache.log4j.Logger;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
+import pl.warp.engine.audio.playlist.PlayList;
+import pl.warp.engine.audio.playlist.PlayRandomPlayList;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.graphics.GraphicsSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.input.glfw.GLFWInput;
 import pl.warp.engine.graphics.input.glfw.GLFWInputTask;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
-import pl.warp.engine.graphics.pipeline.output.OutputTexture2DRenderer;
-import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
-import pl.warp.ide.Launcher;
-import pl.warp.ide.controller.IDEController;
-import pl.warp.ide.scene.SceneLoader;
 
+import java.io.File;
 import java.util.Random;
 
 /**
@@ -38,7 +38,7 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 864, HEIGHT = 697;
+    private static final int WIDTH = 1200, HEIGHT = 720;
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
@@ -46,24 +46,21 @@ public class Test {
     private static final int GUN_COOLDOWN = 5;
     private static Random random = new Random();
 
-    public static void main(String... args) {
+    public static void runTest(RenderingConfig config) {
 
         EngineContext context = new EngineContext();
-        RenderingConfig settings = new RenderingConfig(60, new Display(FULLSCREEN, WIDTH, HEIGHT));
 
-        OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
-        IDEController.INPUT = outputRenderer.getOutput();
-        OnScreenRenderer onScreenRenderer = new OnScreenRenderer();
-        //CameraScript cameraScript = new CameraScript(camera);
+        OnScreenRenderer onScreenRenderer = new OnScreenRenderer(config);
+
         GLFWInput input = new GLFWInput();
         AudioContext audioContext = new AudioContext();
-        AudioManager audioManager = new AudioManager(audioContext);
-        SceneLoader loader = new TestSceneLoader(settings, context, audioManager);
+        AudioManager.INSTANCE = new AudioManager(audioContext);
+        GraphicsSceneLoader loader = new TestSceneLoader(config, context);
         loader.loadScene();
         Camera camera = loader.getCamera();
         Scene scene = loader.getScene();
         audioContext.setAudioListener(new AudioListener(camera.getParent()));
-        Graphics graphics = new Graphics(context, outputRenderer, camera, settings);
+        Graphics graphics = new Graphics(context, onScreenRenderer, camera, config);
         EngineThread graphicsThread = graphics.getThread();
         graphics.enableUpsLogging();
         loader.loadGraphics(graphicsThread);
@@ -78,32 +75,32 @@ public class Test {
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
             scriptsThread.start(); //has to start after the window is created
         });
+
+
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
-        physicsThread.scheduleOnce(() -> {
-            physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
-        });
+        physicsThread.scheduleTask(new MovementTask(root));
+        physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
+
 
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        audioThread.scheduleOnce(() -> {
-            audioThread.scheduleTask(new AudioTask(audioContext));
-            audioManager.loadFiles("/pl/warp/game/sound");
-            audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
+        audioThread.scheduleTask(new AudioTask(audioContext));
+        audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
 
+        audioThread.scheduleOnce(() -> {
+            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
+            PlayList playList = new PlayRandomPlayList();
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
+            MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
+            AudioManager.INSTANCE.play(musicSource);
         });
+
         audioThread.start();
+
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        aiThread.scheduleOnce(() -> {
-            aiThread.scheduleTask(new AITask(root));
-            new Thread(() -> {
-                try {
-                    Launcher.main(args);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
+
+        aiThread.scheduleTask(new AITask(root));
         aiThread.start();
         new Script(root) {
             @Override
@@ -122,7 +119,8 @@ public class Test {
         };
 
         graphicsThread.scheduleOnce(physicsThread::start);
-
         graphics.create();
     }
+
+
 }

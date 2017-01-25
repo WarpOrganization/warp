@@ -13,15 +13,13 @@ import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler.Re
  *         Created 2017-01-14 at 19
  */
 public class SceneViewRenderer {
+
+    private RenderingPipelineOutputHandler pipelineOutput;
     private Canvas canvas;
-    private final RenderingPipelineOutputHandler pipelineOutput;
 
-    public SceneViewRenderer(Canvas canvas, RenderingPipelineOutputHandler pipelineOutput) {
-        this.canvas = canvas;
+    public void startRendering(RenderingPipelineOutputHandler pipelineOutput, Canvas canvas) {
         this.pipelineOutput = pipelineOutput;
-    }
-
-    public void startRendering() {
+        this.canvas = canvas;
         pipelineOutput.addOutputListener(this::drawScene);
     }
 

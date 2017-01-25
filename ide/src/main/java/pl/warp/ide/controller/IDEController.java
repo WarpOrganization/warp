@@ -12,9 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.graphics.pipeline.output.RenderingPipelineOutputHandler;
-import pl.warp.ide.engine.EngineIDEInitializer;
-import pl.warp.ide.engine.SceneViewRenderer;
+import pl.warp.ide.engine.IDEInitializer;
 import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentItem;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
@@ -28,16 +26,14 @@ import java.util.ResourceBundle;
  */
 public class IDEController implements Initializable {
 
-    private SceneTreeLoader sceneLoader;
+    private SceneTreeLoader sceneTreeLoader;
     private JavaFxInput input;
-    private EngineIDEInitializer ideInitializer;
-    private Scene scene;
+    private IDEInitializer ideInitializer;
 
-    public IDEController(SceneTreeLoader sceneLoader, JavaFxInput input, EngineIDEInitializer ideInitializer, Scene scene) {
-        this.sceneLoader = sceneLoader;
+    public IDEController(SceneTreeLoader sceneLoader, JavaFxInput input, IDEInitializer ideInitializer) {
+        this.sceneTreeLoader = sceneLoader;
         this.input = input;
         this.ideInitializer = ideInitializer;
-        this.scene = scene;
     }
 
     @FXML
@@ -72,8 +68,9 @@ public class IDEController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        componentController = new ComponentController(sceneTree, scene, sceneLoader);
         ideInitializer.start(sceneView);
+        Scene scene = ideInitializer.getLoadedScene();
+        componentController = new ComponentController(sceneTree, scene, sceneTreeLoader);
     }
 
     @FXML
