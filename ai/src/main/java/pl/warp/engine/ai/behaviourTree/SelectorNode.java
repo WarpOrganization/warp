@@ -7,7 +7,7 @@ package pl.warp.engine.ai.behaviourTree;
 public class SelectorNode extends CompositeNode {
 
     @Override
-    int tick(Ticker ticker) {
+    int tick(Ticker ticker, int delta) {
         for (Node child : children) {
             int status = ticker.tickNode(child);
 

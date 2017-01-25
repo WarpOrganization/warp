@@ -11,5 +11,5 @@ public abstract class LeafNode extends Node {
 
     }
 
-    public abstract int tick(Ticker ticker);
+    public abstract int tick(Ticker ticker, int delta);
 }

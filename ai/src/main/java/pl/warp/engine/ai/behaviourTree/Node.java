@@ -27,7 +27,7 @@ public abstract class Node {
         return tickOpened == tick - 1 && isOpen;
     }
 
-    abstract int tick(Ticker ticker);
+    abstract int tick(Ticker ticker, int delta);
 
     public abstract void onOpen(Ticker ticker);
 

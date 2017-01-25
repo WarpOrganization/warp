@@ -11,6 +11,7 @@ public class Ticker {
     private BehaviourTree tree;
     private HashMap<String, Object> data;
     private int currentTick = Integer.MIN_VALUE;
+    private int delta;
 
     public Ticker(BehaviourTree behaviourTree, HashMap<String, Object> data) {
 
@@ -31,14 +32,15 @@ public class Ticker {
 
     private int enterNode(Node node) {
         node.onEnter(this);
-        int status = node.tick(this);
+        int status = node.tick(this, delta);
         if (status != Node.RUNNING) {
             node.close();
         }
         return status;
     }
 
-    void initializeTick() {
+    void initializeTick(int delta) {
+        this.delta = delta;
         currentTick++;
     }
 

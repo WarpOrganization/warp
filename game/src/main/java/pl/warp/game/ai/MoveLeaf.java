@@ -16,7 +16,7 @@ public class MoveLeaf extends LeafNode{
     Vector3f vel = new Vector3f();
 
     @Override
-    public int tick(Ticker ticker) {
+    public int tick(Ticker ticker, int delta) {
         Component owner = (Component) ticker.getData("owner");
         PhysicalBodyProperty property = owner.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         if(property.getVelocity().length()<100){
