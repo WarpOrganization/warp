@@ -10,7 +10,7 @@ import pl.warp.engine.ai.behaviourTree.Ticker;
 public class ShootLeaf extends LeafNode{
 
     @Override
-    public int tick(Ticker ticker) {
+    public int tick(Ticker ticker, int delta) {
         return 0;
     }
 

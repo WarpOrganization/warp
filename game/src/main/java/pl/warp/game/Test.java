@@ -9,6 +9,7 @@ import pl.warp.engine.ai.AITask;
 import pl.warp.engine.ai.behaviourTree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
+import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.audio.playlist.PlayRandomPlayList;
@@ -372,7 +373,7 @@ public class Test {
                 new DroneProperty(goat,5,1, team1);
                 team2.add(goat);
             }
-            //new AIProperty(goat, builder.build(goat));
+            new AIProperty(goat, builder.build(goat));
         }
     }
 }

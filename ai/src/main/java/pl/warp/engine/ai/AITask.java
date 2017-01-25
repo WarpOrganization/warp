@@ -31,7 +31,7 @@ public class AITask extends EngineTask {
         root.forEachChildren(child ->{
                if(hasAi(child)){
                    AIProperty property = child.getProperty(AIProperty.AI_POPERTY_NAME);
-                   property.getBehaviourTree().execute();
+                   property.getBehaviourTree().execute(delta);
                }
            });
     }

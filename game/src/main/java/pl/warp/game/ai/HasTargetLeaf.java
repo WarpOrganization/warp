@@ -14,7 +14,7 @@ public class HasTargetLeaf extends LeafNode {
     private final String TARGET_PROPERTY = "droneProperty";
 
     @Override
-    public int tick(Ticker ticker) {
+    public int tick(Ticker ticker, int delta) {
         DroneProperty d = (DroneProperty) ticker.getData(TARGET_PROPERTY);
         if (d != null && d.isEnabled() && d.getHitPoints() > 0) return Node.SUCCESS;
         else return Node.FAILURE;

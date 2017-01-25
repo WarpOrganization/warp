@@ -7,8 +7,8 @@ package pl.warp.engine.ai.behaviourTree;
 public class Inverter extends DecoratorNode {
 
     @Override
-    int tick(Ticker ticker) {
-        switch (child.tick(ticker)) {
+    int tick(Ticker ticker, int delta) {
+        switch (ticker.tickNode(child)) {
             case Node.RUNNING:
                 return Node.RUNNING;
             case Node.SUCCESS:

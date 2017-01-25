@@ -17,7 +17,7 @@ public class FindTargetLeaf extends LeafNode {
     private final String TARGET_LIST = "targetList";
 
     @Override
-    public int tick(Ticker ticker) {
+    public int tick(Ticker ticker, int delta) {
         Component owner = (Component) ticker.getData(OWNER_KEY);
         DroneProperty property = owner.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
         ArrayList<Component> targets = property.getTargetList();

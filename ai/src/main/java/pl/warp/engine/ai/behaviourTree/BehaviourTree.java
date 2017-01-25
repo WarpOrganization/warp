@@ -23,9 +23,9 @@ public class BehaviourTree {
         data.put("owner", owner);
     }
 
-    public void execute() {
-        ticker.initializeTick();
-        baseNode.tick(ticker);
+    public void execute(int delta) {
+        ticker.initializeTick(delta);
+        baseNode.tick(ticker, delta);
     }
 
 }
