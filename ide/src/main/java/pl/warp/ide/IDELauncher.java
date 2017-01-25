@@ -28,7 +28,7 @@ import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
  * @author Jaca777
  *         Created 2016-12-04 at 11
  */
-public class Launcher extends Application {
+public class IDELauncher extends Application {
 
     public static final int FPS = 40;
 
@@ -36,7 +36,7 @@ public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         CustomLookRepository lookRepo = loadCustomLookRepository();
-        RenderingConfig config = new RenderingConfig(FPS, new Display(false, -1, -1));
+        RenderingConfig config = new RenderingConfig(FPS, new Display(false, -1, -1).setVisible(false));
         JavaFxInput javaFxInput = new JavaFxInput();
         EngineContext context = new EngineContext();
         SceneViewRenderer renderer = new SceneViewRenderer();
@@ -86,7 +86,7 @@ public class Launcher extends Application {
     }
 
     private ImageView getImage(String name) {
-        return new ImageView(new Image(Launcher.class.getResourceAsStream(name)));
+        return new ImageView(new Image(IDELauncher.class.getResourceAsStream(name)));
     }
 
     private GraphicsSceneLoader getSceneLoader(RenderingConfig config, EngineContext context) { //TODO remove - temporary
@@ -94,6 +94,6 @@ public class Launcher extends Application {
     }
 
     public static void main(String... args) throws Exception {
-        Application.launch(Launcher.class, args);
+        Application.launch(IDELauncher.class, args);
     }
 }

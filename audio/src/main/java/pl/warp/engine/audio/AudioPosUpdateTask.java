@@ -25,7 +25,7 @@ public class AudioPosUpdateTask extends EngineTask {
 
     @Override
     protected void onInit() {
-        System.out.println();
+
     }
 
     @Override

@@ -56,7 +56,7 @@ public class Graphics {
     }
 
     private void createWindow() {
-        this.display = new Display(config.getDisplay().isFullscreen(), config.getDisplay().getWidth(), config.getDisplay().getHeight());
+        this.display = config.getDisplay();
         this.windowManager = new GLFWWindowManager(this.thread::interrupt);
         WindowTask windowTask = new WindowTask(windowManager, display);
         thread.scheduleTask(windowTask);

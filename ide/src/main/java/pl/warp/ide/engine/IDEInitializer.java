@@ -31,13 +31,15 @@ import java.io.File;
  * */
 public class IDEInitializer {
 
-    private GraphicsSceneLoader loader;
     private SceneViewRenderer sceneViewRenderer;
+    private GraphicsSceneLoader loader;
+    private Scene loadedScene;
+
     private RenderingConfig config;
     private EngineContext context;
-    private Input input;
     private Graphics graphics;
-    private Scene loadedScene;
+
+    private Input input;
 
     public IDEInitializer(GraphicsSceneLoader loader, SceneViewRenderer sceneViewRenderer, RenderingConfig config, EngineContext context, Input input) {
         this.loader = loader;
@@ -112,11 +114,10 @@ public class IDEInitializer {
         AudioContext audioContext = new AudioContext();
         AudioManager audioManager = new AudioManager(audioContext);
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        audioThread.scheduleTask(new AudioTask(audioContext));
+        audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
         audioThread.scheduleOnce(() -> {
-            audioThread.scheduleTask(new AudioTask(audioContext));
             audioManager.loadFiles("data" + File.separator + "sound" + File.separator + "effects"); //TODO move it
-            audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
-
         });
         audioThread.start();
     }
