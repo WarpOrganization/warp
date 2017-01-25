@@ -258,7 +258,8 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             Texture2D bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
 
             AudioManager audioManager = AudioManager.INSTANCE;
-            new GunScript(controllableGoat, GUN_COOLDOWN, root, bulletMesh, spritesheetTexture, bulletTexture, controllableGoat, audioManager);
+            new GunProperty(controllableGoat,GUN_COOLDOWN,root,bulletMesh, spritesheetTexture,bulletTexture, audioManager);
+            new GunScript(controllableGoat);
 
             SpotLight goatLight = new SpotLight(
                     controllableGoat,

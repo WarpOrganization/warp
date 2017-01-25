@@ -63,7 +63,10 @@ public class BulletScript extends Script<Component> {
             TexturedParticleSystem system = new TexturedParticleSystem(animator, factory, 1000, explosionSpritesheet);
             new GraphicsParticleEmitterProperty(component, system);
             executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);
-            executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
+            DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
+            droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
+            if (droneProperty.getHitPoints() < 0)
+                executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
         }
     }
 
@@ -74,6 +77,7 @@ public class BulletScript extends Script<Component> {
 
     //TODO REMOVE AS SOON AS DISABLING COLLIDER WORKS
     private static class DupaProperty extends Property {//xd
+
         public DupaProperty(Component parent) {
             super(parent);
         }

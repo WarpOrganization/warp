@@ -2,6 +2,7 @@ package pl.warp.game;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.input.Input;
@@ -16,6 +17,7 @@ import java.awt.event.KeyEvent;
  */
 public class GoatControlScript extends Script<Component> {
 
+    private static final float MOUSE_ROTATION_SPEED_FACTOR = 0.2f;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(1, 0, 0);
@@ -24,6 +26,7 @@ public class GoatControlScript extends Script<Component> {
     private float movementSpeed;
     private float rotationSpeed;
     private PhysicalBodyProperty bodyProperty;
+    private GunProperty gunProperty;
     private final float brakingForce;
     private final float arrowKeysRottationSpeed;
 
@@ -42,6 +45,7 @@ public class GoatControlScript extends Script<Component> {
     @Override
     public void onInit() {
         this.bodyProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        this.gunProperty = getOwner().getProperty(GunProperty.GUN_PROPERTY_NAME);
     }
 
     @Override
@@ -74,6 +78,10 @@ public class GoatControlScript extends Script<Component> {
             brake(delta);
         if (input.isKeyDown(KeyEvent.VK_P))
             stop();
+             if(input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
+            gunProperty.setTriggered(true);
+        else
+            gunProperty.setTriggered(false);
         if (input.isKeyDown(KeyEvent.VK_UP))
         addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
         if (input.isKeyDown(KeyEvent.VK_DOWN))
