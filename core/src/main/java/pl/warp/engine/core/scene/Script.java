@@ -15,7 +15,7 @@ public abstract class Script<T extends Component> {
     public Script(T owner) {
         this.owner = owner;
         this.context = owner.getContext();
-        context.getScriptContext().addScript(this);
+        context.getScriptManager().addScript(this);
     }
 
     public T getOwner() {

@@ -36,18 +36,13 @@ public class RayTester {
             synchronized (world) {
                 world.getCollisionWorld().rayTest(raytestTask.getStartPos(), raytestTask.getEndPos(), result2);
             }
-
             if (result2.hasHit()) {
-
                 raytestTask.setHasHit(true);
                 Component hit;
-
                 synchronized (world) {
                     hit = world.getComponent(result2.getCollisionObject().getUserValue());
                 }
-
                 raytestTask.setHit(hit);
-
             } else {
                 raytestTask.setHasHit(false);
                 raytestTask.setHit(null);

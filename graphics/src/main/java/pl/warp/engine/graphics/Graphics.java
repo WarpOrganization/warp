@@ -35,6 +35,9 @@ public class Graphics {
     private Display display;
     private GLFWWindowManager windowManager;
     private Environment environment;
+    private MeshRenderer meshRenderer;
+    private SkyboxRenderer skyboxRenderer;
+    private ParticleSystemRenderer particleSystemRenderer;
 
     public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
         this.context = context;
@@ -86,9 +89,9 @@ public class Graphics {
     }
 
     private SceneRenderer getSceneRenderer() {
-        MeshRenderer meshRenderer = new MeshRenderer(mainViewCamera, environment);
-        SkyboxRenderer skyboxRenderer = new SkyboxRenderer(mainViewCamera);
-        ParticleSystemRenderer particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
+        meshRenderer = new MeshRenderer(mainViewCamera, environment);
+        skyboxRenderer = new SkyboxRenderer(mainViewCamera);
+        particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
         ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, environmentFlareRenderer};
@@ -108,6 +111,13 @@ public class Graphics {
         return builder.via(flareRenderer);
     }
 
+    public Graphics setMainViewCamera(Camera mainViewCamera) {
+        this.mainViewCamera = mainViewCamera;
+        meshRenderer.setCamera(mainViewCamera);
+        skyboxRenderer.setCamera(mainViewCamera);
+        particleSystemRenderer.setCamera(mainViewCamera);
+        return this;
+    }
 
     public EngineThread getThread() {
         return thread;

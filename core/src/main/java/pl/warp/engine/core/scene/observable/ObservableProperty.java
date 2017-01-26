@@ -10,8 +10,8 @@ import java.util.Arrays;
  *         Created 2016-12-26 at 20
  */
 public class ObservableProperty<T extends Component> extends Property<T> {
-    public ObservableProperty(T owner, String name, ObservableValue... values) {
-        super(owner, name);
+    public ObservableProperty(String name, ObservableValue... values) {
+        super(name);
         Arrays.asList(values).forEach(c -> c.registerObserver(s -> stateChanged((ObservableValue<?>) s)));
     }
 

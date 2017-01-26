@@ -17,6 +17,7 @@ public class RenderingConfig {
     private boolean lens = true;
     private float bloomLevel = 1f;
     private float bloomThreshold = 1.0f;
+    private float fov = 70;
 
     public RenderingConfig(int fps, Display display) {
         this.fps = fps;
@@ -96,5 +97,14 @@ public class RenderingConfig {
 
     public void setLens(boolean lens) {
         this.lens = lens;
+    }
+
+    public float getFov() {
+        return fov;
+    }
+
+    public RenderingConfig setFov(float fov) {
+        this.fov = fov;
+        return this;
     }
 }

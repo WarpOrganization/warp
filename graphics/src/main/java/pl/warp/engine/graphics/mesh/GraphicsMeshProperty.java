@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.mesh;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.graphics.mesh.Mesh;
 
 /**
  * @author Jaca777
@@ -14,8 +13,8 @@ public class GraphicsMeshProperty extends Property<Component> {
 
     private Mesh mesh;
 
-    public GraphicsMeshProperty(Component owner, Mesh mesh) {
-        super(owner, MESH_PROPERTY_NAME);
+    public GraphicsMeshProperty(Mesh mesh) {
+        super(MESH_PROPERTY_NAME);
         this.mesh = mesh;
     }
 

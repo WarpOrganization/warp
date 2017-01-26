@@ -211,16 +211,13 @@ public abstract class Component {
         return context;
     }
 
-    /**
-     * Methods used by factory methods of properties and listeners.
-     * Makes it possible to introduce type safety.
-     */
 
-    void addProperty(Property<?> property) {
+    public void addProperty(Property property) {
         this.properties.put(property.getName(), property);
+        property.setOwner(this);
     }
 
-    void removeProperty(Property<?> property) {
+    public void removeProperty(Property property) {
         this.properties.remove(property.getName());
     }
 

@@ -23,8 +23,6 @@ public class ParticleSystemRenderer implements Renderer {
     private DotParticleRenderer dotParticleRenderer;
     private TexturedParticleRenderer texturedParticleRenderer;
 
-
-
     public ParticleSystemRenderer(Camera camera) {
         this.camera = camera;
     }
@@ -69,4 +67,7 @@ public class ParticleSystemRenderer implements Renderer {
         texturedParticleRenderer.destroy();
     }
 
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+    }
 }

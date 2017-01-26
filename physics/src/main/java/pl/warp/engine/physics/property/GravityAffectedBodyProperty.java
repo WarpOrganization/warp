@@ -17,8 +17,8 @@ public class GravityAffectedBodyProperty extends Property<Component> {
 
     private boolean isStanding;
 
-    public GravityAffectedBodyProperty(Component owner, Component gravityGenerator) {
-        super(owner, GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
+    public GravityAffectedBodyProperty(Component gravityGenerator) {
+        super(GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
     }
 
     public Vector3f getNextTickTranslation() {

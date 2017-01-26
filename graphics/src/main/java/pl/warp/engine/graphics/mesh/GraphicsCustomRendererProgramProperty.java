@@ -12,8 +12,8 @@ public class GraphicsCustomRendererProgramProperty extends Property<Component> {
     public static final String CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME = "customRendererProgram";
     private ComponentRendererProgram program;
 
-    public GraphicsCustomRendererProgramProperty(Component owner, ComponentRendererProgram program) {
-        super(owner, CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
+    public GraphicsCustomRendererProgramProperty(ComponentRendererProgram program) {
+        super(CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
         this.program = program;
     }
 

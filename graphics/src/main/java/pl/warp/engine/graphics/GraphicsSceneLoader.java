@@ -10,7 +10,6 @@ import pl.warp.engine.graphics.camera.Camera;
  */
 public interface GraphicsSceneLoader {
     void loadScene();
-    boolean isLoaded();
     void loadGraphics(EngineThread graphicsThread);
     Scene getScene();
     Camera getCamera();

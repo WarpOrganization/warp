@@ -7,6 +7,8 @@ repositories {
     mavenCentral()
 }
 
+def platform=project.properties['platform'] ?: "windows"
+
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     testCompile 'junit:junit:4.12'
@@ -17,7 +19,7 @@ jar.dependsOn subprojects.tasks['classes']
 jar {
     baseName = "warp-${platform}"
     manifest {
-        attributes 'Main-Class': 'pl.warp.game.TestApp'
+        attributes 'Main-Class': 'pl.warp.test.TestApp'
     }
     subprojects.each { subproject ->
         from subproject.sourceSets.main.output.classesDir
@@ -29,6 +31,8 @@ jar {
 
 
 subprojects {
+
+
 
     test {
         reports.junitXml.enabled = false

@@ -14,8 +14,8 @@ public class GraphicsSkyboxProperty extends Property<Scene> {
 
     private Cubemap cubemap;
 
-    public GraphicsSkyboxProperty(Scene owner, Cubemap cubemap) {
-        super(owner, CUBEMAP_PROPERTY_NAME);
+    public GraphicsSkyboxProperty(Cubemap cubemap) {
+        super(CUBEMAP_PROPERTY_NAME);
         this.cubemap = cubemap;
     }
 

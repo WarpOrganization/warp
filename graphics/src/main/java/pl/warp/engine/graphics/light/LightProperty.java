@@ -16,8 +16,8 @@ public class LightProperty extends Property<Component> {
 
     public static final String LIGHT_PROPERTY_NAME = "lightProperty";
 
-    public LightProperty(Component owner) {
-        super(owner);
+    public LightProperty() {
+        super(LIGHT_PROPERTY_NAME);
     }
 
     public void addSpotLight(SpotLight light) {

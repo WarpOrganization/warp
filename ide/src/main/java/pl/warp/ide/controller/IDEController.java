@@ -10,7 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.ide.engine.IDEInitializer;
+import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentItem;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
@@ -26,12 +26,12 @@ public class IDEController implements Initializable {
 
     private SceneTreeLoader sceneTreeLoader;
     private JavaFxInput input;
-    private IDEInitializer ideInitializer;
+    private IDEEngine engine;
 
-    public IDEController(SceneTreeLoader sceneLoader, JavaFxInput input, IDEInitializer ideInitializer) {
-        this.sceneTreeLoader = sceneLoader;
+    public IDEController(SceneTreeLoader sceneTreeLoader, JavaFxInput input, IDEEngine engine) {
+        this.sceneTreeLoader = sceneTreeLoader;
         this.input = input;
-        this.ideInitializer = ideInitializer;
+        this.engine = engine;
     }
 
     @FXML
@@ -69,8 +69,8 @@ public class IDEController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ideInitializer.start(sceneView);
-        componentController = new ComponentController(sceneTree, ideInitializer.getLoadedScene(), sceneTreeLoader);
+        engine.start(sceneView);
+        componentController = new ComponentController(sceneTree, engine.getScene(), sceneTreeLoader);
         input.listenOn(root, sceneView);
     }
 

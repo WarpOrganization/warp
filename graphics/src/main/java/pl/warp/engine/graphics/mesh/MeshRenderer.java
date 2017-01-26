@@ -86,4 +86,8 @@ public class MeshRenderer implements Renderer {
     public void destroy() {
         defaultProgram.delete();
     }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+    }
 }

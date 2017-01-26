@@ -26,11 +26,11 @@ public abstract class Camera extends Actor {
 
     public abstract void rotate(float angleXInRadians, float angleYInRadians, float angleZInRadians);
 
-    public abstract void rotateX(float angleInRadians);
+    public abstract void rotateLocalX(float angleInRadians);
 
-    public abstract void rotateY(float angleInRadians);
+    public abstract void rotateLocalY(float angleInRadians);
 
-    public abstract void rotateZ(float angleInRadians);
+    public abstract void rotateLocalZ(float angleInRadians);
 
     public abstract Vector3f getPosition(Vector3f dest);
 

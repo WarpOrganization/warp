@@ -15,8 +15,8 @@ public class BoxColliderProperty extends Property<Component> {
     private double depth;
 
 
-    public BoxColliderProperty(Component owner, double height, double width, double depth) {
-        super(owner);
+    public BoxColliderProperty(double height, double width, double depth) {
+        super();
         this.height = height;
         this.width = width;
         this.depth = depth;

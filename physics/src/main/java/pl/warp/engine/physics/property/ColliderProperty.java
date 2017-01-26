@@ -13,8 +13,8 @@ public class ColliderProperty extends Property<Component> {
 
     private Collider collider;
 
-    public ColliderProperty(Component owner, Collider collider) {
-        super(owner, COLLIDER_PROPERTY_NAME);
+    public ColliderProperty(Collider collider) {
+        super(COLLIDER_PROPERTY_NAME);
         this.collider = collider;
     }
 

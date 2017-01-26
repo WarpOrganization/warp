@@ -9,7 +9,7 @@ import pl.warp.engine.core.scene.Property;
  */
 public abstract class PhysicalProperty extends Property<Component>{
 
-    public PhysicalProperty(Component owner, String name) {
-        super(owner, name);
+    public PhysicalProperty(String name) {
+        super(name);
     }
 }

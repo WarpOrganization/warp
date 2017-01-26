@@ -1,7 +1,6 @@
 package pl.warp.engine.ai.property;
 
 import pl.warp.engine.ai.behaviourTree.BehaviourTree;
-import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 /**
@@ -14,10 +13,15 @@ public class AIProperty extends Property {
 
     private BehaviourTree behaviourTree;
 
-    public AIProperty(Component owner, BehaviourTree behaviourTree) {
-        super(owner, AI_POPERTY_NAME);
-        behaviourTree.init(owner);
+    public AIProperty(BehaviourTree behaviourTree) {
+        super(AI_POPERTY_NAME);
         this.behaviourTree = behaviourTree;
+    }
+
+    @Override
+    public void enable() {
+        super.enable();
+        behaviourTree.init(getOwner());
     }
 
     public void setBehaviourTree(BehaviourTree behaviourTree) {

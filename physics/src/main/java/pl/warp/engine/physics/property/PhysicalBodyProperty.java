@@ -29,8 +29,8 @@ public class PhysicalBodyProperty extends Property<Component> {
     private Vector3f nextTickTranslation = new Vector3f();
     private Vector3f nextTickRotation = new Vector3f();
 
-    public PhysicalBodyProperty(Component owner, float mass, float xLength, float yLength, float zLength) {
-        super(owner, PHYSICAL_BODY_PROPERTY_NAME);
+    public PhysicalBodyProperty(float mass, float xLength, float yLength, float zLength) {
+        super(PHYSICAL_BODY_PROPERTY_NAME);
         this.mass = mass;
         this.radius = radius;
         inertia.set((zLength * zLength + yLength * yLength) * mass / 12, 0, 0,

@@ -11,20 +11,20 @@ public abstract class Property<T extends Component> {
     private boolean enabled = false;
     private boolean triggerStateEvents = false;
 
-    public Property(T owner) {
-        this.owner = owner;
+    public Property() {
         this.name = getClass().getName();
-        owner.addProperty(this);
-        enable();
     }
 
-    public Property(T owner, String name) {
-        this.owner = owner;
+    public Property(String name) {
         this.name = name;
-        owner.addProperty(this);
-        enable();
     }
 
+
+    protected void setOwner(T owner){
+        if(this.owner != null) throw new IllegalStateException("Component can't have two owners.");
+        else this.owner = owner;
+        enable();
+    }
 
     public T getOwner() {
         return owner;

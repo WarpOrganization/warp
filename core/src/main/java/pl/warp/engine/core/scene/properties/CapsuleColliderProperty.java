@@ -12,8 +12,8 @@ public class CapsuleColliderProperty extends Property<Component> {
     private double radius;
     private double height;
 
-    public CapsuleColliderProperty(Component owner, double radius, double height) {
-        super(owner);
+    public CapsuleColliderProperty(double radius, double height) {
+        super();
         this.radius = radius;
         this.height = height;
     }

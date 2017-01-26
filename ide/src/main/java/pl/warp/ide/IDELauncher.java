@@ -13,9 +13,9 @@ import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.game.TestSceneLoader;
+import pl.warp.test.TestSceneLoader;
 import pl.warp.ide.controller.IDEController;
-import pl.warp.ide.engine.IDEInitializer;
+import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.engine.SceneViewRenderer;
 import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentLook;
@@ -41,9 +41,9 @@ public class IDELauncher extends Application {
         EngineContext context = new EngineContext();
         SceneViewRenderer renderer = new SceneViewRenderer();
         GraphicsSceneLoader sceneLoader = getSceneLoader(config, context);
-        IDEInitializer ideInitializer = new IDEInitializer(sceneLoader, renderer, config, context, javaFxInput);
+        IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, context, javaFxInput);
 
-        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, ideInitializer);
+        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, engine);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);

@@ -21,16 +21,17 @@ public class JavaFxInput implements Input {
     private Vector2f lastCursorPos = new Vector2f(0, 0);
     private Vector2f cursorPosition = null;
     private Vector2f cursorPositionDelta = new Vector2f(0, 0);
+    private Canvas canvas;
 
     public void onKeyReleased(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
-        if(keyCode > 348) return;
+        if (keyCode > 348) return;
         else keyboardKeys[keyCode] = false;
     }
 
     public void onKeyPressed(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
-        if(keyCode > 348) return;
+        if (keyCode > 348) return;
         else keyboardKeys[keyCode] = true;
     }
 
@@ -56,8 +57,10 @@ public class JavaFxInput implements Input {
 
     @Override
     public void update() {
-        if(cursorPosition == null) cursorPosition = new Vector2f(lastCursorPos);
+        if(canvas == null) return;
+        if (cursorPosition == null) cursorPosition = new Vector2f(lastCursorPos);
         this.lastCursorPos.sub(cursorPosition, cursorPositionDelta);
+        this.cursorPositionDelta.mul(1.0f / (float) canvas.getWidth(), 1.0f / (float) canvas.getHeight());
         this.cursorPosition.set(lastCursorPos);
     }
 
@@ -82,9 +85,11 @@ public class JavaFxInput implements Input {
     }
 
     public void listenOn(AnchorPane root, Canvas canvas) {
+        this.canvas = canvas;
         canvas.setOnMouseMoved(this::onMouseMoved);
-        root.setOnMousePressed(this::onMousePressed);
-        root.setOnMouseReleased(this::onMouseReleased);
+        canvas.setOnMouseDragged(this::onMouseMoved);
+        canvas.setOnMousePressed(this::onMousePressed);
+        canvas.setOnMouseReleased(this::onMouseReleased);
         root.setOnKeyPressed(this::onKeyPressed);
         root.setOnKeyReleased(this::onKeyReleased);
     }

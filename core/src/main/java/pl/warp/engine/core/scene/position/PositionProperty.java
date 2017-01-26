@@ -15,16 +15,21 @@ public class PositionProperty extends ObservableProperty<Component> {
     private ObservableValue<Vector3f> position;
     private PositionCalculationStrategy strategy;
 
-    public PositionProperty(Component owner, ObservableValue<Vector3f> observablePosition, PositionCalculationStrategy strategy, int unit) {
-        super(owner, POSITION_PROPERTY_NAME, observablePosition);
+    public PositionProperty(ObservableValue<Vector3f> observablePosition, PositionCalculationStrategy strategy, int unit) {
+        super(POSITION_PROPERTY_NAME, observablePosition);
         this.strategy = strategy;
         this.position = observablePosition;
         this.unit = unit;
-        strategy.initialize(this);
     }
 
-    public PositionProperty(Component owner, Vector3f initialPosition, PositionCalculationStrategy strategy, int unit) {
-        this(owner, ObservableValue.of(initialPosition), strategy, unit);
+    public PositionProperty(Vector3f initialPosition, PositionCalculationStrategy strategy, int unit) {
+        this(ObservableValue.of(initialPosition), strategy, unit);
+    }
+
+    @Override
+    public void enable() {
+        super.enable();
+        strategy.initialize(this);
     }
 
     public Vector3f getPosition() {

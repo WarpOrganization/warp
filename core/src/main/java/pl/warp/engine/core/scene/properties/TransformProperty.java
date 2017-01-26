@@ -2,7 +2,6 @@ package pl.warp.engine.core.scene.properties;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 
 /**
@@ -17,12 +16,12 @@ public class TransformProperty extends Property{
     private Quaternionf rotation = new Quaternionf();
     private Vector3f scale = new Vector3f().set(1);
 
-    public TransformProperty(Component owner) {
-        super(owner, TRANSFORM_PROPERTY_NAME);
+    public TransformProperty() {
+        super(TRANSFORM_PROPERTY_NAME);
     }
 
-    protected TransformProperty(Component owner, Vector3f translation, Quaternionf rotation, Vector3f scale) {
-        super(owner);
+    protected TransformProperty(Vector3f translation, Quaternionf rotation, Vector3f scale) {
+        super(TRANSFORM_PROPERTY_NAME);
         this.translation = translation;
         this.rotation = rotation;
         this.scale = scale;
@@ -44,16 +43,28 @@ public class TransformProperty extends Property{
         rotation.rotate(xAngleInRadians, yAngleInRadians, zAngleInRadians);
     }
 
-    public void rotateX(float angleInRadians) {
+    public void rotateLocalX(float angleInRadians) {
         rotation.rotateLocalX(angleInRadians);
     }
 
-    public void rotateY(float angleInRadians) {
+    public void rotateLocalY(float angleInRadians) {
         rotation.rotateLocalY(angleInRadians);
     }
 
-    public void rotateZ(float angleInRadians) {
+    public void rotateLocalZ(float angleInRadians) {
         rotation.rotateLocalZ(angleInRadians);
+    }
+
+    public Quaternionf rotateX(float angle) {
+        return rotation.rotateX(angle);
+    }
+
+    public Quaternionf rotateY(float angle) {
+        return rotation.rotateY(angle);
+    }
+
+    public Quaternionf rotateZ(float angle) {
+        return rotation.rotateZ(angle);
     }
 
     public Quaternionf getRotation() {

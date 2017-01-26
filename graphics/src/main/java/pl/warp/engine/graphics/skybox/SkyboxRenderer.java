@@ -61,4 +61,8 @@ public class SkyboxRenderer implements Renderer {
         cubemapProgram.delete();
         logger.info("Skybox renderer destroyed.");
     }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+    }
 }

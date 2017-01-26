@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.material;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.graphics.material.Material;
 
 /**
  * @author Jaca777
@@ -13,8 +12,8 @@ public class GraphicsMaterialProperty extends Property<Component> {
     public static final String MATERIAL_PROPERTY_NAME = "material";
     private Material material;
 
-    public GraphicsMaterialProperty(Component owner, Material material) {
-        super(owner, MATERIAL_PROPERTY_NAME);
+    public GraphicsMaterialProperty(Material material) {
+        super(MATERIAL_PROPERTY_NAME);
         this.material = material;
     }
 

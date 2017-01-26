@@ -9,9 +9,9 @@ import pl.warp.engine.core.scene.Script;
  */
 public class ScriptTask extends EngineTask {
 
-    private ScriptContext context;
+    private ScriptManager context;
 
-    public ScriptTask(ScriptContext context) {
+    public ScriptTask(ScriptManager context) {
         this.context = context;
     }
 

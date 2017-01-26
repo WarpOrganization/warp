@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.camera;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -21,7 +22,8 @@ public class QuaternionCamera extends Camera {
     public QuaternionCamera(Component parent, Vector3f position, ProjectionMatrix projection) {
         super(parent);
         this.projection = projection;
-        this.transform = new TransformProperty(this);
+        this.transform = new TransformProperty();
+        addProperty(transform);
         transform.move(position);
     }
 
@@ -41,20 +43,31 @@ public class QuaternionCamera extends Camera {
     }
 
     @Override
-    public void rotateX(float angleInRadians) {
-        transform.rotateX(angleInRadians);
+    public void rotateLocalX(float angleInRadians) {
+        transform.rotateLocalX(angleInRadians);
     }
 
     @Override
-    public void rotateY(float angleInRadians) {
-        transform.rotateY(angleInRadians);
+    public void rotateLocalY(float angleInRadians) {
+        transform.rotateLocalY(angleInRadians);
     }
 
     @Override
-    public void rotateZ(float angleInRadians) {
-        transform.rotateZ(angleInRadians);
+    public void rotateLocalZ(float angleInRadians) {
+        transform.rotateLocalZ(angleInRadians);
     }
 
+    public Quaternionf rotateX(float angle) {
+        return transform.rotateX(angle);
+    }
+
+    public Quaternionf rotateY(float angle) {
+        return transform.rotateY(angle);
+    }
+
+    public Quaternionf rotateZ(float angle) {
+        return transform.rotateZ(angle);
+    }
 
     @Override
     public Vector3f getPosition(Vector3f dest) {
@@ -64,6 +77,10 @@ public class QuaternionCamera extends Camera {
     @Override
     public Matrix4f getCameraMatrix() {
         return Transforms.getActualTransform(this).invert();
+    }
+
+    public TransformProperty getTransform() {
+        return transform;
     }
 
     @Override

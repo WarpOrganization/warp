@@ -2,7 +2,7 @@ package pl.warp.engine.core;
 
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
-import pl.warp.engine.core.scene.script.ScriptContext;
+import pl.warp.engine.core.scene.script.ScriptManager;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -28,7 +28,7 @@ public class EngineContext {
     }
 
     private Scene scene;
-    private ScriptContext scriptContext;
+    private ScriptManager scriptManager;
     private Input input;
 
     public Scene getScene() {
@@ -39,12 +39,12 @@ public class EngineContext {
         this.scene = scene;
     }
 
-    public ScriptContext getScriptContext() {
-        return scriptContext;
+    public ScriptManager getScriptManager() {
+        return scriptManager;
     }
 
-    public void setScriptContext(ScriptContext scriptContext) {
-        this.scriptContext = scriptContext;
+    public void setScriptManager(ScriptManager scriptManager) {
+        this.scriptManager = scriptManager;
     }
 
     public Input getInput() {
