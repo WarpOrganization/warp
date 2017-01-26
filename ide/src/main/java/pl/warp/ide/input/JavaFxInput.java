@@ -1,11 +1,13 @@
 package pl.warp.ide.input;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import org.joml.Vector2f;
 import pl.warp.engine.core.scene.input.Input;
 
-import static java.awt.event.MouseEvent.*;
+import static java.awt.event.MouseEvent.NOBUTTON;
 
 /**
  * @author Jaca777
@@ -13,8 +15,8 @@ import static java.awt.event.MouseEvent.*;
  */
 public class JavaFxInput implements Input {
 
-    private boolean[] keyboardKeys = new boolean[349];
-    private boolean[] mouseButtons = new boolean[8];
+    private volatile boolean[] keyboardKeys = new boolean[349];
+    private volatile boolean[] mouseButtons = new boolean[8];
 
     private Vector2f lastCursorPos = new Vector2f(0, 0);
     private Vector2f cursorPosition = null;
@@ -22,12 +24,14 @@ public class JavaFxInput implements Input {
 
     public void onKeyReleased(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
-        keyboardKeys[keyCode] = false;
+        if(keyCode > 348) return;
+        else keyboardKeys[keyCode] = false;
     }
 
     public void onKeyPressed(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
-        keyboardKeys[keyCode] = true;
+        if(keyCode > 348) return;
+        else keyboardKeys[keyCode] = true;
     }
 
     public void onMouseMoved(MouseEvent event) {
@@ -52,6 +56,7 @@ public class JavaFxInput implements Input {
 
     @Override
     public void update() {
+        if(cursorPosition == null) cursorPosition = new Vector2f(lastCursorPos);
         this.lastCursorPos.sub(cursorPosition, cursorPositionDelta);
         this.cursorPosition.set(lastCursorPos);
     }
@@ -76,4 +81,11 @@ public class JavaFxInput implements Input {
         return mouseButtons[button];
     }
 
+    public void listenOn(AnchorPane root, Canvas canvas) {
+        canvas.setOnMouseMoved(this::onMouseMoved);
+        root.setOnMousePressed(this::onMousePressed);
+        root.setOnMouseReleased(this::onMouseReleased);
+        root.setOnKeyPressed(this::onKeyPressed);
+        root.setOnKeyReleased(this::onKeyReleased);
+    }
 }

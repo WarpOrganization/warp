@@ -8,10 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Scene;
 import pl.warp.ide.engine.IDEInitializer;
 import pl.warp.ide.input.JavaFxInput;
 import pl.warp.ide.scene.tree.ComponentItem;
@@ -63,14 +61,17 @@ public class IDEController implements Initializable {
     @FXML
     private Button createComponent;
 
+    @FXML
+    private AnchorPane root;
+
 
     private ComponentController componentController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ideInitializer.start(sceneView);
-        Scene scene = ideInitializer.getLoadedScene();
-        componentController = new ComponentController(sceneTree, scene, sceneTreeLoader);
+        componentController = new ComponentController(sceneTree, ideInitializer.getLoadedScene(), sceneTreeLoader);
+        input.listenOn(root, sceneView);
     }
 
     @FXML
@@ -91,31 +92,6 @@ public class IDEController implements Initializable {
     @FXML
     public void onReloadScene(ActionEvent event) {
         componentController.onReloadScene();
-    }
-
-    @FXML
-    void okKeyReleased(KeyEvent event) {
-        input.onKeyReleased(event);
-    }
-
-    @FXML
-    void onKeyPressed(KeyEvent event) {
-        input.onKeyPressed(event);
-    }
-
-    @FXML
-    void onMouseMoved(MouseEvent event) {
-        input.onMouseMoved(event);
-    }
-
-    @FXML
-    void onMousePressed(MouseEvent event) {
-        input.onMousePressed(event);
-    }
-
-    @FXML
-    void onMouseReleased(MouseEvent event) {
-        input.onMouseReleased(event);
     }
 
     @FXML

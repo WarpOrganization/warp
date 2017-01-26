@@ -284,6 +284,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
             Component frigate = new SimpleComponent(root);
+            new NameProperty(frigate, "Frigate");
             new GraphicsMeshProperty(frigate, friageMesh);
             new GraphicsMaterialProperty(frigate, frigateMaterial);
             new PhysicalBodyProperty(frigate, 20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3);
@@ -312,6 +313,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
         int nOfGoats = 10;
         for (int i = 0; i < nOfGoats; i++) {
             Component goat = new SimpleComponent(parent);
+            new NameProperty(goat, "Ship " + i);
             new GraphicsMeshProperty(goat, goatMesh);
             Material material = new Material(goatTexture);
             material.setShininess(20f);

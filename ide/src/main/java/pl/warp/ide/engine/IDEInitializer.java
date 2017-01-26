@@ -2,14 +2,12 @@ package pl.warp.ide.engine;
 
 import javafx.scene.canvas.Canvas;
 import pl.warp.engine.ai.AITask;
-import pl.warp.engine.audio.AudioContext;
-import pl.warp.engine.audio.AudioManager;
-import pl.warp.engine.audio.AudioPosUpdateTask;
-import pl.warp.engine.audio.AudioTask;
+import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
+import pl.warp.engine.core.scene.input.InputTask;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.GraphicsSceneLoader;
@@ -27,8 +25,8 @@ import java.io.File;
 /**
  * @author Jaca777
  *         Created 2017-01-22 at 13
- * Loads scene and starts the tasks
- * */
+ *         Loads scene and starts the tasks
+ */
 public class IDEInitializer {
 
     private SceneViewRenderer sceneViewRenderer;
@@ -49,7 +47,7 @@ public class IDEInitializer {
         this.input = input;
     }
 
-    public void start(Canvas destCanvas){
+    public void start(Canvas destCanvas) {
         setRenderingTargetSize((int) destCanvas.getWidth(), (int) destCanvas.getHeight());
         OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
         loadScene();
@@ -79,26 +77,29 @@ public class IDEInitializer {
         createPhysicsThread(root, graphics.getThread());
         createAudioThread();
         createAIThread(root);
+        createInputTask();
         graphics.create();
         OutputTexture2DRenderer output = (OutputTexture2DRenderer) graphics.getOutput();
         sceneViewRenderer.startRendering(output.getOutput(), destCanvas);
     }
 
+    private void createInputTask() {
+        graphics.getThread().scheduleTask(new InputTask(input));
+    }
+
     private void createPhysicsThread(Component root, EngineThread graphicsThread) {
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
-        physicsThread.scheduleOnce(() -> {
-            physicsThread.scheduleTask(new MovementTask(root));
-            physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
-        });
+        physicsThread.scheduleTask(new MovementTask(root));
+        physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), root, rayTester));
         graphicsThread.scheduleOnce(physicsThread::start);
     }
 
     private void createScriptThread(EngineContext context, Input input, EngineThread graphicsThread) {
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        scriptThread.scheduleTask(new ScriptTask(context.getScriptContext()));
         graphicsThread.scheduleOnce(() -> {
             context.setInput(input);
-            scriptThread.scheduleTask(new ScriptTask(context.getScriptContext()));
             //TODO start input task
             scriptThread.start(); //has to start after the window is created
         });
@@ -112,6 +113,7 @@ public class IDEInitializer {
 
     private void createAudioThread() {
         AudioContext audioContext = new AudioContext();
+        audioContext.setAudioListener(new AudioListener(loader.getCamera()));
         AudioManager audioManager = new AudioManager(audioContext);
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         audioThread.scheduleTask(new AudioTask(audioContext));

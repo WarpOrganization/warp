@@ -30,9 +30,10 @@ public class ComponentController {
         sceneTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(selectedComponent != null)
                 unmarkSelected(selectedComponent);
-            selectedComponent = newValue.getValue().getComponent();
-            if(selectedComponent != null)
+            if(newValue != null) {
+                selectedComponent = newValue.getValue().getComponent();
                 markSelected(selectedComponent);
+            }
         });
     }
 

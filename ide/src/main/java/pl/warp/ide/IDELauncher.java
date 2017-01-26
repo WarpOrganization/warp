@@ -43,7 +43,7 @@ public class IDELauncher extends Application {
         GraphicsSceneLoader sceneLoader = getSceneLoader(config, context);
         IDEInitializer ideInitializer = new IDEInitializer(sceneLoader, renderer, config, context, javaFxInput);
 
-        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), new JavaFxInput(), ideInitializer);
+        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, ideInitializer);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);
