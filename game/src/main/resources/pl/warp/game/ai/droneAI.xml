@@ -4,7 +4,11 @@
         <node path="pl.warp.game.ai.HasTargetLeaf"/>
         <node path="pl.warp.game.ai.FindTargetLeaf"/>
     </node>
-    <node path="pl.warp.engine.ai.behaviourTree.SequenceNode">
-        <node path="pl.warp.game.ai.AdjustSteeringLeaf"/>
+    <node path="pl.warp.engine.ai.behaviourTree.Inverter">
+        <node path="pl.warp.engine.ai.behaviourTree.SequenceNode">
+            <node path="pl.warp.game.ai.AdjustSteeringLeaf"/>
+            <node path="pl.warp.game.ai.ShootLeaf"/>
+        </node>
     </node>
+    <node path="pl.warp.game.ai.StopShootingLeaf"/>
 </baseNode>

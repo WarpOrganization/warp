@@ -12,13 +12,10 @@ import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-
-import java.awt.event.KeyEvent;
 
 /**
  * @author Hubertus
@@ -34,8 +31,8 @@ public class GunScript extends Script<Component> {
     private Component root;
     private Texture2DArray explosionSpritesheet;
     private Material bulletMaterial;
-    private final AudioManager audioManager;
-    private Component playerShip;
+    private AudioManager audioManager;
+    private GunProperty gunProperty;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(-1, 0, 0);
@@ -44,18 +41,10 @@ public class GunScript extends Script<Component> {
 
     private Mesh bulletMesh;
 
-
-    public GunScript(Component owner, int cooldown, Component root, Mesh bulletMesh, Texture2DArray explosionSpritesheet, Texture2D bulletTexture, Component playerShip, AudioManager audioManager) {
+    public GunScript(Component owner) {
         super(owner);
         this.owner = owner;
-        this.cooldown = cooldown;
-        this.root = root;
-        this.bulletMesh = bulletMesh;
-        this.bulletMaterial = new Material(bulletTexture);
-        this.audioManager = audioManager;
-        this.bulletMaterial.setBrightnessTexture(bulletTexture);
-        this.explosionSpritesheet = explosionSpritesheet;
-        this.playerShip = playerShip;
+
     }
 
     @Override
@@ -63,7 +52,13 @@ public class GunScript extends Script<Component> {
         timer = 0;
         transformProperty = getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         physicalProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-
+        gunProperty = getOwner().getProperty(GunProperty.GUN_PROPERTY_NAME);
+        this.root = gunProperty.getRoot();
+        this.bulletMesh = gunProperty.getBulletMesh();
+        this.bulletMaterial = new Material(gunProperty.getBulletTexture());
+        this.audioManager = gunProperty.getAudioManager();
+        this.bulletMaterial.setBrightnessTexture(gunProperty.getBulletTexture());
+        this.explosionSpritesheet = gunProperty.getExplosionSpritesheet();
     }
 
     @Override
@@ -73,7 +68,7 @@ public class GunScript extends Script<Component> {
     }
 
     private void input() {
-        if (getContext().getInput().isKeyDown(KeyEvent.VK_CONTROL))
+        if (gunProperty.isTriggered())
             shoot();
         else shot = false;
     }
@@ -96,7 +91,7 @@ public class GunScript extends Script<Component> {
             shot = true;
         }
         if (timer <= 0) {
-            timer = cooldown;
+            timer = gunProperty.getCooldownTime();
 
             Transforms.getAbsoluteRotation(getOwner()).transform(direction.set(FORWARD_VECTOR));
             Transforms.getAbsoluteRotation(getOwner()).transform(direction2.set(RIGHT_VECTOR));
@@ -115,7 +110,7 @@ public class GunScript extends Script<Component> {
             new PhysicalBodyProperty(bullet, BULLET_MASS, 0.1f, 0.1f, 0.1f).applyForce(direction);
             new ColliderProperty(bullet, new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z)));
             root.addChild(bullet);
-            new BulletScript(bullet, 10000, explosionSpritesheet, playerShip);
+            new BulletScript(bullet, 10000, explosionSpritesheet, getOwner());
         }
 
     }
