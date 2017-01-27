@@ -44,8 +44,6 @@ public class AdjustSteeringLeaf extends LeafNode {
     }
 
     private void setProperties(Ticker ticker) {
-        if(!((Component) ticker.getData(TARGET)).hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
-            System.out.println();
         targetTransform = ((Component) ticker.getData(TARGET)).getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         owner = (Component) ticker.getData(OWNER_KEY);
         ownerTransform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);

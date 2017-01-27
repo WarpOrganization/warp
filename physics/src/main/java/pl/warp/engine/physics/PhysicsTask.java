@@ -76,9 +76,9 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        finalizeMovement();
         collisionHandler.updateCollisions();
         collisionHandler.performRayTests();
-        finalizeMovement();
         rayTester.update();
         //world.getActiveCollisions().clear();
     }
