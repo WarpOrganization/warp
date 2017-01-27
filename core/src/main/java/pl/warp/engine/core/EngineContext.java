@@ -35,7 +35,7 @@ public class EngineContext {
         return scene;
     }
 
-    public void setScene(Scene scene) {
+    protected void setScene(Scene scene) {
         this.scene = scene;
     }
 
@@ -43,7 +43,7 @@ public class EngineContext {
         return scriptManager;
     }
 
-    public void setScriptManager(ScriptManager scriptManager) {
+    protected void setScriptManager(ScriptManager scriptManager) {
         this.scriptManager = scriptManager;
     }
 
@@ -51,7 +51,7 @@ public class EngineContext {
         return input;
     }
 
-    public void setInput(Input input) {
+    protected void setInput(Input input) {
         this.input = input;
     }
 }

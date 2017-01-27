@@ -1,7 +1,7 @@
 package pl.warp.engine.core.scene.observable;
 
-import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.scene.Component;
 
 import java.util.Arrays;
 

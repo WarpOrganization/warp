@@ -9,7 +9,6 @@ import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
 import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.audio.AudioManager;
-import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.EngineThread;
 import pl.warp.engine.core.SimpleEngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -54,6 +53,7 @@ import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.game.GameContextBuilder;
 import pl.warp.test.program.gas.GasPlanetProgram;
 import pl.warp.test.program.ring.PlanetaryRingProgram;
 import pl.warp.test.program.ring.PlanetaryRingProperty;
@@ -82,7 +82,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
     private boolean loaded = false;
 
     private RenderingConfig config;
-    private EngineContext context;
+    private GameContextBuilder contextBuilder;
     private Scene scene;
     private Component controllableGoat;
     private Camera camera;
@@ -92,9 +92,9 @@ public class TestSceneLoader implements GraphicsSceneLoader {
     private AudioManager audioManager;
 
 
-    public TestSceneLoader(RenderingConfig config, EngineContext context) {
+    public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         this.config = config;
-        this.context = context;
+        this.contextBuilder = contextBuilder;
     }
 
     @Override
@@ -106,11 +106,11 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             e.printStackTrace();
         }
 
-        scene = new Scene(context);
+        scene = new Scene(contextBuilder.getGameContext());
         scene.addProperty(new NameProperty("Test universe"));
-        context.setScene(scene);
+        contextBuilder.setScene(scene);
 
-        context.setScriptManager(new ScriptManager());
+        contextBuilder.setScriptManager(new ScriptManager());
 
         controllableGoat = new SimpleComponent(scene);
         controllableGoat.addProperty(new NameProperty("Player ship"));
@@ -324,7 +324,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             transformProperty.move(new Vector3f(x, y, z));
             goat.addProperty(transformProperty);
             SequenceNode basenode = new SequenceNode();
-            //  basenode.addChildren(new SpinLeaf());
+            //basenode.addChildren(new SpinLeaf());
             //BehaviourTree behaviourTree = builder.build(goat);
             if (i < nOfGoats / 2) {
                 goat.addProperty(new DroneProperty(5, 1, team2));

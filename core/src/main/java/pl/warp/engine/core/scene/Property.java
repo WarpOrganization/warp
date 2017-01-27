@@ -26,7 +26,7 @@ public abstract class Property<T extends Component> {
         enable();
     }
 
-    public T getOwner() {
+    protected T getOwner() {
         return owner;
     }
 

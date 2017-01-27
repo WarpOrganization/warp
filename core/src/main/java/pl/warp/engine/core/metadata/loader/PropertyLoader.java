@@ -5,15 +5,13 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.metadata.Metadata;
 import pl.warp.engine.core.metadata.PropertyMetadata;
+import pl.warp.engine.core.scene.Component;
 import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

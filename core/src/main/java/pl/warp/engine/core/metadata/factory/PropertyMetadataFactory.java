@@ -4,8 +4,8 @@ import pl.warp.engine.core.metadata.Metadata;
 import pl.warp.engine.core.metadata.PropertyMetadata;
 import pl.warp.engine.core.metadata.ReflectionUtil;
 import pl.warp.engine.core.metadata.loader.MetadataLoadingException;
-import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.scene.Component;
 
 import java.lang.reflect.Field;
 import java.util.List;

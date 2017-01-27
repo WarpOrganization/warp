@@ -1,8 +1,5 @@
 package pl.warp.engine.core.scene;
 
-import java.util.Objects;
-import java.util.function.Consumer;
-
 /**
  * @author Jaca777
  *         Created 2016-06-26 at 22

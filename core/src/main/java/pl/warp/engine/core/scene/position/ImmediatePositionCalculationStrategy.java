@@ -11,8 +11,8 @@ import pl.warp.engine.core.scene.observable.ObservablePropertyChangedEvent;
  */
 public class ImmediatePositionCalculationStrategy extends PositionCalculationStrategy {
     @Override
-    public void initialize(PositionProperty positionProperty) {
-        SimpleListener.createListener(positionProperty.getOwner(), //todo observe parents (wtf how)
+    public void initialize(Component component) {
+        SimpleListener.createListener(component, //todo observe parents (wtf how)
                 ObservablePropertyChangedEvent.OBSERVABLE_PROPERTY_CHANGED_EVENT_NAME,
                 this::propertyChanged);
     }

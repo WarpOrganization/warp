@@ -15,8 +15,6 @@ dependencies {
     compile project(':graphics')
     compile project(':audio')
     compile project(':ai')
-    compile project(':test')
-    compile project(':game')
     testCompile 'junit:junit:4.12'
 }
 

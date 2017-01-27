@@ -1,12 +1,12 @@
 package pl.warp.engine.resourcemanagement.scene;
 
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.SceneComponent;
 
 /**
  * @author Jaca777
  *         Created 2016-08-15 at 20
  */
-public class Chunk extends Component {
+public class Chunk extends SceneComponent {
 
     private ChunkPosition position;
 

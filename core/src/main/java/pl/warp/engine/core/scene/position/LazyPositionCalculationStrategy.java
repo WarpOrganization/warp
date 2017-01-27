@@ -9,17 +9,18 @@ import pl.warp.engine.core.scene.Component;
  */
 public class LazyPositionCalculationStrategy extends PositionCalculationStrategy {
 
+    private Component component;
     private PositionProperty positionProperty;
 
     @Override
-    public void initialize(PositionProperty positionProperty) {
-        this.positionProperty = positionProperty;
+    public void initialize(Component component) {
+        this.component = component;
+        this.positionProperty = component.getProperty(PositionProperty.POSITION_PROPERTY_NAME);
     }
 
     @Override
     public Vector3f getPosition(Component parentToRelate, int unit, Vector3f dest) {
-        Component component = positionProperty.getOwner();
-        if (positionProperty.getOwner() == parentToRelate) return dest;
+        if (component == parentToRelate) return dest;
         processComponentPosition(unit, dest, component);
         return processParentPosition(parentToRelate, unit, dest, component);
     }

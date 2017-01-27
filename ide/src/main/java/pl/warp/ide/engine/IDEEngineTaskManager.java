@@ -18,6 +18,7 @@ import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
+import pl.warp.game.GameContextBuilder;
 
 import java.io.File;
 
@@ -35,25 +36,25 @@ public class IDEEngineTaskManager {
 
     private Graphics graphics;
     private RenderingConfig config;
-    private EngineContext context;
+    private GameContextBuilder contextBuilder;
 
     private Input input;
     private RayTester rayTester;
 
-    public IDEEngineTaskManager(SceneViewRenderer sceneViewRenderer, Scene scene, Camera camera, RenderingConfig config, EngineContext context, Input input) {
+    public IDEEngineTaskManager(SceneViewRenderer sceneViewRenderer, Scene scene, Camera camera, RenderingConfig config, GameContextBuilder contextBuilder, Input input) {
         this.sceneViewRenderer = sceneViewRenderer;
         this.loadedScene = scene;
         this.camera = camera;
         this.config = config;
-        this.context = context;
+        this.contextBuilder = contextBuilder;
         this.input = input;
     }
 
     public void startTasks(Canvas destCanvas) {
         setRenderingTargetSize((int) destCanvas.getWidth(), (int) destCanvas.getHeight());
         OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
-        graphics = createGraphics(context, outputRenderer);
-        startTasks(context, graphics, loadedScene, destCanvas);
+        graphics = createGraphics(contextBuilder.getGameContext(), outputRenderer);
+        startTasks(contextBuilder.getGameContext(), graphics, loadedScene, destCanvas);
     }
 
     private void setRenderingTargetSize(int width, int height) {
@@ -94,7 +95,7 @@ public class IDEEngineTaskManager {
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         scriptThread.scheduleTask(new ScriptTask(context.getScriptManager()));
         graphicsThread.scheduleOnce(() -> {
-            context.setInput(input);
+            contextBuilder.setInput(input);
             //TODO start input task
             scriptThread.start(); //has to start after the window is created
         });

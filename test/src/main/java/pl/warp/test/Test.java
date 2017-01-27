@@ -23,6 +23,8 @@ import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
+import pl.warp.game.GameContext;
+import pl.warp.game.GameContextBuilder;
 
 import java.io.File;
 import java.util.Random;
@@ -47,14 +49,15 @@ public class Test {
 
     public static void runTest(RenderingConfig config) {
 
-        EngineContext context = new EngineContext();
+        GameContextBuilder contextBuilder = new GameContextBuilder();
+        GameContext context = contextBuilder.getGameContext();
 
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer(config);
 
         GLFWInput input = new GLFWInput();
         AudioContext audioContext = new AudioContext();
         AudioManager.INSTANCE = new AudioManager(audioContext);
-        GraphicsSceneLoader loader = new TestSceneLoader(config, context);
+        GraphicsSceneLoader loader = new TestSceneLoader(config, contextBuilder);
         loader.loadScene();
         Camera camera = loader.getCamera();
         new GoatControlScript(camera.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
@@ -68,7 +71,7 @@ public class Test {
 
         EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
-            context.setInput(input);
+            contextBuilder.setInput(input);
             scriptsThread.scheduleTask(new ScriptTask(context.getScriptManager()));
             GLFWWindowManager windowManager = graphics.getWindowManager();
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
@@ -78,6 +81,7 @@ public class Test {
 
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
+        contextBuilder.setRayTester(rayTester);
         physicsThread.scheduleTask(new MovementTask(scene));
         physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
 

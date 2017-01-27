@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.SceneComponent;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -102,7 +103,7 @@ public class GunScript extends Script<Component> {
             parentVelocity.set(physicalProperty.getVelocity());
             direction.add(parentVelocity.mul(BULLET_MASS));
 
-            Component bullet = new SimpleComponent(getContext());
+            SceneComponent bullet = new SimpleComponent(getContext());
             bullet.addProperty(new GraphicsMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();

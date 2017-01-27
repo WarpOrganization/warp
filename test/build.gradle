@@ -5,17 +5,18 @@ apply plugin: 'java'
 
 repositories {
     jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile project(':core')
-    compile project(':physics')
     compile project(':graphics')
+    compile project(':physics')
     compile project(':audio')
     compile project(':ai')
-    compile project(':test')
     compile project(':game')
     testCompile 'junit:junit:4.12'
 }

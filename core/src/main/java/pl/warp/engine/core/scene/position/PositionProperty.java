@@ -29,7 +29,7 @@ public class PositionProperty extends ObservableProperty<Component> {
     @Override
     public void enable() {
         super.enable();
-        strategy.initialize(this);
+        strategy.initialize(getOwner());
     }
 
     public Vector3f getPosition() {

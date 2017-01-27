@@ -1,22 +1,17 @@
 package pl.warp.engine.graphics.camera;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Actor;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.SceneComponent;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
-
-import java.util.List;
 
 
 /**
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public abstract class Camera extends Actor {
+public abstract class Camera extends SceneComponent {
 
     public Camera(Component parent) {
         super(parent);

@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.RendererException;
 import pl.warp.engine.graphics.light.SpotLight;
 
 import java.util.ArrayList;

@@ -6,14 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.GraphicsSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.test.TestSceneLoader;
+import pl.warp.game.GameContextBuilder;
 import pl.warp.ide.controller.IDEController;
 import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.engine.SceneViewRenderer;
@@ -23,6 +23,7 @@ import pl.warp.ide.scene.tree.SceneTreeLoader;
 import pl.warp.ide.scene.tree.look.ComponentTypeLook;
 import pl.warp.ide.scene.tree.look.CustomLookRepository;
 import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
+import pl.warp.test.TestSceneLoader;
 
 /**
  * @author Jaca777
@@ -38,10 +39,10 @@ public class IDELauncher extends Application {
         CustomLookRepository lookRepo = loadCustomLookRepository();
         RenderingConfig config = new RenderingConfig(FPS, new Display(false, -1, -1).setVisible(false));
         JavaFxInput javaFxInput = new JavaFxInput();
-        EngineContext context = new EngineContext();
+        GameContextBuilder contextBuilder = new GameContextBuilder();
         SceneViewRenderer renderer = new SceneViewRenderer();
-        GraphicsSceneLoader sceneLoader = getSceneLoader(config, context);
-        IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, context, javaFxInput);
+        GraphicsSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
+        IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, contextBuilder, javaFxInput);
 
         IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, engine);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -89,8 +90,8 @@ public class IDELauncher extends Application {
         return new ImageView(new Image(IDELauncher.class.getResourceAsStream(name)));
     }
 
-    private GraphicsSceneLoader getSceneLoader(RenderingConfig config, EngineContext context) { //TODO remove - temporary
-        return new TestSceneLoader(config, context);
+    private GraphicsSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) { //TODO remove - temporary
+        return new TestSceneLoader(config, contextBuilder);
     }
 
     public static void main(String... args) throws Exception {
