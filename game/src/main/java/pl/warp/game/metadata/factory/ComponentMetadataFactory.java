@@ -1,7 +1,7 @@
-package pl.warp.engine.core.metadata.factory;
+package pl.warp.game.metadata.factory;
 
-import pl.warp.engine.core.metadata.ComponentMetadata;
-import pl.warp.engine.core.metadata.PropertyMetadata;
+import pl.warp.game.metadata.ComponentMetadata;
+import pl.warp.game.metadata.PropertyMetadata;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
 

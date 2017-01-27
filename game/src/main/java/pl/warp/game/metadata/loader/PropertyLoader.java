@@ -1,11 +1,10 @@
-package pl.warp.engine.core.metadata.loader;
+package pl.warp.game.metadata.loader;
 
-import pl.warp.engine.core.metadata.ReflectionUtil;
+import pl.warp.game.metadata.ReflectionUtil;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.core.metadata.Metadata;
-import pl.warp.engine.core.metadata.PropertyMetadata;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.game.metadata.Metadata;
+import pl.warp.game.metadata.PropertyMetadata;
 import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Constructor;

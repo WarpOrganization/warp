@@ -5,8 +5,6 @@ import org.joml.Vector3f;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.SceneComponent;
-import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
@@ -17,12 +15,15 @@ import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameSceneComponent;
+import pl.warp.game.script.GameScript;
 
 /**
  * @author Hubertus
  *         Created 7/12/16
  */
-public class GunScript extends Script<Component> {
+public class GunScript extends GameScript<GameComponent> {
 
     private final Component owner;
     private int cooldown;
@@ -42,7 +43,7 @@ public class GunScript extends Script<Component> {
 
     private Mesh bulletMesh;
 
-    public GunScript(Component owner) {
+    public GunScript(GameComponent owner) {
         super(owner);
         this.owner = owner;
     }
@@ -103,7 +104,7 @@ public class GunScript extends Script<Component> {
             parentVelocity.set(physicalProperty.getVelocity());
             direction.add(parentVelocity.mul(BULLET_MASS));
 
-            SceneComponent bullet = new SimpleComponent(getContext());
+            SceneComponent bullet = new GameSceneComponent(getContext());
             bullet.addProperty(new GraphicsMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();

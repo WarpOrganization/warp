@@ -9,20 +9,25 @@ import pl.warp.game.GameContext;
  */
 public class ListenableGameParent extends ListenableParent implements GameComponent {
 
-    private GameContext context;
-
     public ListenableGameParent(GameContext context) {
         super(context);
-        this.context = context;
     }
 
     public ListenableGameParent(GameComponent parent) {
         super(parent);
-        this.context = parent.getContext();
+    }
+    @Override
+    public GameContext getContext() {
+        return (GameContext) super.getContext();
     }
 
     @Override
-    public GameContext getContext() {
-        return context;
+    public GameComponent getParent(){
+        return (GameComponent) super.getParent();
+    }
+
+    @Override
+    public GameComponent getChild(int index) {
+        return (GameComponent) super.getChild(index);
     }
 }

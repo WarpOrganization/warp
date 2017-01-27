@@ -13,13 +13,11 @@ import pl.warp.engine.core.EngineThread;
 import pl.warp.engine.core.SimpleEngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.SimpleComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptManager;
-import pl.warp.engine.graphics.GraphicsSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.light.LightProperty;
 import pl.warp.engine.graphics.light.SpotLight;
@@ -54,6 +52,10 @@ import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameScene;
+import pl.warp.game.scene.GameSceneComponent;
+import pl.warp.game.scene.GameSceneLoader;
 import pl.warp.test.program.gas.GasPlanetProgram;
 import pl.warp.test.program.ring.PlanetaryRingProgram;
 import pl.warp.test.program.ring.PlanetaryRingProperty;
@@ -71,7 +73,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
  * @author Jaca777
  *         Created 2017-01-22 at 11
  */
-public class TestSceneLoader implements GraphicsSceneLoader {
+public class TestSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
@@ -83,9 +85,9 @@ public class TestSceneLoader implements GraphicsSceneLoader {
 
     private RenderingConfig config;
     private GameContextBuilder contextBuilder;
-    private Scene scene;
-    private Component controllableGoat;
-    private Camera camera;
+    private GameScene scene;
+    private GameSceneComponent controllableGoat;
+    private GameComponent cameraComponent;
     private Mesh bulletMesh;
     private Texture2DArray boomSpritesheet;
     private Texture2D bulletTexture;
@@ -106,19 +108,23 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             e.printStackTrace();
         }
 
-        scene = new Scene(contextBuilder.getGameContext());
+        scene = new GameScene(contextBuilder.getGameContext());
         scene.addProperty(new NameProperty("Test universe"));
         contextBuilder.setScene(scene);
 
         contextBuilder.setScriptManager(new ScriptManager());
 
-        controllableGoat = new SimpleComponent(scene);
+        controllableGoat = new GameSceneComponent(scene);
         controllableGoat.addProperty(new NameProperty("Player ship"));
 
         Display display = config.getDisplay();
 
-        camera = new QuaternionCamera(controllableGoat, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
-        camera.addProperty(new NameProperty("Camera"));
+        cameraComponent = new GameSceneComponent(controllableGoat);
+        TransformProperty cameraTransform = new TransformProperty();
+        cameraComponent.addProperty(cameraTransform);
+        Camera camera = new QuaternionCamera(cameraComponent, cameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
+        cameraComponent.addProperty(new NameProperty("Camera"));
+        cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
 
         loaded = true;
@@ -178,7 +184,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
 
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             Texture2DArray lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
-            Component light = new SimpleComponent(scene);
+            Component light = new GameSceneComponent(scene);
             LightProperty property = new LightProperty();
             light.addProperty(property);
             SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f).mul(4), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
@@ -192,7 +198,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             LensFlare flare = new LensFlare(lensTexture, flares);
             new GraphicsLensFlareProperty(flare);
 
-            Component gasSphere = new SimpleComponent(scene);
+            GameComponent gasSphere = new GameSceneComponent(scene);
             Sphere sphere = new Sphere(50, 50);
             gasSphere.addProperty(new GraphicsMeshProperty(sphere));
             ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
@@ -214,7 +220,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
 
             float startR = 1.5f;
             float endR = 2.5f;
-            Component ring = new SimpleComponent(gasSphere);
+            Component ring = new GameSceneComponent(gasSphere);
             Ring ringMesh = new Ring(20, startR, endR);
             ring.addProperty(new GraphicsMeshProperty(ringMesh));
             ring.addProperty(new GraphicsCustomRendererProgramProperty(new PlanetaryRingProgram()));
@@ -231,7 +237,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
             Texture2D floorTexture = new Texture2D(decodedFloorTexture.getWidth(), decodedFloorTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedFloorTexture.getData());
             Material floorMaterial = new Material(floorTexture);
-            Component floor = new SimpleComponent(scene);
+            Component floor = new GameSceneComponent(scene);
             new GraphicsMeshProperty(floor, floorMesh);
             new GraphicsMaterialProperty(floor,floorMaterial);
             new TransformProperty(floor);
@@ -282,7 +288,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
-            Component frigate = new SimpleComponent(scene);
+            Component frigate = new GameSceneComponent(scene);
             frigate.addProperty(new NameProperty("Frigate"));
             frigate.addProperty(new GraphicsMeshProperty(friageMesh));
             frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
@@ -298,17 +304,17 @@ public class TestSceneLoader implements GraphicsSceneLoader {
     }
 
     @Override
-    public Camera getCamera() {
-        return camera;
+    public GameComponent getCameraComponent() {
+        return cameraComponent;
     }
 
-    private void generateGOATS(Component parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
+    private void generateGOATS(GameComponent parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
         int nOfGoats = 10;
         for (int i = 0; i < nOfGoats; i++) {
-            Component goat = new SimpleComponent(parent);
+            Component goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new GraphicsMeshProperty(goatMesh));
             Material material = new Material(goatTexture);
@@ -339,7 +345,7 @@ public class TestSceneLoader implements GraphicsSceneLoader {
 
 
     @Override
-    public Scene getScene() {
+    public GameScene getScene() {
         return scene;
     }
 }

@@ -1,9 +1,9 @@
-package pl.warp.engine.core.metadata.factory;
+package pl.warp.game.metadata.factory;
 
-import pl.warp.engine.core.metadata.Metadata;
-import pl.warp.engine.core.metadata.PropertyMetadata;
-import pl.warp.engine.core.metadata.ReflectionUtil;
-import pl.warp.engine.core.metadata.loader.MetadataLoadingException;
+import pl.warp.game.metadata.Metadata;
+import pl.warp.game.metadata.PropertyMetadata;
+import pl.warp.game.metadata.ReflectionUtil;
+import pl.warp.game.metadata.loader.MetadataLoadingException;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.Component;
 

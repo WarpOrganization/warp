@@ -7,8 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.GraphicsSceneLoader;
+import pl.warp.game.scene.GameSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
@@ -41,7 +40,7 @@ public class IDELauncher extends Application {
         JavaFxInput javaFxInput = new JavaFxInput();
         GameContextBuilder contextBuilder = new GameContextBuilder();
         SceneViewRenderer renderer = new SceneViewRenderer();
-        GraphicsSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
+        GameSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
         IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, contextBuilder, javaFxInput);
 
         IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, engine);
@@ -90,7 +89,7 @@ public class IDELauncher extends Application {
         return new ImageView(new Image(IDELauncher.class.getResourceAsStream(name)));
     }
 
-    private GraphicsSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) { //TODO remove - temporary
+    private GameSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) { //TODO remove - temporary
         return new TestSceneLoader(config, contextBuilder);
     }
 

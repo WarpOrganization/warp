@@ -12,6 +12,7 @@ import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.pipeline.output.OutputTexture2DRenderer;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
@@ -19,6 +20,7 @@ import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.scene.GameComponent;
 
 import java.io.File;
 
@@ -32,6 +34,7 @@ public class IDEEngineTaskManager {
 
     private SceneViewRenderer sceneViewRenderer;
     private Scene loadedScene;
+    private GameComponent cameraComponent;
     private Camera camera;
 
     private Graphics graphics;
@@ -41,10 +44,11 @@ public class IDEEngineTaskManager {
     private Input input;
     private RayTester rayTester;
 
-    public IDEEngineTaskManager(SceneViewRenderer sceneViewRenderer, Scene scene, Camera camera, RenderingConfig config, GameContextBuilder contextBuilder, Input input) {
+    public IDEEngineTaskManager(SceneViewRenderer sceneViewRenderer, Scene scene, GameComponent cameraComponent, RenderingConfig config, GameContextBuilder contextBuilder, Input input) {
         this.sceneViewRenderer = sceneViewRenderer;
         this.loadedScene = scene;
-        this.camera = camera;
+        this.cameraComponent = cameraComponent;
+        this.camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
         this.config = config;
         this.contextBuilder = contextBuilder;
         this.input = input;
@@ -109,7 +113,7 @@ public class IDEEngineTaskManager {
 
     private void createAudioThread() {
         AudioContext audioContext = new AudioContext();
-        audioContext.setAudioListener(new AudioListener(camera));
+        audioContext.setAudioListener(new AudioListener(cameraComponent));
         AudioManager audioManager = new AudioManager(audioContext);
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         audioThread.scheduleTask(new AudioTask(audioContext));

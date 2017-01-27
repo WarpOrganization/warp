@@ -3,11 +3,11 @@ package pl.warp.test;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.game.scene.GameComponent;
+import pl.warp.game.script.GameScript;
 
 import java.awt.event.KeyEvent;
 
@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
  * @author Jaca777
  *         Created 2016-07-08 at 00
  */
-public class GoatControlScript extends Script<Component> {
+public class GoatControlScript extends GameScript<GameComponent> {
 
     private static final float MOUSE_ROTATION_SPEED_FACTOR = 0.2f;
 
@@ -34,7 +34,7 @@ public class GoatControlScript extends Script<Component> {
     private Vector3f rightVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
 
-    public GoatControlScript(Component owner, float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRotationSpeed) {
+    public GoatControlScript(GameComponent owner, float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRotationSpeed) {
         super(owner);
         this.movementSpeed = movementSpeed;
         this.rotationSpeed = rotationSpeed;

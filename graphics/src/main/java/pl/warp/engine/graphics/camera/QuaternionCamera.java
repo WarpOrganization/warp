@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.camera;
 
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -12,23 +11,23 @@ import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
  * @author Jaca777
  *         Created 2016-07-01 at 20
  */
-public class QuaternionCamera extends Camera {
+public class QuaternionCamera implements Camera {
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, 1);
 
     private ProjectionMatrix projection;
     private TransformProperty transform;
+    private Component cameraComponent;
 
-    public QuaternionCamera(Component parent, Vector3f position, ProjectionMatrix projection) {
-        super(parent);
+    public QuaternionCamera(Component cameraComponent, Vector3f position, TransformProperty transform, ProjectionMatrix projection) {
         this.projection = projection;
-        this.transform = new TransformProperty();
-        addProperty(transform);
+        this.transform = transform;
+        this.cameraComponent = cameraComponent;
         transform.move(position);
     }
 
-    public QuaternionCamera(Component parent, ProjectionMatrix projection) {
-        this(parent, new Vector3f(), projection);
+    public QuaternionCamera(Component cameraComponent, TransformProperty transform, ProjectionMatrix projection) {
+        this(cameraComponent, new Vector3f(), transform, projection);
     }
 
     @Override
@@ -57,26 +56,29 @@ public class QuaternionCamera extends Camera {
         transform.rotateLocalZ(angleInRadians);
     }
 
-    public Quaternionf rotateX(float angle) {
-        return transform.rotateX(angle);
+    @Override
+    public void rotateX(float angle) {
+         transform.rotateX(angle);
     }
 
-    public Quaternionf rotateY(float angle) {
-        return transform.rotateY(angle);
+    @Override
+    public void rotateY(float angle) {
+        transform.rotateY(angle);
     }
 
-    public Quaternionf rotateZ(float angle) {
-        return transform.rotateZ(angle);
+    @Override
+    public void rotateZ(float angle) {
+         transform.rotateZ(angle);
     }
 
     @Override
     public Vector3f getPosition(Vector3f dest) {
-        return Transforms.getAbsolutePosition(this, dest);
+        return Transforms.getAbsolutePosition(cameraComponent, dest);
     }
 
     @Override
     public Matrix4f getCameraMatrix() {
-        return Transforms.getActualTransform(this).invert();
+        return Transforms.getActualTransform(cameraComponent).invert();
     }
 
     public TransformProperty getTransform() {
@@ -92,7 +94,7 @@ public class QuaternionCamera extends Camera {
 
     @Override
     public Matrix4f getRotationMatrix() {
-        return Transforms.getAbsoluteRotation(this).get(tempRotation).invert();
+        return Transforms.getAbsoluteRotation(cameraComponent).get(tempRotation).invert();
     }
 
     private Vector3f forwardVector = new Vector3f();

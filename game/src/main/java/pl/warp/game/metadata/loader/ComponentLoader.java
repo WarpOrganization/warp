@@ -1,8 +1,8 @@
-package pl.warp.engine.core.metadata.loader;
+package pl.warp.game.metadata.loader;
 
-import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.metadata.ComponentMetadata;
+import pl.warp.game.GameContext;
+import pl.warp.game.metadata.ComponentMetadata;
 
 /**
  * @author Jaca777
@@ -11,9 +11,9 @@ import pl.warp.engine.core.metadata.ComponentMetadata;
 public class ComponentLoader {
 
     private PropertyLoader propertyLoader;
-    private EngineContext context;
+    private GameContext context;
 
-    public ComponentLoader(PropertyLoader propertyLoader, EngineContext context) {
+    public ComponentLoader(PropertyLoader propertyLoader, GameContext context) {
         this.propertyLoader = propertyLoader;
         this.context = context;
     }

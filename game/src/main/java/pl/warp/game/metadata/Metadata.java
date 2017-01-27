@@ -1,4 +1,4 @@
-package pl.warp.engine.core.metadata;
+package pl.warp.game.metadata;
 
 /**
  * @author Jaca777

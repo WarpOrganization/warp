@@ -6,7 +6,9 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.Transforms;
-import pl.warp.engine.graphics.camera.QuaternionCamera;
+import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.camera.CameraProperty;
+import pl.warp.game.scene.GameComponent;
 
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.MouseEvent.BUTTON3;
@@ -15,15 +17,17 @@ import static java.awt.event.MouseEvent.BUTTON3;
  * @author Jaca777
  *         Created 2017-01-26 at 12
  */
-public class IDECameraControlScript extends Script<QuaternionCamera> {
+public class IDECameraControlScript extends Script<GameComponent> {
 
     private static final float CAMERA_SPEED = 0.025f;
     private static final float ROT_SPEED = 0.06f;
 
     private float cameraSpeed = CAMERA_SPEED;
+    private Camera camera;
 
-    public IDECameraControlScript(QuaternionCamera owner) {
+    public IDECameraControlScript(GameComponent owner) {
         super(owner);
+        this.camera = owner.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
     }
 
     @Override
@@ -59,7 +63,7 @@ public class IDECameraControlScript extends Script<QuaternionCamera> {
             movementVector.normalize();
             movementVector.rotate(rotation);
             movementVector.mul(cameraSpeed * delta);
-            getOwner().move(movementVector);
+            camera.move(movementVector);
         }
     }
 
@@ -67,12 +71,12 @@ public class IDECameraControlScript extends Script<QuaternionCamera> {
     private void rotate(Input input, int delta) {
         if (input.isMouseButtonDown(BUTTON3)) {
             Vector2f cursorPositionDelta = input.getCursorPositionDelta();
-            getOwner().rotateX(cursorPositionDelta.y * ROT_SPEED * delta);
-            getOwner().rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
+            camera.rotateX(cursorPositionDelta.y * ROT_SPEED * delta);
+            camera.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
         }
         if(input.isKeyDown(VK_Q))
-            getOwner().rotateZ(ROT_SPEED * delta * 0.01f);
+            camera.rotateZ(ROT_SPEED * delta * 0.01f);
         if(input.isKeyDown(VK_E))
-            getOwner().rotateZ(-ROT_SPEED * delta * 0.01f);
+            camera.rotateZ(-ROT_SPEED * delta * 0.01f);
     }
 }

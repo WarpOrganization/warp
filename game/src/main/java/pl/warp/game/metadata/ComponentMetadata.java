@@ -1,8 +1,8 @@
-package pl.warp.engine.core.metadata;
+package pl.warp.game.metadata;
 
-import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.SimpleComponent;
+import pl.warp.game.GameContext;
+import pl.warp.game.scene.GameSceneComponent;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class ComponentMetadata implements Serializable {
         return propertyMetadata;
     }
 
-    public Component newInstance(EngineContext context){
-        return new SimpleComponent(context);
+    public Component newInstance(GameContext context){
+        return new GameSceneComponent(context);
     }
 }
