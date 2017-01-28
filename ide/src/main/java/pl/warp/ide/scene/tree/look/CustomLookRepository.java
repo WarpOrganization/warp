@@ -1,7 +1,6 @@
 package pl.warp.ide.scene.tree.look;
 
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Scene;
+import pl.warp.game.scene.GameComponent;
 import pl.warp.ide.scene.tree.ComponentLook;
 
 import java.util.Arrays;
@@ -21,17 +20,12 @@ public class CustomLookRepository implements ComponentLookRepository {
     }
 
     @Override
-    public ComponentLook getDesc(Component component) {
+    public ComponentLook getLook(GameComponent component) {
         return componentTypeLooks
                 .stream()
                 .filter(f -> f.applies(component))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("No type descriptor found for component " + component + "."))
                 .getDescriptor();
-    }
-
-
-    private boolean isScene(Component component) {
-        return component instanceof Scene;
     }
 }

@@ -101,21 +101,21 @@ public class QuaternionCamera implements Camera {
 
     @Override
     public Vector3f getForwardVector() {
-        return transform.getRotation().positiveZ(forwardVector).negate(); // but... why?
+        return Transforms.getAbsoluteRotation(cameraComponent).positiveZ(forwardVector).negate();
     }
 
     private Vector3f rightVector = new Vector3f();
 
     @Override
     public Vector3f getRightVector() {
-        return transform.getRotation().positiveX(rightVector).negate();
+        return Transforms.getAbsoluteRotation(cameraComponent).positiveX(rightVector).negate();
     }
 
     private Vector3f upVector = new Vector3f();
 
     @Override
     public Vector3f getUpVector() {
-        return transform.getRotation().positiveY(upVector).negate();
+        return Transforms.getAbsoluteRotation(cameraComponent).positiveY(upVector).negate();
     }
 
 }

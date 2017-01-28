@@ -3,21 +3,21 @@ package pl.warp.ide.engine;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.script.GameScript;
 
 import static java.awt.event.KeyEvent.*;
-import static java.awt.event.MouseEvent.BUTTON3;
+import static java.awt.event.MouseEvent.BUTTON1;
 
 /**
  * @author Jaca777
  *         Created 2017-01-26 at 12
  */
-public class IDECameraControlScript extends Script<GameComponent> {
+public class IDECameraControlScript extends GameScript<GameComponent> {
 
     private static final float CAMERA_SPEED = 0.025f;
     private static final float ROT_SPEED = 0.06f;
@@ -31,14 +31,14 @@ public class IDECameraControlScript extends Script<GameComponent> {
     }
 
     @Override
-    public void onInit() {
+    public void init() {
 
     }
 
     private Vector3f movementVector = new Vector3f();
 
     @Override
-    public void onUpdate(int delta) {
+    public void update(int delta) {
         Input input = getContext().getInput();
         move(input, delta);
         rotate(input, delta);
@@ -69,7 +69,7 @@ public class IDECameraControlScript extends Script<GameComponent> {
 
 
     private void rotate(Input input, int delta) {
-        if (input.isMouseButtonDown(BUTTON3)) {
+        if (input.isMouseButtonDown(BUTTON1)) {
             Vector2f cursorPositionDelta = input.getCursorPositionDelta();
             camera.rotateX(cursorPositionDelta.y * ROT_SPEED * delta);
             camera.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);

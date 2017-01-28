@@ -1,10 +1,9 @@
-package pl.warp.ide.controller;
+package pl.warp.ide.controller.component;
 
 import javafx.scene.control.TreeView;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
-import pl.warp.ide.scene.tree.ComponentItem;
+import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameScene;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 
 /**
@@ -12,13 +11,13 @@ import pl.warp.ide.scene.tree.SceneTreeLoader;
  */
 public class ComponentController {
 
-    private TreeView<ComponentItem<Component>> sceneTree;
-    private Scene scene;
+    private TreeView<GameComponent> sceneTree;
+    private GameScene scene;
     private SceneTreeLoader loader;
-    private Component selectedComponent;
+    private GameComponent selectedComponent;
 
 
-    public ComponentController(TreeView<ComponentItem<Component>> sceneTree, Scene scene, SceneTreeLoader loader) {
+    public ComponentController(TreeView<GameComponent> sceneTree, GameScene scene, SceneTreeLoader loader) {
         this.sceneTree = sceneTree;
         this.loader = loader;
         this.scene = scene;
@@ -32,18 +31,19 @@ public class ComponentController {
             if(selectedComponent != null)
                 unmarkSelected(selectedComponent);
             if(newValue != null) {
-                selectedComponent = newValue.getValue().getComponent();
+                selectedComponent = newValue.getValue();
                 markSelected(selectedComponent);
             }
         });
+        new ComponentSelectionScript(scene, sceneTree);
     }
 
-    private void markSelected(Component selectedComponent) {
+    private void markSelected(GameComponent selectedComponent) {
         selectedComponent.<GraphicsMaterialProperty>getPropertyIfExists(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)
                 .ifPresent(p -> p.getMaterial().setBrightness(4.0f));
     }
 
-    private void unmarkSelected(Component selectedComponent) {
+    private void unmarkSelected(GameComponent selectedComponent) {
         selectedComponent.<GraphicsMaterialProperty>getPropertyIfExists(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)
                 .ifPresent(p -> p.getMaterial().setBrightness(1.0f));
     }

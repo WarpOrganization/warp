@@ -9,10 +9,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.game.scene.GameComponent;
+import pl.warp.ide.controller.component.ComponentController;
 import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.input.JavaFxInput;
-import pl.warp.ide.scene.tree.ComponentItem;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 
 import java.net.URL;
@@ -47,7 +47,7 @@ public class IDEController implements Initializable {
     private TextArea logOutput;
 
     @FXML
-    private TreeView<ComponentItem<Component>> sceneTree;
+    private TreeView<GameComponent> sceneTree;
 
     @FXML
     private ListView<?> componentList;
@@ -71,7 +71,7 @@ public class IDEController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         engine.start(sceneView);
         componentController = new ComponentController(sceneTree, engine.getScene(), sceneTreeLoader);
-        input.listenOn(root, sceneView);
+        input.listenOn(root, sceneView, engine.getScene());
     }
 
     @FXML

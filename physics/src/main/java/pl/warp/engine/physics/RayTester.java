@@ -91,10 +91,9 @@ public class RayTester {
     private Vector3 startPos = new Vector3();
     private Vector3 endPos = new Vector3();
 
-    public Component rayTest(Vector3f startPos, Vector3f endPos) {
+    public synchronized Component rayTest(Vector3f startPos, Vector3f endPos) {
         this.startPos.set(startPos.x, startPos.y, startPos.z);
         this.endPos.set(endPos.x, endPos.y, endPos.z);
-
         return rayTest(this.startPos, this.endPos);
     }
 

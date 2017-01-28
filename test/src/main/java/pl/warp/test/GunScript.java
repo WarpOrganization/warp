@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.SceneComponent;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
@@ -49,7 +48,7 @@ public class GunScript extends GameScript<GameComponent> {
     }
 
     @Override
-    public void onInit() {
+    public void init() {
         timer = 0;
         transformProperty = getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         physicalProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
@@ -63,7 +62,7 @@ public class GunScript extends GameScript<GameComponent> {
     }
 
     @Override
-    public void onUpdate(int delta) {
+    public void update(int delta) {
         input();
         cooldown(delta);
     }
@@ -104,7 +103,7 @@ public class GunScript extends GameScript<GameComponent> {
             parentVelocity.set(physicalProperty.getVelocity());
             direction.add(parentVelocity.mul(BULLET_MASS));
 
-            SceneComponent bullet = new GameSceneComponent(getContext());
+            GameComponent bullet = new GameSceneComponent(getContext());
             bullet.addProperty(new GraphicsMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();

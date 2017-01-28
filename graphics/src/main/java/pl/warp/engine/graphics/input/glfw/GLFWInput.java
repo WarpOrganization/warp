@@ -2,7 +2,9 @@ package pl.warp.engine.graphics.input.glfw;
 
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
-import pl.warp.engine.core.scene.input.Input;
+import pl.warp.engine.core.scene.Event;
+import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.input.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -14,6 +16,12 @@ import java.awt.event.MouseEvent;
 
 @SuppressWarnings("Duplicates") //srsly intellij?
 public class GLFWInput implements Input {
+
+    private Scene scene;
+
+    public GLFWInput(Scene scene) {
+        this.scene = scene;
+    }
 
     private long windowHandle;
 
@@ -51,12 +59,15 @@ public class GLFWInput implements Input {
             return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
+                triggerEvent(new KeyPressedEvent(key));
                 keyboardKeys[keyStroke] = true;
                 break;
             case GLFW.GLFW_RELEASE:
+                triggerEvent(new KeyReleasedEvent(key));
                 keyboardKeys[keyStroke] = false;
                 break;
             case GLFW.GLFW_REPEAT:
+                triggerEvent(new KeyPressedEvent(key));
                 keyboardKeys[keyStroke] = true;
                 break;
         }
@@ -68,15 +79,22 @@ public class GLFWInput implements Input {
             return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
+                triggerEvent(new MouseButtonPressedEvent(button));
                 mouseButtons[buttonCode] = true;
                 break;
             case GLFW.GLFW_RELEASE:
+                triggerEvent(new MouseButtonReleasedEvent(button));
                 mouseButtons[buttonCode] = false;
                 break;
             case GLFW.GLFW_REPEAT:
+                triggerEvent(new MouseButtonPressedEvent(button));
                 mouseButtons[buttonCode] = true;
                 break;
         }
+    }
+
+    private void triggerEvent(Event event) {
+        scene.triggerEvent(event);
     }
 
     @Override

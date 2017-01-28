@@ -17,6 +17,7 @@ public class ComponentLook {
     public ComponentLook(Function<Component, String> nameSupplier, Supplier<Node> imageSupplier) {
         this.nameSupplier = nameSupplier;
         this.imageSupplier = imageSupplier;
+
     }
 
     public String createName(Component component) {

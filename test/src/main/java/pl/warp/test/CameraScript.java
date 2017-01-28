@@ -23,7 +23,7 @@ public class CameraScript extends GameScript<GameComponent> {
     }
 
     @Override
-    public void onInit() {
+    public void init() {
         this.parentBody = getOwner().getParent().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         this.parentTransform = getOwner().getParent().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
@@ -31,7 +31,7 @@ public class CameraScript extends GameScript<GameComponent> {
     private Vector3f prevVelocity = new Vector3f();
 
     @Override
-    public void onUpdate(int delta) {
+    public void update(int delta) {
         Quaternionf rotation = new Quaternionf(parentTransform.getRotation()).invert();
         Vector3f currentVelocity = new Vector3f(parentBody.getVelocity()).rotate(rotation);
         Vector3f velDelta = new Vector3f();

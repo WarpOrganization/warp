@@ -2,20 +2,19 @@ package pl.warp.ide.engine;
 
 import javafx.scene.canvas.Canvas;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.graphics.camera.CameraProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
-import pl.warp.game.scene.GameSceneComponent;
-import pl.warp.game.scene.GameSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
+import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameScene;
+import pl.warp.game.scene.GameSceneComponent;
+import pl.warp.game.scene.GameSceneLoader;
 
 /**
  * @author Jaca777
@@ -64,7 +63,7 @@ public class IDEEngine {
         new IDECameraControlScript(cameraComponent);
     }
 
-    public Scene getScene() {
+    public GameScene getScene() {
         return currentScene;
     }
 }

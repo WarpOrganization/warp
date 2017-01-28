@@ -3,6 +3,7 @@ package pl.warp.game;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
+import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.physics.RayTester;
 
 /**
@@ -20,6 +21,10 @@ public class GameContextBuilder {
         gameContext.setRayTester(rayTester);
     }
 
+    public void setCamera(Camera camera) {
+        gameContext.setCamera(camera);
+    }
+
     public GameContext getGameContext() {
         return gameContext;
     }
@@ -35,4 +40,6 @@ public class GameContextBuilder {
     public void setInput(Input input) {
         gameContext.setInput(input);
     }
+
+
 }

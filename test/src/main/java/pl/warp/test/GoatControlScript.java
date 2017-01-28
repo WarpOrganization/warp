@@ -43,13 +43,13 @@ public class GoatControlScript extends GameScript<GameComponent> {
     }
 
     @Override
-    public void onInit() {
+    public void init() {
         this.bodyProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         this.gunProperty = getOwner().getProperty(GunProperty.GUN_PROPERTY_NAME);
     }
 
     @Override
-    public void onUpdate(int delta) {
+    public void update(int delta) {
         updateDirections();
         desiredTorque.set(0, 0, 0);
         move(delta);

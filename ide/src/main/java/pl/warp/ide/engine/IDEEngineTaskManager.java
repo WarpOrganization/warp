@@ -73,14 +73,22 @@ public class IDEEngineTaskManager {
     }
 
     private void startTasks(EngineContext context, Graphics graphics, Scene scene, Canvas destCanvas) {
-        createScriptThread(context, input, graphics.getThread());
+        createScriptThread(input, graphics.getThread());
         createPhysicsThread(scene, graphics.getThread());
         createAudioThread();
         createAIThread(scene);
         createInputTask();
+        initContext();
         graphics.create();
         OutputTexture2DRenderer output = (OutputTexture2DRenderer) graphics.getOutput();
         sceneViewRenderer.startRendering(output.getOutput(), destCanvas);
+    }
+
+    private void initContext() {
+        contextBuilder.setCamera(camera);
+        contextBuilder.setScene(loadedScene);
+        contextBuilder.setRayTester(rayTester);
+        contextBuilder.setInput(input);
     }
 
     private void createInputTask() {
@@ -95,9 +103,9 @@ public class IDEEngineTaskManager {
         graphicsThread.scheduleOnce(physicsThread::start);
     }
 
-    private void createScriptThread(EngineContext context, Input input, EngineThread graphicsThread) {
+    private void createScriptThread(Input input, EngineThread graphicsThread) {
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        scriptThread.scheduleTask(new ScriptTask(context.getScriptManager()));
+        scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptManager()));
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
             //TODO start input task

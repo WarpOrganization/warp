@@ -10,6 +10,7 @@ import pl.warp.game.GameContext;
  */
 public abstract class GameScript<T extends GameComponent> extends Script<T> {
     private GameContext gameContext;
+    private GameInputHandler inputHandler;
 
     public GameScript(T owner) {
         super(owner);
@@ -20,4 +21,19 @@ public abstract class GameScript<T extends GameComponent> extends Script<T> {
     protected GameContext getContext() {
         return gameContext;
     }
+
+
+    @Override
+    public void onInit() {
+        init();
+    }
+
+    protected abstract void init();
+
+    @Override
+    public void onUpdate(int delta) {
+        update(delta);
+    }
+
+    protected abstract void update(int delta);
 }

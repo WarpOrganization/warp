@@ -56,15 +56,16 @@ public class Test {
 
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer(config);
 
-        GLFWInput input = new GLFWInput();
         AudioContext audioContext = new AudioContext();
         AudioManager.INSTANCE = new AudioManager(audioContext);
         GameSceneLoader loader = new TestSceneLoader(config, contextBuilder);
         loader.loadScene();
         GameComponent cameraComponent = loader.getCameraComponent();
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
+        contextBuilder.setCamera(camera);
         new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         Scene scene = loader.getScene();
+        GLFWInput input = new GLFWInput(scene);
         audioContext.setAudioListener(new AudioListener(cameraComponent.getParent()));
         Graphics graphics = new Graphics(context, onScreenRenderer, camera, config);
         EngineThread graphicsThread = graphics.getThread();

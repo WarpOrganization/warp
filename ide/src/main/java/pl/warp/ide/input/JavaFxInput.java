@@ -5,7 +5,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.joml.Vector2f;
-import pl.warp.engine.core.scene.input.Input;
+import pl.warp.engine.core.scene.input.*;
+import pl.warp.game.scene.GameScene;
 
 import static java.awt.event.MouseEvent.NOBUTTON;
 
@@ -22,17 +23,20 @@ public class JavaFxInput implements Input {
     private Vector2f cursorPosition = null;
     private Vector2f cursorPositionDelta = new Vector2f(0, 0);
     private Canvas canvas;
+    private GameScene scene;
 
     public void onKeyReleased(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
         if (keyCode > 348) return;
         else keyboardKeys[keyCode] = false;
+        scene.triggerEvent(new KeyReleasedEvent(keyCode));
     }
 
     public void onKeyPressed(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
         if (keyCode > 348) return;
-        else keyboardKeys[keyCode] = true;
+        keyboardKeys[keyCode] = true;
+        scene.triggerEvent(new KeyPressedEvent(keyCode));
     }
 
     public void onMouseMoved(MouseEvent event) {
@@ -45,6 +49,7 @@ public class JavaFxInput implements Input {
         if (buttonCode == NOBUTTON)
             return; //button unrecognized
         mouseButtons[buttonCode] = true;
+        scene.triggerEvent(new MouseButtonPressedEvent(buttonCode));
     }
 
 
@@ -53,11 +58,12 @@ public class JavaFxInput implements Input {
         if (buttonCode == NOBUTTON)
             return; //button unrecognized
         mouseButtons[buttonCode] = false;
+        scene.triggerEvent(new MouseButtonReleasedEvent(buttonCode));
     }
 
     @Override
     public void update() {
-        if(canvas == null) return;
+        if (canvas == null) return;
         if (cursorPosition == null) cursorPosition = new Vector2f(lastCursorPos);
         this.lastCursorPos.sub(cursorPosition, cursorPositionDelta);
         this.cursorPositionDelta.mul(1.0f / (float) canvas.getWidth(), 1.0f / (float) canvas.getHeight());
@@ -84,8 +90,9 @@ public class JavaFxInput implements Input {
         return mouseButtons[button];
     }
 
-    public void listenOn(AnchorPane root, Canvas canvas) {
+    public void listenOn(AnchorPane root, Canvas canvas, GameScene scene) {
         this.canvas = canvas;
+        this.scene = scene;
         canvas.setOnMouseMoved(this::onMouseMoved);
         canvas.setOnMouseDragged(this::onMouseMoved);
         canvas.setOnMousePressed(this::onMousePressed);
