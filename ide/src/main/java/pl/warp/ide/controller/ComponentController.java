@@ -11,6 +11,7 @@ import pl.warp.ide.scene.tree.SceneTreeLoader;
  * Created by user on 2017-01-17.
  */
 public class ComponentController {
+
     private TreeView<ComponentItem<Component>> sceneTree;
     private Scene scene;
     private SceneTreeLoader loader;

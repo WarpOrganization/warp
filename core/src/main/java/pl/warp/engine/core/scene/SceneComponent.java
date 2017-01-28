@@ -152,7 +152,7 @@ public abstract class SceneComponent implements Component {
     public void setParent(Component parent) {
         Component previousParent = this.parent;
         this.parent = parent;
-        if(previousParent!= null) previousParent.removeChild(this);
+        if(previousParent != null) previousParent.removeChild(this);
         if(parent != null) parent.addChild(this);
     }
 
@@ -207,8 +207,8 @@ public abstract class SceneComponent implements Component {
     public void removeChild(Component child) {
         synchronized (children) {
             if (children.contains(child)) {
-                children.remove(child);
                 if(child.getParent() == this)  child.setParent(null);
+                children.remove(child);
             } else throw new ChildNotPresentException("Unable to remove a child.");
         }
     }

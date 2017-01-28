@@ -15,8 +15,8 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,7 +27,7 @@ public class BulletScript extends Script<Component> {
 
     private int life;
     private Listener<Component, CollisionEvent> collisionListener;
-    private static final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(3);
+    private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(8);
     private Texture2DArray explosionSpritesheet;
     private Component playerShip;
 
@@ -65,8 +65,7 @@ public class BulletScript extends Script<Component> {
             executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);
             DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
             droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
-            if (droneProperty.getHitPoints() < 0)
-                executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
+            executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
         }
     }
 
