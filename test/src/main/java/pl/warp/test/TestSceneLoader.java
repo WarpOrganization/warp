@@ -1,5 +1,7 @@
 package pl.warp.test;
 
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector3f;
@@ -50,6 +52,9 @@ import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
+import pl.warp.engine.physics.CollisionType;
+import pl.warp.engine.physics.collider.BasicCollider;
+import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
@@ -92,6 +97,13 @@ public class TestSceneLoader implements GameSceneLoader {
     private Texture2DArray boomSpritesheet;
     private Texture2D bulletTexture;
     private AudioManager audioManager;
+    private Mesh goatMesh;
+    private Texture2D goatTexture;
+    private Texture2D goatBrightnessTexture;
+    private Mesh friageMesh;
+    private Texture2D frigateTexture;
+    private Material frigateMaterial;
+    private Texture2D frigateBrightnessTexture;
 
 
     public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -162,9 +174,9 @@ public class TestSceneLoader implements GameSceneLoader {
     @Override
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
-            Mesh goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
+            goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
-            Texture2D goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
+            goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -230,7 +242,7 @@ public class TestSceneLoader implements GameSceneLoader {
             ring.addProperty(new PlanetaryRingProperty(startR, endR, ringColors));
 
             ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
-            Texture2D brightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
+            goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
 
 
             /*Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
@@ -252,7 +264,7 @@ public class TestSceneLoader implements GameSceneLoader {
 
             controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
             Material material = new Material(goatTexture);
-            material.setBrightnessTexture(brightnessTexture);
+            material.setBrightnessTexture(goatBrightnessTexture);
             controllableGoat.addProperty(new GraphicsMaterialProperty(material));
             controllableGoat.addProperty(new TransformProperty());
 
@@ -280,13 +292,13 @@ public class TestSceneLoader implements GameSceneLoader {
             scene.addProperty(new GraphicsSkyboxProperty(cubemap));
 
 
-            Mesh friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
+            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
-            Texture2D frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
-            Material frigateMaterial = new Material(frigateTexture);
+            frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
+            frigateMaterial = new Material(frigateTexture);
             frigateMaterial.setShininess(20);
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
-            Texture2D frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
+            frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
             Component frigate = new GameSceneComponent(scene);
             frigate.addProperty(new NameProperty("Frigate"));
@@ -298,7 +310,7 @@ public class TestSceneLoader implements GameSceneLoader {
             transformProperty.rotateLocalY((float) -(Math.PI / 2));
             transformProperty.scale(new Vector3f(3));
             frigate.addProperty(transformProperty);
-            generateGOATS(scene, goatMesh, goatTexture, brightnessTexture);
+            generateGOATS(scene);
 
         });
     }
@@ -308,7 +320,7 @@ public class TestSceneLoader implements GameSceneLoader {
         return cameraComponent;
     }
 
-    private void generateGOATS(GameComponent parent, Mesh goatMesh, Texture2D goatTexture, Texture2D brightnessTexture) {
+    private void generateGOATS(GameComponent parent) {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
@@ -319,7 +331,7 @@ public class TestSceneLoader implements GameSceneLoader {
             goat.addProperty(new GraphicsMeshProperty(goatMesh));
             Material material = new Material(goatTexture);
             material.setShininess(20f);
-            material.setBrightnessTexture(brightnessTexture);
+            material.setBrightnessTexture(goatBrightnessTexture);
             goat.addProperty(new GraphicsMaterialProperty(material));
             goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
             goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
@@ -347,6 +359,34 @@ public class TestSceneLoader implements GameSceneLoader {
     @Override
     public GameScene getScene() {
         return scene;
+    }
+
+    public GameComponent createShip(GameComponent parent) {
+        GameComponent goat = new GameSceneComponent(parent);
+        goat.addProperty(new GraphicsMeshProperty(goatMesh));
+        Material material = new Material(goatTexture);
+        material.setShininess(20f);
+        material.setBrightnessTexture(goatBrightnessTexture);
+        goat.addProperty(new GraphicsMaterialProperty(material));
+        goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+        TransformProperty transformProperty = new TransformProperty();
+        goat.addProperty(transformProperty);
+        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), goat, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+        goat.addProperty(colliderProperty);
+        return goat;
+    }
+
+    public GameComponent createFrigate(GameComponent parent) {
+        GameComponent frigate = new GameSceneComponent(parent);
+        frigate.addProperty(new NameProperty("Frigate"));
+        frigate.addProperty(new GraphicsMeshProperty(friageMesh));
+        frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
+        frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
+        TransformProperty transformProperty = new TransformProperty();
+        frigate.addProperty(transformProperty);
+        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(38.365f * 3, 15.1f * 3, 11.9f * 3)), frigate, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+        frigate.addProperty(colliderProperty);
+        return frigate;
     }
 }
 

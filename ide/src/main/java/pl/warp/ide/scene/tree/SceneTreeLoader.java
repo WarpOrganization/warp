@@ -9,6 +9,7 @@ import pl.warp.engine.core.scene.listenable.ChildRemovedEvent;
 import pl.warp.engine.core.scene.listenable.ListenableParent;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
+import pl.warp.ide.controller.component.ComponentController;
 import pl.warp.ide.engine.IDEComponentProperty;
 import pl.warp.ide.scene.tree.look.ComponentLookRepository;
 
@@ -30,15 +31,15 @@ public class SceneTreeLoader {
         this.descRepository = descRepository;
     }
 
-    public void loadScene(GameScene scene, TreeView<GameComponent> sceneTree) {
-        sceneTree.setCellFactory(param -> new ComponentCell(descRepository));
+    public void loadScene(GameScene scene, TreeView<GameComponent> sceneTree, ComponentController componentController) {
+        sceneTree.setCellFactory(param -> new ComponentCell(descRepository, componentController));
         TreeItem<GameComponent> sceneItem = new TreeItem<>(scene);
         sceneTree.setRoot(sceneItem);
         scene.forEachGameChildren(c -> loadComponent(sceneItem, c));
         scheduledExecutor.schedule(() -> {
             if (sceneChanged) {
                 sceneChanged = false;
-                Platform.runLater(() -> loadScene(scene, sceneTree));
+                Platform.runLater(() -> loadScene(scene, sceneTree, componentController));
             }
         }, RELOAD_DELAY, TimeUnit.MILLISECONDS);
     }

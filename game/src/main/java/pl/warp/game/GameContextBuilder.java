@@ -3,6 +3,7 @@ package pl.warp.game;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.physics.RayTester;
 
@@ -41,5 +42,7 @@ public class GameContextBuilder {
         gameContext.setInput(input);
     }
 
-
+    public void setGraphics(Graphics graphics) {
+        gameContext.setGraphics(graphics);
+    }
 }

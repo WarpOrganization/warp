@@ -79,7 +79,10 @@ public class TestApp extends Application {
 
         dialog.getDialogPane().setContent(grid);
 
-        RenderingConfig config = dialog.showAndWait().orElseThrow(RuntimeException::new);
+        RenderingConfig config = dialog.showAndWait().orElseGet(() -> {
+            System.exit(0);
+            throw new RuntimeException();
+        });
         Test.runTest(config);
 
     }

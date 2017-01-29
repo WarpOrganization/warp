@@ -3,17 +3,18 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="891.0" prefWidth="1294.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -43,7 +44,7 @@
             <Button layoutX="1237.0" layoutY="4.0" mnemonicParsing="false" onAction="#onReloadScene" text="Reload scene" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
          </children>
       </AnchorPane>
-      <SplitPane dividerPositions="0.1586687306501548, 0.8312693498452013" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
+      <SplitPane dividerPositions="0.1586687306501548, 0.8212074303405573" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -58,6 +59,7 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
                               <Canvas fx:id="sceneView" height="696.0" layoutX="147.0" layoutY="126.0" scaleY="-1.0" width="863.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Canvas fx:id="sceneView1" height="696.0" width="850.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -74,21 +76,33 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="213.0">
                            <children>
-                              <TreeView fx:id="sceneTree" layoutX="14.0" layoutY="98.0" prefHeight="354.0" prefWidth="213.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <Button layoutY="357.0" mnemonicParsing="false" onAction="#onEditComponent" prefHeight="10.0" prefWidth="52.0" text="Edit" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" />
-                              <Button layoutX="54.0" layoutY="357.0" mnemonicParsing="false" onAction="#onAddComponent" prefHeight="25.0" prefWidth="65.0" text="Add" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="54.0" />
-                              <Button layoutX="121.0" layoutY="357.0" mnemonicParsing="false" onAction="#onRemoveComponent" prefHeight="25.0" prefWidth="65.0" text="Remove" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="121.0" />
+                              <TreeView fx:id="sceneTree" layoutX="14.0" layoutY="98.0" prefHeight="385.0" prefWidth="213.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="213.0">
                            <children>
-                              <ListView fx:id="componentList" layoutX="6.0" layoutY="29.0" prefHeight="401.0" prefWidth="213.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
-                              <TextField layoutX="2.0" layoutY="2.0" promptText="Search..." />
-                              <Button fx:id="editComponent" layoutX="2.0" layoutY="434.0" mnemonicParsing="false" onAction="#onEditRepoComponent" prefHeight="25.0" prefWidth="51.0" text="Edit" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="2.0" />
-                              <Button fx:id="deleteComponent" layoutX="134.0" layoutY="434.0" mnemonicParsing="false" onAction="#onDeleteRepoComponent" prefHeight="25.0" prefWidth="65.0" text="Delete" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="134.0" />
-                              <Button fx:id="createComponent" layoutX="56.0" layoutY="434.0" mnemonicParsing="false" onAction="#onCreateRepoComponent" prefHeight="25.0" prefWidth="76.0" text="Create" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="56.0" />
-                           </children>
-                        </AnchorPane>
+                              <GridPane fx:id="descriptorGrid" layoutX="7.0" layoutY="14.0" prefHeight="438.0" prefWidth="213.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
                     </items>
                   </SplitPane>
                </children></AnchorPane>

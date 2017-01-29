@@ -3,11 +3,8 @@ package pl.warp.ide;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.game.scene.GameSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
@@ -22,6 +19,9 @@ import pl.warp.ide.scene.tree.SceneTreeLoader;
 import pl.warp.ide.scene.tree.look.ComponentTypeLook;
 import pl.warp.ide.scene.tree.look.CustomLookRepository;
 import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
+import pl.warp.ide.scene.tree.prototype.FunctionComponentPrototype;
+import pl.warp.ide.scene.tree.prototype.LocalPrototypeRepository;
+import pl.warp.ide.scene.tree.prototype.PrototypeRepository;
 import pl.warp.test.TestSceneLoader;
 
 /**
@@ -40,10 +40,11 @@ public class IDELauncher extends Application {
         JavaFxInput javaFxInput = new JavaFxInput();
         GameContextBuilder contextBuilder = new GameContextBuilder();
         SceneViewRenderer renderer = new SceneViewRenderer();
-        GameSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
+        TestSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
         IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, contextBuilder, javaFxInput);
 
-        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, engine);
+        PrototypeRepository testRepository = createTestRepository(sceneLoader);
+        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, engine, testRepository);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);
@@ -53,19 +54,28 @@ public class IDELauncher extends Application {
         primaryStage.show();
     }
 
+    private PrototypeRepository createTestRepository(TestSceneLoader sceneLoader) {
+        PrototypeRepository repository = new LocalPrototypeRepository();
+        FunctionComponentPrototype shipPrototype = new FunctionComponentPrototype("Ship", sceneLoader::createShip);
+        FunctionComponentPrototype frigatePrototype = new FunctionComponentPrototype("Frigate", sceneLoader::createFrigate);
+        repository.add(shipPrototype);
+        repository.add(frigatePrototype);
+        return repository;
+    }
+
     private CustomLookRepository loadCustomLookRepository() {
         ComponentLook sceneLook = new ComponentLook(
                 new DefaultNameSupplier("Scene"),
-                () -> getImage("icons\\Scene.png"));
+                () -> IconUtil.getIcon("Scene"));
         ComponentLook cameraLook = new ComponentLook(
                 new DefaultNameSupplier("Camera"),
-                () -> getImage("icons\\Camera.png"));
+                () -> IconUtil.getIcon("Camera"));
         ComponentLook drawableLook = new ComponentLook(
                 new DefaultNameSupplier("Drawable Component"),
-                () -> getImage("icons\\Drawable.png"));
+                () -> IconUtil.getIcon("Drawable"));
         ComponentLook componentLook = new ComponentLook(
                 new DefaultNameSupplier("Component"),
-                () -> getImage("icons\\Component.png"));
+                () -> IconUtil.getIcon("Component"));
         return new CustomLookRepository(
                 new ComponentTypeLook(this::isScene, sceneLook),
                 new ComponentTypeLook(this::isCamera, cameraLook),
@@ -85,11 +95,7 @@ public class IDELauncher extends Application {
         return component.hasProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME);
     }
 
-    private ImageView getImage(String name) {
-        return new ImageView(new Image(IDELauncher.class.getResourceAsStream(name)));
-    }
-
-    private GameSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) { //TODO remove - temporary
+    private TestSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         return new TestSceneLoader(config, contextBuilder);
     }
 

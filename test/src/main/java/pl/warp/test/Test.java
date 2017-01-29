@@ -41,7 +41,6 @@ public class Test {
 
     private static Logger logger = Logger.getLogger(Test.class);
     private static final boolean FULLSCREEN = false;
-    private static final int WIDTH = 1200, HEIGHT = 720;
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
@@ -68,6 +67,7 @@ public class Test {
         GLFWInput input = new GLFWInput(scene);
         audioContext.setAudioListener(new AudioListener(cameraComponent.getParent()));
         Graphics graphics = new Graphics(context, onScreenRenderer, camera, config);
+        contextBuilder.setGraphics(graphics);
         EngineThread graphicsThread = graphics.getThread();
         graphics.enableUpsLogging();
         loader.loadGraphics(graphicsThread);

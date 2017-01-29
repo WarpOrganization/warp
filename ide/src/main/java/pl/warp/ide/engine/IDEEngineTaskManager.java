@@ -58,6 +58,7 @@ public class IDEEngineTaskManager {
         setRenderingTargetSize((int) destCanvas.getWidth(), (int) destCanvas.getHeight());
         OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
         graphics = createGraphics(contextBuilder.getGameContext(), outputRenderer);
+        contextBuilder.setGraphics(graphics);
         startTasks(contextBuilder.getGameContext(), graphics, loadedScene, destCanvas);
     }
 
