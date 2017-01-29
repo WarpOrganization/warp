@@ -60,13 +60,13 @@ public class IDEEngineTaskManager {
         OutputTexture2DRenderer outputRenderer = new OutputTexture2DRenderer();
         graphics = createGraphics(contextBuilder.getGameContext(), outputRenderer);
         contextBuilder.setGraphics(graphics);
-        startTasks(contextBuilder.getGameContext(), graphics, loadedScene, destCanvas);
+        startTasks(graphics, loadedScene, destCanvas);
     }
 
     private void setRenderingTargetSize(int width, int height) {
         Display display = this.config.getDisplay();
-        display.setWidth(width + 2);
-        display.setHeight(height + 2);
+        display.setWidth(width);
+        display.setHeight(height);
     }
 
 
@@ -74,7 +74,7 @@ public class IDEEngineTaskManager {
         return new Graphics(context, outputRenderer, camera, config);
     }
 
-    private void startTasks(EngineContext context, Graphics graphics, Scene scene, Canvas destCanvas) {
+    private void startTasks(Graphics graphics, Scene scene, Canvas destCanvas) {
         createScriptThread(input, graphics.getThread());
         createPhysicsThread(scene, graphics.getThread());
         createAudioThread();

@@ -8,6 +8,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -40,25 +42,36 @@
       <AnchorPane layoutY="27.0" prefHeight="34.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
          <children>
             <Separator layoutY="32.0" prefHeight="0.0" prefWidth="1233.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0" />
-            <Button fx:id="runButton" layoutX="14.0" layoutY="4.0" mnemonicParsing="false" onAction="#onRunGame" text="Run" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="4.0" />
             <Button layoutX="1237.0" layoutY="4.0" mnemonicParsing="false" onAction="#onReloadScene" text="Reload scene" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
          </children>
       </AnchorPane>
-      <SplitPane dividerPositions="0.1586687306501548, 0.8212074303405573" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
+      <SplitPane fx:id="splitPane1" dividerPositions="0.1586687306501548, 0.8212074303405573" layoutY="59.0" prefHeight="767.0" prefWidth="1233.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <HBox layoutX="14.0" layoutY="231.0" />
-                  <Label layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="186.0" text="Project" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="6.0" />
-                  <TreeView fx:id="projectTree" layoutX="6.0" layoutY="37.0" prefHeight="802.0" prefWidth="202.0" AnchorPane.bottomAnchor="-8.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="37.0" />
+                  <Label layoutX="14.0" layoutY="1.0" prefHeight="17.0" prefWidth="186.0" text="Project Explorer" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
+                  <TreeView fx:id="projectTree" layoutX="6.0" layoutY="26.0" prefHeight="813.0" prefWidth="202.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="17.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <SplitPane dividerPositions="0.8427260812581914" orientation="VERTICAL" prefHeight="765.0" prefWidth="859.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane fx:id="splitPane2" dividerPositions="0.8427260812581914" orientation="VERTICAL" prefHeight="765.0" prefWidth="859.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Canvas fx:id="sceneView" height="696.0" rotate="180.0" scaleX="-1.0" width="850.0" />
+                              <TabPane layoutX="63.0" layoutY="69.0" prefHeight="696.0" prefWidth="848.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <tabs>
+                                  <Tab text="Test project">
+                                    <content>
+                                      <AnchorPane fx:id="canvasPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <Canvas fx:id="sceneView" height="667.0" layoutX="2.0" layoutY="1.0" rotate="180.0" scaleX="-1.0" width="848.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -71,11 +84,12 @@
             </AnchorPane>
             <AnchorPane prefHeight="765.0" prefWidth="580.0">
                <children>
-                  <SplitPane dividerPositions="0.4680337756332931" layoutX="-35.0" layoutY="116.0" orientation="VERTICAL" prefHeight="765.0" prefWidth="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane fx:id="splitPane3" dividerPositions="0.4680337756332931" layoutX="-35.0" layoutY="116.0" orientation="VERTICAL" prefHeight="765.0" prefWidth="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="213.0">
                            <children>
-                              <TreeView fx:id="sceneTree" layoutX="14.0" layoutY="98.0" prefHeight="385.0" prefWidth="213.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TreeView fx:id="sceneTree" layoutX="14.0" layoutY="17.0" prefHeight="368.0" prefWidth="226.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="17.0" />
+                              <Label layoutX="10.0" layoutY="1.0" prefHeight="17.0" prefWidth="186.0" text="Scene tree" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="1.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="213.0">

@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
@@ -44,10 +45,27 @@ public class IDEEngine {
     public void start(Canvas canvas) {
         loader.loadScene();
         this.currentScene = loader.getScene();
+        bindSizes(canvas);
         initCamera();
         taskManager = new IDEEngineTaskManager(renderer, currentScene, cameraComponent, config, contextBuilder, input);
         taskManager.startTasks(canvas);
         loader.loadGraphics(taskManager.getGraphics().getThread());
+    }
+
+    private void bindSizes(Canvas canvas) {
+        canvas.widthProperty().addListener((observable, oldValue, newValue) -> {
+            resize((int) canvas.getWidth(), (int) canvas.getHeight());
+        });
+        canvas.heightProperty().addListener((observable, oldValue, newValue) -> {
+            resize((int) canvas.getWidth(), (int) canvas.getHeight());
+        });
+    }
+
+    private void resize(int width, int height) {
+        Graphics graphics = contextBuilder.getGameContext().getGraphics();
+        graphics.getThread().scheduleOnce(() ->
+                graphics.resize(width, height)
+        );
     }
 
     private void initCamera() {

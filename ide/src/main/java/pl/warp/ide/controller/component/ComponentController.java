@@ -83,7 +83,7 @@ public class ComponentController {
     }
 
     public void editComponent(GameComponent component) {
-
+        positionComponent(component);
     }
 
     public void removeComponent(GameComponent component) {

@@ -87,7 +87,7 @@ public class GunScript extends GameScript<GameComponent> {
 
     private void shoot() {
         if (!shot) {
-            audioManager.playSingle(owner, "gun");
+            AudioManager.INSTANCE.playSingle(owner, "gun");
             shot = true;
         }
         if (timer <= 0) {

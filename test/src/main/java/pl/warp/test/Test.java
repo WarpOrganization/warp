@@ -7,16 +7,17 @@ import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.audio.playlist.PlayRandomPlayList;
-import pl.warp.engine.core.*;
+import pl.warp.engine.core.EngineThread;
+import pl.warp.engine.core.RapidExecutionStrategy;
+import pl.warp.engine.core.SyncEngineThread;
+import pl.warp.engine.core.SyncTimer;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameSceneLoader;
-import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.input.glfw.GLFWInput;
 import pl.warp.engine.graphics.input.glfw.GLFWInputTask;
 import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
@@ -27,6 +28,7 @@ import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.game.GameContext;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.scene.GameComponent;
 
 import java.io.File;
 import java.util.Random;
@@ -57,7 +59,7 @@ public class Test {
 
         AudioContext audioContext = new AudioContext();
         AudioManager.INSTANCE = new AudioManager(audioContext);
-        GameSceneLoader loader = new TestSceneLoader(config, contextBuilder);
+        TestSceneLoader loader = new TestSceneLoader(config, contextBuilder);
         loader.loadScene();
         GameComponent cameraComponent = loader.getCameraComponent();
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
@@ -124,7 +126,7 @@ public class Test {
                 }
             }
         };
-
+        loader.enableControls();
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
     }

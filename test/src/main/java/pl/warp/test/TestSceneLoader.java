@@ -84,7 +84,7 @@ public class TestSceneLoader implements GameSceneLoader {
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 5;
+    private static final int GUN_COOLDOWN = 80;
 
     private boolean loaded = false;
 
@@ -137,8 +137,13 @@ public class TestSceneLoader implements GameSceneLoader {
         cameraComponent.addProperty(new NameProperty("Camera"));
         cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
-        new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+        controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+        controllableGoat.addProperty(new TransformProperty());
         loaded = true;
+    }
+
+    public void enableControls() {
+        new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
     }
 
     private static void unpackResources() throws IOException {
@@ -261,18 +266,16 @@ public class TestSceneLoader implements GameSceneLoader {
             GraphicsMeshProperty graphicsMeshProperty = new GraphicsMeshProperty(goatMesh);
             controllableGoat.addProperty(graphicsMeshProperty);
 
-            controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
             controllableGoat.addProperty(new GraphicsMaterialProperty(material));
-            controllableGoat.addProperty(new TransformProperty());
 
             bulletMesh = new Sphere(15, 15, 0.5f);
             ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
-
-            audioManager = AudioManager.INSTANCE;
             controllableGoat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
+            audioManager = AudioManager.INSTANCE;
+
             new GunScript(controllableGoat);
 
             SpotLight goatLight = new SpotLight(

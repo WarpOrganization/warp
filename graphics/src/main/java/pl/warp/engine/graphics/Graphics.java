@@ -38,6 +38,7 @@ public class Graphics {
     private MeshRenderer meshRenderer;
     private SkyboxRenderer skyboxRenderer;
     private ParticleSystemRenderer particleSystemRenderer;
+    private Pipeline pipeline;
 
     public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
         this.context = context;
@@ -72,7 +73,7 @@ public class Graphics {
     }
 
     private void createRenderingTask() {
-        Pipeline pipeline = createPipeline();
+        pipeline = createPipeline();
         RenderingTask task = new RenderingTask(context, display, windowManager, pipeline);
         thread.scheduleTask(task);
     }
@@ -117,6 +118,10 @@ public class Graphics {
         skyboxRenderer.setCamera(mainViewCamera);
         particleSystemRenderer.setCamera(mainViewCamera);
         return this;
+    }
+
+    public void resize(int newWidth, int newHeight) {
+        pipeline.resize(newWidth, newHeight);
     }
 
     public EngineThread getThread() {

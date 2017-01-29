@@ -4,10 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import pl.warp.game.GameContext;
@@ -46,6 +43,9 @@ public class IDEController implements Initializable {
     private TreeView<String> projectTree;
 
     @FXML
+    private AnchorPane canvasPane;
+
+    @FXML
     private Canvas sceneView;
 
     @FXML
@@ -67,6 +67,15 @@ public class IDEController implements Initializable {
     private AnchorPane root;
 
     @FXML
+    private SplitPane splitPane1;
+
+    @FXML
+    private SplitPane splitPane2;
+
+    @FXML
+    private SplitPane splitPane3;
+
+    @FXML
     private GridPane descriptorGrid;
 
     private ComponentController componentController;
@@ -74,9 +83,24 @@ public class IDEController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createProjectTree();
+        //makeCanvasResizable();
+        disableSplitPanes();
         engine.start(sceneView);
         componentController = new ComponentController(sceneTree, descriptorGrid, context, sceneTreeLoader, repository);
         input.listenOn(sceneView, engine.getScene());
+    }
+
+    private void disableSplitPanes() {
+        disableDivider(splitPane1);
+        disableDivider(splitPane2);
+        disableDivider(splitPane3);
+    }
+
+    private void disableDivider(SplitPane pane) {
+        SplitPane.Divider divider = pane.getDividers().get(0);
+        double pos = divider.getPosition();
+        divider.positionProperty().addListener((observable, oldValue, newValue) ->
+                divider.setPosition(pos));
     }
 
     private void createProjectTree() {
@@ -84,6 +108,14 @@ public class IDEController implements Initializable {
         projectTree.setRoot(root);
         root.getChildren().add(new TreeItem<>("Scripts"));
         root.getChildren().add(new TreeItem<>("Components"));
+    }
+
+    private void makeCanvasResizable() {
+        canvasPane.widthProperty().addListener((ov, oldValue, newValue) ->
+                sceneView.setWidth(newValue.doubleValue()));
+
+        canvasPane.heightProperty().addListener((ov, oldValue, newValue) ->
+                sceneView.setHeight(newValue.doubleValue()));
     }
 
 
