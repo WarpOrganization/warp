@@ -1,11 +1,11 @@
 package pl.warp.game;
 
-import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.physics.RayTester;
+import pl.warp.game.scene.GameScene;
 
 /**
  * @author Jaca777
@@ -30,7 +30,7 @@ public class GameContextBuilder {
         return gameContext;
     }
 
-    public void setScene(Scene scene) {
+    public void setScene(GameScene scene) {
         gameContext.setScene(scene);
     }
 

@@ -4,8 +4,8 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
+import pl.warp.game.GameContext;
 import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
 import pl.warp.ide.controller.component.positioner.ComponentPositioner;
 import pl.warp.ide.scene.tree.SceneTreeLoader;
 import pl.warp.ide.scene.tree.prototype.ComponentPrototype;
@@ -17,25 +17,26 @@ import pl.warp.ide.scene.tree.prototype.PrototypeRepository;
 public class ComponentController {
 
     private TreeView<GameComponent> sceneTree;
-    private GameScene scene;
+    private GameContext context;
     private SceneTreeLoader loader;
     private GameComponent selectedComponent;
     private PrototypeRepository repository;
     private ComponentPositioner positioner;
     private ComponentDescriptor descriptor;
 
-    public ComponentController(TreeView<GameComponent> sceneTree, GridPane descriptorPane, GameScene scene, SceneTreeLoader loader, PrototypeRepository repository) {
+    public ComponentController(TreeView<GameComponent> sceneTree, GridPane descriptorPane, GameContext context, SceneTreeLoader loader, PrototypeRepository repository) {
         this.sceneTree = sceneTree;
         this.loader = loader;
-        this.scene = scene;
+        this.context = context;
         this.selectedComponent = null;
         this.repository = repository;
+        this.positioner = new ComponentPositioner(context);
         this.descriptor = new ComponentDescriptor(descriptorPane);
         initialize();
     }
 
     private void initialize() {
-        loader.loadScene(scene, sceneTree, this);
+        loader.loadScene(context.getScene(), sceneTree, this);
         sceneTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             descriptor.unload();
             if (selectedComponent != null)
@@ -46,7 +47,7 @@ public class ComponentController {
                 markSelected(selectedComponent);
             }
         });
-        new ComponentSelectionScript(scene, sceneTree);
+        new ComponentSelectionScript(context.getScene(), sceneTree);
     }
 
 
@@ -78,7 +79,7 @@ public class ComponentController {
     }
 
     private void positionComponent(GameComponent gameComponent) {
-
+        positioner.position(gameComponent);
     }
 
     public void editComponent(GameComponent component) {
@@ -91,6 +92,6 @@ public class ComponentController {
     }
 
     public void onReloadScene() {
-        loader.loadScene(scene, sceneTree, this);
+        loader.loadScene(context.getScene(), sceneTree, this);
     }
 }

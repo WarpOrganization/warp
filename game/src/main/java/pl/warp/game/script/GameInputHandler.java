@@ -67,4 +67,8 @@ public class GameInputHandler {
     public boolean isMouseButtonDown(int button) {
         return input.isMouseButtonDown(button);
     }
+
+    public double getScrollDelta() {
+        return input.getScrollDelta();
+    }
 }

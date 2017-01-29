@@ -21,6 +21,7 @@ import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameScene;
 
 import java.io.File;
 
@@ -33,7 +34,7 @@ import java.io.File;
 public class IDEEngineTaskManager {
 
     private SceneViewRenderer sceneViewRenderer;
-    private Scene loadedScene;
+    private GameScene loadedScene;
     private GameComponent cameraComponent;
     private Camera camera;
 
@@ -44,7 +45,7 @@ public class IDEEngineTaskManager {
     private Input input;
     private RayTester rayTester;
 
-    public IDEEngineTaskManager(SceneViewRenderer sceneViewRenderer, Scene scene, GameComponent cameraComponent, RenderingConfig config, GameContextBuilder contextBuilder, Input input) {
+    public IDEEngineTaskManager(SceneViewRenderer sceneViewRenderer, GameScene scene, GameComponent cameraComponent, RenderingConfig config, GameContextBuilder contextBuilder, Input input) {
         this.sceneViewRenderer = sceneViewRenderer;
         this.loadedScene = scene;
         this.cameraComponent = cameraComponent;
@@ -64,8 +65,8 @@ public class IDEEngineTaskManager {
 
     private void setRenderingTargetSize(int width, int height) {
         Display display = this.config.getDisplay();
-        display.setWidth(width + 1);
-        display.setHeight(height + 1);
+        display.setWidth(width + 2);
+        display.setHeight(height + 2);
     }
 
 

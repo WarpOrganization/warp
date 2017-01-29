@@ -58,8 +58,7 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Canvas fx:id="sceneView" height="696.0" layoutX="147.0" layoutY="126.0" scaleY="-1.0" width="863.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <Canvas fx:id="sceneView1" height="696.0" width="850.0" />
+                              <Canvas fx:id="sceneView" height="696.0" rotate="180.0" scaleX="-1.0" width="850.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

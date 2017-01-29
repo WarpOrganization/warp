@@ -12,6 +12,6 @@ public class IDEComponentProperty extends Property<Component> {
     public static final String IDE_COMPONENT_PROPERTY_NAME = "ideComponent";
 
     public IDEComponentProperty() {
-        super();
+        super(IDE_COMPONENT_PROPERTY_NAME);
     }
 }

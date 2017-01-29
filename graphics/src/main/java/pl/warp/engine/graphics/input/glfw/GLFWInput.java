@@ -28,6 +28,10 @@ public class GLFWInput implements Input {
     private boolean[] keyboardKeys = new boolean[349];
     private boolean[] mouseButtons = new boolean[8];
 
+    private double lastScrollPos;
+    private double scrollPos;
+    private double scrollPosDelta;
+
     private Vector2f cursorPosition;
     private Vector2f cursorPositionDelta = new Vector2f(0, 0);
 
@@ -51,6 +55,7 @@ public class GLFWInput implements Input {
     private void createCallbacks() {
         GLFW.glfwSetKeyCallback(windowHandle, this::keyAction);
         GLFW.glfwSetMouseButtonCallback(windowHandle, this::mouseButtonAction);
+        GLFW.glfwSetScrollCallback(windowHandle, this::scrollAction);
     }
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
@@ -93,13 +98,24 @@ public class GLFWInput implements Input {
         }
     }
 
+    private void scrollAction(long window, double x, double y) {
+        lastScrollPos = y;
+    }
+
+
     private void triggerEvent(Event event) {
         scene.triggerEvent(event);
     }
 
     @Override
     public void update() {
+        updateScroll();
         updateMousePos();
+    }
+
+    private void updateScroll() {
+        scrollPosDelta = scrollPos - lastScrollPos;
+        scrollPos = lastScrollPos;
     }
 
     private void updateMousePos() {
@@ -116,6 +132,11 @@ public class GLFWInput implements Input {
     @Override
     public Vector2f getCursorPositionDelta() {
         return cursorPositionDelta;
+    }
+
+    @Override
+    public double getScrollDelta() {
+        return scrollPosDelta;
     }
 
     @Override

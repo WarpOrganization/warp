@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
  *         Created 2017-01-22 at 12
  */
 public class JavaFxKeyMapper {
-    public static int toAWTKeyCode(KeyCode code){
+    public static int toAWTKeyCode(KeyCode code) {
         return code.impl_getCode();
     }
 

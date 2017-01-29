@@ -12,6 +12,8 @@ public interface Input {
 
     Vector2f getCursorPositionDelta();
 
+    double getScrollDelta();
+
     boolean isKeyDown(int key);
 
     boolean isMouseButtonDown(int button);

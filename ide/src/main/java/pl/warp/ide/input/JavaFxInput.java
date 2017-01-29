@@ -1,9 +1,10 @@
 package pl.warp.ide.input;
 
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.ScrollEvent;
 import org.joml.Vector2f;
 import pl.warp.engine.core.scene.input.*;
 import pl.warp.game.scene.GameScene;
@@ -24,6 +25,10 @@ public class JavaFxInput implements Input {
     private Vector2f cursorPositionDelta = new Vector2f(0, 0);
     private Canvas canvas;
     private GameScene scene;
+
+    private double lastScrollPosDelta;
+    private double scrollPosDelta;
+
 
     public void onKeyReleased(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
@@ -61,10 +66,24 @@ public class JavaFxInput implements Input {
         scene.triggerEvent(new MouseButtonReleasedEvent(buttonCode));
     }
 
+    private void onScroll(ScrollEvent scrollEvent) {
+        lastScrollPosDelta += scrollEvent.getDeltaY();
+    }
+
     @Override
     public void update() {
         if (canvas == null) return;
         if (cursorPosition == null) cursorPosition = new Vector2f(lastCursorPos);
+        updateScroll();
+        updateCursorPos();
+    }
+
+    private void updateScroll() {
+        scrollPosDelta = lastScrollPosDelta;
+        lastScrollPosDelta = 0;
+    }
+
+    private void updateCursorPos() {
         this.lastCursorPos.sub(cursorPosition, cursorPositionDelta);
         this.cursorPositionDelta.mul(1.0f / (float) canvas.getWidth(), 1.0f / (float) canvas.getHeight());
         this.cursorPosition.set(lastCursorPos);
@@ -81,6 +100,11 @@ public class JavaFxInput implements Input {
     }
 
     @Override
+    public double getScrollDelta() {
+        return scrollPosDelta;
+    }
+
+    @Override
     public boolean isKeyDown(int key) {
         return keyboardKeys[key];
     }
@@ -90,14 +114,18 @@ public class JavaFxInput implements Input {
         return mouseButtons[button];
     }
 
-    public void listenOn(AnchorPane root, Canvas canvas, GameScene scene) {
+    public void listenOn(Canvas canvas, GameScene scene) {
         this.canvas = canvas;
         this.scene = scene;
         canvas.setOnMouseMoved(this::onMouseMoved);
         canvas.setOnMouseDragged(this::onMouseMoved);
         canvas.setOnMousePressed(this::onMousePressed);
         canvas.setOnMouseReleased(this::onMouseReleased);
-        root.setOnKeyPressed(this::onKeyPressed);
-        root.setOnKeyReleased(this::onKeyReleased);
+        canvas.setOnScroll(this::onScroll);
+    }
+
+    public void listenOn(Scene scene){
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, this::onKeyReleased);
     }
 }

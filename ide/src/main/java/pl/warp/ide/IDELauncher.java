@@ -44,11 +44,12 @@ public class IDELauncher extends Application {
         IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, contextBuilder, javaFxInput);
 
         PrototypeRepository testRepository = createTestRepository(sceneLoader);
-        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, engine, testRepository);
+        IDEController controller = new IDEController(new SceneTreeLoader(lookRepo), javaFxInput, contextBuilder.getGameContext(), engine, testRepository);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "idewindow.fxml"));
         fxmlLoader.setController(controller);
         Scene scene = new Scene(fxmlLoader.load());
+        javaFxInput.listenOn(scene);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Warp Engine IDE");
         primaryStage.show();

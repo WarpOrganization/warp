@@ -10,6 +10,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import pl.warp.game.GameContext;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.ide.controller.component.ComponentController;
 import pl.warp.ide.engine.IDEEngine;
@@ -29,12 +30,14 @@ public class IDEController implements Initializable {
     private SceneTreeLoader sceneTreeLoader;
     private JavaFxInput input;
     private IDEEngine engine;
+    private GameContext context;
     private PrototypeRepository repository;
 
-    public IDEController(SceneTreeLoader sceneTreeLoader, JavaFxInput input, IDEEngine engine, PrototypeRepository repository) {
+    public IDEController(SceneTreeLoader sceneTreeLoader, JavaFxInput input, GameContext context, IDEEngine engine, PrototypeRepository repository) {
         this.sceneTreeLoader = sceneTreeLoader;
         this.input = input;
         this.engine = engine;
+        this.context = context;
         this.repository = repository;
     }
 
@@ -74,8 +77,8 @@ public class IDEController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         createProjectTree();
         engine.start(sceneView);
-        componentController = new ComponentController(sceneTree, descriptorGrid, engine.getScene(), sceneTreeLoader, repository);
-        input.listenOn(root, sceneView, engine.getScene());
+        componentController = new ComponentController(sceneTree, descriptorGrid, context, sceneTreeLoader, repository);
+        input.listenOn(sceneView, engine.getScene());
     }
 
     private void createProjectTree() {
