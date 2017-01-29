@@ -62,7 +62,7 @@ public class Test {
         GameComponent cameraComponent = loader.getCameraComponent();
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
         contextBuilder.setCamera(camera);
-        new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+        //new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         Scene scene = loader.getScene();
         GLFWInput input = new GLFWInput(scene);
         audioContext.setAudioListener(new AudioListener(cameraComponent.getParent()));

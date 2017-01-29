@@ -20,7 +20,7 @@ import static java.lang.Math.PI;
 public class AdjustSteeringLeaf extends LeafNode {
 
     private final String TARGET = "target";
-    private final float GOAL_SPEED = 10f;
+    private final float GOAL_SPEED = 40f;
     private final float ACCELERATION_FORCE = 10f;
     private final float ANGULAR_ACCELERATION = 0.2f;
     private final float GOAL_ROTATION_SPEED = 0.9f;

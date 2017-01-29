@@ -137,7 +137,7 @@ public class TestSceneLoader implements GameSceneLoader {
         cameraComponent.addProperty(new NameProperty("Camera"));
         cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
-
+        new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         loaded = true;
     }
 
@@ -325,7 +325,7 @@ public class TestSceneLoader implements GameSceneLoader {
         ArrayList<Component> team2 = new ArrayList<>();
         int nOfGoats = 10;
         for (int i = 0; i < nOfGoats; i++) {
-            Component goat = new GameSceneComponent(parent);
+            GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new GraphicsMeshProperty(goatMesh));
             Material material = new Material(goatTexture);
@@ -351,6 +351,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 team2.add(goat);
             }
             goat.addProperty(new AIProperty(builder.build(goat)));
+            new GunScript(goat);
         }
     }
 
