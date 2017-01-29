@@ -41,8 +41,6 @@ public class IDEController implements Initializable {
         this.repository = repository;
     }
 
-    @FXML
-    private Button runButton;
 
     @FXML
     private TreeView<String> projectTree;

@@ -102,7 +102,6 @@ public class TestSceneLoader implements GameSceneLoader {
     private Texture2D goatBrightnessTexture;
     private Mesh friageMesh;
     private Texture2D frigateTexture;
-    private Material frigateMaterial;
     private Texture2D frigateBrightnessTexture;
 
 
@@ -295,7 +294,7 @@ public class TestSceneLoader implements GameSceneLoader {
             friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
             frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
-            frigateMaterial = new Material(frigateTexture);
+            Material frigateMaterial = new Material(frigateTexture);
             frigateMaterial.setShininess(20);
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
@@ -380,6 +379,7 @@ public class TestSceneLoader implements GameSceneLoader {
         GameComponent frigate = new GameSceneComponent(parent);
         frigate.addProperty(new NameProperty("Frigate"));
         frigate.addProperty(new GraphicsMeshProperty(friageMesh));
+        Material frigateMaterial = new Material(frigateTexture);
         frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
         frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
         TransformProperty transformProperty = new TransformProperty();
