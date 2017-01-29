@@ -37,4 +37,8 @@ public abstract class Script<T extends Component> {
     public abstract void onInit();
 
     public abstract void onUpdate(int delta);
+
+    public void stop(){
+        getContext().getScriptManager().removeScript(this);
+    }
 }

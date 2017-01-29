@@ -5,6 +5,7 @@ import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.game.GameContext;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameSceneComponent;
@@ -20,6 +21,7 @@ public class ComponentPositioner {
     private Camera positioningCamera;
     private GameComponent component;
     private GameComponent rotatingComponent;
+    private ComponentPositioningScript componentPositioningScript;
 
     public ComponentPositioner(GameContext context) {
         this.context = context;
@@ -28,12 +30,18 @@ public class ComponentPositioner {
     public void position(GameComponent component) {
         if (this.component != null) throw new IllegalStateException("Can't position two components at once");
         this.component = component;
+        makeTransparet(component);
         createView(component);
         runScript(component);
     }
 
     private void runScript(GameComponent component) {
-        new ComponentPositioningScript(component, this::finalizePositioning);
+        componentPositioningScript = new ComponentPositioningScript(component, this::finalizePositioning);
+    }
+
+    private void makeTransparet(GameComponent component) {
+        component.<GraphicsMaterialProperty>getPropertyIfExists(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)
+                .ifPresent(m -> m.getMaterial().setTransparency(0.5f));
     }
 
     private void createView(GameComponent component) {
@@ -58,8 +66,15 @@ public class ComponentPositioner {
     }
 
     private void finalizePositioning() {
+        componentPositioningScript.stop();
+        makeSolid(component);
         component = null;
         rotatingComponent.destroy();
         context.getGraphics().setMainViewCamera(sceneCamera);
+    }
+
+    private void makeSolid(GameComponent component) {
+        component.<GraphicsMaterialProperty>getPropertyIfExists(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)
+                .ifPresent(m -> m.getMaterial().setTransparency(1.0f));
     }
 }

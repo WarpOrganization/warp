@@ -14,6 +14,7 @@ public class Material {
     private Texture2D brightnessTexture;
     private float brightness = 1.0f;
     private float shininess = 0.1f;
+    private float transparency = 1.0f;
 
     public Material(Texture2D mainTexture) {
         this.mainTexture = mainTexture;
@@ -54,6 +55,14 @@ public class Material {
 
     public void setShininess(float shininess) {
         this.shininess = shininess;
+    }
+
+    public float getTransparency() {
+        return transparency;
+    }
+
+    public void setTransparency(float transparency) {
+        this.transparency = transparency;
     }
 }
 

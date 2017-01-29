@@ -87,7 +87,7 @@ public class GoatControlScript extends GameScript<GameComponent> {
         if (input.isKeyDown(KeyEvent.VK_SPACE))
             brake(delta);
         if (input.isKeyDown(KeyEvent.VK_P))
-            stop();
+            stopBody();
         if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
             gunProperty.setTriggered(true);
         else
@@ -142,7 +142,7 @@ public class GoatControlScript extends GameScript<GameComponent> {
   */
     }
 
-    private void stop() {
+    private void stopBody() {
         bodyProperty.setVelocity(new Vector3f(0));
         bodyProperty.setAngularVelocity(new Vector3f(0));
     }

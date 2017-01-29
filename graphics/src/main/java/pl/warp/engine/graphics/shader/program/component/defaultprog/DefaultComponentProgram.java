@@ -43,6 +43,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int unifMaterialShininess;
     private int unifMaterialHasBrightnessTexture;
     private int unifMaterialBrightnessTexture;
+    private int unifMaterialTransparency;
     private int unifLightEnabled;
     private int unifSpotLightCount;
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
@@ -70,6 +71,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         this.unifMaterialShininess = getUniformLocation("material.shininess");
         this.unifMaterialHasBrightnessTexture = getUniformLocation("material.hasBrightnessTexture");
         this.unifMaterialBrightnessTexture = getUniformLocation("material.brightnessTexture");
+        this.unifMaterialTransparency = getUniformLocation("material.transparency");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
         this.unifSpotLightCount = getUniformLocation("numSpotLights");
     }
@@ -98,6 +100,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
         useTexture(material.getMainTexture(), MAIN_MATERIAL_TEXTURE_SAMPLER);
         setUniformf(unifMaterialBrightness, material.getBrightness());
         setUniformf(unifMaterialShininess, material.getShininess());
+        setUniformf(unifMaterialTransparency, material.getTransparency());
         if (material.hasBrightnessTexture()) {
             setUniformb(unifMaterialHasBrightnessTexture, true);
             useTexture(material.getBrightnessTexture(), MATERIAL_BRIGHTNESS_TEXTURE);

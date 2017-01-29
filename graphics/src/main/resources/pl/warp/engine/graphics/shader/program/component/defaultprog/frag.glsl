@@ -19,6 +19,7 @@ struct Material {
     bool hasBrightnessTexture;
     float brightness;
     float shininess;
+    float transparency;
 };
 const float SPECULAR_EXPONENT = 100.0;
 const float BRIGHTNESS_TEXTURE_MULTIPLIER = 3.0;
@@ -55,6 +56,7 @@ void main(void) {
     fragColor.rgb *= material.brightness;
     if(material.hasBrightnessTexture) applyBrightnessTexture();
     if(isNan(fragColor.rgb)) discard;
+    fragColor.a *= material.transparency;
 }
 
 vec3 getLight() {
