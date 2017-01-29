@@ -29,6 +29,7 @@ import pl.warp.engine.physics.RayTester;
 import pl.warp.game.GameContext;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.script.CameraRayTester;
 
 import java.io.File;
 import java.util.Random;
@@ -87,7 +88,7 @@ public class Test {
 
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
-        contextBuilder.setRayTester(rayTester);
+        contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
         physicsThread.scheduleTask(new MovementTask(scene));
         physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
 

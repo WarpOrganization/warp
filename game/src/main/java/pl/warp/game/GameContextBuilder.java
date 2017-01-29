@@ -4,8 +4,8 @@ import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.physics.RayTester;
 import pl.warp.game.scene.GameScene;
+import pl.warp.game.script.CameraRayTester;
 
 /**
  * @author Jaca777
@@ -18,7 +18,7 @@ public class GameContextBuilder {
         this.gameContext = new GameContext();
     }
 
-    public void setRayTester(RayTester rayTester) {
+    public void setRayTester(CameraRayTester rayTester) {
         gameContext.setRayTester(rayTester);
     }
 

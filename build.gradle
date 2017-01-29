@@ -17,23 +17,33 @@ dependencies {
 subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
 jar.dependsOn subprojects.tasks['classes']
 jar {
-    baseName = "warp-${platform}"
+    subprojects.each { subproject ->
+        from { subproject.configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+    def ideModule = subprojects.find { s -> s.name == "ide" }
+    from {ideModule.sourceSets.main.output.classesDir}
+    from {ideModule.sourceSets.main.output.resourcesDir}
+}
+
+task testJar(type: Jar, dependsOn: 'build') {
     manifest {
         attributes 'Main-Class': 'pl.warp.test.TestApp'
     }
-    subprojects.each { subproject ->
-        from subproject.sourceSets.main.output.classesDir
-        from subproject.sourceSets.main.output.resourcesDir
-        from { subproject.configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    }
+    baseName = "warp-${platform}"
+    with jar
+}
 
+task ideJar(type: Jar, dependsOn: 'build') {
+    manifest {
+        attributes 'Main-Class': 'pl.warp.ide.IDELauncher'
+    }
+    baseName = "warp-IDE-${platform}"
+    with jar
 }
 
 
+
 subprojects {
-
-
-
     test {
         reports.junitXml.enabled = false
     }

@@ -2,13 +2,14 @@ package pl.warp.ide.controller.component;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.joml.Vector3f;
-import pl.warp.engine.physics.RayTester;
+import org.joml.Vector2f;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
+import pl.warp.game.script.CameraRayTester;
 import pl.warp.game.script.GameScriptWithInput;
 
 import java.awt.event.MouseEvent;
+import java.util.Optional;
 
 /**
  * @author Jaca777
@@ -29,9 +30,6 @@ public class ComponentSelectionScript extends GameScriptWithInput<GameScene> {
 
     }
 
-    private Vector3f cameraPos = new Vector3f(0,0, -100);
-    private Vector3f vector = new Vector3f(0, 0, 100);
-
     @Override
     protected void update(int delta) {
         if (getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON3))
@@ -39,13 +37,10 @@ public class ComponentSelectionScript extends GameScriptWithInput<GameScene> {
     }
 
     private void select() {
-        RayTester rayTester = getContext().getRayTester();
-/*        Camera camera = getContext().getCamera();
-        camera.getForwardVector().mul(SELECTION_RANGE, vector);
-        vector.add(camera.getPosition(cameraPos));*/
-        GameComponent component = (GameComponent) rayTester.rayTest(cameraPos, vector);
-        System.out.println(component);
-        if (component != null) selectComponent(component);
+        CameraRayTester rayTester = getContext().getRayTester();
+        Vector2f cursorPosition = getInputHandler().getCursorPosition();
+        Optional<GameComponent> gameComponent = rayTester.testCameraRay(cursorPosition.x, cursorPosition.y, SELECTION_RANGE);
+        gameComponent.ifPresent(this::selectComponent);
     }
 
     private void selectComponent(GameComponent component) {

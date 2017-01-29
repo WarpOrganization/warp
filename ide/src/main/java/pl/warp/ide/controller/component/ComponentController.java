@@ -1,5 +1,6 @@
 package pl.warp.ide.controller.component;
 
+import javafx.application.Platform;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import pl.warp.engine.core.scene.NameProperty;
@@ -38,14 +39,16 @@ public class ComponentController {
     private void initialize() {
         loader.loadScene(context.getScene(), sceneTree, this);
         sceneTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            descriptor.unload();
-            if (selectedComponent != null)
-                unmarkSelected(selectedComponent);
-            if (newValue != null) {
-                descriptor.load(newValue.getValue());
-                selectedComponent = newValue.getValue();
-                markSelected(selectedComponent);
-            }
+            Platform.runLater(() -> {
+                descriptor.unload();
+                if (selectedComponent != null)
+                    unmarkSelected(selectedComponent);
+                if (newValue != null) {
+                    descriptor.load(newValue.getValue());
+                    selectedComponent = newValue.getValue();
+                    markSelected(selectedComponent);
+                }
+            });
         });
         new ComponentSelectionScript(context.getScene(), sceneTree);
     }

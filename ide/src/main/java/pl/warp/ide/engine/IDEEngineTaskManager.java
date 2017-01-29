@@ -22,6 +22,7 @@ import pl.warp.engine.physics.RayTester;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
+import pl.warp.game.script.CameraRayTester;
 
 import java.io.File;
 
@@ -89,7 +90,7 @@ public class IDEEngineTaskManager {
     private void initContext() {
         contextBuilder.setCamera(camera);
         contextBuilder.setScene(loadedScene);
-        contextBuilder.setRayTester(rayTester);
+        contextBuilder.setRayTester(new CameraRayTester(contextBuilder.getGameContext(), rayTester));
         contextBuilder.setInput(input);
     }
 

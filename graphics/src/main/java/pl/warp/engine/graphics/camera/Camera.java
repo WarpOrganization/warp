@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.camera;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 
@@ -29,6 +30,8 @@ public interface Camera {
 
     Vector3f getPosition(Vector3f dest);
 
+    Quaternionf getNonrealtiveRotation();
+
     Matrix4f getCameraMatrix();
 
     ProjectionMatrix getProjectionMatrix();
@@ -40,4 +43,5 @@ public interface Camera {
     Vector3f getRightVector();
 
     Vector3f getUpVector();
+
 }

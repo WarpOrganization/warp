@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.camera;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
@@ -58,7 +59,7 @@ public class QuaternionCamera implements Camera {
 
     @Override
     public void rotateX(float angle) {
-         transform.rotateX(angle);
+        transform.rotateX(angle);
     }
 
     @Override
@@ -68,12 +69,18 @@ public class QuaternionCamera implements Camera {
 
     @Override
     public void rotateZ(float angle) {
-         transform.rotateZ(angle);
+        transform.rotateZ(angle);
     }
+
 
     @Override
     public Vector3f getPosition(Vector3f dest) {
         return Transforms.getAbsolutePosition(cameraComponent, dest);
+    }
+
+    @Override
+    public Quaternionf getNonrealtiveRotation() {
+        return Transforms.getAbsoluteRotation(cameraComponent);
     }
 
     @Override

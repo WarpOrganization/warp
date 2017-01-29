@@ -3,8 +3,6 @@ package pl.warp.ide;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
-
 /**
  * @author Jaca777
  *         Created 2017-01-28 at 16
@@ -15,6 +13,6 @@ public class IconUtil {
     }
 
     private static String toIconPath(String name) {
-        return "icons" + File.separator + name + ".png";
+        return "icons/"+ name + ".png";
     }
 }
