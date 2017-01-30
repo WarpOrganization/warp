@@ -49,7 +49,7 @@ public class ComponentPositioningScript extends GameScriptWithInput<GameComponen
     private void move(int delta) {
         float componentSpeed;
         if (getInputHandler().isKeyDown(VK_SHIFT))
-            componentSpeed = COMPONENT_SPEED * 3;
+            componentSpeed = COMPONENT_SPEED * 50;
         else componentSpeed = COMPONENT_SPEED;
 
         movementVector.zero();

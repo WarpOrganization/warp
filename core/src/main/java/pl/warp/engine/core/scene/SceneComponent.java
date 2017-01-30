@@ -136,7 +136,7 @@ public abstract class SceneComponent implements Component {
     }
 
     /**
-     * @throws IllegalStateException if parent is not present
+     *
      */
     @Override
     public Component getParent() {

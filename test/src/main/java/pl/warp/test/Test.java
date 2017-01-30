@@ -128,6 +128,9 @@ public class Test {
             }
         };
         loader.enableControls();
+/*        graphicsThread.scheduleOnce(() -> {
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+        });*/ //MATRIX MODE
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
     }

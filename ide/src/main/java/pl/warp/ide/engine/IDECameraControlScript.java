@@ -19,7 +19,7 @@ import static java.awt.event.MouseEvent.BUTTON1;
 public class IDECameraControlScript extends GameScriptWithInput<GameComponent> {
 
     private static final float CAMERA_SPEED = 0.025f;
-    private static final float ROT_SPEED = 0.06f;
+    private static final float ROT_SPEED = 0.03f;
 
     private float cameraSpeed = CAMERA_SPEED;
     private Camera camera;

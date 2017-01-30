@@ -59,6 +59,8 @@ public class IDELauncher extends Application {
         PrototypeRepository repository = new LocalPrototypeRepository();
         FunctionComponentPrototype shipPrototype = new FunctionComponentPrototype("Ship", sceneLoader::createShip);
         FunctionComponentPrototype frigatePrototype = new FunctionComponentPrototype("Frigate", sceneLoader::createFrigate);
+        FunctionComponentPrototype planetPrototype = new FunctionComponentPrototype("Planet", sceneLoader::createPlanet);
+        repository.add(planetPrototype);
         repository.add(shipPrototype);
         repository.add(frigatePrototype);
         return repository;
