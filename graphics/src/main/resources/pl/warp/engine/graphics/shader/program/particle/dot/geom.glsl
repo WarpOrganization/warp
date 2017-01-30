@@ -14,7 +14,7 @@ layout (max_vertices = 4) out;
 
 smooth out vec2 coord;
 flat out vec4 color;
-out float gradient;
+flat out float gradient;
 
 flat in vec4 vColor[];
 flat in float vScale[];

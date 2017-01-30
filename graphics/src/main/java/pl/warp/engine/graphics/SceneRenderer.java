@@ -72,11 +72,13 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void render(Component component) {
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         matrixStack.push();
         if(component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
             applyTransformations(component);
         renderComponent(component);
         component.forEachChildren(this::render);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         matrixStack.pop();
     }
 
