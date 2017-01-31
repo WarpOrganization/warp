@@ -2,7 +2,6 @@ package pl.warp.test;
 
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.audio.playlist.PlayList;
@@ -31,6 +30,7 @@ import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.script.CameraRayTester;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Random;
 
@@ -120,10 +120,11 @@ public class Test {
 
             @Override
             public void onUpdate(int delta) {
-                if (input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+                if (input.isKeyDown(KeyEvent.VK_ESCAPE)) {
                     scriptsThread.scheduleOnce(scriptsThread::interrupt);
                     graphicsThread.scheduleOnce(graphicsThread::interrupt);
                     physicsThread.scheduleOnce(physicsThread::interrupt);
+                    System.exit(0);
                 }
             }
         };

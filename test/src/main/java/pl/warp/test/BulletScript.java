@@ -27,6 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+
 /**
  * @author Hubertus
  *         Created 7/12/16
@@ -81,7 +83,10 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private void resetComponent(Component component) {
         TransformProperty transform = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-        transform.setTranslation(new Vector3f(0));
+        float x = 10 + random.nextFloat() * 200 - 100f;
+        float y = random.nextFloat() * 200 - 100f;
+        float z = random.nextFloat() * 200 - 100f;
+        transform.setTranslation(new Vector3f(x, y, z));
         PhysicalBodyProperty bodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         bodyProperty.setVelocity(new Vector3f(0));
         bodyProperty.setAngularVelocity(new Vector3f(0));

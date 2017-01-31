@@ -86,13 +86,9 @@ public class GunScript extends GameScript<GameComponent> {
     private boolean shot = false;
 
     private void shoot() {
-        if (!shot) {
-            AudioManager.INSTANCE.playSingle(owner, "gun");
-            shot = true;
-        }
         if (timer <= 0) {
+            AudioManager.INSTANCE.playSingle(owner, "gun");
             timer = gunProperty.getCooldownTime();
-
             Transforms.getAbsoluteRotation(getOwner()).transform(direction.set(FORWARD_VECTOR));
             Transforms.getAbsoluteRotation(getOwner()).transform(direction2.set(RIGHT_VECTOR));
             bulletTranslation.set(direction);

@@ -82,7 +82,7 @@ public class TestSceneLoader implements GameSceneLoader {
     private static final float MOV_SPEED = 0.2f * 10;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 80;
+    private static final int GUN_COOLDOWN = 200;
     public static GameComponent MAIN_GOAT;
 
     private boolean loaded = false;
@@ -352,7 +352,7 @@ public class TestSceneLoader implements GameSceneLoader {
         ArrayList<Component> team2 = new ArrayList<>();
         team1.add(controllableGoat);
         controllableGoat.addProperty(new DroneProperty(5, 1, team2));
-        int nOfGoats = 15;
+        int nOfGoats = 20;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
@@ -366,7 +366,7 @@ public class TestSceneLoader implements GameSceneLoader {
             SequenceNode basenode = new SequenceNode();
             //basenode.addChildren(new SpinLeaf());
             //BehaviourTree behaviourTree = builder.build(goat);
-            if (i < nOfGoats / 2) {
+            if (i < nOfGoats / 2 || i > 15) {
                 Material material = new Material(goatTexture);
                 material.setShininess(20f);
                 material.setBrightnessTexture(goatBrightnessTexture);

@@ -68,6 +68,7 @@ public class TestApp extends Application {
         grid.add(new Label("Arrows - rotation"), 2, 6);
         grid.add(new Label("Ctrl - shooting the gun"), 1, 7);
         grid.add(new Label("Space - stopping"), 2, 7);
+        grid.add(new Label("Esc - exit"), 1, 8);
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == runButtonType) {
                 int width = Integer.parseInt(displayWidth.getText());
