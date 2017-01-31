@@ -24,7 +24,7 @@ public class FindTargetLeaf extends LeafNode {
         if (targets.size() == 0) return Node.FAILURE;
         Component target = targets.get((int) Math.floor(Math.random() * targets.size()));
         ticker.setData(target, "target");
-        ticker.setData(target.getProperty(DroneProperty.DRONE_PROPERTY_NAME), "droneProperty");
+        if(target.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) ticker.setData(target.getProperty(DroneProperty.DRONE_PROPERTY_NAME), "droneProperty");
         return Node.SUCCESS;
     }
 

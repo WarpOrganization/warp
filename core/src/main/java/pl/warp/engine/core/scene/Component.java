@@ -23,6 +23,8 @@ public interface Component {
 
     boolean hasEnabledProperty(String name);
 
+    <T extends Property> boolean hasEnabledProperty(Class<T> c);
+
     Set<Property> getProperties();
 
     <T extends Event> void triggerEvent(T event);

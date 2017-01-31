@@ -83,6 +83,7 @@ public class TestSceneLoader implements GameSceneLoader {
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 80;
+    public static GameComponent MAIN_GOAT;
 
     private boolean loaded = false;
 
@@ -111,6 +112,11 @@ public class TestSceneLoader implements GameSceneLoader {
     private Sphere sphere;
     private Ring ringMesh;
     private PlanetaryRingProgram planetaryRingProgram;
+    private ImageData brightnessTextureData;
+    private ImageData brightnessTextureData2;
+    private Texture2D goatTexture2;
+    private Texture2D bulletTexture2;
+    private Texture2D goatBrightnessTexture2;
 
 
     public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -135,7 +141,7 @@ public class TestSceneLoader implements GameSceneLoader {
 
         controllableGoat = new GameSceneComponent(scene);
         controllableGoat.addProperty(new NameProperty("Player ship"));
-
+        MAIN_GOAT = controllableGoat;
         Display display = config.getDisplay();
 
         cameraComponent = new GameSceneComponent(controllableGoat);
@@ -189,6 +195,9 @@ public class TestSceneLoader implements GameSceneLoader {
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
+
+            ImageData decodedTexture2 = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_2.png"), PNGDecoder.Format.RGBA);
+            goatTexture2 = new Texture2D(decodedTexture2.getWidth(), decodedTexture2.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture2.getData());
 
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -255,9 +264,11 @@ public class TestSceneLoader implements GameSceneLoader {
             ringColors.enableAnisotropy(4);
             ring.addProperty(new PlanetaryRingProperty(startR, endR, ringColors));
 
-            ImageData brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
+            brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
 
+            brightnessTextureData2 = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_2_brightness.png"), PNGDecoder.Format.RGBA);
+            goatBrightnessTexture2 = new Texture2D(brightnessTextureData2.getWidth(), brightnessTextureData2.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData2.getData());
 
             /*Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
             ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
@@ -285,6 +296,9 @@ public class TestSceneLoader implements GameSceneLoader {
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             controllableGoat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
             audioManager = AudioManager.INSTANCE;
+
+            ImageData bullet2decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet_2.png"), PNGDecoder.Format.RGBA);
+            bulletTexture2 = new Texture2D(bullet2decodedTexture.getWidth(), bullet2decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bullet2decodedTexture.getData());
 
             new GunScript(controllableGoat);
 
@@ -336,17 +350,13 @@ public class TestSceneLoader implements GameSceneLoader {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
-        int nOfGoats = 10;
+        team1.add(controllableGoat);
+        controllableGoat.addProperty(new DroneProperty(5, 1, team2));
+        int nOfGoats = 15;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new GraphicsMeshProperty(goatMesh));
-            Material material = new Material(goatTexture);
-            material.setShininess(20f);
-            material.setBrightnessTexture(goatBrightnessTexture);
-            goat.addProperty(new GraphicsMaterialProperty(material));
-            goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-            goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
             float x = 10 + random.nextFloat() * 200 - 100f;
             float y = random.nextFloat() * 200 - 100f;
             float z = random.nextFloat() * 200 - 100f;
@@ -357,15 +367,26 @@ public class TestSceneLoader implements GameSceneLoader {
             //basenode.addChildren(new SpinLeaf());
             //BehaviourTree behaviourTree = builder.build(goat);
             if (i < nOfGoats / 2) {
+                Material material = new Material(goatTexture);
+                material.setShininess(20f);
+                material.setBrightnessTexture(goatBrightnessTexture);
+                goat.addProperty(new GraphicsMaterialProperty(material));
+                goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+                goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
                 goat.addProperty(new DroneProperty(5, 1, team2));
                 team1.add(goat);
             } else {
+                Material material = new Material(goatTexture2);
+                material.setShininess(20f);
+                material.setBrightnessTexture(goatBrightnessTexture2);
+                goat.addProperty(new GraphicsMaterialProperty(material));
+                goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+                goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture2, audioManager));
                 goat.addProperty(new DroneProperty(5, 1, team1));
                 team2.add(goat);
             }
             goat.addProperty(new AIProperty(builder.build(goat)));
             new GunScript(goat);
-            scene.removeChild(goat);
         }
     }
 
@@ -404,7 +425,7 @@ public class TestSceneLoader implements GameSceneLoader {
         return frigate;
     }
 
-    public GameComponent createPlanet(GameComponent parent){
+    public GameComponent createPlanet(GameComponent parent) {
         GameComponent gasSphere = new GameSceneComponent(parent);
         gasSphere.addProperty(new GraphicsMeshProperty(sphere));
         gasSphere.addProperty(new GraphicsCustomRendererProgramProperty(gasProgram));

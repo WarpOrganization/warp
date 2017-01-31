@@ -84,6 +84,11 @@ public abstract class SceneComponent implements Component {
     }
 
     @Override
+    public <T extends Property> boolean hasEnabledProperty(Class<T> c) {
+        return hasProperty(c) && getProperty(c).isEnabled();
+    }
+
+    @Override
     public Set<Property> getProperties() {
         return properties.entrySet().stream()
                 .map(Map.Entry::getValue)

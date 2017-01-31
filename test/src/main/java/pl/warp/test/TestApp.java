@@ -18,7 +18,7 @@ public class TestApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Dialog<RenderingConfig> dialog = new Dialog<>();
-        dialog.setTitle("Warp Game Engine");
+        dialog.setTitle("Warp Game Engine Demonstration");
         dialog.setHeaderText("Graphics settings");
 
         ButtonType runButtonType = new ButtonType("Run", ButtonBar.ButtonData.OK_DONE);
@@ -63,7 +63,11 @@ public class TestApp extends Application {
         grid.add(new Label("Display height:"), 0, 5);
         grid.add(displayHeight, 1, 5);
         grid.add(new Label("Affects performance"), 2, 5);
-
+        grid.add(new Label("Controls:"), 0, 6);
+        grid.add(new Label("WSAD - movement"), 1, 6);
+        grid.add(new Label("Arrows - rotation"), 2, 6);
+        grid.add(new Label("Ctrl - shooting the gun"), 1, 7);
+        grid.add(new Label("Space - stopping"), 2, 7);
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == runButtonType) {
                 int width = Integer.parseInt(displayWidth.getText());

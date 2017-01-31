@@ -5,6 +5,8 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.SimpleListener;
+import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
@@ -18,6 +20,7 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
 
 import java.util.concurrent.Executors;
@@ -55,23 +58,56 @@ public class BulletScript extends GameScript<GameComponent> {
             getOwner().destroy();
     }
 
-    private void onCollision(CollisionEvent event) {
+    private synchronized void onCollision(CollisionEvent event) {
         Component component = event.getSecondComponent();
-        if (component != playerShip && !component.hasProperty(DupaProperty.class)) {
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-            ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.04f, 300, true, true);
+        if(component.hasEnabledProperty(Bulletproof.class)) return;
+        if (component != playerShip && component != TestSceneLoader.MAIN_GOAT) {
             component.getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
-            component.addProperty(new DupaProperty());
-            TexturedParticleSystem system = new TexturedParticleSystem(animator, factory, 1000, explosionSpritesheet);
-            component.addProperty(new GraphicsParticleEmitterProperty(system));
-            executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);
+            component.addProperty(new Bulletproof());
+            kaboom(component);
             DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
             droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
             executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
+        } else if(component == TestSceneLoader.MAIN_GOAT) {
+            GameComponent component1 = new GameSceneComponent((GameComponent) component);
+            kaboom(component1);
+            executorService.schedule(() -> destroy(component1), 1, TimeUnit.SECONDS);
+            resetComponent(component);
         }
+    }
+
+    private void resetComponent(Component component) {
+        TransformProperty transform = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        transform.setTranslation(new Vector3f(0));
+        PhysicalBodyProperty bodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        bodyProperty.setVelocity(new Vector3f(0));
+        bodyProperty.setAngularVelocity(new Vector3f(0));
+        executorService.schedule(() -> {
+            bodyProperty.setVelocity(new Vector3f(0));
+            bodyProperty.setAngularVelocity(new Vector3f(0));
+            transform.getRotation().set(0,0,0,1);
+        }, 50, TimeUnit.MILLISECONDS);
+        if(!component.hasProperty(Bulletproof.class)) component.addProperty(new Bulletproof());
+        Property bulletproofProperty = component.getProperty(Bulletproof.class);
+        bulletproofProperty.enable();
+        GraphicsMaterialProperty materialProperty = component.getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME);
+        materialProperty.getMaterial().setTransparency(0.5f);
+        executorService.schedule(() -> {
+            materialProperty.getMaterial().setTransparency(1.0f);
+            bulletproofProperty.disable();
+        }, 2, TimeUnit.SECONDS);
+    }
+
+
+    private void kaboom(Component component) {
+        ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
+        ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.04f, 300, true, true);
+        TexturedParticleSystem system = new TexturedParticleSystem(animator, factory, 1000, explosionSpritesheet);
+        component.addProperty(new GraphicsParticleEmitterProperty(system));
+        executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);
     }
 
     private void destroy(Component componentHit) {
@@ -80,10 +116,11 @@ public class BulletScript extends GameScript<GameComponent> {
     }
 
     //TODO REMOVE AS SOON AS DISABLING COLLIDER WORKS
-    private static class DupaProperty extends Property {//xd
+    private static class Bulletproof extends Property {
 
-        public DupaProperty() {
+        public Bulletproof() {
             super();
         }
     }
+
 }

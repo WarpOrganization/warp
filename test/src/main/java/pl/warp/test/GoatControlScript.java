@@ -58,6 +58,9 @@ public class GoatControlScript extends GameScript<GameComponent> {
         useGun();
     }
 
+    private Vector3f movement = new Vector3f();
+
+
     private void useGun() {
         Input input = getContext().getInput();
         getOwner().<GunProperty>getPropertyIfExists(GunProperty.GUN_PROPERTY_NAME).ifPresent(
