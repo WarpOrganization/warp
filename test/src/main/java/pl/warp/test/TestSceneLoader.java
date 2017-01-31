@@ -376,6 +376,8 @@ public class TestSceneLoader implements GameSceneLoader {
                 goat.addProperty(new DroneProperty(5, 1, team2));
                 team1.add(goat);
             } else {
+                transformProperty.move(new Vector3f(0f, 0f, -500f));
+                //transformProperty.getRotation().rotateY((float) Math.PI);
                 Material material = new Material(goatTexture2);
                 material.setShininess(20f);
                 material.setBrightnessTexture(goatBrightnessTexture2);
