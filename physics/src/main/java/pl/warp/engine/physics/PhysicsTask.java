@@ -61,7 +61,10 @@ public class PhysicsTask extends EngineTask {
 
         parent.forEachChildren(component -> {
             if (component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)) {
-                ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), component, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+                PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+                ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(
+                        new Vector3(physicalBodyProperty.getXLength(), physicalBodyProperty.getYLength(), physicalBodyProperty.getZLength())),
+                        component, new Vector3f(0f), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
                 component.addProperty(colliderProperty);
                 handleSceneEntered(new ChildAddedEvent(component));
             }

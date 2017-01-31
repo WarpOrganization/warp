@@ -62,7 +62,7 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private synchronized void onCollision(CollisionEvent event) {
         Component component = event.getSecondComponent();
-        if(component.hasEnabledProperty(Bulletproof.class)) return;
+        if (component.hasEnabledProperty(Bulletproof.class)) return;
         if (component != playerShip && component != TestSceneLoader.MAIN_GOAT) {
             component.getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
@@ -70,10 +70,12 @@ public class BulletScript extends GameScript<GameComponent> {
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             component.addProperty(new Bulletproof());
             kaboom(component);
-            DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
-            droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
+            if (component.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) {
+                DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
+                droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
+            }
             executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
-        } else if(component == TestSceneLoader.MAIN_GOAT) {
+        } else if (component == TestSceneLoader.MAIN_GOAT) {
             GameComponent component1 = new GameSceneComponent((GameComponent) component);
             kaboom(component1);
             executorService.schedule(() -> destroy(component1), 1, TimeUnit.SECONDS);
@@ -93,9 +95,9 @@ public class BulletScript extends GameScript<GameComponent> {
         executorService.schedule(() -> {
             bodyProperty.setVelocity(new Vector3f(0));
             bodyProperty.setAngularVelocity(new Vector3f(0));
-            transform.getRotation().set(0,0,0,1);
+            transform.getRotation().set(0, 0, 0, 1);
         }, 50, TimeUnit.MILLISECONDS);
-        if(!component.hasProperty(Bulletproof.class)) component.addProperty(new Bulletproof());
+        if (!component.hasProperty(Bulletproof.class)) component.addProperty(new Bulletproof());
         Property bulletproofProperty = component.getProperty(Bulletproof.class);
         bulletproofProperty.enable();
         GraphicsMaterialProperty materialProperty = component.getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME);

@@ -29,6 +29,8 @@ public class PhysicalBodyProperty extends Property<Component> {
     private Vector3f nextTickTranslation = new Vector3f();
     private Vector3f nextTickRotation = new Vector3f();
 
+    private float xLength, yLength, zLength; //HOTFIX
+
     public PhysicalBodyProperty(float mass, float xLength, float yLength, float zLength) {
         super(PHYSICAL_BODY_PROPERTY_NAME);
         this.mass = mass;
@@ -38,6 +40,21 @@ public class PhysicalBodyProperty extends Property<Component> {
                 0, 0, (xLength * xLength + yLength * yLength) * mass / 12).invert();
         inertiaRotated.set(inertia);
         universalRotationInertia = (2f * mass / 5f) * (xLength + yLength + zLength) / 3f * (xLength + yLength + zLength) / 3f;
+        this.xLength = xLength;
+        this.yLength = yLength;
+        this.zLength = zLength;
+    }
+
+    public float getXLength() {
+        return xLength;
+    }
+
+    public float getYLength() {
+        return yLength;
+    }
+
+    public float getZLength() {
+        return zLength;
     }
 
     public void recalculateInteriaTensor(Quaternionf rotation) {
