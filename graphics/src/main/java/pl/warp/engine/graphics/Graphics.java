@@ -3,7 +3,6 @@ package pl.warp.engine.graphics;
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
-import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
@@ -93,9 +92,8 @@ public class Graphics {
         meshRenderer = new MeshRenderer(mainViewCamera, environment);
         skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
-        ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
-        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, environmentFlareRenderer};
+        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, environmentFlareRenderer};
         return new SceneRenderer(context.getScene(), config, renderers);
     }
 

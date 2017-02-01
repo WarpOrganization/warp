@@ -35,10 +35,13 @@ public class ParticleSystemRenderer implements Renderer {
         logger.info("Particle renderer initialized...");
     }
 
+    private int delta;
+
     @Override
     public void initRendering(int delta) {
         texturedParticleRenderer.useCamera(camera);
         dotParticleRenderer.useCamera(camera);
+        this.delta = delta;
     }
 
     @Override
@@ -47,6 +50,7 @@ public class ParticleSystemRenderer implements Renderer {
             GraphicsParticleEmitterProperty emitterProperty =
                     component.getProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
             ParticleSystem system = emitterProperty.getSystem();
+            system.update(delta);
             getRenderer(system).render(system, stack);
         }
     }

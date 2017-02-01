@@ -1,6 +1,6 @@
 package pl.warp.engine.ai.loader;
 
-import pl.warp.engine.ai.behaviourtree.Node;
+import pl.warp.engine.ai.behaviortree.Node;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

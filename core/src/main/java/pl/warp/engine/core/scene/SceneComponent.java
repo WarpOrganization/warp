@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 /**
  * @author Jaca777
  *         Created 2016-06-27 at 12
- *         TODO delete children streams
  */
 public abstract class SceneComponent implements Component {
 

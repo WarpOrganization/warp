@@ -1,6 +1,6 @@
 package pl.warp.engine.ai.property;
 
-import pl.warp.engine.ai.behaviourtree.BehaviourTree;
+import pl.warp.engine.ai.behaviortree.BehaviourTree;
 import pl.warp.engine.core.scene.Property;
 
 /**

@@ -1,4 +1,4 @@
-package pl.warp.engine.ai.behaviourtree;
+package pl.warp.engine.ai.behaviortree;
 
 import java.util.HashMap;
 

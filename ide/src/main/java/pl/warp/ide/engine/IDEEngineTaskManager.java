@@ -111,7 +111,6 @@ public class IDEEngineTaskManager {
         scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptManager()));
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
-            //TODO start input task
             scriptThread.start(); //has to start after the window is created
         });
     }
