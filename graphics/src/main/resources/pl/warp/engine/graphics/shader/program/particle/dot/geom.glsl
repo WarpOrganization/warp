@@ -29,7 +29,7 @@ void main()
      // Vertex 4
     coord = vec2(1.0, 1.0);
     color = vColor[0];
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += (vec2(1, 1) * scale);
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
@@ -37,7 +37,7 @@ void main()
     // Vertex 3
     coord = vec2(-1.0, 1.0);
     color = vColor[0];
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += vec2(-1, 1) * scale;
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
@@ -45,7 +45,7 @@ void main()
     // Vertex 2
     coord = vec2(1.0, -1.0);
     color = vColor[0];
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += vec2(1, -1) * scale;
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
@@ -53,7 +53,7 @@ void main()
     // Vertex 1
     coord = vec2(-1.0, -1.0);
     color = vColor[0];
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += vec2(-1, -1) * scale;
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();

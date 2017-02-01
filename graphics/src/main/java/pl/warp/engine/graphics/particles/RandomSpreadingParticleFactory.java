@@ -1,8 +1,6 @@
 package pl.warp.engine.graphics.particles;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
 
 import java.util.Random;
 
@@ -16,14 +14,16 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
 
     private float velocity;
     private int timeToLive;
+    private int timeToLiveGradient;
     private boolean randomizeRotation;
     private boolean randomizeScaleScalar;
 
     private Random random = new Random();
 
-    public RandomSpreadingParticleFactory(float velocity, int timeToLive, boolean randomizeRotation, boolean randomizeScaleScalar) {
+    public RandomSpreadingParticleFactory(float velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
         this.velocity = velocity;
         this.timeToLive = timeToLive;
+        this.timeToLiveGradient = timeToLiveGradient;
         this.randomizeRotation = randomizeRotation;
         this.randomizeScaleScalar = randomizeScaleScalar;
     }
@@ -34,6 +34,7 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
         Vector3f velocity = genVelocity();
         float scale = randomizeScaleScalar ? genScale() : 1.0f;
         float rotation = randomizeRotation ? genRotation() : 0;
+        int timeToLive = (int) (this.timeToLive + (timeToLiveGradient * random.nextFloat() - (timeToLiveGradient / 2.0f)));
         return newParticle(position, velocity, scale, rotation, timeToLive);
     }
 

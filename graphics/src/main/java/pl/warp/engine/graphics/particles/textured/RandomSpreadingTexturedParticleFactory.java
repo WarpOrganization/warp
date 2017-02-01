@@ -1,9 +1,7 @@
 package pl.warp.engine.graphics.particles.textured;
 
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import pl.warp.engine.graphics.particles.RandomSpreadingParticleFactory;
-import pl.warp.engine.graphics.particles.dot.DotParticle;
 
 /**
  * @author Jaca777
@@ -11,8 +9,9 @@ import pl.warp.engine.graphics.particles.dot.DotParticle;
  */
 public class RandomSpreadingTexturedParticleFactory extends RandomSpreadingParticleFactory<TexturedParticle> {
 
-    public RandomSpreadingTexturedParticleFactory(float velocity, int timeToLive, boolean randomizeRotation, boolean randomizeScaleScalar) {
-        super(velocity, timeToLive, randomizeRotation, randomizeScaleScalar);
+
+    public RandomSpreadingTexturedParticleFactory(float velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
+        super(velocity, timeToLive, timeToLiveGradient, randomizeRotation, randomizeScaleScalar);
     }
 
     @Override

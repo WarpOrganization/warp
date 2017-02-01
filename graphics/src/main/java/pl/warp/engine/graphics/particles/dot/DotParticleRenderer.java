@@ -24,6 +24,7 @@ import static pl.warp.engine.graphics.particles.ParticleSystemRenderer.MAX_PARTI
  */
 public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> {
 
+    public static final float FADE_AFTER = 1000;
     private DotParticleProgram program;
 
     private int positionVBO;
@@ -89,14 +90,14 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
 
     @Override
     public void render(DotParticleSystem system, MatrixStack stack) {
-        List<DotParticle> particles = system.getParticles();
+        List<TwoColorDotParticle> particles = system.getParticles();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         program.use();
         program.useMatrixStack(stack);
-        updateVBOS(particles);
         GL30.glBindVertexArray(vao);
+        updateVBOS(particles);
         GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
         GL30.glBindVertexArray(0);
     }
@@ -106,10 +107,10 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     private FloatBuffer gradients = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
     private FloatBuffer scales = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
 
-    private void updateVBOS(List<DotParticle> particles) {
+    private void updateVBOS(List<TwoColorDotParticle> particles) {
         clearBuffers();
         int particleCounter = 1;
-        for (DotParticle particle : particles) {
+        for (TwoColorDotParticle particle : particles) {
             if (particleCounter > MAX_PARTICLES_NUMBER) break;
             putPosition(particle.getPosition());
             putColor(particle.getColor());
@@ -160,10 +161,10 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, scales, GL15.GL_DYNAMIC_DRAW);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorVBO);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorVBO, GL15.GL_DYNAMIC_DRAW);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colors, GL15.GL_DYNAMIC_DRAW);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, gradientVBO);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, gradientVBO, GL15.GL_DYNAMIC_DRAW);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, gradients, GL15.GL_DYNAMIC_DRAW);
     }
 
 

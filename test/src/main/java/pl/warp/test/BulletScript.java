@@ -20,7 +20,6 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
 
 import java.util.concurrent.Executors;
@@ -76,10 +75,10 @@ public class BulletScript extends GameScript<GameComponent> {
             }
             executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
         } else if (component == TestSceneLoader.MAIN_GOAT) {
-            GameComponent component1 = new GameSceneComponent((GameComponent) component);
+    /*        GameComponent component1 = new GameSceneComponent((GameComponent) component);
             kaboom(component1);
             executorService.schedule(() -> destroy(component1), 1, TimeUnit.SECONDS);
-            resetComponent(component);
+            resetComponent(component);*/
         }
     }
 
@@ -111,7 +110,7 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private void kaboom(Component component) {
         ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-        ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.04f, 300, true, true);
+        ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.04f, 300, 0, true, true);
         TexturedParticleSystem system = new TexturedParticleSystem(animator, factory, 1000, explosionSpritesheet);
         component.addProperty(new GraphicsParticleEmitterProperty(system));
         executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);

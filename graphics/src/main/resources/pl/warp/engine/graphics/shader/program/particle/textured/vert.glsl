@@ -14,7 +14,7 @@ flat out float vTextureIndex;
 
 
 void main(void) {
-    gl_Position = vec4(position, 1);
+    gl_Position = modelViewMatrix * vec4(position, 1);
     vRotation = mat2(
         cos(rotation), -sin(rotation),
         sin(rotation), cos(rotation));

@@ -28,28 +28,28 @@ void main()
 
      // Vertex 4
     texCoord = vec2(1.0, 1.0);
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += (particleRotation * vec2(1, 1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 3
     texCoord = vec2(0.0, 1.0);
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += (particleRotation * vec2(-1, 1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 2
     texCoord = vec2(1.0, 0.0);
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += (particleRotation * vec2(1, -1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
 
     // Vertex 1
     texCoord = vec2(0.0, 0.0);
-    gl_Position = modelViewMatrix * pos;
+    gl_Position = pos;
     gl_Position.xy += (particleRotation * vec2(-1, -1));
     gl_Position = projectionMatrix * gl_Position;
     EmitVertex();
