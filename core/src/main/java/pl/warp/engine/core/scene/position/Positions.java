@@ -9,6 +9,7 @@ import java.util.Objects;
 /**
  * @author Jaca777
  *         Created 2016-12-27 at 15
+ *         TODO Replace with positioning system
  */
 public class Positions {
     public static int getMutualUnit(Component a, Component b) {

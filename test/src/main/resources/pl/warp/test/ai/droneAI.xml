@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<baseNode path="pl.warp.engine.ai.behaviourTree.SequenceNode">
-    <node path="pl.warp.engine.ai.behaviourTree.SelectorNode">
+<baseNode path="pl.warp.engine.ai.behaviourtree.SequenceNode">
+    <node path="pl.warp.engine.ai.behaviourtree.SelectorNode">
         <node path="pl.warp.test.ai.HasTargetLeaf"/>
         <node path="pl.warp.test.ai.FindTargetLeaf"/>
     </node>
-    <node path="pl.warp.engine.ai.behaviourTree.Inverter">
-        <node path="pl.warp.engine.ai.behaviourTree.SequenceNode">
+    <node path="pl.warp.engine.ai.behaviourtree.Inverter">
+        <node path="pl.warp.engine.ai.behaviourtree.SequenceNode">
             <node path="pl.warp.test.ai.AdjustSteeringLeaf"/>
             <node path="pl.warp.test.ai.ShootLeaf"/>
         </node>

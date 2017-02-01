@@ -74,7 +74,7 @@ public class Graphics {
 
     private void createRenderingTask() {
         pipeline = createPipeline();
-        RenderingTask task = new RenderingTask(context, display, windowManager, pipeline);
+        RenderingTask task = new RenderingTask(display, windowManager, pipeline);
         thread.scheduleTask(task);
     }
 

@@ -2,9 +2,9 @@ package pl.warp.test.ai;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.ai.behaviourTree.LeafNode;
-import pl.warp.engine.ai.behaviourTree.Node;
-import pl.warp.engine.ai.behaviourTree.Ticker;
+import pl.warp.engine.ai.behaviourtree.LeafNode;
+import pl.warp.engine.ai.behaviourtree.Node;
+import pl.warp.engine.ai.behaviourtree.Ticker;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;

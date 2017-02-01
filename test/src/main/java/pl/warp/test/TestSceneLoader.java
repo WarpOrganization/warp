@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.ai.behaviourTree.SequenceNode;
+import pl.warp.engine.ai.behaviourtree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
 import pl.warp.engine.ai.property.AIProperty;

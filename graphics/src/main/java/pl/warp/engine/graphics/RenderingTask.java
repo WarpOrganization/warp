@@ -1,12 +1,9 @@
 package pl.warp.engine.graphics;
 
 import org.apache.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLUtil;
-import org.lwjgl.system.MemoryUtil;
-import pl.warp.engine.core.*;
+import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.WindowManager;
@@ -23,7 +20,7 @@ public class RenderingTask extends EngineTask {
     private WindowManager windowManager;
     private Pipeline pipeline;
 
-    public RenderingTask(EngineContext context, Display display, WindowManager windowManager, Pipeline pipeline) { //TODO resize listener
+    public RenderingTask(Display display, WindowManager windowManager, Pipeline pipeline) { //TODO resize listener
         this.display = display;
         this.windowManager = windowManager;
         this.pipeline = pipeline;

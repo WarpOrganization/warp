@@ -1,8 +1,8 @@
 package pl.warp.test.ai;
 
-import pl.warp.engine.ai.behaviourTree.LeafNode;
-import pl.warp.engine.ai.behaviourTree.Node;
-import pl.warp.engine.ai.behaviourTree.Ticker;
+import pl.warp.engine.ai.behaviourtree.LeafNode;
+import pl.warp.engine.ai.behaviourtree.Node;
+import pl.warp.engine.ai.behaviourtree.Ticker;
 import pl.warp.test.DroneProperty;
 
 /**

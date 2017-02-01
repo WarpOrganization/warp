@@ -1,4 +1,4 @@
-package pl.warp.engine.ai.behaviourTree;
+package pl.warp.engine.ai.behaviourtree;
 
 import java.util.ArrayList;
 
