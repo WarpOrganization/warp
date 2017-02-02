@@ -1,5 +1,6 @@
 package pl.warp.game;
 
+import pl.warp.engine.core.scene.EventDispatcher;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.Graphics;
@@ -44,5 +45,9 @@ public class GameContextBuilder {
 
     public void setGraphics(Graphics graphics) {
         gameContext.setGraphics(graphics);
+    }
+
+    public void setEventDispatcher(EventDispatcher eventDispatcher) {
+        gameContext.setEventDispatcher(eventDispatcher);
     }
 }

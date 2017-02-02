@@ -16,6 +16,7 @@ import pl.warp.engine.core.EngineThread;
 import pl.warp.engine.core.SimpleEngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;
+import pl.warp.engine.core.scene.PoolEventDispatcher;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.RenderingConfig;
@@ -139,6 +140,7 @@ public class TestSceneLoader implements GameSceneLoader {
         scene = new GameScene(contextBuilder.getGameContext());
         scene.addProperty(new NameProperty("Test universe"));
         contextBuilder.setScene(scene);
+        contextBuilder.setEventDispatcher(new PoolEventDispatcher());
 
         contextBuilder.setScriptManager(new ScriptManager());
 
@@ -355,9 +357,9 @@ public class TestSceneLoader implements GameSceneLoader {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
-        team1.add(controllableGoat);
+        //team1.add(controllableGoat);
         controllableGoat.addProperty(new DroneProperty(5, 1, team2));
-        int nOfGoats = 20;
+        int nOfGoats = 1000;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
@@ -371,7 +373,7 @@ public class TestSceneLoader implements GameSceneLoader {
             SequenceNode basenode = new SequenceNode();
             //basenode.addChildren(new SpinLeaf());
             //BehaviourTree behaviourTree = builder.build(goat);
-            if (i < nOfGoats / 2 || i > 15) {
+            if (i < nOfGoats / 2) {
                 Material material = new Material(goatTexture);
                 material.setShininess(20f);
                 material.setBrightnessTexture(goatBrightnessTexture);

@@ -19,6 +19,7 @@ public abstract class SceneComponent implements Component {
     private final Map<String, Property> properties = new TreeMap<>();
     private final Set<Listener> listeners = new HashSet<>();
     private final List<Component> children = new LinkedList<>();
+    private final Queue<Event> eventQueue = new LinkedList<>();
     private boolean alive = true;
 
     public SceneComponent(Component parent) {
@@ -99,12 +100,12 @@ public abstract class SceneComponent implements Component {
      */
     @Override
     public <T extends Event> void triggerEvent(T event) {
-        synchronized (listeners) {
-            for (Listener listener : listeners) {
-                if (listener.isInterestedIn(event))
-                    listener.handle(event);
-            }
-        }
+        getContext().getEventDispatcher().dispatchEvent(this, event);
+    }
+
+    @Override
+    public Set<Listener> getListeners() {
+        return listeners;
     }
 
     /**

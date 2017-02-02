@@ -14,7 +14,7 @@ public class RandomSpreadingTwoColorDotParticleFactory extends RandomSpreadingPa
     private Vector4f endColor;
     private float gradient;
 
-    public RandomSpreadingTwoColorDotParticleFactory(float velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar, Vector4f initialColor, Vector4f endColor, float gradient) {
+    public RandomSpreadingTwoColorDotParticleFactory(float velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation /* <- U WOT? TODO REMOVE*/, boolean randomizeScaleScalar, Vector4f initialColor, Vector4f endColor, float gradient) {
         super(velocity, timeToLive, timeToLiveGradient, randomizeRotation, randomizeScaleScalar);
         this.initialColor = initialColor;
         this.endColor = endColor;

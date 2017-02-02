@@ -1,5 +1,6 @@
 package pl.warp.engine.core;
 
+import pl.warp.engine.core.scene.EventDispatcher;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
@@ -30,6 +31,7 @@ public class EngineContext {
     private Scene scene;
     private ScriptManager scriptManager;
     private Input input;
+    private EventDispatcher eventDispatcher;
 
     public Scene getScene() {
         return scene;
@@ -53,5 +55,13 @@ public class EngineContext {
 
     protected void setInput(Input input) {
         this.input = input;
+    }
+
+    public EventDispatcher getEventDispatcher() {
+        return eventDispatcher;
+    }
+
+    protected void setEventDispatcher(EventDispatcher eventDispatcher) {
+        this.eventDispatcher = eventDispatcher;
     }
 }

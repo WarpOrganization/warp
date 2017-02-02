@@ -5,6 +5,7 @@ import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.PoolEventDispatcher;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.input.InputTask;
@@ -91,6 +92,7 @@ public class IDEEngineTaskManager {
         contextBuilder.setCamera(camera);
         contextBuilder.setScene(loadedScene);
         contextBuilder.setRayTester(new CameraRayTester(contextBuilder.getGameContext(), rayTester));
+        contextBuilder.setEventDispatcher(new PoolEventDispatcher());
         contextBuilder.setInput(input);
     }
 
