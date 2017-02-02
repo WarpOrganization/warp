@@ -36,9 +36,9 @@ import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.dot.TwoColorDotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
 import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingDotParticleFactory;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingTwoColorDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -220,19 +220,21 @@ public class TestSceneLoader implements GameSceneLoader {
 
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
-            Component light = new GameSceneComponent(scene);
-            LightProperty property = new LightProperty();
-            light.addProperty(property);
-            SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f).mul(4), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
-            property.addSpotLight(spotLight);
-            TransformProperty lightSourceTransform = new TransformProperty();
-            light.addProperty(lightSourceTransform);
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
-            ParticleFactory<TwoColorDotParticle> factory = new RandomSpreadingDotParticleFactory(0.006f, 1500, 500, true, true,
-                    new Vector4f(0.5f, 1.5f, 0.5f, 2.0f), new Vector4f(0.5f, 0.5f, 2.0f, 0.0f), 0.85f);
-            light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 1000)));
-            LensFlare flare = new LensFlare(lensTexture, flares);
-            new GraphicsLensFlareProperty(flare);
+            {
+                Component light = new GameSceneComponent(scene);
+                LightProperty property = new LightProperty();
+                light.addProperty(property);
+                SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f).mul(4), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
+                property.addSpotLight(spotLight);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 1500, 500, true, true,
+                        new Vector4f(0.5f, 1.5f, 0.5f, 2.0f), new Vector4f(0.5f, 0.5f, 2.0f, 0.0f), 0.85f);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
 
             GameComponent gasSphere = new GameSceneComponent(scene);
             sphere = new Sphere(50, 50);
@@ -339,7 +341,7 @@ public class TestSceneLoader implements GameSceneLoader {
             transformProperty.rotateLocalY((float) -(Math.PI / 2));
             transformProperty.scale(new Vector3f(3));
             frigate.addProperty(transformProperty);*/
-            //generateGOATS(scene);
+            generateGOATS(scene);
 
         });
     }

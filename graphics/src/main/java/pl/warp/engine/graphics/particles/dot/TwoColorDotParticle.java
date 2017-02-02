@@ -2,13 +2,12 @@ package pl.warp.engine.graphics.particles.dot;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import pl.warp.engine.graphics.particles.Particle;
 
 /**
  * @author Jaca777
  *         Created 2016-08-08 at 19
  */
-public class TwoColorDotParticle extends Particle {
+public class TwoColorDotParticle extends DotParticle {
 
     private Vector4f startColor;
     private Vector4f endColor;
@@ -31,6 +30,7 @@ public class TwoColorDotParticle extends Particle {
 
     private Vector4f color = new Vector4f();
 
+    @Override
     public Vector4f getColor() {
         float progress = getTimeToLive() / (float) getTotalTimeToLive();
         return color.set(interpolateValues(startColor.x, endColor.x, progress), interpolateValues(startColor.y, endColor.y, progress),
@@ -41,6 +41,7 @@ public class TwoColorDotParticle extends Particle {
         return a * i + b * (1.0f - i);
     }
 
+    @Override
     public float getGradient() {
         return gradient;
     }

@@ -90,7 +90,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
 
     @Override
     public void render(DotParticleSystem system, MatrixStack stack) {
-        List<TwoColorDotParticle> particles = system.getParticles();
+        List<DotParticle> particles = system.getParticles();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -107,10 +107,10 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     private FloatBuffer gradients = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
     private FloatBuffer scales = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER);
 
-    private void updateVBOS(List<TwoColorDotParticle> particles) {
+    private void updateVBOS(List<DotParticle> particles) {
         clearBuffers();
         int particleCounter = 1;
-        for (TwoColorDotParticle particle : particles) {
+        for (DotParticle particle : particles) {
             if (particleCounter > MAX_PARTICLES_NUMBER) break;
             putPosition(particle.getPosition());
             putColor(particle.getColor());

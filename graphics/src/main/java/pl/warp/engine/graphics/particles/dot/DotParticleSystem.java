@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class DotParticleSystem extends ParticleSystem {
 
-    private List<TwoColorDotParticle> particles;
+    private List<DotParticle> particles;
 
-    public DotParticleSystem(ParticleAnimator<? super TwoColorDotParticle> animator, ParticleFactory<TwoColorDotParticle> factory, float frequency) {
+    public DotParticleSystem(ParticleAnimator<? super DotParticle> animator, ParticleFactory<DotParticle> factory, float frequency) {
         this(animator, factory, frequency, new LinkedList<>());
     }
 
-    public DotParticleSystem(ParticleAnimator<? super TwoColorDotParticle> animator, ParticleFactory<TwoColorDotParticle> factory, float frequency, List<TwoColorDotParticle> particles) {
+    public DotParticleSystem(ParticleAnimator<? super DotParticle> animator, ParticleFactory<DotParticle> factory, float frequency, List<DotParticle> particles) {
         super(new ParticleEmitter<>(factory, frequency, particles), animator);
         this.particles = particles;
     }
@@ -28,7 +28,7 @@ public class DotParticleSystem extends ParticleSystem {
     }
 
     @Override
-    public List<TwoColorDotParticle> getParticles() {
+    public List<DotParticle> getParticles() {
         return particles;
     }
 

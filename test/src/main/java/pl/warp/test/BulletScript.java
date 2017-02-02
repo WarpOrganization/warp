@@ -1,6 +1,7 @@
 package pl.warp.test;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Property;
@@ -12,9 +13,9 @@ import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.textured.RandomSpreadingTexturedParticleFactory;
-import pl.warp.engine.graphics.particles.textured.TexturedParticle;
-import pl.warp.engine.graphics.particles.textured.TexturedParticleSystem;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingTwoColorDotParticleFactory;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
@@ -110,10 +111,11 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private void kaboom(Component component) {
         ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-        ParticleFactory<TexturedParticle> factory = new RandomSpreadingTexturedParticleFactory(0.04f, 300, 0, true, true);
-        TexturedParticleSystem system = new TexturedParticleSystem(animator, factory, 1000, explosionSpritesheet);
+        ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.04f, 500, 0, true, true,
+                new Vector4f(2.5f, 0.5f, 1.5f, 2.0f), new Vector4f(1.0f, 0.5f, 1.0f, 0.0f), 0.8f);
+        DotParticleSystem system = new DotParticleSystem(animator, factory, 1000);
         component.addProperty(new GraphicsParticleEmitterProperty(system));
-        executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);
+        executorService.schedule(() -> system.setEmit(false), 300, TimeUnit.MILLISECONDS);
     }
 
     private void destroy(Component componentHit) {
