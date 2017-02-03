@@ -19,7 +19,6 @@ public abstract class SceneComponent implements Component {
     private final Map<String, Property> properties = new TreeMap<>();
     private final Set<Listener> listeners = new HashSet<>();
     private final List<Component> children = new LinkedList<>();
-    private final Queue<Event> eventQueue = new LinkedList<>();
     private boolean alive = true;
 
     public SceneComponent(Component parent) {
@@ -64,7 +63,8 @@ public abstract class SceneComponent implements Component {
      */
     @Override
     public <T extends Property> T getProperty(String name) {
-        if (!hasProperty(name)) throw new PropertyNotPresentException(name);
+        if (!hasProperty(name))
+            throw new PropertyNotPresentException(name);
         else return (T) properties.get(name);
     }
 

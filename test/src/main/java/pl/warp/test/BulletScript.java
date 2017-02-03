@@ -57,7 +57,7 @@ public class BulletScript extends GameScript<GameComponent> {
     protected void update(int delta) {
         life -= delta;
         if (life < 0)
-            getOwner().destroy();
+            if(getOwner().hasParent()) getOwner().destroy(); // We are not mean, we won't kill orphans. Nobility quickfix.
     }
 
     private synchronized void onCollision(CollisionEvent event) {
