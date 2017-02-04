@@ -408,16 +408,31 @@ public class TestSceneLoader implements GameSceneLoader {
                 TransformProperty lightSourceTransform = new TransformProperty();
                 lightSourceTransform.move(new Vector3f(-30f, 0f, 0f));
                 light.addProperty(lightSourceTransform);
-                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00005f, 0), 0, 0);
                 ParticleStage[] stages = {
-                        new ParticleStage(2.0f, new Vector4f(2.0f, 0.0f, 0.0f, 0.4f)),
-                        new ParticleStage(2.0f, new Vector4f(2.0f, 1.0f, 0.1f, 0.3f)),
-                        new ParticleStage(2.0f, new Vector4f(2.0f, 2.0f, 0.1f, 0.3f)),
-                        new ParticleStage(3.0f, new Vector4f(1.0f, 1.0f, 0.8f, 0.5f)),
-                        new ParticleStage(5.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+                        new ParticleStage(1.5f, new Vector4f(3.0f, 0.0f, 0.0f, 0.4f)),
+                        new ParticleStage(1.5f, new Vector4f(2.0f, 2.0f, 0.1f, 0.0f)),
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 2500, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.01f, 1000, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
+
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(-30f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00003f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+                        new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+                        new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.2f)),
+                        new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 2500, 500, true, true, stages);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
             }
