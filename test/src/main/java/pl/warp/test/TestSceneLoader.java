@@ -347,6 +347,57 @@ public class TestSceneLoader implements GameSceneLoader {
             }
 
 
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(15f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 1500, 500, true, true,
+                        new Vector4f(1.5f, 0.5f, 0.5f, 2.0f), new Vector4f(0.5f, 2.0f, 0.5f, 0.0f), 0.4f);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
+
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(-30f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 2500, 500, true, true,
+                        new Vector4f(1.5f, 0.5f, 0.5f, 0.2f), new Vector4f(0.5f, 0.5f, 0.5f, 0.0f), 4.0f);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
+
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(-30f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 1500, 500, true, true,
+                        new Vector4f(2.0f, 0.0f, 0.0f, 1.0f), new Vector4f(1.5f, 1.5f, 0.5f, 0.0f), 1.0f);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
+
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(-50f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 2500, 500, true, true,
+                        new Vector4f(0.5f, 0.5f, 0.5f, 0.2f), new Vector4f(0.5f, 0.5f, 0.5f, 0.0f), 4.0f);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
         });
     }
 
@@ -361,7 +412,7 @@ public class TestSceneLoader implements GameSceneLoader {
         ArrayList<Component> team2 = new ArrayList<>();
         //team1.add(controllableGoat);
         controllableGoat.addProperty(new DroneProperty(5, 1, team2));
-        int nOfGoats = 200;
+        int nOfGoats = 50;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
