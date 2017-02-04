@@ -39,7 +39,8 @@ import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
 import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingTwoColorDotParticleFactory;
+import pl.warp.engine.graphics.particles.dot.ParticleStage;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -197,6 +198,7 @@ public class TestSceneLoader implements GameSceneLoader {
     @Override
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
+
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
@@ -316,16 +318,49 @@ public class TestSceneLoader implements GameSceneLoader {
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
-/*            Component frigate = new GameSceneComponent(scene);
+            GameComponent frigate = new GameSceneComponent(scene);
             frigate.addProperty(new NameProperty("Frigate"));
             frigate.addProperty(new GraphicsMeshProperty(friageMesh));
             frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
-            frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f, 15.1f, 11.9f));
+   /*         frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f, 15.1f, 11.9f));*/
             TransformProperty transformProperty = new TransformProperty();
             transformProperty.move(new Vector3f(100, 0, 0));
             transformProperty.rotateLocalY((float) -(Math.PI / 2));
             transformProperty.scale(new Vector3f(3));
-            frigate.addProperty(transformProperty);*/
+            frigate.addProperty(transformProperty);
+
+            {
+                Component light = new GameSceneComponent(frigate);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(18f, 0.4f, 4.4f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0.00001f, 0.0f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.002f, 800, 100, true, true, stages);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
+
+            {
+                Component light = new GameSceneComponent(frigate);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(18f, 0.4f, -4.4f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0.00001f, 0.0f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.002f, 800, 100, true, true, stages);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+                LensFlare flare = new LensFlare(lensTexture, flares);
+                new GraphicsLensFlareProperty(flare);
+            }
+
             generateGOATS(scene);
 
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
@@ -339,8 +374,11 @@ public class TestSceneLoader implements GameSceneLoader {
                 TransformProperty lightSourceTransform = new TransformProperty();
                 light.addProperty(lightSourceTransform);
                 ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
-                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 1500, 500, true, true,
-                        new Vector4f(0.5f, 1.5f, 0.5f, 2.0f), new Vector4f(0.5f, 0.5f, 2.0f, 0.0f), 0.85f);
+                ParticleStage[] stages = {
+                        new ParticleStage(0.4f, new Vector4f(0.5f, 1.5f, 0.5f, 2.0f)),
+                        new ParticleStage(0.85f, new Vector4f(0.5f, 0.5f, 2.0f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 1500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -353,12 +391,17 @@ public class TestSceneLoader implements GameSceneLoader {
                 lightSourceTransform.move(new Vector3f(15f, 0f, 0f));
                 light.addProperty(lightSourceTransform);
                 ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
-                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 1500, 500, true, true,
-                        new Vector4f(1.5f, 0.5f, 0.5f, 2.0f), new Vector4f(0.5f, 2.0f, 0.5f, 0.0f), 0.4f);
+                ParticleStage[] stages = {
+                        new ParticleStage(0.4f, new Vector4f(1.5f, 0.5f, 0.5f, 2.0f)),
+                        new ParticleStage(0.4f, new Vector4f(0.5f, 0.5f, 2.0f, 2.0f)),
+                        new ParticleStage(0.4f, new Vector4f(0.5f, 2.0f, 0.5f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 1500, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
             }
+
 
             {
                 Component light = new GameSceneComponent(scene);
@@ -366,22 +409,15 @@ public class TestSceneLoader implements GameSceneLoader {
                 lightSourceTransform.move(new Vector3f(-30f, 0f, 0f));
                 light.addProperty(lightSourceTransform);
                 ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
-                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 2500, 500, true, true,
-                        new Vector4f(1.5f, 0.5f, 0.5f, 0.2f), new Vector4f(0.5f, 0.5f, 0.5f, 0.0f), 4.0f);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
-            }
-
-            {
-                Component light = new GameSceneComponent(scene);
-                TransformProperty lightSourceTransform = new TransformProperty();
-                lightSourceTransform.move(new Vector3f(-30f, 0f, 0f));
-                light.addProperty(lightSourceTransform);
-                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
-                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 1500, 500, true, true,
-                        new Vector4f(2.0f, 0.0f, 0.0f, 1.0f), new Vector4f(1.5f, 1.5f, 0.5f, 0.0f), 1.0f);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
+                ParticleStage[] stages = {
+                        new ParticleStage(2.0f, new Vector4f(2.0f, 0.0f, 0.0f, 0.4f)),
+                        new ParticleStage(2.0f, new Vector4f(2.0f, 1.0f, 0.1f, 0.3f)),
+                        new ParticleStage(2.0f, new Vector4f(2.0f, 2.0f, 0.1f, 0.3f)),
+                        new ParticleStage(3.0f, new Vector4f(1.0f, 1.0f, 0.8f, 0.5f)),
+                        new ParticleStage(5.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 2500, 100, true, true, stages);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
             }
@@ -391,13 +427,18 @@ public class TestSceneLoader implements GameSceneLoader {
                 TransformProperty lightSourceTransform = new TransformProperty();
                 lightSourceTransform.move(new Vector3f(-50f, 0f, 0f));
                 light.addProperty(lightSourceTransform);
-                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
-                ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.006f, 2500, 500, true, true,
-                        new Vector4f(0.5f, 0.5f, 0.5f, 0.2f), new Vector4f(0.5f, 0.5f, 0.5f, 0.0f), 4.0f);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00000f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.2f)),
+                        new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 2500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
             }
+
+
         });
     }
 

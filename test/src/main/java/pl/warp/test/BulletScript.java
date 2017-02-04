@@ -15,7 +15,8 @@ import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
 import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingTwoColorDotParticleFactory;
+import pl.warp.engine.graphics.particles.dot.ParticleStage;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
@@ -111,8 +112,11 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private void kaboom(Component component) {
         ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-        ParticleFactory<DotParticle> factory = new RandomSpreadingTwoColorDotParticleFactory(0.04f, 500, 0, true, true,
-                new Vector4f(2.5f, 0.5f, 1.5f, 2.0f), new Vector4f(1.0f, 0.5f, 1.0f, 0.0f), 0.8f);
+        ParticleStage[] stages = {
+                new ParticleStage(0.8f, new Vector4f(2.5f, 0.5f, 1.5f, 2.0f)),
+                new ParticleStage(0.8f, new Vector4f(1.0f, 0.5f, 1.0f, 0.0f))
+        };
+        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.04f, 500, 0, true, true, stages);
         DotParticleSystem system = new DotParticleSystem(animator, factory, 1000);
         component.addProperty(new GraphicsParticleEmitterProperty(system));
         executorService.schedule(() -> system.setEmit(false), 300, TimeUnit.MILLISECONDS);

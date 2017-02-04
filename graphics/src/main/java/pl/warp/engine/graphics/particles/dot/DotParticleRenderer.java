@@ -112,9 +112,10 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         int particleCounter = 1;
         for (DotParticle particle : particles) {
             if (particleCounter > MAX_PARTICLES_NUMBER) break;
+            ParticleStage stage = particle.getStage();
             putPosition(particle.getPosition());
-            putColor(particle.getColor());
-            putGradient(particle.getGradient());
+            putColor(stage.getColor());
+            putGradient(stage.getGradient());
             putScale(particle.getScale());
             particleCounter++;
         }

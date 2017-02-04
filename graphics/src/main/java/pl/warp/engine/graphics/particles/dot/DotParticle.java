@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.particles.dot;
 
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import pl.warp.engine.graphics.particles.Particle;
 
 /**
@@ -14,7 +13,5 @@ public abstract class DotParticle extends Particle {
     }
 
 
-    abstract Vector4f getColor();
-
-    abstract float getGradient();
+    abstract ParticleStage getStage();
 }
