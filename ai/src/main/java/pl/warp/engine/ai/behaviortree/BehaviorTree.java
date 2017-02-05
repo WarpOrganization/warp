@@ -8,13 +8,13 @@ import java.util.HashMap;
  * @author Hubertus
  *         Created 03.01.2017
  */
-public class BehaviourTree {
+public class BehaviorTree {
     private Node baseNode;
     private HashMap<String, Object> data = new HashMap<>();
     private Ticker ticker = new Ticker(this, data);
     private Component owner;
 
-    public BehaviourTree(Node baseNode, Component owner) {
+    public BehaviorTree(Node baseNode, Component owner) {
         this.baseNode = baseNode;
     }
 
@@ -28,4 +28,7 @@ public class BehaviourTree {
         baseNode.tick(ticker, delta);
     }
 
+    public Component getOwner() {
+        return owner;
+    }
 }

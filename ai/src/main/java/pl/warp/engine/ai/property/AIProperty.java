@@ -1,34 +1,35 @@
 package pl.warp.engine.ai.property;
 
-import pl.warp.engine.ai.behaviortree.BehaviourTree;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.ai.behaviortree.BehaviorTree;
+import pl.warp.engine.core.scene.observable.ObservableProperty;
 
 /**
  * @author Hubertus
  *         Created 10.01.2017
  */
-public class AIProperty extends Property {
+public class AIProperty extends ObservableProperty {
 
     public static final String AI_POPERTY_NAME = "aiProperty";
 
-    private BehaviourTree behaviourTree;
+    private BehaviorTree behaviorTree;
 
-    public AIProperty(BehaviourTree behaviourTree) {
+    public AIProperty(BehaviorTree behaviorTree) {
         super(AI_POPERTY_NAME);
-        this.behaviourTree = behaviourTree;
+        this.behaviorTree = behaviorTree;
     }
 
+    //TODO remove
     @Override
     public void enable() {
         super.enable();
-        behaviourTree.init(getOwner());
+        behaviorTree.init(getOwner());
     }
 
-    public void setBehaviourTree(BehaviourTree behaviourTree) {
-        this.behaviourTree = behaviourTree;
+    public void setBehaviorTree(BehaviorTree behaviorTree) {
+        this.behaviorTree = behaviorTree;
     }
 
-    public BehaviourTree getBehaviourTree() {
-        return behaviourTree;
+    public BehaviorTree getBehaviorTree() {
+        return behaviorTree;
     }
 }

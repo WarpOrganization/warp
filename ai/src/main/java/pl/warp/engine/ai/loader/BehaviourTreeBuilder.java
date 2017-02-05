@@ -1,6 +1,6 @@
 package pl.warp.engine.ai.loader;
 
-import pl.warp.engine.ai.behaviortree.BehaviourTree;
+import pl.warp.engine.ai.behaviortree.BehaviorTree;
 import pl.warp.engine.core.scene.Component;
 
 /**
@@ -12,11 +12,11 @@ public class BehaviourTreeBuilder {
     private NodeBuilder baseNode;
 
 
-    public BehaviourTree build(Component owner) {
-        BehaviourTree tree = null;
+    public BehaviorTree build(Component owner) {
+        BehaviorTree tree = null;
 
         try {
-            tree = new BehaviourTree(baseNode.build(), owner);
+            tree = new BehaviorTree(baseNode.build(), owner);
         } catch (Exception e) {
             e.printStackTrace();
         }

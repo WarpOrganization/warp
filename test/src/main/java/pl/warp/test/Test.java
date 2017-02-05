@@ -2,6 +2,7 @@ package pl.warp.test;
 
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
+import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.audio.playlist.PlayList;
@@ -89,6 +90,7 @@ public class Test {
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
         contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
+        contextBuilder.setAIManager(new AIManager());
         physicsThread.scheduleTask(new MovementTask(scene));
         physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
 
@@ -110,7 +112,7 @@ public class Test {
 
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
 
-        aiThread.scheduleTask(new AITask(scene));
+        aiThread.scheduleTask(new AITask(context.getAIManager(), scene));
         aiThread.start();
         new Script(scene) {
             @Override

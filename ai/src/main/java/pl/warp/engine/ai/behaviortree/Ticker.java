@@ -8,13 +8,13 @@ import java.util.HashMap;
  */
 public class Ticker {
 
-    private BehaviourTree tree;
+    private BehaviorTree tree;
     private HashMap<String, Object> data;
     private int currentTick = Integer.MIN_VALUE;
     private int delta;
 
-    public Ticker(BehaviourTree behaviourTree, HashMap<String, Object> data) {
-        this.tree = behaviourTree;
+    public Ticker(BehaviorTree behaviorTree, HashMap<String, Object> data) {
+        this.tree = behaviorTree;
         this.data = data;
     }
 

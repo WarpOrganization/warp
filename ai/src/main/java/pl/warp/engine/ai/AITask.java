@@ -10,15 +10,18 @@ import pl.warp.engine.core.scene.Component;
  */
 public class AITask extends EngineTask {
 
-    private Component root;
+    private AIManager manager;
+    private Component scene;
 
-    public AITask(Component root){
-        this.root = root;
+
+    public AITask(AIManager manager, Component scene) {
+        this.manager = manager;
+        this.scene = scene;
     }
 
     @Override
     protected void onInit() {
-
+        manager.init(scene);
     }
 
     @Override
@@ -28,15 +31,13 @@ public class AITask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        root.forEachChildren(child ->{
-               if(hasAi(child)){
-                   AIProperty property = child.getProperty(AIProperty.AI_POPERTY_NAME);
-                   property.getBehaviourTree().execute(delta);
-               }
-           });
+        manager.update();
+        manager.getProperties().forEach((p) -> {
+            if(p.isEnabled()) p.getBehaviorTree().execute(delta);
+        });
     }
 
-    private boolean hasAi(Component c){
+    private boolean hasAi(Component c) {
         return c.hasEnabledProperty(AIProperty.AI_POPERTY_NAME);
     }
 }

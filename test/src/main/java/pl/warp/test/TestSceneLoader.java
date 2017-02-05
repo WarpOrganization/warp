@@ -481,7 +481,7 @@ public class TestSceneLoader implements GameSceneLoader {
             goat.addProperty(transformProperty);
             SequenceNode basenode = new SequenceNode();
             //basenode.addChildren(new SpinLeaf());
-            //BehaviourTree behaviourTree = builder.build(goat);
+            //BehaviorTree behaviourTree = builder.build(goat);
             if (i < nOfGoats / 2) {
                 Material material = new Material(goatTexture);
                 material.setShininess(20f);
