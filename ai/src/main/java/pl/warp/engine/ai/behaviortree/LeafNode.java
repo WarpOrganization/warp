@@ -7,8 +7,13 @@ package pl.warp.engine.ai.behaviortree;
 public abstract class LeafNode extends Node {
 
     @Override
-    public void addChild(Node child){
+    public void addChild(Node child) {
 
+    }
+
+    @Override
+    public void init(Ticker ticker) {
+        onInit(ticker);
     }
 
     public abstract int tick(Ticker ticker, int delta);

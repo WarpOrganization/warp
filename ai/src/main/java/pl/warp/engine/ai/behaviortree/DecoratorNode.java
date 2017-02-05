@@ -8,8 +8,14 @@ public abstract class DecoratorNode extends Node {
     protected Node child;
 
     @Override
-    public void addChild(Node child){
+    public void addChild(Node child) {
         this.child = child;
+    }
+
+    @Override
+    public void init(Ticker ticker) {
+        onInit(ticker);
+        if (child != null) child.init(ticker);
     }
 
     public Node getChild() {

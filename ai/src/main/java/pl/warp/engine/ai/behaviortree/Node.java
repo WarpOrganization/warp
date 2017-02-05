@@ -10,28 +10,39 @@ public abstract class Node {
     public static final int FAILURE = 2;
     public static final int RUNNING = 3;
 
-    public static final String OWNER_KEY = "owner";
     private boolean isOpen = false;
     private int tickOpened = 0;
 
-    public void open(int tick) {
+    public void enter(Ticker ticker){
+        if(tickOpened == ticker.getCurrentTick() - 1 && isOpen){
+            onReEnter(ticker);
+        }else {
+            open(ticker);
+        }
+    }
+
+    private void open(Ticker ticker) {
         isOpen = true;
-        tickOpened = tick;
+        tickOpened = ticker.getCurrentTick();
+        onOpen(ticker);
     }
 
-    public void close() {
+    public void close(Ticker ticker) {
         isOpen = false;
-    }
-
-    public boolean isOpen(int tick) {
-        return tickOpened == tick - 1 && isOpen;
+        onClose(ticker);
     }
 
     abstract int tick(Ticker ticker, int delta);
 
-    public abstract void onOpen(Ticker ticker);
+    protected abstract void onOpen(Ticker ticker);
 
-    public abstract void onEnter(Ticker ticker);
+    protected abstract void onReEnter(Ticker ticker);
 
     public abstract void addChild(Node node);
+
+    protected abstract void init(Ticker ticker);
+
+    protected abstract void onInit(Ticker ticker);
+
+    protected abstract void onClose(Ticker ticker);
 }

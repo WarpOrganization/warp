@@ -33,7 +33,10 @@ public class AITask extends EngineTask {
     public void update(int delta) {
         manager.update();
         manager.getProperties().forEach((p) -> {
-            if(p.isEnabled()) p.getBehaviorTree().execute(delta);
+            if (p.isEnabled()) {
+                if(!p.getBehaviorTree().isInitialized()) p.getBehaviorTree().init();
+                p.getBehaviorTree().execute(delta);
+            }
         });
     }
 

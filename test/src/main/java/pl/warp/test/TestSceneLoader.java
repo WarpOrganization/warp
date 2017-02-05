@@ -64,6 +64,7 @@ import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.scene.GameSceneLoader;
+import pl.warp.test.ai.DroneMemoryProperty;
 import pl.warp.test.program.gas.GasPlanetProgram;
 import pl.warp.test.program.ring.PlanetaryRingProgram;
 import pl.warp.test.program.ring.PlanetaryRingProperty;
@@ -503,6 +504,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 goat.addProperty(new DroneProperty(5, 1, team1));
                 team2.add(goat);
             }
+            goat.addProperty(new DroneMemoryProperty());
             goat.addProperty(new AIProperty(builder.build(goat)));
             new GunScript(goat);
         }

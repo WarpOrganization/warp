@@ -1,39 +1,26 @@
 package pl.warp.engine.ai.behaviortree;
 
-import java.util.HashMap;
+import pl.warp.engine.core.scene.Component;
 
 /**
  * @author Hubertus
  *         Created 03.01.2017
  */
-public class Ticker {
+public class Ticker<T extends Component> {
 
-    private BehaviorTree tree;
-    private HashMap<String, Object> data;
+    private BehaviorTree<T> tree;
     private int currentTick = Integer.MIN_VALUE;
     private int delta;
 
-    public Ticker(BehaviorTree behaviorTree, HashMap<String, Object> data) {
+    public Ticker(BehaviorTree<T> behaviorTree) {
         this.tree = behaviorTree;
-        this.data = data;
     }
 
     public int tickNode(Node node) {
-        if (!node.isOpen(currentTick)) {
-            openNode(node);
-        }
-        return enterNode(node);
-    }
-
-    private void openNode(Node node) {
-        node.onOpen(this);
-    }
-
-    private int enterNode(Node node) {
-        node.onEnter(this);
+        node.enter(this);
         int status = node.tick(this, delta);
         if (status != Node.RUNNING) {
-            node.close();
+            node.close(this);
         }
         return status;
     }
@@ -43,11 +30,11 @@ public class Ticker {
         currentTick++;
     }
 
-    public Object getData(String key){
-        return data.get(key);
+    public int getCurrentTick() {
+        return currentTick;
     }
 
-    public void setData(Object value, String key){
-        data.put(key, value);
+    public T getOwner() {
+        return tree.getOwner();
     }
 }

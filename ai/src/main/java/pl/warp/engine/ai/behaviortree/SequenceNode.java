@@ -24,7 +24,17 @@ public class SequenceNode extends CompositeNode{
     }
 
     @Override
-    public void onEnter(Ticker ticker) {
+    public void onReEnter(Ticker ticker) {
+
+    }
+
+    @Override
+    protected void onInit(Ticker ticker) {
+
+    }
+
+    @Override
+    protected void onClose(Ticker ticker) {
 
     }
 

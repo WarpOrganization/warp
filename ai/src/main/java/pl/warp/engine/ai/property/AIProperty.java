@@ -18,13 +18,6 @@ public class AIProperty extends ObservableProperty {
         this.behaviorTree = behaviorTree;
     }
 
-    //TODO remove
-    @Override
-    public void enable() {
-        super.enable();
-        behaviorTree.init(getOwner());
-    }
-
     public void setBehaviorTree(BehaviorTree behaviorTree) {
         this.behaviorTree = behaviorTree;
     }

@@ -2,25 +2,24 @@ package pl.warp.engine.ai.behaviortree;
 
 import pl.warp.engine.core.scene.Component;
 
-import java.util.HashMap;
-
 /**
  * @author Hubertus
  *         Created 03.01.2017
  */
-public class BehaviorTree {
+public class BehaviorTree<T extends Component> {
     private Node baseNode;
-    private HashMap<String, Object> data = new HashMap<>();
-    private Ticker ticker = new Ticker(this, data);
-    private Component owner;
+    private Ticker<T> ticker = new Ticker<>(this);
+    private T owner;
+    private boolean initialized;
 
-    public BehaviorTree(Node baseNode, Component owner) {
+    public BehaviorTree(Node baseNode, T owner) {
         this.baseNode = baseNode;
+        this.owner = owner;
     }
 
-    public void init(Component owner){
-        this.owner = owner;
-        data.put("owner", owner);
+    public void init() {
+        initialized = true;
+        baseNode.init(ticker);
     }
 
     public void execute(int delta) {
@@ -28,7 +27,11 @@ public class BehaviorTree {
         baseNode.tick(ticker, delta);
     }
 
-    public Component getOwner() {
+    public T getOwner() {
         return owner;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 }
