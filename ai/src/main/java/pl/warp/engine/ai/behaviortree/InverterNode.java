@@ -4,7 +4,7 @@ package pl.warp.engine.ai.behaviortree;
  * @author Hubertus
  *         Created 24.01.17
  */
-public class Inverter extends DecoratorNode {
+public class InverterNode extends DecoratorNode {
 
     @Override
     int tick(Ticker ticker, int delta) {

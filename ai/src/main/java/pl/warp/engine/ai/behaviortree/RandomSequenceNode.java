@@ -1,30 +1,31 @@
 package pl.warp.engine.ai.behaviortree;
 
+import java.util.Collections;
+
 /**
  * @author Hubertus
- *         Created 10.01.2017
+ *         Created 05.02.17
  */
-public class SequenceNode extends CompositeNode {
+public class RandomSequenceNode extends CompositeNode {
 
     @Override
     int tick(Ticker ticker, int delta) {
+        Collections.shuffle(children);
         for (Node child : children) {
             int status = ticker.tickNode(child);
-
-            if (status != Node.SUCCESS) {
+            if (status != Node.SUCCESS)
                 return status;
-            }
         }
         return Node.SUCCESS;
     }
 
     @Override
-    public void onOpen(Ticker ticker) {
+    protected void onOpen(Ticker ticker) {
 
     }
 
     @Override
-    public void onReEnter(Ticker ticker) {
+    protected void onReEnter(Ticker ticker) {
 
     }
 
@@ -37,6 +38,4 @@ public class SequenceNode extends CompositeNode {
     protected void onClose(Ticker ticker) {
 
     }
-
-
 }

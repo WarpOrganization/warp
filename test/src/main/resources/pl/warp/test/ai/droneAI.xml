@@ -4,7 +4,7 @@
         <node path="pl.warp.test.ai.HasTargetLeaf"/>
         <node path="pl.warp.test.ai.FindTargetLeaf"/>
     </node>
-    <node path="pl.warp.engine.ai.behaviortree.Inverter">
+    <node path="pl.warp.engine.ai.behaviortree.InverterNode">
         <node path="pl.warp.engine.ai.behaviortree.SequenceNode">
             <node path="pl.warp.test.ai.AdjustSteeringLeaf"/>
             <node path="pl.warp.test.ai.ShootLeaf"/>
