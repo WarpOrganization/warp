@@ -443,7 +443,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 TransformProperty lightSourceTransform = new TransformProperty();
                 lightSourceTransform.move(new Vector3f(-50f, 0f, 0f));
                 light.addProperty(lightSourceTransform);
-                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00000f, 0), 0, 0);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00003f, 0), 0, 0);
                 ParticleStage[] stages = {
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.2f)),
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),

@@ -1,6 +1,7 @@
 package pl.warp.ide.engine;
 
 import javafx.scene.canvas.Canvas;
+import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
@@ -80,7 +81,7 @@ public class IDEEngineTaskManager {
         createScriptThread(input, graphics.getThread());
         createPhysicsThread(scene, graphics.getThread());
         createAudioThread();
-        createAIThread(scene);
+        createAIThread();
         createInputTask();
         initContext();
         graphics.create();
@@ -117,9 +118,10 @@ public class IDEEngineTaskManager {
         });
     }
 
-    private void createAIThread(Component root) {
+    private void createAIThread() {
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        aiThread.scheduleOnce(() -> aiThread.scheduleTask(new AITask(root)));
+        AIManager aiManager = new AIManager();
+        aiThread.scheduleOnce(() -> aiThread.scheduleTask(new AITask(aiManager, loadedScene)));
         aiThread.start();
     }
 

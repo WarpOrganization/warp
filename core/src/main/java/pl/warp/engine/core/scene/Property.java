@@ -20,10 +20,12 @@ public abstract class Property<T extends Component> {
     }
 
 
-    protected void setOwner(T owner){
-        if(this.owner != null) throw new IllegalStateException("Component can't have two owners.");
-        else this.owner = owner;
-        enable();
+    protected void setOwner(T owner) {
+        if (this.owner != null) throw new IllegalStateException("Component can't have two owners.");
+        else {
+            this.owner = owner;
+            enable();
+        }
     }
 
     protected T getOwner() {
@@ -44,11 +46,11 @@ public abstract class Property<T extends Component> {
 
     public void enable() {
         this.enabled = true;
-        if(triggerStateEvents) owner.triggerEvent(new PropertyEnabledEvent<>(this));
+        if (triggerStateEvents) owner.triggerEvent(new PropertyEnabledEvent<>(this));
     }
 
     public void disable() {
         this.enabled = false;
-        if(triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent<>(this));
+        if (triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent<>(this));
     }
 }

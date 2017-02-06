@@ -12,19 +12,20 @@ import java.util.ArrayList;
 public class NodeBuilder {
     private String path;
     private ArrayList<NodeBuilder> children = new ArrayList<>();
-    public Node build()throws Exception{
+
+    public Node build() throws Exception {
         Class<?> clazz = null;
-            clazz = Class.forName(path);
-            Constructor<?> ctor = clazz.getConstructor();
-            Node node = (Node) ctor.newInstance();
-            children.forEach(child -> {
-                try {
-                    node.addChild(child.build());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            return node;
+        clazz = Class.forName(path);
+        Constructor<?> ctor = clazz.getConstructor();
+        Node node = (Node) ctor.newInstance();
+        children.forEach(child -> {
+            try {
+                node.addChild(child.build());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return node;
     }
 
     public void setPath(String path) {
