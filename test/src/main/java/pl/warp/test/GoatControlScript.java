@@ -8,6 +8,7 @@ import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.script.GameScript;
+import pl.warp.game.script.OwnerProperty;
 
 import java.awt.event.KeyEvent;
 
@@ -25,8 +26,13 @@ public class GoatControlScript extends GameScript<GameComponent> {
 
     private float movementSpeed;
     private float rotationSpeed;
+
+    @OwnerProperty(name = PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)
     private PhysicalBodyProperty bodyProperty;
+
+    @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
     private GunProperty gunProperty;
+
     private final float brakingForce;
     private final float arrowKeysRottationSpeed;
 
@@ -42,10 +48,10 @@ public class GoatControlScript extends GameScript<GameComponent> {
         this.arrowKeysRottationSpeed = arrowKeysRotationSpeed;
     }
 
+
     @Override
-    public void init() {
-        this.bodyProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-        this.gunProperty = getOwner().getProperty(GunProperty.GUN_PROPERTY_NAME);
+    protected void init() {
+
     }
 
     @Override

@@ -45,4 +45,8 @@ public abstract class GameScript<T extends GameComponent> extends Script<T> {
     void setScheduler(UpdateScheduler scheduler) {
         this.scheduler = scheduler;
     }
+
+    protected void log(String info){
+        System.out.println(info);
+    }
 }

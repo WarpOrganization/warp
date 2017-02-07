@@ -1,15 +1,14 @@
 package pl.warp.game.script;
 
 import org.apache.log4j.Logger;
-import pl.warp.engine.core.scene.Event;
-import pl.warp.engine.core.scene.Script;
-import pl.warp.engine.core.scene.SimpleListener;
+import pl.warp.engine.core.scene.*;
 import pl.warp.engine.core.scene.script.ScriptInitializationException;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.game.script.updatescheduler.*;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -23,13 +22,14 @@ public class GameScriptManager extends ScriptManager {
 
     @Override
     public void initializeScript(Script script) {
-        super.initializeScript(script);
         try {
             initScheduler((GameScript) script);
             loadHandlers((GameScript) script);
+            loadProperties((GameScript) script);
         } catch (ClassCastException c) {
             LOGGER.warn("Script " + script.getClass().getSimpleName() + " is not a game script. It may cause it not to work properly.");
         }
+        super.initializeScript(script);
     }
 
     private void initScheduler(GameScript script) {
@@ -96,4 +96,35 @@ public class GameScriptManager extends ScriptManager {
             }
         });
     }
+
+    private void loadProperties(GameScript script) {
+        Class c = script.getClass();
+        Field[] declaredFields = c.getDeclaredFields();
+        for (Field field : declaredFields) {
+            if (field.getAnnotation(OwnerProperty.class) != null)
+                loadProperty(script, field);
+        }
+    }
+
+    private void loadProperty(GameScript script, Field field) {
+        OwnerProperty ownerProperty = field.getAnnotation(OwnerProperty.class);
+        Component owner = script.getOwner();
+        if (!owner.hasProperty(ownerProperty.name()))
+            throw new ScriptInitializationException(new IllegalStateException("Component has no property named " + ownerProperty.name() + "."));
+        else {
+            setField(script, field, ownerProperty);
+        }
+    }
+
+    private void setField(GameScript script, Field field, OwnerProperty ownerProperty) {
+        try {
+            field.setAccessible(true);
+            Property property = script.getOwner().getProperty(ownerProperty.name());
+            field.set(script, property);
+        } catch (Exception e) {
+            throw new ScriptInitializationException(e);
+        }
+    }
+
+
 }
