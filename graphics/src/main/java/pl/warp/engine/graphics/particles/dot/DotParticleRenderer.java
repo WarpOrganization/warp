@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.particles.dot;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
@@ -8,7 +9,6 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.shader.program.particle.dot.DotParticleProgram;
 
@@ -89,13 +89,13 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     }
 
     @Override
-    public void render(DotParticleSystem system, MatrixStack stack) {
+    public void render(DotParticleSystem system, Matrix4f matrix) {
         List<DotParticle> particles = system.getParticles();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         program.use();
-        program.useMatrixStack(stack);
+        program.useMatrix(matrix);
         GL30.glBindVertexArray(vao);
         updateVBOS(particles);
         GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);

@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.particles.textured;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -7,7 +8,6 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.shader.program.particle.textured.TexturedParticleProgram;
 
@@ -81,17 +81,18 @@ public class TexturedParticleRenderer implements ParticleRenderer<TexturedPartic
     }
 
     @Override
-    public void render(TexturedParticleSystem system, MatrixStack stack) {
+    public void render(TexturedParticleSystem system, Matrix4f matrix) {
         List<TexturedParticle> particles = system.getParticles();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         program.use();
-        program.useMatrixStack(stack);
+        program.useMatrix(matrix);
         program.useSpriteSheet(system.getSpriteSheet());
         GL30.glBindVertexArray(vao);
         updateVBOS(particles);
         GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDepthMask(true);
         GL30.glBindVertexArray(0);
     }
 

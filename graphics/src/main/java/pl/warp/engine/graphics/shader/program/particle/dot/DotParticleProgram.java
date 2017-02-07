@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.shader.program.particle.dot;
 
 import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
 
 /**
@@ -36,8 +35,8 @@ public class DotParticleProgram extends GeometryProgram {
         this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
     }
 
-    public void useMatrixStack(MatrixStack stack) {
-        this.modelMatrix = stack.topMatrix();
+    public void useMatrix(Matrix4f matrix) {
+        this.modelMatrix = matrix;
         setModelViewMatrix();
         if (cameraMatrix != null) setModelViewMatrix();
     }
