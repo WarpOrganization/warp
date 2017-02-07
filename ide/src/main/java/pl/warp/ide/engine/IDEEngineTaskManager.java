@@ -25,6 +25,7 @@ import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.script.CameraRayTester;
+import pl.warp.game.script.GameScriptManager;
 
 import java.io.File;
 
@@ -110,8 +111,10 @@ public class IDEEngineTaskManager {
     }
 
     private void createScriptThread(Input input, EngineThread graphicsThread) {
+        GameScriptManager scriptManager = new GameScriptManager();
+        contextBuilder.setScriptManager(scriptManager);
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptManager()));
+        scriptThread.scheduleTask(new ScriptTask(scriptManager));
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
             scriptThread.start(); //has to start after the window is created

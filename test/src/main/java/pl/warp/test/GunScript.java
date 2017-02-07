@@ -17,11 +17,13 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
+import pl.warp.game.script.updatescheduler.DelayScheduling;
 
 /**
  * @author Hubertus
  *         Created 7/12/16
  */
+@DelayScheduling(delayInMillis = 1000/57)
 public class GunScript extends GameScript<GameComponent> {
 
     private final Component owner;

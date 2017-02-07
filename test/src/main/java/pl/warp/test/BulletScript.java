@@ -5,7 +5,6 @@ import org.joml.Vector4f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.core.scene.SimpleListener;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
@@ -22,6 +21,7 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.script.EventHandler;
 import pl.warp.game.script.GameScript;
 
 import java.util.concurrent.Executors;
@@ -34,6 +34,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
  * @author Hubertus
  *         Created 7/12/16
  */
+
 public class BulletScript extends GameScript<GameComponent> {
 
     private int life;
@@ -51,16 +52,18 @@ public class BulletScript extends GameScript<GameComponent> {
 
     @Override
     protected void init() {
-        collisionListener = SimpleListener.createListener(getOwner(), CollisionEvent.COLLISION_EVENT_NAME, this::onCollision);
+
     }
 
     @Override
     protected void update(int delta) {
         life -= delta;
         if (life < 0)
-            if(getOwner().hasParent()) getOwner().destroy(); // We are not mean, we won't kill orphans. Nobility quickfix.
+            if (getOwner().hasParent())
+                getOwner().destroy(); // We are not mean, we won't kill orphans. Nobility quickfix.
     }
 
+    @EventHandler(eventName = CollisionEvent.COLLISION_EVENT_NAME)
     private synchronized void onCollision(CollisionEvent event) {
         Component component = event.getSecondComponent();
         if (component.hasEnabledProperty(Bulletproof.class)) return;

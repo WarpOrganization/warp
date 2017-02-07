@@ -32,7 +32,7 @@ public class ParticleSystemRenderer implements Renderer {
         logger.info("Initializing particle renderer...");
         dotParticleRenderer = new DotParticleRenderer();
         texturedParticleRenderer = new TexturedParticleRenderer();
-        logger.info("Particle renderer initialized...");
+        logger.info("Particle renderer initialized.");
     }
 
     private int delta;

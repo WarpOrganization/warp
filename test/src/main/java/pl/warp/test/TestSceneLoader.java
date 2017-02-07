@@ -18,7 +18,6 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.core.scene.PoolEventDispatcher;
 import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
@@ -144,7 +143,6 @@ public class TestSceneLoader implements GameSceneLoader {
         contextBuilder.setScene(scene);
         contextBuilder.setEventDispatcher(new PoolEventDispatcher());
 
-        contextBuilder.setScriptManager(new ScriptManager());
 
         controllableGoat = new GameSceneComponent(scene);
         controllableGoat.addProperty(new NameProperty("Player ship"));

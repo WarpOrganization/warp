@@ -12,7 +12,6 @@ public abstract class Listener<T extends Component, U extends Event> {
     protected Listener(T owner, EventFilterStrategy filterStrategy) {
         this.owner = owner;
         this.filterStrategy = filterStrategy;
-        this.owner.addListener(this);
     }
 
     protected Listener(T owner, String eventTypeName) {

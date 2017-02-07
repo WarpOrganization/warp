@@ -26,10 +26,14 @@ public class SimpleListener<T extends Component, U extends Event> extends Listen
     }
 
     public static <T extends Event> SimpleListener createListener(Component owner, String eventTypeName, Consumer<T> handler) {
-        return new SimpleListener(owner, eventTypeName, handler);
+        SimpleListener simpleListener = new SimpleListener(owner, eventTypeName, handler);
+        owner.addListener(simpleListener);
+        return simpleListener;
     }
 
     public static <T extends Event> SimpleListener createListener(Component owner, Class<T> eventClass, Consumer<T> handler) {
-        return new SimpleListener(owner, eventClass, handler);
+        SimpleListener simpleListener = new SimpleListener(owner, eventClass, handler);
+        owner.addListener(simpleListener);
+        return simpleListener;
     }
 }
