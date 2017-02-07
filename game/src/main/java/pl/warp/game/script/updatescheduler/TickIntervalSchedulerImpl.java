@@ -28,4 +28,13 @@ public class TickIntervalSchedulerImpl implements UpdateScheduler {
             return true;
         } else return false;
     }
+
+    public void setIntervalTicks(int intervalTicks) {
+        this.intervalTicks = intervalTicks;
+    }
+
+    public void setTicksUntilUpdate(int ticksUntilUpdate) {
+        this.ticksUntilUpdate = ticksUntilUpdate;
+    }
 }
+

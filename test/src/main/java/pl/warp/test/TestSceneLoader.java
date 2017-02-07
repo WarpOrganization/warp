@@ -361,8 +361,6 @@ public class TestSceneLoader implements GameSceneLoader {
                 new GraphicsLensFlareProperty(flare);
             }
 
-            generateGOATS(scene);
-
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
             {
@@ -453,6 +451,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 new GraphicsLensFlareProperty(flare);
             }
 
+            generateGOATS(scene);
 
         });
     }

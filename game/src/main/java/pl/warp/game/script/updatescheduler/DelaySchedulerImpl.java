@@ -26,4 +26,12 @@ public class DelaySchedulerImpl implements UpdateScheduler {
             return true;
         } else return false;
     }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+
+    public void setDelayUntilUpdate(int delayUntilUpdate) {
+        this.delayUntilUpdate = delayUntilUpdate;
+    }
 }

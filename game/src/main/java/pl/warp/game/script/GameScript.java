@@ -3,6 +3,8 @@ package pl.warp.game.script;
 import pl.warp.engine.core.scene.Script;
 import pl.warp.game.GameContext;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.script.updatescheduler.DelaySchedulerImpl;
+import pl.warp.game.script.updatescheduler.TickIntervalSchedulerImpl;
 import pl.warp.game.script.updatescheduler.UpdateScheduler;
 
 /**
@@ -42,9 +44,22 @@ public abstract class GameScript<T extends GameComponent> extends Script<T> {
 
     protected abstract void update(int delta);
 
-    void setScheduler(UpdateScheduler scheduler) {
+    protected void setScheduler(UpdateScheduler scheduler) {
         this.scheduler = scheduler;
     }
+
+    protected void scheduleByTickIntervals(int ticks){
+        if(scheduler instanceof TickIntervalSchedulerImpl)
+            ((TickIntervalSchedulerImpl) scheduler).setIntervalTicks(ticks);
+        else setScheduler(new TickIntervalSchedulerImpl(ticks));
+    }
+
+    protected void scheduleByDelay(int delayInMillis){
+        if(scheduler instanceof DelaySchedulerImpl)
+            ((DelaySchedulerImpl) scheduler).setDelay(delayInMillis);
+        else setScheduler(new DelaySchedulerImpl(delayInMillis));
+    }
+
 
     protected void log(String info){
         System.out.println(info);
