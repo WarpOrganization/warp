@@ -11,6 +11,7 @@ import pl.warp.game.script.updatescheduler.*;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * @author Jaca777
@@ -26,7 +27,7 @@ public class GameScriptManager extends ScriptManager {
         try {
             initScheduler((GameScript) script);
             loadHandlers((GameScript) script);
-        }catch (ClassCastException c) {
+        } catch (ClassCastException c) {
             LOGGER.warn("Script " + script.getClass().getSimpleName() + " is not a game script. It may cause it not to work properly.");
         }
     }
@@ -84,10 +85,12 @@ public class GameScriptManager extends ScriptManager {
         EventHandler handler = method.getAnnotation(EventHandler.class);
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         MethodHandle handle = lookup.unreflect(method);
-        MethodHandle scriptHandle = handle.bindTo(script);
+        if (!Modifier.isStatic(method.getModifiers()))
+            handle = handle.bindTo(script);
+        MethodHandle finalHandle = handle;
         SimpleListener.createListener(script.getOwner(), handler.eventName(), (Event e) -> {
             try {
-                scriptHandle.invoke(e);
+                finalHandle.invoke(e);
             } catch (Throwable throwable) {
                 throw new EventHandlerException(throwable);
             }
