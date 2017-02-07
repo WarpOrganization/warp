@@ -339,7 +339,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
                         new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.002f, 800, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -355,7 +355,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
                         new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.002f, 800, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -376,7 +376,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(0.4f, new Vector4f(0.5f, 1.5f, 0.5f, 2.0f)),
                         new ParticleStage(0.85f, new Vector4f(0.5f, 0.5f, 2.0f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 1500, 500, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -394,7 +394,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(0.4f, new Vector4f(0.5f, 0.5f, 2.0f, 2.0f)),
                         new ParticleStage(0.4f, new Vector4f(0.5f, 2.0f, 0.5f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 1500, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -411,7 +411,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(1.5f, new Vector4f(3.0f, 0.0f, 0.0f, 0.4f)),
                         new ParticleStage(1.5f, new Vector4f(2.0f, 2.0f, 0.1f, 0.0f)),
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.01f, 1000, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -429,7 +429,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.2f)),
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 2500, 500, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
@@ -445,13 +445,15 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.2f)),
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.006f, 2500, 500, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
                 new GraphicsLensFlareProperty(flare);
             }
 
             generateGOATS(scene);
+
+            allyEngineParticles(controllableGoat);
 
         });
     }
@@ -490,6 +492,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
                 goat.addProperty(new DroneProperty(5, 1, team2));
                 team1.add(goat);
+                allyEngineParticles(goat);
             } else {
                 transformProperty.move(new Vector3f(0f, 0f, -500f));
                 //transformProperty.getRotation().rotateY((float) Math.PI);
@@ -501,6 +504,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture2, audioManager));
                 goat.addProperty(new DroneProperty(5, 1, team1));
                 team2.add(goat);
+                enemyEngineParticles(goat);
             }
             goat.addProperty(new DroneMemoryProperty());
             goat.addProperty(new AIProperty(builder.build(goat)));
@@ -508,6 +512,29 @@ public class TestSceneLoader implements GameSceneLoader {
         }
     }
 
+    private void allyEngineParticles(GameComponent goat) {
+        engineParticles(goat, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f), new Vector4f(0.2f, 0.5f, 1.0f, 0.0f));
+    }
+
+    private void enemyEngineParticles(GameComponent goat) {
+        engineParticles(goat, new Vector4f(1.0f, 0.5f, 0.2f, 2.0f), new Vector4f(1.0f, 0.5f, 0.2f, 0.0f));
+    }
+
+    private void engineParticles(GameComponent goat, Vector4f color, Vector4f color1) {
+        Component light = new GameSceneComponent(goat);
+        TransformProperty lightSourceTransform = new TransformProperty();
+        lightSourceTransform.move(new Vector3f(0f, -0.35f, 3.5f));
+        light.addProperty(lightSourceTransform);
+        ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0.000f, 0.0f, 0.00001f), 0, 0);
+        ParticleStage[] stages = {
+                new ParticleStage(0.5f, color),
+                new ParticleStage(0.5f, color1)
+        };
+        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
+        light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+        LensFlare flare = new LensFlare(lensTexture, flares);
+        new GraphicsLensFlareProperty(flare);
+    }
 
     @Override
     public GameScene getScene() {

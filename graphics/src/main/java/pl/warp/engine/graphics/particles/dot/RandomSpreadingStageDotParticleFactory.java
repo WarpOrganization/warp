@@ -11,7 +11,7 @@ public class RandomSpreadingStageDotParticleFactory extends RandomSpreadingParti
 
     private ParticleStage[] stages;
 
-    public RandomSpreadingStageDotParticleFactory(float velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation /* <- U WOT? TODO REMOVE*/, boolean randomizeScaleScalar, ParticleStage[] stages) {
+    public RandomSpreadingStageDotParticleFactory(Vector3f velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation /* <- U WOT? TODO REMOVE*/, boolean randomizeScaleScalar, ParticleStage[] stages) {
         super(velocity, timeToLive, timeToLiveGradient, randomizeRotation, randomizeScaleScalar);
         this.stages = stages;
     }

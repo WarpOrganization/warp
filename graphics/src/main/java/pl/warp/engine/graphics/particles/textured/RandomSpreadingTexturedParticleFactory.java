@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.particles.RandomSpreadingParticleFactory;
 public class RandomSpreadingTexturedParticleFactory extends RandomSpreadingParticleFactory<TexturedParticle> {
 
 
-    public RandomSpreadingTexturedParticleFactory(float velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
+    public RandomSpreadingTexturedParticleFactory(Vector3f velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
         super(velocity, timeToLive, timeToLiveGradient, randomizeRotation, randomizeScaleScalar);
     }
 

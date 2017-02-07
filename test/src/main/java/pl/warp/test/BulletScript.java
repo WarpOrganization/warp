@@ -119,7 +119,7 @@ public class BulletScript extends GameScript<GameComponent> {
                 new ParticleStage(0.8f, new Vector4f(2.5f, 0.5f, 1.5f, 2.0f)),
                 new ParticleStage(0.8f, new Vector4f(1.0f, 0.5f, 1.0f, 0.0f))
         };
-        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(0.04f, 500, 0, true, true, stages);
+        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 0, true, true, stages);
         DotParticleSystem system = new DotParticleSystem(animator, factory, 1000);
         component.addProperty(new GraphicsParticleEmitterProperty(system));
         executorService.schedule(() -> system.setEmit(false), 300, TimeUnit.MILLISECONDS);
