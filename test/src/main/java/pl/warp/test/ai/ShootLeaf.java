@@ -1,9 +1,8 @@
 package pl.warp.test.ai;
 
-import pl.warp.engine.ai.behaviourtree.LeafNode;
-import pl.warp.engine.ai.behaviourtree.Node;
-import pl.warp.engine.ai.behaviourtree.Ticker;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.ai.behaviortree.LeafNode;
+import pl.warp.engine.ai.behaviortree.Node;
+import pl.warp.engine.ai.behaviortree.Ticker;
 import pl.warp.test.DroneProperty;
 import pl.warp.test.GunProperty;
 
@@ -18,12 +17,6 @@ public class ShootLeaf extends LeafNode {
 
     @Override
     public int tick(Ticker ticker, int delta) {
-        if (gunProperty == null)
-
-            gunProperty = ((Component) ticker.getData(OWNER_KEY)).getProperty(GunProperty.GUN_PROPERTY_NAME);
-        if (droneProperty == null)
-            droneProperty = ((Component) ticker.getData(OWNER_KEY)).getProperty(DroneProperty.DRONE_PROPERTY_NAME);
-
         if (droneProperty.getHitPoints() > 0) {
             gunProperty.setTriggered(true);
             return Node.SUCCESS;
@@ -38,7 +31,18 @@ public class ShootLeaf extends LeafNode {
     }
 
     @Override
-    public void onEnter(Ticker ticker) {
+    public void onReEnter(Ticker ticker) {
+
+    }
+
+    @Override
+    protected void onInit(Ticker ticker) {
+        droneProperty = ticker.getOwner().getProperty(DroneProperty.DRONE_PROPERTY_NAME);
+        gunProperty = ticker.getOwner().getProperty(GunProperty.GUN_PROPERTY_NAME);
+    }
+
+    @Override
+    protected void onClose(Ticker ticker) {
 
     }
 }

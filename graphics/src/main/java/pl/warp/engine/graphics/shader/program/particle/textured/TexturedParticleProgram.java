@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.shader.program.particle.textured;
 
 import org.joml.Matrix4f;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 
@@ -38,8 +37,8 @@ public class TexturedParticleProgram extends GeometryProgram {
         this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
     }
 
-    public void useMatrixStack(MatrixStack stack) {
-        this.modelMatrix = stack.topMatrix();
+    public void useMatrix(Matrix4f matrix) {
+        this.modelMatrix = matrix;
         setModelViewMatrix();
         if (cameraMatrix != null) setModelViewMatrix();
     }

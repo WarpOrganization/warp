@@ -1,10 +1,12 @@
 package pl.warp.ide.engine;
 
 import javafx.scene.canvas.Canvas;
+import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.*;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.PoolEventDispatcher;
 import pl.warp.engine.core.scene.Scene;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.input.InputTask;
@@ -23,6 +25,7 @@ import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.script.CameraRayTester;
+import pl.warp.game.script.GameScriptManager;
 
 import java.io.File;
 
@@ -79,7 +82,7 @@ public class IDEEngineTaskManager {
         createScriptThread(input, graphics.getThread());
         createPhysicsThread(scene, graphics.getThread());
         createAudioThread();
-        createAIThread(scene);
+        createAIThread();
         createInputTask();
         initContext();
         graphics.create();
@@ -91,6 +94,7 @@ public class IDEEngineTaskManager {
         contextBuilder.setCamera(camera);
         contextBuilder.setScene(loadedScene);
         contextBuilder.setRayTester(new CameraRayTester(contextBuilder.getGameContext(), rayTester));
+        contextBuilder.setEventDispatcher(new PoolEventDispatcher());
         contextBuilder.setInput(input);
     }
 
@@ -107,18 +111,20 @@ public class IDEEngineTaskManager {
     }
 
     private void createScriptThread(Input input, EngineThread graphicsThread) {
+        GameScriptManager scriptManager = new GameScriptManager();
+        contextBuilder.setScriptManager(scriptManager);
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptManager()));
+        scriptThread.scheduleTask(new ScriptTask(scriptManager));
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
-            //TODO start input task
             scriptThread.start(); //has to start after the window is created
         });
     }
 
-    private void createAIThread(Component root) {
+    private void createAIThread() {
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        aiThread.scheduleOnce(() -> aiThread.scheduleTask(new AITask(root)));
+        AIManager aiManager = new AIManager();
+        aiThread.scheduleOnce(() -> aiThread.scheduleTask(new AITask(aiManager, loadedScene)));
         aiThread.start();
     }
 

@@ -2,6 +2,7 @@ package pl.warp.test;
 
 import org.apache.log4j.Logger;
 import org.joml.Vector3f;
+import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.audio.playlist.PlayList;
@@ -10,8 +11,6 @@ import pl.warp.engine.core.EngineThread;
 import pl.warp.engine.core.RapidExecutionStrategy;
 import pl.warp.engine.core.SyncEngineThread;
 import pl.warp.engine.core.SyncTimer;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.Script;
 import pl.warp.engine.core.scene.script.ScriptTask;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
@@ -28,7 +27,10 @@ import pl.warp.engine.physics.RayTester;
 import pl.warp.game.GameContext;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
+import pl.warp.game.scene.GameScene;
 import pl.warp.game.script.CameraRayTester;
+import pl.warp.game.script.GameScript;
+import pl.warp.game.script.GameScriptManager;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -56,6 +58,7 @@ public class Test {
         GameContextBuilder contextBuilder = new GameContextBuilder();
         GameContext context = contextBuilder.getGameContext();
 
+        contextBuilder.setScriptManager(new GameScriptManager());
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer(config);
 
         AudioContext audioContext = new AudioContext();
@@ -66,7 +69,7 @@ public class Test {
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
         contextBuilder.setCamera(camera);
         //new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
-        Scene scene = loader.getScene();
+        GameScene scene = loader.getScene();
         GLFWInput input = new GLFWInput(scene);
         audioContext.setAudioListener(new AudioListener(cameraComponent.getParent()));
         Graphics graphics = new Graphics(context, onScreenRenderer, camera, config);
@@ -89,6 +92,7 @@ public class Test {
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         RayTester rayTester = new RayTester();
         contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
+        contextBuilder.setAIManager(new AIManager());
         physicsThread.scheduleTask(new MovementTask(scene));
         physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
 
@@ -110,16 +114,16 @@ public class Test {
 
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
 
-        aiThread.scheduleTask(new AITask(scene));
+        aiThread.scheduleTask(new AITask(context.getAIManager(), scene));
         aiThread.start();
-        new Script(scene) {
+        new GameScript(scene) {
             @Override
-            public void onInit() {
+            public void init() {
 
             }
 
             @Override
-            public void onUpdate(int delta) {
+            public void update(int delta) {
                 if (input.isKeyDown(KeyEvent.VK_ESCAPE)) {
                     scriptsThread.scheduleOnce(scriptsThread::interrupt);
                     graphicsThread.scheduleOnce(graphicsThread::interrupt);

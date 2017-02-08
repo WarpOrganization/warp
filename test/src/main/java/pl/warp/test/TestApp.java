@@ -34,7 +34,7 @@ public class TestApp extends Application {
         Slider bloomIters = new Slider(0, 6, 5);
         setupSlider(bloomIters);
 
-        Slider bloomLevel = new Slider(0.0, 2.0, 1.0);
+        Slider bloomLevel = new Slider(0.0, 2.0, 0.6);
         bloomLevel.setShowTickMarks(true);
         bloomLevel.setShowTickLabels(true);
         bloomLevel.setMajorTickUnit(1.0);

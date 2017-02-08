@@ -1,8 +1,8 @@
 package pl.warp.test.ai;
 
-import pl.warp.engine.ai.behaviourtree.LeafNode;
-import pl.warp.engine.ai.behaviourtree.Node;
-import pl.warp.engine.ai.behaviourtree.Ticker;
+import pl.warp.engine.ai.behaviortree.LeafNode;
+import pl.warp.engine.ai.behaviortree.Node;
+import pl.warp.engine.ai.behaviortree.Ticker;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.test.DroneProperty;
 
@@ -16,15 +16,15 @@ public class FindTargetLeaf extends LeafNode {
 
     private final String TARGET_LIST = "targetList";
 
+    private ArrayList<Component> targets;
+    private DroneMemoryProperty memoryProperty;
+
     @Override
     public int tick(Ticker ticker, int delta) {
-        Component owner = (Component) ticker.getData(OWNER_KEY);
-        DroneProperty property = owner.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
-        ArrayList<Component> targets = property.getTargetList();
         if (targets.size() == 0) return Node.FAILURE;
         Component target = targets.get((int) Math.floor(Math.random() * targets.size()));
-        ticker.setData(target, "target");
-        if(target.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) ticker.setData(target.getProperty(DroneProperty.DRONE_PROPERTY_NAME), "droneProperty");
+        memoryProperty.setTarget(target);
+        if(target.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) memoryProperty.setTargetDroneProperty(target.getProperty(DroneProperty.DRONE_PROPERTY_NAME));
         return Node.SUCCESS;
     }
 
@@ -34,7 +34,20 @@ public class FindTargetLeaf extends LeafNode {
     }
 
     @Override
-    public void onEnter(Ticker ticker) {
+    public void onReEnter(Ticker ticker) {
+
+    }
+
+    @Override
+    protected void onInit(Ticker ticker) {
+        Component owner = ticker.getOwner();
+        DroneProperty droneProperty = owner.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
+        targets = droneProperty.getTargetList();
+        memoryProperty = owner.getProperty(DroneMemoryProperty.DRONE_MEMORY_PROPERTY_NAME);
+    }
+
+    @Override
+    protected void onClose(Ticker ticker) {
 
     }
 }

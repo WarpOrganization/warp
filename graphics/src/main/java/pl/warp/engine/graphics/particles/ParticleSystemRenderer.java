@@ -1,19 +1,20 @@
 package pl.warp.engine.graphics.particles;
 
 import org.apache.log4j.Logger;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.particles.dot.DotParticleRenderer;
 import pl.warp.engine.graphics.particles.textured.TexturedParticleRenderer;
+import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
+import pl.warp.engine.graphics.texture.MultisampleTexture2D;
+
+import java.util.List;
 
 /**
  * @author Jaca777
  *         Created 2016-07-11 at 13
  */
-public class ParticleSystemRenderer implements Renderer {
+public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, MultisampleTexture2D> {
 
     private static final Logger logger = Logger.getLogger(LensFlareRenderer.class);
 
@@ -22,32 +23,38 @@ public class ParticleSystemRenderer implements Renderer {
     private Camera camera;
     private DotParticleRenderer dotParticleRenderer;
     private TexturedParticleRenderer texturedParticleRenderer;
+    private ParticleSystemStorage particleSystemStorage;
 
-    public ParticleSystemRenderer(Camera camera) {
+    private MultisampleTexture2D scene;
+
+    public ParticleSystemRenderer(Camera camera, ParticleSystemStorage particleSystemStorage) {
         this.camera = camera;
+        this.particleSystemStorage = particleSystemStorage;
     }
+
 
     @Override
     public void init() {
         logger.info("Initializing particle renderer...");
         dotParticleRenderer = new DotParticleRenderer();
         texturedParticleRenderer = new TexturedParticleRenderer();
-        logger.info("Particle renderer initialized...");
+        logger.info("Particle renderer initialized.");
     }
 
-    @Override
-    public void initRendering(int delta) {
+    private void initRendering() {
         texturedParticleRenderer.useCamera(camera);
         dotParticleRenderer.useCamera(camera);
     }
 
     @Override
-    public void render(Component component, MatrixStack stack) {
-        if (component.hasEnabledProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)) {
-            GraphicsParticleEmitterProperty emitterProperty =
-                    component.getProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
-            ParticleSystem system = emitterProperty.getSystem();
-            getRenderer(system).render(system, stack);
+    public void update(int delta) {
+        initRendering();
+        List<ParticleSystemStorage.ParticleSystemData> systems = particleSystemStorage.getSystems();
+        for (int i = 0; i < particleSystemStorage.getSystemsNumber(); i++) {
+            ParticleSystemStorage.ParticleSystemData data = systems.get(i);
+            ParticleSystem system = data.getSystem();
+            system.update(delta);
+            getRenderer(system).render(system, data.getTransformation());
         }
     }
 
@@ -65,9 +72,26 @@ public class ParticleSystemRenderer implements Renderer {
     @Override
     public void destroy() {
         texturedParticleRenderer.destroy();
+        dotParticleRenderer.destroy();
+    }
+
+    @Override
+    public void onResize(int newWidth, int newHeight) {
+
     }
 
     public void setCamera(Camera camera) {
         this.camera = camera;
+    }
+
+
+    @Override
+    public MultisampleTexture2D getOutput() {
+        return scene;
+    }
+
+    @Override
+    public void setInput(MultisampleTexture2D input) {
+       this.scene = input;
     }
 }

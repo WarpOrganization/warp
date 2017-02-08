@@ -1,5 +1,6 @@
 package pl.warp.engine.core.scene.script;
 
+import org.apache.log4j.Logger;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Script;
 
@@ -9,22 +10,25 @@ import pl.warp.engine.core.scene.Script;
  */
 public class ScriptTask extends EngineTask {
 
-    private ScriptManager context;
+    public static final Logger SCRIPT_TASK_LOGGER = Logger.getLogger(ScriptTask.class);
 
-    public ScriptTask(ScriptManager context) {
-        this.context = context;
+    private ScriptManager manager;
+
+    public ScriptTask(ScriptManager manager) {
+        this.manager = manager;
     }
 
     @Override
     protected void onInit() {
-        context.update();
-        context.getScripts().forEach(s -> {
+        SCRIPT_TASK_LOGGER.info("Initializing script task...");
+        manager.update();
+        manager.getScripts().forEach(s -> {
             if (s.isInitialized())
                 throw new IllegalStateException("Unable to initialize script - script has already been initialized." +
                         " There can be only one script task per context.");
-            s.onInit();
-            s.setInitialized(true);
+            initialize(s);
         });
+        SCRIPT_TASK_LOGGER.info("Script task initialized.");
     }
 
     @Override
@@ -34,16 +38,24 @@ public class ScriptTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        context.update();
-        context.getScripts().forEach(s -> {
+        manager.update();
+        manager.getScripts().forEach(s -> {
             if (!s.isInitialized())
                 initialize(s);
-            s.onUpdate(delta);
+            try {
+                s.onUpdate(delta);
+            } catch (Exception e) {
+                SCRIPT_TASK_LOGGER.error("Exception occurred when updating the script.", e);
+            }
         });
     }
 
-    private void initialize(Script<?> s) {
-        s.onInit();
-        s.setInitialized(true);
+    protected void initialize(Script<?> s) {
+        try {
+            manager.initializeScript(s);
+        } catch (Exception e) {
+            SCRIPT_TASK_LOGGER.error("Failed to initialize script.", e);
+        }
     }
+
 }

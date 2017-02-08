@@ -3,8 +3,9 @@ package pl.warp.engine.graphics;
 import pl.warp.engine.core.*;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
-import pl.warp.engine.graphics.particles.ParticleEmitterRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
+import pl.warp.engine.graphics.particles.ParticleSystemsRecorder;
+import pl.warp.engine.graphics.particles.ParticleSystemStorage;
 import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.pipeline.Sink;
@@ -37,8 +38,12 @@ public class Graphics {
     private Environment environment;
     private MeshRenderer meshRenderer;
     private SkyboxRenderer skyboxRenderer;
+    private ParticleSystemStorage particleSystemStorage;
+    private ParticleSystemsRecorder particleSystemRecorder;
     private ParticleSystemRenderer particleSystemRenderer;
+
     private Pipeline pipeline;
+
 
     public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
         this.context = context;
@@ -80,26 +85,28 @@ public class Graphics {
 
     private Pipeline createPipeline() {
         SceneRenderer sceneRenderer = getSceneRenderer();
+        particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera, particleSystemStorage);
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
         PipelineBuilder<Texture2D> pipeline = PipelineBuilder
                 .from(sceneRenderer)
+                .via(particleSystemRenderer)
                 .via(textureRenderer);
-        if(config.isBloomEnabled()) pipeline = createBloom(pipeline);
-        if(config.areLensEnabled()) pipeline = createFlares(pipeline);
+        if (config.isBloomEnabled()) pipeline = createBloom(pipeline);
+        if (config.areLensEnabled()) pipeline = createFlares(pipeline);
         return pipeline.to(output);
     }
 
     private SceneRenderer getSceneRenderer() {
         meshRenderer = new MeshRenderer(mainViewCamera, environment);
         skyboxRenderer = new SkyboxRenderer(mainViewCamera);
-        particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera);
-        ParticleEmitterRenderer emitterRenderer = new ParticleEmitterRenderer();
+        particleSystemStorage = new ParticleSystemStorage();
+        particleSystemRecorder = new ParticleSystemsRecorder(particleSystemStorage);
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
-        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRenderer, emitterRenderer, environmentFlareRenderer};
+        Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRecorder, environmentFlareRenderer};
         return new SceneRenderer(context.getScene(), config, renderers);
     }
 
-    private PipelineBuilder<Texture2D> createBloom(PipelineBuilder<Texture2D>  builder) {
+    private PipelineBuilder<Texture2D> createBloom(PipelineBuilder<Texture2D> builder) {
         BloomRenderer bloomRenderer = new BloomRenderer(config);
         HDRRenderer hdrRenderer = new HDRRenderer(config);
         return builder

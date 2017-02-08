@@ -29,6 +29,7 @@ public class CameraRayTester {
     private Vector3f tempVector2 = new Vector3f();
     private Vector3f tempVector3 = new Vector3f();
     private Matrix4f tempMatrix = new Matrix4f();
+
     public synchronized Optional<GameComponent> testCameraRay(float x, float y, float range){
         tempVector.zero();
         tempVector2.zero();

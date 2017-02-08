@@ -16,7 +16,7 @@ flat out float vGradient;
 
 
 void main(void) {
-    gl_Position = vec4(position, 1);
+    gl_Position = modelViewMatrix * vec4(position, 1);
     vColor = color;
     vScale = gradient;
     vGradient = scale;

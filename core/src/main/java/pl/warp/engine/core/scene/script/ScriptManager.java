@@ -41,6 +41,17 @@ public class ScriptManager {
         }
     }
 
+    public void initializeScript(Script script) {
+        try {
+            script.onInit();
+            script.setInitialized(true);
+        } catch (Exception e) {
+            script.setInitialized(false);
+            removeScript(script);
+            throw new ScriptInitializationException(e);
+        }
+    }
+
     public Set<Script<?>> getScripts() {
         return scripts;
     }

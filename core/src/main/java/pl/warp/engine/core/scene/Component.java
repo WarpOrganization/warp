@@ -29,6 +29,8 @@ public interface Component {
 
     <T extends Event> void triggerEvent(T event);
 
+    Set<Listener> getListeners();
+
     <T extends Event> void triggerOnChildren(T event);
 
     <T extends Event> void broadcastEvent(T event);

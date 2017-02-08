@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 /**
  * @author Jaca777
  *         Created 2016-06-27 at 12
- *         TODO delete children streams
  */
 public abstract class SceneComponent implements Component {
 
@@ -64,7 +63,8 @@ public abstract class SceneComponent implements Component {
      */
     @Override
     public <T extends Property> T getProperty(String name) {
-        if (!hasProperty(name)) throw new PropertyNotPresentException(name);
+        if (!hasProperty(name))
+            throw new PropertyNotPresentException(name);
         else return (T) properties.get(name);
     }
 
@@ -100,12 +100,12 @@ public abstract class SceneComponent implements Component {
      */
     @Override
     public <T extends Event> void triggerEvent(T event) {
-        synchronized (listeners) {
-            for (Listener listener : listeners) {
-                if (listener.isInterestedIn(event))
-                    listener.handle(event);
-            }
-        }
+        getContext().getEventDispatcher().dispatchEvent(this, event);
+    }
+
+    @Override
+    public Set<Listener> getListeners() {
+        return listeners;
     }
 
     /**

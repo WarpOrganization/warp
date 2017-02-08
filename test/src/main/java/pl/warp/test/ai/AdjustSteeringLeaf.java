@@ -2,9 +2,9 @@ package pl.warp.test.ai;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.ai.behaviourtree.LeafNode;
-import pl.warp.engine.ai.behaviourtree.Node;
-import pl.warp.engine.ai.behaviourtree.Ticker;
+import pl.warp.engine.ai.behaviortree.LeafNode;
+import pl.warp.engine.ai.behaviortree.Node;
+import pl.warp.engine.ai.behaviortree.Ticker;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
@@ -31,9 +31,23 @@ public class AdjustSteeringLeaf extends LeafNode {
     private TransformProperty ownerTransform;
     private TransformProperty targetTransform;
     private PhysicalBodyProperty bodyProperty;
+    private DroneMemoryProperty memoryProperty;
     private Component owner;
-
     private Vector3f ownerDirection = new Vector3f();
+
+
+    @Override
+    protected void onInit(Ticker ticker) {
+        owner = ticker.getOwner();
+        ownerTransform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        memoryProperty = owner.getProperty(DroneMemoryProperty.DRONE_MEMORY_PROPERTY_NAME);
+        bodyProperty = owner.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+    }
+
+    @Override
+    protected void onClose(Ticker ticker) {
+
+    }
 
     @Override
     public int tick(Ticker ticker, int delta) {
@@ -44,11 +58,7 @@ public class AdjustSteeringLeaf extends LeafNode {
     }
 
     private void setProperties(Ticker ticker) {
-        targetTransform = ((Component) ticker.getData(TARGET)).getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-        owner = (Component) ticker.getData(OWNER_KEY);
-        ownerTransform = owner.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-        bodyProperty = owner.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-
+        targetTransform = memoryProperty.getTarget().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
 
     private Vector3f actualVelocity = new Vector3f();
@@ -109,7 +119,9 @@ public class AdjustSteeringLeaf extends LeafNode {
     }
 
     @Override
-    public void onEnter(Ticker ticker) {
+    public void onReEnter(Ticker ticker) {
 
     }
+
+
 }
