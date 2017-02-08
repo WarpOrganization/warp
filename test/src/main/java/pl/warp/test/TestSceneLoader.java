@@ -27,7 +27,7 @@ import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
-import pl.warp.engine.graphics.mesh.GraphicsCustomRendererProgramProperty;
+import pl.warp.engine.graphics.mesh.CustomMeshProgramProperty;
 import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
@@ -59,14 +59,17 @@ import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.graphics.effects.gas.GasPlanet;
+import pl.warp.game.graphics.effects.gas.GasPlanetProgram;
+import pl.warp.game.graphics.effects.ring.PlanetRing;
+import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
+import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
+import pl.warp.game.graphics.effects.sun.SunProgram;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.scene.GameSceneLoader;
 import pl.warp.test.ai.DroneMemoryProperty;
-import pl.warp.test.program.gas.GasPlanetProgram;
-import pl.warp.test.program.ring.PlanetaryRingProgram;
-import pl.warp.test.program.ring.PlanetaryRingProperty;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -116,12 +119,13 @@ public class TestSceneLoader implements GameSceneLoader {
     private EngineThread graphicsThread;
     private Sphere sphere;
     private Ring ringMesh;
-    private PlanetaryRingProgram planetaryRingProgram;
+    private PlanetRingProgram planetRingProgram;
     private ImageData brightnessTextureData;
     private ImageData brightnessTextureData2;
     private Texture2D goatTexture2;
     private Texture2D bulletTexture2;
     private Texture2D goatBrightnessTexture2;
+    private SunProgram sunProgram;
 
 
     public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -197,7 +201,7 @@ public class TestSceneLoader implements GameSceneLoader {
     @Override
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
-
+            this.graphicsThread = graphicsThread;
             //new ComponentLoggingScript(controllableGoat);
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
@@ -219,42 +223,44 @@ public class TestSceneLoader implements GameSceneLoader {
                     new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(1)),
                     new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(1)),
                     new SingleFlare(0.2f, 1, 0.25f, new Vector3f(1)),
-                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f)),
+                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f))
             };
 
 
-            GameComponent gasSphere = new GameSceneComponent(scene);
-            sphere = new Sphere(50, 50);
-            gasSphere.addProperty(new GraphicsMeshProperty(sphere));
             ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
             colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
-            gasProgram = new GasPlanetProgram(colorsTexture);
-            gasSphere.addProperty(new GraphicsCustomRendererProgramProperty(gasProgram));
+            GasPlanet gasPlanet = new GasPlanet(scene, colorsTexture);
             TransformProperty gasSphereTransform = new TransformProperty();
             gasSphereTransform.move(new Vector3f(-1200f, -200f, -500f));
             gasSphereTransform.scale(new Vector3f(1000.0f));
-            gasSphere.addProperty(gasSphereTransform);
-            this.graphicsThread = graphicsThread;
-            this.graphicsThread.scheduleTask(new SimpleEngineTask() {
-                @Override
-                public void update(int delta) {
-                    gasProgram.use();
-                    gasProgram.update(delta);
-                    gasSphereTransform.rotateLocalY(delta * 0.00001f);
-                }
-            });
+            gasPlanet.addProperty(gasSphereTransform);
 
             float startR = 1.5f;
             float endR = 2.5f;
-            Component ring = new GameSceneComponent(gasSphere);
-            ringMesh = new Ring(20, startR, endR);
-            ring.addProperty(new GraphicsMeshProperty(ringMesh));
-            planetaryRingProgram = new PlanetaryRingProgram();
-            ring.addProperty(new GraphicsCustomRendererProgramProperty(planetaryRingProgram));
+
             ImageData ringColorsData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ring_colors.png"), PNGDecoder.Format.RGBA);
             ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, true, ringColorsData.getData());
             ringColors.enableAnisotropy(4);
-            ring.addProperty(new PlanetaryRingProperty(startR, endR, ringColors));
+
+            PlanetRing ring = new PlanetRing(gasPlanet, startR, endR, ringColors);
+
+/*            GameComponent sun = new GameSceneComponent(scene);
+            sphere = new Sphere(50, 50);
+            sun.addProperty(new GraphicsMeshProperty(sphere));
+            colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
+            sunProgram = new SunProgram();
+            sun.addProperty(new CustomMeshProgramProperty(gasProgram));
+            TransformProperty sunSphereTransform = new TransformProperty();
+            sunSphereTransform.move(new Vector3f(2000f, 200f, 500f));
+            sunSphereTransform.scale(new Vector3f(1000.0f));
+            sun.addProperty(sunSphereTransform);
+            this.graphicsThread.scheduleTask(new SimpleEngineTask() {
+                @Override
+                public void update(int delta) {
+                    sunProgram.use();
+                    sunProgram.update(delta);
+                }
+            });*/
 
             brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
@@ -341,8 +347,6 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
             }
 
             {
@@ -357,8 +361,6 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
             }
 
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
@@ -378,8 +380,6 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
             }
 
 
@@ -396,8 +396,6 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
             }
 
 
@@ -414,7 +412,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
                 LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
+                light.addProperty(new GraphicsLensFlareProperty(flare));
             }
 
             {
@@ -431,8 +429,34 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
+            }
+
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(60f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, -0.00008f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(0.1f, new Vector4f(2.0f, 2.0f, 0.5f, 2.5f)),
+                        new ParticleStage(0.1f, new Vector4f(1.0f, 0.5f, 0.5f, 0.0f)),
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 300, true, true, stages);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
+            }
+
+            {
+                Component light = new GameSceneComponent(scene);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(60f, 0f, 0f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, -0.00004f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(1.0f, new Vector4f(2.0f, 2.0f, 1.5f, 0.5f)),
+                        new ParticleStage(1.0f, new Vector4f(1.0f, 0.5f, 0.5f, 0.0f)),
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.02f), 100, 0, true, true, stages);
+                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
             }
 
             {
@@ -447,14 +471,10 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                new GraphicsLensFlareProperty(flare);
             }
 
             generateGOATS(scene);
-
             allyEngineParticles(controllableGoat);
-
         });
     }
 
@@ -573,7 +593,7 @@ public class TestSceneLoader implements GameSceneLoader {
     public GameComponent createPlanet(GameComponent parent) {
         GameComponent gasSphere = new GameSceneComponent(parent);
         gasSphere.addProperty(new GraphicsMeshProperty(sphere));
-        gasSphere.addProperty(new GraphicsCustomRendererProgramProperty(gasProgram));
+        gasSphere.addProperty(new CustomMeshProgramProperty(gasProgram));
         TransformProperty gasSphereTransform = new TransformProperty();
         gasSphereTransform.scale(new Vector3f(1000.0f));
         gasSphere.addProperty(gasSphereTransform);
@@ -590,8 +610,8 @@ public class TestSceneLoader implements GameSceneLoader {
         float endR = 2.5f;
         Component ring = new GameSceneComponent(gasSphere);
         ring.addProperty(new GraphicsMeshProperty(ringMesh));
-        ring.addProperty(new GraphicsCustomRendererProgramProperty(planetaryRingProgram));
-        ring.addProperty(new PlanetaryRingProperty(startR, endR, ringColors));
+        ring.addProperty(new CustomMeshProgramProperty(planetRingProgram));
+        ring.addProperty(new PlanetRingProperty(startR, endR, ringColors));
         return gasSphere;
     }
 }

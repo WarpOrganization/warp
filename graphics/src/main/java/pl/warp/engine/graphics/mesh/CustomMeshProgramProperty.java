@@ -2,22 +2,22 @@ package pl.warp.engine.graphics.mesh;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.MeshRendererProgram;
 
 /**
  * @author Jaca777
  *         Created 2016-08-02 at 18
  */
-public class GraphicsCustomRendererProgramProperty extends Property<Component> {
+public class CustomMeshProgramProperty extends Property<Component> {
     public static final String CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME = "customRendererProgram";
-    private ComponentRendererProgram program;
+    private MeshRendererProgram program;
 
-    public GraphicsCustomRendererProgramProperty(ComponentRendererProgram program) {
+    public CustomMeshProgramProperty(MeshRendererProgram program) {
         super(CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
         this.program = program;
     }
 
-    public ComponentRendererProgram getProgram() {
+    public MeshRendererProgram getProgram() {
         return program;
     }
 }

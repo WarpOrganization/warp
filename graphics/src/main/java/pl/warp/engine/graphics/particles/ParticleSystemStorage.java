@@ -38,9 +38,8 @@ public class ParticleSystemStorage {
     }
 
     private void growList() {
-        systems.addAll(Stream.generate(ParticleSystemData::new)
-                .limit(systems.size() / 2)
-                .collect(Collectors.toCollection(ArrayList::new)));
+        for(int i = 0; i < systemsNumber / 2; i++)
+            systems.add(new ParticleSystemData());
     }
 
     public int getSystemsNumber() {

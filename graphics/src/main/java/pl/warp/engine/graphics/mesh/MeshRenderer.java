@@ -8,8 +8,8 @@ import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
-import pl.warp.engine.graphics.shader.ComponentRendererProgram;
-import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultComponentProgram;
+import pl.warp.engine.graphics.shader.MeshRendererProgram;
+import pl.warp.engine.graphics.shader.program.component.defaultprog.DefaultMeshProgram;
 
 /**
  * @author Jaca777
@@ -19,7 +19,7 @@ public class MeshRenderer implements Renderer {
 
     private static final Logger logger = Logger.getLogger(LensFlareRenderer.class);
 
-    private ComponentRendererProgram defaultProgram;
+    private MeshRendererProgram defaultProgram;
     private Camera camera;
     private Environment environment;
 
@@ -31,7 +31,7 @@ public class MeshRenderer implements Renderer {
     @Override
     public void init() {
         logger.info("Initializing mesh renderer...");
-        this.defaultProgram = new DefaultComponentProgram();
+        this.defaultProgram = new DefaultMeshProgram();
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
         logger.info("Mesh renderer initialized.");
@@ -45,7 +45,7 @@ public class MeshRenderer implements Renderer {
     @Override
     public void render(Component component, MatrixStack stack) {
         if (component.hasEnabledProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME)) {
-            ComponentRendererProgram program = getProgram(component);
+            MeshRendererProgram program = getProgram(component);
             program.use();
             program.useCamera(camera);
             program.useEnvironment(environment);
@@ -55,10 +55,10 @@ public class MeshRenderer implements Renderer {
         }
     }
 
-    private ComponentRendererProgram getProgram(Component component) {
-        if (component.hasEnabledProperty(GraphicsCustomRendererProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME)) {
-            GraphicsCustomRendererProgramProperty property =
-                    component.getProperty(GraphicsCustomRendererProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
+    private MeshRendererProgram getProgram(Component component) {
+        if (component.hasEnabledProperty(CustomMeshProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME)) {
+            CustomMeshProgramProperty property =
+                    component.getProperty(CustomMeshProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
             return property.getProgram();
         } else return this.defaultProgram;
     }

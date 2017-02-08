@@ -8,7 +8,7 @@ import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.MeshRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
@@ -19,7 +19,7 @@ import java.util.List;
  * @author Jaca777
  *         Created 2016-07-01 at 13
  */
-public class DefaultComponentProgram extends ComponentRendererProgram {
+public class DefaultMeshProgram extends MeshRendererProgram {
 
     private static final String VERTEX_SHADER = "component/defaultprog/vert";
     private static final String FRAGMENT_SHADER = "component/defaultprog/frag";
@@ -48,7 +48,7 @@ public class DefaultComponentProgram extends ComponentRendererProgram {
     private int unifSpotLightCount;
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
 
-    public DefaultComponentProgram() {
+    public DefaultMeshProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
         loadLocations();

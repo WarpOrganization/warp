@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public abstract class ComponentRendererProgram extends Program{
+public abstract class MeshRendererProgram extends Program{
 
     public static final int SPOT_LIGHT_POSITION = 0;
     public static final int SPOT_LIGHT_CONE_DIRECTION = 1;
@@ -26,7 +26,7 @@ public abstract class ComponentRendererProgram extends Program{
     public static final int ATTR_TEXUTRE_COORD_LOCATION = 1;
     public static final int ATTR_NORMAL_LOCATION = 2;
 
-    public ComponentRendererProgram(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
+    public MeshRendererProgram(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
         super(vertexShaderName, fragmentShaderName, compiler);
     }
 

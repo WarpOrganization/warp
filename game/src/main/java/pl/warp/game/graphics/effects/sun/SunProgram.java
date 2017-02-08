@@ -1,29 +1,25 @@
-package pl.warp.test.program.gas;
+package pl.warp.game.graphics.effects.sun;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.shader.ComponentRendererProgram;
+import pl.warp.engine.graphics.shader.MeshRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
-import pl.warp.engine.graphics.texture.Texture1D;
 
 /**
  * @author Jaca777
  *         Created 2016-08-03 at 01
  */
-public class GasPlanetProgram extends ComponentRendererProgram {
+public class SunProgram extends MeshRendererProgram {
 
-    private static final int COLORS_TEXTURE_SAMPLER = 0;
+    private static final String PROGRAM_PATH = "pl/warp/game/graphics/effects/";
+    private static final String VERTEX_SHADER = "sun/vert";
+    private static final String FRAGMENT_SHADER = "sun/frag";
 
-    private static final String PROGRAM_PATH = "pl/warp/test/program/";
-    private static final String VERTEX_SHADER = "gas/vert";
-    private static final String FRAGMENT_SHADER = "gas/frag";
-
-    private Texture1D colorsTexture;
     private int time;
 
     private int unifProjectionMatrix;
@@ -32,13 +28,11 @@ public class GasPlanetProgram extends ComponentRendererProgram {
     private int unifCameraMatrix;
     private int unifCameraPos;
     private int unifTime;
-    private int unifColor;
 
-    public GasPlanetProgram(Texture1D colorsTexture) {
+    public SunProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
-        this.colorsTexture = colorsTexture;
         loadLocations();
     }
 
@@ -52,13 +46,12 @@ public class GasPlanetProgram extends ComponentRendererProgram {
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
-        this.unifColor = getUniformLocation("color");
         this.unifTime = getUniformLocation("time");
     }
 
     @Override
     public void useComponent(Component component) {
-        useTexture(colorsTexture, COLORS_TEXTURE_SAMPLER);
+
     }
 
     private Vector3f tmpVector = new Vector3f();
@@ -77,7 +70,7 @@ public class GasPlanetProgram extends ComponentRendererProgram {
     }
 
     public void update(int delta) {
-        time += delta;
+        time =  (time + delta) % Integer.MAX_VALUE;
         setUniformi(unifTime, time);
     }
 

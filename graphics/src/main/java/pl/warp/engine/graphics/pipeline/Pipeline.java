@@ -12,8 +12,9 @@ public class Pipeline {
     }
 
     public void init() {
-        for (PipelineElement element : elements)
+        for (PipelineElement element : elements) {
             element.init();
+        }
         connectElements();
     }
 
@@ -27,8 +28,9 @@ public class Pipeline {
     }
 
     public void update(int delta) {
-        for (PipelineElement element : elements)
+        for (PipelineElement element : elements) {
             element.update(delta);
+        }
     }
 
     public void resize(int newWidth, int newHeight) {

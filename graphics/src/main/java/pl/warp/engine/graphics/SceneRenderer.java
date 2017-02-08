@@ -73,7 +73,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private void render(Component component) {
         matrixStack.push();
-        if(component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
+        if (component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
             applyTransformations(component);
         renderComponent(component);
         component.forEachChildren(this::render);
@@ -81,6 +81,10 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void renderComponent(Component component) {
+        if (component.hasEnabledProperty(CustomRendererProperty.CUSTOM_RENDERER_PROPERTY_NAME)) {
+            CustomRendererProperty rendererProperty = component.getProperty(CustomRendererProperty.CUSTOM_RENDERER_PROPERTY_NAME);
+            rendererProperty.getRenderer().render(component, matrixStack);
+        }
         for (Renderer renderer : renderers)
             renderer.render(component, matrixStack);
     }
