@@ -6,7 +6,6 @@ uniform mat4 rotationMatrix;
 uniform mat4 cameraMatrix;
 
 uniform vec3 cameraPos;
-uniform bool rmirror;
 uniform mat4 mCameraMatrix;
 
 out vec3 onSpherePos;

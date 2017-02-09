@@ -44,7 +44,7 @@ public class MeshRenderer implements Renderer {
 
     @Override
     public void render(Component component, MatrixStack stack) {
-        if (component.hasEnabledProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME)) {
+        if (component.hasEnabledProperty(RenderableMeshProperty.MESH_PROPERTY_NAME)) {
             MeshRendererProgram program = getProgram(component);
             program.use();
             program.useCamera(camera);
@@ -56,16 +56,16 @@ public class MeshRenderer implements Renderer {
     }
 
     private MeshRendererProgram getProgram(Component component) {
-        if (component.hasEnabledProperty(CustomMeshProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME)) {
-            CustomMeshProgramProperty property =
-                    component.getProperty(CustomMeshProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
+        if (component.hasEnabledProperty(CustomProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME)) {
+            CustomProgramProperty property =
+                    component.getProperty(CustomProgramProperty.CUSTOM_RENDERER_PROGRAM_PROPERTY_NAME);
             return property.getProgram();
         } else return this.defaultProgram;
     }
 
     private void renderMesh(Component component) {
-        setupGL();
-        Mesh mesh = component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh();
+        setupGL(); //TODO optimize
+        Mesh mesh = component.<RenderableMeshProperty>getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).getMesh();
         mesh.draw();
     }
 

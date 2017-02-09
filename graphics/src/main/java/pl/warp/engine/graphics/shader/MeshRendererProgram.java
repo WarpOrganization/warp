@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public abstract class MeshRendererProgram extends Program{
+public abstract class MeshRendererProgram extends Program {
 
     public static final int SPOT_LIGHT_POSITION = 0;
     public static final int SPOT_LIGHT_CONE_DIRECTION = 1;
@@ -34,9 +34,5 @@ public abstract class MeshRendererProgram extends Program{
     public abstract void useCamera(Camera camera);
     public abstract void useMatrixStack(MatrixStack stack);
     public abstract void useEnvironment(Environment environment);
-
-    public void update(int delta) {
-
-    }
 
 }

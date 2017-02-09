@@ -7,7 +7,7 @@ import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
 import pl.warp.engine.graphics.particles.ParticleFactory;
@@ -68,7 +68,7 @@ public class BulletScript extends GameScript<GameComponent> {
         Component component = event.getSecondComponent();
         if (component.hasEnabledProperty(Bulletproof.class)) return;
         if (component != playerShip && component != TestSceneLoader.MAIN_GOAT) {
-            component.getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).disable();
+            component.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();

@@ -1,7 +1,7 @@
 package pl.warp.game.graphics.effects.ring;
 
-import pl.warp.engine.graphics.mesh.CustomMeshProgramProperty;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.mesh.CustomProgramProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.game.scene.GameComponent;
@@ -27,8 +27,8 @@ public class PlanetRing extends GameSceneComponent {
 
     private void init() {
         Ring ringMesh = new Ring(20, startRadius, endRadius);
-        this.addProperty(new GraphicsMeshProperty(ringMesh));
-        this.addProperty(new CustomMeshProgramProperty(getPlanetaryRingProgram()));
+        this.addProperty(new RenderableMeshProperty(ringMesh));
+        this.addProperty(new CustomProgramProperty(getPlanetaryRingProgram()));
         this.addProperty(new PlanetRingProperty(startRadius, endRadius, colors));
     }
 

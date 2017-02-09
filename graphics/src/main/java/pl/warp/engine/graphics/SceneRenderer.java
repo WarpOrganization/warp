@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
@@ -60,8 +60,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void finalizeRendering() {
-        for (Renderer renderer : renderers)
-            renderer.performOrderedRenderingStep();
+
     }
 
     private void initRendering(int delta) {
@@ -83,7 +82,8 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private void renderComponent(Component component) {
         if (component.hasEnabledProperty(CustomRendererProperty.CUSTOM_RENDERER_PROPERTY_NAME)) {
             CustomRendererProperty rendererProperty = component.getProperty(CustomRendererProperty.CUSTOM_RENDERER_PROPERTY_NAME);
-            rendererProperty.getRenderer().render(component, matrixStack);
+            CustomRenderer renderer = rendererProperty.getRenderer();
+            if(renderer.isEnabled()) renderer.render(component, matrixStack);
         }
         for (Renderer renderer : renderers)
             renderer.render(component, matrixStack);
@@ -126,8 +126,8 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void destroyProperties(Component component) {
-        if (component.hasProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME))
-            component.<GraphicsMeshProperty>getProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME).getMesh().unload();
+        if (component.hasProperty(RenderableMeshProperty.MESH_PROPERTY_NAME))
+            component.<RenderableMeshProperty>getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).getMesh().unload();
         if (component.hasProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)) {
             Material material = component.<GraphicsMaterialProperty>getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME).getMaterial();
             material.getMainTexture().delete();

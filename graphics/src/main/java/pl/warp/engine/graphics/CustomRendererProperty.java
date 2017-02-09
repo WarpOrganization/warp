@@ -10,14 +10,14 @@ import pl.warp.engine.core.scene.Property;
 public class CustomRendererProperty extends Property<Component> {
     public static final String CUSTOM_RENDERER_PROPERTY_NAME = "customRendererProperty";
 
-    private Renderer renderer;
+    private CustomRenderer renderer;
 
-    public CustomRendererProperty(Renderer renderer) {
+    public CustomRendererProperty(CustomRenderer renderer) {
         super(CUSTOM_RENDERER_PROPERTY_NAME);
         this.renderer = renderer;
     }
 
-    public Renderer getRenderer() {
+    public CustomRenderer getRenderer() {
         return renderer;
     }
 }

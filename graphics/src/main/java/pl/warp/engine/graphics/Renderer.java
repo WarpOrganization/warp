@@ -16,6 +16,4 @@ public interface Renderer {
 
     void destroy();
 
-    default void performOrderedRenderingStep() {
-    }
 }

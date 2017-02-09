@@ -9,7 +9,7 @@ import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
@@ -111,7 +111,7 @@ public class GunScript extends GameScript<GameComponent> {
             direction.add(parentVelocity.mul(BULLET_MASS));
 
             GameComponent bullet = new GameSceneComponent(getContext());
-            bullet.addProperty(new GraphicsMeshProperty(bulletMesh));
+            bullet.addProperty(new RenderableMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();
             transformProperty.setTranslation(new Vector3f(bulletTranslation));

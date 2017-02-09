@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.ide.controller.IDEController;
@@ -95,7 +95,7 @@ public class IDELauncher extends Application {
     }
 
     private boolean isDrawableModel(Component component) {
-        return component.hasProperty(GraphicsMeshProperty.MESH_PROPERTY_NAME);
+        return component.hasProperty(RenderableMeshProperty.MESH_PROPERTY_NAME);
     }
 
     private TestSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {

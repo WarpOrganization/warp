@@ -15,6 +15,7 @@ import pl.warp.game.script.CameraRayTester;
  *         Created 2017-01-27 at 17
  */
 public class GameContext extends EngineContext {
+
     private CameraRayTester rayTester;
     private Camera camera;
     private Graphics graphics;

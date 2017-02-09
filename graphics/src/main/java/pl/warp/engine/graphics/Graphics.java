@@ -41,6 +41,7 @@ public class Graphics {
     private ParticleSystemStorage particleSystemStorage;
     private ParticleSystemsRecorder particleSystemRecorder;
     private ParticleSystemRenderer particleSystemRenderer;
+    private CustomRenderersManager customRenderersManager;
 
     private Pipeline pipeline;
 
@@ -97,6 +98,7 @@ public class Graphics {
     }
 
     private SceneRenderer getSceneRenderer() {
+        this.customRenderersManager = new CustomRenderersManager(this);
         meshRenderer = new MeshRenderer(mainViewCamera, environment);
         skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         particleSystemStorage = new ParticleSystemStorage();
@@ -124,11 +126,13 @@ public class Graphics {
         meshRenderer.setCamera(mainViewCamera);
         skyboxRenderer.setCamera(mainViewCamera);
         particleSystemRenderer.setCamera(mainViewCamera);
+        customRenderersManager.setMainViewCamera(mainViewCamera);
         return this;
     }
 
     public void resize(int newWidth, int newHeight) {
         pipeline.resize(newWidth, newHeight);
+        customRenderersManager.resize(newWidth, newHeight);
     }
 
     public EngineThread getThread() {
@@ -163,5 +167,11 @@ public class Graphics {
         return output;
     }
 
+    public CustomRenderersManager getCustomRenderersManager() {
+        return customRenderersManager;
+    }
 
+    public Camera getMainViewCamera() {
+        return mainViewCamera;
+    }
 }

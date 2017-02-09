@@ -1,7 +1,8 @@
 package pl.warp.game.graphics.effects.gas;
 
-import pl.warp.engine.graphics.mesh.CustomMeshProgramProperty;
-import pl.warp.engine.graphics.mesh.GraphicsMeshProperty;
+import pl.warp.engine.core.updater.UpdaterTask;
+import pl.warp.engine.graphics.mesh.CustomProgramProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.texture.Texture1D;
@@ -24,8 +25,8 @@ public class GasPlanet extends GameSceneComponent {
 
     private void init() {
         Mesh sphere = new Sphere(50, 50);
-        this.addProperty(new GraphicsMeshProperty(sphere));
-        this.addProperty(new CustomMeshProgramProperty(getGasProgram()));
+        this.addProperty(new RenderableMeshProperty(sphere));
+        this.addProperty(new CustomProgramProperty(getGasProgram()));
         this.addProperty(new GasPlanetProperty(colors));
     }
 
@@ -36,7 +37,7 @@ public class GasPlanet extends GameSceneComponent {
             return property.getProgram();
         } else {
             GasPlanetProgram gasPlanetProgram = new GasPlanetProgram();
-            getContext().getGraphics().getThread().scheduleTask(new GasPlanetTask(gasPlanetProgram));
+            getContext().getGraphics().getThread().scheduleTask(new UpdaterTask(gasPlanetProgram));
             getContext().getScene().addProperty(new GasPlanetContextProperty(gasPlanetProgram));
             return gasPlanetProgram;
         }

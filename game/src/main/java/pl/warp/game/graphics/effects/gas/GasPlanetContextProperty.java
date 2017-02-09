@@ -10,7 +10,6 @@ import pl.warp.game.scene.GameComponent;
 public class GasPlanetContextProperty extends Property<GameComponent> {
     public static final String GAS_PLANET_CONTEXT_PROPERTY_NAME = "gasPlanetContextProperty";
 
-
     private GasPlanetProgram program;
 
     public GasPlanetContextProperty(GasPlanetProgram program) {
