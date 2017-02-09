@@ -14,7 +14,7 @@ layout(location = 0) out vec4 fragColor;
 #include "util/noise4d"
 
 void main() {
-    float dist = length(coord) * 3.0;
+    float dist = length(coord) * 4.0;
     float brightness = (1.0 / (dist * dist) - 0.1) * 0.7;
-    fragColor.rgba = vec4(1.0);
+    fragColor.rgba = vec4(1, 1, 1, max(brightness, 0));
 }
