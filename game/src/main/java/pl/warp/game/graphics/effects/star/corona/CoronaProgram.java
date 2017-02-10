@@ -94,8 +94,9 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
 
     @Override
     public void update(int delta) {
-        time = (time + delta) % Integer.MAX_VALUE;
-        setUniformi(unifTime, time);
+        use();
+        time = ((time + delta)) % Integer.MAX_VALUE;
+        setUniformf(unifTime, time / 1000.0f); //seconds
     }
 
     public void useEnvironment(Environment environment) {
