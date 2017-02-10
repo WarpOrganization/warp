@@ -15,7 +15,8 @@ layout(location = 0) out vec4 fragColor;
 
 void main() {
 
-    float t = (time * 0.02) - length(spherePos);
+    float actualDist = length(spherePos);
+    float t = (time * 0.04) - actualDist;
 
     // Offset normal with noise
     float frequency = 1.0;

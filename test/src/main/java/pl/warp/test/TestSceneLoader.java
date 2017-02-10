@@ -278,13 +278,16 @@ public class TestSceneLoader implements GameSceneLoader {
                 }
             };
             TransformProperty sunSphereTransform = new TransformProperty();
-            sunSphereTransform.move(new Vector3f(10000f, 200f, 500f));
+            sunSphereTransform.move(new Vector3f(16000f, 200f, 500f));
             sunSphereTransform.scale(new Vector3f(2000.0f));
             sun.addProperty(sunSphereTransform);
             SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
             LightSourceProperty lightSourceProperty = new LightSourceProperty();
             sun.addProperty(lightSourceProperty);
             lightSourceProperty.addSpotLight(spotLight);
+            LensFlare flare = new LensFlare(lensTexture, flares);
+            GraphicsLensFlareProperty flareProperty = new GraphicsLensFlareProperty(flare);
+            sun.addProperty(flareProperty);
 
             brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
@@ -559,8 +562,6 @@ public class TestSceneLoader implements GameSceneLoader {
         };
         ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
         light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
-        LensFlare flare = new LensFlare(lensTexture, flares);
-        new GraphicsLensFlareProperty(flare);
     }
 
     @Override
