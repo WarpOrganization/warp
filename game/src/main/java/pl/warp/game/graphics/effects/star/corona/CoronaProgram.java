@@ -1,11 +1,11 @@
 package pl.warp.game.graphics.effects.star.corona;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.updater.Updatable;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.GeometryProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
@@ -30,6 +30,7 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
     private int unifModelMatrix;
     private int unifRotationMatrix;
     private int unifCameraMatrix;
+    private int unifCameraRotationMatrix;
     private int unifTime;
     private int unifTemperature;
     private int unifSize;
@@ -54,6 +55,7 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
         this.unifModelMatrix = getUniformLocation("modelMatrix");
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
+        this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
         this.unifTime = getUniformLocation("time");
         this.unifSize = getUniformLocation("size");
         this.unifTemperature = getUniformLocation("color");
@@ -84,12 +86,16 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
 
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
+        setUniformMatrix4(unifCameraRotationMatrix, camera.getRotationMatrix());
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
     }
 
-    public void useMatrixStack(MatrixStack stack) {
-        setUniformMatrix4(unifModelMatrix, stack.topMatrix());
-        setUniformMatrix4(unifRotationMatrix, stack.topRotationMatrix());
+    public void useModelMatrix(Matrix4f modelMatrix) {
+        setUniformMatrix4(unifModelMatrix, modelMatrix);
+    }
+
+    public void useRotationMatrix(Matrix4f rotationMatrix) {
+        setUniformMatrix4(unifRotationMatrix,  rotationMatrix);
     }
 
     @Override
