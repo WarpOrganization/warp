@@ -12,6 +12,8 @@ import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
  */
 public abstract class MeshRendererProgram extends Program {
 
+    public static final int MAX_SPOT_LIGHT_SOURCES = 25;
+
     public static final int SPOT_LIGHT_POSITION = 0;
     public static final int SPOT_LIGHT_CONE_DIRECTION = 1;
     public static final int SPOT_LIGHT_CONE_ANGLE = 2;

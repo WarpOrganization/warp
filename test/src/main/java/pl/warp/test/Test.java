@@ -107,7 +107,7 @@ public class Test {
             playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
             playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
             MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
-            AudioManager.INSTANCE.play(musicSource);
+            //AudioManager.INSTANCE.play(musicSource);
         });
 
         audioThread.start();

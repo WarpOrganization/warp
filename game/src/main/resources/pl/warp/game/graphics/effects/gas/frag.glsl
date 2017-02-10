@@ -1,16 +1,41 @@
 #version 400
 precision highp float;
 
+struct SpotLightSource {
+    vec3 position;
+    vec3 coneDirection;
+    float coneAngle;
+    float coneGradient;
+    vec3 color;
+    vec3 ambientColor;
+    float attenuation;
+    float gradient;
+};
+
+const float SPECULAR_EXPONENT = 100.0;
+const float SHININESS = 5.0;
+
+uniform SpotLightSource spotLightSources[$MAX_LIGHTS$];
+uniform int numSpotLights;
+
+uniform bool lightEnabled;
+
 uniform sampler1D colors;
 uniform int time = 1;
-in vec3 onSpherePos;
-in vec3 normal;
+in vec3 onSpherePos; //position relative to sphere center
+
+in vec3 vPos3; //absolute position on scene
+in vec2 vTexCoord;
+in vec3 vEyeDir;
+smooth in vec3 vNormal;
 
 layout(location = 0) out vec4 fragColor;
 
 #include "util/noise4d"
+#include "util/light"
 
 void main() {
+
     float texCoord = onSpherePos.y * 0.5 + 0.5;
     vec4 noisePos = vec4(onSpherePos, time * 0.000005);
 
@@ -26,6 +51,6 @@ void main() {
     float n = n1 + n2 + n3;
     float newTexCoord = clamp(texCoord + n, 0.005, 0.995);
     vec3 color = texture(colors, newTexCoord).rgb;
-    fragColor.rgb = color;
+    fragColor.rgb = color * getLight(vNormal, vPos3, vEyeDir, SHININESS, SPECULAR_EXPONENT);
     fragColor.a = 1.0;
 }

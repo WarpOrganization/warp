@@ -22,7 +22,7 @@ import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
-import pl.warp.engine.graphics.light.LightProperty;
+import pl.warp.engine.graphics.light.LightSourceProperty;
 import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
@@ -231,10 +231,9 @@ public class TestSceneLoader implements GameSceneLoader {
             ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
             colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
             GasPlanet gasPlanet = new GasPlanet(scene, colorsTexture);
-            TransformProperty gasSphereTransform = new TransformProperty();
+            TransformProperty gasSphereTransform = gasPlanet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             gasSphereTransform.move(new Vector3f(-1200f, -200f, -500f));
             gasSphereTransform.scale(new Vector3f(1000.0f));
-            gasPlanet.addProperty(gasSphereTransform);
 
             float startR = 1.5f;
             float endR = 2.5f;
@@ -247,10 +246,13 @@ public class TestSceneLoader implements GameSceneLoader {
 
             Star sun = new Star(scene, 30000f);
             TransformProperty sunSphereTransform = new TransformProperty();
-            sunSphereTransform.move(new Vector3f(2000f, 200f, 500f));
-            sunSphereTransform.scale(new Vector3f(1000.0f));
+            sunSphereTransform.move(new Vector3f(10000f, 200f, 500f));
+            sunSphereTransform.scale(new Vector3f(3000.0f));
             sun.addProperty(sunSphereTransform);
-
+            SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
+            LightSourceProperty lightSourceProperty = new LightSourceProperty();
+            sun.addProperty(lightSourceProperty);
+            lightSourceProperty.addSpotLight(spotLight);
 
             brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
@@ -289,17 +291,6 @@ public class TestSceneLoader implements GameSceneLoader {
             bulletTexture2 = new Texture2D(bullet2decodedTexture.getWidth(), bullet2decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bullet2decodedTexture.getData());
 
             new GunScript(controllableGoat);
-
-            SpotLight goatLight = new SpotLight(
-                    controllableGoat,
-                    new Vector3f(0, 0, 1),
-                    new Vector3f(0, 0, 1), 0.30f, 0.3f,
-                    new Vector3f(0.5f),
-                    new Vector3f(0f, 0f, 0f),
-                    0.1f, 0.1f);
-            LightProperty directionalLightProperty = new LightProperty();
-            controllableGoat.addProperty(directionalLightProperty);
-            directionalLightProperty.addSpotLight(goatLight);
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -357,10 +348,6 @@ public class TestSceneLoader implements GameSceneLoader {
             lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
             {
                 Component light = new GameSceneComponent(scene);
-                LightProperty property = new LightProperty();
-                light.addProperty(property);
-                SpotLight spotLight = new SpotLight(light, new Vector3f(0f, 0f, 0f), new Vector3f(2f, 2f, 2f).mul(4), new Vector3f(0.6f, 0.6f, 0.6f), 0.1f, 0.1f);
-                property.addSpotLight(spotLight);
                 TransformProperty lightSourceTransform = new TransformProperty();
                 light.addProperty(lightSourceTransform);
                 ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
@@ -401,8 +388,6 @@ public class TestSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 100, true, true, stages);
                 light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
-                LensFlare flare = new LensFlare(lensTexture, flares);
-                light.addProperty(new GraphicsLensFlareProperty(flare));
             }
 
             {

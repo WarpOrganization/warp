@@ -5,17 +5,25 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.updater.Updatable;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.MeshRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
 
+import java.util.List;
+
 /**
  * @author Jaca777
  *         Created 2016-08-03 at 01
  */
 public class GasPlanetProgram extends MeshRendererProgram implements Updatable {
+
+    private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES);
+
+    private static final String[] SPOT_LIGHT_FIELD_NAMES =
+            {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
 
     private static final int COLORS_TEXTURE_SAMPLER = 0;
 
@@ -32,12 +40,16 @@ public class GasPlanetProgram extends MeshRendererProgram implements Updatable {
     private int unifCameraPos;
     private int unifTime;
     private int unifColor;
+    private int unifLightEnabled;
+    private int unifSpotLightCount;
+    private int[][] unifSpotLightSources = new int[MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
 
     public GasPlanetProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
-                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
+                new ExtendedGLSLProgramCompiler(CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
         loadLocations();
+        loadSpotLightStructure();
     }
 
     private void loadLocations() {
@@ -52,6 +64,15 @@ public class GasPlanetProgram extends MeshRendererProgram implements Updatable {
         this.unifCameraPos = getUniformLocation("cameraPos");
         this.unifColor = getUniformLocation("color");
         this.unifTime = getUniformLocation("time");
+        this.unifLightEnabled = getUniformLocation("lightEnabled");
+        this.unifSpotLightCount = getUniformLocation("numSpotLights");
+    }
+
+    private void loadSpotLightStructure() {
+        for (int i = 0; i < MAX_SPOT_LIGHT_SOURCES; i++)
+            for (int j = 0; j < SPOT_LIGHT_FIELD_NAMES.length; j++)
+                this.unifSpotLightSources[i][j] =
+                        getUniformLocation("spotLightSources[" + i + "]." + SPOT_LIGHT_FIELD_NAMES[j]);
     }
 
     @Override
@@ -83,8 +104,25 @@ public class GasPlanetProgram extends MeshRendererProgram implements Updatable {
         setUniformi(unifTime, time);
     }
 
-    @Override
     public void useEnvironment(Environment environment) {
+        setUniformb(unifLightEnabled, environment.isLightEnabled());
+        List<SpotLight> spotLights = environment.getSpotLights();
+        int j = 0;
+        for (SpotLight spotLight : spotLights)
+            if (spotLight.isEnabled())
+                setSpotLight(unifSpotLightSources[j++], spotLight);
+        setUniformi(unifSpotLightCount, j);
+    }
 
+
+    private void setSpotLight(int[] lightStruct, SpotLight light) {
+        setUniformV3(lightStruct[SPOT_LIGHT_POSITION], light.getPosition());
+        setUniformV3(lightStruct[SPOT_LIGHT_CONE_DIRECTION], light.getDirection());
+        setUniformf(lightStruct[SPOT_LIGHT_CONE_ANGLE], light.getConeAngle());
+        setUniformf(lightStruct[SPOT_LIGHT_CONE_GRADIENT], light.getConeGradient());
+        setUniformV3(lightStruct[SPOT_LIGHT_COLOR], light.getColor());
+        setUniformV3(lightStruct[SPOT_LIGHT_AMBIENT_COLOR], light.getAmbientColor());
+        setUniformf(lightStruct[SPOT_LIGHT_ATTENUATION], light.getAttenuation());
+        setUniformf(lightStruct[SPOT_LIGHT_GRADIENT], light.getGradient());
     }
 }

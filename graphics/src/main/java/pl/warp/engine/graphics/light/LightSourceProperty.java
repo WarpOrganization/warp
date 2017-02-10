@@ -10,13 +10,13 @@ import java.util.Set;
  * Created by Hubertus on 2016-06-26.
  */
 
-public class LightProperty extends Property<Component> {
+public class LightSourceProperty extends Property<Component> {
 
     private Set<SpotLight> spotLights = new HashSet<>();
 
     public static final String LIGHT_PROPERTY_NAME = "lightProperty";
 
-    public LightProperty() {
+    public LightSourceProperty() {
         super(LIGHT_PROPERTY_NAME);
     }
 

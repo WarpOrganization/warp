@@ -24,7 +24,7 @@ public class SceneLightObserver {
                 SimpleListener.createListener(scene, LightAddedEvent.LIGHT_ADDED_EVENT_NAME, this::handleLightAdded);
         this.lightRemovedEventListener =
                 SimpleListener.createListener(scene, LightRemovedEvent.LIGHT_REMOVED_EVENT_NAME, this::handleLightRemoved);
-        Set<LightProperty> properties = scene.getChildrenProperties(LightProperty.LIGHT_PROPERTY_NAME);
+        Set<LightSourceProperty> properties = scene.getChildrenProperties(LightSourceProperty.LIGHT_PROPERTY_NAME);
         addLights(properties);
     }
 
@@ -37,8 +37,8 @@ public class SceneLightObserver {
         environment.removeSpotLightSource(event.getRemovedLight());
     }
 
-    private void addLights(Set<LightProperty> properties) {
-        for (LightProperty property : properties)
+    private void addLights(Set<LightSourceProperty> properties) {
+        for (LightSourceProperty property : properties)
             if (property.isEnabled()) {
                 for (SpotLight spotLight : property.getSpotLights())
                     environment.addSpotLightSource(spotLight);

@@ -27,8 +27,7 @@ public class DefaultMeshProgram extends MeshRendererProgram {
     private static final int MAIN_MATERIAL_TEXTURE_SAMPLER = 0;
     private static final int MATERIAL_BRIGHTNESS_TEXTURE = 1;
 
-    private static final int MAX_SPOT_LIGHT_SOURCES = 25;
-    private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MAX_SPOT_LIGHT_SOURCES);
+    private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES);
 
     private static final String[] SPOT_LIGHT_FIELD_NAMES =
             {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
