@@ -15,10 +15,10 @@ layout(location = 0) out vec4 fragColor;
 
 void main() {
 
-    float t = (time * 0.05) - length(spherePos);
+    float t = (time * 0.02) - length(spherePos);
 
     // Offset normal with noise
-    float frequency = 1.5;
+    float frequency = 0.2;
     float ox = snoise(vec4(spherePos, t) * frequency);
     float oy = snoise(vec4((spherePos + 2000.0), t) * frequency);
     float oz = snoise(vec4((spherePos + 4000.0), t) * frequency);
@@ -31,10 +31,12 @@ void main() {
 
     // Get noise with normalized position to offset the original position
 
-    vec3 offsetPos = spherePos + noise(vec4(nDistVec, t), 5, 2.0, 0.7) * 0.1;
+    vec3 offsetPos = spherePos + noise(vec4(nDistVec, t), 5, 2.0, 0.7) * 0.2;
 
     float dist = length(offsetPos) * 4.0;
-    float brightness = (1.0 / (dist * dist) - 0.1) * 1.2;
+    float brightness = (1.0 / (dist * dist) - 0.1) * 0.7;
 
     fragColor.rgba = vec4(1, 1, 1, max(brightness, 0));
+    float u = max(0.001, (temperature - dist * 2000) / 29200.0f);
+    fragColor.rgb += (texture(colors, u).rgb + brightness);
 }

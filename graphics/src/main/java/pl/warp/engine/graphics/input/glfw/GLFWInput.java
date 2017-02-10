@@ -25,7 +25,7 @@ public class GLFWInput implements Input {
 
     private long windowHandle;
 
-    private boolean[] keyboardKeys = new boolean[349];
+    private boolean[] keyboardKeys = new boolean[2048];
     private boolean[] mouseButtons = new boolean[8];
 
     private double lastScrollPos;

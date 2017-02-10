@@ -27,4 +27,12 @@ public class CoronaProperty extends Property<Component>{
     public float getSize() {
         return size;
     }
+
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setSize(float size) {
+        this.size = size;
+    }
 }

@@ -17,7 +17,7 @@ import static java.awt.event.MouseEvent.NOBUTTON;
  */
 public class JavaFxInput implements Input {
 
-    private volatile boolean[] keyboardKeys = new boolean[349];
+    private volatile boolean[] keyboardKeys = new boolean[2048];
     private volatile boolean[] mouseButtons = new boolean[8];
 
     private Vector2f lastCursorPos = new Vector2f(0, 0);

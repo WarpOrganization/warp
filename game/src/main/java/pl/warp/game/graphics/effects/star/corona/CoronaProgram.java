@@ -56,7 +56,8 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
         this.unifTime = getUniformLocation("time");
-        this.unifTemperature = getUniformLocation("color");
+        this.unifTemperature = getUniformLocation("temperature");
+        this.unifBrightness = getUniformLocation("brightness");
     }
 
     public void useComponent(Component component) {
@@ -64,6 +65,7 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
         if (component.hasEnabledProperty(CoronaProperty.CORONA_PROPERTY_NAME)) {
             CoronaProperty property = component.getProperty(CoronaProperty.CORONA_PROPERTY_NAME);
             setUniformf(unifTemperature, property.getTemperature());
+            setUniformV3(unifBrightness, getBrightness(property.getTemperature()));
         } else
             throw new IllegalArgumentException("Component needs an enabled star property in order to render a star.");
     }

@@ -17,6 +17,7 @@ import pl.warp.engine.core.SimpleEngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.core.scene.PoolEventDispatcher;
+import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
@@ -28,8 +29,8 @@ import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.CustomProgramProperty;
-import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
@@ -66,12 +67,16 @@ import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
 import pl.warp.game.graphics.effects.star.Star;
 import pl.warp.game.graphics.effects.star.StarProgram;
+import pl.warp.game.graphics.effects.star.StarProperty;
+import pl.warp.game.graphics.effects.star.corona.CoronaProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.scene.GameSceneLoader;
+import pl.warp.game.script.GameScript;
 import pl.warp.test.ai.DroneMemoryProperty;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -244,7 +249,34 @@ public class TestSceneLoader implements GameSceneLoader {
 
             PlanetRing ring = new PlanetRing(gasPlanet, startR, endR, ringColors);
 
-            Star sun = new Star(scene, 30000f);
+            Star sun = new Star(scene, 5000f);
+            new GameScript<Star>(sun){
+
+                private StarProperty starProperty;
+                private CoronaProperty coronaProperty;
+
+                @Override
+                protected void init() {
+                    starProperty = sun.getProperty(StarProperty.STAR_PROPERTY_NAME);
+                    coronaProperty = sun.getChild(0).getProperty(CoronaProperty.CORONA_PROPERTY_NAME);
+                }
+
+                @Override
+                protected void update(int delta) {
+                    float temperature = starProperty.getTemperature();
+                    Input input = getContext().getInput();
+                    if(input.isKeyDown(KeyEvent.VK_O)) {
+                        temperature += delta * 10;
+                        System.out.println("Current temperature: " + temperature);
+                    }
+                    if(input.isKeyDown(KeyEvent.VK_L)){
+                        temperature = Math.max(3600f, temperature - delta * 10);
+                        System.out.println("Current temperature: " + temperature);
+                    }
+                    starProperty.setTemperature(temperature);
+                    coronaProperty.setTemperature(temperature);
+                }
+            };
             TransformProperty sunSphereTransform = new TransformProperty();
             sunSphereTransform.move(new Vector3f(10000f, 200f, 500f));
             sunSphereTransform.scale(new Vector3f(3000.0f));
