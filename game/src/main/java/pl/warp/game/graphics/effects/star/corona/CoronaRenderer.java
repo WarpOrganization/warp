@@ -11,7 +11,7 @@ import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.mesh.PointVAO;
+import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 
 /**
  * @author Jaca777
@@ -22,7 +22,7 @@ public class CoronaRenderer extends CustomRenderer {
     private Camera camera;
     private CoronaProgram program;
     private Environment environment;
-    private PointVAO pointVAO;
+    private QuadMesh quadMesh;
 
     public CoronaRenderer(Graphics graphics, CoronaProgram program) {
         super(graphics);
@@ -32,7 +32,7 @@ public class CoronaRenderer extends CustomRenderer {
 
     @Override
     public void init() {
-        this.pointVAO = new PointVAO(new Vector3f(0));
+        this.quadMesh = new QuadMesh();
     }
 
     @Override
@@ -45,21 +45,20 @@ public class CoronaRenderer extends CustomRenderer {
     @Override
     public void render(Component component, MatrixStack stack) {
         if (component.hasEnabledProperty(CoronaProperty.CORONA_PROPERTY_NAME)) {
+            stack.push();
             CoronaProperty property = component.getProperty(CoronaProperty.CORONA_PROPERTY_NAME);
-            float size = extractScale(stack.topMatrix());
-
+            stack.scale(property.getSize(), property.getSize(), property.getSize());
             Quaternionf rotation = getRotation(stack);
-
             program.use();
             program.useCamera(camera);
             program.useEnvironment(environment);
             program.useModelMatrix(stack.topMatrix());
-            program.useRotationMatrix(rotation.get(tempMatrix).invert());
+            program.useRotationMatrix(rotation.get(tempMatrix));
             program.useComponent(component);
-            program.useSize(size * property.getSize());
             GL11.glDepthMask(false);
-            pointVAO.draw();
+            quadMesh.draw();
             GL11.glDepthMask(true);
+            stack.pop();
         } else throw new IllegalArgumentException("Can't render a corona without a mesh.");
     }
 
@@ -69,6 +68,8 @@ public class CoronaRenderer extends CustomRenderer {
     private Quaternionf tempQuaternion = new Quaternionf();
 
     protected Quaternionf getRotation(MatrixStack stack) {
+        temp2.set(0, 0, 0, 1);
+        this.tempQuaternion.identity();
         Vector3f cameraPos = camera.getPosition(temp);
         Vector4f planetPos4 = temp2.mul(stack.topMatrix());
         Vector3f coronaPos = temp3.set(planetPos4.x, planetPos4.y, planetPos4.z).div(planetPos4.w);
@@ -77,8 +78,8 @@ public class CoronaRenderer extends CustomRenderer {
         Matrix4f coronaRotation = tempMatrix.mul(stack.topRotationMatrix());
         Vector4f normal4 = temp2.set(0, 0, 1, 1);
         Vector4f rotatedNormal4 = normal4.mul(coronaRotation);
-        Vector3f rotatedNormal = temp3.set(rotatedNormal4.x, rotatedNormal4.y, rotatedNormal4.z).div(rotatedNormal4.w);
-        return tempQuaternion.rotateTo(rotatedNormal, direction);
+        Vector3f rotatedNormal = temp.set(rotatedNormal4.x, rotatedNormal4.y, rotatedNormal4.z).div(rotatedNormal4.w);
+        return this.tempQuaternion.rotateTo(rotatedNormal, direction);
     }
 
 

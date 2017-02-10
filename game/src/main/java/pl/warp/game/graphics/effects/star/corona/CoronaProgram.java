@@ -33,7 +33,6 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
     private int unifCameraRotationMatrix;
     private int unifTime;
     private int unifTemperature;
-    private int unifSize;
     private int unifBrightness;
 
     private Texture1D temperature;
@@ -57,7 +56,6 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
         this.unifTime = getUniformLocation("time");
-        this.unifSize = getUniformLocation("size");
         this.unifTemperature = getUniformLocation("color");
     }
 
@@ -68,10 +66,6 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
             setUniformf(unifTemperature, property.getTemperature());
         } else
             throw new IllegalArgumentException("Component needs an enabled star property in order to render a star.");
-    }
-
-    public void useSize(float size){
-        setUniformf(unifSize, size);
     }
 
     private Vector3f tempBrightness = new Vector3f();
