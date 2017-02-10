@@ -270,7 +270,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         System.out.println("Current temperature: " + temperature);
                     }
                     if(input.isKeyDown(KeyEvent.VK_L)){
-                        temperature = Math.max(3600f, temperature - delta * 10);
+                        temperature = Math.max(4100f, temperature - delta * 10);
                         System.out.println("Current temperature: " + temperature);
                     }
                     starProperty.setTemperature(temperature);
@@ -279,7 +279,7 @@ public class TestSceneLoader implements GameSceneLoader {
             };
             TransformProperty sunSphereTransform = new TransformProperty();
             sunSphereTransform.move(new Vector3f(10000f, 200f, 500f));
-            sunSphereTransform.scale(new Vector3f(3000.0f));
+            sunSphereTransform.scale(new Vector3f(2000.0f));
             sun.addProperty(sunSphereTransform);
             SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
             LightSourceProperty lightSourceProperty = new LightSourceProperty();

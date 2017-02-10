@@ -49,7 +49,7 @@ void main() {
     float n2 = ridgedNoise(noisePos, 5,  5.0, 0.75) * 0.015 - 0.01;
     float n3 = snoise(noisePos) * threshold;
     float n = n1 + n2 + n3;
-    float newTexCoord = clamp(texCoord + n, 0.005, 0.995);
+    float newTexCoord = clamp(texCoord + n, 0.1, 0.9);
     vec3 color = texture(colors, newTexCoord).rgb;
     fragColor.rgb = color * getLight(vNormal, vPos3, vEyeDir, SHININESS, SPECULAR_EXPONENT);
     fragColor.a = 1.0;

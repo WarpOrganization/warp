@@ -49,7 +49,7 @@ public class Star extends GameSceneComponent {
     private void createCorona() {
         corona = new GameSceneComponent(this);
         corona.addProperty(new CustomRendererProperty(contextProperty.getCoronaRenderer()));
-        corona.addProperty(new CoronaProperty(temperature, 3.0f));
+        corona.addProperty(new CoronaProperty(temperature, 2.0f));
     }
 
     private StarContextProperty getContextProperty() {
