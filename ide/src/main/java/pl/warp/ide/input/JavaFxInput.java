@@ -32,14 +32,14 @@ public class JavaFxInput implements Input {
 
     public void onKeyReleased(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
-        if (keyCode > 348) return;
+        if (keyCode >= 2048) return;
         else keyboardKeys[keyCode] = false;
         scene.triggerEvent(new KeyReleasedEvent(keyCode));
     }
 
     public void onKeyPressed(KeyEvent event) {
         int keyCode = JavaFxKeyMapper.toAWTKeyCode(event.getCode());
-        if (keyCode > 348) return;
+        if (keyCode >= 2048) return;
         keyboardKeys[keyCode] = true;
         scene.triggerEvent(new KeyPressedEvent(keyCode));
     }
@@ -51,7 +51,7 @@ public class JavaFxInput implements Input {
 
     public void onMousePressed(MouseEvent event) {
         int buttonCode = JavaFxKeyMapper.toAWTButton(event.getButton());
-        if (buttonCode == NOBUTTON)
+        if (buttonCode >= mouseButtons.length || buttonCode == NOBUTTON)
             return; //button unrecognized
         mouseButtons[buttonCode] = true;
         scene.triggerEvent(new MouseButtonPressedEvent(buttonCode));
@@ -60,7 +60,7 @@ public class JavaFxInput implements Input {
 
     public void onMouseReleased(MouseEvent event) {
         int buttonCode = JavaFxKeyMapper.toAWTButton(event.getButton());
-        if (buttonCode == NOBUTTON)
+        if (buttonCode >= mouseButtons.length || buttonCode == NOBUTTON)
             return; //button unrecognized
         mouseButtons[buttonCode] = false;
         scene.triggerEvent(new MouseButtonReleasedEvent(buttonCode));

@@ -60,7 +60,7 @@ public class GLFWInput implements Input {
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
         int keyStroke = GLFWKeyMapper.toKeyCode(key);
-        if (keyStroke == KeyEvent.VK_UNDEFINED)
+        if (keyStroke >= keyboardKeys.length || keyStroke == KeyEvent.VK_UNDEFINED)
             return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
@@ -80,7 +80,7 @@ public class GLFWInput implements Input {
 
     private void mouseButtonAction(long window, int button, int action, int mods) {
         int buttonCode = GLFWKeyMapper.toButtonCode(button);
-        if (buttonCode == MouseEvent.NOBUTTON)
+        if (button >= mouseButtons.length || buttonCode == MouseEvent.NOBUTTON)
             return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
