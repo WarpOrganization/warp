@@ -136,6 +136,7 @@ public class TestSceneLoader implements GameSceneLoader {
     private StarProgram starProgram;
     private GameSceneComponent enemyPortal;
     private GameSceneComponent allyPortal;
+    private GasPlanet gasPlanet;
 
 
     public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -239,10 +240,11 @@ public class TestSceneLoader implements GameSceneLoader {
 
             ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
             colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
-            GasPlanet gasPlanet = new GasPlanet(scene, colorsTexture);
+            gasPlanet = new GasPlanet(scene, colorsTexture);
             TransformProperty gasSphereTransform = gasPlanet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             gasSphereTransform.move(new Vector3f(-1200f, -200f, -500f));
             gasSphereTransform.scale(new Vector3f(1000.0f));
+
 
             float startR = 1.5f;
             float endR = 2.5f;
@@ -315,6 +317,8 @@ public class TestSceneLoader implements GameSceneLoader {
 
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
             controllableGoat.addProperty(renderableMeshProperty);
+
+            new KabooomScript(controllableGoat, gasPlanet, 1000.0f);
 
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
@@ -539,6 +543,7 @@ public class TestSceneLoader implements GameSceneLoader {
         int nOfGoats = 10;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
+            new KabooomScript(goat, gasPlanet, 1000.0f);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new RenderableMeshProperty(goatMesh));
             float x = 10 + random.nextFloat() * 200 - 100f;
