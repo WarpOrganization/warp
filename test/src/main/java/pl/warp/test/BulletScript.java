@@ -70,7 +70,6 @@ public class BulletScript extends GameScript<GameComponent> {
             component.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME).disable();
-            component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             component.forEachChildren(c -> {
                 if (c.hasProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME))
                     c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
@@ -85,9 +84,7 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private void resetComponent(Component component) {
         component.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).enable();
-        component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).enable();
         component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME).enable();
-        component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).enable();
         component.forEachChildren(c -> {
             if (c.hasProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME))
                 c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).enable();
@@ -110,6 +107,7 @@ public class BulletScript extends GameScript<GameComponent> {
         GraphicsMaterialProperty materialProperty = component.getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME);
         materialProperty.getMaterial().setTransparency(0.5f);
         executorService.schedule(() -> {
+            component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).enable();
             materialProperty.getMaterial().setTransparency(1.0f);
             bulletproofProperty.disable();
         }, 5, TimeUnit.SECONDS);
