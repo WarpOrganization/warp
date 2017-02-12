@@ -47,8 +47,10 @@ public class MeshRenderer implements Renderer {
         if (component.hasEnabledProperty(RenderableMeshProperty.MESH_PROPERTY_NAME)) {
             MeshRendererProgram program = getProgram(component);
             program.use();
-            program.useCamera(camera);
-            program.useEnvironment(environment);
+            if (program != defaultProgram) { //TODO optimize
+                program.useCamera(camera);
+                program.useEnvironment(environment);
+            }
             program.useMatrixStack(stack);
             program.useComponent(component);
             renderMesh(component);

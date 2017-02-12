@@ -1,13 +1,17 @@
 package pl.warp.game.graphics.effects.ring;
 
+import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.MeshRendererProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
+
+import java.util.List;
 
 /**
  * @author Jaca777
@@ -15,6 +19,11 @@ import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
  */
 public class PlanetRingProgram extends MeshRendererProgram {
     private static final int COLORS_TEXTURE_SAMPLER = 0;
+
+    private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES);
+
+    private static final String[] SPOT_LIGHT_FIELD_NAMES =
+            {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
 
     private static final String PROGRAM_PATH = "pl/warp/game/graphics/effects/";
     private static final String VERTEX_SHADER = "ring/vert";
@@ -24,18 +33,22 @@ public class PlanetRingProgram extends MeshRendererProgram {
     private int unifModelMatrix;
     private int unifRotationMatrix;
     private int unifCameraMatrix;
+    private int unifCameraPos;
     private int unifRingStart;
     private int unifRingEnd;
+    private int unifLightEnabled;
+    private int unifSpotLightCount;
+    private int[][] unifSpotLightSources = new int[MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
 
     public PlanetRingProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
-                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
+                new ExtendedGLSLProgramCompiler(CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
         loadLocations();
     }
-
     private void loadLocations() {
         loadUniforms();
+        loadSpotLightStructure();
     }
 
     private void loadUniforms() {
@@ -43,13 +56,23 @@ public class PlanetRingProgram extends MeshRendererProgram {
         this.unifModelMatrix = getUniformLocation("modelMatrix");
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
+        this.unifCameraPos = getUniformLocation("cameraPos");
         this.unifRingStart = getUniformLocation("ringStart");
         this.unifRingEnd = getUniformLocation("ringEnd");
+        this.unifLightEnabled = getUniformLocation("lightEnabled");
+        this.unifSpotLightCount = getUniformLocation("numSpotLights");
     }
+
+    private void loadSpotLightStructure() {
+        for (int i = 0; i < MAX_SPOT_LIGHT_SOURCES; i++)
+            for (int j = 0; j < SPOT_LIGHT_FIELD_NAMES.length; j++)
+                this.unifSpotLightSources[i][j] =
+                        getUniformLocation("spotLightSources[" + i + "]." + SPOT_LIGHT_FIELD_NAMES[j]);
+    }
+
 
     @Override
     public void useComponent(Component component) {
-        //useTexture(colorsTexture, COLORS_TEXTURE_SAMPLER);
         if (component.hasEnabledProperty(PlanetRingProperty.PLANETARY_RING_PROPERTY_NAME)) {
             PlanetRingProperty property = component.getProperty(PlanetRingProperty.PLANETARY_RING_PROPERTY_NAME);
             setUniformf(unifRingStart, property.getStartRadius());
@@ -59,10 +82,13 @@ public class PlanetRingProgram extends MeshRendererProgram {
             throw new IllegalStateException("Unable to render component without PlanetaryRingProperty enabled property.");
     }
 
+    private Vector3f tmpVector = new Vector3f();
+
     @Override
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
+        setUniformV3(unifCameraPos, camera.getPosition(tmpVector));
     }
 
     @Override
@@ -73,6 +99,24 @@ public class PlanetRingProgram extends MeshRendererProgram {
 
     @Override
     public void useEnvironment(Environment environment) {
+        setUniformb(unifLightEnabled, environment.isLightEnabled());
+        List<SpotLight> spotLights = environment.getSpotLights();
+        int j = 0;
+        for (SpotLight spotLight : spotLights)
+            if (spotLight.isEnabled())
+                setSpotLight(unifSpotLightSources[j++], spotLight);
+        setUniformi(unifSpotLightCount, j);
+    }
 
+
+    private void setSpotLight(int[] lightStruct, SpotLight light) {
+        setUniformV3(lightStruct[SPOT_LIGHT_POSITION], light.getPosition());
+        setUniformV3(lightStruct[SPOT_LIGHT_CONE_DIRECTION], light.getDirection());
+        setUniformf(lightStruct[SPOT_LIGHT_CONE_ANGLE], light.getConeAngle());
+        setUniformf(lightStruct[SPOT_LIGHT_CONE_GRADIENT], light.getConeGradient());
+        setUniformV3(lightStruct[SPOT_LIGHT_COLOR], light.getColor());
+        setUniformV3(lightStruct[SPOT_LIGHT_AMBIENT_COLOR], light.getAmbientColor());
+        setUniformf(lightStruct[SPOT_LIGHT_ATTENUATION], light.getAttenuation());
+        setUniformf(lightStruct[SPOT_LIGHT_GRADIENT], light.getGradient());
     }
 }

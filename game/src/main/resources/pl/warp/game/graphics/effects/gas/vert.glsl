@@ -18,7 +18,7 @@ layout(location = 0) in vec3 inVertex;
 layout(location = 1) in vec2 inTexCoord; out vec2 vTexCoord;
 layout(location = 2) in vec3 inNormal;
 
-vec3 calculateNormal(vec3 norma);
+vec3 calculateNormal(vec3 normal);
 
 void main(void) {
 

@@ -75,7 +75,7 @@ public class BulletScript extends GameScript<GameComponent> {
                     c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
             });
             component.addProperty(new Bulletproof());
-            kaboom(component);
+            kaboom((GameComponent) component);
             DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
             droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
             executorService.schedule(() -> destroy(component), 2, TimeUnit.SECONDS);
@@ -114,17 +114,19 @@ public class BulletScript extends GameScript<GameComponent> {
     }
 
 
-    private void kaboom(Component component) {
-        ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-        ParticleStage[] stages = {
-                new ParticleStage(0.8f, new Vector4f(2.5f, 0.5f, 1.5f, 2.0f)),
-                new ParticleStage(0.8f, new Vector4f(1.0f, 0.5f, 1.0f, 0.0f))
+    private void kaboom(GameComponent component) {
+        ParticleAnimator animator1 = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
+        ParticleStage[] stages1 = {
+                new ParticleStage(10.0f, new Vector4f(1.0f, 0.2f, 1.0f, 1.0f)),
+                new ParticleStage(10.0f, new Vector4f(0.5f, 0.2f, 1.0f, 0.0f))
         };
-        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 0, true, true, stages);
-        DotParticleSystem system = new DotParticleSystem(animator, factory, 1000);
-        component.addProperty(new ParticleEmitterProperty(system));
-        executorService.schedule(() -> system.setEmit(false), 300, TimeUnit.MILLISECONDS);
+        ParticleFactory<DotParticle> factory1 = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 100, true, true, stages1);
+        DotParticleSystem system1 = new DotParticleSystem(animator1, factory1, 400);
+        ParticleEmitterProperty property = new ParticleEmitterProperty(system1);
+        component.addProperty(property);
+        executorService.schedule(() -> system1.setEmit(false), 300, TimeUnit.MILLISECONDS);
     }
+
 
     private void destroy(Component componentHit) {
         resetComponent(componentHit);
