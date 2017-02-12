@@ -6,10 +6,11 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
-import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
@@ -28,8 +29,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.badlogic.gdx.math.MathUtils.random;
-
 /**
  * @author Hubertus
  *         Created 7/12/16
@@ -41,13 +40,13 @@ public class BulletScript extends GameScript<GameComponent> {
     private Listener<Component, CollisionEvent> collisionListener;
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(8);
     private Texture2DArray explosionSpritesheet;
-    private Component playerShip;
+    private Component shooterShip;
 
     public BulletScript(GameComponent owner, int life, Texture2DArray explosionSpritesheet, GameComponent playerShip) {
         super(owner);
         this.life = life;
         this.explosionSpritesheet = explosionSpritesheet;
-        this.playerShip = playerShip;
+        this.shooterShip = playerShip;
     }
 
     @Override
@@ -67,32 +66,36 @@ public class BulletScript extends GameScript<GameComponent> {
     private synchronized void onCollision(CollisionEvent event) {
         Component component = event.getSecondComponent();
         if (component.hasEnabledProperty(Bulletproof.class)) return;
-        if (component != playerShip && component != TestSceneLoader.MAIN_GOAT) {
+        if (component != shooterShip && component.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) {
             component.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
             component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME).disable();
             component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
+            component.forEachChildren(c -> {
+                if (c.hasProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME))
+                    c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
+            });
             component.addProperty(new Bulletproof());
             kaboom(component);
-            if (component.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) {
-                DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
-                droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
-            }
-            executorService.schedule(() -> destroy(component), 1, TimeUnit.SECONDS);
-        } else if (component == TestSceneLoader.MAIN_GOAT) {
-    /*        GameComponent component1 = new GameSceneComponent((GameComponent) component);
-            kaboom(component1);
-            executorService.schedule(() -> destroy(component1), 1, TimeUnit.SECONDS);
-            resetComponent(component);*/
+            DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
+            droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
+            executorService.schedule(() -> destroy(component), 2, TimeUnit.SECONDS);
         }
     }
 
     private void resetComponent(Component component) {
+        component.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).enable();
+        component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).enable();
+        component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME).enable();
+        component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).enable();
+        component.forEachChildren(c -> {
+            if (c.hasProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME))
+                c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).enable();
+        });
         TransformProperty transform = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-        float x = 10 + random.nextFloat() * 200 - 100f;
-        float y = random.nextFloat() * 200 - 100f;
-        float z = random.nextFloat() * 200 - 100f;
-        transform.setTranslation(new Vector3f(x, y, z));
+        DroneProperty droneProperty = component.getProperty(DroneProperty.DRONE_PROPERTY_NAME);
+        GameComponent respawn = droneProperty.getRespawn();
+        Transforms.getAbsolutePosition(respawn, transform.getTranslation());
         PhysicalBodyProperty bodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         bodyProperty.setVelocity(new Vector3f(0));
         bodyProperty.setAngularVelocity(new Vector3f(0));
@@ -109,7 +112,7 @@ public class BulletScript extends GameScript<GameComponent> {
         executorService.schedule(() -> {
             materialProperty.getMaterial().setTransparency(1.0f);
             bulletproofProperty.disable();
-        }, 2, TimeUnit.SECONDS);
+        }, 5, TimeUnit.SECONDS);
     }
 
 
@@ -121,20 +124,21 @@ public class BulletScript extends GameScript<GameComponent> {
         };
         ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 0, true, true, stages);
         DotParticleSystem system = new DotParticleSystem(animator, factory, 1000);
-        component.addProperty(new GraphicsParticleEmitterProperty(system));
+        component.addProperty(new ParticleEmitterProperty(system));
         executorService.schedule(() -> system.setEmit(false), 300, TimeUnit.MILLISECONDS);
     }
 
     private void destroy(Component componentHit) {
-        componentHit.destroy();
+        resetComponent(componentHit);
         getOwner().destroy();
     }
 
     //TODO REMOVE AS SOON AS DISABLING COLLIDER WORKS
     private static class Bulletproof extends Property {
+        public static final String BULLETPROOF_PROPERTY_NAME = "bulletproof";
 
         public Bulletproof() {
-            super();
+            super(BULLETPROOF_PROPERTY_NAME);
         }
     }
 

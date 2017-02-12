@@ -28,8 +28,8 @@ public class ParticleSystemsRecorder implements Renderer {
 
     @Override
     public void render(Component component, MatrixStack stack) {
-        if(component.hasProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)){
-            GraphicsParticleEmitterProperty emitterProperty = component.getProperty(GraphicsParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+        if(component.hasEnabledProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)){
+            ParticleEmitterProperty emitterProperty = component.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
             storage.add(emitterProperty.getSystem(), stack.topMatrix());
         }
     }

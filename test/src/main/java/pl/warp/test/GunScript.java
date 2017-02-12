@@ -11,7 +11,7 @@ import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
@@ -111,6 +111,7 @@ public class GunScript extends GameScript<GameComponent> {
             direction.add(parentVelocity.mul(BULLET_MASS));
 
             GameComponent bullet = new GameSceneComponent(getContext());
+            bullet.addProperty(new BulletProperty());
             bullet.addProperty(new RenderableMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();
@@ -125,7 +126,7 @@ public class GunScript extends GameScript<GameComponent> {
                 };
 
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.02f), 100, 0, true, true, stages);
-                particles.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
+                particles.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
             }
 
 

@@ -33,8 +33,8 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
-import pl.warp.engine.graphics.particles.GraphicsParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleFactory;
 import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
@@ -89,6 +89,8 @@ import static com.badlogic.gdx.math.MathUtils.random;
 /**
  * @author Jaca777
  *         Created 2017-01-22 at 11
+ *         CANCER CODE, ONLY FOR TESTING
+ *         TODO KILL IT WITH FIRE
  */
 public class TestSceneLoader implements GameSceneLoader {
 
@@ -132,6 +134,8 @@ public class TestSceneLoader implements GameSceneLoader {
     private Texture2D bulletTexture2;
     private Texture2D goatBrightnessTexture2;
     private StarProgram starProgram;
+    private GameSceneComponent enemyPortal;
+    private GameSceneComponent allyPortal;
 
 
     public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -250,7 +254,7 @@ public class TestSceneLoader implements GameSceneLoader {
             PlanetRing ring = new PlanetRing(gasPlanet, startR, endR, ringColors);
 
             Star sun = new Star(scene, 5000f);
-            new GameScript<Star>(sun){
+            new GameScript<Star>(sun) {
 
                 private StarProperty starProperty;
                 private CoronaProperty coronaProperty;
@@ -265,11 +269,11 @@ public class TestSceneLoader implements GameSceneLoader {
                 protected void update(int delta) {
                     float temperature = starProperty.getTemperature();
                     Input input = getContext().getInput();
-                    if(input.isKeyDown(KeyEvent.VK_O)) {
+                    if (input.isKeyDown(KeyEvent.VK_O)) {
                         temperature += delta * 10;
                         System.out.println("Current temperature: " + temperature);
                     }
-                    if(input.isKeyDown(KeyEvent.VK_L)){
+                    if (input.isKeyDown(KeyEvent.VK_L)) {
                         temperature = Math.max(4100f, temperature - delta * 10);
                         System.out.println("Current temperature: " + temperature);
                     }
@@ -331,6 +335,33 @@ public class TestSceneLoader implements GameSceneLoader {
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             scene.addProperty(new GraphicsSkyboxProperty(cubemap));
 
+            allyPortal = new GameSceneComponent(scene);
+            TransformProperty allyPortalTransform = new TransformProperty();
+            allyPortal.addProperty(allyPortalTransform);
+            allyPortalTransform.move(new Vector3f(0, 0, 200));
+            {
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(10.0f, new Vector4f(0.2f, 0.5f, 1.0f, 1.0f)),
+                        new ParticleStage(10.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
+                allyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
+            }
+
+            enemyPortal = new GameSceneComponent(scene);
+            TransformProperty enemyPortalTransform = new TransformProperty();
+            enemyPortal.addProperty(enemyPortalTransform);
+            enemyPortalTransform.move(new Vector3f(0, 0, -600));
+            {
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(10.0f, new Vector4f(1.0f, 0.5f, 0.2f, 1.0f)),
+                        new ParticleStage(10.0f, new Vector4f(1.0f, 0.5f, 0.2f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
+                enemyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
+            }
 
             friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
@@ -344,12 +375,14 @@ public class TestSceneLoader implements GameSceneLoader {
             frigate.addProperty(new NameProperty("Frigate"));
             frigate.addProperty(new RenderableMeshProperty(friageMesh));
             frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
-   /*         frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f, 15.1f, 11.9f));*/
-            TransformProperty transformProperty = new TransformProperty();
-            transformProperty.move(new Vector3f(100, 0, 0));
-            transformProperty.rotateLocalY((float) -(Math.PI / 2));
-            transformProperty.scale(new Vector3f(3));
-            frigate.addProperty(transformProperty);
+            //frigate.addProperty(new PhysicalBodyProperty(10000.0f, 38.365f, 15.1f, 11.9f));
+            TransformProperty frigateTransform = new TransformProperty();
+            frigateTransform.move(new Vector3f(100, 0, 0));
+            frigateTransform.scale(new Vector3f(3));
+            frigateTransform.rotateY((float) (Math.PI / 2));
+            frigate.addProperty(frigateTransform);
+            //new FrigateScript(frigate, Transforms.getAbsolutePosition(gasPlanet, new Vector3f()));
+
 
             {
                 Component light = new GameSceneComponent(frigate);
@@ -362,7 +395,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
             }
 
             {
@@ -376,11 +409,12 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
             }
 
             ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
+/*
             {
                 Component light = new GameSceneComponent(scene);
                 TransformProperty lightSourceTransform = new TransformProperty();
@@ -391,7 +425,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(0.85f, new Vector4f(0.5f, 0.5f, 2.0f, 0.0f))
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 500, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
             }
 
 
@@ -407,7 +441,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(0.4f, new Vector4f(0.5f, 2.0f, 0.5f, 0.0f))
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 100, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
             }
 
 
@@ -422,7 +456,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(1.5f, new Vector4f(2.0f, 2.0f, 0.1f, 0.0f)),
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 100, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
             }
 
             {
@@ -438,7 +472,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
             }
 
             {
@@ -452,7 +486,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(0.1f, new Vector4f(1.0f, 0.5f, 0.5f, 0.0f)),
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 300, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
             }
 
             {
@@ -466,7 +500,7 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(1.0f, new Vector4f(1.0f, 0.5f, 0.5f, 0.0f)),
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.02f), 100, 0, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
             }
 
             {
@@ -480,8 +514,9 @@ public class TestSceneLoader implements GameSceneLoader {
                         new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
-                light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
             }
+*/
 
             generateGOATS(scene);
             allyEngineParticles(controllableGoat);
@@ -497,9 +532,9 @@ public class TestSceneLoader implements GameSceneLoader {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
-        //team1.add(controllableGoat);
-        controllableGoat.addProperty(new DroneProperty(5, 1, team2));
-        int nOfGoats = 50;
+        team1.add(controllableGoat);
+        controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
+        int nOfGoats = 10;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new NameProperty("Ship " + i));
@@ -520,7 +555,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 goat.addProperty(new GraphicsMaterialProperty(material));
                 goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
                 goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
-                goat.addProperty(new DroneProperty(5, 1, team2));
+                goat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
                 team1.add(goat);
                 allyEngineParticles(goat);
             } else {
@@ -532,7 +567,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 goat.addProperty(new GraphicsMaterialProperty(material));
                 goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2f, 1.8f / 2f, 13.443f / 2f));
                 goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture2, audioManager));
-                goat.addProperty(new DroneProperty(5, 1, team1));
+                goat.addProperty(new DroneProperty(5, 1, team1, enemyPortal));
                 team2.add(goat);
                 enemyEngineParticles(goat);
             }
@@ -561,7 +596,7 @@ public class TestSceneLoader implements GameSceneLoader {
                 new ParticleStage(0.5f, color1)
         };
         ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
-        light.addProperty(new GraphicsParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+        light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
     }
 
     @Override

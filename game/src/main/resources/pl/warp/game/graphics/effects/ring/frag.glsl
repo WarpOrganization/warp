@@ -8,6 +8,8 @@ uniform float ringEnd;
 smooth in vec3 onRingPos;
 smooth in vec3 worldPos;
 
+const float discardAlpha = 0.05f;
+
 #include "util/noise3d"
 
 layout(location = 0) out vec4 fragColor;
@@ -17,5 +19,5 @@ void main() {
     if(distance < ringStart || distance > ringEnd) discard;
     float texturePos = distance - ringStart;
     fragColor = texture(ringColors, texturePos);
-    if(fragColor.a < 0.05f) discard;
+    if(fragColor.a < discardAlpha) discard;
 }
