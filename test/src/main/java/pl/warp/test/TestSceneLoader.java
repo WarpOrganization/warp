@@ -95,7 +95,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class TestSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.8f ;
+    private static final float MOV_SPEED = 2.0f ;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
@@ -242,7 +242,7 @@ public class TestSceneLoader implements GameSceneLoader {
             colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
             gasPlanet = new GasPlanet(scene, colorsTexture);
             TransformProperty gasSphereTransform = gasPlanet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            gasSphereTransform.move(new Vector3f(-1200f, -200f, -500f));
+            gasSphereTransform.move(new Vector3f(-1600f, -200f, -500f));
             gasSphereTransform.scale(new Vector3f(1000.0f));
 
 

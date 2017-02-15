@@ -17,12 +17,10 @@ public class ShootLeaf extends LeafNode {
 
     @Override
     public int tick(Ticker ticker, int delta) {
-        if (droneProperty.getHitPoints() > 0) {
+        if(gunProperty.isEnabled()) {
             gunProperty.setTriggered(true);
             return Node.SUCCESS;
-        } else {
-            return Node.FAILURE;
-        }
+        } else return Node.FAILURE;
     }
 
     @Override

@@ -57,6 +57,7 @@ public class KabooomScript extends GameScript<GameComponent> {
 
     @EventHandler(eventName = KabooomEvent.KABOOM_EVENT_NAME)
     private void onKaboom(KabooomEvent event) {
+        if(!getOwner().hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) return;
         getOwner().addProperty(new KaboomedProperty());
         getOwner().getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
         getOwner().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();
@@ -66,12 +67,8 @@ public class KabooomScript extends GameScript<GameComponent> {
                 c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
         });
         getOwner().addProperty(new BulletScript.Bulletproof());
-        DroneProperty droneProperty = getOwner().getProperty(DroneProperty.DRONE_PROPERTY_NAME);
-        droneProperty.setHitPoints(droneProperty.getHitPoints() - 1);
         kaboom(getOwner());
-        executorService.schedule(() -> {
-            resetComponent(getOwner());
-        }, 2, TimeUnit.SECONDS);
+        executorService.schedule(() -> resetComponent(getOwner()), 2, TimeUnit.SECONDS);
     }
 
     public void resetComponent(Component component) {

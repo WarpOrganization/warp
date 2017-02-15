@@ -41,11 +41,10 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     private Vector3f postition2 = new Vector3f();
 
     public void calculateCollisionResponse(Component component1, Component component2, Vector3 contactPos, Vector3 collisionNormal) {
-        ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         if (component1.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME) && component2.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME) //quickfix TODO repair
-                && (isCollidable(collider1) && isCollidable(collider2))) {
-
+                && (isCollidable(component1) && isCollidable(component2))) {
+            ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+            ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             TransformProperty transformProperty1 = component1.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
@@ -84,14 +83,14 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
             normal.mul(j, impulse);
 
-            if (isCollidable(collider2)) {
+            if (isCollidable(component1)) {
                 physicalProperty2.applyForce(impulse);
                 physicalProperty2.addTorque(impulse, distance2);
             }
 
             impulse.negate();
 
-            if (isCollidable(collider1)) {
+            if (isCollidable(component2)) {
                 physicalProperty1.applyForce(impulse);
                 physicalProperty1.addTorque(impulse, distance1);
             }
@@ -106,11 +105,10 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     private Vector3f rotationPerMove = new Vector3f();
 
     public void preventIntersection(Component component1, Component component2, Vector3 contactPos, Vector3 collisionNormal, float penetrationDepth) {
-        ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-        ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
         if (component1.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME) && component2.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME) //quickfix TODO repair
-                && (isCollidable(collider1) && isCollidable(collider2))) {
-
+                && (isCollidable(component1) && isCollidable(component2))) {
+            ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+            ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             TransformProperty transformProperty1 = component1.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
@@ -164,8 +162,9 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
     }
 
 
-    private boolean isCollidable(ColliderProperty property) {
-        return property.isEnabled() && property.getCollider().getDefaultCollisionHandling();
+    private boolean isCollidable(Component c) {
+        return c.hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME) &&
+                c.<ColliderProperty>getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).getCollider().getDefaultCollisionHandling();
     }
 
 

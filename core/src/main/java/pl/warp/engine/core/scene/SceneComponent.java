@@ -16,7 +16,7 @@ public abstract class SceneComponent implements Component {
 
     private Component parent;
     private EngineContext context;
-    private final Map<String, Property> properties = new TreeMap<>();
+    private final Map<String, Property> properties = new HashMap<>();
     private final Set<Listener> listeners = new HashSet<>();
     private final List<Component> children = new LinkedList<>();
     private boolean alive = true;

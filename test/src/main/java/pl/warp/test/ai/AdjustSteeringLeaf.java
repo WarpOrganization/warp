@@ -58,7 +58,8 @@ public class AdjustSteeringLeaf extends LeafNode {
     }
 
     private void setProperties(Ticker ticker) {
-        targetTransform = memoryProperty.getTarget().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        if(memoryProperty.getTarget().hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
+            targetTransform = memoryProperty.getTarget().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
 
     private Vector3f actualVelocity = new Vector3f();
@@ -91,26 +92,28 @@ public class AdjustSteeringLeaf extends LeafNode {
     private Vector3f angularVelocityChange = new Vector3f();
 
     private boolean rotate(int delta) {
-        targetTransform.getTranslation().sub(ownerTransform.getTranslation(), targetDirection);
-        targetDirection.normalize();
-        rotationChange.x = (float) ((Math.atan2(ownerDirection.y, ownerDirection.z) * 180 / PI) - (Math.atan2(targetDirection.y, targetDirection.z) * 180 / PI));
-        rotationChange.y = (float) ((Math.atan2(ownerDirection.x, ownerDirection.z) * 180 / PI) - (Math.atan2(targetDirection.x, targetDirection.z) * 180 / PI));
+        if(targetTransform != null) {
+            targetTransform.getTranslation().sub(ownerTransform.getTranslation(), targetDirection);
+            targetDirection.normalize();
+            rotationChange.x = (float) ((Math.atan2(ownerDirection.y, ownerDirection.z) * 180 / PI) - (Math.atan2(targetDirection.y, targetDirection.z) * 180 / PI));
+            rotationChange.y = (float) ((Math.atan2(ownerDirection.x, ownerDirection.z) * 180 / PI) - (Math.atan2(targetDirection.x, targetDirection.z) * 180 / PI));
 
-        boolean isAligned = false;
-        if(rotationChange.x<ACCURACY&&rotationChange.y<ACCURACY) isAligned = true;
+            boolean isAligned = false;
+            if (rotationChange.x < ACCURACY && rotationChange.y < ACCURACY) isAligned = true;
 
-        rotationChange.normalize();
-        rotationChange.mul(GOAL_ROTATION_SPEED, goalAngularVelocity);
-        goalAngularVelocity.sub(bodyProperty.getAngularVelocity(), angularVelocityChange);
-        //TODO rethink these calculations
-        //if (angularVelocityChange.length() > ANGULAR_ACCELERATION * delta / bodyProperty.getUniversalRotationInertia()) {
+            rotationChange.normalize();
+            rotationChange.mul(GOAL_ROTATION_SPEED, goalAngularVelocity);
+            goalAngularVelocity.sub(bodyProperty.getAngularVelocity(), angularVelocityChange);
+            //TODO rethink these calculations
+            //if (angularVelocityChange.length() > ANGULAR_ACCELERATION * delta / bodyProperty.getUniversalRotationInertia()) {
             //rotationChange.normalize();
             //rotationChange.mul(ANGULAR_ACCELERATION * delta);
             //bodyProperty.addAngularVelocity(rotationChange.div(bodyProperty.getUniversalRotationInertia()));
-        //} else {
+            //} else {
             bodyProperty.addAngularVelocity(angularVelocityChange);
-        //}
-        return isAligned;
+            //}
+            return isAligned;
+        } else return false;
     }
 
     @Override
