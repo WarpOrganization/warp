@@ -95,7 +95,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class TestSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.2f * 10;
+    private static final float MOV_SPEED = 0.8f ;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
