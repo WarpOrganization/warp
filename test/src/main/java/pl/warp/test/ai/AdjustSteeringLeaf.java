@@ -105,13 +105,7 @@ public class AdjustSteeringLeaf extends LeafNode {
             rotationChange.mul(GOAL_ROTATION_SPEED, goalAngularVelocity);
             goalAngularVelocity.sub(bodyProperty.getAngularVelocity(), angularVelocityChange);
             //TODO rethink these calculations
-            //if (angularVelocityChange.length() > ANGULAR_ACCELERATION * delta / bodyProperty.getUniversalRotationInertia()) {
-            //rotationChange.normalize();
-            //rotationChange.mul(ANGULAR_ACCELERATION * delta);
-            //bodyProperty.addAngularVelocity(rotationChange.div(bodyProperty.getUniversalRotationInertia()));
-            //} else {
             bodyProperty.addAngularVelocity(angularVelocityChange);
-            //}
             return isAligned;
         } else return false;
     }

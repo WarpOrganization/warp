@@ -90,6 +90,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     private void applyTransformations(Component component) {
+
         TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         applyTranslation(property);
         applyScale(property);

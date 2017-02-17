@@ -32,7 +32,6 @@ public class ComponentLoggingScript extends GameScript {
 
     @Override
     protected void init() {
-
         log("Component name: " + name.getComponentName());
     }
 

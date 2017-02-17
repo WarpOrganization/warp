@@ -20,7 +20,7 @@ public class ObservableProperty<T extends Component> extends Property<T> {
         if (getOwner() != null) throw new IllegalStateException("Component can't have two owners.");
         else {
             super.setOwner(owner);
-            owner.getContext().getScene().triggerEvent(new PropertyAddedEvent<>(this, owner));
+            owner.triggerOnRoot(new PropertyAddedEvent<>(this, owner));
         }
     }
 
