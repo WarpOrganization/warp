@@ -12,6 +12,9 @@ import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
 import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.audio.AudioManager;
+import pl.warp.engine.audio.MusicSource;
+import pl.warp.engine.audio.playlist.PlayList;
+import pl.warp.engine.audio.playlist.PlayRandomPlayList;
 import pl.warp.engine.core.EngineThread;
 import pl.warp.engine.core.SimpleEngineTask;
 import pl.warp.engine.core.scene.Component;
@@ -174,39 +177,6 @@ public class TestSceneLoader implements GameSceneLoader {
         controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
         controllableGoat.addProperty(new TransformProperty());
         loaded = true;
-    }
-
-    public void enableControls() {
-        new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
-    }
-
-    private static void unpackResources() throws IOException {
-        String path = Test.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        String decodedPath = URLDecoder.decode(path, "UTF-8");
-        File jarFile = new File(decodedPath);
-        String parent = jarFile.getParent();
-        String dataPath = parent + File.separator + "data";
-        File dataDir = new File(dataPath);
-        if (dataDir.exists()) FileUtils.deleteDirectory(dataDir);
-        copy(dataPath + "" + File.separator + "sound" + File.separator + "effects" + File.separator + "gun.wav", "sound/effects/gun.wav");
-        copy(dataPath + "" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav", "sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
-        copy(dataPath + "" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav", "sound/music/Stellardrone-Light_Years-05_In_Time.wav");
-        copy(dataPath + "" + File.separator + "ai" + File.separator + "droneAI.xml", "ai/droneAI.xml");
-
-    }
-
-    private static void copy(String decodedPath, String name) throws IOException {
-        FileOutputStream fileOutputStream4 = getFileOutputStream(decodedPath);
-        InputStream ai = Test.class.getResourceAsStream(name);
-        IOUtils.copy(ai, fileOutputStream4);
-    }
-
-
-    private static FileOutputStream getFileOutputStream(String decodedPath) throws IOException {
-        File file = new File(decodedPath);
-        new File(file.getParent()).mkdirs();
-        file.createNewFile();
-        return new FileOutputStream(file);
     }
 
     @Override
@@ -521,7 +491,84 @@ public class TestSceneLoader implements GameSceneLoader {
 
             generateGOATS(scene);
             allyEngineParticles(controllableGoat);
+            new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         });
+    }
+
+    @Override
+    public GameScene getScene() {
+        return scene;
+    }
+
+    @Override
+    public GameComponent getCameraComponent() {
+        return cameraComponent;
+    }
+
+    @Override
+    public void loadSound(EngineThread audioThread) {
+        audioThread.scheduleOnce(() -> {
+            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
+            PlayList playList = new PlayRandomPlayList();
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
+            MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
+            AudioManager.INSTANCE.play(musicSource);
+        });
+    }
+
+    public GameComponent createShip(GameComponent parent) {
+        GameComponent goat = new GameSceneComponent(parent);
+        goat.addProperty(new RenderableMeshProperty(goatMesh));
+        Material material = new Material(goatTexture);
+        material.setShininess(20f);
+        material.setBrightnessTexture(goatBrightnessTexture);
+        goat.addProperty(new GraphicsMaterialProperty(material));
+        goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+        TransformProperty transformProperty = new TransformProperty();
+        goat.addProperty(transformProperty);
+        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), goat, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+        goat.addProperty(colliderProperty);
+        return goat;
+    }
+
+    public GameComponent createFrigate(GameComponent parent) {
+        GameComponent frigate = new GameSceneComponent(parent);
+        frigate.addProperty(new NameProperty("Frigate"));
+        frigate.addProperty(new RenderableMeshProperty(friageMesh));
+        Material frigateMaterial = new Material(frigateTexture);
+        frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
+        frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
+        TransformProperty transformProperty = new TransformProperty();
+        frigate.addProperty(transformProperty);
+        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(38.365f * 3, 15.1f * 3, 11.9f * 3)), frigate, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+        frigate.addProperty(colliderProperty);
+        return frigate;
+    }
+
+    public GameComponent createPlanet(GameComponent parent) {
+        GameComponent gasSphere = new GameSceneComponent(parent);
+        gasSphere.addProperty(new RenderableMeshProperty(sphere));
+        gasSphere.addProperty(new CustomProgramProperty(gasProgram));
+        TransformProperty gasSphereTransform = new TransformProperty();
+        gasSphereTransform.scale(new Vector3f(1000.0f));
+        gasSphere.addProperty(gasSphereTransform);
+        graphicsThread.scheduleTask(new SimpleEngineTask() {
+            @Override
+            public void update(int delta) {
+                gasProgram.use();
+                gasProgram.update(delta);
+                gasSphereTransform.rotateLocalY(delta * 0.00001f);
+            }
+        });
+
+        float startR = 1.5f;
+        float endR = 2.5f;
+        Component ring = new GameSceneComponent(gasSphere);
+        ring.addProperty(new RenderableMeshProperty(ringMesh));
+        ring.addProperty(new CustomProgramProperty(planetRingProgram));
+        ring.addProperty(new PlanetRingProperty(startR, endR, ringColors));
+        return gasSphere;
     }
 
     protected void fire(Vector3f pos) {
@@ -556,9 +603,32 @@ public class TestSceneLoader implements GameSceneLoader {
         }
     }
 
-    @Override
-    public GameComponent getCameraComponent() {
-        return cameraComponent;
+    private static void unpackResources() throws IOException {
+        String path = Test.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String decodedPath = URLDecoder.decode(path, "UTF-8");
+        File jarFile = new File(decodedPath);
+        String parent = jarFile.getParent();
+        String dataPath = parent + File.separator + "data";
+        File dataDir = new File(dataPath);
+        if (dataDir.exists()) FileUtils.deleteDirectory(dataDir);
+        copy(dataPath + "" + File.separator + "sound" + File.separator + "effects" + File.separator + "gun.wav", "sound/effects/gun.wav");
+        copy(dataPath + "" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav", "sound/music/Stellardrone-Light_Years-01_Red_Giant.wav");
+        copy(dataPath + "" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav", "sound/music/Stellardrone-Light_Years-05_In_Time.wav");
+        copy(dataPath + "" + File.separator + "ai" + File.separator + "droneAI.xml", "ai/droneAI.xml");
+
+    }
+
+    private static void copy(String decodedPath, String name) throws IOException {
+        FileOutputStream fileOutputStream4 = getFileOutputStream(decodedPath);
+        InputStream ai = Test.class.getResourceAsStream(name);
+        IOUtils.copy(ai, fileOutputStream4);
+    }
+
+    private static FileOutputStream getFileOutputStream(String decodedPath) throws IOException {
+        File file = new File(decodedPath);
+        new File(file.getParent()).mkdirs();
+        file.createNewFile();
+        return new FileOutputStream(file);
     }
 
     private void generateGOATS(GameComponent parent) {
@@ -631,65 +701,6 @@ public class TestSceneLoader implements GameSceneLoader {
         };
         ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
         light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
-    }
-
-    @Override
-    public GameScene getScene() {
-        return scene;
-    }
-
-    public GameComponent createShip(GameComponent parent) {
-        GameComponent goat = new GameSceneComponent(parent);
-        goat.addProperty(new RenderableMeshProperty(goatMesh));
-        Material material = new Material(goatTexture);
-        material.setShininess(20f);
-        material.setBrightnessTexture(goatBrightnessTexture);
-        goat.addProperty(new GraphicsMaterialProperty(material));
-        goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-        TransformProperty transformProperty = new TransformProperty();
-        goat.addProperty(transformProperty);
-        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), goat, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-        goat.addProperty(colliderProperty);
-        return goat;
-    }
-
-    public GameComponent createFrigate(GameComponent parent) {
-        GameComponent frigate = new GameSceneComponent(parent);
-        frigate.addProperty(new NameProperty("Frigate"));
-        frigate.addProperty(new RenderableMeshProperty(friageMesh));
-        Material frigateMaterial = new Material(frigateTexture);
-        frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
-        frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
-        TransformProperty transformProperty = new TransformProperty();
-        frigate.addProperty(transformProperty);
-        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(38.365f * 3, 15.1f * 3, 11.9f * 3)), frigate, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-        frigate.addProperty(colliderProperty);
-        return frigate;
-    }
-
-    public GameComponent createPlanet(GameComponent parent) {
-        GameComponent gasSphere = new GameSceneComponent(parent);
-        gasSphere.addProperty(new RenderableMeshProperty(sphere));
-        gasSphere.addProperty(new CustomProgramProperty(gasProgram));
-        TransformProperty gasSphereTransform = new TransformProperty();
-        gasSphereTransform.scale(new Vector3f(1000.0f));
-        gasSphere.addProperty(gasSphereTransform);
-        graphicsThread.scheduleTask(new SimpleEngineTask() {
-            @Override
-            public void update(int delta) {
-                gasProgram.use();
-                gasProgram.update(delta);
-                gasSphereTransform.rotateLocalY(delta * 0.00001f);
-            }
-        });
-
-        float startR = 1.5f;
-        float endR = 2.5f;
-        Component ring = new GameSceneComponent(gasSphere);
-        ring.addProperty(new RenderableMeshProperty(ringMesh));
-        ring.addProperty(new CustomProgramProperty(planetRingProgram));
-        ring.addProperty(new PlanetRingProperty(startR, endR, ringColors));
-        return gasSphere;
     }
 }
 

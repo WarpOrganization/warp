@@ -1,12 +1,8 @@
 package pl.warp.test;
 
-import org.apache.log4j.Logger;
-import org.joml.Vector3f;
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
-import pl.warp.engine.audio.playlist.PlayList;
-import pl.warp.engine.audio.playlist.PlayRandomPlayList;
 import pl.warp.engine.core.EngineThread;
 import pl.warp.engine.core.RapidExecutionStrategy;
 import pl.warp.engine.core.SyncEngineThread;
@@ -28,31 +24,25 @@ import pl.warp.game.GameContext;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
+import pl.warp.game.scene.GameSceneLoader;
 import pl.warp.game.script.CameraRayTester;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.GameScriptManager;
 
+import javax.management.RuntimeErrorException;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.util.Random;
 
 /**
  * @author Jaca777
  *         Created 2016-06-27 at 14
  *         CANCER CODE, ONLY FOR TESTING
  *         TODO KILL IT WITH FIRE
+ *
+ *         MarconZet
+ *         "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live."
  */
+
 public class Test {
-
-    private static Logger logger = Logger.getLogger(Test.class);
-    private static final boolean FULLSCREEN = false;
-    private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 0.2f * 10;
-    private static final float BRAKING_FORCE = 0.2f * 10;
-    private static final float ARROWS_ROTATION_SPEED = 2f;
-    private static final int GUN_COOLDOWN = 5;
-    private static Random random = new Random();
-
     public static void runTest(RenderingConfig config) {
 
         GameContextBuilder contextBuilder = new GameContextBuilder();
@@ -63,7 +53,8 @@ public class Test {
 
         AudioContext audioContext = new AudioContext();
         AudioManager.INSTANCE = new AudioManager(audioContext);
-        TestSceneLoader loader = new TestSceneLoader(config, contextBuilder);
+
+        GameSceneLoader loader = getGameSceneLoader(config, contextBuilder);
         loader.loadScene();
         GameComponent cameraComponent = loader.getCameraComponent();
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
@@ -101,14 +92,7 @@ public class Test {
         audioThread.scheduleTask(new AudioTask(audioContext));
         audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
 
-        audioThread.scheduleOnce(() -> {
-            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
-            PlayList playList = new PlayRandomPlayList();
-            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
-            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
-            MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
-            AudioManager.INSTANCE.play(musicSource);
-        });
+        loader.loadSound(audioThread);
 
         audioThread.start();
 
@@ -132,10 +116,18 @@ public class Test {
                 }
             }
         };
-        loader.enableControls();
         graphicsThread.scheduleOnce(physicsThread::start);
         graphics.create();
     }
 
+    private static GameSceneLoader getGameSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
+        switch (config.getScene()){
+            case 0: return new TestSceneLoader(config, contextBuilder);
+            case 1: return new TestSceneLoader(config, contextBuilder);
+            case 2: return new TestSceneLoader(config, contextBuilder);
+            case 3: return new TestSceneLoader(config, contextBuilder);
+        }
+        throw new RuntimeException("The Scene hasn't been selected");
+    }
 
 }

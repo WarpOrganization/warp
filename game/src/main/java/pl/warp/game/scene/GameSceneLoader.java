@@ -11,4 +11,5 @@ public interface GameSceneLoader {
     void loadGraphics(EngineThread graphicsThread);
     GameScene getScene();
     GameComponent getCameraComponent();
+    void loadSound(EngineThread audioThread);
 }
