@@ -29,6 +29,7 @@ import pl.warp.game.script.CameraRayTester;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.GameScriptManager;
 
+import javax.management.RuntimeErrorException;
 import java.awt.event.KeyEvent;
 
 /**
@@ -120,10 +121,13 @@ public class Test {
     }
 
     private static GameSceneLoader getGameSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
-        /*w tym miejscu magicznie na podstawie danych zawartych w configu stwierdze którą scenę załadować,
-        na razie zwraca pewixa.
-         */
-        return new TestSceneLoader(config, contextBuilder);
+        switch (config.getScene()){
+            case 0: return new TestSceneLoader(config, contextBuilder);
+            case 1: return new TestSceneLoader(config, contextBuilder);
+            case 2: return new TestSceneLoader(config, contextBuilder);
+            case 3: return new TestSceneLoader(config, contextBuilder);
+        }
+        throw new RuntimeException("The Scene hasn't been selected");
     }
 
 }

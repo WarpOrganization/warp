@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics;
 
+import javafx.beans.property.ReadOnlyIntegerProperty;
 import pl.warp.engine.graphics.window.Display;
 
 /**
@@ -18,6 +19,7 @@ public class RenderingConfig {
     private float bloomLevel = 1f;
     private float bloomThreshold = 1.0f;
     private float fov = 70;
+    private int scene;
 
     public RenderingConfig(int fps, Display display) {
         this.fps = fps;
@@ -106,5 +108,13 @@ public class RenderingConfig {
     public RenderingConfig setFov(float fov) {
         this.fov = fov;
         return this;
+    }
+
+    public void setScene(int scene) {
+        this.scene = scene;
+    }
+
+    public int getScene() {
+        return scene;
     }
 }

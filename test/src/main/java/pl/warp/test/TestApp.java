@@ -1,6 +1,7 @@
 package pl.warp.test;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -47,6 +48,10 @@ public class TestApp extends Application {
         TextField displayWidth = new TextField("1280");
         TextField displayHeight = new TextField("920");
 
+        ListView<String> availableScenes = new ListView<>();
+        availableScenes.setItems(FXCollections.observableArrayList ("Space", "Test1", "Test2", "Test3"));
+        availableScenes.setPrefSize(2,1);
+
         grid.add(new Label("Rendering samples:"), 0, 0);
         grid.add(renderingSamples, 1, 0);
         grid.add(new Label("Affects performance"), 2, 0);
@@ -70,6 +75,9 @@ public class TestApp extends Application {
         grid.add(new Label("Space - stopping"), 2, 7);
         grid.add(new Label("O / L - controlling sun temperature"), 1, 8);
         grid.add(new Label("Esc - exit"), 2, 8);
+        grid.add(new Label("Scene to load"),0,9);
+        grid.add(availableScenes, 1, 9);
+
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == runButtonType) {
                 int width = Integer.parseInt(displayWidth.getText());
@@ -79,6 +87,7 @@ public class TestApp extends Application {
                 config.setBloomLevel((float) bloomLevel.getValue());
                 config.setExposure((float) exposure.getValue());
                 config.setRenderingSamples((int) renderingSamples.getValue());
+                config.setScene(availableScenes.getSelectionModel().getSelectedIndex());
                 return config;
             } else return null;
         });
