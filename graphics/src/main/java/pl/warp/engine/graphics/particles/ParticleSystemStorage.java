@@ -29,7 +29,7 @@ public class ParticleSystemStorage {
     }
 
     public void add(ParticleSystem system, Matrix4f matrix) {
-        if (systemsNumber == INITIAL_SYSTEMS_AMOUNT - 1)
+        if (systemsNumber == systems.size() - 1)
             growList();
         ParticleSystemData data = systems.get(systemsNumber);
         data.setSystem(system);

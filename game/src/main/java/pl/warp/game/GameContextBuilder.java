@@ -20,39 +20,47 @@ public class GameContextBuilder {
         this.gameContext = new GameContext();
     }
 
-    public void setRayTester(CameraRayTester rayTester) {
+    public GameContextBuilder setRayTester(CameraRayTester rayTester) {
         gameContext.setRayTester(rayTester);
+        return this;
     }
 
-    public void setCamera(Camera camera) {
+    public GameContextBuilder setCamera(Camera camera) {
         gameContext.setCamera(camera);
+        return this;
     }
 
     public GameContext getGameContext() {
         return gameContext;
     }
 
-    public void setScene(GameScene scene) {
+    public GameContextBuilder setScene(GameScene scene) {
         gameContext.setScene(scene);
+        return this;
     }
 
-    public void setScriptManager(ScriptManager scriptManager) {
+    public GameContextBuilder setScriptManager(ScriptManager scriptManager) {
         gameContext.setScriptManager(scriptManager);
+        return this;
     }
 
-    public void setInput(Input input) {
+    public GameContextBuilder setInput(Input input) {
         gameContext.setInput(input);
+        return this;
     }
 
-    public void setGraphics(Graphics graphics) {
+    public GameContextBuilder setGraphics(Graphics graphics) {
         gameContext.setGraphics(graphics);
+        return this;
     }
 
-    public void setEventDispatcher(EventDispatcher eventDispatcher) {
+    public GameContextBuilder setEventDispatcher(EventDispatcher eventDispatcher) {
         gameContext.setEventDispatcher(eventDispatcher);
+        return this;
     }
 
-    public void setAIManager(AIManager aiManager) {
+    public GameContextBuilder setAIManager(AIManager aiManager) {
         gameContext.setAiManager(aiManager);
+        return this;
     }
 }
