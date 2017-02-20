@@ -117,7 +117,7 @@ public class GunScript extends GameScript<GameComponent> {
             TransformProperty transformProperty = new TransformProperty();
             transformProperty.setTranslation(new Vector3f(bulletTranslation));
 
-            if (getOwner() == TestSceneLoader.MAIN_GOAT) {
+            if (getOwner() == SpaceSceneLoader.MAIN_GOAT) {
                 Component particles = new GameSceneComponent(bullet);
                 ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0, 0), 0, 0);
                 ParticleStage[] stages = {

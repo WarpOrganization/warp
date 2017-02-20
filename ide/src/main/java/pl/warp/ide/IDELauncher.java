@@ -22,7 +22,7 @@ import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
 import pl.warp.ide.scene.tree.prototype.FunctionComponentPrototype;
 import pl.warp.ide.scene.tree.prototype.LocalPrototypeRepository;
 import pl.warp.ide.scene.tree.prototype.PrototypeRepository;
-import pl.warp.test.TestSceneLoader;
+import pl.warp.test.SpaceSceneLoader;
 
 /**
  * @author Jaca777
@@ -40,7 +40,7 @@ public class IDELauncher extends Application {
         JavaFxInput javaFxInput = new JavaFxInput();
         GameContextBuilder contextBuilder = new GameContextBuilder();
         SceneViewRenderer renderer = new SceneViewRenderer();
-        TestSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
+        SpaceSceneLoader sceneLoader = getSceneLoader(config, contextBuilder);
         IDEEngine engine = new IDEEngine(sceneLoader, renderer, config, contextBuilder, javaFxInput);
 
         PrototypeRepository testRepository = createTestRepository(sceneLoader);
@@ -55,7 +55,7 @@ public class IDELauncher extends Application {
         primaryStage.show();
     }
 
-    private PrototypeRepository createTestRepository(TestSceneLoader sceneLoader) {
+    private PrototypeRepository createTestRepository(SpaceSceneLoader sceneLoader) {
         PrototypeRepository repository = new LocalPrototypeRepository();
         FunctionComponentPrototype shipPrototype = new FunctionComponentPrototype("Ship", sceneLoader::createShip);
         FunctionComponentPrototype frigatePrototype = new FunctionComponentPrototype("Frigate", sceneLoader::createFrigate);
@@ -98,8 +98,8 @@ public class IDELauncher extends Application {
         return component.hasProperty(RenderableMeshProperty.MESH_PROPERTY_NAME);
     }
 
-    private TestSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
-        return new TestSceneLoader(config, contextBuilder);
+    private SpaceSceneLoader getSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
+        return new SpaceSceneLoader(config, contextBuilder);
     }
 
     public static void main(String... args) throws Exception {

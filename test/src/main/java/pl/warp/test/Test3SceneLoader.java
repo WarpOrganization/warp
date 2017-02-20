@@ -95,7 +95,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
  *         CANCER CODE, ONLY FOR TESTING
  *         TODO KILL IT WITH FIRE
  */
-public class TestSceneLoader implements GameSceneLoader {
+public class Test3SceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 2.0f ;
@@ -142,7 +142,7 @@ public class TestSceneLoader implements GameSceneLoader {
     private GasPlanet gasPlanet;
 
 
-    public TestSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
+    public Test3SceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         this.config = config;
         this.contextBuilder = contextBuilder;
     }

@@ -29,7 +29,6 @@ import pl.warp.game.script.CameraRayTester;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.GameScriptManager;
 
-import javax.management.RuntimeErrorException;
 import java.awt.event.KeyEvent;
 
 /**
@@ -43,7 +42,7 @@ import java.awt.event.KeyEvent;
  */
 
 public class Test {
-    public static void runTest(RenderingConfig config) {
+    public static void runTest(RenderingConfig config, int sceneToLoad) {
 
         GameContextBuilder contextBuilder = new GameContextBuilder();
         GameContext context = contextBuilder.getGameContext();
@@ -54,7 +53,7 @@ public class Test {
         AudioContext audioContext = new AudioContext();
         AudioManager.INSTANCE = new AudioManager(audioContext);
 
-        GameSceneLoader loader = getGameSceneLoader(config, contextBuilder);
+        GameSceneLoader loader = getGameSceneLoader(config, contextBuilder, sceneToLoad);
         loader.loadScene();
         GameComponent cameraComponent = loader.getCameraComponent();
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
@@ -120,14 +119,19 @@ public class Test {
         graphics.create();
     }
 
-    private static GameSceneLoader getGameSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
-        switch (config.getScene()){
-            case 0: return new TestSceneLoader(config, contextBuilder);
-            case 1: return new TestSceneLoader(config, contextBuilder);
-            case 2: return new TestSceneLoader(config, contextBuilder);
-            case 3: return new TestSceneLoader(config, contextBuilder);
+    private static GameSceneLoader getGameSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder, int sceneToLoad) {
+        switch (sceneToLoad) {
+            case 0:
+                return new SpaceSceneLoader(config, contextBuilder);
+            case 1:
+                return new Test1SceneLoader(config, contextBuilder);
+            case 2:
+                return new Test2SceneLoader(config, contextBuilder);
+            case 3:
+                return new Test3SceneLoader(config, contextBuilder);
+            default:
+                return new SpaceSceneLoader(config, contextBuilder);
         }
-        throw new RuntimeException("The Scene hasn't been selected");
     }
 
 }

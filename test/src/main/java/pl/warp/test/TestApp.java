@@ -48,9 +48,8 @@ public class TestApp extends Application {
         TextField displayWidth = new TextField("1280");
         TextField displayHeight = new TextField("920");
 
-        ListView<String> availableScenes = new ListView<>();
-        availableScenes.setItems(FXCollections.observableArrayList ("Space", "Test1", "Test2", "Test3"));
-        availableScenes.setPrefSize(2,1);
+        ChoiceBox<String> availableScenes = new ChoiceBox<>(FXCollections.observableArrayList ("Space", "Test1", "Test2", "Test3"));
+        availableScenes.setTooltip(new Tooltip("Chose which scene will load"));
 
         grid.add(new Label("Rendering samples:"), 0, 0);
         grid.add(renderingSamples, 1, 0);
@@ -87,7 +86,6 @@ public class TestApp extends Application {
                 config.setBloomLevel((float) bloomLevel.getValue());
                 config.setExposure((float) exposure.getValue());
                 config.setRenderingSamples((int) renderingSamples.getValue());
-                config.setScene(availableScenes.getSelectionModel().getSelectedIndex());
                 return config;
             } else return null;
         });
@@ -98,8 +96,8 @@ public class TestApp extends Application {
             System.exit(0);
             throw new RuntimeException();
         });
-        Test.runTest(config);
 
+        Test.runTest(config, availableScenes.getSelectionModel().getSelectedIndex());
     }
 
     private void setupSlider(Slider bloomIters) {
