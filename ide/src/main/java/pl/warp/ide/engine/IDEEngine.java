@@ -49,7 +49,12 @@ public class IDEEngine {
         initCamera();
         taskManager = new IDEEngineTaskManager(renderer, currentScene, cameraComponent, config, contextBuilder, input);
         taskManager.startTasks(canvas);
+        enableControls();
         loader.loadGraphics(taskManager.getGraphics().getThread());
+    }
+
+    protected void enableControls() {
+        new IDECameraControlScript(cameraComponent);
     }
 
     private void bindSizes(Canvas canvas) {
@@ -78,7 +83,6 @@ public class IDEEngine {
         CameraProperty cameraProperty = new CameraProperty(camera);
         cameraComponent.addProperty(cameraProperty);
         cameraComponent.addProperty(new IDEComponentProperty());
-        new IDECameraControlScript(cameraComponent);
     }
 
     public GameScene getScene() {

@@ -87,7 +87,7 @@ public class KabooomScript extends GameScript<GameComponent> {
         bodyProperty.setVelocity(new Vector3f(0));
         bodyProperty.setAngularVelocity(new Vector3f(0));
         executorService.schedule(() -> {
-            bodyProperty.setVelocity(new Vector3f(0));
+            bodyProperty.setVelocity(new Vector3f(0, 0, -40.0f));
             bodyProperty.setAngularVelocity(new Vector3f(0));
             transform.getRotation().set(0, 0, 0, 1);
         }, 50, TimeUnit.MILLISECONDS);

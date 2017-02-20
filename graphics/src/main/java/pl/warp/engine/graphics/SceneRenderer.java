@@ -146,6 +146,10 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         this.renderingFramebuffer.resize(newWidth, newHeight);
     }
 
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
     @Override
     public MultisampleTexture2D getOutput() {
         return outputTexture;
