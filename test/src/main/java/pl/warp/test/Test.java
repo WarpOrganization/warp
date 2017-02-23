@@ -124,7 +124,7 @@ public class Test {
             case 0:
                 return new SpaceSceneLoader(config, contextBuilder);
             case 1:
-                return new Test1SceneLoader(config, contextBuilder);
+                return new GroundSceneLoader(config, contextBuilder);
             case 2:
                 return new Test2SceneLoader(config, contextBuilder);
             case 3:
