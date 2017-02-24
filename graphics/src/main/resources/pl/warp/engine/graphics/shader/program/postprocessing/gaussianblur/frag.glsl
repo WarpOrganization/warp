@@ -14,9 +14,9 @@ const float[8] weights = float[](0.034619, 0.044859, 0.055857, 0.066833, 0.07684
 void main(void){
 	fragColor = vec4(0.0);
     for(int i = 0; i < 15; i++) {
-        vec2 coord = (texCoord + blurDirection * pixelSize * (i - 7)) * 3;
-        coord.x = clamp(coord.x, 0.001, 0.999);
-        coord.y = clamp(coord.y, 0.001, 0.999);
+        vec2 coord = (texCoord + blurDirection * pixelSize * (i - 7)) * 2;
+        coord.x = clamp(coord.x, 0.01, 0.99);
+        coord.y = clamp(coord.y, 0.01, 0.99);
         fragColor += texture(tex, coord) * weights[abs(i - 7)];
     }
     fragColor.a = 1.0f;

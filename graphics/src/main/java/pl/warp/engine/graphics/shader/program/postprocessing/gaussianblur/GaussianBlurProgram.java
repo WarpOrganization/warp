@@ -3,10 +3,8 @@ package pl.warp.engine.graphics.shader.program.postprocessing.gaussianblur;
 import org.joml.Vector2f;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.shader.Program;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Texture2D;
 
-import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 /**

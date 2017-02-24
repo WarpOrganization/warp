@@ -105,7 +105,7 @@ public class Graphics {
         particleSystemRecorder = new ParticleSystemsRecorder(particleSystemStorage);
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRecorder, environmentFlareRenderer};
-        return new SceneRenderer(context.getScene(), config, renderers);
+        return new SceneRenderer(context.getScene(), config, new ComponentRenderer(renderers));
     }
 
     private PipelineBuilder<Texture2D> createBloom(PipelineBuilder<Texture2D> builder) {

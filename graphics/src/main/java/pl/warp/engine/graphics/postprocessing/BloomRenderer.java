@@ -97,9 +97,9 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
 
     private void createTextures() {
         this.bloomDetectionTexture = new Texture2D(config.getDisplay().getWidth(), config.getDisplay().getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
-        this.verticalBlurTexture = new Texture2D(config.getDisplay().getWidth() / 3, config.getDisplay().getHeight() / 3, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.verticalBlurTexture = new Texture2D(config.getDisplay().getWidth() / 2, config.getDisplay().getHeight() / 2, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(verticalBlurTexture);
-        this.blurredBloomTexture = new Texture2D(config.getDisplay().getWidth() / 3, config.getDisplay().getHeight() / 3, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.blurredBloomTexture = new Texture2D(config.getDisplay().getWidth() / 2, config.getDisplay().getHeight() / 2, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(blurredBloomTexture);
     }
 
@@ -134,8 +134,8 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     @Override
     public void onResize(int newWidth, int newHeight) {
         this.bloomDetectionFramebuffer.resize(newWidth, newHeight);
-        this.verticalBlurFramebuffer.resize(newWidth / 3, newHeight / 3);
-        this.bloomDetectionFramebuffer.resize(newWidth / 3, newHeight / 3);
+        this.verticalBlurFramebuffer.resize(newWidth / 2, newHeight / 2);
+        this.bloomDetectionFramebuffer.resize(newWidth / 2, newHeight / 2);
     }
 
     @Override

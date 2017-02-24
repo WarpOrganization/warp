@@ -29,7 +29,6 @@ void main(void){
     if(maxElem > maxBrightness)
         fragColor *= (maxBrightness / maxElem);
 
-
     fragColor.a = 1.0f;
 }
 
