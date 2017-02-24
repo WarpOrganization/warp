@@ -1,7 +1,5 @@
 package pl.warp.test;
 
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector3f;
@@ -16,7 +14,6 @@ import pl.warp.engine.audio.MusicSource;
 import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.audio.playlist.PlayRandomPlayList;
 import pl.warp.engine.core.EngineThread;
-import pl.warp.engine.core.SimpleEngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.core.scene.PoolEventDispatcher;
@@ -31,7 +28,6 @@ import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
-import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
@@ -58,16 +54,12 @@ import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.engine.physics.CollisionType;
-import pl.warp.engine.physics.collider.BasicCollider;
-import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.graphics.effects.gas.GasPlanet;
 import pl.warp.game.graphics.effects.gas.GasPlanetProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRing;
 import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
-import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
 import pl.warp.game.graphics.effects.star.Star;
 import pl.warp.game.graphics.effects.star.StarProgram;
 import pl.warp.game.graphics.effects.star.StarProperty;
@@ -95,21 +87,21 @@ import static com.badlogic.gdx.math.MathUtils.random;
  *         CANCER CODE, ONLY FOR TESTING
  *         TODO KILL IT WITH FIRE
  */
-public class Test1SceneLoader implements GameSceneLoader {
+public class GroundSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 2.0f ;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
-    public static GameComponent MAIN_GOAT;
+    public static GameComponent MAIN_OBJECT;
 
     private boolean loaded = false;
 
     private RenderingConfig config;
     private GameContextBuilder contextBuilder;
     private GameScene scene;
-    private GameSceneComponent controllableGoat;
+    private GameSceneComponent playerObject;
     private GameComponent cameraComponent;
     private Mesh bulletMesh;
     private Texture2DArray boomSpritesheet;
@@ -142,7 +134,7 @@ public class Test1SceneLoader implements GameSceneLoader {
     private GasPlanet gasPlanet;
 
 
-    public Test1SceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
+    public GroundSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         this.config = config;
         this.contextBuilder = contextBuilder;
     }
@@ -157,25 +149,25 @@ public class Test1SceneLoader implements GameSceneLoader {
         }
 
         scene = new GameScene(contextBuilder.getGameContext());
-        scene.addProperty(new NameProperty("Test universe"));
+        scene.addProperty(new NameProperty("Build earth"));
         contextBuilder.setScene(scene);
         contextBuilder.setEventDispatcher(new PoolEventDispatcher());
 
 
-        controllableGoat = new GameSceneComponent(scene);
-        controllableGoat.addProperty(new NameProperty("Player ship"));
-        MAIN_GOAT = controllableGoat;
+        playerObject = new GameSceneComponent(scene);
+        playerObject.addProperty(new NameProperty("Player ship"));
+        MAIN_OBJECT = playerObject;
         Display display = config.getDisplay();
 
-        cameraComponent = new GameSceneComponent(controllableGoat);
+        cameraComponent = new GameSceneComponent(playerObject);
         TransformProperty cameraTransform = new TransformProperty();
         cameraComponent.addProperty(cameraTransform);
         Camera camera = new QuaternionCamera(cameraComponent, cameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
         cameraComponent.addProperty(new NameProperty("Camera"));
         cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
-        controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-        controllableGoat.addProperty(new TransformProperty());
+        playerObject.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+        playerObject.addProperty(new TransformProperty());
         loaded = true;
     }
 
@@ -183,7 +175,7 @@ public class Test1SceneLoader implements GameSceneLoader {
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
             this.graphicsThread = graphicsThread;
-            //new ComponentLoggingScript(controllableGoat);
+            //new ComponentLoggingScript(playerObject);
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
             goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
@@ -270,39 +262,37 @@ public class Test1SceneLoader implements GameSceneLoader {
             brightnessTextureData2 = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_2_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture2 = new Texture2D(brightnessTextureData2.getWidth(), brightnessTextureData2.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData2.getData());
 
-            /*Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
+            Mesh floorMesh = ObjLoader.read(Test.class.getResourceAsStream("floor.obj"), false).toVAOMesh();
             ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
             Texture2D floorTexture = new Texture2D(decodedFloorTexture.getWidth(), decodedFloorTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedFloorTexture.getData());
             Material floorMaterial = new Material(floorTexture);
             Component floor = new GameSceneComponent(scene);
-            new RenderableMeshProperty(floor, floorMesh);
-            new GraphicsMaterialProperty(floor,floorMaterial);
-            new TransformProperty(floor);
-            new PhysicalBodyProperty(floor, 100, 100, 100, 100);
-*/
+            floor.addProperty(new RenderableMeshProperty(floorMesh));
+            floor.addProperty(new GraphicsMaterialProperty(floorMaterial));
+            floor.addProperty(new TransformProperty());
 
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             boomSpritesheet = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
-            controllableGoat.addProperty(renderableMeshProperty);
+            playerObject.addProperty(renderableMeshProperty);
 
-            new KabooomScript(controllableGoat, gasPlanet, 1000.0f);
+            new KabooomScript(playerObject, gasPlanet, 1000.0f);
 
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
-            controllableGoat.addProperty(new GraphicsMaterialProperty(material));
+            playerObject.addProperty(new GraphicsMaterialProperty(material));
 
             bulletMesh = new Sphere(15, 15, 0.5f);
             ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
-            controllableGoat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
+            playerObject.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
             audioManager = AudioManager.INSTANCE;
 
             ImageData bullet2decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet_2.png"), PNGDecoder.Format.RGBA);
             bulletTexture2 = new Texture2D(bullet2decodedTexture.getWidth(), bullet2decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bullet2decodedTexture.getData());
 
-            new GunScript(controllableGoat);
+            new GunScript(playerObject);
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -336,7 +326,7 @@ public class Test1SceneLoader implements GameSceneLoader {
                 enemyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
             }
 
-            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
+            /*friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
             frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
             Material frigateMaterial = new Material(frigateTexture);
@@ -344,7 +334,7 @@ public class Test1SceneLoader implements GameSceneLoader {
             ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
-            /*GameComponent frigate = new GameSceneComponent(scene);
+            GameComponent frigate = new GameSceneComponent(scene);
             frigate.addProperty(new NameProperty("Frigate"));
             frigate.addProperty(new RenderableMeshProperty(friageMesh));
             frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
@@ -384,10 +374,7 @@ public class Test1SceneLoader implements GameSceneLoader {
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
                 light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
             }
-*/
-            ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
-            lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
-/*
+
             {
                 Component light = new GameSceneComponent(scene);
                 TransformProperty lightSourceTransform = new TransformProperty();
@@ -400,7 +387,6 @@ public class Test1SceneLoader implements GameSceneLoader {
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1500, 500, true, true, stages);
                 light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 700)));
             }
-
 
             {
                 Component light = new GameSceneComponent(scene);
@@ -460,10 +446,12 @@ public class Test1SceneLoader implements GameSceneLoader {
                 light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
             }
 */
+            ImageDataArray lightSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            lightSpritesheetTexture = new Texture2DArray(lightSpritesheet.getWidth(), lightSpritesheet.getHeight(), lightSpritesheet.getArraySize(), lightSpritesheet.getData());
 
-            generateGOATS(scene);
-            allyEngineParticles(controllableGoat);
-            new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            //generateGOATS(scene);
+            allyEngineParticles(playerObject);
+            new GoatControlScript(playerObject, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         });
     }
 
@@ -487,92 +475,6 @@ public class Test1SceneLoader implements GameSceneLoader {
             MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
             AudioManager.INSTANCE.play(musicSource);
         });
-    }
-
-    public GameComponent createShip(GameComponent parent) {
-        GameComponent goat = new GameSceneComponent(parent);
-        goat.addProperty(new RenderableMeshProperty(goatMesh));
-        Material material = new Material(goatTexture);
-        material.setShininess(20f);
-        material.setBrightnessTexture(goatBrightnessTexture);
-        goat.addProperty(new GraphicsMaterialProperty(material));
-        goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-        TransformProperty transformProperty = new TransformProperty();
-        goat.addProperty(transformProperty);
-        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), goat, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-        goat.addProperty(colliderProperty);
-        return goat;
-    }
-
-    public GameComponent createFrigate(GameComponent parent) {
-        GameComponent frigate = new GameSceneComponent(parent);
-        frigate.addProperty(new NameProperty("Frigate"));
-        frigate.addProperty(new RenderableMeshProperty(friageMesh));
-        Material frigateMaterial = new Material(frigateTexture);
-        frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
-        frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
-        TransformProperty transformProperty = new TransformProperty();
-        frigate.addProperty(transformProperty);
-        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(38.365f * 3, 15.1f * 3, 11.9f * 3)), frigate, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-        frigate.addProperty(colliderProperty);
-        return frigate;
-    }
-
-    public GameComponent createPlanet(GameComponent parent) {
-        GameComponent gasSphere = new GameSceneComponent(parent);
-        gasSphere.addProperty(new RenderableMeshProperty(sphere));
-        gasSphere.addProperty(new CustomProgramProperty(gasProgram));
-        TransformProperty gasSphereTransform = new TransformProperty();
-        gasSphereTransform.scale(new Vector3f(1000.0f));
-        gasSphere.addProperty(gasSphereTransform);
-        graphicsThread.scheduleTask(new SimpleEngineTask() {
-            @Override
-            public void update(int delta) {
-                gasProgram.use();
-                gasProgram.update(delta);
-                gasSphereTransform.rotateLocalY(delta * 0.00001f);
-            }
-        });
-
-        float startR = 1.5f;
-        float endR = 2.5f;
-        Component ring = new GameSceneComponent(gasSphere);
-        ring.addProperty(new RenderableMeshProperty(ringMesh));
-        ring.addProperty(new CustomProgramProperty(planetRingProgram));
-        ring.addProperty(new PlanetRingProperty(startR, endR, ringColors));
-        return gasSphere;
-    }
-
-    protected void fire(Vector3f pos) {
-        {
-            Component light = new GameSceneComponent(scene);
-            TransformProperty lightSourceTransform = new TransformProperty();
-            lightSourceTransform.move(new Vector3f(pos));
-            light.addProperty(lightSourceTransform);
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00005f, 0), 0, 0);
-            ParticleStage[] stages = {
-                    new ParticleStage(1.5f, new Vector4f(3.0f, 0.0f, 0.0f, 0.4f)),
-                    new ParticleStage(1.5f, new Vector4f(2.0f, 2.0f, 0.1f, 0.0f)),
-            };
-            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 100, true, true, stages);
-            light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 400)));
-        }
-
-        {
-            Component light = new GameSceneComponent(scene);
-            TransformProperty lightSourceTransform = new TransformProperty();
-            lightSourceTransform.move(new Vector3f(pos));
-            light.addProperty(lightSourceTransform);
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.00003f, 0), 0, 0);
-            ParticleStage[] stages = {
-                    new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
-                    new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
-                    new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.2f)),
-                    new ParticleStage(4.0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
-            };
-            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
-            light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
-        }
     }
 
     private static void unpackResources() throws IOException {
@@ -607,8 +509,8 @@ public class Test1SceneLoader implements GameSceneLoader {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
-        team1.add(controllableGoat);
-        controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
+        team1.add(playerObject);
+        playerObject.addProperty(new DroneProperty(5, 1, team2, allyPortal));
         int nOfGoats = 10;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
