@@ -287,6 +287,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
             controllableGoat.addProperty(renderableMeshProperty);
             //renderableMeshProperty.disable();
+            allyEngineParticles(controllableGoat);
 
             new KabooomScript(controllableGoat, gasPlanet, 1000.0f);
 
@@ -490,7 +491,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             }*/
 
             generateGOATS(scene);
-            allyEngineParticles(controllableGoat);
+            //spawnFrigates();
             new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         });
     }
@@ -629,6 +630,54 @@ public class SpaceSceneLoader implements GameSceneLoader {
         new File(file.getParent()).mkdirs();
         file.createNewFile();
         return new FileOutputStream(file);
+    }
+
+    private void spawnFrigates(){
+        int nOfFrigates = 1000;
+        for (int i = 0; i < nOfFrigates; i++) {
+            float x = random.nextFloat() * 4000 - 2000f;
+            float y = random.nextFloat() * 4000 - 2000f;
+            float z =  3000 + random.nextFloat() * 4000 - 2000f;
+            GameComponent frigate = new GameSceneComponent(scene);
+            frigate.addProperty(new NameProperty("Frigate"));
+            frigate.addProperty(new RenderableMeshProperty(friageMesh));
+            Material frigateMaterial = new Material(frigateTexture);
+            frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
+            //frigate.addProperty(new PhysicalBodyProperty(10000.0f, 38.365f, 15.1f, 11.9f));
+            TransformProperty frigateTransform = new TransformProperty();
+            frigateTransform.move(new Vector3f(x, y, z));
+            frigateTransform.scale(new Vector3f(3));
+            frigateTransform.rotateY(-(float) (Math.PI / 2));
+            frigate.addProperty(frigateTransform);
+
+            {
+                Component light = new GameSceneComponent(frigate);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(18f, 0.4f, 4.4f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0.00001f, 0.0f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+            }
+
+            {
+                Component light = new GameSceneComponent(frigate);
+                TransformProperty lightSourceTransform = new TransformProperty();
+                lightSourceTransform.move(new Vector3f(18f, 0.4f, -4.4f));
+                light.addProperty(lightSourceTransform);
+                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0.00001f, 0.0f, 0), 0, 0);
+                ParticleStage[] stages = {
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
+                        new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
+                };
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
+                light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
+            }
+        }
     }
 
     private void generateGOATS(GameComponent parent) {

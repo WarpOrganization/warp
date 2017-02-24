@@ -8,6 +8,7 @@ import org.joml.Vector4f;
  */
 public class ParticleStage {
     private float gradient;
+    private float scale;
     private Vector4f color;
 
     public ParticleStage(float gradient, Vector4f color) {

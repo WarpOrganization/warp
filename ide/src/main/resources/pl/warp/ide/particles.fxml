@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<AnchorPane fx:id="componentPanel" prefHeight="560.0" prefWidth="226.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane layoutX="10.0" layoutY="23.0" prefHeight="81.0" prefWidth="197.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="84.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="113.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Time to live" />
+            <Label text="TTL gradient" GridPane.rowIndex="1" />
+            <TextField text="1000" GridPane.columnIndex="1" />
+            <TextField text="300" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckBox mnemonicParsing="false" selected="true" text="Rnd rotation" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <CheckBox mnemonicParsing="false" selected="true" text="Rnd scale" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <Separator layoutX="5.0" layoutY="108.0" prefWidth="200.0" />
+      <Label layoutX="4.0" layoutY="6.0" text="Particle" />
+      <Label layoutX="5.0" layoutY="111.0" text="Emitter" />
+      <GridPane layoutX="8.0" layoutY="128.0" prefHeight="104.0" prefWidth="193.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="85.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="108.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Velocity X" />
+            <Slider max="0.01" value="0.002" GridPane.columnIndex="1" />
+            <Label text="Velocity Y" GridPane.rowIndex="1" />
+            <Slider max="0.01" value="0.002" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Velocity Z" GridPane.rowIndex="2" />
+            <Slider max="0.01" value="0.002" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Frequency" GridPane.rowIndex="3" />
+            <TextField text="20" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <Separator layoutX="4.0" layoutY="238.0" prefWidth="200.0" />
+      <Label layoutX="4.0" layoutY="240.0" text="Animator" />
+      <GridPane layoutX="8.0" layoutY="257.0" prefHeight="68.0" prefWidth="193.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="85.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="108.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Acceleration X" />
+            <Slider majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" />
+            <Label text="Acceleration Y" GridPane.rowIndex="1" />
+            <Slider majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Acceleration Z" GridPane.rowIndex="2" />
+            <Slider majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <Separator layoutX="3.0" layoutY="332.0" prefWidth="200.0" />
+      <Label layoutX="4.0" layoutY="335.0" text="Stages" />
+      <Accordion layoutX="12.0" layoutY="357.0" />
+      <AnchorPane layoutY="357.0">
+         <children>
+            <TabPane prefHeight="200.0" prefWidth="226.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Stage 1">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab text="Stage 2">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                <Tab text="+">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <GridPane layoutX="18.0" layoutY="43.0" prefHeight="147.0" prefWidth="186.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="83.0" minWidth="10.0" prefWidth="83.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="109.0" minWidth="10.0" prefWidth="99.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Color" />
+                  <ColorPicker prefHeight="25.0" prefWidth="114.0" GridPane.columnIndex="1" />
+                  <Label text="Scale" GridPane.rowIndex="2" />
+                  <Label text="Gradient" GridPane.rowIndex="3" />
+                  <Label text="Transparency" GridPane.rowIndex="1" />
+                  <Slider max="1.0" value="0.5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Slider max="10.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Slider max="1.0" prefWidth="109.0" value="0.5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
