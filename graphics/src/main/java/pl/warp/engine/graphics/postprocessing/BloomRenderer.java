@@ -15,12 +15,12 @@ import pl.warp.engine.graphics.texture.Texture2D;
  * @author Jaca777
  *         Created 2016-07-20 at 12
  */
-public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
+public class BloomRenderer implements Flow<Texture2D, WeightedTexture2D> {
 
     private static final Logger logger = Logger.getLogger(BloomRenderer.class);
 
     private Texture2D input;
-    private BloomRendererOutput output;
+    private WeightedTexture2D output;
 
     private Texture2D bloomDetectionTexture;
     private Texture2D verticalBlurTexture;
@@ -91,7 +91,7 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
         createFramebuffers();
         createPrograms();
         this.quad = new Quad();
-        this.output = new BloomRendererOutput(input, blurredBloomTexture);
+        this.output = new WeightedTexture2D(blurredBloomTexture, config.getBloomLevel());
         logger.info("Bloom renderer initialized.");
     }
 
@@ -139,13 +139,12 @@ public class BloomRenderer implements Flow<Texture2D, BloomRendererOutput> {
     }
 
     @Override
-    public BloomRendererOutput getOutput() {
+    public WeightedTexture2D getOutput() {
         return output;
     }
 
     @Override
     public void setInput(Texture2D input) {
         this.input = input;
-        output.setScene(input);
     }
 }

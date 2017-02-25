@@ -6,18 +6,20 @@ import pl.warp.engine.graphics.mesh.MeshRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemsRecorder;
 import pl.warp.engine.graphics.particles.ParticleSystemStorage;
-import pl.warp.engine.graphics.pipeline.MultisampleTextureRenderer;
-import pl.warp.engine.graphics.pipeline.Pipeline;
-import pl.warp.engine.graphics.pipeline.Sink;
+import pl.warp.engine.graphics.pipeline.*;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
 import pl.warp.engine.graphics.postprocessing.HDRRenderer;
+import pl.warp.engine.graphics.postprocessing.WeightedTexture2D;
 import pl.warp.engine.graphics.postprocessing.lens.LensEnvironmentFlareRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 import pl.warp.engine.graphics.skybox.SkyboxRenderer;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jaca777
@@ -92,9 +94,21 @@ public class Graphics {
                 .from(sceneRenderer)
                 .via(particleSystemRenderer)
                 .via(textureRenderer);
-        if (config.isBloomEnabled()) pipeline = createBloom(pipeline);
-        if (config.areLensEnabled()) pipeline = createFlares(pipeline);
+        pipeline = createPostprocessing(pipeline);
         return pipeline.to(output);
+    }
+
+    private PipelineBuilder<Texture2D> createPostprocessing(PipelineBuilder<Texture2D> pipeline) {
+        if (config.areLensEnabled()) pipeline = createFlares(pipeline);
+        List<Flow<Texture2D, WeightedTexture2D>> postprocesses = new ArrayList<>();
+        SimpleFlow<Texture2D, WeightedTexture2D> sceneFlow = new SimpleFlow<>(
+                new WeightedTexture2D(null, 1.0f),
+                (i, o) -> o.setTexture(i));
+        postprocesses.add(sceneFlow);
+        if (config.isBloomEnabled()) postprocesses.add(createBloom());
+        MultiFlow<Texture2D, WeightedTexture2D> postprocessing = new MultiFlow<>(postprocesses.stream().toArray(Flow[]::new), WeightedTexture2D[]::new);
+        HDRRenderer hdrRenderer = new HDRRenderer(config);
+        return pipeline.via(postprocessing).via(hdrRenderer);
     }
 
     private SceneRenderer getSceneRenderer() {
@@ -108,12 +122,8 @@ public class Graphics {
         return new SceneRenderer(context.getScene(), config, new ComponentRenderer(renderers));
     }
 
-    private PipelineBuilder<Texture2D> createBloom(PipelineBuilder<Texture2D> builder) {
-        BloomRenderer bloomRenderer = new BloomRenderer(config);
-        HDRRenderer hdrRenderer = new HDRRenderer(config);
-        return builder
-                .via(bloomRenderer)
-                .via(hdrRenderer);
+    private Flow<Texture2D, WeightedTexture2D> createBloom() {
+        return new BloomRenderer(config);
     }
 
     private PipelineBuilder<Texture2D> createFlares(PipelineBuilder<Texture2D> builder) {

@@ -33,10 +33,14 @@ public class SunshaftRenderer implements Flow<Texture2D, Texture2D> {
     @Override
     public void update(int delta) {
         if(sunshaftSource.getSource() != null) {
+            renderer.enterChildren();
+            renderer.prepareComponent(sunshaftSource.getSource());
+            renderer.renderComponent(sunshaftSource.getSource());
+
             renderComponent();
             occlude();
-            blur();
             render();
+            renderer.leaveChildren();
         }
     }
 
@@ -47,7 +51,6 @@ public class SunshaftRenderer implements Flow<Texture2D, Texture2D> {
     }
 
     private void prepare() {
-        renderer.enterChildren();
         applyTransform(sunshaftSource.getSource());
     }
 
@@ -76,8 +79,7 @@ public class SunshaftRenderer implements Flow<Texture2D, Texture2D> {
 
     @Override
     public void destroy() {
-        //TODO
-        throw new UnsupportedOperationException();
+
     }
 
     @Override
@@ -87,8 +89,7 @@ public class SunshaftRenderer implements Flow<Texture2D, Texture2D> {
 
     @Override
     public Texture2D getOutput() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
@@ -96,4 +97,5 @@ public class SunshaftRenderer implements Flow<Texture2D, Texture2D> {
         //TODO
         throw new UnsupportedOperationException();
     }
+
 }

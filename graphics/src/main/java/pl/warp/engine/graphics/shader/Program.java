@@ -1,18 +1,16 @@
 package pl.warp.engine.graphics.shader;
 
-import com.google.common.io.CharStreams;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgram;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.LocalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 
 /**
@@ -150,5 +148,4 @@ public abstract class Program {
     public int getProgram() {
         return program.getGLProgram();
     }
-
 }
