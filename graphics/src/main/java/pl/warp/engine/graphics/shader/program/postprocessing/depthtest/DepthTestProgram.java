@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.shader.program.postprocessing.depthtest;
 
 import pl.warp.engine.graphics.shader.Program;
+import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 /**
@@ -20,10 +21,10 @@ public class DepthTestProgram extends Program {
     public DepthTestProgram() {
         super(PROGRAM_NAME);
         this.unifComponentDepthSampler = getUniformLocation("componentDepth");
-        setUniformf(this.unifComponentDepthSampler, 1);
+        setUniformi(this.unifComponentDepthSampler, 1);
     }
 
-    public void useSceneDepthSampler(Texture2D texture){
+    public void useSceneDepthSampler(MultisampleTexture2D texture){
         useTexture(texture, SCENE_DEPTH_SAMPLER);
     }
 

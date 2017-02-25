@@ -13,6 +13,8 @@ import pl.warp.engine.graphics.postprocessing.HDRRenderer;
 import pl.warp.engine.graphics.postprocessing.WeightedTexture2D;
 import pl.warp.engine.graphics.postprocessing.lens.LensEnvironmentFlareRenderer;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
+import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftProperty;
+import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftRenderer;
 import pl.warp.engine.graphics.skybox.SkyboxRenderer;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
@@ -46,6 +48,8 @@ public class Graphics {
     private CustomRenderersManager customRenderersManager;
 
     private Pipeline pipeline;
+    private SceneRenderer sceneRenderer;
+    private ComponentRenderer componentRenderer;
 
 
     public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
@@ -87,7 +91,7 @@ public class Graphics {
     }
 
     private Pipeline createPipeline() {
-        SceneRenderer sceneRenderer = getSceneRenderer();
+        sceneRenderer = getSceneRenderer();
         particleSystemRenderer = new ParticleSystemRenderer(mainViewCamera, particleSystemStorage);
         MultisampleTextureRenderer textureRenderer = new MultisampleTextureRenderer(config);
         PipelineBuilder<Texture2D> pipeline = PipelineBuilder
@@ -106,6 +110,7 @@ public class Graphics {
                 (i, o) -> o.setTexture(i));
         postprocesses.add(sceneFlow);
         if (config.isBloomEnabled()) postprocesses.add(createBloom());
+        if(config.isSunshaftEnabled()) postprocesses.add(createSunshaft());
         MultiFlow<Texture2D, WeightedTexture2D> postprocessing = new MultiFlow<>(postprocesses.stream().toArray(Flow[]::new), WeightedTexture2D[]::new);
         HDRRenderer hdrRenderer = new HDRRenderer(config);
         return pipeline.via(postprocessing).via(hdrRenderer);
@@ -119,11 +124,18 @@ public class Graphics {
         particleSystemRecorder = new ParticleSystemsRecorder(particleSystemStorage);
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRecorder, environmentFlareRenderer};
-        return new SceneRenderer(context.getScene(), config, new ComponentRenderer(renderers));
+        componentRenderer = new ComponentRenderer(renderers);
+        return new SceneRenderer(context.getScene(), config, componentRenderer);
     }
 
     private Flow<Texture2D, WeightedTexture2D> createBloom() {
         return new BloomRenderer(config);
+    }
+
+    private Flow<Texture2D, WeightedTexture2D> createSunshaft() {
+        SunshaftProperty property = new SunshaftProperty();
+        context.getScene().addProperty(property);
+        return new SunshaftRenderer(sceneRenderer, property.getSource(), config, componentRenderer, mainViewCamera);
     }
 
     private PipelineBuilder<Texture2D> createFlares(PipelineBuilder<Texture2D> builder) {

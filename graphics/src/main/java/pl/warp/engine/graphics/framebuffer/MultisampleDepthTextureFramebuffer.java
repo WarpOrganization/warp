@@ -24,14 +24,14 @@ public class MultisampleDepthTextureFramebuffer extends Framebuffer{
         this.destTex = destTex;
         this.depthTex = depthTex;
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, this.name);
-        attachDepthBuffer(depthTex);
+        attachDepthTexture(depthTex);
         attachTexture(destTex);
         int status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
         if(status == GL30.GL_FRAMEBUFFER_UNSUPPORTED) throw new FramebufferException("Frame buffers not supported");
         if(status != GL30.GL_FRAMEBUFFER_COMPLETE) throw new FramebufferException("Incomplete framebuffer: " + status);
     }
 
-    private void attachDepthBuffer(MultisampleTexture2D texture) {
+    private void attachDepthTexture(MultisampleTexture2D texture) {
         GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture.getTexture());
         GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL32.GL_TEXTURE_2D_MULTISAMPLE, texture.getTexture(), 0);
     }

@@ -12,8 +12,6 @@ import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
-import static org.lwjgl.opengl.GL11.GL_DEPTH_COMPONENT;
-
 /**
  * @author Jaca777
  *         Created 2016-06-29 at 21
@@ -122,5 +120,9 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     @Override
     public MultisampleTexture2D getOutput() {
         return outputTexture;
+    }
+
+    public MultisampleTexture2D getDepthTexture() {
+        return depthTexture;
     }
 }

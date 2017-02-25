@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.shader.program.postprocessing.sunshaft;
 
+import org.joml.Vector2f;
 import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftSource;
 import pl.warp.engine.graphics.shader.Program;
 import pl.warp.engine.graphics.texture.Texture2D;
@@ -16,6 +17,7 @@ public class SunshaftProgram extends Program {
 
     private int DIFFUSE_SAMPLER = 0;
 
+    private int unifCenter;
     private int unifExposure;
     private int unifDecay;
     private int unifDensity;
@@ -28,11 +30,12 @@ public class SunshaftProgram extends Program {
     }
 
     private void loadUniforms() {
+        this.unifCenter = getUniformLocation("center");
         this.unifExposure = getUniformLocation("exposure");
         this.unifDecay = getUniformLocation("decay");
         this.unifDensity = getUniformLocation("density");
         this.unifWeight = getUniformLocation("weight");
-        this.unifClamp = getUniformLocation("clamp");
+        this.unifClamp = getUniformLocation("clampValue");
     }
 
     public void useDiffuseTexture(Texture2D diffuseTexture){
@@ -45,6 +48,10 @@ public class SunshaftProgram extends Program {
         setUniformf(unifDensity, source.getDensity());
         setUniformf(unifWeight, source.getWeight());
         setUniformf(unifClamp, source.getClamp());
+    }
+
+    public void useCenter(Vector2f center){
+        setUniformV2(unifCenter, center);
     }
 
 }

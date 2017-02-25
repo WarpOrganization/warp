@@ -74,4 +74,8 @@ public class ComponentRenderer {
         for (Renderer renderer : renderers)
             renderer.destroy();
     }
+
+    public MatrixStack getMatrixStack() {
+        return matrixStack;
+    }
 }

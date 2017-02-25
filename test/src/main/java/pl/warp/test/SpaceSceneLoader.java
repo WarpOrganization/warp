@@ -47,6 +47,7 @@ import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFact
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
+import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftProperty;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
@@ -182,6 +183,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
     @Override
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
+
             this.graphicsThread = graphicsThread;
             //new ComponentLoggingScript(controllableGoat);
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
@@ -263,6 +265,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             LensFlare flare = new LensFlare(lensTexture, flares);
             GraphicsLensFlareProperty flareProperty = new GraphicsLensFlareProperty(flare);
             sun.addProperty(flareProperty);
+            scene.<SunshaftProperty>getPropertyIfExists(SunshaftProperty.SUNSHAFT_PROPERTY_NAME).ifPresent(p -> p.getSource().setComponent(sun));
 
             brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());

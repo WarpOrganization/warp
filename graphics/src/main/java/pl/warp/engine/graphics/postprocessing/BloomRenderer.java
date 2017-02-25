@@ -10,6 +10,7 @@ import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.shader.program.postprocessing.bloomdetection.BloomDetectionProgram;
 import pl.warp.engine.graphics.shader.program.postprocessing.gaussianblur.GaussianBlurProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
+import pl.warp.engine.graphics.window.Display;
 
 /**
  * @author Jaca777
@@ -96,10 +97,11 @@ public class BloomRenderer implements Flow<Texture2D, WeightedTexture2D> {
     }
 
     private void createTextures() {
-        this.bloomDetectionTexture = new Texture2D(config.getDisplay().getWidth(), config.getDisplay().getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
-        this.verticalBlurTexture = new Texture2D(config.getDisplay().getWidth() / 2, config.getDisplay().getHeight() / 2, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        Display display = config.getDisplay();
+        this.bloomDetectionTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.verticalBlurTexture = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(verticalBlurTexture);
-        this.blurredBloomTexture = new Texture2D(config.getDisplay().getWidth() / 2, config.getDisplay().getHeight() / 2, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+        this.blurredBloomTexture = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGB32F, GL11.GL_RGB, false, null);
         setupBlurTexture(blurredBloomTexture);
     }
 

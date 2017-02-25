@@ -19,7 +19,7 @@ public class SunshaftSource {
         return source;
     }
 
-    public void setSource(Component source) {
+    public void setComponent(Component source) {
         this.source = source;
     }
 
