@@ -5,12 +5,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.graphics.framebuffer.MultisampleFramebuffer;
+import pl.warp.engine.graphics.framebuffer.MultisampleDepthTextureFramebuffer;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
+
+import static org.lwjgl.opengl.GL11.GL_DEPTH_COMPONENT;
 
 /**
  * @author Jaca777
@@ -22,8 +24,9 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private Scene scene;
     private RenderingConfig settings;
-    private MultisampleFramebuffer renderingFramebuffer;
+    private MultisampleDepthTextureFramebuffer renderingFramebuffer;
     private MultisampleTexture2D outputTexture;
+    private MultisampleTexture2D depthTexture;
     private final ComponentRenderer renderer;
 
     public SceneRenderer(Scene scene, RenderingConfig settings, ComponentRenderer renderer) {
@@ -102,7 +105,9 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private void setupFramebuffer() {
         this.outputTexture = new MultisampleTexture2D(settings.getDisplay().getWidth(), settings.getDisplay().getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
-        this.renderingFramebuffer = new MultisampleFramebuffer(outputTexture);
+        this.depthTexture = new MultisampleTexture2D(settings.getDisplay().getWidth(), settings.getDisplay().getHeight(),
+                GL11.GL_DEPTH_COMPONENT, GL11.GL_DEPTH_COMPONENT, settings.getRenderingSamples());
+        this.renderingFramebuffer = new MultisampleDepthTextureFramebuffer(outputTexture, depthTexture);
     }
 
     @Override
