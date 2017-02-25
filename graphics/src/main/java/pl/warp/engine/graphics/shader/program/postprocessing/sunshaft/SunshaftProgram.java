@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.shader.program.postprocessing.sunshaft;
 
-import pl.warp.engine.graphics.postprocessing.sunshaft.sunshaft.SunshaftSource;
+import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftSource;
 import pl.warp.engine.graphics.shader.Program;
 import pl.warp.engine.graphics.texture.Texture2D;
 

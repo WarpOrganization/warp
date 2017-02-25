@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.postprocessing.sunshaft.sunshaft;
+package pl.warp.engine.graphics.postprocessing.sunshaft;
 
 import pl.warp.engine.core.scene.Component;
 
