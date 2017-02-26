@@ -65,7 +65,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         renderer.initRendering(delta);
     }
 
-    private void render(Component component) {
+    public void render(Component component) {
         renderer.enterChildren();
         renderer.prepareComponent(component);
         renderer.renderComponent(component);

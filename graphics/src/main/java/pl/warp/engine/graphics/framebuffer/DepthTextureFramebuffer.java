@@ -33,13 +33,11 @@ public class DepthTextureFramebuffer extends Framebuffer {
     }
 
     private void attachDepthTexture() {
-        this.depthTex.bind();
         GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this.depthTex.getTexture(), 0);
     }
 
     private void attachTexture() {
         GL20.glDrawBuffers(BufferTools.toDirectBuffer(new int[]{GL_COLOR_ATTACHMENT0}));
-        this.destTex.bind();
         GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.destTex.getTexture(), 0);
     }
 

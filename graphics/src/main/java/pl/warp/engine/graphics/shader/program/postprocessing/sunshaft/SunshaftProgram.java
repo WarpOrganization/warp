@@ -13,7 +13,6 @@ public class SunshaftProgram extends Program {
     private static String PROGRAM_NAME = "postprocessing/sunshaft";
 
     public static final int ATTR_VERTEX = 0;
-    public static final int ATTR_TEX_COORD = 1;
 
     private int DIFFUSE_SAMPLER = 0;
 

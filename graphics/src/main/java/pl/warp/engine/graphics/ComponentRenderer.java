@@ -58,8 +58,9 @@ public class ComponentRenderer {
             CustomRenderer renderer = rendererProperty.getRenderer();
             if(renderer.isEnabled()) renderer.render(component, matrixStack);
         }
-        for (Renderer renderer : renderers)
+        for (Renderer renderer : renderers) {
             renderer.render(component, matrixStack);
+        }
     }
 
     public void enterChildren() {

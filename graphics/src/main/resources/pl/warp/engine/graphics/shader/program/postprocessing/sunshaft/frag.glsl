@@ -1,7 +1,6 @@
 #version 330
 precision highp float;
 
-varying vec2 vTexCoord;
 uniform sampler2D diffuse;
 
 uniform vec2 center;
@@ -11,11 +10,13 @@ uniform float density;
 uniform float weight;
 uniform float clampValue;
 
-const int iSamples = 20;
+in vec2 vTexCoord;
+
+const int iSamples = 256;
 
 void main(){
-    vec2 deltaTextCoord = vec2(vTexCoord - center);
-    deltaTextCoord *= 1.0 /  float(iSamples) * density;
+    vec2 deltaTextCoord = vec2(vTexCoord - (center + 1) / 2);
+    deltaTextCoord *= 1.0 / float(iSamples) * density;
     vec2 coord = vTexCoord;
     float illuminationDecay = 1.0;
     vec4 color = vec4(0.0);
@@ -23,7 +24,6 @@ void main(){
         coord -= deltaTextCoord;
         vec4 texel = texture(diffuse, coord);
         texel *= illuminationDecay * weight;
-
         color += texel;
         illuminationDecay *= decay;
     }

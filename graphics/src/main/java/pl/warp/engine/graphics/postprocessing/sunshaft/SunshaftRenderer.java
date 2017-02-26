@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.ComponentRenderer;
-import pl.warp.engine.graphics.GLErrors;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
@@ -38,6 +37,9 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     private Texture2D componentRenderTexture;
     private Texture2D componentDepthTexture;
 
+    private TextureFramebuffer occludedFramebuffer;
+    private Texture2D occludedComponent;
+
     private DepthTestProgram depthTestProgram;
 
     private SunshaftProgram sunshaftProgram;
@@ -57,8 +59,9 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     @Override
     public void update(int delta) {
         if (sunshaftSource.getSource() != null) {
-            renderer.enterChildren();
             componentRenderFramebuffer.bindDraw();
+            componentRenderFramebuffer.clean();
+            renderer.enterChildren();
             renderComponent();
             Vector2f componentPos = getComponentScreenPos();
             occlude();
@@ -70,7 +73,6 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     private void renderComponent() {
         prepare();
         renderer.renderComponent(sunshaftSource.getSource());
-
     }
 
     private void prepare() {
@@ -83,18 +85,23 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     }
 
     private void occlude() {
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        quad.bind();
+        this.occludedFramebuffer.bindDraw();
+        this.occludedFramebuffer.clean();
         depthTestProgram.use();
+        depthTestProgram.useSceneDepthSampler(sceneRenderer.getDepthTexture());
         depthTestProgram.useComponentDepthSampler(componentDepthTexture);
-        depthTestProgram.useSceneDepthSampler(sceneRenderer.getOutput());
+        depthTestProgram.useComponentTexture(componentRenderTexture);
         quad.draw();
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     private void renderSunshaft(Vector2f sunshaftCenter) {
+        System.out.println(sunshaftCenter);
+        quad.bind();
         sunshaftFramebuffer.bindDraw();
+        sunshaftFramebuffer.clean();
         sunshaftProgram.use();
-        sunshaftProgram.useDiffuseTexture(componentRenderTexture);
+        sunshaftProgram.useDiffuseTexture(occludedComponent);
         sunshaftProgram.useSunshaftSource(sunshaftSource);
         sunshaftProgram.useCenter(sunshaftCenter);
         quad.draw();
@@ -103,23 +110,23 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
 
     @Override
     public void init() {
-        GLErrors.checkOGLErrors();
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
+
         this.depthTestProgram = new DepthTestProgram();
-        GLErrors.checkOGLErrors();
         this.sunshaftProgram = new SunshaftProgram();
-        GLErrors.checkOGLErrors();
         Display display = config.getDisplay();
-        this.componentRenderTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
-        GLErrors.checkOGLErrors();
-        this.componentDepthTexture = new Texture2D(display.getWidth(), display.getHeight(), GL11.GL_DEPTH_COMPONENT, GL11.GL_DEPTH_COMPONENT, false, null);
+
+        this.occludedComponent = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
+        this.occludedFramebuffer = new TextureFramebuffer(occludedComponent);
+
+        this.componentRenderTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
+        this.componentDepthTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_DEPTH_COMPONENT32F, GL11.GL_DEPTH_COMPONENT, false, null);
         this.componentRenderFramebuffer = new DepthTextureFramebuffer(componentRenderTexture, componentDepthTexture);
-        GLErrors.checkOGLErrors();
-        this.sunshaftTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGB32F, GL11.GL_RGB, false, null);
+
+        this.sunshaftTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
         this.sunshaftFramebuffer = new TextureFramebuffer(sunshaftTexture);
-        GLErrors.checkOGLErrors();
         this.quad = new Quad();
         this.output = new WeightedTexture2D(sunshaftTexture, 1.0f);
-        GLErrors.checkOGLErrors();
     }
 
     @Override
@@ -132,6 +139,7 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     @Override
     public void onResize(int newWidth, int newHeight) {
         componentRenderFramebuffer.resize(newWidth, newHeight);
+        occludedFramebuffer.resize(newWidth, newHeight);
         sunshaftFramebuffer.resize(newWidth, newHeight);
     }
 
@@ -153,7 +161,7 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
         vector4.mul(renderer.getMatrixStack().topMatrix());
         vector4.mul(camera.getCameraMatrix());
         vector4.mul(camera.getProjectionMatrix().getMatrix());
-        vector2.set(vector4.x, vector4.y);
+        vector2.set(vector4.x / vector4.w, vector4.y / vector4.w);
         return vector2;
     }
 }

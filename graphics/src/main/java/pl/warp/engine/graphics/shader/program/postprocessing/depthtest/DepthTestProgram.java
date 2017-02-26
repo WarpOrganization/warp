@@ -10,18 +10,24 @@ import pl.warp.engine.graphics.texture.Texture2D;
  */
 public class DepthTestProgram extends Program {
     private static String PROGRAM_NAME = "postprocessing/depthtest";
-    private static final int SCENE_DEPTH_SAMPLER = 0;
+    private static final int SCENE_DEPTH_SAMPLER = 2;
     private static final int COMPONENT_DEPTH_SAMPLER = 1;
+    private static final int COMPONENT_SAMPLER = 0;
 
     public static final int ATTR_VERTEX = 0;
-    public static final int ATTR_TEX_COORD = 1;
 
     private int unifComponentDepthSampler;
+    private int unifSceneDepthSampler;
+    private int unifComponentSampler;
 
     public DepthTestProgram() {
         super(PROGRAM_NAME);
+        this.unifSceneDepthSampler = getUniformLocation("sceneDepth");
         this.unifComponentDepthSampler = getUniformLocation("componentDepth");
-        setUniformi(this.unifComponentDepthSampler, 1);
+        this.unifComponentSampler = getUniformLocation("component");
+        setUniformi(this.unifComponentSampler, COMPONENT_SAMPLER);
+        setUniformi(this.unifComponentDepthSampler, COMPONENT_DEPTH_SAMPLER);
+        setUniformi(this.unifSceneDepthSampler, SCENE_DEPTH_SAMPLER);
     }
 
     public void useSceneDepthSampler(MultisampleTexture2D texture){
@@ -33,4 +39,7 @@ public class DepthTestProgram extends Program {
     }
 
 
+    public void useComponentTexture(Texture2D componentTexture) {
+        useTexture(componentTexture, COMPONENT_SAMPLER);
+    }
 }
