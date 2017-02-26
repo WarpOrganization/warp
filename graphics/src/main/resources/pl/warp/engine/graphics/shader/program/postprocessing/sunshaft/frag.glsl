@@ -12,7 +12,7 @@ uniform float clampValue;
 
 in vec2 vTexCoord;
 
-const int iSamples = 256;
+const int iSamples = 164;
 
 void main(){
     vec2 deltaTextCoord = vec2(vTexCoord - (center + 1) / 2);

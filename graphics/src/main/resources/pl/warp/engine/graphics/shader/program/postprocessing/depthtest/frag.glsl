@@ -14,7 +14,7 @@ void main(void) {
     ivec2 size = textureSize(sceneDepth);
     ivec2 iTexCoord = ivec2(floor(size * vTexCoord));
     if(texelFetch(sceneDepth, iTexCoord, 0).r + 0.000001 > texture(componentDepth, vTexCoord).r) {
-       fragColor.rgb = vec3(texture(component, vTexCoord).r);
+       fragColor.rgb = texture(component, vTexCoord).rgb;
        fragColor.a = 1.0;
     }
  }
