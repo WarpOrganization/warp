@@ -203,9 +203,6 @@ public class SpaceSceneLoader implements GameSceneLoader {
                     new SingleFlare(-0.5f, 1, 0.05f, new Vector3f(1)),
                     new SingleFlare(-0.6f, 1, 0.08f, new Vector3f(1)),
                     new SingleFlare(-0.4f, 1, 0.25f, new Vector3f(1)),
-                    new SingleFlare(-0.1f, 1, 0.2f, new Vector3f(1)),
-                    new SingleFlare(0.2f, 1, 0.25f, new Vector3f(1)),
-                    new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f))
             };
 
 

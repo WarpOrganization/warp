@@ -9,7 +9,7 @@ import pl.warp.engine.core.scene.Component;
 public class SunshaftSource {
     private Component source;
 
-    private float exposure = 0.085f;
+    private float exposure = 0.1f;
     private float decay = 0.97f;
     private float density = 1.0f;
     private float weight = 0.2f;
