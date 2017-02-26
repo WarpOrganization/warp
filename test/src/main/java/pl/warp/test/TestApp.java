@@ -50,6 +50,7 @@ public class TestApp extends Application {
 
         ChoiceBox<String> availableScenes = new ChoiceBox<>(FXCollections.observableArrayList ("Space", "Ground", "Test2", "Test3"));
         availableScenes.setTooltip(new Tooltip("Chose which scene will load"));
+        availableScenes.getSelectionModel().selectFirst();
 
         grid.add(new Label("Rendering samples:"), 0, 0);
         grid.add(renderingSamples, 1, 0);
