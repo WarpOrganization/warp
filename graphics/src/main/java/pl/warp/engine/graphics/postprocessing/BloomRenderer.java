@@ -92,7 +92,7 @@ public class BloomRenderer implements Flow<Texture2D, WeightedTexture2D> {
         createFramebuffers();
         createPrograms();
         this.quad = new Quad();
-        this.output = new WeightedTexture2D(blurredBloomTexture, config.getBloomLevel());
+        this.output = new WeightedTexture2D(blurredBloomTexture, config.getBloomLevel(), 1.0f);
         logger.info("Bloom renderer initialized.");
     }
 

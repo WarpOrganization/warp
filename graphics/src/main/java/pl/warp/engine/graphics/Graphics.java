@@ -106,7 +106,7 @@ public class Graphics {
         if (config.areLensEnabled()) pipeline = createFlares(pipeline);
         List<Flow<Texture2D, WeightedTexture2D>> postprocesses = new ArrayList<>();
         SimpleFlow<Texture2D, WeightedTexture2D> sceneFlow = new SimpleFlow<>(
-                new WeightedTexture2D(null, 1.0f),
+                new WeightedTexture2D(null, 1.0f, 1.0f),
                 (i, o) -> o.setTexture(i));
         postprocesses.add(sceneFlow);
         if (config.isBloomEnabled()) postprocesses.add(createBloom());

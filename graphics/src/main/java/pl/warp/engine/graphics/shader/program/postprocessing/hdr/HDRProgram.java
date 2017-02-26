@@ -25,6 +25,7 @@ public class HDRProgram extends Program {
 
     private int[] unifSamplers = new int[MAX_SAMPLERS];
     private int[] unifWeights = new int[MAX_SAMPLERS];
+    private int[] unifScales = new int[MAX_SAMPLERS];
     private int unifSamplersNumber;
     private int unifExposure;
 
@@ -39,8 +40,9 @@ public class HDRProgram extends Program {
         for(int i = 0; i < MAX_SAMPLERS; i++){
             this.unifSamplers[i] = getUniformLocation("samplers[" + i + "]");
             this.unifWeights[i] = getUniformLocation("weights[" + i + "]");
-            this.unifSamplersNumber = getUniformLocation("samplersNumber");
+            this.unifScales[i] = getUniformLocation("scales[" + i + "]");
         }
+        this.unifSamplersNumber = getUniformLocation("samplersNumber");
     }
 
     private void setupSamplers() {
@@ -55,6 +57,7 @@ public class HDRProgram extends Program {
             WeightedTexture2D texture = textures[i];
             useTexture(texture.getTexture(), i);
             setUniformf(unifWeights[i], texture.getWeight());
+            setUniformf(unifScales[i], texture.getScale());
         }
     }
 

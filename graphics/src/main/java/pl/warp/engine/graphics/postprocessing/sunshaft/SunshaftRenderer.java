@@ -96,7 +96,6 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     }
 
     private void renderSunshaft(Vector2f sunshaftCenter) {
-        System.out.println(sunshaftCenter);
         quad.bind();
         sunshaftFramebuffer.bindDraw();
         sunshaftFramebuffer.clean();
@@ -116,17 +115,17 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
         this.sunshaftProgram = new SunshaftProgram();
         Display display = config.getDisplay();
 
-        this.occludedComponent = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
+        this.occludedComponent = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
         this.occludedFramebuffer = new TextureFramebuffer(occludedComponent);
 
         this.componentRenderTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
         this.componentDepthTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_DEPTH_COMPONENT32F, GL11.GL_DEPTH_COMPONENT, false, null);
         this.componentRenderFramebuffer = new DepthTextureFramebuffer(componentRenderTexture, componentDepthTexture);
 
-        this.sunshaftTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
+        this.sunshaftTexture = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
         this.sunshaftFramebuffer = new TextureFramebuffer(sunshaftTexture);
         this.quad = new Quad();
-        this.output = new WeightedTexture2D(sunshaftTexture, 1.0f);
+        this.output = new WeightedTexture2D(sunshaftTexture, 1.0f, 1.0f);
     }
 
     @Override
@@ -138,9 +137,9 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
 
     @Override
     public void onResize(int newWidth, int newHeight) {
-        componentRenderFramebuffer.resize(newWidth, newHeight);
-        occludedFramebuffer.resize(newWidth, newHeight);
-        sunshaftFramebuffer.resize(newWidth, newHeight);
+        componentRenderFramebuffer.resize(newWidth / 2, newHeight / 2);
+        occludedFramebuffer.resize(newWidth / 2, newHeight / 2);
+        sunshaftFramebuffer.resize(newWidth / 2, newHeight / 2);
     }
 
     @Override

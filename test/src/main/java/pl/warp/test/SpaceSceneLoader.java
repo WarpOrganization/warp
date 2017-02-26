@@ -687,7 +687,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
-        team1.add(controllableGoat);
+        //team1.add(controllableGoat);
         controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
         int nOfGoats = 20;
         for (int i = 0; i < nOfGoats; i++) {
