@@ -77,7 +77,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 2.0f ;
-    private static final float BRAKING_FORCE = 0.2f * 10;
+    private static final float BRAKING_FORCE = 0.2f * 100;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
     public static GameComponent MAIN_OBJECT;
@@ -137,9 +137,11 @@ public class GroundSceneLoader implements GameSceneLoader {
     @Override
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
-            goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
-            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
-            goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
+
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
+            Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
+            scene.addProperty(new GraphicsSkyboxProperty(cubemap));
+
 
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -156,8 +158,6 @@ public class GroundSceneLoader implements GameSceneLoader {
                     new SingleFlare(0.2f, 1, 0.25f, new Vector3f(1)),
                     new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f))
             };
-
-
 
             Star sun = new Star(scene, 5000f);
             new GameScript<Star>(sun) {
@@ -187,21 +187,20 @@ public class GroundSceneLoader implements GameSceneLoader {
                     coronaProperty.setTemperature(temperature);
                 }
             };
+
             TransformProperty sunSphereTransform = new TransformProperty();
-            sunSphereTransform.move(new Vector3f(16000f, 200f, 500f));
+            sunSphereTransform.move(new Vector3f(200f, 16000f, 500f));
             sunSphereTransform.scale(new Vector3f(2000.0f));
             sun.addProperty(sunSphereTransform);
+
             SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
             LightSourceProperty lightSourceProperty = new LightSourceProperty();
             sun.addProperty(lightSourceProperty);
+
             lightSourceProperty.addSpotLight(spotLight);
             LensFlare flare = new LensFlare(lensTexture, flares);
             GraphicsLensFlareProperty flareProperty = new GraphicsLensFlareProperty(flare);
             sun.addProperty(flareProperty);
-
-            brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
-            goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
-
 
 
 
@@ -220,28 +219,48 @@ public class GroundSceneLoader implements GameSceneLoader {
 
 
 
-            ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
-            boomSpritesheet = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
+            Vector3f movement = new Vector3f(0f, 0f,0f);
 
+            GameComponent tank = new GameSceneComponent(scene);
+
+            TransformProperty tankTransform = new TransformProperty();
+            tank.addProperty(tankTransform);
+            tankTransform.move(movement);
+            tankTransform.setScale(new Vector3f(10f, 10f, 10f));
+
+            Mesh tankMesh = ObjLoader.read(Test.class.getResourceAsStream("tank.obj"), false).toVAOMesh();
+            RenderableMeshProperty tankRenderableMeshProperty = new RenderableMeshProperty(tankMesh);
+            tank.addProperty(tankRenderableMeshProperty);
+
+            ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("free-grey-camouflage-vector.png"), PNGDecoder.Format.BGRA);
+            Texture2D tankTexture = new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData());
+            Material tankMaterial = new Material(tankTexture);
+            tank.addProperty(new GraphicsMaterialProperty(tankMaterial));
+
+
+
+            goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
             playerObject.addProperty(renderableMeshProperty);
 
-
+            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
+            goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
+            brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
+            goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
             playerObject.addProperty(new GraphicsMaterialProperty(material));
 
+            ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
+            boomSpritesheet = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
             bulletMesh = new Sphere(15, 15, 0.5f);
             ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             playerObject.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
+
             audioManager = AudioManager.INSTANCE;
 
             new GunScript(playerObject);
-
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
-            Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
-            scene.addProperty(new GraphicsSkyboxProperty(cubemap));
 
             engineParticles(playerObject, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f), new Vector4f(0.2f, 0.5f, 1.0f, 0.0f));
             new GoatControlScript(playerObject, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
