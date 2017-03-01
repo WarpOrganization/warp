@@ -104,7 +104,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     private void setupFramebuffer() {
         this.outputTexture = new MultisampleTexture2D(settings.getDisplay().getWidth(), settings.getDisplay().getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, settings.getRenderingSamples());
         this.depthTexture = new MultisampleTexture2D(settings.getDisplay().getWidth(), settings.getDisplay().getHeight(),
-                GL11.GL_DEPTH_COMPONENT, GL11.GL_DEPTH_COMPONENT, settings.getRenderingSamples());
+                GL30.GL_DEPTH_COMPONENT32F, GL11.GL_DEPTH_COMPONENT, settings.getRenderingSamples());
         this.renderingFramebuffer = new MultisampleDepthTextureFramebuffer(outputTexture, depthTexture);
     }
 

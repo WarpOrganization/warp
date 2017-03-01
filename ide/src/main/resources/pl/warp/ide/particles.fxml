@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <AnchorPane fx:id="componentPanel" prefHeight="560.0" prefWidth="226.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane layoutX="10.0" layoutY="23.0" prefHeight="81.0" prefWidth="197.0">
@@ -30,10 +29,10 @@
          <children>
             <Label text="Time to live" />
             <Label text="TTL gradient" GridPane.rowIndex="1" />
-            <TextField text="1000" GridPane.columnIndex="1" />
-            <TextField text="300" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <CheckBox mnemonicParsing="false" selected="true" text="Rnd rotation" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <CheckBox mnemonicParsing="false" selected="true" text="Rnd scale" GridPane.rowIndex="2" />
+            <TextField fx:id="ttlField" text="1000" GridPane.columnIndex="1" />
+            <TextField fx:id="ttlGradientField" text="300" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckBox fx:id="rndRotationBox" mnemonicParsing="false" selected="true" text="Rnd rotation" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <CheckBox fx:id="rndScaleBox" mnemonicParsing="false" selected="true" text="Rnd scale" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <Separator layoutX="5.0" layoutY="108.0" prefWidth="200.0" />
@@ -52,13 +51,13 @@
          </rowConstraints>
          <children>
             <Label text="Velocity X" />
-            <Slider max="0.01" value="0.002" GridPane.columnIndex="1" />
+            <Slider fx:id="velocityXSlider" max="0.01" value="0.002" GridPane.columnIndex="1" />
             <Label text="Velocity Y" GridPane.rowIndex="1" />
-            <Slider max="0.01" value="0.002" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Slider fx:id="velocityYSlider" max="0.01" value="0.002" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Velocity Z" GridPane.rowIndex="2" />
-            <Slider max="0.01" value="0.002" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Slider fx:id="velocityZSlider" max="0.01" value="0.002" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Frequency" GridPane.rowIndex="3" />
-            <TextField text="20" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="frequencyField" text="20" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <Separator layoutX="4.0" layoutY="238.0" prefWidth="200.0" />
@@ -75,11 +74,11 @@
          </rowConstraints>
          <children>
             <Label text="Acceleration X" />
-            <Slider majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" />
+            <Slider fx:id="accXSlider" majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" />
             <Label text="Acceleration Y" GridPane.rowIndex="1" />
-            <Slider majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Slider fx:id="accYSlider" majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Acceleration Z" GridPane.rowIndex="2" />
-            <Slider majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Slider fx:id="accZSlider" majorTickUnit="0.01" max="0.01" min="-0.01" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <Separator layoutX="3.0" layoutY="332.0" prefWidth="200.0" />
@@ -87,18 +86,13 @@
       <Accordion layoutX="12.0" layoutY="357.0" />
       <AnchorPane layoutY="357.0">
          <children>
-            <TabPane prefHeight="200.0" prefWidth="226.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="stagesPane" prefHeight="200.0" prefWidth="226.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Stage 1">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </Tab>
-                  <Tab text="Stage 2">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                  </Tab>
                 <Tab text="+">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
@@ -122,10 +116,10 @@
                   <ColorPicker prefHeight="25.0" prefWidth="114.0" GridPane.columnIndex="1" />
                   <Label text="Scale" GridPane.rowIndex="2" />
                   <Label text="Gradient" GridPane.rowIndex="3" />
-                  <Label text="Transparency" GridPane.rowIndex="1" />
-                  <Slider max="1.0" value="0.5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Slider max="10.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Slider max="1.0" prefWidth="109.0" value="0.5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label text="Visiblity" GridPane.rowIndex="1" />
+                  <Slider fx:id="visibilitySlider" max="1.0" value="0.5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Slider fx:id="scaleSlider" max="10.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Slider fx:id="gradientSlider" max="1.0" prefWidth="109.0" value="0.5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>

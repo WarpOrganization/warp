@@ -186,11 +186,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             this.graphicsThread = graphicsThread;
             //new ComponentLoggingScript(controllableGoat);
-            goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
-            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1.png"), PNGDecoder.Format.RGBA);
+            goatMesh = ObjLoader.read(Test.class.getResourceAsStream("sw_fighter.obj"), false).toVAOMesh();
+            ImageData decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter.png"), PNGDecoder.Format.RGBA);
             goatTexture = new Texture2D(decodedTexture.getWidth(), decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture.getData());
 
-            ImageData decodedTexture2 = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_2.png"), PNGDecoder.Format.RGBA);
+            ImageData decodedTexture2 = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter.png"), PNGDecoder.Format.RGBA);
             goatTexture2 = new Texture2D(decodedTexture2.getWidth(), decodedTexture2.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTexture2.getData());
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -264,7 +264,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             sun.addProperty(flareProperty);
             scene.<SunshaftProperty>getPropertyIfExists(SunshaftProperty.SUNSHAFT_PROPERTY_NAME).ifPresent(p -> p.getSource().setComponent(sun));
 
-            brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_1_brightness.png"), PNGDecoder.Format.RGBA);
+            brightnessTextureData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter_brightness.png"), PNGDecoder.Format.RGBA);
             goatBrightnessTexture = new Texture2D(brightnessTextureData.getWidth(), brightnessTextureData.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, brightnessTextureData.getData());
 
             brightnessTextureData2 = ImageDecoder.decodePNG(Test.class.getResourceAsStream("fighter_2_brightness.png"), PNGDecoder.Format.RGBA);
@@ -287,7 +287,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
             controllableGoat.addProperty(renderableMeshProperty);
             //renderableMeshProperty.disable();
-            allyEngineParticles(controllableGoat);
+            //allyEngineParticles(controllableGoat);
 
             new KabooomScript(controllableGoat, gasPlanet, 1000.0f);
 
@@ -338,12 +338,12 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 enemyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
             }
 
-            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
-            ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
+            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("sw_fighter.obj"), false).toVAOMesh();
+            ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter.png"), PNGDecoder.Format.RGBA);
             frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
             Material frigateMaterial = new Material(frigateTexture);
             frigateMaterial.setShininess(20);
-            ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
+            ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter_brightness.png"), PNGDecoder.Format.RGBA);
             frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
             GameComponent frigate = new GameSceneComponent(scene);
@@ -686,7 +686,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         ArrayList<Component> team2 = new ArrayList<>();
         //team1.add(controllableGoat);
         controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
-        int nOfGoats = 20;
+        int nOfGoats = 100;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             new KabooomScript(goat, gasPlanet, 1000.0f);
