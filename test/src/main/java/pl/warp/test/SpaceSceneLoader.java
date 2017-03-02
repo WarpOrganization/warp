@@ -295,7 +295,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             material.setBrightnessTexture(goatBrightnessTexture);
             controllableGoat.addProperty(new GraphicsMaterialProperty(material));
 
-            bulletMesh = new Sphere(15, 15, 0.5f);
+            bulletMesh = ObjLoader.read(Test.class.getResourceAsStream("bullet.obj"), false).toVAOMesh();
             ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             controllableGoat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));

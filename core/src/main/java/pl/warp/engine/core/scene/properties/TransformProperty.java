@@ -82,4 +82,8 @@ public class TransformProperty extends Property{
     public void move(Vector3f movement) {
         this.translation.add(movement);
     }
+
+    public void setRotation(Quaternionf rotation) {
+        this.rotation.set(rotation);
+    }
 }
