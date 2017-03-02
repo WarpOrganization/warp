@@ -42,6 +42,7 @@ public class MovementTask extends EngineTask {
 
     //TODO standing to false
     //TODO implement matrixstack
+    Vector3f upVector = new Vector3f();
     @Override
     public void update(int delta) {
         float fdelta = (float) delta / 1000;
@@ -69,7 +70,12 @@ public class MovementTask extends EngineTask {
                     tmpRotation.rotateLocalZ(tmpTorque.z);
                     physicalBodyProperty.recalculateInteriaTensor(tmpRotation);
                     colliderProperty.getCollider().setTransform(tmpVelocity.add(transformProperty.getTranslation()), tmpRotation);
-                    if (gravityProperty != null) gravityProperty.setStanding(false);
+
+                    if (gravityProperty != null) {
+                        gravityProperty.getDownVector().negate(upVector);
+                        if(physicalBodyProperty.getVelocity().dot(upVector)>0.001)
+                            gravityProperty.setStanding(false);
+                    }
                 } else {
                     transformProperty.move(tmpVelocity.mul(fdelta));
 

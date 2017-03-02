@@ -227,7 +227,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             floor.addProperty(new PhysicalBodyProperty(10000,1000f,15,1000f));
 
 
-            Vector3f movement = new Vector3f(0f, 0f,0f);
+            Vector3f movement = new Vector3f(0f, 100f,-60f);
 
             GameComponent tank = new GameSceneComponent(scene);
 
