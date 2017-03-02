@@ -55,6 +55,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
         finalizeRendering();
     }
 
+
     private void finalizeRendering() {
 
     }

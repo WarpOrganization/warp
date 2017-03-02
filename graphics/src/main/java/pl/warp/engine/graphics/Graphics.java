@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics;
 
 import pl.warp.engine.core.*;
+import pl.warp.engine.core.updater.UpdaterTask;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
@@ -67,8 +68,13 @@ public class Graphics {
     public void create() {
         createWindow();
         createEnvironment();
+        createCameraTask();
         createRenderingTask();
         thread.start();
+    }
+
+    private void createCameraTask() {
+        thread.scheduleTask(new UpdaterTask(d -> mainViewCamera.updateMatrices()));
     }
 
     private void createWindow() {

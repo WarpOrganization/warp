@@ -28,6 +28,8 @@ public interface Camera {
 
     void rotateZ(float angle);
 
+    void updateMatrices();
+
     Vector3f getPosition(Vector3f dest);
 
     Quaternionf getNonrealtiveRotation();
