@@ -7,7 +7,7 @@ import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.property.ColliderProperty;
-import pl.warp.engine.physics.property.GravityAffectedBodyProperty;
+import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -39,6 +39,7 @@ public class MovementTask extends EngineTask {
     protected void onClose() {
 
     }
+
     //TODO standing to false
     //TODO implement matrixstack
     @Override
@@ -48,8 +49,15 @@ public class MovementTask extends EngineTask {
             if (isPhysicalBody(component) && isTransormable(component)) {
                 PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
                 TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+                GravityProperty gravityProperty = null;
+                if (isGravityAffected(component)) {
+                    gravityProperty = component.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
+                    if (!gravityProperty.isStanding())
+                        physicalBodyProperty.getVelocity().add(gravityProperty.getDownVector());
+                }
                 tmpVelocity.set(physicalBodyProperty.getVelocity());
                 tmpTorque.set(physicalBodyProperty.getAngularVelocity());
+
                 if (isCollidable(component)) {
                     ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
 
@@ -61,6 +69,7 @@ public class MovementTask extends EngineTask {
                     tmpRotation.rotateLocalZ(tmpTorque.z);
                     physicalBodyProperty.recalculateInteriaTensor(tmpRotation);
                     colliderProperty.getCollider().setTransform(tmpVelocity.add(transformProperty.getTranslation()), tmpRotation);
+                    if (gravityProperty != null) gravityProperty.setStanding(false);
                 } else {
                     transformProperty.move(tmpVelocity.mul(fdelta));
 
@@ -83,7 +92,7 @@ public class MovementTask extends EngineTask {
         return component.hasEnabledProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
     }
 
-    private boolean isGravityAffected(Component component){
-        return component.hasEnabledProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
+    private boolean isGravityAffected(Component component) {
+        return component.hasEnabledProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
     }
 }

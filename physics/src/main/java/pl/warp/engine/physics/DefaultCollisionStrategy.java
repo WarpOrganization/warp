@@ -7,6 +7,7 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.ColliderProperty;
+import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
@@ -159,6 +160,25 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
             rotationPerMove.mul(angular2);
             //physicalProperty2.getNextTickRotation().add(rotationPerMove);
         }
+    }
+
+    Vector3f downVector = new Vector3f();
+    Vector3f downComponent = new Vector3f();
+    public void calculateFloorCollision(Component floor, Component body, float depth){
+        GravityProperty gravityProperty = body.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
+        TransformProperty transform = body.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        PhysicalBodyProperty bodyProperty = body.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+        downVector.set(gravityProperty.getDownVector());
+        downVector.normalize();
+
+        downComponent.set(downVector);
+        downComponent.mul(bodyProperty.getVelocity().dot(downVector));
+
+        downVector.negate();
+        downVector.mul(depth);
+        transform.move(downVector);
+        gravityProperty.setStanding(true);
+        bodyProperty.getVelocity().sub(downComponent);
     }
 
 

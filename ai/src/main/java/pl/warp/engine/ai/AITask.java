@@ -1,6 +1,5 @@
 package pl.warp.engine.ai;
 
-import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.scene.Component;
 

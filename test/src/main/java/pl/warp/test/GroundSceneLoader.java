@@ -39,6 +39,7 @@ import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFact
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
+import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftProperty;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
@@ -49,6 +50,7 @@ import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
+import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.graphics.effects.star.Star;
@@ -131,7 +133,10 @@ public class GroundSceneLoader implements GameSceneLoader {
         cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
         playerObject.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-        playerObject.addProperty(new TransformProperty());
+        TransformProperty playerTrasform = new TransformProperty();
+        playerObject.addProperty(playerTrasform);
+        playerObject.addProperty(new GravityProperty(new Vector3f(0,-1,0)));
+        playerTrasform.move(new Vector3f(0,100,0));
     }
 
     @Override
@@ -201,22 +206,25 @@ public class GroundSceneLoader implements GameSceneLoader {
             LensFlare flare = new LensFlare(lensTexture, flares);
             GraphicsLensFlareProperty flareProperty = new GraphicsLensFlareProperty(flare);
             sun.addProperty(flareProperty);
+            scene.<SunshaftProperty>getPropertyIfExists(SunshaftProperty.SUNSHAFT_PROPERTY_NAME).ifPresent(p -> p.getSource().setComponent(sun));
 
+            GameComponent floor = new GameSceneComponent(scene);
+            Component floorTextureComponent = new GameSceneComponent(floor);
 
-
-            Component floor = new GameSceneComponent(scene);
             TransformProperty floorTransform = new TransformProperty();
-            floor.addProperty(floorTransform);
+            floorTextureComponent.addProperty(floorTransform);
             floorTransform.scale(new Vector3f(1000f, 1000f, 1000f));
             floorTransform.rotate(-(float)Math.PI/2,0,0);
+            floorTransform.move(new Vector3f(0,15,0));
 
-            floor.addProperty(new RenderableMeshProperty(new QuadMesh()));
+            floorTextureComponent.addProperty(new RenderableMeshProperty(new QuadMesh()));
 
             ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
             Texture2D floorTexture = new Texture2D(decodedFloorTexture.getWidth(), decodedFloorTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedFloorTexture.getData());
             Material floorMaterial = new Material(floorTexture);
-            floor.addProperty(new GraphicsMaterialProperty(floorMaterial));
-
+            floorTextureComponent.addProperty(new GraphicsMaterialProperty(floorMaterial));
+            floor.addProperty(new TransformProperty());
+            floor.addProperty(new PhysicalBodyProperty(10000,1000f,15,1000f));
 
 
             Vector3f movement = new Vector3f(0f, 0f,0f);
@@ -237,7 +245,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             Material tankMaterial = new Material(tankTexture);
             tank.addProperty(new GraphicsMaterialProperty(tankMaterial));
 
-
+            tank.addProperty(new PhysicalBodyProperty(1,1,1,1));
+            tank.addProperty(new GravityProperty(new Vector3f(0,-1,0)));
 
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);

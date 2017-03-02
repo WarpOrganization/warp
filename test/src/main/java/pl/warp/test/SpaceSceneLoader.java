@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import pl.warp.engine.ai.behaviortree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
-import pl.warp.engine.ai.property.AIProperty;
+import pl.warp.engine.ai.AIProperty;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
 import pl.warp.engine.audio.playlist.PlayList;

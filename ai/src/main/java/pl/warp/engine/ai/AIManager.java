@@ -1,7 +1,6 @@
 package pl.warp.engine.ai;
 
 import pl.warp.engine.ai.behaviortree.BehaviorTreeNotFoundException;
-import pl.warp.engine.ai.property.AIProperty;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.ComponentDeathEvent;
 import pl.warp.engine.core.scene.SimpleListener;

@@ -7,14 +7,14 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.collider.PointCollider;
-import pl.warp.engine.physics.property.GravityAffectedBodyProperty;
+import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
  * @author Hubertus
  *         Created 2016-07-19
  */
-
+//TODO heavy refactoring
 public class CollisionHandler {
 
     private PhysicsWorld world;
@@ -38,11 +38,11 @@ public class CollisionHandler {
         synchronized (world) {
             world.getCollisionWorld().performDiscreteCollisionDetection();
             world.getActiveCollisions().forEach(manifold -> {//TODO do something with contact resolution priority and penetration recalculation
-                for(int i =0;i<manifold.getNumContacts();i++){
-                manifold.getContactPoint(i).getPositionWorldOnA(contactPos);
-                manifold.getContactPoint(i).getNormalWorldOnB(normal);
-                assingValues(manifold);
-                processCollision(component1, component2, manifold, i);
+                for (int i = 0; i < manifold.getNumContacts(); i++) {
+                    manifold.getContactPoint(i).getPositionWorldOnA(contactPos);
+                    manifold.getContactPoint(i).getNormalWorldOnB(normal);
+                    assingValues(manifold);
+                    processCollision(component1, component2, manifold, i);
                 }
             });
         }
@@ -50,21 +50,21 @@ public class CollisionHandler {
 
     private void processCollision(Component component1, Component component2, btPersistentManifold manifold, int i) {
         if (isGravityAffected(component1) && !isGravityAffected(component2)) {
-            processGravityBodiesIntersection(manifold);
+            processGravityBodiesIntersection(component2, component1, manifold, -manifold.getContactPoint(i).getDistance());
         } else if (isGravityAffected(component2) && !isGravityAffected(component1)) {
-            processGravityBodiesIntersection(manifold);
+            processGravityBodiesIntersection(component1, component2, manifold, -manifold.getContactPoint(i).getDistance());
         } else {
             collisionStrategy.calculateCollisionResponse(component1, component2, contactPos, normal);
             collisionStrategy.preventIntersection(component1, component2, contactPos, normal, -manifold.getContactPoint(i).getDistance());
         }
     }
+
     private boolean isGravityAffected(Component component) {
-        return component.hasEnabledProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
+        return component.hasEnabledProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
     }
 
-    private void processGravityBodiesIntersection(btPersistentManifold manifold) {
-        GravityAffectedBodyProperty bodyProperty = component1.getProperty(GravityAffectedBodyProperty.GRAVITY_AFFECTED_BODY_PROPERTY_NAME);
-        bodyProperty.stand();
+    private void processGravityBodiesIntersection(Component floor, Component body, btPersistentManifold manifold, float depth) {
+        collisionStrategy.calculateFloorCollision(floor, body, depth);
     }
 
     private float findLongestDistance(btPersistentManifold manifold) {
