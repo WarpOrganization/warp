@@ -100,7 +100,7 @@ public abstract class SceneComponent implements Component {
      */
     @Override
     public <T extends Event> void triggerEvent(T event) {
-        getContext().getEventDispatcher().dispatchEvent(this, event);
+        if(alive) getContext().getEventDispatcher().dispatchEvent(this, event);
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class SceneComponent implements Component {
      */
     @Override
     public <T extends Event> void triggerOnChildren(T event) {
-        forEachChildren(child -> {
+        if(alive) forEachChildren(child -> {
             child.triggerEvent(event);
             child.triggerOnChildren(event);
         });
