@@ -78,7 +78,11 @@ import java.net.URLDecoder;
 public class GroundSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 2.0f ;
+    private static final float MOV_SPEED = 2.0f;
+    private static final float TANK_ROT_SPEED = 0.5f;
+    private static final float TANK_ACC_SPEED = 0.1f;
+    private static final float TANK_MAX_SPEED = 2f;
+    private static final float TANK_BRAKING_FORCE = 1.5f;
     private static final float BRAKING_FORCE = 0.2f * 100;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
@@ -135,8 +139,8 @@ public class GroundSceneLoader implements GameSceneLoader {
         playerObject.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
         TransformProperty playerTrasform = new TransformProperty();
         playerObject.addProperty(playerTrasform);
-        playerObject.addProperty(new GravityProperty(new Vector3f(0,-1,0)));
-        playerTrasform.move(new Vector3f(0,100,0));
+        playerObject.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
+        playerTrasform.move(new Vector3f(0, 100, 0));
     }
 
     @Override
@@ -146,7 +150,6 @@ public class GroundSceneLoader implements GameSceneLoader {
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             scene.addProperty(new GraphicsSkyboxProperty(cubemap));
-
 
 
             ImageDataArray lensSpritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("lens_flares.png"), PNGDecoder.Format.RGBA, 2, 1);
@@ -214,8 +217,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             TransformProperty floorTransform = new TransformProperty();
             floorTextureComponent.addProperty(floorTransform);
             floorTransform.scale(new Vector3f(1000f, 1000f, 1000f));
-            floorTransform.rotate(-(float)Math.PI/2,0,0);
-            floorTransform.move(new Vector3f(0,15,0));
+            floorTransform.rotate(-(float) Math.PI / 2, 0, 0);
+            floorTransform.move(new Vector3f(0, 15, 0));
 
             floorTextureComponent.addProperty(new RenderableMeshProperty(new QuadMesh()));
 
@@ -224,10 +227,10 @@ public class GroundSceneLoader implements GameSceneLoader {
             Material floorMaterial = new Material(floorTexture);
             floorTextureComponent.addProperty(new GraphicsMaterialProperty(floorMaterial));
             floor.addProperty(new TransformProperty());
-            floor.addProperty(new PhysicalBodyProperty(10000,1000f,15,1000f));
+            floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));
 
 
-            Vector3f movement = new Vector3f(0f, 100f,-60f);
+            Vector3f movement = new Vector3f(0f, 100f, -60f);
 
             GameComponent tank = new GameSceneComponent(scene);
 
@@ -245,8 +248,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             Material tankMaterial = new Material(tankTexture);
             tank.addProperty(new GraphicsMaterialProperty(tankMaterial));
 
-            tank.addProperty(new PhysicalBodyProperty(1,1,1,1));
-            tank.addProperty(new GravityProperty(new Vector3f(0,-1,0)));
+            tank.addProperty(new PhysicalBodyProperty(1, 1, 1, 1));
+            tank.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
 
             goatMesh = ObjLoader.read(Test.class.getResourceAsStream("fighter_1.obj"), false).toVAOMesh();
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
@@ -272,7 +275,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             new GunScript(playerObject);
 
             engineParticles(playerObject, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f), new Vector4f(0.2f, 0.5f, 1.0f, 0.0f));
-            new GoatControlScript(playerObject, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            //new GoatControlScript(playerObject, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            new TankControlScript(playerObject, TANK_ACC_SPEED, TANK_ROT_SPEED, TANK_MAX_SPEED, TANK_BRAKING_FORCE);
         });
     }
 
