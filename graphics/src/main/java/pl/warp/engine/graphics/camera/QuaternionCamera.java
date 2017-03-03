@@ -74,16 +74,19 @@ public class QuaternionCamera implements Camera {
 
     private Matrix4f cameraMatrix;
     private Matrix4f rotationMatrix;
+    private Vector3f cameraPos = new Vector3f();
+
     @Override
-    public void updateMatrices() {
+    public void update() {
         this.cameraMatrix = Transforms.getActualTransform(cameraComponent).invert();
         this.rotationMatrix = Transforms.getAbsoluteRotation(cameraComponent).get(tempRotation).invert();
+        Transforms.getAbsolutePosition(cameraComponent, cameraPos);
     }
 
 
     @Override
     public Vector3f getPosition(Vector3f dest) {
-        return Transforms.getAbsolutePosition(cameraComponent, dest);
+        return dest.set(cameraPos);
     }
 
     @Override

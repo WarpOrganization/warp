@@ -15,12 +15,14 @@ public class PlanetRingProperty extends Property<Component> {
     private float startRadius;
     private float endRadius;
     private Texture1D ringColors;
+    private boolean renderShadow;
 
-    public PlanetRingProperty(float startMeshRadius, float endMeshRadius, Texture1D ringColors) {
+    public PlanetRingProperty(float startRadius, float endRadius, Texture1D ringColors, boolean renderShadow) {
         super(PLANETARY_RING_PROPERTY_NAME);
-        this.startRadius = startMeshRadius;
-        this.endRadius = endMeshRadius;
+        this.startRadius = startRadius;
+        this.endRadius = endRadius;
         this.ringColors = ringColors;
+        this.renderShadow = renderShadow;
     }
 
     public float getStartRadius() {
@@ -33,5 +35,9 @@ public class PlanetRingProperty extends Property<Component> {
 
     public Texture1D getRingColors() {
         return ringColors;
+    }
+
+    public boolean getRenderShadow() {
+        return renderShadow;
     }
 }

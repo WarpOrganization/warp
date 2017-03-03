@@ -2,6 +2,8 @@ package pl.warp.game.graphics.effects.ring;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;
@@ -29,6 +31,9 @@ public class PlanetRingProgram extends MeshRendererProgram {
     private static final String VERTEX_SHADER = "ring/vert";
     private static final String FRAGMENT_SHADER = "ring/frag";
 
+    private int unifRenderShadow;
+    private int unifPlanetRadius;
+    private int unifPlanetPos;
     private int unifProjectionMatrix;
     private int unifModelMatrix;
     private int unifRotationMatrix;
@@ -52,6 +57,9 @@ public class PlanetRingProgram extends MeshRendererProgram {
     }
 
     private void loadUniforms() {
+        this.unifRenderShadow = getUniformLocation("renderShadow");
+        this.unifPlanetRadius = getUniformLocation("planetRadius");
+        this.unifPlanetPos = getUniformLocation("planetPos");
         this.unifProjectionMatrix = getUniformLocation("projectionMatrix");
         this.unifModelMatrix = getUniformLocation("modelMatrix");
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
@@ -78,11 +86,21 @@ public class PlanetRingProgram extends MeshRendererProgram {
             setUniformf(unifRingStart, property.getStartRadius());
             setUniformf(unifRingEnd, property.getEndRadius());
             useTexture(property.getRingColors(), COLORS_TEXTURE_SAMPLER);
+            setUniformb(unifRenderShadow, property.getRenderShadow());
+            if(property.getRenderShadow()) usePlanet(component.getParent());
         } else
             throw new IllegalStateException("Unable to render component without PlanetaryRingProperty enabled property.");
     }
 
     private Vector3f tmpVector = new Vector3f();
+
+    private void usePlanet(Component planet) {
+        TransformProperty transformProperty = planet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        setUniformf(unifPlanetRadius, transformProperty.getScale().x);
+        Transforms.getAbsolutePosition(planet, tmpVector); //TODO pass somehow
+        setUniformV3(unifPlanetPos, tmpVector);
+    }
+
 
     @Override
     public void useCamera(Camera camera) {

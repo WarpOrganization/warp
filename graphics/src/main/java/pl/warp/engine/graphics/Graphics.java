@@ -74,7 +74,7 @@ public class Graphics {
     }
 
     private void createCameraTask() {
-        thread.scheduleTask(new UpdaterTask(d -> mainViewCamera.updateMatrices()));
+        thread.scheduleTask(new UpdaterTask(d -> mainViewCamera.update()));
     }
 
     private void createWindow() {

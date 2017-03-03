@@ -29,7 +29,7 @@ public class PlanetRing extends GameSceneComponent {
         Ring ringMesh = new Ring(20, startRadius, endRadius);
         this.addProperty(new RenderableMeshProperty(ringMesh));
         this.addProperty(new CustomProgramProperty(getPlanetaryRingProgram()));
-        this.addProperty(new PlanetRingProperty(startRadius, endRadius, colors));
+        this.addProperty(new PlanetRingProperty(startRadius, endRadius, colors, true));
     }
 
     public PlanetRingProgram getPlanetaryRingProgram() {

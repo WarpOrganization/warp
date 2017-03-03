@@ -28,7 +28,7 @@ public interface Camera {
 
     void rotateZ(float angle);
 
-    void updateMatrices();
+    void update();
 
     Vector3f getPosition(Vector3f dest);
 

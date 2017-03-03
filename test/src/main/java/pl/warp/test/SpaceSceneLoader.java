@@ -569,7 +569,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         Component ring = new GameSceneComponent(gasSphere);
         ring.addProperty(new RenderableMeshProperty(ringMesh));
         ring.addProperty(new CustomProgramProperty(planetRingProgram));
-        ring.addProperty(new PlanetRingProperty(startR, endR, ringColors));
+        ring.addProperty(new PlanetRingProperty(startR, endR, ringColors, true));
         return gasSphere;
     }
 
