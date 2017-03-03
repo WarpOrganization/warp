@@ -7,13 +7,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import pl.warp.game.GameContext;
 import pl.warp.game.scene.GameComponent;
-import pl.warp.ide.controller.component.ComponentController;
+import pl.warp.ide.controller.componenteditor.ComponentElement;
+import pl.warp.ide.controller.componenteditor.ComponentViewSceneFactory;
+import pl.warp.ide.controller.sceneeditor.SceneEditorController;
 import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.input.JavaFxInput;
-import pl.warp.ide.scene.tree.SceneTreeLoader;
-import pl.warp.ide.scene.tree.prototype.PrototypeRepository;
+import pl.warp.ide.controller.sceneeditor.tree.SceneTreeLoader;
+import pl.warp.ide.controller.sceneeditor.tree.prototype.PrototypeRepository;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,6 +32,7 @@ public class IDEController implements Initializable {
     private IDEEngine engine;
     private GameContext context;
     private PrototypeRepository repository;
+    private EditorManager editorManager;
 
     public IDEController(SceneTreeLoader sceneTreeLoader, JavaFxInput input, GameContext context, IDEEngine engine, PrototypeRepository repository) {
         this.sceneTreeLoader = sceneTreeLoader;
@@ -38,6 +42,17 @@ public class IDEController implements Initializable {
         this.repository = repository;
     }
 
+    @FXML
+    private Pane sceneTreePane;
+
+    @FXML
+    private Pane componentTreePane;
+
+    @FXML
+    private TreeView<ComponentElement> componentTree;
+
+    @FXML
+    private Pane componentPane;
 
     @FXML
     private TreeView<String> projectTree;
@@ -78,7 +93,7 @@ public class IDEController implements Initializable {
     @FXML
     private GridPane descriptorGrid;
 
-    private ComponentController componentController;
+    private SceneEditorController sceneEditorController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -86,7 +101,10 @@ public class IDEController implements Initializable {
         //makeCanvasResizable();
         disableSplitPanes();
         engine.start(sceneView);
-        componentController = new ComponentController(sceneTree, descriptorGrid, context, sceneTreeLoader, repository);
+        sceneEditorController = new SceneEditorController(sceneTree, descriptorGrid, context, sceneTreeLoader, repository);
+        PanelManager panelManager = new PanelManager(sceneTreePane, descriptorGrid, componentTree, canvasPane);
+        ComponentViewSceneFactory factory = new ComponentViewSceneFactory();
+        editorManager = new EditorManager(panelManager, new ViewManager(context, context.getScene(), factory), sceneEditorController);
         input.listenOn(sceneView, engine.getScene());
     }
 
@@ -121,12 +139,7 @@ public class IDEController implements Initializable {
 
     @FXML
     public void onReloadScene(ActionEvent event) {
-        componentController.onReloadScene();
-    }
-
-    @FXML
-    void onRunGame(ActionEvent event) {
-
+        sceneEditorController.onReload();
     }
 
 

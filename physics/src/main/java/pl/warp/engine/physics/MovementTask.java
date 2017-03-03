@@ -47,7 +47,7 @@ public class MovementTask extends EngineTask {
     public void update(int delta) {
         float fdelta = (float) delta / 1000;
         parent.forEachChildren(component -> {
-            if (isPhysicalBody(component) && isTransormable(component)) {
+            if (isPhysicalBody(component) && isTransformable(component)) {
                 PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
                 TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
                 GravityProperty gravityProperty = null;
@@ -90,7 +90,7 @@ public class MovementTask extends EngineTask {
         return component.hasEnabledProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
     }
 
-    private boolean isTransormable(Component component) {
+    private boolean isTransformable(Component component) {
         return component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
 

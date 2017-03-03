@@ -16,6 +16,8 @@ import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.scene.GameSceneLoader;
+import pl.warp.ide.controller.camera.FreeCameraScript;
+import pl.warp.ide.controller.sceneeditor.IDEComponentProperty;
 
 /**
  * @author Jaca777
@@ -54,7 +56,7 @@ public class IDEEngine {
     }
 
     protected void enableControls() {
-        new IDECameraControlScript(cameraComponent);
+        new FreeCameraScript(cameraComponent);
     }
 
     private void bindSizes(Canvas canvas) {

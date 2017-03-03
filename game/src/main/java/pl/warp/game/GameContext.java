@@ -47,7 +47,7 @@ public class GameContext extends EngineContext {
         this.rayTester = rayTester;
     }
 
-    protected void setScene(GameScene scene) {
+    public void setScene(GameScene scene) {
         super.setScene(scene);
     }
 

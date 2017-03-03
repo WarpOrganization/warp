@@ -14,14 +14,14 @@ import pl.warp.ide.controller.IDEController;
 import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.engine.SceneViewRenderer;
 import pl.warp.ide.input.JavaFxInput;
-import pl.warp.ide.scene.tree.ComponentLook;
-import pl.warp.ide.scene.tree.SceneTreeLoader;
-import pl.warp.ide.scene.tree.look.ComponentTypeLook;
-import pl.warp.ide.scene.tree.look.CustomLookRepository;
-import pl.warp.ide.scene.tree.look.DefaultNameSupplier;
-import pl.warp.ide.scene.tree.prototype.FunctionComponentPrototype;
-import pl.warp.ide.scene.tree.prototype.LocalPrototypeRepository;
-import pl.warp.ide.scene.tree.prototype.PrototypeRepository;
+import pl.warp.ide.controller.look.ItemLook;
+import pl.warp.ide.controller.sceneeditor.tree.SceneTreeLoader;
+import pl.warp.ide.controller.look.ItemTypeLook;
+import pl.warp.ide.controller.look.CustomLookRepository;
+import pl.warp.ide.controller.look.DefaultNameSupplier;
+import pl.warp.ide.controller.sceneeditor.tree.prototype.FunctionComponentPrototype;
+import pl.warp.ide.controller.sceneeditor.tree.prototype.LocalPrototypeRepository;
+import pl.warp.ide.controller.sceneeditor.tree.prototype.PrototypeRepository;
 import pl.warp.test.SpaceSceneLoader;
 
 /**
@@ -67,23 +67,23 @@ public class IDELauncher extends Application {
     }
 
     private CustomLookRepository loadCustomLookRepository() {
-        ComponentLook sceneLook = new ComponentLook(
+        ItemLook sceneLook = new ItemLook(
                 new DefaultNameSupplier("Scene"),
                 () -> IconUtil.getIcon("Scene"));
-        ComponentLook cameraLook = new ComponentLook(
+        ItemLook cameraLook = new ItemLook(
                 new DefaultNameSupplier("Camera"),
                 () -> IconUtil.getIcon("Camera"));
-        ComponentLook drawableLook = new ComponentLook(
+        ItemLook drawableLook = new ItemLook(
                 new DefaultNameSupplier("Drawable Component"),
                 () -> IconUtil.getIcon("Drawable"));
-        ComponentLook componentLook = new ComponentLook(
+        ItemLook itemLook = new ItemLook(
                 new DefaultNameSupplier("Component"),
                 () -> IconUtil.getIcon("Component"));
-        return new CustomLookRepository(
-                new ComponentTypeLook(this::isScene, sceneLook),
-                new ComponentTypeLook(this::isCamera, cameraLook),
-                new ComponentTypeLook(this::isDrawableModel, drawableLook),
-                new ComponentTypeLook(c -> true, componentLook));
+        return new CustomLookRepository<>(
+                new ItemTypeLook<>(this::isScene, sceneLook),
+                new ItemTypeLook<>(this::isCamera, cameraLook),
+                new ItemTypeLook<>(this::isDrawableModel, drawableLook),
+                new ItemTypeLook(c -> true, itemLook));
     }
 
     private Boolean isScene(Component component) {
