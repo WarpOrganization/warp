@@ -96,8 +96,8 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
                 physicalProperty1.addTorque(impulse, distance1);
             }
 
-        component1.triggerEvent(new CollisionEvent(component2, relativeVelocity.length()));
-        component2.triggerEvent(new CollisionEvent(component1, relativeVelocity.length()));
+            component1.triggerEvent(new CollisionEvent(component2, relativeVelocity.length()));
+            component2.triggerEvent(new CollisionEvent(component1, relativeVelocity.length()));
 
         }
     }
@@ -164,7 +164,8 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
     Vector3f downVector = new Vector3f();
     Vector3f downComponent = new Vector3f();
-    public void calculateFloorCollision(Component floor, Component body, float depth){
+
+    public void calculateFloorCollision(Component floor, Component body, float depth) {
         GravityProperty gravityProperty = body.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
         TransformProperty transform = body.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         PhysicalBodyProperty bodyProperty = body.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
@@ -179,6 +180,9 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
         transform.move(downVector);
         gravityProperty.setStanding(true);
         bodyProperty.getVelocity().sub(downComponent);
+        //TODO update relative velocity
+        floor.triggerEvent(new CollisionEvent(body, 0));
+        body.triggerEvent(new CollisionEvent(floor, 0));
     }
 
 

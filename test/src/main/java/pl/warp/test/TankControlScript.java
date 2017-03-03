@@ -30,6 +30,9 @@ public class TankControlScript extends GameScript {
     @OwnerProperty(name = GravityProperty.GRAVITY_PROPERTY_NAME)
     private GravityProperty gravityProperty;
 
+    @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
+    private GunProperty gunProperty;
+
     private Vector3f forwardVector = new Vector3f();
 
     public TankControlScript(GameComponent owner, float speed, float rotataionSpeed, float maxSpeed, float brakingForce) {
@@ -59,13 +62,16 @@ public class TankControlScript extends GameScript {
             linearMove(speed * delta);
         else if (input.isKeyDown(KeyEvent.VK_S))
             linearMove(-speed * delta);
-        else if(gravityProperty.isStanding()) brake();
+        else if (gravityProperty.isStanding()) brake();
 
         if (input.isKeyDown(KeyEvent.VK_A))
             anguarMove(0, rotataionSpeed, 0);
         else if (input.isKeyDown(KeyEvent.VK_D))
             anguarMove(0, -rotataionSpeed, 0);
         else anguarMove(0, 0, 0);
+
+        if (input.isKeyDown(KeyEvent.VK_CONTROL)) gunProperty.setTriggered(true);
+        else gunProperty.setTriggered(false);
     }
 
     private Vector3f vel = new Vector3f();
@@ -74,9 +80,9 @@ public class TankControlScript extends GameScript {
         vel.set(bodyProperty.getVelocity());
         vel.negate().normalize();
         vel.mul(brakingForce);
-        if(bodyProperty.getVelocity().length()>brakingForce/bodyProperty.getMass()){
+        if (bodyProperty.getVelocity().length() > brakingForce / bodyProperty.getMass()) {
             bodyProperty.applyForce(vel);
-        }else {
+        } else {
             bodyProperty.getVelocity().set(0);
         }
     }

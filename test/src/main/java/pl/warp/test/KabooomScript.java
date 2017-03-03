@@ -57,7 +57,7 @@ public class KabooomScript extends GameScript<GameComponent> {
 
     @EventHandler(eventName = KabooomEvent.KABOOM_EVENT_NAME)
     private void onKaboom(KabooomEvent event) {
-        if(!getOwner().hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) return;
+        if (!getOwner().hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) return;
         getOwner().addProperty(new KaboomedProperty());
         getOwner().getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
         getOwner().getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME).disable();

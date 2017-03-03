@@ -54,7 +54,7 @@ public class BulletScript extends GameScript<GameComponent> {
 
     private void destroy(Component componentHit) {
         componentHit.triggerEvent(new KabooomScript.KabooomEvent());
-        if(getOwner().hasParent()) getOwner().destroy();
+        if (getOwner().hasParent()) getOwner().destroy();
     }
 
     //TODO REMOVE AS SOON AS DISABLING COLLIDER WORKS
