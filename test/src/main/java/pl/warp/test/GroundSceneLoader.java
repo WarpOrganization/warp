@@ -231,8 +231,13 @@ public class GroundSceneLoader implements GameSceneLoader {
             floor.addProperty(new TransformProperty());
             floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));
 
-            GameComponent tanken = CreateTank(true);
+            GameComponent DesertTank = CreateTank(true);
+            TransformProperty DesertTankTransform =  DesertTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            DesertTankTransform.move(new Vector3f(-300.0f, 0.0f, 0.0f));
 
+            GameComponent PlainsTank = CreateTank(false);
+            TransformProperty PlainsTankTransform =  PlainsTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            PlainsTankTransform.move(new Vector3f(300.0f, 0.0f, 0.0f));
 /*
             Vector3f movement = new Vector3f(0f, 100f, -60f);
 
@@ -311,12 +316,12 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         TransformProperty TurretTransform = new TransformProperty();
         Turret.addProperty(TurretTransform);
-        TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
+        //TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
 
         TransformProperty MainGunTransform = new TransformProperty();
         MainGun.addProperty(MainGunTransform);
-        MainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci szymon blender podaje offsety, bo mi podał gówno, a offsety robiłem ręcznie
-        MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
+        MainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi podał gówno, a offsety robiłem ręcznie
+        //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
 
         TransformProperty SpinnigWheelTransform = new TransformProperty();
         SpinnigWheel.addProperty(SpinnigWheelTransform);
