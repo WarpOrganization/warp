@@ -360,7 +360,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             //new FrigateScript(frigate, Transforms.getAbsolutePosition(gasPlanet, new Vector3f()));
 
 
-/*            {
+            {
                 Component light = new GameSceneComponent(frigate);
                 TransformProperty lightSourceTransform = new TransformProperty();
                 lightSourceTransform.move(new Vector3f(18f, 0.4f, 4.4f));
@@ -489,7 +489,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 };
                 ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 2500, 500, true, true, stages);
                 light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 200)));
-            }*/
+            }
 
             generateGOATS(scene);
             //spawnFrigates();
