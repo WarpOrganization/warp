@@ -39,8 +39,14 @@ public class TankRoundScript extends GameScript<GameComponent> {
 
     }
 
+    private int timer = -1;
+
     @Override
     protected void update(int delta) {
+        if (timer > -1) timer += delta;
+        if (timer > 300)
+            if (getOwner().hasParent())
+                getOwner().destroy();
 
     }
 
@@ -51,8 +57,7 @@ public class TankRoundScript extends GameScript<GameComponent> {
             //TODO destroy tank
         }
         kaboom(getOwner());
-        if (getOwner().hasParent())
-            getOwner().destroy();
+        timer = 0;
     }
 
     private void kaboom(GameComponent component) {
