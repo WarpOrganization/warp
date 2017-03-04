@@ -75,8 +75,6 @@ import java.net.URLDecoder;
  */
 public class GroundSceneLoader implements GameSceneLoader {
 
-    public static GameComponent MAIN_OBJECT;
-
     private static final float TANK_HULL_ROT_SPEED = 0.3f;
     private static final float TANK_HULL_ACC_SPEED = 0.4f;
     private static final float TANK_HULL_MAX_SPEED = 10f;
@@ -107,7 +105,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private GameSceneComponent playerTankTurret;
     private GameSceneComponent playerTankBarrel;
     private GameSceneComponent playerTankBarrelFake;
-    private static boolean SmoothLighting = true;
+    private static boolean smoothLighting = true;
 
     public GroundSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         this.config = config;
@@ -130,10 +128,8 @@ public class GroundSceneLoader implements GameSceneLoader {
 
 
         playerTankHull = new GameSceneComponent(scene);
-        MAIN_OBJECT = playerTankHull;
         playerTankHull.addProperty(new NameProperty("player tank hull"));
         playerTankHull.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-        playerTankHull.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
 
         playerTankTurret = new GameSceneComponent(playerTankHull);
         playerTankTurret.addProperty(new NameProperty("player tank turret"));
@@ -259,100 +255,13 @@ public class GroundSceneLoader implements GameSceneLoader {
             floor.addProperty(new TransformProperty());
             floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));
 
-            GameComponent desertTank = createTank("tankModel/DesertTexture.png");
+            GameComponent desertTank = createAiTank(scene,"tankModel/DesertTexture.png");
             TransformProperty desertTankTransform =  desertTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             desertTankTransform.move(new Vector3f(-300.0f, 0.0f, 0.0f));
 
-            GameComponent plainsTank = createTank("tankModel/WoodlandTexture.png");
+            GameComponent plainsTank = createAiTank(scene,"tankModel/WoodlandTexture.png");
             TransformProperty plainsTankTransform =  plainsTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             plainsTankTransform.move(new Vector3f(300.0f, 0.0f, 0.0f));
-/*
-            Vector3f movement = new Vector3f(0f, 100f, -60f);
-
-            GameComponent tank = new GameSceneComponent(scene);
-
-            TransformProperty tankTransform = new TransformProperty();
-            tank.addProperty(tankTransform);
-            tankTransform.move(movement);
-            tankTransform.setScale(new Vector3f(10f, 10f, 10f));
-
-            Mesh tankMesh = ObjLoader.read(Test.class.getResourceAsStream("tank.obj"), false).toVAOMesh();
-            RenderableMeshProperty tankRenderableMeshProperty = new RenderableMeshProperty(tankMesh);
-            tank.addProperty(tankRenderableMeshProperty);
-
-            ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("free-grey-camouflage-vector.png"), PNGDecoder.Format.BGRA);
-            Texture2D tankTexture = new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData());
-            Material tankMaterial = new Material(tankTexture);
-            tank.addProperty(new GraphicsMaterialProperty(tankMaterial));
-
-            tank.addProperty(new PhysicalBodyProperty(1, 1, 1, 1));
-            tank.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
-*/
-
-
-
-            //tank.addProperty(new GunProperty(TANK_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
-            //new TankGunScript(tank, TANK_COOLDOWN);
-            GameComponent tracks= new GameSceneComponent(playerTankHull);
-            GameSceneComponent trackWheels = new GameSceneComponent(playerTankHull);
-            GameComponent spinnigWheel = new GameSceneComponent(playerTankHull);
-            GameComponent turretAdditions = new GameSceneComponent(playerTankTurret);
-            GameComponent minigunStand = new GameSceneComponent(playerTankTurret);
-            GameComponent minigun = new GameSceneComponent(playerTankTurret);
-
-
-            TransformProperty mainTransform = new TransformProperty();
-            mainTransform.setScale(new Vector3f(10f,10f,10f));
-            mainTransform.move(new Vector3f(0,100,0));
-            playerTankHull.addProperty(mainTransform);
-
-            TransformProperty turretTransform = new TransformProperty();
-            playerTankTurret.addProperty(turretTransform);
-            //TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
-
-            TransformProperty mainGunTransform = new TransformProperty();
-            playerTankBarrel.addProperty(mainGunTransform);
-            mainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi poda� g�wno, a offsety robi�em r�cznie
-            //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
-
-            TransformProperty mainGunFakeTransform = new TransformProperty();
-            playerTankBarrelFake.addProperty(mainGunFakeTransform);
-            mainGunFakeTransform.move(new Vector3f(-0.4f,0f,-0.131f));
-
-            TransformProperty spinnigWheelTransform = new TransformProperty();
-            spinnigWheel.addProperty(spinnigWheelTransform);
-            spinnigWheelTransform.move(new Vector3f(0.0f, 0.66f, -2.44f));
-
-            playerTankHull.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainBody.obj"), SmoothLighting).toMesh()));
-            tracks.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Tracks.obj"), SmoothLighting).toMesh()));
-            tracks.addProperty(new AnimatedTextureProperty(new Vector2f(0f, 1f)));
-            tracks.addProperty(new CustomProgramProperty(new AnimatedTextureProgram()));
-            trackWheels.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TrackWheels.obj"), SmoothLighting).toMesh()));
-            spinnigWheel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/SpinnigWheel.obj"), SmoothLighting).toMesh()));
-            playerTankTurret.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Turret.obj"), SmoothLighting).toMesh()));
-            turretAdditions.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TurretAdditions.obj"), SmoothLighting).toMesh()));
-            minigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), SmoothLighting).toMesh()));
-            minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), SmoothLighting).toMesh()));
-            playerTankBarrel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
-            playerTankBarrelFake.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
-            playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
-
-            ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
-            Material tankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
-
-            playerTankHull.addProperty(getGraphicsProperty(tankMaterial));
-            trackWheels.addProperty(getGraphicsProperty(tankMaterial));
-            spinnigWheel.addProperty(getGraphicsProperty(tankMaterial));
-            playerTankTurret.addProperty(getGraphicsProperty(tankMaterial));
-            turretAdditions.addProperty(getGraphicsProperty(tankMaterial));
-            minigunStand.addProperty(getGraphicsProperty(tankMaterial));
-            minigun.addProperty(getGraphicsProperty(tankMaterial));
-            playerTankBarrel.addProperty(getGraphicsProperty(tankMaterial));
-            playerTankBarrelFake.addProperty(getGraphicsProperty(tankMaterial));
-
-            ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
-            tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
-
 
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             boomSpritesheet = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
@@ -363,12 +272,20 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             audioManager = AudioManager.INSTANCE;
 
-            //new GunScript(playerTankHull);
-            //new TankGunScript(playerTankHull, TANK_COOLDOWN, scene);
 
-            //new GoatControlScript(playerTankHull, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
-            //new TankControlScript(playerTankHull, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
-            new HullControlScript(playerTankHull, spinnigWheel, tracks, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
+            createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
+
+            playerTankBarrelFake.addProperty(new TransformProperty());
+            ((TransformProperty)playerTankBarrelFake.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)).move(new Vector3f(-0.4f,0f,-0.131f));
+
+            playerTankBarrelFake.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), smoothLighting).toMesh()));
+            playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
+
+            ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
+            playerTankBarrelFake.addProperty(getGraphicsProperty(new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()))));
+
+
+            new HullControlScript(playerTankHull, playerTankHull.getChild(3), playerTankHull.getChild(1), TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
             new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED, TANK_BARREL_ELEVATION_MAX, TANK_BARREL_ELEVATION_MIN);
             new SecondCameraScript(secondCameraComponent,
@@ -379,32 +296,37 @@ public class GroundSceneLoader implements GameSceneLoader {
             });
     }
 
-    private GameComponent createTank(String texturePath) {
-        boolean smoothLighting = true;
+    private GameComponent createAiTank(GameComponent parent, String texturePath) {
 
-        GameComponent mainBody = new GameSceneComponent(scene);
+        GameComponent mainBody = new GameSceneComponent(parent);
+        GameComponent turret = new GameSceneComponent(mainBody);
+        GameComponent mainGun = new GameSceneComponent(turret);
+
+        return createTankModel(texturePath, mainBody, turret, mainGun);
+    }
+
+    private GameComponent createTankModel(String texturePath, GameComponent mainBody, GameComponent turret, GameComponent mainGun) {
+
         GameComponent tracks= new GameSceneComponent(mainBody);
         GameSceneComponent trackWheels = new GameSceneComponent(mainBody);
         GameComponent spinnigWheel = new GameSceneComponent(mainBody);
-
-        GameComponent turret = new GameSceneComponent(mainBody);
         GameComponent turretAdditions = new GameSceneComponent(turret);
         GameComponent minigunStand = new GameSceneComponent(turret);
         GameComponent minigun = new GameSceneComponent(turret);
-        GameComponent mainGun = new GameSceneComponent(turret);
+
 
         TransformProperty mainTransform = new TransformProperty();
+        mainTransform.setScale(new Vector3f(10f,10f,10f));
+        mainTransform.move(new Vector3f(0,100,0));
         mainBody.addProperty(mainTransform);
-        mainTransform.setScale(new Vector3f(100f,100f,100f));
+
 
         TransformProperty turretTransform = new TransformProperty();
         turret.addProperty(turretTransform);
-        //TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
 
         TransformProperty MainGunTransform = new TransformProperty();
         mainGun.addProperty(MainGunTransform);
         MainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi podał gówno, a offsety robiłem ręcznie
-        //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
 
         TransformProperty SpinnigWheelTransform = new TransformProperty();
         spinnigWheel.addProperty(SpinnigWheelTransform);
@@ -412,6 +334,8 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         mainBody.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainBody.obj"), smoothLighting).toMesh()));
         tracks.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Tracks.obj"), smoothLighting).toMesh()));
+        tracks.addProperty(new AnimatedTextureProperty(new Vector2f(0f, 1f)));
+        tracks.addProperty(new CustomProgramProperty(new AnimatedTextureProgram()));
         trackWheels.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TrackWheels.obj"), smoothLighting).toMesh()));
         spinnigWheel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/SpinnigWheel.obj"), smoothLighting).toMesh()));
         turret.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Turret.obj"), smoothLighting).toMesh()));
@@ -421,7 +345,6 @@ public class GroundSceneLoader implements GameSceneLoader {
         mainGun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), smoothLighting).toMesh()));
 
         ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream(texturePath), PNGDecoder.Format.RGBA);
-
         Material tankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
 
         mainBody.addProperty(getGraphicsProperty(tankMaterial));
@@ -435,6 +358,10 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
         tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
+
+        mainBody.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+        mainBody.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
+
 
         return mainBody;
     }
@@ -460,8 +387,8 @@ public class GroundSceneLoader implements GameSceneLoader {
         });
     }
 
-    private Property getGraphicsProperty(Material tankMaterial) {
-        return new GraphicsMaterialProperty(tankMaterial);
+    private Property getGraphicsProperty(Material material) {
+        return new GraphicsMaterialProperty(material);
     }
 
     private static void unpackResources() throws IOException {
