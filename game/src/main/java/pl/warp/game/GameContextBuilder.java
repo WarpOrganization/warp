@@ -5,7 +5,6 @@ import pl.warp.engine.core.scene.EventDispatcher;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.Graphics;
-import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.script.CameraRayTester;
 
@@ -22,11 +21,6 @@ public class GameContextBuilder {
 
     public GameContextBuilder setRayTester(CameraRayTester rayTester) {
         gameContext.setRayTester(rayTester);
-        return this;
-    }
-
-    public GameContextBuilder setCamera(Camera camera) {
-        gameContext.setCamera(camera);
         return this;
     }
 

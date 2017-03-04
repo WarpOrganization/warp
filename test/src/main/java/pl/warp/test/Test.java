@@ -57,7 +57,6 @@ public class Test {
         loader.loadScene();
         GameComponent cameraComponent = loader.getCameraComponent();
         Camera camera = cameraComponent.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
-        contextBuilder.setCamera(camera);
         //new GoatControlScript(cameraComponent.getParent(), MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         GameScene scene = loader.getScene();
         GLFWInput input = new GLFWInput(scene);

@@ -48,7 +48,7 @@ public class ComponentPositioner {
     }
 
     private void createView(GameComponent component) {
-        this.sceneCamera = context.getCamera();
+        this.sceneCamera = context.getGraphics().getMainViewCamera();
         this.rotatingComponent = new GameSceneComponent(component);
         rotatingComponent.addProperty(new IDEComponentProperty());
         TransformProperty rotatingTransform = new TransformProperty();

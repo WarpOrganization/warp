@@ -47,7 +47,7 @@ public class ComponentEditorController {
         cameraTransform.move(new Vector3f(0, 0, 20.0f));
         cameraComponent.addProperty(cameraTransform);
         cameraComponent.addProperty(new IDEComponentProperty());
-        QuaternionCamera camera = new QuaternionCamera(cameraComponent, cameraTransform, context.getCamera().getProjectionMatrix());
+        QuaternionCamera camera = new QuaternionCamera(cameraComponent, cameraTransform, context.getGraphics().getMainViewCamera().getProjectionMatrix());
         cameraComponent.addProperty(new CameraProperty(camera));
         new ComponentCameraScript(cameraComponent, camera, cameraParent);
         context.getGraphics().setMainViewCamera(camera);

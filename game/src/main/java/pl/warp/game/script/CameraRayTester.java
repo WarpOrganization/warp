@@ -34,7 +34,7 @@ public class CameraRayTester {
         tempVector.zero();
         tempVector2.zero();
         tempVector3.zero();
-        Camera camera = context.getCamera();
+        Camera camera = context.getGraphics().getMainViewCamera();
         Vector4f rayStart = tempVector.set(x, y, 0.0f, 1.0f);
         invertProjection(camera, rayStart);
         invertRotation(camera, rayStart);

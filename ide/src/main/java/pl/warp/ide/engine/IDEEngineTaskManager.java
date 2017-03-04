@@ -91,7 +91,6 @@ public class IDEEngineTaskManager {
     }
 
     private void initContext() {
-        contextBuilder.setCamera(camera);
         contextBuilder.setScene(loadedScene);
         contextBuilder.setRayTester(new CameraRayTester(contextBuilder.getGameContext(), rayTester));
         contextBuilder.setEventDispatcher(new PoolEventDispatcher());

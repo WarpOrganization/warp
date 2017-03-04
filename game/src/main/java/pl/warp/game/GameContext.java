@@ -6,7 +6,6 @@ import pl.warp.engine.core.scene.EventDispatcher;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.graphics.Graphics;
-import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.script.CameraRayTester;
 
@@ -17,17 +16,12 @@ import pl.warp.game.script.CameraRayTester;
 public class GameContext extends EngineContext {
 
     private CameraRayTester rayTester;
-    private Camera camera;
     private Graphics graphics;
     private AIManager aiManager;
 
 
     public CameraRayTester getRayTester() {
         return rayTester;
-    }
-
-    public Camera getCamera() {
-        return camera;
     }
 
     public Graphics getGraphics() {
@@ -59,10 +53,6 @@ public class GameContext extends EngineContext {
     @Override
     protected void setInput(Input input) {
         super.setInput(input);
-    }
-
-    protected void setCamera(Camera camera) {
-        this.camera = camera;
     }
 
     protected void setGraphics(Graphics graphics) {
