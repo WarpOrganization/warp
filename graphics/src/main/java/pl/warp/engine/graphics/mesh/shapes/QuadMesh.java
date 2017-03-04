@@ -16,8 +16,8 @@ public class QuadMesh extends VAOMesh {
     };
 
     private static final float[] TEX_COORDS = new float[]{
-            1.0f, 0.0f,
             0.0f, 0.0f,
+            1.0f, 0.0f,
             1.0f, 1.0f,
             0.0f, 1.0f
     };
