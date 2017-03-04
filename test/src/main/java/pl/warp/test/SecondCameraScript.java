@@ -7,9 +7,6 @@ import pl.warp.game.scene.GameComponent;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.OwnerProperty;
 
-import javax.naming.Context;
-import java.awt.event.KeyEvent;
-
 /**
  * Created by Marcin on 04.03.2017.
  */
@@ -21,11 +18,13 @@ public class SecondCameraScript extends GameScript<GameComponent>{
     private CameraProperty mainCameraProperty;
     private RenderableMeshProperty trueGun;
     private RenderableMeshProperty fakeGun;
+    private RenderableMeshProperty turret;
 
-    public SecondCameraScript(GameComponent owner, RenderableMeshProperty fakeGun, CameraProperty mainCameraProperty) {
+    public SecondCameraScript(GameComponent owner, RenderableMeshProperty fakeGun, RenderableMeshProperty turret, CameraProperty mainCameraProperty) {
         super(owner);
         this.mainCameraProperty = mainCameraProperty;
         this.fakeGun = fakeGun;
+        this.turret = turret;
     }
 
     @Override
@@ -38,10 +37,12 @@ public class SecondCameraScript extends GameScript<GameComponent>{
         Input input = getContext().getInput();
 
         if(input.getScrollDelta() < 0){
+            turret.disable();
             trueGun.disable();
             fakeGun.enable();
             this.getContext().getGraphics().setMainViewCamera(secondCameraProperty.getCamera());
         }else if(input.getScrollDelta() > 0){
+            turret.enable();
             trueGun.enable();
             fakeGun.disable();
             this.getContext().getGraphics().setMainViewCamera(mainCameraProperty.getCamera());

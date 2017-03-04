@@ -316,7 +316,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             TransformProperty mainGunFakeTransform = new TransformProperty();
             playerTankBarrelFake.addProperty(mainGunFakeTransform);
-            mainGunFakeTransform.move(new Vector3f(-0.4f,0f,0f));
+            mainGunFakeTransform.move(new Vector3f(-0.4f,0f,-0.131f));
 
             TransformProperty spinnigWheelTransform = new TransformProperty();
             spinnigWheel.addProperty(spinnigWheelTransform);
@@ -370,7 +370,10 @@ public class GroundSceneLoader implements GameSceneLoader {
             new HullControlScript(playerTankHull, spinnigWheel, tracks, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
             new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED, TANK_BARREL_ELEVATION_MAX, TANK_BARREL_ELEVATION_MIN);
-            new SecondCameraScript(secondCameraComponent, playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME), mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
+            new SecondCameraScript(secondCameraComponent,
+                    playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
+                    playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
+                    mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
 
             });
     }
