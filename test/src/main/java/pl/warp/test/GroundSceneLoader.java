@@ -78,9 +78,9 @@ public class GroundSceneLoader implements GameSceneLoader {
     public static GameComponent MAIN_OBJECT;
 
     private static final float TANK_HULL_ROT_SPEED = 0.3f;
-    private static final float TANK_HULL_ACC_SPEED = 0.1f;
+    private static final float TANK_HULL_ACC_SPEED = 0.4f;
     private static final float TANK_HULL_MAX_SPEED = 10f;
-    private static final float TANK_HULL_BRAKING_FORCE = 1.5f;
+    private static final float TANK_HULL_BRAKING_FORCE = 5.0f;
     private static final float TANK_TURRET_ROT_SPEED = 1.5f;
     private static final float TANK_BARREL_ELEVATION_SPEED = 2f;
     private static final float TANK_BARREL_ELEVATION_MAX = 20f;
@@ -254,7 +254,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             floorTextureComponent.addProperty(new GraphicsMaterialProperty(terrainMaterial));
             ImageData decodedTerrainNormal = ImageDecoder.decodePNG(Test.class.getResourceAsStream("terrain_normal.png"), PNGDecoder.Format.RGBA);
             Texture2D terrainNormal = new Texture2D(decodedTerrainNormal.getWidth(), decodedTerrainNormal.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTerrainNormal.getData());
-            floorTextureComponent.addProperty(new TerrainProperty(new Vector2f(50f), terrainNormal));
+            floorTextureComponent.addProperty(new TerrainProperty(new Vector2f(150f), terrainNormal));
             floorTextureComponent.addProperty(new CustomProgramProperty(new TerrainProgram()));
             floor.addProperty(new TransformProperty());
             floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));

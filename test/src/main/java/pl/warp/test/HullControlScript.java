@@ -88,7 +88,7 @@ public class HullControlScript extends GameScript {
     }
 
     private void linearMove(float speed) {
-        this.tracksAnimation.setDelta(tracksAnimation.getDelta() - (speed * -0.02f));
+        this.tracksAnimation.setDelta(tracksAnimation.getDelta() + (bodyProperty.getVelocity().length() * -0.003f));
         forwardVector.normalize().mul(speed);
         if(bodyProperty.getVelocity().length() < maxSpeed)
             bodyProperty.applyForce(forwardVector);
