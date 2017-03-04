@@ -48,7 +48,7 @@ public class TestApp extends Application {
         TextField displayWidth = new TextField("1280");
         TextField displayHeight = new TextField("920");
 
-        ChoiceBox<String> availableScenes = new ChoiceBox<>(FXCollections.observableArrayList ("Space", "Ground", "Test2", "Test3"));
+        ChoiceBox<String> availableScenes = new ChoiceBox<>(FXCollections.observableArrayList ("Space", "Ground"));
         availableScenes.setTooltip(new Tooltip("Chose which scene will load"));
         availableScenes.getSelectionModel().selectFirst();
 
