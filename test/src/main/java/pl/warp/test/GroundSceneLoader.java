@@ -90,6 +90,8 @@ public class GroundSceneLoader implements GameSceneLoader {
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
 
+    private static final boolean smoothLighting = true;
+
     private RenderingConfig config;
     private GameContextBuilder contextBuilder;
 
@@ -106,7 +108,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private GameSceneComponent playerTankTurret;
     private GameSceneComponent playerTankBarrel;
     private GameSceneComponent playerTankBarrelFake;
-    private static boolean smoothLighting = true;
+
 
     public GroundSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         this.config = config;
@@ -141,9 +143,10 @@ public class GroundSceneLoader implements GameSceneLoader {
         playerTankBarrelFake = new GameSceneComponent(playerTankBarrel);
         playerTankBarrelFake.addProperty(new NameProperty("player tank barrel fake"));
 
-
         mainCameraComponent = new GameSceneComponent(playerTankBarrel);
         mainCameraComponent.addProperty(new NameProperty("main camera"));
+
+
 
         TransformProperty mainCameraTransform = new TransformProperty();
         mainCameraTransform.rotateY((float) Math.PI);
@@ -272,9 +275,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             playerTankBarrel.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
 
-            audioManager = AudioManager.INSTANCE;
-
             new TankGunScript(playerTankBarrel, TANK_COOLDOWN, TANK_GUN_OUT_SPEED, scene);
+
 
             createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
 
@@ -296,6 +298,7 @@ public class GroundSceneLoader implements GameSceneLoader {
                     playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
 
+            audioManager = AudioManager.INSTANCE;
         });
     }
 
