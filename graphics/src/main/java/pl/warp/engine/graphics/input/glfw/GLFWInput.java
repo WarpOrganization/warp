@@ -64,15 +64,15 @@ public class GLFWInput implements Input {
             return; //key unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
-                triggerEvent(new KeyPressedEvent(key));
+                triggerEvent(new KeyPressedEvent(keyStroke));
                 keyboardKeys[keyStroke] = true;
                 break;
             case GLFW.GLFW_RELEASE:
-                triggerEvent(new KeyReleasedEvent(key));
+                triggerEvent(new KeyReleasedEvent(keyStroke));
                 keyboardKeys[keyStroke] = false;
                 break;
             case GLFW.GLFW_REPEAT:
-                triggerEvent(new KeyPressedEvent(key));
+                triggerEvent(new KeyPressedEvent(keyStroke));
                 keyboardKeys[keyStroke] = true;
                 break;
         }
@@ -84,15 +84,15 @@ public class GLFWInput implements Input {
             return; //button unrecognized
         switch (action) {
             case GLFW.GLFW_PRESS:
-                triggerEvent(new MouseButtonPressedEvent(button));
+                triggerEvent(new MouseButtonPressedEvent(buttonCode));
                 mouseButtons[buttonCode] = true;
                 break;
             case GLFW.GLFW_RELEASE:
-                triggerEvent(new MouseButtonReleasedEvent(button));
+                triggerEvent(new MouseButtonReleasedEvent(buttonCode));
                 mouseButtons[buttonCode] = false;
                 break;
             case GLFW.GLFW_REPEAT:
-                triggerEvent(new MouseButtonPressedEvent(button));
+                triggerEvent(new MouseButtonPressedEvent(buttonCode));
                 mouseButtons[buttonCode] = true;
                 break;
         }
