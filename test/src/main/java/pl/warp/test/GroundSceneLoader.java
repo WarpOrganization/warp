@@ -2,6 +2,7 @@ package pl.warp.test;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
@@ -25,6 +26,7 @@ import pl.warp.engine.graphics.light.SpotLight;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
+import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
@@ -46,12 +48,13 @@ import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
+import pl.warp.engine.graphics.shader.program.component.terrain.TerrainProgram;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
+import pl.warp.engine.graphics.terrain.TerrainProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.graphics.effects.star.Star;
@@ -149,7 +152,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
 
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/clouds");
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             scene.addProperty(new GraphicsSkyboxProperty(cubemap));
 
@@ -199,7 +202,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             };
 
             TransformProperty sunSphereTransform = new TransformProperty();
-            sunSphereTransform.move(new Vector3f(200f, 16000f, 500f));
+            sunSphereTransform.move(new Vector3f(2000f, 2000f, 5000f));
             sunSphereTransform.scale(new Vector3f(2000.0f));
             sun.addProperty(sunSphereTransform);
 
@@ -224,20 +227,24 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             floorTextureComponent.addProperty(new RenderableMeshProperty(new QuadMesh()));
 
-            ImageData decodedFloorTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("floor_1.png"), PNGDecoder.Format.RGBA);
-            Texture2D floorTexture = new Texture2D(decodedFloorTexture.getWidth(), decodedFloorTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedFloorTexture.getData());
-            Material floorMaterial = new Material(floorTexture);
-            floorTextureComponent.addProperty(new GraphicsMaterialProperty(floorMaterial));
+            ImageData decodedTerrainTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("terrain.png"), PNGDecoder.Format.RGBA);
+            Texture2D terrainTexture = new Texture2D(decodedTerrainTexture.getWidth(), decodedTerrainTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTerrainTexture.getData());
+            Material terrainMaterial = new Material(terrainTexture);
+            floorTextureComponent.addProperty(new GraphicsMaterialProperty(terrainMaterial));
+            ImageData decodedTerrainNormal = ImageDecoder.decodePNG(Test.class.getResourceAsStream("terrain_normal.png"), PNGDecoder.Format.RGBA);
+            Texture2D terrainNormal = new Texture2D(decodedTerrainNormal.getWidth(), decodedTerrainNormal.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTerrainNormal.getData());
+            floorTextureComponent.addProperty(new TerrainProperty(new Vector2f(50f), terrainNormal));
+            floorTextureComponent.addProperty(new CustomProgramProperty(new TerrainProgram()));
             floor.addProperty(new TransformProperty());
             floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));
 
-            GameComponent DesertTank = CreateTank(true);
-            TransformProperty DesertTankTransform =  DesertTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            DesertTankTransform.move(new Vector3f(-300.0f, 0.0f, 0.0f));
+            GameComponent desertTank = createTank("tankModel/DesertTexture.png");
+            TransformProperty desertTankTransform =  desertTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            desertTankTransform.move(new Vector3f(-300.0f, 0.0f, 0.0f));
 
-            GameComponent PlainsTank = CreateTank(false);
-            TransformProperty PlainsTankTransform =  PlainsTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            PlainsTankTransform.move(new Vector3f(300.0f, 0.0f, 0.0f));
+            GameComponent plainsTank = createTank("tankModel/WoodlandTexture.png");
+            TransformProperty plainsTankTransform =  plainsTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            plainsTankTransform.move(new Vector3f(300.0f, 0.0f, 0.0f));
 /*
             Vector3f movement = new Vector3f(0f, 100f, -60f);
 
@@ -296,68 +303,64 @@ public class GroundSceneLoader implements GameSceneLoader {
         });
     }
 
-    private GameComponent CreateTank(Boolean Texture) {
-        Boolean SmoothLighting = true;
+    private GameComponent createTank(String texturePath) {
+        boolean smoothLighting = true;
 
-        GameComponent MainBody = new GameSceneComponent(scene);
-        GameComponent Tracks= new GameSceneComponent(MainBody);
-        GameSceneComponent TrackWheels = new GameSceneComponent(MainBody);
-        GameComponent SpinnigWheel = new GameSceneComponent(MainBody);
+        GameComponent mainBody = new GameSceneComponent(scene);
+        GameComponent tracks= new GameSceneComponent(mainBody);
+        GameSceneComponent trackWheels = new GameSceneComponent(mainBody);
+        GameComponent spinnigWheel = new GameSceneComponent(mainBody);
 
-        GameComponent Turret = new GameSceneComponent(MainBody);
-        GameComponent TurretAdditions = new GameSceneComponent(Turret);
-        GameComponent MinigunStand = new GameSceneComponent(Turret);
-        GameComponent Minigun = new GameSceneComponent(Turret);
-        GameComponent MainGun = new GameSceneComponent(Turret);
+        GameComponent turret = new GameSceneComponent(mainBody);
+        GameComponent turretAdditions = new GameSceneComponent(turret);
+        GameComponent minigunStand = new GameSceneComponent(turret);
+        GameComponent minigun = new GameSceneComponent(turret);
+        GameComponent mainGun = new GameSceneComponent(turret);
 
-        TransformProperty MainTransform = new TransformProperty();
-        MainBody.addProperty(MainTransform);
-        MainTransform.setScale(new Vector3f(100f,100f,100f));
+        TransformProperty mainTransform = new TransformProperty();
+        mainBody.addProperty(mainTransform);
+        mainTransform.setScale(new Vector3f(100f,100f,100f));
 
-        TransformProperty TurretTransform = new TransformProperty();
-        Turret.addProperty(TurretTransform);
+        TransformProperty turretTransform = new TransformProperty();
+        turret.addProperty(turretTransform);
         //TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
 
         TransformProperty MainGunTransform = new TransformProperty();
-        MainGun.addProperty(MainGunTransform);
+        mainGun.addProperty(MainGunTransform);
         MainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi podał gówno, a offsety robiłem ręcznie
         //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
 
         TransformProperty SpinnigWheelTransform = new TransformProperty();
-        SpinnigWheel.addProperty(SpinnigWheelTransform);
+        spinnigWheel.addProperty(SpinnigWheelTransform);
         SpinnigWheelTransform.move(new Vector3f(0.0f, 0.66f, -2.44f));
 
-        MainBody.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainBody.obj"), SmoothLighting).toMesh()));
-        Tracks.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Tracks.obj"), SmoothLighting).toMesh()));
-        TrackWheels.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TrackWheels.obj"), SmoothLighting).toMesh()));
-        SpinnigWheel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/SpinnigWheel.obj"), SmoothLighting).toMesh()));
-        Turret.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Turret.obj"), SmoothLighting).toMesh()));
-        TurretAdditions.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TurretAdditions.obj"), SmoothLighting).toMesh()));
-        MinigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), SmoothLighting).toMesh()));
-        Minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), SmoothLighting).toMesh()));
-        MainGun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
+        mainBody.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainBody.obj"), smoothLighting).toMesh()));
+        tracks.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Tracks.obj"), smoothLighting).toMesh()));
+        trackWheels.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TrackWheels.obj"), smoothLighting).toMesh()));
+        spinnigWheel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/SpinnigWheel.obj"), smoothLighting).toMesh()));
+        turret.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Turret.obj"), smoothLighting).toMesh()));
+        turretAdditions.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TurretAdditions.obj"), smoothLighting).toMesh()));
+        minigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), smoothLighting).toMesh()));
+        minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), smoothLighting).toMesh()));
+        mainGun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), smoothLighting).toMesh()));
 
-        ImageData decodedTankTexture;
-        if(Texture) {
-            decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
-        }else{
-            decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/WoodlandTexture.png"), PNGDecoder.Format.RGBA);
-        }
-        Material TankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
+        ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream(texturePath), PNGDecoder.Format.RGBA);
 
-        MainBody.addProperty(getGraphicsProperty(TankMaterial));
-        TrackWheels.addProperty(getGraphicsProperty(TankMaterial));
-        SpinnigWheel.addProperty(getGraphicsProperty(TankMaterial));
-        Turret.addProperty(getGraphicsProperty(TankMaterial));
-        TurretAdditions.addProperty(getGraphicsProperty(TankMaterial));
-        MinigunStand.addProperty(getGraphicsProperty(TankMaterial));
-        Minigun.addProperty(getGraphicsProperty(TankMaterial));
-        MainGun.addProperty(getGraphicsProperty(TankMaterial));
+        Material tankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
+
+        mainBody.addProperty(getGraphicsProperty(tankMaterial));
+        trackWheels.addProperty(getGraphicsProperty(tankMaterial));
+        spinnigWheel.addProperty(getGraphicsProperty(tankMaterial));
+        turret.addProperty(getGraphicsProperty(tankMaterial));
+        turretAdditions.addProperty(getGraphicsProperty(tankMaterial));
+        minigunStand.addProperty(getGraphicsProperty(tankMaterial));
+        minigun.addProperty(getGraphicsProperty(tankMaterial));
+        mainGun.addProperty(getGraphicsProperty(tankMaterial));
 
         ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
-        Tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
+        tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
 
-        return MainBody;
+        return mainBody;
     }
 
     @Override

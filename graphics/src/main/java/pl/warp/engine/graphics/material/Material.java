@@ -10,23 +10,23 @@ import java.util.Objects;
  */
 public class Material {
 
-    private Texture2D mainTexture;
+    private Texture2D diffuseTexture;
     private Texture2D brightnessTexture;
     private float brightness = 1.0f;
     private float shininess = 0.1f;
     private float transparency = 1.0f;
 
-    public Material(Texture2D mainTexture) {
-        this.mainTexture = mainTexture;
+    public Material(Texture2D diffuseTexture) {
+        this.diffuseTexture = diffuseTexture;
     }
 
-    public Texture2D getMainTexture() {
-        return mainTexture;
+    public Texture2D getDiffuseTexture() {
+        return diffuseTexture;
     }
 
-    public void setMainTexture(Texture2D mainTexture) {
-        Objects.requireNonNull(mainTexture);
-        this.mainTexture = mainTexture;
+    public void setDiffuseTexture(Texture2D diffuseTexture) {
+        Objects.requireNonNull(diffuseTexture);
+        this.diffuseTexture = diffuseTexture;
     }
 
     public Texture2D getBrightnessTexture() {

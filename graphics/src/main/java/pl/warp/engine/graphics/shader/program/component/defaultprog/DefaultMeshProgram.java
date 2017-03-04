@@ -24,10 +24,10 @@ public class DefaultMeshProgram extends MeshRendererProgram {
     private static final String VERTEX_SHADER = "component/defaultprog/vert";
     private static final String FRAGMENT_SHADER = "component/defaultprog/frag";
 
-    private static final int MAIN_MATERIAL_TEXTURE_SAMPLER = 0;
+    private static final int DIFFUSE_MATERIAL_TEXTURE_SAMPLER = 0;
     private static final int MATERIAL_BRIGHTNESS_TEXTURE = 1;
 
-    private static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES);
+    protected static final ConstantField CONSTANT_FIELD = new ConstantField().set("MAX_LIGHTS", MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES);
 
     private static final String[] SPOT_LIGHT_FIELD_NAMES =
             {"position", "coneDirection", "coneAngle", "coneGradient", "color", "ambientColor", "attenuation", "gradient"};
@@ -37,20 +37,22 @@ public class DefaultMeshProgram extends MeshRendererProgram {
     private int unifRotationMatrix;
     private int unifCameraMatrix;
     private int unifCameraPos;
-    private int unifMainTexture;
     private int unifMaterialBrightness;
     private int unifMaterialShininess;
     private int unifMaterialHasBrightnessTexture;
-    private int unifMaterialBrightnessTexture;
     private int unifMaterialTransparency;
     private int unifLightEnabled;
     private int unifSpotLightCount;
     private int[][] unifSpotLightSources = new int[MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
 
-    public DefaultMeshProgram() {
-        super(VERTEX_SHADER, FRAGMENT_SHADER,
-                new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
+    protected DefaultMeshProgram(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
+        super(vertexShaderName, fragmentShaderName, compiler);
         loadLocations();
+    }
+
+    public DefaultMeshProgram() {
+        this(VERTEX_SHADER, FRAGMENT_SHADER,
+                new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
     }
 
     private void loadLocations() {
@@ -65,11 +67,9 @@ public class DefaultMeshProgram extends MeshRendererProgram {
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
-        this.unifMainTexture = getUniformLocation("material.mainTexture");
         this.unifMaterialBrightness = getUniformLocation("material.brightness");
         this.unifMaterialShininess = getUniformLocation("material.shininess");
         this.unifMaterialHasBrightnessTexture = getUniformLocation("material.hasBrightnessTexture");
-        this.unifMaterialBrightnessTexture = getUniformLocation("material.brightnessTexture");
         this.unifMaterialTransparency = getUniformLocation("material.transparency");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
         this.unifSpotLightCount = getUniformLocation("numSpotLights");
@@ -83,8 +83,8 @@ public class DefaultMeshProgram extends MeshRendererProgram {
     }
 
     private void setupSamplers() {
-        setUniformi(unifMainTexture, MAIN_MATERIAL_TEXTURE_SAMPLER);
-        setUniformi(unifMaterialBrightnessTexture, MATERIAL_BRIGHTNESS_TEXTURE);
+        setTextureLocation("material.diffuseTexture", DIFFUSE_MATERIAL_TEXTURE_SAMPLER);
+        setTextureLocation("material.brightnessTexture", MATERIAL_BRIGHTNESS_TEXTURE);
     }
 
     @Override
@@ -96,17 +96,17 @@ public class DefaultMeshProgram extends MeshRendererProgram {
     }
 
     private void useMaterial(Material material) {
-        useTexture(material.getMainTexture(), MAIN_MATERIAL_TEXTURE_SAMPLER);
+        useTexture(material.getDiffuseTexture(), DIFFUSE_MATERIAL_TEXTURE_SAMPLER);
         setUniformf(unifMaterialBrightness, material.getBrightness());
         setUniformf(unifMaterialShininess, material.getShininess());
         setUniformf(unifMaterialTransparency, material.getTransparency());
-        if (material.hasBrightnessTexture()) {
-            setUniformb(unifMaterialHasBrightnessTexture, true);
+        setUniformb(unifMaterialHasBrightnessTexture, material.hasBrightnessTexture());
+        if (material.hasBrightnessTexture())
             useTexture(material.getBrightnessTexture(), MATERIAL_BRIGHTNESS_TEXTURE);
-        } else setUniformb(unifMaterialHasBrightnessTexture, false);
     }
 
     private Vector3f tmpVector = new Vector3f();
+
     @Override
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());

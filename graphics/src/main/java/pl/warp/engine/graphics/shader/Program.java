@@ -148,4 +148,8 @@ public abstract class Program {
     public int getProgram() {
         return program.getGLProgram();
     }
+
+    protected void setTextureLocation(String name, int sampler) {
+        setUniformi(getUniformLocation(name), sampler);
+    }
 }
