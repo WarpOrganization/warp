@@ -58,6 +58,8 @@ public class SecondCameraScript extends GameScriptWithInput<GameComponent>{
                 trueGun.disable();
                 fakeGun.enable();
                 secondCameraPerspectiveMatrix.setFov(70);
+                zoomedIN = false;
+                super.getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON2);
                 this.getContext().getGraphics().setMainViewCamera(secondCameraProperty.getCamera());
             } else {
                 turret.enable();
