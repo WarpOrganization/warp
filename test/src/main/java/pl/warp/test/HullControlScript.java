@@ -4,6 +4,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
@@ -17,7 +18,7 @@ import java.awt.event.KeyEvent;
  */
 public class HullControlScript extends GameScript {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private final float speed;
+    private final float acceleration;
     private final float rotationSpeed;
     private final float maxSpeed;
     private final float brakingForce;
@@ -28,12 +29,18 @@ public class HullControlScript extends GameScript {
     @OwnerProperty(name = GravityProperty.GRAVITY_PROPERTY_NAME)
     private GravityProperty gravityProperty;
 
+    private GameComponent spinningWheel;
+    private GameComponent tracks;
+
+    private AnimatedTextureProperty tracksAnimation;
 
     private Vector3f forwardVector = new Vector3f();
 
-    public HullControlScript(GameComponent owner, float speed, float rotationSpeed, float maxSpeed, float brakingForce) {
+    public HullControlScript(GameComponent owner, GameComponent spinningWheel, GameComponent tracks, float acceleration, float rotationSpeed, float maxSpeed, float brakingForce) {
         super(owner);
-        this.speed = speed;
+        this.spinningWheel = spinningWheel;
+        this.tracks = tracks;
+        this.acceleration = acceleration;
         this.rotationSpeed = rotationSpeed;
         this.maxSpeed = maxSpeed;
         this.brakingForce = brakingForce;
@@ -41,7 +48,7 @@ public class HullControlScript extends GameScript {
 
     @Override
     protected void init() {
-
+        this.tracksAnimation = tracks.getProperty(AnimatedTextureProperty.ANIMATED_TEXTURE_PROPERTY_NAME);
     }
 
     @Override
@@ -55,9 +62,9 @@ public class HullControlScript extends GameScript {
     private void move(int delta) {
         Input input = getContext().getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
-            linearMove(-speed * delta);
+            linearMove(-acceleration * delta);
         else if (input.isKeyDown(KeyEvent.VK_S))
-            linearMove(speed * delta);
+            linearMove(acceleration * delta);
         else if (gravityProperty.isStanding()) brake();
 
         if (input.isKeyDown(KeyEvent.VK_A))
@@ -81,19 +88,21 @@ public class HullControlScript extends GameScript {
     }
 
     private void linearMove(float speed) {
+        this.tracksAnimation.setDelta(tracksAnimation.getDelta() - (speed * -0.02f));
         forwardVector.normalize().mul(speed);
-        bodyProperty.applyForce(forwardVector);
+        if(bodyProperty.getVelocity().length() < maxSpeed)
+            bodyProperty.applyForce(forwardVector);
     }
 
     private Vector3f tmp = new Vector3f();
 
     private void fixVelocity() {
-        bodyProperty.getVelocity().set(tmp
+        bodyProperty.getVelocity().set(
+                tmp
                 .set(forwardVector)
                 .normalize()
-                .mul(
-                        bodyProperty.getVelocity()
-                                .dot(forwardVector)));
+                .mul(bodyProperty.getVelocity().dot(forwardVector))
+        );
     }
 
     private Vector3f angularVelocity = new Vector3f();

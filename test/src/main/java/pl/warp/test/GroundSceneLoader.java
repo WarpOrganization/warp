@@ -17,6 +17,7 @@ import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.RenderingConfig;
+import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
@@ -39,6 +40,7 @@ import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
+import pl.warp.engine.graphics.shader.program.component.animatedtexture.AnimatedTextureProgram;
 import pl.warp.engine.graphics.shader.program.component.terrain.TerrainProgram;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.terrain.TerrainProperty;
@@ -75,9 +77,9 @@ public class GroundSceneLoader implements GameSceneLoader {
 
     public static GameComponent MAIN_OBJECT;
 
-    private static final float TANK_HULL_ROT_SPEED = 0.5f;
+    private static final float TANK_HULL_ROT_SPEED = 0.3f;
     private static final float TANK_HULL_ACC_SPEED = 0.1f;
-    private static final float TANK_HULL_MAX_SPEED = 2f;
+    private static final float TANK_HULL_MAX_SPEED = 10f;
     private static final float TANK_HULL_BRAKING_FORCE = 1.5f;
     private static final float TANK_TURRET_ROT_SPEED = 1.5f;
     private static final float TANK_BARREL_ELEVATION_SPEED = 1f;
@@ -277,55 +279,57 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             //tank.addProperty(new GunProperty(TANK_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
             //new TankGunScript(tank, TANK_COOLDOWN);
-            GameComponent Tracks= new GameSceneComponent(playerTankHull);
-            GameSceneComponent TrackWheels = new GameSceneComponent(playerTankHull);
-            GameComponent SpinnigWheel = new GameSceneComponent(playerTankHull);
-            GameComponent TurretAdditions = new GameSceneComponent(playerTankTurret);
-            GameComponent MinigunStand = new GameSceneComponent(playerTankTurret);
-            GameComponent Minigun = new GameSceneComponent(playerTankTurret);
+            GameComponent tracks= new GameSceneComponent(playerTankHull);
+            GameSceneComponent trackWheels = new GameSceneComponent(playerTankHull);
+            GameComponent spinnigWheel = new GameSceneComponent(playerTankHull);
+            GameComponent turretAdditions = new GameSceneComponent(playerTankTurret);
+            GameComponent minigunStand = new GameSceneComponent(playerTankTurret);
+            GameComponent minigun = new GameSceneComponent(playerTankTurret);
 
 
-            TransformProperty MainTransform = new TransformProperty();
-            MainTransform.setScale(new Vector3f(10f,10f,10f));
-            playerTankHull.addProperty(MainTransform);
+            TransformProperty mainTransform = new TransformProperty();
+            mainTransform.setScale(new Vector3f(10f,10f,10f));
+            playerTankHull.addProperty(mainTransform);
 
-            TransformProperty TurretTransform = new TransformProperty();
-            playerTankTurret.addProperty(TurretTransform);
+            TransformProperty turretTransform = new TransformProperty();
+            playerTankTurret.addProperty(turretTransform);
             //TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
 
-            TransformProperty MainGunTransform = new TransformProperty();
-            playerTankBarrel.addProperty(MainGunTransform);
-            MainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi poda� g�wno, a offsety robi�em r�cznie
+            TransformProperty mainGunTransform = new TransformProperty();
+            playerTankBarrel.addProperty(mainGunTransform);
+            mainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi poda� g�wno, a offsety robi�em r�cznie
             //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
 
-            TransformProperty SpinnigWheelTransform = new TransformProperty();
-            SpinnigWheel.addProperty(SpinnigWheelTransform);
-            SpinnigWheelTransform.move(new Vector3f(0.0f, 0.66f, -2.44f));
+            TransformProperty spinnigWheelTransform = new TransformProperty();
+            spinnigWheel.addProperty(spinnigWheelTransform);
+            spinnigWheelTransform.move(new Vector3f(0.0f, 0.66f, -2.44f));
 
             playerTankHull.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainBody.obj"), SmoothLighting).toMesh()));
-            Tracks.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Tracks.obj"), SmoothLighting).toMesh()));
-            TrackWheels.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TrackWheels.obj"), SmoothLighting).toMesh()));
-            SpinnigWheel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/SpinnigWheel.obj"), SmoothLighting).toMesh()));
+            tracks.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Tracks.obj"), SmoothLighting).toMesh()));
+            tracks.addProperty(new AnimatedTextureProperty(new Vector2f(0f, 1f)));
+            tracks.addProperty(new CustomProgramProperty(new AnimatedTextureProgram()));
+            trackWheels.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TrackWheels.obj"), SmoothLighting).toMesh()));
+            spinnigWheel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/SpinnigWheel.obj"), SmoothLighting).toMesh()));
             playerTankTurret.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Turret.obj"), SmoothLighting).toMesh()));
-            TurretAdditions.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TurretAdditions.obj"), SmoothLighting).toMesh()));
-            MinigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), SmoothLighting).toMesh()));
-            Minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), SmoothLighting).toMesh()));
+            turretAdditions.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TurretAdditions.obj"), SmoothLighting).toMesh()));
+            minigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), SmoothLighting).toMesh()));
+            minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), SmoothLighting).toMesh()));
             playerTankBarrel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
 
             ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
-            Material TankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
+            Material tankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
 
-            playerTankHull.addProperty(getGraphicsProperty(TankMaterial));
-            TrackWheels.addProperty(getGraphicsProperty(TankMaterial));
-            SpinnigWheel.addProperty(getGraphicsProperty(TankMaterial));
-            playerTankTurret.addProperty(getGraphicsProperty(TankMaterial));
-            TurretAdditions.addProperty(getGraphicsProperty(TankMaterial));
-            MinigunStand.addProperty(getGraphicsProperty(TankMaterial));
-            Minigun.addProperty(getGraphicsProperty(TankMaterial));
-            playerTankBarrel.addProperty(getGraphicsProperty(TankMaterial));
+            playerTankHull.addProperty(getGraphicsProperty(tankMaterial));
+            trackWheels.addProperty(getGraphicsProperty(tankMaterial));
+            spinnigWheel.addProperty(getGraphicsProperty(tankMaterial));
+            playerTankTurret.addProperty(getGraphicsProperty(tankMaterial));
+            turretAdditions.addProperty(getGraphicsProperty(tankMaterial));
+            minigunStand.addProperty(getGraphicsProperty(tankMaterial));
+            minigun.addProperty(getGraphicsProperty(tankMaterial));
+            playerTankBarrel.addProperty(getGraphicsProperty(tankMaterial));
 
             ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
-            Tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
+            tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
 
 
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
@@ -342,9 +346,10 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             //new GoatControlScript(playerTankHull, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
             //new TankControlScript(playerTankHull, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
-            new HullControlScript(playerTankHull, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
+            new HullControlScript(playerTankHull, spinnigWheel, tracks, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
             new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED);
+
             });
     }
 

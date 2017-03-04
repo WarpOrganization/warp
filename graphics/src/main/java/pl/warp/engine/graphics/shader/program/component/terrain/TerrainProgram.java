@@ -23,7 +23,7 @@ public class TerrainProgram extends DefaultMeshProgram {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
         this.unifScale = getUniformLocation("scale");
-        //setTextureLocation("material.normalMap", NORMAL_MAP_SAMPLER);
+        setTextureLocation("material.normalMap", NORMAL_MAP_SAMPLER);
     }
 
     private Vector2f scale = new Vector2f();
