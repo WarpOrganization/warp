@@ -342,7 +342,6 @@ public class GroundSceneLoader implements GameSceneLoader {
             //new GunScript(playerTankHull);
             //new TankGunScript(playerTankHull, TANK_COOLDOWN, scene);
 
-            engineParticles(playerTankHull, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f), new Vector4f(0.2f, 0.5f, 1.0f, 0.0f));
             //new GoatControlScript(playerTankHull, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
             //new TankControlScript(playerTankHull, TANK_ACC_SPEED, TANK_ROT_SPEED, TANK_MAX_SPEED, TANK_BRAKING_FORCE);
             new HullControlScript(playerTankHull, TANK_ACC_SPEED, TANK_ROT_SPEED, TANK_MAX_SPEED, TANK_BRAKING_FORCE);
@@ -463,19 +462,4 @@ public class GroundSceneLoader implements GameSceneLoader {
         file.createNewFile();
         return new FileOutputStream(file);
     }
-
-    private void engineParticles(GameComponent goat, Vector4f color, Vector4f color1) {
-        Component light = new GameSceneComponent(goat);
-        TransformProperty lightSourceTransform = new TransformProperty();
-        lightSourceTransform.move(new Vector3f(0f, -0.35f, 3.5f));
-        light.addProperty(lightSourceTransform);
-        ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0.000f, 0.0f, 0.00001f), 0, 0);
-        ParticleStage[] stages = {
-                new ParticleStage(0.5f, color),
-                new ParticleStage(0.5f, color1)
-        };
-        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
-        light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
-    }
-
 }
