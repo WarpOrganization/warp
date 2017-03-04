@@ -83,6 +83,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private static final float TANK_BARREL_ELEVATION_SPEED = 2f;
     private static final float TANK_BARREL_ELEVATION_MAX = 20f;
     private static final float TANK_BARREL_ELEVATION_MIN = -5f;
+    private static final float TANK_GUN_OUT_SPEED = 400f;
 
     private static final int TANK_COOLDOWN = 300;
     private static final float BRAKING_FORCE = 0;
@@ -145,7 +146,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         mainCameraComponent.addProperty(new NameProperty("main camera"));
 
         TransformProperty mainCameraTransform = new TransformProperty();
-        mainCameraTransform.rotateY((float)Math.PI);
+        mainCameraTransform.rotateY((float) Math.PI);
         mainCameraComponent.addProperty(mainCameraTransform);
 
         Display display = config.getDisplay();
@@ -158,7 +159,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         secondCameraComponent.addProperty(new NameProperty("second camera"));
 
         TransformProperty secondCameraTransform = new TransformProperty();
-        secondCameraTransform.rotateY((float)Math.PI);
+        secondCameraTransform.rotateY((float) Math.PI);
         secondCameraComponent.addProperty(secondCameraTransform);
 
         Camera secondCamera = new QuaternionCamera(secondCameraComponent, secondCameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
@@ -268,10 +269,11 @@ public class GroundSceneLoader implements GameSceneLoader {
             bulletMesh = new Sphere(15, 15, 0.5f);
             ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
-            playerTankHull.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
+            playerTankBarrel.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
 
             audioManager = AudioManager.INSTANCE;
 
+            new TankGunScript(playerTankBarrel, TANK_COOLDOWN, TANK_GUN_OUT_SPEED, scene);
 
             createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
 
@@ -293,7 +295,7 @@ public class GroundSceneLoader implements GameSceneLoader {
                     playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
 
-            });
+        });
     }
 
     private GameComponent createAiTank(GameComponent parent, String texturePath) {

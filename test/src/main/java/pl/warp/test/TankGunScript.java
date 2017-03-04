@@ -26,19 +26,21 @@ import pl.warp.game.script.OwnerProperty;
 public class TankGunScript extends GameScript<GameComponent> {
 
     private final int reloadTime;
+    private final float outSpeed;
     private Component root;
     @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
     GunProperty gunProperty;
-    private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private static final Vector3f GUN_OFFSET = new Vector3f(0, 10, -10);
+    private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, 1);
+    private static final Vector3f GUN_OFFSET = new Vector3f(0, 0, 0);
     private Mesh mesh;
     private Material material;
 
     private int reloadLeft = 0;
 
-    public TankGunScript(GameComponent owner, int reloadTime, Component root) {
+    public TankGunScript(GameComponent owner, int reloadTime, float outSpeed, Component root) {
         super(owner);
         this.reloadTime = reloadTime;
+        this.outSpeed = outSpeed;
         this.root = root;
     }
 
@@ -64,8 +66,7 @@ public class TankGunScript extends GameScript<GameComponent> {
 
     private Vector3f forwardVector = new Vector3f();
     private Vector3f translation = new Vector3f();
-    private Vector3f velUpComponent = new Vector3f(0, 70, 0);
-    private Vector3f gunOffset = new Vector3f(0, 10, -10);
+    private Vector3f gunOffset = new Vector3f();
     private Vector3 roundTranslation = new Vector3();
 
     private void shoot() {
@@ -80,8 +81,7 @@ public class TankGunScript extends GameScript<GameComponent> {
             TransformProperty transformProperty = new TransformProperty();
             transformProperty.move(translation);
             round.addProperty(transformProperty);
-            forwardVector.mul(100);
-            forwardVector.add(velUpComponent);
+            forwardVector.mul(outSpeed);
             PhysicalBodyProperty bodyProperty = new PhysicalBodyProperty(1, 1, 1, 1);
             bodyProperty.applyForce(forwardVector);
             round.addProperty(bodyProperty);

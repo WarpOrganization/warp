@@ -23,6 +23,9 @@ public class BarrelControlScript extends GameScript {
     @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)
     private  TransformProperty transformProperty;
 
+    @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
+    private GunProperty gunProperty;
+
     public BarrelControlScript(GameComponent owner, float elevationSpeed, float elevationMAX, float elevationMIN) {
         super(owner);
         this.elevationSpeed = elevationSpeed * (float)Math.PI/5000;
@@ -49,7 +52,8 @@ public class BarrelControlScript extends GameScript {
         else if(transformProperty.getRotation().x < elevationMAX/2)
             transformProperty.getRotation().setAngleAxis(elevationMAX, 1f,0f,0f);
 
-
+        if(input.isKeyDown(KeyEvent.VK_CONTROL)) gunProperty.setTriggered(true);
+        else gunProperty.setTriggered(false);
     }
 
     private Vector3f forwardVector = new Vector3f();
