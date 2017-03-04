@@ -303,6 +303,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             TransformProperty mainTransform = new TransformProperty();
             mainTransform.setScale(new Vector3f(10f,10f,10f));
+            mainTransform.move(new Vector3f(0,100,0));
             playerTankHull.addProperty(mainTransform);
 
             TransformProperty turretTransform = new TransformProperty();
