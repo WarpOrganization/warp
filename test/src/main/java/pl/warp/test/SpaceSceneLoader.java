@@ -502,8 +502,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         return scene;
     }
 
-    @Override
-    public GameComponent getCameraComponent() {
+    public GameComponent getMainCameraComponent() {
         return cameraComponent;
     }
 

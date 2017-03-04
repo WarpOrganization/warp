@@ -82,7 +82,9 @@ public class GroundSceneLoader implements GameSceneLoader {
     private static final float TANK_HULL_MAX_SPEED = 10f;
     private static final float TANK_HULL_BRAKING_FORCE = 1.5f;
     private static final float TANK_TURRET_ROT_SPEED = 1.5f;
-    private static final float TANK_BARREL_ELEVATION_SPEED = 1f;
+    private static final float TANK_BARREL_ELEVATION_SPEED = 2f;
+    private static final float TANK_BARREL_ELEVATION_MAX = 20f;
+    private static final float TANK_BARREL_ELEVATION_MIN = -5f;
 
     private static final int TANK_COOLDOWN = 300;
     private static final float BRAKING_FORCE = 0.2f * 100;
@@ -91,9 +93,10 @@ public class GroundSceneLoader implements GameSceneLoader {
 
     private RenderingConfig config;
     private GameContextBuilder contextBuilder;
-    private GameScene scene;
 
-    private GameComponent cameraComponent;
+    private GameScene scene;
+    private GameComponent mainCameraComponent;
+    private GameComponent secondCameraComponent;
     private Mesh bulletMesh;
     private Texture2DArray boomSpritesheet;
     private Texture2D bulletTexture;
@@ -103,6 +106,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private GameSceneComponent playerTankHull;
     private GameSceneComponent playerTankTurret;
     private GameSceneComponent playerTankBarrel;
+    private GameSceneComponent playerTankBarrelFake;
     private static boolean SmoothLighting = true;
 
     public GroundSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -132,27 +136,37 @@ public class GroundSceneLoader implements GameSceneLoader {
         playerTankHull.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
 
         playerTankTurret = new GameSceneComponent(playerTankHull);
-        playerTankTurret.addProperty(new PhysicalBodyProperty(10f,1f,1f,1f));
         playerTankTurret.addProperty(new NameProperty("player tank turret"));
 
         playerTankBarrel = new GameSceneComponent(playerTankTurret);
-        playerTankBarrel.addProperty(new PhysicalBodyProperty(10f,1f,1f,1f));
         playerTankBarrel.addProperty(new NameProperty("player tank barrel"));
 
-        cameraComponent = new GameSceneComponent(playerTankTurret);
-        cameraComponent.addProperty(new NameProperty("Camera"));
+        playerTankBarrelFake = new GameSceneComponent(playerTankBarrel);
+        playerTankBarrelFake.addProperty(new NameProperty("player tank barrel fake"));
 
-        TransformProperty cameraTransform = new TransformProperty();
-        cameraComponent.addProperty(cameraTransform);
-        cameraTransform.rotateY((float)Math.PI);
+
+        mainCameraComponent = new GameSceneComponent(playerTankBarrel);
+        mainCameraComponent.addProperty(new NameProperty("main camera"));
+
+        TransformProperty mainCameraTransform = new TransformProperty();
+        mainCameraTransform.rotateY((float)Math.PI);
+        mainCameraComponent.addProperty(mainCameraTransform);
 
         Display display = config.getDisplay();
-        Camera camera = new QuaternionCamera(cameraComponent, cameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
-        camera.move(new Vector3f(0, 4f, -9f));
-        cameraComponent.addProperty(new CameraProperty(camera));
+        Camera mainCamera = new QuaternionCamera(mainCameraComponent, mainCameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
+        mainCamera.move(new Vector3f(0, 4f, -9f));
+        mainCameraComponent.addProperty(new CameraProperty(mainCamera));
 
 
+        secondCameraComponent = new GameSceneComponent(playerTankBarrel);
+        secondCameraComponent.addProperty(new NameProperty("second camera"));
 
+        TransformProperty secondCameraTransform = new TransformProperty();
+        secondCameraTransform.rotateY((float)Math.PI);
+        secondCameraComponent.addProperty(secondCameraTransform);
+
+        Camera secondCamera = new QuaternionCamera(secondCameraComponent, secondCameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
+        secondCameraComponent.addProperty(new CameraProperty(secondCamera));
     }
 
     @Override
@@ -300,6 +314,10 @@ public class GroundSceneLoader implements GameSceneLoader {
             mainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi poda� g�wno, a offsety robi�em r�cznie
             //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
 
+            TransformProperty mainGunFakeTransform = new TransformProperty();
+            playerTankBarrelFake.addProperty(mainGunFakeTransform);
+            mainGunFakeTransform.move(new Vector3f(-0.4f,0f,0f));
+
             TransformProperty spinnigWheelTransform = new TransformProperty();
             spinnigWheel.addProperty(spinnigWheelTransform);
             spinnigWheelTransform.move(new Vector3f(0.0f, 0.66f, -2.44f));
@@ -315,6 +333,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             minigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), SmoothLighting).toMesh()));
             minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), SmoothLighting).toMesh()));
             playerTankBarrel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
+            playerTankBarrelFake.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
+            playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
 
             ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
             Material tankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
@@ -327,6 +347,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             minigunStand.addProperty(getGraphicsProperty(tankMaterial));
             minigun.addProperty(getGraphicsProperty(tankMaterial));
             playerTankBarrel.addProperty(getGraphicsProperty(tankMaterial));
+            playerTankBarrelFake.addProperty(getGraphicsProperty(tankMaterial));
 
             ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
             tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
@@ -348,7 +369,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             //new TankControlScript(playerTankHull, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new HullControlScript(playerTankHull, spinnigWheel, tracks, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
-            new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED);
+            new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED, TANK_BARREL_ELEVATION_MAX, TANK_BARREL_ELEVATION_MIN);
+            new SecondCameraScript(secondCameraComponent, playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME), mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
 
             });
     }
@@ -418,9 +440,8 @@ public class GroundSceneLoader implements GameSceneLoader {
         return scene;
     }
 
-    @Override
-    public GameComponent getCameraComponent() {
-        return cameraComponent;
+    public GameComponent getMainCameraComponent() {
+        return mainCameraComponent;
     }
 
     @Override

@@ -36,16 +36,12 @@ public class TurretControlScript extends GameScript {
     @Override
     protected void update(int delta) {
         updateDirections();
-        move(delta);
+        move();
     }
 
-    private void move(int delta) {
+    private void move() {
         Input input = getContext().getInput();
-
-        if (input.isKeyDown(KeyEvent.VK_RIGHT))
-            transformProperty.rotateY(-rotationSpeed*delta);
-        else if (input.isKeyDown(KeyEvent.VK_LEFT))
-            transformProperty.rotateY(rotationSpeed*delta);
+        transformProperty.rotateY(-input.getCursorPositionDelta().x*rotationSpeed);
     }
 
     private Vector3f forwardVector = new Vector3f();

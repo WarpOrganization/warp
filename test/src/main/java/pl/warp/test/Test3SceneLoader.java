@@ -464,8 +464,7 @@ public class Test3SceneLoader implements GameSceneLoader {
         return scene;
     }
 
-    @Override
-    public GameComponent getCameraComponent() {
+    public GameComponent getMainCameraComponent() {
         return cameraComponent;
     }
 

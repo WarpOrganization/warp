@@ -10,6 +10,6 @@ public interface GameSceneLoader {
     void loadScene();
     void loadGraphics(EngineThread graphicsThread);
     GameScene getScene();
-    GameComponent getCameraComponent();
+    GameComponent getMainCameraComponent();
     void loadSound(EngineThread audioThread);
 }
