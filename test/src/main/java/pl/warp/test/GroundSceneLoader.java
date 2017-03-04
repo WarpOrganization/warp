@@ -87,7 +87,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private static final float TANK_BARREL_ELEVATION_MIN = -5f;
 
     private static final int TANK_COOLDOWN = 300;
-    private static final float BRAKING_FORCE = 0.2f * 100;
+    private static final float BRAKING_FORCE = 0;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
 

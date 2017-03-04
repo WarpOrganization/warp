@@ -99,7 +99,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class SpaceSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 2.0f ;
+    private static final float MOV_SPEED = 2.0f;
     private static final float BRAKING_FORCE = 0.2f * 10;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
@@ -338,12 +338,12 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 enemyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
             }
 
-            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("sw_fighter.obj"), false).toVAOMesh();
-            ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter.png"), PNGDecoder.Format.RGBA);
+            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
+            ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
             frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
             Material frigateMaterial = new Material(frigateTexture);
             frigateMaterial.setShininess(20);
-            ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("sw_fighter_brightness.png"), PNGDecoder.Format.RGBA);
+            ImageData frigateBrightnessDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy_brightness.png"), PNGDecoder.Format.RGBA);
             frigateBrightnessTexture = new Texture2D(frigateBrightnessDecodedTexture.getWidth(), frigateBrightnessDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateBrightnessDecodedTexture.getData());
             frigateMaterial.setBrightnessTexture(frigateBrightnessTexture);
             GameComponent frigate = new GameSceneComponent(scene);
@@ -632,12 +632,12 @@ public class SpaceSceneLoader implements GameSceneLoader {
         return new FileOutputStream(file);
     }
 
-    private void spawnFrigates(){
-        int nOfFrigates = 1000;
+    private void spawnFrigates() {
+        int nOfFrigates = 1500;
         for (int i = 0; i < nOfFrigates; i++) {
-            float x = random.nextFloat() * 4000 - 2000f;
-            float y = random.nextFloat() * 4000 - 2000f;
-            float z =  3000 + random.nextFloat() * 4000 - 2000f;
+            float x = -3000 + random.nextFloat() * 6000 - 3000f;
+            float y = random.nextFloat() * 6000 - 3000f;
+            float z = 4000 + random.nextFloat() * 6000 - 3000f;
             GameComponent frigate = new GameSceneComponent(scene);
             frigate.addProperty(new NameProperty("Frigate"));
             frigate.addProperty(new RenderableMeshProperty(friageMesh));

@@ -141,11 +141,11 @@ public class Graphics {
     private Flow<Texture2D, WeightedTexture2D> createSunshaft() {
         SunshaftProperty property = new SunshaftProperty();
         context.getScene().addProperty(property);
-        return new SunshaftRenderer(sceneRenderer, property.getSource(), config, componentRenderer, mainViewCamera);
+        return new SunshaftRenderer(sceneRenderer, property.getSource(), config, componentRenderer, this);
     }
 
     private PipelineBuilder<Texture2D> createFlares(PipelineBuilder<Texture2D> builder) {
-        LensFlareRenderer flareRenderer = new LensFlareRenderer(mainViewCamera, environment, config);
+        LensFlareRenderer flareRenderer = new LensFlareRenderer(this, environment, config);
         return builder.via(flareRenderer);
     }
 
