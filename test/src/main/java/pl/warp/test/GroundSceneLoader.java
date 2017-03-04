@@ -151,7 +151,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         Display display = config.getDisplay();
         Camera mainCamera = new QuaternionCamera(mainCameraComponent, mainCameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
-        mainCamera.move(new Vector3f(0, 4f, -9f));
+        mainCamera.move(new Vector3f(0, 2f, -9f));
         mainCameraComponent.addProperty(new CameraProperty(mainCamera));
 
 
@@ -164,6 +164,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         Camera secondCamera = new QuaternionCamera(secondCameraComponent, secondCameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
         secondCameraComponent.addProperty(new CameraProperty(secondCamera));
+
     }
 
     @Override
