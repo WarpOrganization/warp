@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
@@ -31,14 +30,6 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
-import pl.warp.engine.graphics.particles.ParticleAnimator;
-import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
-import pl.warp.engine.graphics.particles.dot.ParticleStage;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -82,17 +73,19 @@ import java.net.URLDecoder;
  */
 public class GroundSceneLoader implements GameSceneLoader {
 
-    private static final float ROT_SPEED = 0.05f;
-    private static final float MOV_SPEED = 2.0f;
-    private static final float TANK_ROT_SPEED = 0.5f;
-    private static final float TANK_ACC_SPEED = 0.1f;
-    private static final float TANK_MAX_SPEED = 2f;
-    private static final float TANK_BRAKING_FORCE = 1.5f;
+    public static GameComponent MAIN_OBJECT;
+
+    private static final float TANK_HULL_ROT_SPEED = 0.5f;
+    private static final float TANK_HULL_ACC_SPEED = 0.1f;
+    private static final float TANK_HULL_MAX_SPEED = 2f;
+    private static final float TANK_HULL_BRAKING_FORCE = 1.5f;
+    private static final float TANK_TURRET_ROT_SPEED = 1.5f;
+    private static final float TANK_BARREL_ELEVATION_SPEED = 1f;
+
     private static final int TANK_COOLDOWN = 300;
     private static final float BRAKING_FORCE = 0.2f * 100;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
-    public static GameComponent MAIN_OBJECT;
 
     private RenderingConfig config;
     private GameContextBuilder contextBuilder;
@@ -107,6 +100,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private Texture2DArray lensTexture;
     private GameSceneComponent playerTankHull;
     private GameSceneComponent playerTankTurret;
+    private GameSceneComponent playerTankBarrel;
     private static boolean SmoothLighting = true;
 
     public GroundSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -139,6 +133,10 @@ public class GroundSceneLoader implements GameSceneLoader {
         playerTankTurret.addProperty(new PhysicalBodyProperty(10f,1f,1f,1f));
         playerTankTurret.addProperty(new NameProperty("player tank turret"));
 
+        playerTankBarrel = new GameSceneComponent(playerTankTurret);
+        playerTankBarrel.addProperty(new PhysicalBodyProperty(10f,1f,1f,1f));
+        playerTankBarrel.addProperty(new NameProperty("player tank barrel"));
+
         cameraComponent = new GameSceneComponent(playerTankTurret);
         cameraComponent.addProperty(new NameProperty("Camera"));
 
@@ -148,7 +146,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         Display display = config.getDisplay();
         Camera camera = new QuaternionCamera(cameraComponent, cameraTransform, new PerspectiveMatrix(70, 0.01f, 20000f, display.getWidth(), display.getHeight()));
-        camera.move(new Vector3f(0, 4f, -15f));
+        camera.move(new Vector3f(0, 4f, -9f));
         cameraComponent.addProperty(new CameraProperty(camera));
 
 
@@ -285,7 +283,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             GameComponent TurretAdditions = new GameSceneComponent(playerTankTurret);
             GameComponent MinigunStand = new GameSceneComponent(playerTankTurret);
             GameComponent Minigun = new GameSceneComponent(playerTankTurret);
-            GameComponent MainGun = new GameSceneComponent(playerTankTurret);
+
 
             TransformProperty MainTransform = new TransformProperty();
             MainTransform.setScale(new Vector3f(10f,10f,10f));
@@ -296,7 +294,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             //TurretTransform.rotate(0.0f, (float)Math.PI/2, 0.0f);
 
             TransformProperty MainGunTransform = new TransformProperty();
-            MainGun.addProperty(MainGunTransform);
+            playerTankBarrel.addProperty(MainGunTransform);
             MainGunTransform.move(new Vector3f(0.0f, 1.35f, 1.33f));//nie gdzie ci Szymon blender podaje offsety, bo mi poda� g�wno, a offsety robi�em r�cznie
             //MainGunTransform.rotate((float)Math.PI/8, 0.0f, 0.0f);
 
@@ -312,7 +310,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             TurretAdditions.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/TurretAdditions.obj"), SmoothLighting).toMesh()));
             MinigunStand.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MinigunStand.obj"), SmoothLighting).toMesh()));
             Minigun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/Minigun.obj"), SmoothLighting).toMesh()));
-            MainGun.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
+            playerTankBarrel.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), SmoothLighting).toMesh()));
 
             ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
             Material TankMaterial = new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()));
@@ -324,7 +322,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             TurretAdditions.addProperty(getGraphicsProperty(TankMaterial));
             MinigunStand.addProperty(getGraphicsProperty(TankMaterial));
             Minigun.addProperty(getGraphicsProperty(TankMaterial));
-            MainGun.addProperty(getGraphicsProperty(TankMaterial));
+            playerTankBarrel.addProperty(getGraphicsProperty(TankMaterial));
 
             ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
             Tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
@@ -343,9 +341,10 @@ public class GroundSceneLoader implements GameSceneLoader {
             //new TankGunScript(playerTankHull, TANK_COOLDOWN, scene);
 
             //new GoatControlScript(playerTankHull, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
-            //new TankControlScript(playerTankHull, TANK_ACC_SPEED, TANK_ROT_SPEED, TANK_MAX_SPEED, TANK_BRAKING_FORCE);
-            new HullControlScript(playerTankHull, TANK_ACC_SPEED, TANK_ROT_SPEED, TANK_MAX_SPEED, TANK_BRAKING_FORCE);
-            new TurretControlScript(playerTankTurret, TANK_ROT_SPEED);
+            //new TankControlScript(playerTankHull, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
+            new HullControlScript(playerTankHull, TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
+            new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
+            new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED);
             });
     }
 

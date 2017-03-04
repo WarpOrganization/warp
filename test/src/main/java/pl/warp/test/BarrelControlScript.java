@@ -5,8 +5,6 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
-import pl.warp.engine.physics.property.GravityProperty;
-import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.OwnerProperty;
@@ -16,16 +14,16 @@ import java.awt.event.KeyEvent;
 /**
  * Created by Marcin on 04.03.2017.
  */
-public class TurretControlScript extends GameScript {
+public class BarrelControlScript extends GameScript {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private final float rotationSpeed;
+    private final float elevetionSpeed;
 
     @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)
     private  TransformProperty transformProperty;
 
-    public TurretControlScript(GameComponent owner, float rotationSpeed) {
+    public BarrelControlScript(GameComponent owner, float elevetionSpeed) {
         super(owner);
-        this.rotationSpeed = rotationSpeed * (float)Math.PI/5000;
+        this.elevetionSpeed = elevetionSpeed * (float)Math.PI/5000;
     }
 
     @Override
@@ -42,10 +40,10 @@ public class TurretControlScript extends GameScript {
     private void move(int delta) {
         Input input = getContext().getInput();
 
-        if (input.isKeyDown(KeyEvent.VK_RIGHT))
-            transformProperty.rotateY(-rotationSpeed*delta);
-        else if (input.isKeyDown(KeyEvent.VK_LEFT))
-            transformProperty.rotateY(rotationSpeed*delta);
+        if (input.isKeyDown(KeyEvent.VK_UP))
+            transformProperty.rotateX(elevetionSpeed *delta);
+        else if (input.isKeyDown(KeyEvent.VK_DOWN))
+            transformProperty.rotateX(-elevetionSpeed *delta);
     }
 
     private Vector3f forwardVector = new Vector3f();
