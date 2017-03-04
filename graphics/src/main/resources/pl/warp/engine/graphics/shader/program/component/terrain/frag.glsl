@@ -52,8 +52,7 @@ void main(void) {
         vec3 shiftedNormal = normalize(vNormal + normalShift);
         vec3 light = getLight(shiftedNormal, vPos3, vEyeDir, material.shininess, SPECULAR_EXPONENT);
         fragColor = vec4(light, 1) * texture(material.diffuseTexture, vTexCoord);
-    }
-    else fragColor = texture(material.diffuseTexture, vTexCoord);
+    } else fragColor = texture(material.diffuseTexture, vTexCoord);
     fragColor.rgb *= material.brightness;
     if(material.hasBrightnessTexture) applyBrightnessTexture();
     if(isNan(fragColor.rgb)) discard;

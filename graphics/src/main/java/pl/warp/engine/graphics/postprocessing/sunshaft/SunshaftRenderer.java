@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.ComponentRenderer;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.SceneRenderer;
 import pl.warp.engine.graphics.camera.Camera;
@@ -31,7 +32,7 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     private SunshaftSource sunshaftSource;
     private RenderingConfig config;
     private ComponentRenderer renderer;
-    private Camera camera;
+    private Graphics graphics;
 
     private DepthTextureFramebuffer componentRenderFramebuffer;
     private Texture2D componentRenderTexture;
@@ -48,12 +49,12 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
 
     private Quad quad;
 
-    public SunshaftRenderer(SceneRenderer sceneRenderer, SunshaftSource sunshaftSource, RenderingConfig config, ComponentRenderer renderer, Camera camera) {
+    public SunshaftRenderer(SceneRenderer sceneRenderer, SunshaftSource sunshaftSource, RenderingConfig config, ComponentRenderer renderer, Graphics graphics) {
         this.sceneRenderer = sceneRenderer;
         this.sunshaftSource = sunshaftSource;
         this.config = config;
         this.renderer = renderer;
-        this.camera = camera;
+        this.graphics = graphics;
     }
 
     @Override
@@ -158,6 +159,7 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     public Vector2f getComponentScreenPos() {
         vector4.set(0, 0, 0, 1);
         vector4.mul(renderer.getMatrixStack().topMatrix());
+        Camera camera = graphics.getMainViewCamera();
         vector4.mul(camera.getCameraMatrix());
         vector4.mul(camera.getProjectionMatrix().getMatrix());
         vector2.set(vector4.x / vector4.w, vector4.y / vector4.w);

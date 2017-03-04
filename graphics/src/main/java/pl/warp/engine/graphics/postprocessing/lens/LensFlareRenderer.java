@@ -1,16 +1,19 @@
 package pl.warp.engine.graphics.postprocessing.lens;
 
 import org.apache.log4j.Logger;
-import org.joml.*;
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.Environment;
-import pl.warp.engine.graphics.RenderingConfig;
-import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.graphics.Environment;
+import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.graphics.RenderingConfig;
+import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.VAO;
 import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.shader.program.lens.LensProgram;
@@ -30,7 +33,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     public static final int MAX_FLARES_NUMBER = 100;
 
-    private Camera camera;
+    private Graphics graphics;
     private Environment environment;
     private RenderingConfig config;
 
@@ -46,8 +49,8 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private int flareColorBuffer;
     private VAO vao;
 
-    public LensFlareRenderer(Camera camera, Environment environment, RenderingConfig config) {
-        this.camera = camera;
+    public LensFlareRenderer(Graphics graphics, Environment environment, RenderingConfig config) {
+        this.graphics = graphics;
         this.environment = environment;
         this.config = config;
     }
@@ -100,8 +103,8 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
     private void renderFlare(int index, Component component, LensFlare flare) {
         Vector4f flarePosition = tempVec4.set(Transforms.getAbsolutePosition(component, tempVec3), 1.0f);
-        Vector4f flareCameraPos = flarePosition.mul(camera.getCameraMatrix());
-        Matrix4f projectionMatrix = camera.getProjectionMatrix().getMatrix();
+        Vector4f flareCameraPos = flarePosition.mul(graphics.getMainViewCamera().getCameraMatrix());
+        Matrix4f projectionMatrix = graphics.getMainViewCamera().getProjectionMatrix().getMatrix();
         Vector4f flareProjectionPos = flareCameraPos.mul(projectionMatrix);
         Vector3f actualProjectionPos = tempVec3.set(flareProjectionPos.x, flareProjectionPos.y, flareProjectionPos.z)
                 .div(flareProjectionPos.w);
