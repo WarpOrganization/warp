@@ -225,7 +225,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             TransformProperty sunSphereTransform = new TransformProperty();
             sunSphereTransform.move(new Vector3f(2000f, 2000f, 5000f));
-            sunSphereTransform.scale(new Vector3f(2000.0f));
+            sunSphereTransform.scale(new Vector3f(1200f));
             sun.addProperty(sunSphereTransform);
 
             SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
@@ -295,8 +295,11 @@ public class GroundSceneLoader implements GameSceneLoader {
             TransformProperty property = new TransformProperty();
             property.setScale(new Vector3f(70f));
             property.setTranslation(new Vector3f(200, -50, 0));
+            property.getRotation().rotate(0, (float) Math.PI + 0.4f, 0);
             city.addProperty(property);
 
+            TransformProperty playerTransform = playerTankHull.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            playerTransform.move(new Vector3f(90f, 0f, 0f));
 
             new HullControlScript(playerTankHull, playerTankHull.getChild(3), playerTankHull.getChild(1), TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
@@ -314,17 +317,17 @@ public class GroundSceneLoader implements GameSceneLoader {
         GameComponent city = new GameSceneComponent(scene);
         GameComponent city0 = new GameSceneComponent(city);
         city0.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("city0.obj"), false).toVAOMesh()));
-        ImageData city0texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("grey.png"), PNGDecoder.Format.RGBA);
+        ImageData city0texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ang1.png"), PNGDecoder.Format.RGBA);
         city0.addProperty(getGraphicsProperty(new Material(new Texture2D(city0texture.getWidth(), city0texture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, city0texture.getData()))));
 
         GameComponent city1 = new GameSceneComponent(city);
         city1.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("city1.obj"), false).toVAOMesh()));
-        ImageData city1texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("grey.png"), PNGDecoder.Format.RGBA);
+        ImageData city1texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("cty2x.png"), PNGDecoder.Format.RGBA);
         city1.addProperty(getGraphicsProperty(new Material(new Texture2D(city1texture.getWidth(), city1texture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, city1texture.getData()))));
 
         GameComponent city2 = new GameSceneComponent(city);
         city2.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("city2.obj"), false).toVAOMesh()));
-        ImageData city2texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("grey.png"), PNGDecoder.Format.RGBA);
+        ImageData city2texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("cty1.png"), PNGDecoder.Format.RGBA);
         city2.addProperty(getGraphicsProperty(new Material(new Texture2D(city2texture.getWidth(), city2texture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, city2texture.getData()))));
 
         return city;
