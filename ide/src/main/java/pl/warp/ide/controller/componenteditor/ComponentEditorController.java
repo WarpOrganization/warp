@@ -27,6 +27,7 @@ public class ComponentEditorController {
     public ComponentEditorController(TreeView<Property> propertiesTree, PropertyEditor propertyEditor, ComponentPositioner positioner) {
         this.propertiesTree = propertiesTree;
         this.propertyEditor = propertyEditor;
+        this.componentPositioner = positioner;
     }
 
     public void suspend() {

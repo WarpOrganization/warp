@@ -43,6 +43,8 @@ public interface Component {
 
     Component getChild(int index);
 
+    int getChildrenNumber();
+
     //Considered redundant
     <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass);
 

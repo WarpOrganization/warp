@@ -1,13 +1,14 @@
 package pl.warp.engine.graphics.particles;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-
-import java.util.Objects;
 
 /**
  * @author Jaca777
  *         Created 2016-07-10 at 14
+ *         TODO REFACTOR PARTICLES MODULE:
+ *          - multiple animators per system
+ *          - factory as a strategy (doesn't create instance)
+ *          - ...?
  */
 public abstract class Particle  {
     private Vector3f position;

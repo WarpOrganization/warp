@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
@@ -31,6 +32,14 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
+import pl.warp.engine.graphics.particles.ParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
+import pl.warp.engine.graphics.particles.ParticleFactory;
+import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.ParticleStage;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -287,6 +296,13 @@ public class GroundSceneLoader implements GameSceneLoader {
             ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
             playerTankBarrelFake.addProperty(getGraphicsProperty(new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()))));
 
+            GameComponent city = createCity();
+
+            TransformProperty property = new TransformProperty();
+            property.setScale(new Vector3f(100f));
+            property.setTranslation(new Vector3f(0, -75, 0));
+            city.addProperty(property);
+
 
             new HullControlScript(playerTankHull, playerTankHull.getChild(3), playerTankHull.getChild(1), TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
             new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
@@ -295,8 +311,27 @@ public class GroundSceneLoader implements GameSceneLoader {
                     playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
-
         });
+    }
+
+    protected GameComponent createCity() {
+        GameComponent city = new GameSceneComponent(scene);
+        GameComponent city0 = new GameSceneComponent(city);
+        city0.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("city0.obj"), false).toVAOMesh()));
+        ImageData city0texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("grey.png"), PNGDecoder.Format.RGBA);
+        city0.addProperty(getGraphicsProperty(new Material(new Texture2D(city0texture.getWidth(), city0texture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, city0texture.getData()))));
+
+        GameComponent city1 = new GameSceneComponent(city);
+        city1.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("city1.obj"), false).toVAOMesh()));
+        ImageData city1texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("grey.png"), PNGDecoder.Format.RGBA);
+        city1.addProperty(getGraphicsProperty(new Material(new Texture2D(city1texture.getWidth(), city1texture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, city1texture.getData()))));
+
+        GameComponent city2 = new GameSceneComponent(city);
+        city2.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("city2.obj"), false).toVAOMesh()));
+        ImageData city2texture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("grey.png"), PNGDecoder.Format.RGBA);
+        city2.addProperty(getGraphicsProperty(new Material(new Texture2D(city2texture.getWidth(), city2texture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, city2texture.getData()))));
+
+        return city;
     }
 
     private GameComponent createAiTank(GameComponent parent, String texturePath) {
@@ -310,7 +345,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
     private GameComponent createTankModel(String texturePath, GameComponent mainBody, GameComponent turret, GameComponent mainGun) {
 
-        GameComponent tracks= new GameSceneComponent(mainBody);
+        GameComponent tracks = new GameSceneComponent(mainBody);
         GameSceneComponent trackWheels = new GameSceneComponent(mainBody);
         GameComponent spinnigWheel = new GameSceneComponent(mainBody);
         GameComponent turretAdditions = new GameSceneComponent(turret);
@@ -358,6 +393,20 @@ public class GroundSceneLoader implements GameSceneLoader {
         minigunStand.addProperty(getGraphicsProperty(tankMaterial));
         minigun.addProperty(getGraphicsProperty(tankMaterial));
         mainGun.addProperty(getGraphicsProperty(tankMaterial));
+
+        {
+            GameComponent particle = new GameSceneComponent(mainBody);
+            TransformProperty particleEmitterTransform = new TransformProperty();
+            particleEmitterTransform.move(new Vector3f(0f, 1f, -2.5f));
+            particle.addProperty(particleEmitterTransform);
+            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.000004f, 0), 0, 0);
+            ParticleStage[] stages = {
+                    new ParticleStage(0.7f, new Vector4f(0.5f, 0.5f, 0.5f, 0.1f)),
+                    new ParticleStage(0.7f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+            };
+            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.0005f), 1000, 200, true, true, stages);
+            particle.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 100)));
+        }
 
         ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
         tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));

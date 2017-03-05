@@ -20,8 +20,8 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
 
     private Random random = new Random();
 
-    public RandomSpreadingParticleFactory(Vector3f velocity, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
-        this.velocity = velocity;
+    public RandomSpreadingParticleFactory(Vector3f spread, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
+        this.velocity = spread;
         this.timeToLive = timeToLive;
         this.timeToLiveGradient = timeToLiveGradient;
         this.randomizeRotation = randomizeRotation;
@@ -31,9 +31,9 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
     @Override
     public T newParticle() {
         Vector3f position = new Vector3f();
-        Vector3f velocity = genVelocity();
-        float scale = randomizeScaleScalar ? genScale() : 1.0f;
-        float rotation = randomizeRotation ? genRotation() : 0;
+        Vector3f velocity = generateVelocity();
+        float scale = randomizeScaleScalar ? generateScale() : 1.0f;
+        float rotation = randomizeRotation ? generateRotation() : 0;
         int timeToLive = (int) (this.timeToLive + (timeToLiveGradient * random.nextFloat() - (timeToLiveGradient / 2.0f)));
         return newParticle(position, velocity, scale, rotation, timeToLive);
     }
@@ -41,19 +41,19 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
     public abstract T newParticle(Vector3f position, Vector3f velocity, float scale, float rotation, int ttl);
 
 
-    private Vector3f genVelocity() {
+    protected Vector3f generateVelocity() {
         float x = random.nextFloat() * 2 - 1;
         float y = random.nextFloat() * 2 - 1;
         float z = random.nextFloat() * 2 - 1;
         return new Vector3f(x, y, z).normalize().mul(velocity);
     }
 
-    private float genScale() {
+    protected float generateScale() {
         float delta = RANDOM_SCALE_THRESHOLD * random.nextFloat();
         return 1.0f - RANDOM_SCALE_THRESHOLD / 2 + delta;
     }
 
-    private float genRotation() {
+    protected float generateRotation() {
         return (float) (2 * Math.PI * random.nextFloat());
     }
 

@@ -166,6 +166,11 @@ public abstract class SceneComponent implements Component {
         return children.get(index);
     }
 
+    @Override
+    public int getChildrenNumber() {
+        return children.size();
+    }
+
     /**
      * Returns children's components of type T. Children of children are traversed as well (and so on).
      * It's a bit slower than {@link #getChildrenProperties(String)}.
