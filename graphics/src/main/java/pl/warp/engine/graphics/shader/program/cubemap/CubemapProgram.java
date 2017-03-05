@@ -2,7 +2,6 @@ package pl.warp.engine.graphics.shader.program.cubemap;
 
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.shader.Program;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.texture.Cubemap;
 
 /**
@@ -18,6 +17,7 @@ public class CubemapProgram extends Program {
 
     private int unifPerspMatrix;
     private int unifRotMatrix;
+    private int unifBrightness;
 
     public CubemapProgram() {
         super(PROGRAM_NAME);
@@ -27,6 +27,7 @@ public class CubemapProgram extends Program {
     private void loadUniforms() {
         this.unifPerspMatrix = getUniformLocation("perspMatrix");
         this.unifRotMatrix = getUniformLocation("rotMatrix");
+        this.unifBrightness = getUniformLocation("brightness");
     }
 
 
@@ -37,5 +38,9 @@ public class CubemapProgram extends Program {
 
     public void useCubemap(Cubemap cubemap) {
         useTexture(cubemap, CUBEMAP_SAMPLER);
+    }
+
+    public void useBrightness(float brightness) {
+        setUniformf(unifBrightness, brightness);
     }
 }

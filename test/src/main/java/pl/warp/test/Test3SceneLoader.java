@@ -298,7 +298,7 @@ public class Test3SceneLoader implements GameSceneLoader {
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
-            scene.addProperty(new GraphicsSkyboxProperty(cubemap));
+            scene.addProperty(new GraphicsSkyboxProperty(cubemap, 1f));
 
             allyPortal = new GameSceneComponent(scene);
             TransformProperty allyPortalTransform = new TransformProperty();
