@@ -2,6 +2,7 @@ package pl.warp.ide.controller.componenteditor;
 
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
+import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.game.GameContext;
@@ -24,7 +25,7 @@ public class ComponentViewSceneFactory implements ComponentSceneFactory {
 
     protected void createSkybox(GameContext context) {
         context.getGraphics().getThread().scheduleOnce(() -> {
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             context.getScene().addProperty(new GraphicsSkyboxProperty(cubemap));
         });

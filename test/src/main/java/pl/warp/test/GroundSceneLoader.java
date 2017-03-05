@@ -174,7 +174,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     public void loadGraphics(EngineThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
 
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/clouds");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/clouds2", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             scene.addProperty(new GraphicsSkyboxProperty(cubemap));
 

@@ -296,7 +296,7 @@ public class Test2SceneLoader implements GameSceneLoader {
 
             new GunScript(controllableGoat);
 
-            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3");
+            ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
             scene.addProperty(new GraphicsSkyboxProperty(cubemap));
 
