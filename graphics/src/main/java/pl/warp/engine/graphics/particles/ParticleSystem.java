@@ -53,4 +53,8 @@ public abstract class ParticleSystem {
     public void setEmit(boolean emit) {
         this.emit = emit;
     }
+
+    public boolean getEmit() {
+        return emit;
+    }
 }
