@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
@@ -31,6 +32,14 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
+import pl.warp.engine.graphics.particles.ParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
+import pl.warp.engine.graphics.particles.ParticleFactory;
+import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.ParticleStage;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -398,6 +407,40 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         mainBody.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
         mainBody.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
+
+
+        GameComponent engineFire = new GameSceneComponent(mainBody);
+        TransformProperty engineFireTransform = new TransformProperty();
+        engineFireTransform.move(new Vector3f(0f, 1f, -2f));
+        engineFire.addProperty(engineFireTransform);
+        ParticleAnimator engineFireAnimator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+        ParticleStage[] engineFireStages = {
+                new ParticleStage(1f, new Vector4f(1f, 1f, 0f, 1f)),
+                new ParticleStage(0f, new Vector4f(1f, 0f, 0f, 0.5f)),
+                new ParticleStage(1f, new Vector4f(-1f, -1f, -1f, 1f)),
+                new ParticleStage(2.5f, new Vector4f(0f, 0f, 0f, 0f)),
+        };
+        ParticleFactory<DotParticle> engineFireFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.005f), 1000, 200, true, true, engineFireStages);
+        engineFire.addProperty(new ParticleEmitterProperty(new DotParticleSystem(engineFireAnimator, engineFireFactory, 200)));
+
+
+
+        GameComponent smokeCover = new GameSceneComponent(mainBody);
+        TransformProperty smokeCoverTransformPropety = new TransformProperty();
+        smokeCoverTransformPropety.move(new Vector3f(0f,0f,0f));
+        smokeCover.addProperty(smokeCoverTransformPropety);
+        ParticleAnimator smokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
+        ParticleStage[] smokeStages = {
+                new ParticleStage(2f, new Vector4f(-1f, -1f, -1f, 0.9f)),
+                new ParticleStage(2f, new Vector4f(-1f, -1f, -1f, 0.9f)),
+                new ParticleStage(2f, new Vector4f(0.5f, 0.5f, 0.5f, 0.5f)),
+        };
+        ParticleFactory<DotParticle> smokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 200, true, true, smokeStages);
+        smokeCover.addProperty(new ParticleEmitterProperty(new DotParticleSystem(smokeAnimator, smokeFactory, 100)));
+
+
+        smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
+        engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
 
 
         return mainBody;
