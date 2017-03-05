@@ -25,9 +25,7 @@ public class SecondCameraScript extends GameScriptWithInput<GameComponent>{
     private RenderableMeshProperty turret;
     private PerspectiveMatrix secondCameraPerspectiveMatrix;
 
-    private boolean currState;
-    private boolean prevState;
-    private boolean zoomedIN;
+    private int currState;
 
 
     public SecondCameraScript(GameComponent owner, RenderableMeshProperty fakeGun, RenderableMeshProperty turret, CameraProperty mainCameraProperty) {
@@ -41,45 +39,31 @@ public class SecondCameraScript extends GameScriptWithInput<GameComponent>{
     protected void init() {
         trueGun = this.getOwner().getParent().getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME);
         secondCameraPerspectiveMatrix = (PerspectiveMatrix) secondCameraProperty.getCamera().getProjectionMatrix();
-        currState = false;
-        prevState = false;
-        zoomedIN = false;
+        currState = 0;
     }
 
     @Override
     protected void update(int delta) {
-        Input input = getContext().getInput();
+        if(super.getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON2))
+            currState = ++currState%3;
 
-        currState = input.getScrollDelta() < 0 || !(input.getScrollDelta() > 0) && prevState;
-
-        if (currState != prevState) {
-            if (currState) {
-                turret.disable();
-                trueGun.disable();
-                fakeGun.enable();
-                secondCameraPerspectiveMatrix.setFov(70);
-                zoomedIN = false;
-                super.getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON2);
-                this.getContext().getGraphics().setMainViewCamera(secondCameraProperty.getCamera());
-            } else {
+        switch (currState) {
+            case 0:
                 turret.enable();
                 trueGun.enable();
                 fakeGun.disable();
                 this.getContext().getGraphics().setMainViewCamera(mainCameraProperty.getCamera());
-            }
-        }
-
-        if (currState && super.getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON2)){
-            if (zoomedIN) {
+                break;
+            case 1:
+                turret.disable();
+                trueGun.disable();
+                fakeGun.enable();
                 secondCameraPerspectiveMatrix.setFov(70);
-                zoomedIN = false;
-            } else {
+                this.getContext().getGraphics().setMainViewCamera(secondCameraProperty.getCamera());
+                break;
+            case 2:
                 secondCameraPerspectiveMatrix.setFov(30);
-                zoomedIN = true;
-            }
+                break;
         }
-
-        prevState = currState;
-
     }
 }
