@@ -7,7 +7,6 @@ import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
 import pl.warp.engine.graphics.shader.program.cubemap.CubemapProgram;
-import pl.warp.engine.graphics.texture.Cubemap;
 
 /**
  * @author Jaca777
@@ -43,17 +42,15 @@ public class SkyboxRenderer implements Renderer {
     public void render(Component component, MatrixStack stack) {
         if (component.hasEnabledProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME)) {
             GraphicsSkyboxProperty property = component.getProperty(GraphicsSkyboxProperty.CUBEMAP_PROPERTY_NAME);
-            renderCubemap(property.getCubemap());
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            cubemapProgram.use();
+            cubemapProgram.useBrightness(property.getBrightness());
+            cubemapProgram.useCubemap(property.getCubemap());
+            skybox.render();
         }
     }
 
 
-    private void renderCubemap(Cubemap cubemap) {
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        cubemapProgram.use();
-        cubemapProgram.useCubemap(cubemap);
-        skybox.render();
-    }
 
     @Override
     public void destroy() {

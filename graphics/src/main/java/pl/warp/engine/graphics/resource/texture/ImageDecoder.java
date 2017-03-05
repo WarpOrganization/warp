@@ -49,13 +49,13 @@ public class ImageDecoder {
     };
 
 
-    public static ImageDataArray decodeCubemap(String cubemapPath) {
+    public static ImageDataArray decodeCubemap(String cubemapPath, PNGDecoder.Format format) {
         InputStream[] streams = new InputStream[6];
         ClassLoader loader = ImageDecoder.class.getClassLoader();
         for (int i = 0; i < CUBEMAP_ELEMENTS.length; i++) {
             streams[i] = loader.getResourceAsStream(cubemapPath + "/" + CUBEMAP_ELEMENTS[i] + ".png");
         }
-        return decodePNGs(streams, PNGDecoder.Format.RGBA);
+        return decodePNGs(streams, format);
     }
 
     private static ImageDataArray decodePNGs(InputStream[] src, PNGDecoder.Format format) {
