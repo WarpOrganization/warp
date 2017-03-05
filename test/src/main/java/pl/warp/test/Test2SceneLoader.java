@@ -310,7 +310,7 @@ public class Test2SceneLoader implements GameSceneLoader {
                         new ParticleStage(10.0f, new Vector4f(0.2f, 0.5f, 1.0f, 1.0f)),
                         new ParticleStage(10.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
                 allyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
             }
 
@@ -324,7 +324,7 @@ public class Test2SceneLoader implements GameSceneLoader {
                         new ParticleStage(10.0f, new Vector4f(1.0f, 0.2f, 0.2f, 1.0f)),
                         new ParticleStage(10.0f, new Vector4f(1.0f, 0.2f, 0.2f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
+                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
                 enemyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
             }
 
@@ -576,7 +576,7 @@ public class Test2SceneLoader implements GameSceneLoader {
                 new ParticleStage(0.5f, color),
                 new ParticleStage(0.5f, color1)
         };
-        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
+        ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.004f, 0.0001f, 0f), 400, 100, true, true, stages);
         light.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
     }
 }

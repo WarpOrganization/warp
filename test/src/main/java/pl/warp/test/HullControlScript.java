@@ -3,8 +3,10 @@ package pl.warp.test;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.input.Input;
+import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
@@ -33,6 +35,8 @@ public class HullControlScript extends GameScript {
     private GameComponent tracks;
 
     private AnimatedTextureProperty tracksAnimation;
+    private ParticleEmitterProperty tracksParticles1;
+    private ParticleEmitterProperty tracksParticles2;
 
     private Vector3f forwardVector = new Vector3f();
 
@@ -49,6 +53,8 @@ public class HullControlScript extends GameScript {
     @Override
     protected void init() {
         this.tracksAnimation = tracks.getProperty(AnimatedTextureProperty.ANIMATED_TEXTURE_PROPERTY_NAME);
+        this.tracksParticles1 = tracks.getChild(0).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+        this.tracksParticles2 = tracks.getChild(1).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
     }
 
     @Override
@@ -65,7 +71,11 @@ public class HullControlScript extends GameScript {
             linearMove(-acceleration * delta);
         else if (input.isKeyDown(KeyEvent.VK_S))
             linearMove(acceleration * delta);
-        else if (gravityProperty.isStanding()) brake();
+        else {
+            tracksParticles1.getSystem().setEmit(false);
+            tracksParticles2.getSystem().setEmit(false);
+            if (gravityProperty.isStanding()) brake();
+        }
 
         if (input.isKeyDown(KeyEvent.VK_A))
             anguarMove(0, rotationSpeed, 0);
@@ -88,21 +98,29 @@ public class HullControlScript extends GameScript {
     }
 
     private void linearMove(float speed) {
+        tracksParticles1.getSystem().setEmit(true);
+        tracksParticles2.getSystem().setEmit(true);
         float direction = Math.signum(forwardVector.dot(bodyProperty.getVelocity()));
-        this.tracksAnimation.setDelta(tracksAnimation.getDelta() + (bodyProperty.getVelocity().length() * 0.003f * direction));
+        float delta = (bodyProperty.getVelocity().length() * 0.003f * direction);
+        this.tracksAnimation.setDelta(tracksAnimation.getDelta() + delta);
+        rotateWheel(delta);
         forwardVector.normalize().mul(speed);
-        if(bodyProperty.getVelocity().length() < maxSpeed)
+        if (bodyProperty.getVelocity().length() < maxSpeed)
             bodyProperty.applyForce(forwardVector);
+    }
+
+    private void rotateWheel(float delta) {
+        TransformProperty transform = spinningWheel.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        transform.rotateX(delta * -2f);
     }
 
     private Vector3f tmp = new Vector3f();
 
     private void fixVelocity() {
         bodyProperty.getVelocity().set(
-                tmp
-                .set(forwardVector)
-                .normalize()
-                .mul(bodyProperty.getVelocity().dot(forwardVector))
+                tmp.set(forwardVector)
+                        .normalize()
+                        .mul(bodyProperty.getVelocity().dot(forwardVector))
         );
     }
 

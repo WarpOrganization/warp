@@ -66,7 +66,7 @@ public class TankRoundScript extends GameScript<GameComponent> {
                 new ParticleStage(10.0f, new Vector4f(1.0f, 0.2f, 1.0f, 1.0f)),
                 new ParticleStage(10.0f, new Vector4f(0.5f, 0.2f, 1.0f, 0.0f))
         };
-        ParticleFactory<DotParticle> factory1 = new RandomSpreadingStageDotParticleFactory(new Vector3f(.04f), 500, 100, true, true, stages1);
+        ParticleFactory<DotParticle> factory1 = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.04f), 500, 100, true, true, stages1);
         DotParticleSystem system1 = new DotParticleSystem(animator1, factory1, 400);
         ParticleEmitterProperty property = new ParticleEmitterProperty(system1);
         component.addProperty(property);

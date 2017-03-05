@@ -12,7 +12,8 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
 
     public static final float RANDOM_SCALE_THRESHOLD = 0.4f;
 
-    private Vector3f velocity;
+    private Vector3f initialVelocity;
+    private Vector3f spread;
     private int timeToLive;
     private int timeToLiveGradient;
     private boolean randomizeRotation;
@@ -20,8 +21,9 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
 
     private Random random = new Random();
 
-    public RandomSpreadingParticleFactory(Vector3f spread, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
-        this.velocity = spread;
+    public RandomSpreadingParticleFactory(Vector3f initialVelocity, Vector3f spread, int timeToLive, int timeToLiveGradient, boolean randomizeRotation, boolean randomizeScaleScalar) {
+        this.initialVelocity = initialVelocity;
+        this.spread = spread;
         this.timeToLive = timeToLive;
         this.timeToLiveGradient = timeToLiveGradient;
         this.randomizeRotation = randomizeRotation;
@@ -45,7 +47,7 @@ public abstract class RandomSpreadingParticleFactory<T extends Particle> impleme
         float x = random.nextFloat() * 2 - 1;
         float y = random.nextFloat() * 2 - 1;
         float z = random.nextFloat() * 2 - 1;
-        return new Vector3f(x, y, z).normalize().mul(velocity);
+        return new Vector3f(x, y, z).normalize().mul(spread).add(initialVelocity);
     }
 
     protected float generateScale() {

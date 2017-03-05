@@ -65,7 +65,7 @@ public class FrigateScript extends GameScript<GameComponent> {
                     new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 2.0f)),
                     new ParticleStage(4.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
             };
-            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.002f), 800, 100, true, true, stages);
+            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.002f), 800, 100, true, true, stages);
             particles.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 300)));
             executorService.schedule(particles::destroy, 1000, TimeUnit.MILLISECONDS);
         }

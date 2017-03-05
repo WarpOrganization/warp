@@ -21,7 +21,7 @@ public abstract class Property<T extends Component> {
 
 
     protected void setOwner(T owner) {
-        if (this.owner != null) throw new IllegalStateException("Component can't have two owners.");
+        if (this.owner != null) throw new IllegalStateException("Property can't have two owners.");
         else {
             this.owner = owner;
             enable();
