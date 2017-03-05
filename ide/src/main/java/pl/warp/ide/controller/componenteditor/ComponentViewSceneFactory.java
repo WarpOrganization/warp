@@ -27,7 +27,7 @@ public class ComponentViewSceneFactory implements ComponentSceneFactory {
         context.getGraphics().getThread().scheduleOnce(() -> {
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
-            context.getScene().addProperty(new GraphicsSkyboxProperty(cubemap));
+            context.getScene().addProperty(new GraphicsSkyboxProperty(cubemap, 1.0f));
         });
     }
 }
