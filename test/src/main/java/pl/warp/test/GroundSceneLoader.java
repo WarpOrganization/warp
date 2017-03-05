@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
@@ -32,14 +31,6 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
-import pl.warp.engine.graphics.particles.ParticleAnimator;
-import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
-import pl.warp.engine.graphics.particles.dot.ParticleStage;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -252,7 +243,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             TransformProperty floorTransform = new TransformProperty();
             floorTextureComponent.addProperty(floorTransform);
-            floorTransform.scale(new Vector3f(1000f, 1000f, 1000f));
+            floorTransform.scale(new Vector3f(5000f));
             floorTransform.rotate(-(float) Math.PI / 2, 0, 0);
             floorTransform.move(new Vector3f(0, 15, 0));
 
@@ -260,11 +251,12 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             ImageData decodedTerrainTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("terrain.png"), PNGDecoder.Format.RGBA);
             Texture2D terrainTexture = new Texture2D(decodedTerrainTexture.getWidth(), decodedTerrainTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTerrainTexture.getData());
+            terrainTexture.enableAnisotropy(8);
             Material terrainMaterial = new Material(terrainTexture);
             floorTextureComponent.addProperty(new GraphicsMaterialProperty(terrainMaterial));
             ImageData decodedTerrainNormal = ImageDecoder.decodePNG(Test.class.getResourceAsStream("terrain_normal.png"), PNGDecoder.Format.RGBA);
             Texture2D terrainNormal = new Texture2D(decodedTerrainNormal.getWidth(), decodedTerrainNormal.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTerrainNormal.getData());
-            floorTextureComponent.addProperty(new TerrainProperty(new Vector2f(150f), terrainNormal));
+            floorTextureComponent.addProperty(new TerrainProperty(new Vector2f(5 * 150f), terrainNormal));
             floorTextureComponent.addProperty(new CustomProgramProperty(new TerrainProgram()));
             floor.addProperty(new TransformProperty());
             floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));
@@ -301,8 +293,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             GameComponent city = createCity();
 
             TransformProperty property = new TransformProperty();
-            property.setScale(new Vector3f(100f));
-            property.setTranslation(new Vector3f(0, -75, 0));
+            property.setScale(new Vector3f(70f));
+            property.setTranslation(new Vector3f(200, -50, 0));
             city.addProperty(property);
 
 
