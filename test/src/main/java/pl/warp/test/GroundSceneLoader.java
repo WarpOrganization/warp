@@ -99,6 +99,8 @@ public class GroundSceneLoader implements GameSceneLoader {
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
 
+    private static final boolean smoothLighting = true;
+
     private RenderingConfig config;
     private GameContextBuilder contextBuilder;
 
@@ -115,7 +117,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private GameSceneComponent playerTankTurret;
     private GameSceneComponent playerTankBarrel;
     private GameSceneComponent playerTankBarrelFake;
-    private static boolean smoothLighting = true;
+
 
     public GroundSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
         this.config = config;
@@ -150,9 +152,10 @@ public class GroundSceneLoader implements GameSceneLoader {
         playerTankBarrelFake = new GameSceneComponent(playerTankBarrel);
         playerTankBarrelFake.addProperty(new NameProperty("player tank barrel fake"));
 
-
         mainCameraComponent = new GameSceneComponent(playerTankBarrel);
         mainCameraComponent.addProperty(new NameProperty("main camera"));
+
+
 
         TransformProperty mainCameraTransform = new TransformProperty();
         mainCameraTransform.rotateY((float) Math.PI);
@@ -281,9 +284,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             playerTankBarrel.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
 
-            audioManager = AudioManager.INSTANCE;
-
             new TankGunScript(playerTankBarrel, TANK_COOLDOWN, TANK_GUN_OUT_SPEED, scene);
+
 
             createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
 
@@ -311,6 +313,8 @@ public class GroundSceneLoader implements GameSceneLoader {
                     playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
+
+            audioManager = AudioManager.INSTANCE;
         });
     }
 
@@ -393,20 +397,6 @@ public class GroundSceneLoader implements GameSceneLoader {
         minigunStand.addProperty(getGraphicsProperty(tankMaterial));
         minigun.addProperty(getGraphicsProperty(tankMaterial));
         mainGun.addProperty(getGraphicsProperty(tankMaterial));
-
-        {
-            GameComponent particle = new GameSceneComponent(mainBody);
-            TransformProperty particleEmitterTransform = new TransformProperty();
-            particleEmitterTransform.move(new Vector3f(0f, 1f, -2.5f));
-            particle.addProperty(particleEmitterTransform);
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0, 0.000004f, 0), 0, 0);
-            ParticleStage[] stages = {
-                    new ParticleStage(0.7f, new Vector4f(0.5f, 0.5f, 0.5f, 0.1f)),
-                    new ParticleStage(0.7f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
-            };
-            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.0005f), 1000, 200, true, true, stages);
-            particle.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 100)));
-        }
 
         ImageData decodedTrackTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/TracksTexture.png"), PNGDecoder.Format.RGBA);
         tracks.addProperty(new GraphicsMaterialProperty(new Material(new Texture2D(decodedTrackTexture.getWidth(), decodedTrackTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTrackTexture.getData()))));
