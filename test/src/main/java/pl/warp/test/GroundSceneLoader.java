@@ -299,6 +299,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
             playerTankBarrelFake.addProperty(getGraphicsProperty(new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()))));
 
+            createGunParticles(playerTankBarrelFake);
+
             GameComponent city = createCity();
 
             TransformProperty property = new TransformProperty();
@@ -426,9 +428,9 @@ public class GroundSceneLoader implements GameSceneLoader {
 
 
         GameComponent smokeCover = new GameSceneComponent(mainBody);
-        TransformProperty smokeCoverTransformPropety = new TransformProperty();
-        smokeCoverTransformPropety.move(new Vector3f(0f,0f,0f));
-        smokeCover.addProperty(smokeCoverTransformPropety);
+        TransformProperty smokeCoverTransformProperty = new TransformProperty();
+        smokeCoverTransformProperty.move(new Vector3f(0f,0f,0f));
+        smokeCover.addProperty(smokeCoverTransformProperty);
         ParticleAnimator smokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0.00002f, 0), 0, 0);
         ParticleStage[] smokeStages = {
                 new ParticleStage(2f, new Vector4f(-1f, -1f, -1f, 0.9f)),
@@ -438,12 +440,44 @@ public class GroundSceneLoader implements GameSceneLoader {
         ParticleFactory<DotParticle> smokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(.006f), 1000, 200, true, true, smokeStages);
         smokeCover.addProperty(new ParticleEmitterProperty(new DotParticleSystem(smokeAnimator, smokeFactory, 100)));
 
+        createGunParticles(mainGun);
+
 
         smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
         engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
 
 
+
         return mainBody;
+    }
+
+    private void createGunParticles(GameComponent mainGun) {
+        GameComponent firedSmoke = new GameSceneComponent(mainGun);
+        TransformProperty firedSmokeTransformProperty = new TransformProperty();
+        firedSmokeTransformProperty.move(new Vector3f(0.01f,-0.04f,2.7f));
+        firedSmoke.addProperty(firedSmokeTransformProperty);
+        ParticleAnimator firedSmokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0.00002f), 0, 0);
+        ParticleStage[] firedSmokeStages = {
+                new ParticleStage(0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.3f)),
+                new ParticleStage(2f, new Vector4f(0.5f, 0.5f, 0.5f, 0.3f)),
+        };
+        ParticleFactory<DotParticle> firedSmokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0.005f), 300, 200, true, true, firedSmokeStages);
+        firedSmoke.addProperty(new ParticleEmitterProperty(new DotParticleSystem(firedSmokeAnimator, firedSmokeFactory, 300)));
+
+        GameComponent firedFlash = new GameSceneComponent(mainGun);
+        TransformProperty firedFlashTransformProperty = new TransformProperty();
+        firedFlashTransformProperty.move(new Vector3f(0.01f,-0.04f,2.7f));
+        firedFlash.addProperty(firedFlashTransformProperty);
+        ParticleAnimator firedFlashAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0.00001f), 0, 0);
+        ParticleStage[] firedFlashStages = {
+                new ParticleStage(0.2f, new Vector4f(1, 0f, 0f, 1f)),
+                new ParticleStage(0.1f, new Vector4f(1, 1f, 0f, 0f)),
+        };
+        ParticleFactory<DotParticle> firedFlashFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f), 200, 200, true, true, firedFlashStages);
+        firedFlash.addProperty(new ParticleEmitterProperty(new DotParticleSystem(firedFlashAnimator, firedFlashFactory, 200)));
+
+        firedSmoke.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
+        firedFlash.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
     }
 
     @Override
