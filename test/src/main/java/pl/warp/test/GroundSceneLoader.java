@@ -6,6 +6,9 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.ai.AIProperty;
+import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
+import pl.warp.engine.ai.loader.BehaviourTreeLoader;
 import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
 import pl.warp.engine.audio.playlist.PlayList;
@@ -57,6 +60,7 @@ import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
+import pl.warp.engine.physics.DupaProperty;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
@@ -75,6 +79,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 
 /**
  * @author MarconZet
@@ -86,7 +91,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
     private static final float TANK_HULL_ROT_SPEED = 0.3f;
     private static final float TANK_HULL_ACC_SPEED = 0.4f;
-    private static final float TANK_HULL_MAX_SPEED = 10f;
+    private static final float TANK_HULL_MAX_SPEED = 100f;
     private static final float TANK_HULL_BRAKING_FORCE = 5.0f;
     private static final float TANK_TURRET_ROT_SPEED = 1.5f;
     private static final float TANK_BARREL_ELEVATION_SPEED = 2f;
@@ -154,7 +159,6 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         mainCameraComponent = new GameSceneComponent(playerTankBarrel);
         mainCameraComponent.addProperty(new NameProperty("main camera"));
-
 
 
         TransformProperty mainCameraTransform = new TransformProperty();
@@ -270,13 +274,23 @@ public class GroundSceneLoader implements GameSceneLoader {
             floor.addProperty(new TransformProperty());
             floor.addProperty(new PhysicalBodyProperty(10000, 1000f, 15, 1000f));
 
-            GameComponent desertTank = createAiTank(scene,"tankModel/DesertTexture.png");
-            TransformProperty desertTankTransform =  desertTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            desertTankTransform.move(new Vector3f(-300.0f, 0.0f, 0.0f));
+            BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/tankAI.xml");
+            ArrayList<Component> targetList1 = new ArrayList<>();
+            ArrayList<Component> targetList2 = new ArrayList<>();
 
-            GameComponent plainsTank = createAiTank(scene,"tankModel/WoodlandTexture.png");
-            TransformProperty plainsTankTransform =  plainsTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            playerTankHull.addProperty(new TransformProperty());
+            playerTankHull.addProperty(new TankProperty(true, playerTankTurret, playerTankBarrel));
+
+            GameComponent desertTank = createAiTank(scene, "tankModel/DesertTexture.png", builder, true, targetList1);
+            TransformProperty desertTankTransform = desertTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            desertTankTransform.move(new Vector3f(-300.0f, 0.0f, 0.0f));
+            targetList2.add(playerTankHull);
+
+            GameComponent plainsTank = createAiTank(scene, "tankModel/WoodlandTexture.png", builder, false, targetList2);
+            TransformProperty plainsTankTransform = plainsTank.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             plainsTankTransform.move(new Vector3f(300.0f, 0.0f, 0.0f));
+            //new TankDestructionParticleManagmentScript(plainsTank);
+            targetList1.add(playerTankHull);
             //new TankDestructionParticleManagmentScript(plainsTank);
 
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
@@ -292,7 +306,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
 
             playerTankBarrelFake.addProperty(new TransformProperty());
-            ((TransformProperty)playerTankBarrelFake.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)).move(new Vector3f(-0.4f,0f,-0.131f));
+            ((TransformProperty) playerTankBarrelFake.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)).move(new Vector3f(-0.4f, 0f, -0.131f));
 
             playerTankBarrelFake.addProperty(new RenderableMeshProperty(ObjLoader.read(Test.class.getResourceAsStream("tankModel/MainGun.obj"), smoothLighting).toMesh()));
             playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).disable();
@@ -345,13 +359,19 @@ public class GroundSceneLoader implements GameSceneLoader {
         return city;
     }
 
-    private GameComponent createAiTank(GameComponent parent, String texturePath) {
+    private GameComponent createAiTank(GameComponent parent, String texturePath, BehaviourTreeBuilder builder, boolean team, ArrayList<Component> targets) {
 
         GameComponent mainBody = new GameSceneComponent(parent);
         GameComponent turret = new GameSceneComponent(mainBody);
         GameComponent mainGun = new GameSceneComponent(turret);
 
-        return createTankModel(texturePath, mainBody, turret, mainGun);
+        GameComponent hull = createTankModel(texturePath, mainBody, turret, mainGun);
+        TankProperty tankProperty = new TankProperty(team, turret, mainGun);
+        tankProperty.setTargets(targets);
+        hull.addProperty(tankProperty);
+        hull.addProperty(new AIProperty(builder.build(hull)));
+        hull.addProperty(new DupaProperty(turret, mainGun));
+        return hull;
     }
 
     private GameComponent createTankModel(String texturePath, GameComponent mainBody, GameComponent turret, GameComponent mainGun) {
@@ -366,8 +386,8 @@ public class GroundSceneLoader implements GameSceneLoader {
 
 
         TransformProperty mainTransform = new TransformProperty();
-        mainTransform.setScale(new Vector3f(10f,10f,10f));
-        mainTransform.move(new Vector3f(0,100,0));
+        mainTransform.setScale(new Vector3f(10f, 10f, 10f));
+        mainTransform.move(new Vector3f(0, 100, 0));
         mainBody.addProperty(mainTransform);
 
 
@@ -417,6 +437,9 @@ public class GroundSceneLoader implements GameSceneLoader {
         createDestructionParticles(mainBody);
         createTracksParticles(tracks);
         createGunParticles(mainGun);
+        turret.addProperty(new PhysicalBodyProperty(1, 1, 1, 1));
+
+
 
         return mainBody;
     }
@@ -434,13 +457,14 @@ public class GroundSceneLoader implements GameSceneLoader {
                 new ParticleStage(1f, new Vector4f(-1f, -1f, -1f, 1f)),
                 new ParticleStage(2.5f, new Vector4f(0f, 0f, 0f, 0f)),
         };
-        ParticleFactory<DotParticle> engineFireFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f,0.01f,0f), new Vector3f(.005f), 1000, 200, true, true, engineFireStages);
+        ParticleFactory<DotParticle> engineFireFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f, 0.01f, 0f), new Vector3f(.005f), 1000, 200, true, true, engineFireStages);
         engineFire.addProperty(new ParticleEmitterProperty(new DotParticleSystem(engineFireAnimator, engineFireFactory, 200)));
+
 
         GameComponent smokeCover = new GameSceneComponent(mainBody);
         smokeCover.addProperty(new NameProperty("particle 2"));
         TransformProperty smokeCoverTransformProperty = new TransformProperty();
-        smokeCoverTransformProperty.move(new Vector3f(0f,0f,0f));
+        smokeCoverTransformProperty.move(new Vector3f(0f, 0f, 0f));
         smokeCover.addProperty(smokeCoverTransformProperty);
         ParticleAnimator smokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0.00001f, 0), 0, 0);
         ParticleStage[] smokeStages = {
@@ -461,12 +485,16 @@ public class GroundSceneLoader implements GameSceneLoader {
                 new ParticleStage(0.5f, new Vector4f(-0.5f, -0.5f, -0.5f, 1f)),
                 new ParticleStage(0.3f, new Vector4f(-0.5f, -0.5f, -0.5f, 1f)),
         };
-        ParticleFactory<DotParticle> smokeDrippingFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f,0.001f,0f), new Vector3f(0.0001f), 16000, 200, true, true, smokeDrippingStages);
+        ParticleFactory<DotParticle> smokeDrippingFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f, 0.001f, 0f), new Vector3f(0.0001f), 16000, 200, true, true, smokeDrippingStages);
         smokeDripping.addProperty(new ParticleEmitterProperty(new DotParticleSystem(smokeDrippingAnimator, smokeDrippingFactory, 6)));
 
-        ((ParticleEmitterProperty)smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-        ((ParticleEmitterProperty)engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-        ((ParticleEmitterProperty)smokeDripping.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
+
+        smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
+        engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
+        ((ParticleEmitterProperty) smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
+        ((ParticleEmitterProperty) engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
+        ((ParticleEmitterProperty) smokeDripping.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
+
     }
 
     private void createTracksParticles(GameComponent tracks) {
@@ -483,7 +511,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         createTrackParticles(source2);
     }
 
-    private void createTrackParticles(GameComponent component){
+    private void createTrackParticles(GameComponent component) {
         ParticleAnimator dustAnimator = new SimpleParticleAnimator(new Vector3f(0, -0.00003f, 0), 0, 0);
         ParticleStage[] firedSmokeStages = {
                 new ParticleStage(0.03f, new Vector4f(1.2f, 1.0f, 1.0f, 1.0f)),
@@ -498,7 +526,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         GameComponent firedSmoke = new GameSceneComponent(mainGun);
         firedSmoke.addProperty(new NameProperty("effect 2"));
         TransformProperty firedSmokeTransformProperty = new TransformProperty();
-        firedSmokeTransformProperty.move(new Vector3f(0.01f,-0.04f,2.7f));
+        firedSmokeTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
         firedSmoke.addProperty(firedSmokeTransformProperty);
         ParticleAnimator firedSmokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, -0.00002f), 0, 0);
         ParticleStage[] firedSmokeStages = {
@@ -511,7 +539,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         GameComponent firedFlash = new GameSceneComponent(mainGun);
         firedFlash.addProperty(new NameProperty("effect 1"));
         TransformProperty firedFlashTransformProperty = new TransformProperty();
-        firedFlashTransformProperty.move(new Vector3f(0.01f,-0.04f,2.7f));
+        firedFlashTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
         firedFlash.addProperty(firedFlashTransformProperty);
         ParticleAnimator firedFlashAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0.00001f), 0, 0);
         ParticleStage[] firedFlashStages = {

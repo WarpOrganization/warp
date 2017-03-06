@@ -47,43 +47,54 @@ public class MovementTask extends EngineTask {
     public void update(int delta) {
         float fdelta = (float) delta / 1000;
         parent.forEachChildren(component -> {
-            if (isPhysicalBody(component) && isTransformable(component)) {
-                PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-                TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-                GravityProperty gravityProperty = null;
-                if (isGravityAffected(component)) {
-                    gravityProperty = component.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
-                    if (!gravityProperty.isStanding())
-                        physicalBodyProperty.getVelocity().add(gravityProperty.getDownVector());
-                }
-                tmpVelocity.set(physicalBodyProperty.getVelocity());
-                tmpTorque.set(physicalBodyProperty.getAngularVelocity());
+            move(component, fdelta);
 
-                if (isCollidable(component)) {
-                    ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-
-                    physicalBodyProperty.setNextTickTranslation(tmpVelocity.mul(fdelta));
-                    physicalBodyProperty.setNextTickRotation(tmpTorque.mul(fdelta));
-                    tmpRotation.set(transformProperty.getRotation());
-                    tmpRotation.rotateLocalX(tmpTorque.x);
-                    tmpRotation.rotateLocalY(tmpTorque.y);
-                    tmpRotation.rotateLocalZ(tmpTorque.z);
-                    physicalBodyProperty.recalculateInteriaTensor(tmpRotation);
-                    colliderProperty.getCollider().setTransform(tmpVelocity.add(transformProperty.getTranslation()), tmpRotation);
-
-                    if (gravityProperty != null) {
-                        gravityProperty.getDownVector().negate(upVector);
-                        if(physicalBodyProperty.getVelocity().dot(upVector)>0.001)
-                            gravityProperty.setStanding(false);
-                    }
-                } else {
-                    transformProperty.move(tmpVelocity.mul(fdelta));
-
-                    Vector3f torque = physicalBodyProperty.getAngularVelocity();
-                    transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
-                }
+            //TODO MY BEST WORKAROUND YET
+            if(component.hasEnabledProperty(DupaProperty.DUPA_PROPERTY_NAME)){
+                DupaProperty d = component.getProperty(DupaProperty.DUPA_PROPERTY_NAME);
+                move(d.getC1(), fdelta);
+                move(d.getC2(), fdelta);
             }
         });
+    }
+
+    private void move(Component component, float fdelta){
+        if (isPhysicalBody(component) && isTransformable(component)) {
+            PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
+            TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            GravityProperty gravityProperty = null;
+            if (isGravityAffected(component)) {
+                gravityProperty = component.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
+                if (!gravityProperty.isStanding())
+                    physicalBodyProperty.getVelocity().add(gravityProperty.getDownVector());
+            }
+            tmpVelocity.set(physicalBodyProperty.getVelocity());
+            tmpTorque.set(physicalBodyProperty.getAngularVelocity());
+
+            if (isCollidable(component)) {
+                ColliderProperty colliderProperty = component.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
+
+                physicalBodyProperty.setNextTickTranslation(tmpVelocity.mul(fdelta));
+                physicalBodyProperty.setNextTickRotation(tmpTorque.mul(fdelta));
+                tmpRotation.set(transformProperty.getRotation());
+                tmpRotation.rotateLocalX(tmpTorque.x);
+                tmpRotation.rotateLocalY(tmpTorque.y);
+                tmpRotation.rotateLocalZ(tmpTorque.z);
+                physicalBodyProperty.recalculateInteriaTensor(tmpRotation);
+                colliderProperty.getCollider().setTransform(tmpVelocity.add(transformProperty.getTranslation()), tmpRotation);
+
+                if (gravityProperty != null) {
+                    gravityProperty.getDownVector().negate(upVector);
+                    if(physicalBodyProperty.getVelocity().dot(upVector)>0.001)
+                        gravityProperty.setStanding(false);
+                }
+            } else {
+                transformProperty.move(tmpVelocity.mul(fdelta));
+
+                Vector3f torque = physicalBodyProperty.getAngularVelocity();
+                transformProperty.rotate(torque.x * fdelta, torque.y * fdelta, torque.z * fdelta);
+            }
+        }
     }
 
     private boolean isPhysicalBody(Component component) {
