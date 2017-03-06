@@ -3,6 +3,7 @@ package pl.warp.test;
 import com.badlogic.gdx.math.Vector3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
@@ -10,14 +11,25 @@ import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
+import pl.warp.engine.graphics.particles.ParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
+import pl.warp.engine.graphics.particles.ParticleFactory;
+import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
+import pl.warp.engine.graphics.particles.dot.DotParticle;
+import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.ParticleStage;
+import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
-import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.OwnerProperty;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Hubertus
@@ -25,6 +37,8 @@ import pl.warp.game.script.OwnerProperty;
  */
 public class TankGunScript extends GameScript<GameComponent> {
 
+
+    private static ScheduledExecutorService es = Executors.newScheduledThreadPool(5);
     private final int reloadTime;
     private final float outSpeed;
     private Component root;
@@ -36,6 +50,8 @@ public class TankGunScript extends GameScript<GameComponent> {
     private Material material;
 
     private int reloadLeft = 0;
+    private DotParticleSystem smokeSystem;
+    private DotParticleSystem fireSystem;
 
     public TankGunScript(GameComponent owner, int reloadTime, float outSpeed, Component root) {
         super(owner);
@@ -46,6 +62,7 @@ public class TankGunScript extends GameScript<GameComponent> {
 
     @Override
     protected void init() {
+        createGunParticles(getOwner());
         this.mesh = gunProperty.getBulletMesh();
         this.material = new Material(gunProperty.getBulletTexture());
     }
@@ -86,11 +103,48 @@ public class TankGunScript extends GameScript<GameComponent> {
             bodyProperty.applyForce(forwardVector);
             round.addProperty(bodyProperty);
             round.addProperty(new ColliderProperty(new PointCollider(round, roundTranslation.set(translation.x, translation.y, translation.z))));
-            round.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
+            //round.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
             round.addProperty(new RenderableMeshProperty(mesh));
             round.addProperty(new GraphicsMaterialProperty(material));
             root.addChild(round);
             new TankRoundScript(round);
+            fireSystem.setEmit(true);
+            smokeSystem.setEmit(true);
+            es.schedule(() -> {
+                fireSystem.setEmit(false);
+                smokeSystem.setEmit(false);
+            }, 100, TimeUnit.MILLISECONDS);
         }
+    }
+
+    private void createGunParticles(GameComponent mainGun) {
+        GameComponent firedSmoke = new GameSceneComponent(mainGun);
+        TransformProperty firedSmokeTransformProperty = new TransformProperty();
+        firedSmokeTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
+        firedSmoke.addProperty(firedSmokeTransformProperty);
+        ParticleAnimator firedSmokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0.00002f), 0, 0);
+        ParticleStage[] firedSmokeStages = {
+                new ParticleStage(0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.3f)),
+                new ParticleStage(2f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
+        };
+        ParticleFactory<DotParticle> firedSmokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.005f), 300, 200, true, true, firedSmokeStages);
+        smokeSystem = new DotParticleSystem(firedSmokeAnimator, firedSmokeFactory, 300);
+        firedSmoke.addProperty(new ParticleEmitterProperty(smokeSystem));
+
+        GameComponent firedFlash = new GameSceneComponent(mainGun);
+        TransformProperty firedFlashTransformProperty = new TransformProperty();
+        firedFlashTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
+        firedFlash.addProperty(firedFlashTransformProperty);
+        ParticleAnimator firedFlashAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0f), 0, 0);
+        ParticleStage[] firedFlashStages = {
+                new ParticleStage(1.0f, new Vector4f(1.0f, 0.6f, 0.5f, 1.0f)),
+                new ParticleStage(1.0f, new Vector4f(1.0f, 0.6f, 0.3f, 0.0f))
+        };
+        ParticleFactory<DotParticle> firedFlashFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.006f), 200, 100, true, true, firedFlashStages);
+        fireSystem = new DotParticleSystem(firedFlashAnimator, firedFlashFactory, 200);
+        firedFlash.addProperty(new ParticleEmitterProperty(fireSystem));
+
+        fireSystem.setEmit(false);
+        smokeSystem.setEmit(false);
     }
 }

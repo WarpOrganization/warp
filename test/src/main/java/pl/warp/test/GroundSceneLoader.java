@@ -146,7 +146,7 @@ public class GroundSceneLoader implements GameSceneLoader {
 
         playerTankHull = new GameSceneComponent(scene);
         playerTankHull.addProperty(new NameProperty("player tank hull"));
-        playerTankHull.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+        playerTankHull.addProperty(new PhysicalBodyProperty(10f, 10f, 10f, 10f));
 
         playerTankTurret = new GameSceneComponent(playerTankHull);
         playerTankTurret.addProperty(new NameProperty("player tank turret"));
@@ -296,7 +296,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             ImageDataArray spritesheet = ImageDecoder.decodeSpriteSheetReverse(Test.class.getResourceAsStream("boom_spritesheet.png"), PNGDecoder.Format.RGBA, 4, 4);
             boomSpritesheet = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
             bulletMesh = new Sphere(15, 15, 0.5f);
-            ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet.png"), PNGDecoder.Format.RGBA);
+            ImageData bulletDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tank_bullet.png"), PNGDecoder.Format.RGBA);
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             playerTankBarrel.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
 
@@ -314,7 +314,6 @@ public class GroundSceneLoader implements GameSceneLoader {
             ImageData decodedTankTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("tankModel/DesertTexture.png"), PNGDecoder.Format.RGBA);
             playerTankBarrelFake.addProperty(getMaterialProperty(new Material(new Texture2D(decodedTankTexture.getWidth(), decodedTankTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, decodedTankTexture.getData()))));
 
-            createGunParticles(playerTankBarrelFake);
 
             GameComponent city = createCity();
 
@@ -434,7 +433,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         mainBody.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
 
 
-        createDestructionParticles(mainBody);
+        //createDestructionParticles(mainBody);
         createTracksParticles(tracks);
         createGunParticles(mainGun);
         turret.addProperty(new PhysicalBodyProperty(1, 1, 1, 1));
@@ -522,36 +521,8 @@ public class GroundSceneLoader implements GameSceneLoader {
         component.addProperty(new ParticleEmitterProperty(new DotParticleSystem(dustAnimator, dustParticleFactory, 400)));
     }
 
-    private void createGunParticles(GameComponent mainGun) {
-        GameComponent firedSmoke = new GameSceneComponent(mainGun);
-        firedSmoke.addProperty(new NameProperty("effect 2"));
-        TransformProperty firedSmokeTransformProperty = new TransformProperty();
-        firedSmokeTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
-        firedSmoke.addProperty(firedSmokeTransformProperty);
-        ParticleAnimator firedSmokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, -0.00002f), 0, 0);
-        ParticleStage[] firedSmokeStages = {
-                new ParticleStage(0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.3f)),
-                new ParticleStage(2f, new Vector4f(0.5f, 0.5f, 0.5f, 0.3f)),
-        };
-        ParticleFactory<DotParticle> firedSmokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0,0,0.006f), new Vector3f(0.005f), 300, 200, true, true, firedSmokeStages);
-        firedSmoke.addProperty(new ParticleEmitterProperty(new DotParticleSystem(firedSmokeAnimator, firedSmokeFactory, 300)));
 
-        GameComponent firedFlash = new GameSceneComponent(mainGun);
-        firedFlash.addProperty(new NameProperty("effect 1"));
-        TransformProperty firedFlashTransformProperty = new TransformProperty();
-        firedFlashTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
-        firedFlash.addProperty(firedFlashTransformProperty);
-        ParticleAnimator firedFlashAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0.00001f), 0, 0);
-        ParticleStage[] firedFlashStages = {
-                new ParticleStage(0.2f, new Vector4f(1, 0f, 0f, 1f)),
-                new ParticleStage(0.4f, new Vector4f(1, 1f, 0f, 0f)),
-        };
-        ParticleFactory<DotParticle> firedFlashFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0f), 200, 200, true, true, firedFlashStages);
-        firedFlash.addProperty(new ParticleEmitterProperty(new DotParticleSystem(firedFlashAnimator, firedFlashFactory, 200)));
 
-        //((ParticleEmitterProperty)firedSmoke.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-        //((ParticleEmitterProperty)firedFlash.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-    }
 
     @Override
     public GameScene getScene() {
