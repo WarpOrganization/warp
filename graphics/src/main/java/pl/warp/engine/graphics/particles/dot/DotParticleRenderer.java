@@ -24,7 +24,6 @@ import static pl.warp.engine.graphics.particles.ParticleSystemRenderer.MAX_PARTI
  */
 public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> {
 
-    public static final float FADE_AFTER = 1000;
     private DotParticleProgram program;
 
     private int positionVBO;

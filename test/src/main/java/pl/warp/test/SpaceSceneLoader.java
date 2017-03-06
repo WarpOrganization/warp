@@ -220,7 +220,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             Star sun = new Star(scene, 5000f);
             TransformProperty sunSphereTransform = new TransformProperty();
-            sunSphereTransform.move(new Vector3f(16000f, 200f, 500f));
+            sunSphereTransform.move(new Vector3f(10000f, 200f, 500f));
             sunSphereTransform.scale(new Vector3f(2000.0f));
             sun.addProperty(sunSphereTransform);
             SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
@@ -432,9 +432,9 @@ public class SpaceSceneLoader implements GameSceneLoader {
         BehaviourTreeBuilder builder = BehaviourTreeLoader.loadXML("data/ai/droneAI.xml");
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
-        //team1.add(controllableGoat);
+        team1.add(controllableGoat);
         controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
-        int nOfGoats = 20;
+        int nOfGoats = 30;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             new KabooomScript(goat, gasPlanet, 1000.0f);
