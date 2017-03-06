@@ -433,9 +433,7 @@ public class GroundSceneLoader implements GameSceneLoader {
         mainBody.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
 
 
-        //createDestructionParticles(mainBody);
         createTracksParticles(tracks);
-        createGunParticles(mainGun);
         turret.addProperty(new PhysicalBodyProperty(1, 1, 1, 1));
 
 
