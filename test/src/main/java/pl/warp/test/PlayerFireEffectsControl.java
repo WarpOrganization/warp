@@ -1,6 +1,7 @@
 package pl.warp.test;
 
 import pl.warp.engine.core.scene.NameProperty;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.script.GameScriptWithInput;
@@ -15,28 +16,38 @@ public class PlayerFireEffectsControl extends GameScriptWithInput<GameComponent>
     private GameComponent mainBarrel;
     private GameComponent secondBarrel;
 
-    private ParticleEmitterProperty firstEffects[];
-    private ParticleEmitterProperty secondEffects[];
+    private ParticleEmitterProperty emitterProperties[][];
+
+    private int [] startTime;
+    private int [] endTime;
+
+    private int nextToActivate;
+    private int nextToKill;
+
+    private boolean playerFire;
+    private int timeFromFire;
+
+    private int activeBarrel;
 
     public PlayerFireEffectsControl(GameComponent owner) {
         super(owner);
-        this.mainBarrel = owner;
-        firstEffects = new ParticleEmitterProperty[2];
-        secondEffects = new ParticleEmitterProperty[2];
     }
 
     @Override
     protected void init() {
+        mainBarrel = this.getOwner();
+        emitterProperties = new ParticleEmitterProperty[2][2];
+        playerFire = false;
         int n = mainBarrel.getChildrenNumber();
         for(int i = 0; i<n; i++){
             GameComponent temp = mainBarrel.getChild(i);
             if(temp.hasProperty(NameProperty.NAME_PROPERTY_NAME)){
                 switch (((NameProperty) temp.getProperty(NameProperty.NAME_PROPERTY_NAME)).getComponentName()) {
                     case "effect 1":
-                        firstEffects[0] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+                        emitterProperties[0][0] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
                         break;
                     case "effect 2":
-                        secondEffects[0] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+                        emitterProperties[0][1] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
                         break;
                     case "player tank barrel fake":
                         secondBarrel = temp;
@@ -50,10 +61,10 @@ public class PlayerFireEffectsControl extends GameScriptWithInput<GameComponent>
             if (temp.hasProperty(NameProperty.NAME_PROPERTY_NAME)) {
                 switch (((NameProperty) temp.getProperty(NameProperty.NAME_PROPERTY_NAME)).getComponentName()) {
                     case "effect 1":
-                        firstEffects[1] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+                        emitterProperties[1][0] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
                         break;
                     case "effect 2":
-                        secondEffects[1] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+                        emitterProperties[1][1] = temp.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
                         break;
                 }
             }
@@ -63,7 +74,18 @@ public class PlayerFireEffectsControl extends GameScriptWithInput<GameComponent>
     @Override
     protected void update(int delta) {
         if(super.getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON1)){
-
+            playerFire = true;
+            activeBarrel = secondBarrel.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).isEnabled()? 1 : 0;
+            timeFromFire = 0;
+        }
+        if(playerFire){
+            timeFromFire += delta;
+            if(startTime[nextToActivate] < timeFromFire){
+                emitterProperties[activeBarrel][nextToActivate++].getSystem().setEmit(true);
+            }
+            if(endTime[nextToKill] > timeFromFire){
+                emitterProperties[activeBarrel][nextToKill++].getSystem().setEmit(false);
+            }
         }
     }
 }

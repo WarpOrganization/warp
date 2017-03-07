@@ -1,15 +1,9 @@
 package pl.warp.test;
 
-import pl.warp.engine.core.SyncEngineThread;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.script.GameScript;
-import sun.rmi.runtime.Log;
-
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 /**
  * Created by Marcin on 05.03.2017.
@@ -21,23 +15,30 @@ public class TankDestructionParticleManagmentScript extends GameScript<GameCompo
 
     private ParticleEmitterProperty [] emitters;
     private int stage;
-    private final int MAX_STAGE;
+
+    private final int FINAL_STAGE;
+    private static final int SAFE_GUARD = Integer.MAX_VALUE;
 
     private int time;
-    private int [] timers;
+    private int [] startTime;
+    private int [] endTime;
+    private int nextToActivate;
+    private int nextToKill;
 
     public TankDestructionParticleManagmentScript(GameComponent owner) {
         super(owner);
-        tankMain = owner;
-        time = 0;
-        stage = 0;
-        MAX_STAGE = 3;
-        emitters = new ParticleEmitterProperty[3];
-        timers = new int[]{4000, 6000, Integer.MAX_VALUE};
+        FINAL_STAGE = 3;
     }
 
     @Override
     protected void init() {
+        tankMain = this.getOwner();
+        time = 0;
+        emitters = new ParticleEmitterProperty[3];
+        startTime = new int[]{0, 4000, 10000, SAFE_GUARD};
+        endTime = new int[]{4000, 10000, Integer.MAX_VALUE, SAFE_GUARD};
+        nextToActivate = 0;
+        nextToKill = 0;
         int n = tankMain.getChildrenNumber();
         for(int i = 0; i<n; i++){
             GameComponent temp = tankMain.getChild(i);
@@ -54,19 +55,17 @@ public class TankDestructionParticleManagmentScript extends GameScript<GameCompo
                 }
             }
         }
-        emitters[0].getSystem().setEmit(true);
     }
 
     @Override
     protected void update(int delta) {
         time += delta;
-        if(time > timers[stage]){
-            emitters[stage++].getSystem().setEmit(false);
-            if(stage > MAX_STAGE) {
-                this.stop();
-            }
-            emitters[stage].getSystem().setEmit(true);
-            time = 0;
+        if(startTime[nextToActivate] < time){
+            emitters[nextToActivate++].getSystem().setEmit(true);
         }
+        if(endTime[nextToKill] > time){
+            emitters[nextToKill++].getSystem().setEmit(false);
+        }
+
     }
 }
