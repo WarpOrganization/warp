@@ -97,7 +97,7 @@ public class GroundSceneLoader implements GameSceneLoader {
     private static final float TANK_BARREL_ELEVATION_SPEED = 2f;
     private static final float TANK_BARREL_ELEVATION_MAX = 20f;
     private static final float TANK_BARREL_ELEVATION_MIN = -5f;
-    private static final float TANK_GUN_OUT_SPEED = 400f;
+    private static final float TANK_GUN_OUT_SPEED = 1000f;
 
     private static final int TANK_COOLDOWN = 300;
     private static final float BRAKING_FORCE = 0;

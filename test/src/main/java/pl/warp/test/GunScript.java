@@ -98,7 +98,7 @@ public class GunScript extends GameScript<GameComponent> {
     }
 
     private void createBullet(int position) {
-        Transforms.getAbsoluteRotation(getOwner()).transform(direction.set(FORWARD_VECTOR)).mul(8.0f);
+        Transforms.getAbsoluteRotation(getOwner()).transform(direction.set(FORWARD_VECTOR)).mul(2.0f);
         Transforms.getAbsoluteRotation(getOwner()).transform(direction2.set(RIGHT_VECTOR)).mul(7.5f);
         {
             bulletTranslation.set(direction);

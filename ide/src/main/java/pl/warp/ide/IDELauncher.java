@@ -37,6 +37,7 @@ public class IDELauncher extends Application {
     public void start(Stage primaryStage) throws Exception {
         CustomLookRepository lookRepo = loadCustomLookRepository();
         RenderingConfig config = new RenderingConfig(FPS, new Display(false, -1, -1).setVisible(false));
+        config.setLens(false);
         JavaFxInput javaFxInput = new JavaFxInput();
         GameContextBuilder contextBuilder = new GameContextBuilder();
         SceneViewRenderer renderer = new SceneViewRenderer();
