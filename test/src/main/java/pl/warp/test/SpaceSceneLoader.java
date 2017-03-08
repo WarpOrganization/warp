@@ -319,7 +319,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             generateGOATS(scene);
             //spawnFrigates();
-            new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            //new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         });
     }
 

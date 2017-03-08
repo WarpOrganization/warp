@@ -122,8 +122,7 @@ public class Graphics {
         return pipeline.via(postprocessing).via(hdrRenderer);
     }
 
-    private SceneRenderer getSceneRenderer() {
-        this.customRenderersManager = new CustomRenderersManager(this);
+    private SceneRenderer getSceneRenderer() { this.customRenderersManager = new CustomRenderersManager(this);
         meshRenderer = new MeshRenderer(mainViewCamera, environment);
         skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         particleSystemStorage = new ParticleSystemStorage();

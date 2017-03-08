@@ -72,12 +72,12 @@ public class QuaternionCamera implements Camera {
         transform.rotateZ(angle);
     }
 
-    private Matrix4f cameraMatrix;
-    private Matrix4f rotationMatrix;
+    private Matrix4f cameraMatrix = new Matrix4f();
+    private Matrix4f rotationMatrix = new Matrix4f();
     private Vector3f cameraPos = new Vector3f();
 
     @Override
-    public void update() {
+    public synchronized void update() {
         this.cameraMatrix = Transforms.getActualTransform(cameraComponent).invert();
         this.rotationMatrix = Transforms.getAbsoluteRotation(cameraComponent).get(tempRotation).invert();
         Transforms.getAbsolutePosition(cameraComponent, cameraPos);
@@ -85,7 +85,7 @@ public class QuaternionCamera implements Camera {
 
 
     @Override
-    public Vector3f getPosition(Vector3f dest) {
+    public synchronized Vector3f getPosition(Vector3f dest) {
         return dest.set(cameraPos);
     }
 
@@ -95,7 +95,7 @@ public class QuaternionCamera implements Camera {
     }
 
     @Override
-    public Matrix4f getCameraMatrix() {
+    public synchronized Matrix4f getCameraMatrix() {
         return cameraMatrix;
     }
 
@@ -104,14 +104,14 @@ public class QuaternionCamera implements Camera {
     }
 
     @Override
-    public ProjectionMatrix getProjectionMatrix() {
+    public synchronized ProjectionMatrix getProjectionMatrix() {
         return projection;
     }
 
     private Matrix4f tempRotation = new Matrix4f();
 
     @Override
-    public Matrix4f getRotationMatrix() {
+    public synchronized Matrix4f getRotationMatrix() {
         return rotationMatrix;
     }
 
