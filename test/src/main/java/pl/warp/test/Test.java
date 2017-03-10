@@ -124,10 +124,6 @@ public class Test {
                 return new SpaceSceneLoader(config, contextBuilder);
             case 1:
                 return new GroundSceneLoader(config, contextBuilder);
-            case 2:
-                return new Test2SceneLoader(config, contextBuilder);
-            case 3:
-                return new Test3SceneLoader(config, contextBuilder);
             default:
                 return new SpaceSceneLoader(config, contextBuilder);
         }

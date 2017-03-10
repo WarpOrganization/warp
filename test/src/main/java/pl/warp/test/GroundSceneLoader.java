@@ -35,14 +35,10 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
-import pl.warp.engine.graphics.particles.ParticleAnimator;
-import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
-import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.animator.DirectionalAccelerationAnimator;
+import pl.warp.engine.graphics.particles.dot.DotParticleAttribute;
 import pl.warp.engine.graphics.particles.dot.ParticleStage;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -441,59 +437,6 @@ public class GroundSceneLoader implements GameSceneLoader {
         return mainBody;
     }
 
-    private void createDestructionParticles(GameComponent mainBody) {
-        GameComponent engineFire = new GameSceneComponent(mainBody);
-        engineFire.addProperty(new NameProperty("particle 1"));
-        TransformProperty engineFireTransform = new TransformProperty();
-        engineFireTransform.move(new Vector3f(0f, 1f, -2f));
-        engineFire.addProperty(engineFireTransform);
-        ParticleAnimator engineFireAnimator = new SimpleParticleAnimator(new Vector3f(0, -0.000002f, 0), 0, 0);
-        ParticleStage[] engineFireStages = {
-                new ParticleStage(1f, new Vector4f(1f, 1f, 0f, 1f)),
-                new ParticleStage(0f, new Vector4f(1f, 0f, 0f, 0.5f)),
-                new ParticleStage(1f, new Vector4f(-1f, -1f, -1f, 1f)),
-                new ParticleStage(2.5f, new Vector4f(0f, 0f, 0f, 0f)),
-        };
-        ParticleFactory<DotParticle> engineFireFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f, 0.01f, 0f), new Vector3f(.005f), 1000, 200, true, true, engineFireStages);
-        engineFire.addProperty(new ParticleEmitterProperty(new DotParticleSystem(engineFireAnimator, engineFireFactory, 200)));
-
-
-        GameComponent smokeCover = new GameSceneComponent(mainBody);
-        smokeCover.addProperty(new NameProperty("particle 2"));
-        TransformProperty smokeCoverTransformProperty = new TransformProperty();
-        smokeCoverTransformProperty.move(new Vector3f(0f, 0f, 0f));
-        smokeCover.addProperty(smokeCoverTransformProperty);
-        ParticleAnimator smokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0.00001f, 0), 0, 0);
-        ParticleStage[] smokeStages = {
-                new ParticleStage(2f, new Vector4f(-1f, -1f, -1f, 0.9f)),
-                new ParticleStage(2f, new Vector4f(-1f, -1f, -1f, 0.9f)),
-                new ParticleStage(4f, new Vector4f(0f, 0f, 0f, 0f)),
-        };
-        ParticleFactory<DotParticle> smokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.006f), 1000, 200, true, true, smokeStages);
-        smokeCover.addProperty(new ParticleEmitterProperty(new DotParticleSystem(smokeAnimator, smokeFactory, 100)));
-
-        GameComponent smokeDripping = new GameSceneComponent(mainBody);
-        smokeDripping.addProperty(new NameProperty("particle 3"));
-        TransformProperty smokeDrippingTransformProperty = new TransformProperty();
-        smokeDrippingTransformProperty.move(new Vector3f(0f, 1f, -2f));
-        smokeDripping.addProperty(smokeDrippingTransformProperty);
-        ParticleAnimator smokeDrippingAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0), 0, 0);
-        ParticleStage[] smokeDrippingStages = {
-                new ParticleStage(0.5f, new Vector4f(-0.5f, -0.5f, -0.5f, 1f)),
-                new ParticleStage(0.3f, new Vector4f(-0.5f, -0.5f, -0.5f, 1f)),
-        };
-        ParticleFactory<DotParticle> smokeDrippingFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0f, 0.001f, 0f), new Vector3f(0.0001f), 16000, 200, true, true, smokeDrippingStages);
-        smokeDripping.addProperty(new ParticleEmitterProperty(new DotParticleSystem(smokeDrippingAnimator, smokeDrippingFactory, 6)));
-
-
-        smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
-        engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
-        ((ParticleEmitterProperty) smokeCover.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-        ((ParticleEmitterProperty) engineFire.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-        ((ParticleEmitterProperty) smokeDripping.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME)).getSystem().setEmit(false);
-
-    }
-
     private void createTracksParticles(GameComponent tracks) {
         GameComponent source1 = new GameSceneComponent(tracks);
         TransformProperty transform1 = new TransformProperty();
@@ -509,14 +452,14 @@ public class GroundSceneLoader implements GameSceneLoader {
     }
 
     private void createTrackParticles(GameComponent component) {
-        ParticleAnimator dustAnimator = new SimpleParticleAnimator(new Vector3f(0, -0.00003f, 0), 0, 0);
+        ParticleAnimator dustAnimator = new DirectionalAccelerationAnimator(new Vector3f(0, -0.00003f, 0));
         ParticleStage[] firedSmokeStages = {
                 new ParticleStage(0.03f, new Vector4f(1.2f, 1.0f, 1.0f, 1.0f)),
                 new ParticleStage(0.03f, new Vector4f(1.2f, 1.0f, 1.0f, 1.0f)),
                 new ParticleStage(0.03f, new Vector4f(1.2f, 1.0f, 1.0f, 0.0f)),
         };
-        ParticleFactory<DotParticle> dustParticleFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0, 0.001f, -0.004f), new Vector3f(0.004f), 500, 200, true, true, firedSmokeStages);
-        component.addProperty(new ParticleEmitterProperty(new DotParticleSystem(dustAnimator, dustParticleFactory, 400)));
+        ParticleEmitter emitter = new SpreadingParticleEmitter(400, new Vector3f(0, 0.001f, -0.004f), new Vector3f(0.004f), 500, 200, true);
+        component.addProperty(new ParticleEmitterProperty(new ParticleSystem(new DotParticleAttribute(firedSmokeStages), emitter, dustAnimator)));
     }
 
 

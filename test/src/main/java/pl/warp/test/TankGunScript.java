@@ -11,14 +11,11 @@ import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
-import pl.warp.engine.graphics.particles.ParticleAnimator;
-import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
+import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.animator.DirectionalAccelerationAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.DotParticleAttribute;
 import pl.warp.engine.graphics.particles.dot.ParticleStage;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -50,8 +47,8 @@ public class TankGunScript extends GameScript<GameComponent> {
     private Material material;
 
     private int reloadLeft = 0;
-    private DotParticleSystem smokeSystem;
-    private DotParticleSystem fireSystem;
+    private ParticleSystem smokeSystem;
+    private ParticleSystem fireSystem;
 
     public TankGunScript(GameComponent owner, int reloadTime, float outSpeed, Component root) {
         super(owner);
@@ -122,26 +119,25 @@ public class TankGunScript extends GameScript<GameComponent> {
         TransformProperty firedSmokeTransformProperty = new TransformProperty();
         firedSmokeTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
         firedSmoke.addProperty(firedSmokeTransformProperty);
-        ParticleAnimator firedSmokeAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0.00002f), 0, 0);
+        ParticleAnimator firedSmokeAnimator = new DirectionalAccelerationAnimator(new Vector3f(0, 0, 0.00002f));
         ParticleStage[] firedSmokeStages = {
                 new ParticleStage(0f, new Vector4f(0.5f, 0.5f, 0.5f, 0.3f)),
                 new ParticleStage(2f, new Vector4f(0.5f, 0.5f, 0.5f, 0.0f)),
         };
-        ParticleFactory<DotParticle> firedSmokeFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.005f), 300, 200, true, true, firedSmokeStages);
-        smokeSystem = new DotParticleSystem(firedSmokeAnimator, firedSmokeFactory, 300);
+        ParticleEmitter<DotParticle> emitter = new SpreadingParticleEmitter<>(300, new Vector3f(0), new Vector3f(0.005f), 300, 200, true);
+        smokeSystem = new ParticleSystem(new DotParticleAttribute(firedSmokeStages), emitter, firedSmokeAnimator);
         firedSmoke.addProperty(new ParticleEmitterProperty(smokeSystem));
 
         GameComponent firedFlash = new GameSceneComponent(mainGun);
         TransformProperty firedFlashTransformProperty = new TransformProperty();
         firedFlashTransformProperty.move(new Vector3f(0.01f, -0.04f, 2.7f));
         firedFlash.addProperty(firedFlashTransformProperty);
-        ParticleAnimator firedFlashAnimator = new SimpleParticleAnimator(new Vector3f(0, 0, 0f), 0, 0);
         ParticleStage[] firedFlashStages = {
                 new ParticleStage(1.0f, new Vector4f(1.0f, 0.6f, 0.5f, 1.0f)),
                 new ParticleStage(1.0f, new Vector4f(1.0f, 0.6f, 0.3f, 0.0f))
         };
-        ParticleFactory<DotParticle> firedFlashFactory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.006f), 200, 100, true, true, firedFlashStages);
-        fireSystem = new DotParticleSystem(firedFlashAnimator, firedFlashFactory, 200);
+        ParticleEmitter firedFlashEmitter = new SpreadingParticleEmitter(200, new Vector3f(0), new Vector3f(0.006f), 200, 100, true);
+        fireSystem = new ParticleSystem(new DotParticleAttribute(firedFlashStages), firedFlashEmitter);
         firedFlash.addProperty(new ParticleEmitterProperty(fireSystem));
 
         fireSystem.setEmit(false);

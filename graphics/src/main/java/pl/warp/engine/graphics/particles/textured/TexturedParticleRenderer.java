@@ -9,7 +9,9 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
+import pl.warp.engine.graphics.particles.ParticleSystem;
 import pl.warp.engine.graphics.shader.program.particle.textured.TexturedParticleProgram;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -21,7 +23,7 @@ import static pl.warp.engine.graphics.particles.ParticleSystemRenderer.MAX_PARTI
  * @author Jaca777
  *         Created 2016-08-08 at 19
  */
-public class TexturedParticleRenderer implements ParticleRenderer<TexturedParticleSystem> {
+public class TexturedParticleRenderer implements ParticleRenderer<TexturedParticle> {
 
     private TexturedParticleProgram program;
 
@@ -31,12 +33,9 @@ public class TexturedParticleRenderer implements ParticleRenderer<TexturedPartic
     private int indexBuff;
     private int vao;
 
-    public TexturedParticleRenderer() {
+    @Override
+    public void initialize() {
         this.program = new TexturedParticleProgram();
-        initBuffers();
-    }
-
-    private void initBuffers() {
         this.positionVBO = GL15.glGenBuffers();
         this.rotationVBO = GL15.glGenBuffers();
         this.textureIndexVBO = GL15.glGenBuffers();
@@ -81,19 +80,24 @@ public class TexturedParticleRenderer implements ParticleRenderer<TexturedPartic
     }
 
     @Override
-    public void render(TexturedParticleSystem system, Matrix4f matrix) {
+    public void render(ParticleSystem<TexturedParticle> system, Matrix4f matrix) {
         List<TexturedParticle> particles = system.getParticles();
+        if(particles.size() == 0) return;
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         program.use();
         program.useMatrix(matrix);
-        program.useSpriteSheet(system.getSpriteSheet());
+        program.useSpriteSheet(getSpritesheet(system));
         GL30.glBindVertexArray(vao);
         updateVBOS(particles);
         GL11.glDrawElements(GL11.GL_POINTS, Math.min(particles.size(), MAX_PARTICLES_NUMBER), GL11.GL_UNSIGNED_INT, 0);
         GL11.glDepthMask(true);
         GL30.glBindVertexArray(0);
+    }
+
+    private Texture2DArray getSpritesheet(ParticleSystem<TexturedParticle> system) {
+        return system.getParticles().get(0).getSpritesheet();
     }
 
     private FloatBuffer positions = BufferUtils.createFloatBuffer(MAX_PARTICLES_NUMBER * 3);
@@ -150,7 +154,7 @@ public class TexturedParticleRenderer implements ParticleRenderer<TexturedPartic
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textureIndices, GL15.GL_DYNAMIC_DRAW);
     }
 
-
+    @Override
     public void destroy() {
         GL15.glDeleteBuffers(new int[]{positionVBO, textureIndexVBO, rotationVBO, indexBuff});
         GL30.glDeleteVertexArrays(vao);

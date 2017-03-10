@@ -5,7 +5,7 @@ import pl.warp.engine.core.updater.UpdaterTask;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
-import pl.warp.engine.graphics.particles.ParticleSystemsRecorder;
+import pl.warp.engine.graphics.particles.ParticleSystemsStorageRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystemStorage;
 import pl.warp.engine.graphics.pipeline.*;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
@@ -44,7 +44,7 @@ public class Graphics {
     private MeshRenderer meshRenderer;
     private SkyboxRenderer skyboxRenderer;
     private ParticleSystemStorage particleSystemStorage;
-    private ParticleSystemsRecorder particleSystemRecorder;
+    private ParticleSystemsStorageRenderer particleSystemRecorder;
     private ParticleSystemRenderer particleSystemRenderer;
     private CustomRenderersManager customRenderersManager;
 
@@ -126,7 +126,7 @@ public class Graphics {
         meshRenderer = new MeshRenderer(mainViewCamera, environment);
         skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         particleSystemStorage = new ParticleSystemStorage();
-        particleSystemRecorder = new ParticleSystemsRecorder(particleSystemStorage);
+        particleSystemRecorder = new ParticleSystemsStorageRenderer(particleSystemStorage);
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRecorder, environmentFlareRenderer};
         componentRenderer = new ComponentRenderer(renderers);

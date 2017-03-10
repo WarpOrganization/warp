@@ -2,13 +2,13 @@ package pl.warp.engine.graphics.particles;
 
 import org.apache.log4j.Logger;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.particles.dot.DotParticleRenderer;
-import pl.warp.engine.graphics.particles.textured.TexturedParticleRenderer;
 import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jaca777
@@ -21,8 +21,7 @@ public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, Multis
     public static final int MAX_PARTICLES_NUMBER = 1000;
 
     private Camera camera;
-    private DotParticleRenderer dotParticleRenderer;
-    private TexturedParticleRenderer texturedParticleRenderer;
+    private Map<ParticleRendererFactory, ParticleRenderer> renderers = new HashMap<>();
     private ParticleSystemStorage particleSystemStorage;
 
     private MultisampleTexture2D scene;
@@ -35,44 +34,48 @@ public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, Multis
 
     @Override
     public void init() {
-        logger.info("Initializing particle renderer...");
-        dotParticleRenderer = new DotParticleRenderer();
-        texturedParticleRenderer = new TexturedParticleRenderer();
-        logger.info("Particle renderer initialized.");
+
     }
 
-    private void initRendering() {
-        texturedParticleRenderer.useCamera(camera);
-        dotParticleRenderer.useCamera(camera);
-    }
 
     @Override
     public void update(int delta) {
-        initRendering();
+        for (ParticleRenderer renderer : renderers.values())
+            renderer.useCamera(camera);
+
         List<ParticleSystemStorage.ParticleSystemData> systems = particleSystemStorage.getSystems();
         for (int i = 0; i < particleSystemStorage.getSystemsNumber(); i++) {
             ParticleSystemStorage.ParticleSystemData data = systems.get(i);
             ParticleSystem system = data.getSystem();
             system.update(delta);
-            getRenderer(system).render(system, data.getTransformation());
+            ParticleRenderer renderer = getRenderer(system);
+            renderer.render(system, data.getTransformation());
         }
     }
 
-    private ParticleRenderer getRenderer(ParticleSystem system) {
-        switch (system.getParticleType()) {
-            case DOT:
-                return dotParticleRenderer;
-            case TEXTURED:
-                return texturedParticleRenderer;
-            default:
-                throw new IllegalStateException("Unknown particle type: " + system.getParticleType());
+    protected ParticleRenderer getRenderer(ParticleSystem system) {
+        if (system.getRenderer() == null)
+            initializeRenderer(system);
+        return system.getRenderer();
+    }
+
+    private void initializeRenderer(ParticleSystem system) {
+        ParticleRendererFactory typeDescriptor = system.getAttribute().getParticleRendererFactory();
+        if (renderers.containsKey(typeDescriptor)) system.setRenderer(renderers.get(typeDescriptor));
+        else {
+            ParticleRenderer typeRenderer = typeDescriptor.createRenderer();
+            typeRenderer.initialize();
+            typeRenderer.useCamera(camera);
+            renderers.put(typeDescriptor, typeRenderer);
+            system.setRenderer(typeRenderer);
         }
     }
+
 
     @Override
     public void destroy() {
-        texturedParticleRenderer.destroy();
-        dotParticleRenderer.destroy();
+        for (ParticleRenderer renderer : renderers.values())
+            renderer.destroy();
     }
 
     @Override
@@ -92,6 +95,6 @@ public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, Multis
 
     @Override
     public void setInput(MultisampleTexture2D input) {
-       this.scene = input;
+        this.scene = input;
     }
 }

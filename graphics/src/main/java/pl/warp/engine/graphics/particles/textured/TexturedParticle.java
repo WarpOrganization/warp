@@ -1,8 +1,8 @@
 package pl.warp.engine.graphics.particles.textured;
 
-        import org.joml.Vector2f;
         import org.joml.Vector3f;
-        import pl.warp.engine.graphics.particles.Particle;
+import pl.warp.engine.graphics.particles.Particle;
+import pl.warp.engine.graphics.texture.Texture2DArray;
 
 /**
  * @author Jaca777
@@ -10,11 +10,17 @@ package pl.warp.engine.graphics.particles.textured;
  */
 public class TexturedParticle extends Particle {
 
+    private Texture2DArray spritesheet;
     private int textureIndex;
 
-    public TexturedParticle(Vector3f position, Vector3f velocity, float scale, float rotation, int totalTimeToLive, int timeToLive, int textureIndex) {
+    protected TexturedParticle(Vector3f position, Vector3f velocity, float scale, float rotation, int totalTimeToLive, int timeToLive, int textureIndex, Texture2DArray spritesheet) {
         super(position, velocity, scale, rotation, totalTimeToLive, timeToLive);
         this.textureIndex = textureIndex;
+        this.spritesheet = spritesheet;
+    }
+
+    public Texture2DArray getSpritesheet() {
+        return spritesheet;
     }
 
     public int getTextureIndex() {

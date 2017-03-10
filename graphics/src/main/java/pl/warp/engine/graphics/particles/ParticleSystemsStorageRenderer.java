@@ -8,11 +8,11 @@ import pl.warp.engine.graphics.math.MatrixStack;
  * @author Jaca777
  *         Created 2017-02-07 at 17
  */
-public class ParticleSystemsRecorder implements Renderer {
+public class ParticleSystemsStorageRenderer implements Renderer {
 
-    ParticleSystemStorage storage;
+    private ParticleSystemStorage storage;
 
-    public ParticleSystemsRecorder(ParticleSystemStorage storage) {
+    public ParticleSystemsStorageRenderer(ParticleSystemStorage storage) {
         this.storage = storage;
     }
 

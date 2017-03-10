@@ -35,14 +35,11 @@ import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
-import pl.warp.engine.graphics.particles.ParticleAnimator;
-import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
+import pl.warp.engine.graphics.particles.*;
+import pl.warp.engine.graphics.particles.animator.DirectionalAccelerationAnimator;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.DotParticleAttribute;
 import pl.warp.engine.graphics.particles.dot.ParticleStage;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -272,13 +269,12 @@ public class SpaceSceneLoader implements GameSceneLoader {
             allyPortal.addProperty(allyPortalTransform);
             allyPortalTransform.move(new Vector3f(0, 0, 200));
             {
-                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
                 ParticleStage[] stages = {
                         new ParticleStage(10.0f, new Vector4f(0.2f, 0.5f, 1.0f, 1.0f)),
                         new ParticleStage(10.0f, new Vector4f(0.2f, 0.5f, 1.0f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
-                allyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
+                ParticleEmitter<DotParticle> emitter = new SpreadingParticleEmitter<>(50, new Vector3f(0), new Vector3f(.01f, .01f, 0f), 1000, 100, true);
+                allyPortal.addProperty(new ParticleEmitterProperty(new ParticleSystem(new DotParticleAttribute(stages), emitter)));
             }
 
             enemyPortal = new GameSceneComponent(scene);
@@ -286,13 +282,12 @@ public class SpaceSceneLoader implements GameSceneLoader {
             enemyPortal.addProperty(enemyPortalTransform);
             enemyPortalTransform.move(new Vector3f(0, 0, -600));
             {
-                ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
                 ParticleStage[] stages = {
                         new ParticleStage(10.0f, new Vector4f(1.0f, 0.2f, 0.2f, 1.0f)),
                         new ParticleStage(10.0f, new Vector4f(1.0f, 0.2f, 0.2f, 0.0f))
                 };
-                ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.01f, .01f, 0f), 1000, 100, true, true, stages);
-                enemyPortal.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 50)));
+                ParticleEmitter<DotParticle> emitter = new SpreadingParticleEmitter<>(50, new Vector3f(0), new Vector3f(.01f, .01f, 0f), 1000, 100, true);
+                enemyPortal.addProperty(new ParticleEmitterProperty(new ParticleSystem(new DotParticleAttribute(stages), emitter)));
             }
 
             friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
@@ -319,7 +314,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             generateGOATS(scene);
             //spawnFrigates();
-            //new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         });
     }
 
@@ -492,26 +487,26 @@ public class SpaceSceneLoader implements GameSceneLoader {
             TransformProperty lightSourceTransform = new TransformProperty();
             lightSourceTransform.move(new Vector3f(-2.1f, 0.3f, -1f));
             particles.addProperty(lightSourceTransform);
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0f, 0.0f, 0.00001f), 0, 0);
+            ParticleAnimator animator = new DirectionalAccelerationAnimator(new Vector3f(0f, 0.0f, 0.00001f));
             ParticleStage[] stages = {
                     new ParticleStage(1.3f, color),
                     new ParticleStage(1.3f, color1)
             };
-            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.00001f, 0.00001f, 0f), 1150, 500, true, true, stages);
-            particles.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 70)));
+            ParticleEmitter emitter = new SpreadingParticleEmitter(70, new Vector3f(0), new Vector3f(0.00001f, 0.00001f, 0f), 1150, 500, true);
+            particles.addProperty(new ParticleEmitterProperty(new ParticleSystem(new DotParticleAttribute(stages), emitter, animator)));
         }
         {
             Component particles = new GameSceneComponent(goat);
             TransformProperty lightSourceTransform = new TransformProperty();
             lightSourceTransform.move(new Vector3f(2.1f, 0.3f, -1f));
             particles.addProperty(lightSourceTransform);
-            ParticleAnimator animator = new SimpleParticleAnimator(new Vector3f(0f, 0.0f, 0.00001f), 0, 0);
+            ParticleAnimator animator = new DirectionalAccelerationAnimator(new Vector3f(0f, 0.0f, 0.00001f));
             ParticleStage[] stages = {
                     new ParticleStage(1.3f, color),
                     new ParticleStage(1.3f, color1)
             };
-            ParticleFactory<DotParticle> factory = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(0.00001f, 0.00001f, 0f), 1150, 500, true, true, stages);
-            particles.addProperty(new ParticleEmitterProperty(new DotParticleSystem(animator, factory, 70)));
+            ParticleEmitter emitter = new SpreadingParticleEmitter(70, new Vector3f(0), new Vector3f(0.00001f, 0.00001f, 0f), 1150, 500, true);
+            particles.addProperty(new ParticleEmitterProperty(new ParticleSystem(new DotParticleAttribute(stages), emitter, animator)));
         }
     }
 }

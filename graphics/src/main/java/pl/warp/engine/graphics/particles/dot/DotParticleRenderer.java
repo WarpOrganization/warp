@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
+import pl.warp.engine.graphics.particles.ParticleSystem;
 import pl.warp.engine.graphics.shader.program.particle.dot.DotParticleProgram;
 
 import java.nio.FloatBuffer;
@@ -22,7 +23,7 @@ import static pl.warp.engine.graphics.particles.ParticleSystemRenderer.MAX_PARTI
  * @author Jaca777
  *         Created 2016-08-08 at 18
  */
-public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> {
+public class DotParticleRenderer implements ParticleRenderer<DotParticle> {
 
     private DotParticleProgram program;
 
@@ -33,12 +34,10 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     private int indexBuff;
     private int vao;
 
-    public DotParticleRenderer() {
-        this.program = new DotParticleProgram();
-        initBuffers();
-    }
 
-    private void initBuffers() {
+    @Override
+    public void initialize() {
+        this.program = new DotParticleProgram();
         this.positionVBO = GL15.glGenBuffers();
         this.scaleVBO = GL15.glGenBuffers();
         this.colorVBO = GL15.glGenBuffers();
@@ -88,7 +87,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
     }
 
     @Override
-    public void render(DotParticleSystem system, Matrix4f matrix) {
+    public void render(ParticleSystem<DotParticle> system, Matrix4f matrix) {
         List<DotParticle> particles = system.getParticles();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDepthMask(false);
@@ -168,7 +167,7 @@ public class DotParticleRenderer implements ParticleRenderer<DotParticleSystem> 
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, gradients, GL15.GL_DYNAMIC_DRAW);
     }
 
-
+    @Override
     public void destroy() {
         GL15.glDeleteBuffers(new int[]{positionVBO, scaleVBO, colorVBO, gradientVBO, indexBuff});
         GL30.glDeleteVertexArrays(vao);

@@ -3,14 +3,13 @@ package pl.warp.test;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.graphics.particles.ParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleEmitter;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.SimpleParticleAnimator;
+import pl.warp.engine.graphics.particles.ParticleSystem;
+import pl.warp.engine.graphics.particles.SpreadingParticleEmitter;
 import pl.warp.engine.graphics.particles.dot.DotParticle;
-import pl.warp.engine.graphics.particles.dot.DotParticleSystem;
+import pl.warp.engine.graphics.particles.dot.DotParticleAttribute;
 import pl.warp.engine.graphics.particles.dot.ParticleStage;
-import pl.warp.engine.graphics.particles.dot.RandomSpreadingStageDotParticleFactory;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
@@ -67,15 +66,13 @@ public class TankRoundScript extends GameScript<GameComponent> {
     }
 
     private void kaboom(GameComponent component) {
-        ParticleAnimator animator1 = new SimpleParticleAnimator(new Vector3f(0), 0, 0);
-        ParticleStage[] stages1 = {
+        ParticleStage[] stages = {
                 new ParticleStage(1.5f, new Vector4f(1.0f, 0.6f, 0.5f, 1.0f)),
                 new ParticleStage(1.5f, new Vector4f(1.0f, 0.6f, 0.3f, 0.0f))
         };
-        ParticleFactory<DotParticle> factory1 = new RandomSpreadingStageDotParticleFactory(new Vector3f(0), new Vector3f(.08f), 300, 100, true, true, stages1);
-        DotParticleSystem system1 = new DotParticleSystem(animator1, factory1, 400);
-        ParticleEmitterProperty property = new ParticleEmitterProperty(system1);
-        component.addProperty(property);
-        executorService.schedule(() -> system1.setEmit(false), 200, TimeUnit.MILLISECONDS);
+        ParticleEmitter<DotParticle> emitter = new SpreadingParticleEmitter<>(400, new Vector3f(0), new Vector3f(.08f), 300, 100, true);
+        ParticleSystem<DotParticle> system = new ParticleSystem<>(new DotParticleAttribute(stages), emitter);
+        component.addProperty(new ParticleEmitterProperty(system));
+        executorService.schedule(() -> system.setEmit(false), 200, TimeUnit.MILLISECONDS);
     }
 }
