@@ -41,7 +41,7 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         synchronized (output) {
             outputData.clear();
             srcTexture.bind();

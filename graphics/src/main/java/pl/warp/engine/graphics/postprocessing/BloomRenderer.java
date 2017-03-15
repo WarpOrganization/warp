@@ -42,7 +42,7 @@ public class BloomRenderer implements Flow<Texture2D, WeightedTexture2D> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         detectBloom();
         blur(bloomDetectionTexture);
         for(int i = 1; i < config.getBloomIterations(); i++) {

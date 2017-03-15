@@ -21,7 +21,7 @@ public class ParticleSystem<T extends Particle> {
         this.emitter = emitter;
         this.animators = new ArrayList<>();
         this.animators.addAll(Arrays.asList(animators));
-        this.animators.add(new ParticleMovementAnimator<T>());
+        this.animators.add(new ParticleMovementAnimator<>());
     }
 
     public void update(int delta) {

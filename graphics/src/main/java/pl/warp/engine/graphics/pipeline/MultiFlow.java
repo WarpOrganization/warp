@@ -18,9 +18,9 @@ public class MultiFlow<I, O> implements Flow<I,O[]> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         for(Flow flow : flows)
-            flow.update(delta);
+            flow.update();
     }
 
     @Override

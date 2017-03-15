@@ -55,7 +55,7 @@ public class HDRRenderer implements Flow<WeightedTexture2D[], Texture2D> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         destFramebuffer.bindDraw();
         destFramebuffer.clean();
         hdrProgram.use();

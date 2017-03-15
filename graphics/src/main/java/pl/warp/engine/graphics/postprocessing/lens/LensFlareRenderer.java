@@ -56,7 +56,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         int flareComponentsNumber = environment.getLensFlareComponents().size();
         if (data.size() != flareComponentsNumber)
             setDataBuffersNumber(flareComponentsNumber);

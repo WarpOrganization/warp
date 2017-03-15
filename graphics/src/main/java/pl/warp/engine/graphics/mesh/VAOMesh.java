@@ -58,7 +58,7 @@ public class VAOMesh extends Mesh {
     }
 
     @Override
-    public void unload() {
+    public void destroy() {
         this.vao.destroy();
     }
 }

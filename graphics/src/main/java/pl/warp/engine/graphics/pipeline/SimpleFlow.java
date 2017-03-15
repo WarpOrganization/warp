@@ -18,7 +18,7 @@ public class SimpleFlow<I, O> implements Flow<I, O> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
 
     }
 

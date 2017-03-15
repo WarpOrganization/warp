@@ -8,11 +8,11 @@ import pl.warp.engine.graphics.math.MatrixStack;
  * @author Jaca777
  *         Created 2017-02-07 at 17
  */
-public class ParticleSystemsStorageRenderer implements Renderer {
+public class ParticleSystemsStorageUpdater implements Renderer {
 
     private ParticleSystemStorage storage;
 
-    public ParticleSystemsStorageRenderer(ParticleSystemStorage storage) {
+    public ParticleSystemsStorageUpdater(ParticleSystemStorage storage) {
         this.storage = storage;
     }
 
@@ -22,7 +22,7 @@ public class ParticleSystemsStorageRenderer implements Renderer {
     }
 
     @Override
-    public void initRendering(int delta) {
+    public void initRendering() {
         storage.reset();
     }
 

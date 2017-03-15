@@ -211,7 +211,7 @@ public class Mesh {
     /**
      * Unloads vbos.
      */
-    public void unload() {
+    public void destroy() {
         GL15.glDeleteBuffers(vertexBuff);
         GL15.glDeleteBuffers(texCoordBuff);
         GL15.glDeleteBuffers(normalBuff);

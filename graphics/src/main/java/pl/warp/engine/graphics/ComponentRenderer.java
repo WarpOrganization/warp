@@ -22,9 +22,9 @@ public class ComponentRenderer {
             renderer.init();
     }
 
-    public void initRendering(int delta) {
+    public void initRendering() {
         for (Renderer renderer : renderers)
-            renderer.initRendering(delta);
+            renderer.initRendering();
     }
 
     public void prepareComponent(Component component) {

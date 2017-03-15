@@ -49,8 +49,8 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     @Override
-    public void update(int delta) {
-        initRendering(delta);
+    public void update() {
+        initRendering();
         render(scene);
         finalizeRendering();
     }
@@ -60,10 +60,10 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     }
 
-    private void initRendering(int delta) {
+    private void initRendering() {
         renderingFramebuffer.bindDraw();
         renderingFramebuffer.clean();
-        renderer.initRendering(delta);
+        renderer.initRendering();
     }
 
     public void render(Component component) {
@@ -94,7 +94,7 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
 
     private void destroyProperties(Component component) {
         if (component.hasProperty(RenderableMeshProperty.MESH_PROPERTY_NAME))
-            component.<RenderableMeshProperty>getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).getMesh().unload();
+            component.<RenderableMeshProperty>getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).getMesh().destroy();
         if (component.hasProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME)) {
             Material material = component.<GraphicsMaterialProperty>getProperty(GraphicsMaterialProperty.MATERIAL_PROPERTY_NAME).getMaterial();
             material.getDiffuseTexture().delete();

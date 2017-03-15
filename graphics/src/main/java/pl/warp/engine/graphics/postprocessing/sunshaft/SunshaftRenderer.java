@@ -58,7 +58,7 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         if (sunshaftSource.getSource() != null) {
             componentRenderFramebuffer.bindDraw();
             componentRenderFramebuffer.clean();

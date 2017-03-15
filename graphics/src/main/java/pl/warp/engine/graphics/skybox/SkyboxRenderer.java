@@ -33,7 +33,7 @@ public class SkyboxRenderer implements Renderer {
     }
 
     @Override
-    public void initRendering(int delta) {
+    public void initRendering() {
         cubemapProgram.use();
         cubemapProgram.useCamera(camera);
     }

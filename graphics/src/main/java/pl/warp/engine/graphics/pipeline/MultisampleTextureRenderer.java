@@ -50,7 +50,7 @@ public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D,Tex
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         destFramebuffer.bindDraw();
         identityProgram.use();
         identityProgram.useTexture(srcTexture);

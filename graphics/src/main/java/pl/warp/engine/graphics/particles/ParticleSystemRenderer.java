@@ -39,7 +39,7 @@ public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, Multis
 
 
     @Override
-    public void update(int delta) {
+    public void update() {
         for (ParticleRenderer renderer : renderers.values())
             renderer.useCamera(camera);
 
@@ -47,7 +47,6 @@ public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, Multis
         for (int i = 0; i < particleSystemStorage.getSystemsNumber(); i++) {
             ParticleSystemStorage.ParticleSystemData data = systems.get(i);
             ParticleSystem system = data.getSystem();
-            system.update(delta);
             ParticleRenderer renderer = getRenderer(system);
             renderer.render(system, data.getTransformation());
         }

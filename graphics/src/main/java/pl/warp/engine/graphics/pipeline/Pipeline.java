@@ -29,7 +29,7 @@ public class Pipeline {
 
     public void update(int delta) {
         for (PipelineElement element : elements) {
-            element.update(delta);
+            element.update();
         }
     }
 

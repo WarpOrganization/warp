@@ -22,7 +22,7 @@ public class LensEnvironmentFlareRenderer implements Renderer{
     }
 
     @Override
-    public void initRendering(int delta) {
+    public void initRendering() {
         environment.resetLensFlareComponents();
     }
 

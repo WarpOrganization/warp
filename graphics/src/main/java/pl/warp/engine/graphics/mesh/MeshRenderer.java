@@ -38,7 +38,7 @@ public class MeshRenderer implements Renderer {
     }
 
     @Override
-    public void initRendering(int delta) {
+    public void initRendering() {
         setupProgram();
     }
 

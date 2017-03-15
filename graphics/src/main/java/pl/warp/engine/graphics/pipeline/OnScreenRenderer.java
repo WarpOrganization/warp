@@ -42,7 +42,7 @@ public class OnScreenRenderer implements Sink<Texture2D> {
     }
 
     @Override
-    public void update(int delta) {
+    public void update() {
         Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
         Framebuffer.SCREEN_FRAMEBUFFER.clean();
         identityProgram.use();

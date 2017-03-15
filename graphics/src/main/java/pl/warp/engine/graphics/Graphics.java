@@ -4,8 +4,9 @@ import pl.warp.engine.core.*;
 import pl.warp.engine.core.updater.UpdaterTask;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.MeshRenderer;
+import pl.warp.engine.graphics.particles.ParticleAnimatorTask;
 import pl.warp.engine.graphics.particles.ParticleSystemRenderer;
-import pl.warp.engine.graphics.particles.ParticleSystemsStorageRenderer;
+import pl.warp.engine.graphics.particles.ParticleSystemsStorageUpdater;
 import pl.warp.engine.graphics.particles.ParticleSystemStorage;
 import pl.warp.engine.graphics.pipeline.*;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
@@ -44,7 +45,7 @@ public class Graphics {
     private MeshRenderer meshRenderer;
     private SkyboxRenderer skyboxRenderer;
     private ParticleSystemStorage particleSystemStorage;
-    private ParticleSystemsStorageRenderer particleSystemRecorder;
+    private ParticleSystemsStorageUpdater particleSystemRecorder;
     private ParticleSystemRenderer particleSystemRenderer;
     private CustomRenderersManager customRenderersManager;
 
@@ -126,11 +127,17 @@ public class Graphics {
         meshRenderer = new MeshRenderer(mainViewCamera, environment);
         skyboxRenderer = new SkyboxRenderer(mainViewCamera);
         particleSystemStorage = new ParticleSystemStorage();
-        particleSystemRecorder = new ParticleSystemsStorageRenderer(particleSystemStorage);
+        particleSystemRecorder = new ParticleSystemsStorageUpdater(particleSystemStorage);
+        createParticleAnimator();
         LensEnvironmentFlareRenderer environmentFlareRenderer = new LensEnvironmentFlareRenderer(environment);
         Renderer[] renderers = {skyboxRenderer, meshRenderer, particleSystemRecorder, environmentFlareRenderer};
         componentRenderer = new ComponentRenderer(renderers);
         return new SceneRenderer(context.getScene(), config, componentRenderer);
+    }
+
+    private void createParticleAnimator() {
+        EngineTask particleAnimatorTask = new ParticleAnimatorTask(particleSystemStorage);
+        thread.scheduleTask(particleAnimatorTask);
     }
 
     private Flow<Texture2D, WeightedTexture2D> createBloom() {
