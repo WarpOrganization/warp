@@ -4,9 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.updater.Updatable;
-import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.shader.GeometryProgram;
+import pl.warp.engine.graphics.shader.Program;
 import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
@@ -16,12 +15,11 @@ import pl.warp.engine.graphics.texture.Texture1D;
  * @author Jaca777
  *         Created 2017-02-09 at 01
  */
-public class CoronaProgram extends GeometryProgram implements Updatable {
+public class CoronaProgram extends Program implements Updatable {
     private static final int COLORS_TEXTURE_SAMPLER = 0;
 
     private static final String PROGRAM_PATH = "pl/warp/game/graphics/effects/";
     private static final String VERTEX_SHADER = "corona/vert";
-    private static final String GEOM_SHADER = "corona/geom";
     private static final String FRAGMENT_SHADER = "corona/frag";
 
     private int time;
@@ -38,7 +36,7 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
     private Texture1D temperature;
 
     public CoronaProgram(Texture1D temperature) {
-        super(VERTEX_SHADER, FRAGMENT_SHADER, GEOM_SHADER,
+        super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
         this.temperature = temperature;
@@ -101,7 +99,4 @@ public class CoronaProgram extends GeometryProgram implements Updatable {
         setUniformf(unifTime, time / 1000.0f); //seconds
     }
 
-    public void useEnvironment(Environment environment) {
-
-    }
 }

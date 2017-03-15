@@ -1,4 +1,4 @@
-package pl.warp.game.graphics.effects.star.corona;
+package pl.warp.game.graphics.effects.atmosphere;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -11,20 +11,20 @@ import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;
-import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
+import pl.warp.engine.graphics.mesh.shapes.Sphere;
 
 /**
  * @author Jaca777
- *         Created 2017-02-09 at 01
+ *         Created 2017-03-12 at 12
  */
-public class CoronaRenderer extends CustomRenderer {
+public class AtmosphereRenderer extends CustomRenderer {
 
     private Camera camera;
-    private CoronaProgram program;
+    private AtmosphereProgram program;
     private Environment environment;
-    private QuadMesh quadMesh;
+    private Sphere sphere;
 
-    public CoronaRenderer(Graphics graphics, CoronaProgram program) {
+    public AtmosphereRenderer(Graphics graphics, AtmosphereProgram program) {
         super(graphics);
         this.program = program;
         this.environment = graphics.getEnvironment();
@@ -32,7 +32,7 @@ public class CoronaRenderer extends CustomRenderer {
 
     @Override
     public void init() {
-        this.quadMesh = new QuadMesh();
+        this.sphere = new Sphere(200, 200);
     }
 
     @Override
@@ -44,18 +44,17 @@ public class CoronaRenderer extends CustomRenderer {
 
     @Override
     public void render(Component component, MatrixStack stack) {
-        if (component.hasEnabledProperty(CoronaProperty.CORONA_PROPERTY_NAME)) {
+        if (component.hasEnabledProperty(AtmosphereProperty.ATMOSPHERE_PROPERTY_NAME)) {
             stack.push();
-            CoronaProperty property = component.getProperty(CoronaProperty.CORONA_PROPERTY_NAME);
-            stack.scale(property.getSize(), property.getSize(), property.getSize());
             Quaternionf rotation = getRotation(stack);
             program.use();
             program.useCamera(camera);
+            program.useEnvironment(environment);
             program.useModelMatrix(stack.topMatrix());
             program.useRotationMatrix(rotation.get(tempMatrix));
             program.useComponent(component);
             GL11.glDepthMask(false);
-            quadMesh.draw();
+            sphere.draw();
             GL11.glDepthMask(true);
             stack.pop();
         } else throw new IllegalArgumentException("Can't render a corona without a mesh.");
@@ -73,7 +72,8 @@ public class CoronaRenderer extends CustomRenderer {
         Vector4f planetPos4 = temp2.mul(stack.topMatrix());
         Vector3f coronaPos = temp3.set(planetPos4.x, planetPos4.y, planetPos4.z).div(planetPos4.w);
         Vector3f direction = coronaPos.sub(cameraPos).negate();
-        Matrix4f coronaRotation = tempMatrix.identity().mul(stack.topRotationMatrix());
+        tempMatrix.identity();
+        Matrix4f coronaRotation = tempMatrix.mul(stack.topRotationMatrix());
         Vector4f normal4 = temp2.set(0, 0, 1, 1);
         Vector4f rotatedNormal4 = normal4.mul(coronaRotation);
         Vector3f rotatedNormal = temp.set(rotatedNormal4.x, rotatedNormal4.y, rotatedNormal4.z).div(rotatedNormal4.w);
@@ -82,7 +82,7 @@ public class CoronaRenderer extends CustomRenderer {
 
     @Override
     public void destroy() {
-
+        this.sphere.destroy();
     }
 
     @Override

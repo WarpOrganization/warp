@@ -214,6 +214,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ringColors.enableAnisotropy(4);
 
             PlanetRing ring = new PlanetRing(gasPlanet, startR, endR, ringColors);
+           /* Atmosphere atmosphere = new Atmosphere(gasPlanet, new Vector3f(1.0f, 1.0f, 1.0f), 1.07f);*/
 
             Star sun = new Star(scene, 5000f);
             TransformProperty sunSphereTransform = new TransformProperty();
@@ -428,7 +429,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         ArrayList<Component> team1 = new ArrayList<>();
         ArrayList<Component> team2 = new ArrayList<>();
         team1.add(controllableGoat);
-        controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
+        //36n6controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
         int nOfGoats = 30;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
