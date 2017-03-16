@@ -1,25 +1,27 @@
 package pl.warp.engine.graphics.pipeline;
 
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
- * @author Jaca777
- *         Created 2017-02-25 at 14
+ * Created by user on 2017-03-16.
  */
-public class SimpleFlow<I, O> implements Flow<I, O> {
+public class FunctionFlow<I, O> implements Flow<I, O> {
 
     private I input;
     private O output;
-    private BiConsumer<I, O>  updater;
+    private BiConsumer<I, O> function;
 
-    public SimpleFlow(O initialValue, BiConsumer<I, O> updater) {
-        this.updater = updater;
-        this.output = initialValue;
+    public FunctionFlow(BiConsumer<I, O> function, O output) {
+        this.function = function;
+        this.output = output;
     }
 
     @Override
     public void update() {
-
+        this.function.accept(input, output);
     }
 
     @Override
@@ -45,7 +47,5 @@ public class SimpleFlow<I, O> implements Flow<I, O> {
     @Override
     public void setInput(I input) {
         this.input = input;
-        updater.accept(input, output);
     }
-
 }
