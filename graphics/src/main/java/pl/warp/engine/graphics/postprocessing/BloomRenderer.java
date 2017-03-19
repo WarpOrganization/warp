@@ -7,8 +7,8 @@ import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Flow;
-import pl.warp.engine.graphics.shader.program.postprocessing.bloomdetection.BloomDetectionProgram;
-import pl.warp.engine.graphics.shader.program.postprocessing.gaussianblur.GaussianBlurProgram;
+import pl.warp.engine.graphics.program.rendering.postprocessing.bloomdetection.BloomDetectionProgram;
+import pl.warp.engine.graphics.program.rendering.postprocessing.gaussianblur.GaussianBlurProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 

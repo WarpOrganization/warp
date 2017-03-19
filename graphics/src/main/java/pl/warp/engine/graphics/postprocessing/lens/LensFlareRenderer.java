@@ -16,7 +16,7 @@ import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.VAO;
 import pl.warp.engine.graphics.pipeline.Flow;
-import pl.warp.engine.graphics.shader.program.lens.LensProgram;
+import pl.warp.engine.graphics.program.rendering.lens.LensProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 import java.nio.IntBuffer;

@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL30;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.particles.ParticleRenderer;
 import pl.warp.engine.graphics.particles.ParticleSystem;
-import pl.warp.engine.graphics.shader.program.particle.textured.TexturedParticleProgram;
+import pl.warp.engine.graphics.program.rendering.particle.textured.TexturedParticleProgram;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 
 import java.nio.FloatBuffer;

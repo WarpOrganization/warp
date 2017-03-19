@@ -6,7 +6,7 @@ import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Flow;
-import pl.warp.engine.graphics.shader.program.postprocessing.hdr.HDRProgram;
+import pl.warp.engine.graphics.program.rendering.postprocessing.hdr.HDRProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 
 /**

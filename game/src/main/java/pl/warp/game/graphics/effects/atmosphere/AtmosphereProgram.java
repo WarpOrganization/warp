@@ -5,15 +5,15 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;
-import pl.warp.engine.graphics.shader.MeshRendererProgram;
-import pl.warp.engine.graphics.shader.Program;
-import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
-import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
+import pl.warp.engine.graphics.program.MeshRendererProgram;
+import pl.warp.engine.graphics.program.Program;
+import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
+import pl.warp.engine.graphics.program.extendedglsl.ExternalProgramLoader;
 
 import java.util.List;
 
-import static pl.warp.engine.graphics.shader.MeshRendererProgram.*;
+import static pl.warp.engine.graphics.program.MeshRendererProgram.*;
 
 /**
  * @author Jaca777

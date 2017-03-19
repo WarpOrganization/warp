@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL30.*;
  * @author Jaca777
  *         Created 06.04.15 at 15:21
  */
-public class Framebuffer {
+public abstract class Framebuffer {
 
     protected int name;
 
@@ -25,6 +25,10 @@ public class Framebuffer {
         GL30.glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     }
 
+    public void setName(int name) {
+        this.name = name;
+    }
+
     public int getName() {
         return name;
     }
@@ -33,9 +37,18 @@ public class Framebuffer {
         GL30.glDeleteFramebuffers(this.name);
     }
 
-    public static final Framebuffer SCREEN_FRAMEBUFFER = new Framebuffer(0);
-
     public void clean() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
+
+    public abstract boolean isAssembled();
+
+    public static final Framebuffer SCREEN_FRAMEBUFFER = new Framebuffer(0) {
+        @Override
+        public boolean isAssembled() {
+            return true;
+        }
+    };
+
+
 }

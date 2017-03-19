@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.mesh;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.graphics.shader.MeshRendererProgram;
+import pl.warp.engine.graphics.program.MeshRendererProgram;
 
 /**
  * @author Jaca777

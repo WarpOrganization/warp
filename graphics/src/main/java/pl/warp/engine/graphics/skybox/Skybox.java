@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import pl.warp.engine.graphics.shader.program.cubemap.CubemapProgram;
+import pl.warp.engine.graphics.program.rendering.cubemap.CubemapProgram;
 import pl.warp.engine.graphics.math.BufferTools;
 
 /**

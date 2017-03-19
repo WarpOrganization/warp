@@ -70,4 +70,9 @@ public class MultisampleDepthTextureFramebuffer extends Framebuffer{
         depthTex.delete();
         destTex.delete();
     }
+
+    @Override
+    public boolean isAssembled() {
+        return true;
+    }
 }

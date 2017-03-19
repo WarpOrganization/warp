@@ -14,7 +14,7 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.input.glfw.GLFWInput;
 import pl.warp.engine.graphics.input.glfw.GLFWInputTask;
-import pl.warp.engine.graphics.pipeline.OnScreenRenderer;
+import pl.warp.engine.graphics.pipeline.rendering.OnScreenRenderer;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;

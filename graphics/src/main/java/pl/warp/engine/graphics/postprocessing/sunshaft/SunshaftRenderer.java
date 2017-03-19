@@ -15,8 +15,8 @@ import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.postprocessing.WeightedTexture2D;
-import pl.warp.engine.graphics.shader.program.postprocessing.depthtest.DepthTestProgram;
-import pl.warp.engine.graphics.shader.program.postprocessing.sunshaft.SunshaftProgram;
+import pl.warp.engine.graphics.program.rendering.postprocessing.depthtest.DepthTestProgram;
+import pl.warp.engine.graphics.program.rendering.postprocessing.sunshaft.SunshaftProgram;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 

@@ -30,7 +30,7 @@ in float fragmentRadius;
 #include "util/noise4d"
 
 void main() {
-    //if(fragmentRadius < 1.0) discard;
+    if(fragmentRadius < 1.0) discard;
     fragColor.rgb = vec3(fragmentRadius);
     fragColor.a = 1.0f;
 }

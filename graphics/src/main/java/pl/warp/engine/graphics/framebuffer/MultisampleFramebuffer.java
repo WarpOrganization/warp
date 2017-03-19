@@ -16,8 +16,15 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class MultisampleFramebuffer extends TextureFramebuffer {
 
+    private MultisampleTexture2D destTex;
+
     public MultisampleFramebuffer(MultisampleTexture2D destTex) {
         super(destTex, GL30.glGenFramebuffers(), GL30.glGenRenderbuffers());
+        this.destTex = destTex;
+    }
+
+    @Override
+    protected void assemble() {
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, this.name);
         attachDepthBuffer(destTex);
         attachTexture(destTex);

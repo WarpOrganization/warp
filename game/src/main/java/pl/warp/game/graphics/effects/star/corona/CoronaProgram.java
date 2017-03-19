@@ -5,10 +5,10 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.updater.Updatable;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.shader.Program;
-import pl.warp.engine.graphics.shader.extendedglsl.ConstantField;
-import pl.warp.engine.graphics.shader.extendedglsl.ExtendedGLSLProgramCompiler;
-import pl.warp.engine.graphics.shader.extendedglsl.ExternalProgramLoader;
+import pl.warp.engine.graphics.program.Program;
+import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
+import pl.warp.engine.graphics.program.extendedglsl.ExternalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture1D;
 
 /**

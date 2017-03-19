@@ -67,4 +67,9 @@ public class DepthTextureFramebuffer extends Framebuffer {
         depthTex.delete();
         destTex.delete();
     }
+
+    @Override
+    public boolean isAssembled() {
+        return true;
+    }
 }

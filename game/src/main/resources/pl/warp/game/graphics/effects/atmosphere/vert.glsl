@@ -15,8 +15,6 @@ layout(location = 0) in vec3 inNormal;
 
 out float fragmentRadius;
 
-float getScale(mat4 matrix);
-
 void main(void) {
     vec4 fragmentPos = projectionMatrix * cameraMatrix * modelMatrix * vec4(inVertex * radius, 1.0f);
     vec4 centerPos = projectionMatrix * cameraMatrix * modelMatrix * vec4(0.0f, 0.0f, 0.0f, 1.0f);

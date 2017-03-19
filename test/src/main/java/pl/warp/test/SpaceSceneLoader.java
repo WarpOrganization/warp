@@ -60,6 +60,7 @@ import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.graphics.effects.atmosphere.Atmosphere;
 import pl.warp.game.graphics.effects.gas.GasPlanet;
 import pl.warp.game.graphics.effects.gas.GasPlanetProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRing;
@@ -214,7 +215,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ringColors.enableAnisotropy(4);
 
             PlanetRing ring = new PlanetRing(gasPlanet, startR, endR, ringColors);
-           /* Atmosphere atmosphere = new Atmosphere(gasPlanet, new Vector3f(1.0f, 1.0f, 1.0f), 1.07f);*/
+            //Atmosphere atmosphere = new Atmosphere(gasPlanet, new Vector3f(1.0f, 1.0f, 1.0f), 1.07f);
 
             Star sun = new Star(scene, 5000f);
             TransformProperty sunSphereTransform = new TransformProperty();
