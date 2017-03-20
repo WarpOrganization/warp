@@ -46,4 +46,8 @@ public abstract class ProgramTextureSource<T extends Program> extends Framebuffe
     public void onResize(int newWidth, int newHeight) {
 
     }
+
+    protected T getProgram() {
+        return program;
+    }
 }

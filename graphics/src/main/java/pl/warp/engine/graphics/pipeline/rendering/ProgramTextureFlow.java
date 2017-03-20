@@ -24,4 +24,6 @@ public abstract class ProgramTextureFlow<T extends Program> extends ProgramTextu
     protected Texture2D getInput() {
         return input;
     }
+
+
 }

@@ -12,6 +12,7 @@ import pl.warp.engine.graphics.particles.ParticleSystemsStorageUpdater;
 import pl.warp.engine.graphics.pipeline.*;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.pipeline.rendering.MultisampleTextureRenderer;
+import pl.warp.engine.graphics.pipeline.rendering.effects.barrelchroma.BarrelChromaEffect;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
 import pl.warp.engine.graphics.postprocessing.HDRRenderer;
 import pl.warp.engine.graphics.postprocessing.WeightedTexture2D;
@@ -64,7 +65,12 @@ public class EnginePipeline {
                 .via(particleSystemRenderer)
                 .via(textureRenderer);
         pipeline = createPostprocessing(pipeline, environment);
+        pipeline = createEffects(pipeline);
         this.pipeline =  pipeline.to(output, graphics);
+    }
+
+    private PipelineBuilder<Texture2D> createEffects(PipelineBuilder<Texture2D> pipeline) {
+        return pipeline.via(new BarrelChromaEffect(30));
     }
 
     private PipelineBuilder<Texture2D> createPostprocessing(PipelineBuilder<Texture2D> pipeline, Environment environment) {
