@@ -46,7 +46,7 @@ public class GaussianBlurProgram extends Program {
     private int unifDisplaySize;
 
     public GaussianBlurProgram(RenderingConfig config) {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         loadUniforms();
         GaussianBlurStage.HORIZONTAL.setDisplaySize(() -> config.getDisplay().getHeight());
         GaussianBlurStage.VERTICAL.setDisplaySize(() -> config.getDisplay().getHeight());

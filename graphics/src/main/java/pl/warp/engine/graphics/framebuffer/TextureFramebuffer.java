@@ -32,17 +32,14 @@ public class TextureFramebuffer extends Framebuffer {
 
     public TextureFramebuffer(TextureShape2D destTex) {
         super(GL30.glGenFramebuffers());
-        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, name);
-
-        this.depthBuff = GL30.glGenRenderbuffers();
         this.destTex = destTex;
-
-        assemble();
+        create();
     }
 
-    public void create(){
+    public void create() {
         setName(GL30.glGenFramebuffers());
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, name);
+        this.depthBuff = GL30.glGenRenderbuffers();
         assemble();
     }
 
@@ -86,11 +83,7 @@ public class TextureFramebuffer extends Framebuffer {
 
     public void setDestinationTexture(TextureShape2D destTex) {
         this.destTex = destTex;
-        assemble();
-    }
-
-    public int getName() {
-        return name;
+        if (assembled) assemble();
     }
 
     public void delete() {

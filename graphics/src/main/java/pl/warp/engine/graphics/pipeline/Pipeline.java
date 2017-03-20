@@ -1,19 +1,23 @@
 package pl.warp.engine.graphics.pipeline;
 
+import pl.warp.engine.graphics.Graphics;
+
 /**
  * @author Jaca777
  *         Created 2016-06-30 at 17
  */
 public class Pipeline {
     private final PipelineElement[] elements;
+    private Graphics graphics;
 
-    public Pipeline(PipelineElement[] elements) {
+    public Pipeline(PipelineElement[] elements, Graphics graphics) {
         this.elements = elements;
+        this.graphics = graphics;
     }
 
     public void init() {
         for (PipelineElement element : elements) {
-            element.init();
+            element.init(graphics);
         }
         connectElements();
     }
@@ -27,7 +31,7 @@ public class Pipeline {
         }
     }
 
-    public void update(int delta) {
+    public void update() {
         for (PipelineElement element : elements) {
             element.update();
         }

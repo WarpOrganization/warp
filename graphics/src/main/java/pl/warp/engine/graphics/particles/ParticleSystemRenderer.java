@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.particles;
 
 import org.apache.log4j.Logger;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.pipeline.Flow;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlareRenderer;
@@ -33,7 +34,7 @@ public class ParticleSystemRenderer implements Flow<MultisampleTexture2D, Multis
 
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
 
     }
 

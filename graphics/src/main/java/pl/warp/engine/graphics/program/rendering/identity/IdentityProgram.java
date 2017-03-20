@@ -19,7 +19,7 @@ public class IdentityProgram extends Program {
     private int unifExposure;
 
     public IdentityProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         this.unifExposure = getUniformLocation("exposure");
     }
 

@@ -17,7 +17,8 @@ public class IdentityMultisampleProgram extends Program {
     private int unifSamples;
 
     public IdentityMultisampleProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
+        compile();
         this.unifSamples = getUniformLocation("samples");
     }
 

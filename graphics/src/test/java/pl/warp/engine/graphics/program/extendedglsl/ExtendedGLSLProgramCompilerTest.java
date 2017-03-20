@@ -1,9 +1,6 @@
-package pl.warp.engine.graphics.shader.extendedglsl;
+package pl.warp.engine.graphics.program.extendedglsl;
 
 import org.junit.Test;
-import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
-import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
-import pl.warp.engine.graphics.program.extendedglsl.ProgramCompilationException;
 
 import static org.junit.Assert.*;
 

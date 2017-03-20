@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.pipeline.rendering;
 
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
@@ -26,7 +27,7 @@ public class OnScreenRenderer implements Sink<Texture2D> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
         this.identityProgram = new IdentityProgram();
         this.identityProgram.setExposure(config.getExposure());
         this.quad = new Quad();

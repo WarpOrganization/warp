@@ -38,11 +38,10 @@ public class SceneRenderer implements Source<MultisampleTexture2D> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
         logger.info("Initializing scene renderer...");
         logger.info("Initializing component renderer...");
-
-            renderer.init();
+        renderer.init();
         logger.info("Setting up scene renderer framebuffers.");
         setupFramebuffer();
         logger.info("Scene renderer initialized.");

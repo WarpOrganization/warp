@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.pipeline.rendering;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
@@ -28,7 +29,7 @@ public class MultisampleTextureRenderer implements Flow<MultisampleTexture2D, Te
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
         this.identityProgram = new IdentityMultisampleProgram();
         this.rect = new Quad();
         initOutput();

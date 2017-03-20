@@ -20,7 +20,8 @@ public class CubemapProgram extends Program {
     private int unifBrightness;
 
     public CubemapProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
+        compile();
         loadUniforms();
     }
 

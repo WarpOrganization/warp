@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.postprocessing;
 
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
@@ -31,7 +32,7 @@ public class HDRRenderer implements Flow<WeightedTexture2D[], Texture2D> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
         logger.info("Initializing HDR renderer...");
         this.hdrProgram = new HDRProgram();
         this.hdrProgram.setExposure(config.getExposure());

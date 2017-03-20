@@ -1,5 +1,4 @@
 package pl.warp.engine.graphics.program.extendedglsl;
-
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import pl.warp.engine.graphics.program.GLSLShaderCompiler;

@@ -17,9 +17,10 @@ project.ext.lwjglVersion = "3.1.0"
 dependencies {
     compile project(':core')
 
-
     compile 'org.slf4j:slf4j-api:1.7.12'
-    // LWJGL dependencies START
+    compile group: 'org.ow2.asm', name: 'asm-all', version: '5.2'
+
+    // LWJGL dependencies
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-egl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
@@ -31,7 +32,6 @@ dependencies {
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
-    // LWJGL dependencies END
 
     testCompile 'junit:junit:4.12'
 }

@@ -26,7 +26,6 @@ public class Graphics {
     private GLFWWindowManager windowManager;
     private Environment environment;
 
-    private ProgramManager programManager;
     private EnginePipeline enginePipeline;
 
     public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
@@ -46,12 +45,7 @@ public class Graphics {
         createEnvironment();
         createCameraTask();
         createRenderingTask();
-        createProgramManager();
         this.thread.start();
-    }
-
-    private void createProgramManager() {
-        this.programManager = new ProgramManager();
     }
 
     private void createCameraTask() {
@@ -118,9 +112,6 @@ public class Graphics {
         return enginePipeline;
     }
 
-    public ProgramManager getProgramManager() {
-        return programManager;
-    }
 
     public Camera getMainViewCamera() {
         return mainViewCamera;

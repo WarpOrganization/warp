@@ -44,6 +44,7 @@ public class AtmosphereProgram extends Program {
     public AtmosphereProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, new ExternalProgramLoader(PROGRAM_PATH)));
+        compile();
         loadLocations();
         loadSpotLightStructure();
     }

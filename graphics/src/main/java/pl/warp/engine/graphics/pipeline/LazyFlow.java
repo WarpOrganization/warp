@@ -1,19 +1,21 @@
 package pl.warp.engine.graphics.pipeline;
 
+import pl.warp.engine.graphics.Graphics;
+
 import java.util.function.BiConsumer;
 
 /**
  * @author Jaca777
  *         Created 2017-02-25 at 14
  */
-public class SimpleFlow<I, O> implements Flow<I, O> {
+public class LazyFlow<I, O> implements Flow<I, O> {
 
     private I input;
     private O output;
-    private BiConsumer<I, O>  updater;
+    private BiConsumer<I, O> lazyUpdater;
 
-    public SimpleFlow(O initialValue, BiConsumer<I, O> updater) {
-        this.updater = updater;
+    public LazyFlow(O initialValue, BiConsumer<I, O> lazyUpdater) {
+        this.lazyUpdater = lazyUpdater;
         this.output = initialValue;
     }
 
@@ -23,7 +25,7 @@ public class SimpleFlow<I, O> implements Flow<I, O> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
 
     }
 
@@ -45,7 +47,7 @@ public class SimpleFlow<I, O> implements Flow<I, O> {
     @Override
     public void setInput(I input) {
         this.input = input;
-        updater.accept(input, output);
+        lazyUpdater.accept(input, output);
     }
 
 }

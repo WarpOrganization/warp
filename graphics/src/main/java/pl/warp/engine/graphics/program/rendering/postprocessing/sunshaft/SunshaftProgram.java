@@ -24,7 +24,7 @@ public class SunshaftProgram extends Program {
     private int unifClamp;
 
     public SunshaftProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         loadUniforms();
     }
 

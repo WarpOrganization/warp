@@ -64,13 +64,13 @@ public class EnginePipeline {
                 .via(particleSystemRenderer)
                 .via(textureRenderer);
         pipeline = createPostprocessing(pipeline, environment);
-        this.pipeline =  pipeline.to(output);
+        this.pipeline =  pipeline.to(output, graphics);
     }
 
     private PipelineBuilder<Texture2D> createPostprocessing(PipelineBuilder<Texture2D> pipeline, Environment environment) {
         if (config.areLensEnabled()) pipeline = createFlares(pipeline, environment);
         List<Flow<Texture2D, WeightedTexture2D>> postprocesses = new ArrayList<>();
-        SimpleFlow<Texture2D, WeightedTexture2D> sceneFlow = new SimpleFlow<>(
+        LazyFlow<Texture2D, WeightedTexture2D> sceneFlow = new LazyFlow<>(
                 new WeightedTexture2D(null, 1.0f, 1.0f),
                 (i, o) -> o.setTexture(i));
         postprocesses.add(sceneFlow);
@@ -106,11 +106,11 @@ public class EnginePipeline {
     private Flow<Texture2D, WeightedTexture2D> createSunshaft() {
         SunshaftProperty property = new SunshaftProperty();
         context.getScene().addProperty(property);
-        return new SunshaftRenderer(sceneRenderer, property.getSource(), config, componentRenderer, graphics);
+        return new SunshaftRenderer(sceneRenderer, property.getSource(), config, componentRenderer);
     }
 
     private PipelineBuilder<Texture2D> createFlares(PipelineBuilder<Texture2D> builder, Environment environment) {
-        LensFlareRenderer flareRenderer = new LensFlareRenderer(graphics, environment, config);
+        LensFlareRenderer flareRenderer = new LensFlareRenderer(environment, config);
         return builder.via(flareRenderer);
     }
 

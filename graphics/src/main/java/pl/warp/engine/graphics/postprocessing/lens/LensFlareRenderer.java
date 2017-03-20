@@ -49,8 +49,7 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
     private int flareColorBuffer;
     private VAO vao;
 
-    public LensFlareRenderer(Graphics graphics, Environment environment, RenderingConfig config) {
-        this.graphics = graphics;
+    public LensFlareRenderer(Environment environment, RenderingConfig config) {
         this.environment = environment;
         this.config = config;
     }
@@ -167,8 +166,9 @@ public class LensFlareRenderer implements Flow<Texture2D, Texture2D> {
 
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
         logger.info("Initializing lens flare renderer...");
+        this.graphics = g;
         this.program = new LensProgram();
         program.useScreenSize(config.getDisplay().getWidth(), config.getDisplay().getHeight());
         createIndexBuffer();

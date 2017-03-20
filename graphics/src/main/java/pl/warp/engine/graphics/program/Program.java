@@ -19,11 +19,15 @@ import java.nio.FloatBuffer;
  */
 public abstract class Program {
 
-    protected ExtendedGLSLProgram program;
+    protected ExtendedGLSLProgram program = null;
+    protected ExtendedGLSLProgramCompiler compiler;
+    protected String vertexShaderName;
+    protected String fragmentShaderName;
 
     public Program(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
-        this.program = compiler.compile(vertexShaderName, fragmentShaderName);
-        GL20.glUseProgram(this.program.getGLProgram());
+        this.vertexShaderName = vertexShaderName;
+        this.fragmentShaderName = fragmentShaderName;
+        this.compiler = compiler;
     }
 
     public Program(int program, int vertexShader, int fragmentShader) {
@@ -37,6 +41,11 @@ public abstract class Program {
 
 
     protected Program() {
+    }
+
+    public void compile() {
+        this.program = compiler.compile(vertexShaderName, fragmentShaderName);
+        GL20.glUseProgram(this.program.getGLProgram());
     }
 
 

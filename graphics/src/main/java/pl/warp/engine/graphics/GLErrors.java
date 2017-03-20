@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL30;
 public class GLErrors {
     public static void checkOGLErrors() {
         int error;
-        while ((error = GL11.glGetError()) != GL11.GL_NO_ERROR)
+        if ((error = GL11.glGetError()) != GL11.GL_NO_ERROR)
             throw new OGLException(GLErrors.toString(error));
     }
 

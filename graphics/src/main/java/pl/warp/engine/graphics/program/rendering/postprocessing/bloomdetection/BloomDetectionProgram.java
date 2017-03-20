@@ -20,7 +20,7 @@ public class BloomDetectionProgram extends Program {
     private int unifCutOff;
 
     public BloomDetectionProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         loadUniforms();
     }
 

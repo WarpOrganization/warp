@@ -49,12 +49,11 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
 
     private Quad quad;
 
-    public SunshaftRenderer(SceneRenderer sceneRenderer, SunshaftSource sunshaftSource, RenderingConfig config, ComponentRenderer renderer, Graphics graphics) {
+    public SunshaftRenderer(SceneRenderer sceneRenderer, SunshaftSource sunshaftSource, RenderingConfig config, ComponentRenderer renderer) {
         this.sceneRenderer = sceneRenderer;
         this.sunshaftSource = sunshaftSource;
         this.config = config;
         this.renderer = renderer;
-        this.graphics = graphics;
     }
 
     @Override
@@ -109,7 +108,9 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
 
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
+        this.graphics = g;
+
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
 
         this.depthTestProgram = new DepthTestProgram();

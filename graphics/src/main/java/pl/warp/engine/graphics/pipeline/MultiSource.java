@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.pipeline;
 
+import pl.warp.engine.graphics.Graphics;
+
 import java.util.function.IntFunction;
 
 /**
@@ -29,8 +31,8 @@ public class MultiSource<O> implements Source<O[]>{
     }
 
     @Override
-    public void init() {
-        for(Source source : sources) source.init();
+    public void init(Graphics g) {
+        for(Source source : sources) source.init(g);
     }
 
     @Override

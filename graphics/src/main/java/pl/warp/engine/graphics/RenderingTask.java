@@ -49,7 +49,7 @@ public class RenderingTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        pipeline.update(delta);
+        pipeline.update();
         GLErrors.checkOGLErrors();
     }
 

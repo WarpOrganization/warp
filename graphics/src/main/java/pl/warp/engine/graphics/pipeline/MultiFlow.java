@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.pipeline;
 
+import pl.warp.engine.graphics.Graphics;
+
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -24,9 +26,9 @@ public class MultiFlow<I, O> implements Flow<I,O[]> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics graphics) {
         for(Flow flow : flows)
-            flow.init();
+            flow.init(graphics);
         loadOutputs();
     }
 

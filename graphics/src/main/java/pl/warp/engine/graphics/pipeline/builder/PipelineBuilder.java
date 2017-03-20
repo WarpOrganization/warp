@@ -1,11 +1,8 @@
 package pl.warp.engine.graphics.pipeline.builder;
 
 import org.apache.commons.lang3.ArrayUtils;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.pipeline.*;
-import pl.warp.engine.graphics.texture.Texture;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Jaca777
@@ -29,8 +26,8 @@ public class PipelineBuilder<T> {
         return new PipelineBuilder<>(ArrayUtils.add(elements, flow), flow);
     }
 
-    public Pipeline to(Sink<T> dest) {
-        return new Pipeline(ArrayUtils.add(elements, dest));
+    public Pipeline to(Sink<T> dest, Graphics graphics) {
+        return new Pipeline(ArrayUtils.add(elements, dest), graphics);
     }
 
 }

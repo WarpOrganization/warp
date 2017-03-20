@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.pipeline;
 
+import pl.warp.engine.graphics.Graphics;
+
 /**
  * @author Jaca777
  *         Created 2017-03-15 at 19
@@ -18,8 +20,8 @@ public class MultiSink<I> implements Sink<I> {
     }
 
     @Override
-    public void init() {
-        for(Sink sink : sinks) sink.init();
+    public void init(Graphics g) {
+        for(Sink sink : sinks) sink.init(g);
     }
 
     @Override

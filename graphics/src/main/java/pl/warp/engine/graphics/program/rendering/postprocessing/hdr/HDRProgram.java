@@ -31,6 +31,7 @@ public class HDRProgram extends Program {
 
     public HDRProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER, new ExtendedGLSLProgramCompiler(CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
+        compile();
         loadUniforms();
         setupSamplers();
     }

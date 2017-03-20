@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.pipeline;
 
+import pl.warp.engine.graphics.Graphics;
+
 import java.util.function.Consumer;
 
 /**
@@ -21,7 +23,7 @@ public class OutputConsumer<T> implements Sink<T> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
 
     }
 

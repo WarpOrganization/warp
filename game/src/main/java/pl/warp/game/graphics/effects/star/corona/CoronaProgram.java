@@ -39,6 +39,7 @@ public class CoronaProgram extends Program implements Updatable {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
+        compile();
         this.temperature = temperature;
         loadLocations();
     }

@@ -30,6 +30,7 @@ public abstract class MeshRendererProgram extends Program {
 
     public MeshRendererProgram(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
         super(vertexShaderName, fragmentShaderName, compiler);
+        compile();
     }
 
     public abstract void useComponent(Component component);

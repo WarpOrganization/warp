@@ -23,6 +23,7 @@ public class LensProgram extends GeometryProgram {
 
     public LensProgram() {
         super(PROGRAM_NAME);
+        compile();
         loadUniforms();
     }
 

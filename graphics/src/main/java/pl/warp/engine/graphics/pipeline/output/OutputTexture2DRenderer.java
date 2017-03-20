@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.pipeline.output;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Textures;
@@ -24,7 +25,7 @@ public class OutputTexture2DRenderer implements Sink<Texture2D> {
     }
 
     @Override
-    public void init() {
+    public void init(Graphics g) {
 
     }
 

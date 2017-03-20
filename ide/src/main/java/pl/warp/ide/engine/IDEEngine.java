@@ -71,7 +71,7 @@ public class IDEEngine {
     private void resize(int width, int height) {
         Graphics graphics = contextBuilder.getGameContext().getGraphics();
         graphics.getThread().scheduleOnce(() ->
-                graphics.resize(width, height)
+                graphics.getEnginePipeline().resize(width, height)
         );
     }
 

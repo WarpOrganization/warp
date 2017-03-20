@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.pipeline.rendering;
 
+import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.PipelineElement;
@@ -30,7 +31,7 @@ public abstract class FramebufferPipelineElement implements PipelineElement {
     abstract void prepare();
 
     @Override
-    public void init() {
+    public void init(Graphics graphics) {
         this.quad = new Quad();
     }
 

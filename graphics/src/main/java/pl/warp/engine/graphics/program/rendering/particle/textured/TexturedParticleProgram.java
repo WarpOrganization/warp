@@ -27,7 +27,7 @@ public class TexturedParticleProgram extends GeometryProgram {
     private Matrix4f modelMatrix;
 
     public TexturedParticleProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         loadUniforms();
     }
 

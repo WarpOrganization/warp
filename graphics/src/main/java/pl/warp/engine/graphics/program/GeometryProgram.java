@@ -1,14 +1,9 @@
 package pl.warp.engine.graphics.program;
 
-import com.google.common.io.CharStreams;
 import org.lwjgl.opengl.GL20;
 import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.program.extendedglsl.LocalProgramLoader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * @author Jaca777
@@ -16,26 +11,25 @@ import java.io.InputStreamReader;
  */
 public class GeometryProgram extends Program {
 
-    public GeometryProgram(String vertexShaderName, String fragmentShaderName, InputStream geometryShader, ExtendedGLSLProgramCompiler compiler) {
-        this(vertexShaderName, fragmentShaderName, toString(geometryShader), compiler);
-    }
+    private String geomShaderName;
 
-    private static String toString(InputStream stream) {
-        try {
-            return CharStreams.toString(new InputStreamReader(stream));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public GeometryProgram(String vertexShader, String fragmentShader, String geometryShader, ExtendedGLSLProgramCompiler compiler) {
-        this.program = compiler.compile(vertexShader, fragmentShader, geometryShader);
-        GL20.glUseProgram(this.program.getGLProgram());
+    public GeometryProgram(String vertexShaderName, String fragmentShaderName, String geometryShaderName, ExtendedGLSLProgramCompiler compiler) {
+        this.compiler = compiler;
+        this.vertexShaderName = vertexShaderName;
+        this.fragmentShaderName = fragmentShaderName;
+        this.geomShaderName = geometryShaderName;
+        this.compiler = compiler;
     }
 
     public GeometryProgram(String programName) {
         this(programName + "/vert", programName + "/frag", programName + "/geom",
                 new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
+    }
+
+    @Override
+    public void compile() {
+        this.program = compiler.compile(vertexShaderName, fragmentShaderName, geomShaderName);
+        GL20.glUseProgram(this.program.getGLProgram());
     }
 
     @Override

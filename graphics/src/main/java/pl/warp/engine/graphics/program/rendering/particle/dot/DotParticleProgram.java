@@ -25,7 +25,7 @@ public class DotParticleProgram extends GeometryProgram {
     private Matrix4f modelMatrix;
 
     public DotParticleProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         loadUniforms();
     }
 

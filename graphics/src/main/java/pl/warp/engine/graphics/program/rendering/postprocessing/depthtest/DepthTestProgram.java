@@ -21,7 +21,7 @@ public class DepthTestProgram extends Program {
     private int unifComponentSampler;
 
     public DepthTestProgram() {
-        super(PROGRAM_NAME);
+        super(PROGRAM_NAME); compile();
         this.unifSceneDepthSampler = getUniformLocation("sceneDepth");
         this.unifComponentDepthSampler = getUniformLocation("componentDepth");
         this.unifComponentSampler = getUniformLocation("component");
