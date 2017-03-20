@@ -19,6 +19,7 @@ public class RenderingConfig {
     private float bloomThreshold = 1.0f;
     private float fov = 70;
     private boolean sunshaft = true;
+    private PipelineEffects effects = new PipelineEffects();
 
     public RenderingConfig(int fps, Display display) {
         this.fps = fps;
@@ -112,4 +113,9 @@ public class RenderingConfig {
     public boolean isSunshaftEnabled() {
         return sunshaft;
     }
+
+    public PipelineEffects getEffects(){
+        return effects;
+    }
+
 }

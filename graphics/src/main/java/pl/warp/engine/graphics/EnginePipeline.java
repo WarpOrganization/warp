@@ -13,8 +13,11 @@ import pl.warp.engine.graphics.particles.ParticleSystemsStorageUpdater;
 import pl.warp.engine.graphics.pipeline.*;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.pipeline.rendering.MultisampleTextureRenderer;
+import pl.warp.engine.graphics.pipeline.rendering.effects.barrelchroma.BarrelChromaEffect;
 import pl.warp.engine.graphics.pipeline.rendering.effects.distortedscreen.DistortedScreenEffect;
 import pl.warp.engine.graphics.pipeline.rendering.effects.monochromatic.MonochromaticEffect;
+import pl.warp.engine.graphics.pipeline.rendering.effects.mosaic.MosaicEffect;
+import pl.warp.engine.graphics.pipeline.rendering.effects.screen.ScreenEffect;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
 import pl.warp.engine.graphics.postprocessing.HDRRenderer;
 import pl.warp.engine.graphics.postprocessing.WeightedTexture2D;
@@ -68,11 +71,17 @@ public class EnginePipeline {
                 .via(textureRenderer);
         pipeline = createPostprocessing(pipeline, environment);
         pipeline = createEffects(pipeline);
-        this.pipeline =  pipeline.to(output, graphics);
+        this.pipeline = pipeline.to(output, graphics);
     }
 
     private PipelineBuilder<Texture2D> createEffects(PipelineBuilder<Texture2D> pipeline) {
-        return pipeline.via(new MonochromaticEffect(new Vector3f(1))).via(new DistortedScreenEffect());
+        PipelineBuilder p = pipeline;
+        if (config.getEffects().isBarrelchroma()) p = p.via(new BarrelChromaEffect(30));
+        if (config.getEffects().isMosaic()) p = p.via(new MosaicEffect(0.003f, 0.0024f));
+        if (config.getEffects().isDistorted()) p = p.via(new DistortedScreenEffect());
+        if (config.getEffects().isMonochromatic()) p = p.via(new MonochromaticEffect(new Vector3f(1)));
+        if (config.getEffects().isScreen()) p = p.via(new ScreenEffect());
+        return p;
     }
 
     private PipelineBuilder<Texture2D> createPostprocessing(PipelineBuilder<Texture2D> pipeline, Environment environment) {
@@ -83,7 +92,7 @@ public class EnginePipeline {
                 (i, o) -> o.setTexture(i));
         postprocesses.add(sceneFlow);
         if (config.isBloomEnabled()) postprocesses.add(createBloom());
-        if(config.isSunshaftEnabled()) postprocesses.add(createSunshaft());
+        if (config.isSunshaftEnabled()) postprocesses.add(createSunshaft());
         MultiFlow<Texture2D, WeightedTexture2D> postprocessing = new MultiFlow<>(postprocesses.stream().toArray(Flow[]::new), WeightedTexture2D[]::new);
         HDRRenderer hdrRenderer = new HDRRenderer(config);
         return pipeline.via(postprocessing).via(hdrRenderer);

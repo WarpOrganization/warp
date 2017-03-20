@@ -75,8 +75,22 @@ public class TestApp extends Application {
         grid.add(new Label("Space - stopping"), 2, 7);
         grid.add(new Label("O / L - controlling sun temperature"), 1, 8);
         grid.add(new Label("Esc - exit"), 2, 8);
+
         grid.add(new Label("Scene to load"),0,9);
         grid.add(availableScenes, 1, 9);
+
+        CheckBox monochromatic = new CheckBox("Monochromatic");
+        CheckBox distorted = new CheckBox("Distorted screen");
+        CheckBox screen = new CheckBox("Screen");
+        CheckBox mosaic = new CheckBox("Mosaic");
+        CheckBox barrelchroma = new CheckBox("Barrel chroma");
+
+        grid.add(monochromatic, 0, 10);
+        grid.add(distorted, 1, 10);
+        grid.add(screen, 2, 10);
+        grid.add(mosaic, 0, 11);
+        grid.add(barrelchroma, 1, 11);
+
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == runButtonType) {
@@ -87,6 +101,11 @@ public class TestApp extends Application {
                 config.setBloomLevel((float) bloomLevel.getValue());
                 config.setExposure((float) exposure.getValue());
                 config.setRenderingSamples((int) renderingSamples.getValue());
+                config.getEffects().setMonochromatic(monochromatic.isSelected());
+                config.getEffects().setScreen(screen.isSelected());
+                config.getEffects().setDistorted(distorted.isSelected());
+                config.getEffects().setMosaic(mosaic.isSelected());
+                config.getEffects().setBarrelchroma(barrelchroma.isSelected());
                 return config;
             } else return null;
         });
