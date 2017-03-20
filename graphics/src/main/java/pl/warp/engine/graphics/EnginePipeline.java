@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics;
 
+import org.joml.Vector3f;
 import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.EngineTask;
 import pl.warp.engine.core.EngineThread;
@@ -12,8 +13,8 @@ import pl.warp.engine.graphics.particles.ParticleSystemsStorageUpdater;
 import pl.warp.engine.graphics.pipeline.*;
 import pl.warp.engine.graphics.pipeline.builder.PipelineBuilder;
 import pl.warp.engine.graphics.pipeline.rendering.MultisampleTextureRenderer;
-import pl.warp.engine.graphics.pipeline.rendering.effects.barrelchroma.BarrelChromaEffect;
-import pl.warp.engine.graphics.pipeline.rendering.effects.screen.ScreenEffect;
+import pl.warp.engine.graphics.pipeline.rendering.effects.distortedscreen.DistortedScreenEffect;
+import pl.warp.engine.graphics.pipeline.rendering.effects.monochromatic.MonochromaticEffect;
 import pl.warp.engine.graphics.postprocessing.BloomRenderer;
 import pl.warp.engine.graphics.postprocessing.HDRRenderer;
 import pl.warp.engine.graphics.postprocessing.WeightedTexture2D;
@@ -71,7 +72,7 @@ public class EnginePipeline {
     }
 
     private PipelineBuilder<Texture2D> createEffects(PipelineBuilder<Texture2D> pipeline) {
-        return pipeline.via(new ScreenEffect()).via(new BarrelChromaEffect(20));
+        return pipeline.via(new MonochromaticEffect(new Vector3f(1))).via(new DistortedScreenEffect());
     }
 
     private PipelineBuilder<Texture2D> createPostprocessing(PipelineBuilder<Texture2D> pipeline, Environment environment) {

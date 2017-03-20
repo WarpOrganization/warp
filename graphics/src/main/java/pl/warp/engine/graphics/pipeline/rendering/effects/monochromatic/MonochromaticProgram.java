@@ -1,6 +1,6 @@
-package pl.warp.engine.graphics.pipeline.rendering.effects.distortedscreen;
+package pl.warp.engine.graphics.pipeline.rendering.effects.monochromatic;
 
-import pl.warp.engine.core.updater.Updatable;
+import org.joml.Vector3f;
 import pl.warp.engine.graphics.program.Program;
 import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
@@ -9,18 +9,16 @@ import pl.warp.engine.graphics.texture.Texture2D;
 
 /**
  * @author Jaca777
- *         Created 2017-03-20 at 21
+ *         Created 2017-03-20 at 22
  */
-public class DistortedScreenProgram extends Program implements Updatable {
+public class MonochromaticProgram extends Program {
     private static final String PROGRAM_PATH = "pl/warp/engine/graphics/pipeline/rendering/effects/";
-    private static final String VERTEX_SHADER = "distortedscreen/vert";
-    private static final String FRAGMENT_SHADER = "distortedscreen/frag";
+    private static final String VERTEX_SHADER = "monochromatic/vert";
+    private static final String FRAGMENT_SHADER = "monochromatic/frag";
 
-    private int unifTime;
+    private int unifColor;
 
-    private int time = 0;
-
-    public DistortedScreenProgram() {
+    public MonochromaticProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER,
                 new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
@@ -29,17 +27,15 @@ public class DistortedScreenProgram extends Program implements Updatable {
     @Override
     public void compile() {
         super.compile();
-        this.unifTime = getUniformLocation("globalTime");
+        this.unifColor = getUniformLocation("color");
     }
 
     public void useTexture(Texture2D texture) {
         useTexture(texture, 0);
     }
 
-    @Override
-    public void update(int delta) {
-        this.time += delta;
-        use();
-        setUniformi(unifTime, time);
+    public void useColor(Vector3f color){
+        setUniformV3(this.unifColor, color);
     }
+
 }
