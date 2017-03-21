@@ -314,11 +314,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
             frigate.addProperty(frigateTransform);
 
             ParticleStage[] stage = {
-                    new ParticleStage(0.07f, new Vector4f(1.0f, 1.0f, 1.0f, 1.0f)),
+                    new ParticleStage(0.1f, new Vector4f(1.0f, 1.0f, 1.0f, 1.0f)),
             };
 
-            int boxEdge = 100;
-            StaticParticleEmitter staticParticleEmitter = new StaticParticleEmitter(controllableGoat, 4000, boxEdge);
+            int boxEdge = 220;
+            StaticParticleEmitter staticParticleEmitter = new StaticParticleEmitter(controllableGoat, 5000, boxEdge);
             StaticParticleAnimator staticParticleAnimator = new StaticParticleAnimator(controllableGoat, boxEdge);
             ParticleSystem dustSystem = new ParticleSystem(new DotParticleAttribute(stage), staticParticleEmitter, staticParticleAnimator);
             controllableGoat.getParent().addProperty(new ParticleEmitterProperty(dustSystem));

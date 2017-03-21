@@ -99,7 +99,7 @@ public class QuaternionCamera implements Camera {
         return cameraMatrix;
     }
 
-    public TransformProperty getTransform() {
+    public synchronized TransformProperty getTransform() {
         return transform;
     }
 
