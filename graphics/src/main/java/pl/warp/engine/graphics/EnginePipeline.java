@@ -76,11 +76,11 @@ public class EnginePipeline {
 
     private PipelineBuilder<Texture2D> createEffects(PipelineBuilder<Texture2D> pipeline) {
         PipelineBuilder p = pipeline;
-        if (config.getEffects().isBarrelchroma()) p = p.via(new BarrelChromaEffect(30));
-        if (config.getEffects().isMosaic()) p = p.via(new MosaicEffect(0.003f, 0.0024f));
-        if (config.getEffects().isDistorted()) p = p.via(new DistortedScreenEffect());
-        if (config.getEffects().isMonochromatic()) p = p.via(new MonochromaticEffect(new Vector3f(1)));
-        if (config.getEffects().isScreen()) p = p.via(new ScreenEffect());
+        if (config.getEffects().isBarrelchromaEnabled()) p = p.via(new BarrelChromaEffect(30));
+        if (config.getEffects().isMosaicEnabled()) p = p.via(new MosaicEffect(0.003f, 0.0024f));
+        if (config.getEffects().isDistortedEnabled()) p = p.via(new DistortedScreenEffect());
+        if (config.getEffects().isMonochromaticEnabled()) p = p.via(new MonochromaticEffect(new Vector3f(1)));
+        if (config.getEffects().isScreenEnabled()) p = p.via(new ScreenEffect());
         return p;
     }
 

@@ -12,7 +12,7 @@ public class PipelineEffects {
     private boolean screen;
     private boolean barrelchroma;
 
-    public boolean isMonochromatic() {
+    public boolean isMonochromaticEnabled() {
         return monochromatic;
     }
 
@@ -20,7 +20,7 @@ public class PipelineEffects {
         this.monochromatic = monochromatic;
     }
 
-    public boolean isDistorted() {
+    public boolean isDistortedEnabled() {
         return distorted;
     }
 
@@ -28,7 +28,7 @@ public class PipelineEffects {
         this.distorted = distorted;
     }
 
-    public boolean isMosaic() {
+    public boolean isMosaicEnabled() {
         return mosaic;
     }
 
@@ -36,7 +36,7 @@ public class PipelineEffects {
         this.mosaic = mosaic;
     }
 
-    public boolean isScreen() {
+    public boolean isScreenEnabled() {
         return screen;
     }
 
@@ -44,7 +44,7 @@ public class PipelineEffects {
         this.screen = screen;
     }
 
-    public boolean isBarrelchroma() {
+    public boolean isBarrelchromaEnabled() {
         return barrelchroma;
     }
 
