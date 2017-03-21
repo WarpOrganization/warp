@@ -40,6 +40,8 @@ import pl.warp.engine.graphics.particles.animator.DirectionalAccelerationAnimato
 import pl.warp.engine.graphics.particles.dot.DotParticle;
 import pl.warp.engine.graphics.particles.dot.DotParticleAttribute;
 import pl.warp.engine.graphics.particles.dot.ParticleStage;
+import pl.warp.engine.graphics.particles.staticparticles.StaticParticleAnimator;
+import pl.warp.engine.graphics.particles.staticparticles.StaticParticleEmitter;
 import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
@@ -60,7 +62,6 @@ import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
-import pl.warp.game.graphics.effects.atmosphere.Atmosphere;
 import pl.warp.game.graphics.effects.gas.GasPlanet;
 import pl.warp.game.graphics.effects.gas.GasPlanetProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRing;
@@ -219,7 +220,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             Star sun = new Star(scene, 5000f);
             TransformProperty sunSphereTransform = new TransformProperty();
-            sunSphereTransform.move(new Vector3f(10000f, 200f, 500f));
+            sunSphereTransform.move(new Vector3f(200f, 200f, 10000f));
             sunSphereTransform.scale(new Vector3f(2000.0f));
             sun.addProperty(sunSphereTransform);
             SpotLight spotLight = new SpotLight(sun, new Vector3f(0), new Vector3f(1.0f).mul(4), new Vector3f(1.0f).mul(0.3f), 0.00001f, 0.0001f);
@@ -312,7 +313,15 @@ public class SpaceSceneLoader implements GameSceneLoader {
             frigateTransform.rotateY((float) (Math.PI / 2));
             frigate.addProperty(frigateTransform);
 
+            ParticleStage[] stage = {
+                    new ParticleStage(0.07f, new Vector4f(1.0f, 1.0f, 1.0f, 1.0f)),
+            };
 
+            int boxEdge = 100;
+            StaticParticleEmitter staticParticleEmitter = new StaticParticleEmitter(controllableGoat, 4000, boxEdge);
+            StaticParticleAnimator staticParticleAnimator = new StaticParticleAnimator(controllableGoat, boxEdge);
+            ParticleSystem dustSystem = new ParticleSystem(new DotParticleAttribute(stage), staticParticleEmitter, staticParticleAnimator);
+            controllableGoat.getParent().addProperty(new ParticleEmitterProperty(dustSystem));
 
             generateGOATS(scene);
             //spawnFrigates();

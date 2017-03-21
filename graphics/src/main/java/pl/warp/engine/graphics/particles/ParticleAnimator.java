@@ -6,4 +6,5 @@ package pl.warp.engine.graphics.particles;
  */
 public interface ParticleAnimator<T extends Particle> {
     void animate(T particle, int delta);
+    default void afterAnimate() {}
 }

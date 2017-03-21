@@ -28,10 +28,9 @@ public class ParticleSystem<T extends Particle> {
         updateParticleLifeTimes(delta);
         emitParticles(delta);
         animateParticles(delta);
-        onUpdate(delta);
     }
 
-    private void updateParticleLifeTimes(int delta) {
+    protected void updateParticleLifeTimes(int delta) {
         for (Iterator<? extends Particle> iterator = particles.iterator(); iterator.hasNext(); ) {
             Particle particle = iterator.next();
             int ttl = particle.getTimeToLive() - delta;
@@ -45,10 +44,8 @@ public class ParticleSystem<T extends Particle> {
             for(ParticleAnimator animator : animators)
                 animator.animate(particle, delta);
         }
-    }
-
-    public void onUpdate(int delta) {
-
+        for(ParticleAnimator animator : animators)
+            animator.afterAnimate();
     }
 
     private void emitParticles(int delta) {
