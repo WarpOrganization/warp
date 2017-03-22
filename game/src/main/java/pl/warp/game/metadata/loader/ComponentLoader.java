@@ -31,7 +31,7 @@ public class ComponentLoader {
     }
 
     private void loadChildren(ComponentMetadata metadata, Component component) {
-/*        metadata.get(md -> {
+/*        metadata.makePlanet(md -> {
             if (md instanceof ComponentMetadata) {
                 Component child = loadComponentMetadata((ComponentMetadata) md);
                 component.addChild(child);

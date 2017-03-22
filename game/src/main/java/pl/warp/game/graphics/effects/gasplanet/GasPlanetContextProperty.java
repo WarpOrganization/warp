@@ -1,4 +1,4 @@
-package pl.warp.game.graphics.effects.gas;
+package pl.warp.game.graphics.effects.gasplanet;
 
 import pl.warp.engine.core.scene.Property;
 import pl.warp.game.scene.GameComponent;

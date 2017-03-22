@@ -62,12 +62,12 @@ import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
-import pl.warp.game.graphics.effects.gas.GasPlanet;
-import pl.warp.game.graphics.effects.gas.GasPlanetProgram;
-import pl.warp.game.graphics.effects.ring.PlanetRing;
+import pl.warp.game.graphics.effects.gasplanet.GasPlanetBuilder;
+import pl.warp.game.graphics.effects.gasplanet.GasPlanetProgram;
+import pl.warp.game.graphics.effects.ring.PlanetRingBuilder;
 import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
-import pl.warp.game.graphics.effects.star.Star;
+import pl.warp.game.graphics.effects.star.StarBuilder;
 import pl.warp.game.graphics.effects.star.StarProgram;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
@@ -134,7 +134,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
     private StarProgram starProgram;
     private GameSceneComponent enemyPortal;
     private GameSceneComponent allyPortal;
-    private GasPlanet gasPlanet;
+    private GameComponent gasPlanet;
 
 
     public SpaceSceneLoader(RenderingConfig config, GameContextBuilder contextBuilder) {
@@ -202,7 +202,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             ImageData decodedColorsTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("gas.png"), PNGDecoder.Format.RGBA);
             colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
-            gasPlanet = new GasPlanet(scene, colorsTexture);
+            gasPlanet = new GasPlanetBuilder(scene, colorsTexture).build();
             TransformProperty gasSphereTransform = gasPlanet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             gasSphereTransform.move(new Vector3f(-1600f, -200f, -500f));
             gasSphereTransform.scale(new Vector3f(1000.0f));
@@ -215,10 +215,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, true, ringColorsData.getData());
             ringColors.enableAnisotropy(4);
 
-            PlanetRing ring = new PlanetRing(gasPlanet, startR, endR, ringColors);
+            GameComponent ring = new PlanetRingBuilder(gasPlanet, ringColors).build();
             //Atmosphere atmosphere = new Atmosphere(gasPlanet, new Vector3f(1.0f, 1.0f, 1.0f), 1.07f);
 
-            Star sun = new Star(scene, 5000f);
+            Texture1D starColors = getStarTemperatureTexture();
+            GameComponent sun = new StarBuilder(scene, starColors).build();
             TransformProperty sunSphereTransform = new TransformProperty();
             sunSphereTransform.move(new Vector3f(200f, 200f, 10000f));
             sunSphereTransform.scale(new Vector3f(2000.0f));
@@ -327,6 +328,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
             //spawnFrigates();
             new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
         });
+    }
+
+    private static Texture1D getStarTemperatureTexture() {
+        ImageData starTemperatureImage = ImageDecoder.decodePNG(StarBuilder.class.getResourceAsStream("star_temperature.png"), PNGDecoder.Format.RGBA);
+        return new Texture1D(starTemperatureImage.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, starTemperatureImage.getData());
     }
 
     @Override

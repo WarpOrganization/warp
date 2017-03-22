@@ -27,63 +27,63 @@ public class TransformProperty extends Property{
         this.scale = scale;
     }
 
-    public Vector3f getScale() {
+    public synchronized Vector3f getScale() {
         return scale;
     }
 
-    public void scale(Vector3f value){
+    public synchronized void scale(Vector3f value){
         this.scale.mul(value);
     }
 
-    public void setScale(Vector3f scale) {
+    public synchronized void setScale(Vector3f scale) {
         this.scale = scale;
     }
 
-    public void rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
+    public synchronized void rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
         rotation.rotate(xAngleInRadians, yAngleInRadians, zAngleInRadians);
     }
 
-    public void rotateLocalX(float angleInRadians) {
+    public synchronized void rotateLocalX(float angleInRadians) {
         rotation.rotateLocalX(angleInRadians);
     }
 
-    public void rotateLocalY(float angleInRadians) {
+    public synchronized void rotateLocalY(float angleInRadians) {
         rotation.rotateLocalY(angleInRadians);
     }
 
-    public void rotateLocalZ(float angleInRadians) {
+    public synchronized void rotateLocalZ(float angleInRadians) {
         rotation.rotateLocalZ(angleInRadians);
     }
 
-    public Quaternionf rotateX(float angle) {
+    public synchronized Quaternionf rotateX(float angle) {
         return rotation.rotateX(angle);
     }
 
-    public Quaternionf rotateY(float angle) {
+    public synchronized Quaternionf rotateY(float angle) {
         return rotation.rotateY(angle);
     }
 
-    public Quaternionf rotateZ(float angle) {
+    public synchronized Quaternionf rotateZ(float angle) {
         return rotation.rotateZ(angle);
     }
 
-    public Quaternionf getRotation() {
+    public synchronized Quaternionf getRotation() {
         return rotation;
     }
 
-    public Vector3f getTranslation() {
+    public synchronized Vector3f getTranslation() {
         return translation;
     }
 
-    public void setTranslation(Vector3f translation) {
+    public synchronized void setTranslation(Vector3f translation) {
         this.translation = translation;
     }
 
-    public void move(Vector3f movement) {
+    public synchronized void move(Vector3f movement) {
         this.translation.add(movement);
     }
 
-    public void setRotation(Quaternionf rotation) {
+    public synchronized void setRotation(Quaternionf rotation) {
         this.rotation.set(rotation);
     }
 }

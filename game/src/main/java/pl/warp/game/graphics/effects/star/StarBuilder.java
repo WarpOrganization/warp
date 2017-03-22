@@ -1,6 +1,5 @@
 package pl.warp.game.graphics.effects.star;
 
-import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.updater.Updatable;
 import pl.warp.engine.core.updater.UpdaterTask;
@@ -9,10 +8,8 @@ import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
-import pl.warp.engine.graphics.resource.texture.ImageData;
-import pl.warp.engine.graphics.resource.texture.ImageDecoder;
-import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.texture.Texture1D;
+import pl.warp.game.graphics.effects.GameComponentBuilder;
 import pl.warp.game.graphics.effects.star.corona.CoronaProgram;
 import pl.warp.game.graphics.effects.star.corona.CoronaProperty;
 import pl.warp.game.graphics.effects.star.corona.CoronaRenderer;
@@ -24,60 +21,68 @@ import pl.warp.game.scene.GameSceneComponent;
  * @author Jaca777
  *         Created 2017-02-08 at 23
  */
-public class Star extends GameSceneComponent {
+public class StarBuilder implements GameComponentBuilder {
 
-    private float temperature;
+    private GameComponent parent;
+    private Texture1D temperatureTexture;
+    private float temperature = 5000f;
     private Component corona;
     private StarContextProperty contextProperty;
 
-    public Star(GameComponent parent, float temperature) {
-        super(parent);
+    public StarBuilder(GameComponent parent, Texture1D temperatureTexture) {
+        this.parent = parent;
+        this.temperatureTexture = temperatureTexture;
+    }
+
+    public StarBuilder setTemperatureTexture(Texture1D temperatureTexture) {
+        this.temperatureTexture = temperatureTexture;
+        return this;
+    }
+
+    public StarBuilder setTemperature(float temperature) {
         this.temperature = temperature;
-        init();
+        return this;
     }
 
-    private void init() {
+    @Override
+    public GameComponent build() {
+        GameComponent star = new GameSceneComponent(parent);
         Mesh sphere = new Sphere(50, 50);
-        this.addProperty(new RenderableMeshProperty(sphere));
+        star.addProperty(new RenderableMeshProperty(sphere));
         contextProperty = getContextProperty();
-        this.addProperty(new CustomProgramProperty(contextProperty.getStarProgram()));
-        this.addProperty(new StarProperty(temperature));
-        this.addProperty(new RenderableMeshProperty(sphere));
-        createCorona();
+        star.addProperty(new CustomProgramProperty(contextProperty.getStarProgram()));
+        star.addProperty(new StarProperty(temperature));
+        star.addProperty(new RenderableMeshProperty(sphere));
+        createCorona(star);
+        return star;
     }
 
-    private void createCorona() {
-        corona = new GameSceneComponent(this);
+    private void createCorona(GameComponent star) {
+        corona = new GameSceneComponent(star);
         corona.addProperty(new CustomRendererProperty(contextProperty.getCoronaRenderer()));
         corona.addProperty(new CoronaProperty(temperature, 2.0f));
     }
 
     private StarContextProperty getContextProperty() {
-        GameScene scene = getContext().getScene();
+        GameScene scene = parent.getContext().getScene();
         if (scene.hasEnabledProperty(StarContextProperty.STAR_CONTEXT_PROPERTY_NAME))
             return scene.getProperty(StarContextProperty.STAR_CONTEXT_PROPERTY_NAME);
         else return createContext();
     }
 
     private StarContextProperty createContext() {
-        Texture1D temperature = getTemperatureTexture();
-        StarProgram starProgram = new StarProgram(temperature);
+        StarProgram starProgram = new StarProgram(temperatureTexture);
         scheduleUpdater(starProgram);
-        CoronaProgram coronaProgram = new CoronaProgram(temperature);
+        CoronaProgram coronaProgram = new CoronaProgram(temperatureTexture);
         scheduleUpdater(coronaProgram);
-        CoronaRenderer coronaRenderer = new CoronaRenderer(getContext().getGraphics(), coronaProgram);
+        CoronaRenderer coronaRenderer = new CoronaRenderer(parent.getContext().getGraphics(), coronaProgram);
         StarContextProperty property = new StarContextProperty(starProgram, coronaProgram, coronaRenderer);
-        getContext().getScene().addProperty(property);
+        parent.getContext().getScene().addProperty(property);
         return property;
     }
 
     private void scheduleUpdater(Updatable updatable) {
-        getContext().getGraphics().getThread().scheduleTask(new UpdaterTask(updatable));
-    }
-
-    private Texture1D getTemperatureTexture() {
-        ImageData ringColorsData = ImageDecoder.decodePNG(Star.class.getResourceAsStream("star_temperature.png"), PNGDecoder.Format.RGBA);
-        return new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, ringColorsData.getData());
+        parent.getContext().getGraphics().getThread().scheduleTask(new UpdaterTask(updatable));
     }
 
 

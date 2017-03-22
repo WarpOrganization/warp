@@ -1,4 +1,4 @@
-package pl.warp.game.graphics.effects.gas;
+package pl.warp.game.graphics.effects.gasplanet;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
@@ -28,8 +28,8 @@ public class GasPlanetProgram extends MeshRendererProgram implements Updatable {
     private static final int COLORS_TEXTURE_SAMPLER = 0;
 
     private static final String PROGRAM_PATH = "pl/warp/game/graphics/effects/";
-    private static final String VERTEX_SHADER = "gas/vert";
-    private static final String FRAGMENT_SHADER = "gas/frag";
+    private static final String VERTEX_SHADER = "gasplanet/vert";
+    private static final String FRAGMENT_SHADER = "gasplanet/frag";
 
     private int time;
 
@@ -80,7 +80,7 @@ public class GasPlanetProgram extends MeshRendererProgram implements Updatable {
         if (component.hasEnabledProperty(GasPlanetProperty.GAS_PLANET_PROPERTY_NAME)) {
             GasPlanetProperty property = component.getProperty(GasPlanetProperty.GAS_PLANET_PROPERTY_NAME);
             useTexture(property.getColors(), COLORS_TEXTURE_SAMPLER);
-        } else throw new IllegalArgumentException("Component needs an enabled gas planet property in order to render a gas planet.");
+        } else throw new IllegalArgumentException("Component needs an enabled gasplanet planet property in order to render a gasplanet planet.");
     }
 
     private Vector3f tmpVector = new Vector3f();

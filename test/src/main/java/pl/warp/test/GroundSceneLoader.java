@@ -18,7 +18,6 @@ import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.core.scene.PoolEventDispatcher;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
@@ -43,16 +42,17 @@ import pl.warp.engine.graphics.postprocessing.lens.GraphicsLensFlareProperty;
 import pl.warp.engine.graphics.postprocessing.lens.LensFlare;
 import pl.warp.engine.graphics.postprocessing.lens.SingleFlare;
 import pl.warp.engine.graphics.postprocessing.sunshaft.SunshaftProperty;
+import pl.warp.engine.graphics.program.rendering.component.animatedtexture.AnimatedTextureProgram;
+import pl.warp.engine.graphics.program.rendering.component.terrain.TerrainProgram;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
-import pl.warp.engine.graphics.program.rendering.component.animatedtexture.AnimatedTextureProgram;
-import pl.warp.engine.graphics.program.rendering.component.terrain.TerrainProgram;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.terrain.TerrainProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
+import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
@@ -60,16 +60,12 @@ import pl.warp.engine.physics.DupaProperty;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
-import pl.warp.game.graphics.effects.star.Star;
-import pl.warp.game.graphics.effects.star.StarProperty;
-import pl.warp.game.graphics.effects.star.corona.CoronaProperty;
+import pl.warp.game.graphics.effects.star.StarBuilder;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.scene.GameSceneLoader;
-import pl.warp.game.script.GameScript;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -203,34 +199,8 @@ public class GroundSceneLoader implements GameSceneLoader {
                     new SingleFlare(0.6f, 1, 0.25f, new Vector3f(1f))
             };
 
-            Star sun = new Star(scene, 5000f);
-            new GameScript<Star>(sun) {
-
-                private StarProperty starProperty;
-                private CoronaProperty coronaProperty;
-
-                @Override
-                protected void init() {
-                    starProperty = sun.getProperty(StarProperty.STAR_PROPERTY_NAME);
-                    coronaProperty = sun.getChild(0).getProperty(CoronaProperty.CORONA_PROPERTY_NAME);
-                }
-
-                @Override
-                protected void update(int delta) {
-                    float temperature = starProperty.getTemperature();
-                    Input input = getContext().getInput();
-                    if (input.isKeyDown(KeyEvent.VK_O)) {
-                        temperature += delta * 10;
-                        System.out.println("Current temperature: " + temperature);
-                    }
-                    if (input.isKeyDown(KeyEvent.VK_L)) {
-                        temperature = Math.max(4100f, temperature - delta * 10);
-                        System.out.println("Current temperature: " + temperature);
-                    }
-                    starProperty.setTemperature(temperature);
-                    coronaProperty.setTemperature(temperature);
-                }
-            };
+            Texture1D starColors = getStarTemperatureTexture();
+            GameComponent sun = new StarBuilder(scene, starColors).build();
 
             TransformProperty sunSphereTransform = new TransformProperty();
             sunSphereTransform.move(new Vector3f(2000f, 2000f, 5000f));
@@ -332,6 +302,11 @@ public class GroundSceneLoader implements GameSceneLoader {
 
             audioManager = AudioManager.INSTANCE;
         });
+    }
+
+    private static Texture1D getStarTemperatureTexture() {
+        ImageData starTemperatureImage = ImageDecoder.decodePNG(StarBuilder.class.getResourceAsStream("star_temperature.png"), PNGDecoder.Format.RGBA);
+        return new Texture1D(starTemperatureImage.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, starTemperatureImage.getData());
     }
 
     protected GameComponent createCity() {
