@@ -11,7 +11,7 @@ import pl.warp.engine.graphics.window.Display;
  * @author Jaca777
  *         Created 2017-03-19 at 23
  */
-public class EdgeDetection extends ProgramTextureFlow<EdgeDetectionProgram> {
+public class EdgeDetection extends ProgramTextureFlow<EdgeDetectionProgram, Texture2D> {
 
     private Vector3f edgeColor;
     private Texture2D output;

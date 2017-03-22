@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.texture.Texture2D;
  * @author Jaca777
  *         Created 2017-03-20 at 22
  */
-public class MonochromaticEffect extends ProgramTextureFlow<MonochromaticProgram> {
+public class MonochromaticEffect extends ProgramTextureFlow<MonochromaticProgram, Texture2D> {
 
     private Texture2D output;
     private Vector3f color;

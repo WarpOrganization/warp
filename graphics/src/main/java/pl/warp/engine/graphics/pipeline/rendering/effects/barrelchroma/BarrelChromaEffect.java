@@ -11,7 +11,7 @@ import pl.warp.engine.graphics.window.Display;
  * @author Jaca777
  *         Created 2017-03-19 at 23
  */
-public class BarrelChromaEffect extends ProgramTextureFlow<BarrelChromaProgram> {
+public class BarrelChromaEffect extends ProgramTextureFlow<BarrelChromaProgram, Texture2D> {
 
     private int maxDistortionPx;
     private Texture2D output;

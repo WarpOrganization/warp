@@ -3,6 +3,7 @@ package pl.warp.engine.graphics.camera;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import pl.warp.engine.core.updater.Updatable;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 
 
@@ -10,7 +11,7 @@ import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public interface Camera {
+public interface Camera extends Updatable {
 
     void move(Vector3f v);
 
@@ -28,7 +29,7 @@ public interface Camera {
 
     void rotateZ(float angle);
 
-    void update();
+    void update(int delta);
 
     Vector3f getPosition(Vector3f dest);
 

@@ -4,13 +4,13 @@ import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.program.Program;
-import pl.warp.engine.graphics.texture.Texture2D;
+import pl.warp.engine.graphics.texture.TextureShape2D;
 
 /**
  * @author Jaca777
  *         Created 2017-03-19 at 21
  */
-public abstract class ProgramTextureSource<T extends Program> extends FramebufferPipelineElement implements Source<Texture2D>  {
+public abstract class ProgramTextureSource<T extends Program, R extends TextureShape2D> extends FramebufferPipelineElement implements Source<R>  {
 
     private T program;
     private TextureFramebuffer framebuffer;

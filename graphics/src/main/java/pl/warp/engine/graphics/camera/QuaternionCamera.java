@@ -77,7 +77,7 @@ public class QuaternionCamera implements Camera {
     private Vector3f cameraPos = new Vector3f();
 
     @Override
-    public synchronized void update() {
+    public synchronized void update(int d) {
         this.cameraMatrix = Transforms.getActualTransform(cameraComponent).invert();
         this.rotationMatrix = Transforms.getAbsoluteRotation(cameraComponent).get(tempRotation).invert();
         Transforms.getAbsolutePosition(cameraComponent, cameraPos);

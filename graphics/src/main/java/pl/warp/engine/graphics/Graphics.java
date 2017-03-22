@@ -49,7 +49,7 @@ public class Graphics {
     }
 
     private void createCameraTask() {
-        thread.scheduleTask(new UpdaterTask(d -> mainViewCamera.update()));
+        thread.scheduleTask(new UpdaterTask(mainViewCamera));
     }
 
     private void createWindow() {

@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.texture.Texture2D;
  * @author Jaca777
  *         Created 2017-03-20 at 21
  */
-public class ScreenEffect extends ProgramTextureFlow<ScreenProgram> {
+public class ScreenEffect extends ProgramTextureFlow<ScreenProgram, Texture2D> {
 
     private Texture2D output;
     private Graphics graphics;

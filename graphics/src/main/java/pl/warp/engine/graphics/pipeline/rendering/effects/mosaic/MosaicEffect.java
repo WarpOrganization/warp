@@ -10,7 +10,7 @@ import pl.warp.engine.graphics.window.Display;
  * @author Jaca777
  *         Created 2017-03-20 at 17
  */
-public class MosaicEffect extends ProgramTextureFlow<MosaicEffectProgram> {
+public class MosaicEffect extends ProgramTextureFlow<MosaicEffectProgram, Texture2D> {
 
     private float tileRadius;
     private float innerTileRadius;
