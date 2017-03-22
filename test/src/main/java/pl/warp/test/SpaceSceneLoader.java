@@ -64,6 +64,7 @@ import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
 import pl.warp.game.graphics.effects.gasplanet.GasPlanetBuilder;
 import pl.warp.game.graphics.effects.gasplanet.GasPlanetProgram;
+import pl.warp.game.graphics.effects.planet.PlanetBuilder;
 import pl.warp.game.graphics.effects.ring.PlanetRingBuilder;
 import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
@@ -80,6 +81,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import static com.badlogic.gdx.math.MathUtils.random;
@@ -323,6 +325,12 @@ public class SpaceSceneLoader implements GameSceneLoader {
             StaticParticleAnimator staticParticleAnimator = new StaticParticleAnimator(controllableGoat, boxEdge);
             ParticleSystem dustSystem = new ParticleSystem(new DotParticleAttribute(stage), staticParticleEmitter, staticParticleAnimator);
             controllableGoat.getParent().addProperty(new ParticleEmitterProperty(dustSystem));
+
+            ByteBuffer[] testData = {null, null, null, null, null, null};
+            GameComponent planet = new PlanetBuilder(scene, new Cubemap(100, 100, testData)).makePlanet();
+            TransformProperty planetTransform = planet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            planetTransform.move(new Vector3f(4000f, -200f, -500f));
+            planetTransform.scale(new Vector3f(1000.0f));
 
             generateGOATS(scene);
             //spawnFrigates();
