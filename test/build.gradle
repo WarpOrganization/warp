@@ -18,6 +18,7 @@ dependencies {
     compile project(':audio')
     compile project(':ai')
     compile project(':game')
+    compile project(':launcher')
     testCompile 'junit:junit:4.12'
 }
 
