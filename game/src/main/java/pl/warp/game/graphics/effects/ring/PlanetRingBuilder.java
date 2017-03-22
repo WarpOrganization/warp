@@ -3,10 +3,10 @@ package pl.warp.game.graphics.effects.ring;
 import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Ring;
+import pl.warp.engine.graphics.program.pool.ProgramPool;
 import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.game.graphics.effects.GameComponentBuilder;
 import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 
 /**
@@ -50,15 +50,14 @@ public class PlanetRingBuilder implements GameComponentBuilder {
         return gameComponent;
     }
 
-    public PlanetRingProgram getPlanetaryRingProgram() {
-        GameScene scene = parent.getContext().getScene();
-        if (scene.hasEnabledProperty(PlanetRingContextProperty.PLANETARY_RING_CONTEXT_PROPERTY_NAME)) {
-            PlanetRingContextProperty property = scene.getProperty(PlanetRingContextProperty.PLANETARY_RING_CONTEXT_PROPERTY_NAME);
-            return property.getProgram();
-        } else {
-            PlanetRingProgram program = new PlanetRingProgram();
-            parent.getContext().getScene().addProperty(new PlanetRingContextProperty(program));
-            return program;
-        }
+    private PlanetRingProgram getPlanetaryRingProgram() {
+        ProgramPool programPool = parent.getContext().getGraphics().getProgramPool();
+        return programPool.getProgram(PlanetRingProgram.class).orElse(createRingProgram(programPool));
+    }
+
+    private PlanetRingProgram createRingProgram(ProgramPool programPool) {
+        PlanetRingProgram program = new PlanetRingProgram();
+        programPool.registerProgram(program);
+        return program;
     }
 }

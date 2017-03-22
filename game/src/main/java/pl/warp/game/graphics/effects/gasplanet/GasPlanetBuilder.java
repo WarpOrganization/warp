@@ -3,13 +3,13 @@ package pl.warp.game.graphics.effects.gasplanet;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.updater.UpdaterTask;
 import pl.warp.engine.graphics.mesh.CustomProgramProperty;
-import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
+import pl.warp.engine.graphics.program.pool.ProgramPool;
 import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.game.graphics.effects.GameComponentBuilder;
 import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.OwnerProperty;
@@ -39,7 +39,7 @@ public class GasPlanetBuilder implements GameComponentBuilder {
         GameComponent gasPlanet = new GameSceneComponent(parent);
         Mesh sphere = new Sphere(50, 50);
         gasPlanet.addProperty(new RenderableMeshProperty(sphere));
-        gasPlanet.addProperty(new CustomProgramProperty(getGasProgram()));
+        gasPlanet.addProperty(new CustomProgramProperty(getGasPlanetProgram()));
         gasPlanet.addProperty(new GasPlanetProperty(colors));
         TransformProperty transformProperty = new TransformProperty();
         gasPlanet.addProperty(transformProperty);
@@ -68,16 +68,20 @@ public class GasPlanetBuilder implements GameComponentBuilder {
         };
     }
 
-    private GasPlanetProgram getGasProgram() {
-        GameScene scene = parent.getContext().getScene();
-        if (scene.hasEnabledProperty(GasPlanetContextProperty.GAS_PLANET_CONTEXT_PROPERTY_NAME)) {
-            GasPlanetContextProperty property = scene.getProperty(GasPlanetContextProperty.GAS_PLANET_CONTEXT_PROPERTY_NAME);
-            return property.getProgram();
-        } else {
-            GasPlanetProgram gasPlanetProgram = new GasPlanetProgram();
-            parent.getContext().getGraphics().getThread().scheduleTask(new UpdaterTask(gasPlanetProgram));
-            parent.getContext().getScene().addProperty(new GasPlanetContextProperty(gasPlanetProgram));
-            return gasPlanetProgram;
-        }
+    private GasPlanetProgram getGasPlanetProgram() {
+        ProgramPool programPool = parent.getContext().getGraphics().getProgramPool();
+        return programPool.getProgram(GasPlanetProgram.class).orElse(createPlanetProgram(programPool));
     }
+
+    private GasPlanetProgram createPlanetProgram(ProgramPool programPool) {
+        GasPlanetProgram program = new GasPlanetProgram();
+        scheduleProgramUpdater(program);
+        programPool.registerProgram(program);
+        return program;
+    }
+
+    private void scheduleProgramUpdater(GasPlanetProgram program) {
+        parent.getContext().getGraphics().getThread().scheduleTask(new UpdaterTask(program));
+    }
+
 }

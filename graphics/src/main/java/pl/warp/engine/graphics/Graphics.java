@@ -4,6 +4,8 @@ import pl.warp.engine.core.*;
 import pl.warp.engine.core.updater.UpdaterTask;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.pipeline.Sink;
+import pl.warp.engine.graphics.program.pool.ProgramPool;
+import pl.warp.engine.graphics.program.pool.ProgramPoolImpl;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
@@ -27,6 +29,7 @@ public class Graphics {
     private Environment environment;
 
     private EnginePipeline enginePipeline;
+    private ProgramPool programPool;
 
     public Graphics(EngineContext context, Sink<Texture2D> output, Camera mainViewCamera, RenderingConfig config) {
         this.context = context;
@@ -45,7 +48,12 @@ public class Graphics {
         createEnvironment();
         createCameraTask();
         createRenderingTask();
+        createProgramPool();
         this.thread.start();
+    }
+
+    private void createProgramPool() {
+        this.programPool = new ProgramPoolImpl();
     }
 
     private void createCameraTask() {
@@ -112,6 +120,9 @@ public class Graphics {
         return enginePipeline;
     }
 
+    public ProgramPool getProgramPool() {
+        return programPool;
+    }
 
     public Camera getMainViewCamera() {
         return mainViewCamera;

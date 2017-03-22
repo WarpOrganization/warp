@@ -5,9 +5,9 @@ import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
+import pl.warp.engine.graphics.program.pool.ProgramPool;
 import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
 import pl.warp.game.script.OwnerProperty;
@@ -29,7 +29,7 @@ public class PlanetBuilder {
         GameComponent planet = new GameSceneComponent(parent);
         Mesh sphere = new Sphere(100, 100);
         planet.addProperty(new RenderableMeshProperty(sphere));
-        planet.addProperty(new CustomProgramProperty(getPlanetPrgoram()));
+        planet.addProperty(new CustomProgramProperty(getPlanetProgram()));
         planet.addProperty(new PlanetProperty(planetSurfaceTexture));
         TransformProperty transformProperty = new TransformProperty();
         planet.addProperty(transformProperty);
@@ -58,16 +58,16 @@ public class PlanetBuilder {
         };
     }
 
-    private PlanetProgram getPlanetPrgoram() {
-        GameScene scene = parent.getContext().getScene();
-        if (scene.hasEnabledProperty(PlanetContextProperty.PLANET_CONTEXT_PROPERTY)) {
-            PlanetContextProperty property = scene.getProperty(PlanetContextProperty.PLANET_CONTEXT_PROPERTY);
-            return property.getProgram();
-        } else {
-            PlanetProgram gasPlanetProgram = new PlanetProgram();
-            parent.getContext().getScene().addProperty(new PlanetContextProperty(gasPlanetProgram));
-            return gasPlanetProgram;
-        }
+    private PlanetProgram getPlanetProgram() {
+        ProgramPool programPool = parent.getContext().getGraphics().getProgramPool();
+        return programPool.getProgram(PlanetProgram.class).orElse(createPlanetProgram(programPool));
     }
+
+    private PlanetProgram createPlanetProgram(ProgramPool programPool) {
+        PlanetProgram program = new PlanetProgram();
+        programPool.registerProgram(program);
+        return program;
+    }
+
 
 }
