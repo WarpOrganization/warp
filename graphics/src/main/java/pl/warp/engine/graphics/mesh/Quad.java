@@ -3,6 +3,7 @@ package pl.warp.engine.graphics.mesh;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL31;
 import pl.warp.engine.graphics.math.BufferTools;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
@@ -46,6 +47,10 @@ public class Quad {
 
     public void draw() {
         GL11.glDrawElements(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0);
+    }
+
+    public void drawInstanced(int instances) {
+        GL31.glDrawElementsInstanced(GL11.GL_TRIANGLES, Quad.INDICES_NUMBER, GL11.GL_UNSIGNED_INT, 0, instances);
     }
 
     public void destroy() {

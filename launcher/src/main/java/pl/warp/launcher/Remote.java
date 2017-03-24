@@ -5,6 +5,5 @@ package pl.warp.launcher;
  *         Created 16.03.17
  */
 public interface Remote {
-
     void getFile(DownloadTask downloadTask);
 }

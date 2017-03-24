@@ -7,6 +7,7 @@ import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.program.pool.ProgramPool;
 import pl.warp.engine.graphics.texture.Cubemap;
+import pl.warp.game.graphics.effects.planet.generator.surface.PlanetSurfaceGenerator;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameSceneComponent;
 import pl.warp.game.script.GameScript;
@@ -17,12 +18,11 @@ import pl.warp.game.script.OwnerProperty;
  *         Created 2017-03-22 at 12
  */
 public class PlanetBuilder {
-    private GameComponent parent;
-    private Cubemap planetSurfaceTexture;
 
-    public PlanetBuilder(GameComponent parent, Cubemap planetSurfaceTexture) {
+    private GameComponent parent;
+
+    public PlanetBuilder(GameComponent parent) {
         this.parent = parent;
-        this.planetSurfaceTexture = planetSurfaceTexture;
     }
 
     public GameComponent makePlanet() {
@@ -30,11 +30,16 @@ public class PlanetBuilder {
         Mesh sphere = new Sphere(100, 100);
         planet.addProperty(new RenderableMeshProperty(sphere));
         planet.addProperty(new CustomProgramProperty(getPlanetProgram()));
-        planet.addProperty(new PlanetProperty(planetSurfaceTexture));
+        planet.addProperty(new PlanetProperty(generateSurface()));
         TransformProperty transformProperty = new TransformProperty();
         planet.addProperty(transformProperty);
         rotate(planet);
         return planet;
+    }
+
+    private Cubemap generateSurface() {
+        PlanetSurfaceGenerator generator = new PlanetSurfaceGenerator(512, 512);
+        return generator.generate(parent.getContext().getGraphics());
     }
 
     private static final float ROTATION_SPEED = 0.00004f;

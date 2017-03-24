@@ -24,8 +24,12 @@ public abstract class FramebufferPipelineElement implements PipelineElement {
         framebuffer.clean();
         prepare();
         quad.bind();
-        quad.draw();
+        drawQuad(quad);
         quad.unbind();
+    }
+
+    protected void drawQuad(Quad quad) {
+        quad.draw();
     }
 
     abstract void prepare();

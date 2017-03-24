@@ -327,7 +327,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             controllableGoat.getParent().addProperty(new ParticleEmitterProperty(dustSystem));
 
             ByteBuffer[] testData = {null, null, null, null, null, null};
-            GameComponent planet = new PlanetBuilder(scene, new Cubemap(100, 100, testData)).makePlanet();
+            GameComponent planet = new PlanetBuilder(scene).makePlanet();
             TransformProperty planetTransform = planet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             planetTransform.move(new Vector3f(4000f, -200f, -500f));
             planetTransform.scale(new Vector3f(1000.0f));

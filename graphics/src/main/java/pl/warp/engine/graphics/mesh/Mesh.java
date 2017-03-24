@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL31;
 import pl.warp.engine.graphics.math.BufferTools;
 
 
@@ -197,6 +198,9 @@ public class Mesh {
         GL11.glDrawElements(GL11.GL_TRIANGLES, indices, GL11.GL_UNSIGNED_INT, 0);
     }
 
+    public void renderInstanced(int instances){
+        GL31.glDrawElementsInstanced(GL11.GL_TRIANGLES, indices, GL11.GL_UNSIGNED_INT, 0, instances);
+    }
 
     /**
      * Binds each vbo and draws mesh.
@@ -204,6 +208,16 @@ public class Mesh {
     public void draw() {
         bind();
         render();
+        finalizeRendering();
+    }
+
+    /**
+     * Binds each vbo and draws mesh instances.
+     * @param instances Number of mesh instances
+     */
+    public void drawInstanced(int instances) {
+        bind();
+        renderInstanced(instances);
         finalizeRendering();
     }
 

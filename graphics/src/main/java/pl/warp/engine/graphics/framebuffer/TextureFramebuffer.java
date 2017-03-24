@@ -2,13 +2,10 @@ package pl.warp.engine.graphics.framebuffer;
 
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import pl.warp.engine.graphics.texture.TextureShape2D;
 import pl.warp.engine.graphics.math.BufferTools;
+import pl.warp.engine.graphics.texture.TextureShape2D;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL30.GL_DEPTH_COMPONENT32F;
-import static org.lwjgl.opengl.GL30.GL_RENDERBUFFER;
 
 /**
  * @author Jaca777
@@ -51,15 +48,15 @@ public class TextureFramebuffer extends Framebuffer {
         else assembled = true;
     }
 
-    private void attachDepthBuffer() {
+    protected void attachDepthBuffer() {
         glBindRenderbuffer(GL_RENDERBUFFER, this.depthBuff);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, this.destTex.getWidth(), this.destTex.getHeight());
         GL30.glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this.depthBuff);
     }
 
-    private void attachTexture() {
+    protected void attachTexture() {
         GL20.glDrawBuffers(BufferTools.toDirectBuffer(new int[]{GL_COLOR_ATTACHMENT0}));
-        GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.destTex.getTexture(), 0);
+        GL30.glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this.destTex.getType(), this.destTex.getTexture(), 0);
     }
 
     public void resize(int w, int h) {

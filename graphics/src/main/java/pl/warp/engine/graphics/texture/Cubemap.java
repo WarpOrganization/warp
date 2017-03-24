@@ -18,11 +18,17 @@ public class Cubemap extends TextureShape2D {
     private int width;
     private int height;
 
-
     public Cubemap(int width, int height, ByteBuffer[] data) {
         super(GL13.GL_TEXTURE_CUBE_MAP, genCubemap(GL11.GL_RGBA, GL11.GL_RGBA, width, height, data), GL11.GL_RGBA, GL11.GL_RGBA, false);
         this.width = width;
         this.height = height;
+        setDefaultParams();
+    }
+
+    private void setDefaultParams() {
+        setParameter(GL11.GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        setParameter(GL11.GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        setParameter(GL11.GL_TEXTURE_WRAP_S, GL_REPEAT);
     }
 
     public void resize(int w, int h) {

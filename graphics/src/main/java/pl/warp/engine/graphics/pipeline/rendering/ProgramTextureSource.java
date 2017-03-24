@@ -1,6 +1,7 @@
 package pl.warp.engine.graphics.pipeline.rendering;
 
 import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.framebuffer.TextureFramebuffer;
 import pl.warp.engine.graphics.pipeline.Source;
 import pl.warp.engine.graphics.program.Program;
@@ -17,6 +18,12 @@ public abstract class ProgramTextureSource<T extends Program, R extends TextureS
 
     public ProgramTextureSource(T program) {
         super(new TextureFramebuffer());
+        this.program = program;
+    }
+
+    public ProgramTextureSource(Framebuffer framebuffer, T program) {
+        super(framebuffer);
+
         this.program = program;
     }
 

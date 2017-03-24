@@ -35,8 +35,7 @@ layout(location = 0) out vec4 fragColor;
 #include "util/light"
 
 void main() {
-
-    vec3 color = texture(colors, vTexCoord).rgb;
-    fragColor.rgb = color * getLight(vNormal, vPos3, vEyeDir, SHININESS, SPECULAR_EXPONENT);
+    vec3 color = texture(surface, vTexCoord).rgb;
+    fragColor.rgb = color; //* getLight(vNormal, vPos3, vEyeDir, SHININESS, SPECULAR_EXPONENT);
     fragColor.a = 1.0;
 }

@@ -27,8 +27,8 @@ public class PlanetProgram extends MeshRendererProgram {
     private static final int SURFACE_TEXTURE_SAMPLER = 0;
 
     private static final String PROGRAM_PATH = "pl/warp/game/graphics/effects/";
-    private static final String VERTEX_SHADER = "gasplanet/vert";
-    private static final String FRAGMENT_SHADER = "gasplanet/frag";
+    private static final String VERTEX_SHADER = "planet/vert";
+    private static final String FRAGMENT_SHADER = "planet/frag";
 
     private int time;
 
