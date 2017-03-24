@@ -81,10 +81,10 @@ import java.util.ArrayList;
  */
 public class GroundSceneLoader implements GameSceneLoader {
 
-    private static final float TANK_HULL_ROT_SPEED = 0.3f;
-    private static final float TANK_HULL_ACC_SPEED = 0.4f;
-    private static final float TANK_HULL_MAX_SPEED = 100f;
-    private static final float TANK_HULL_BRAKING_FORCE = 5.0f;
+    private static final float TANK_HULL_ROT_SPEED = 1.8f;
+    private static final float TANK_HULL_ACC_SPEED = 1f;
+    private static final float TANK_HULL_MAX_SPEED = 3000f;
+    private static final float TANK_HULL_BRAKING_FORCE = 15.0f;
     private static final float TANK_TURRET_ROT_SPEED = 1.5f;
     private static final float TANK_BARREL_ELEVATION_SPEED = 2f;
     private static final float TANK_BARREL_ELEVATION_MAX = 20f;

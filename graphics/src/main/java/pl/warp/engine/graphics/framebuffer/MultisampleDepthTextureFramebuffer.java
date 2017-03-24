@@ -72,6 +72,16 @@ public class MultisampleDepthTextureFramebuffer extends Framebuffer{
     }
 
     @Override
+    public int getWidth() {
+        return destTex.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return destTex.getHeight();
+    }
+
+    @Override
     public boolean isAssembled() {
         return true;
     }

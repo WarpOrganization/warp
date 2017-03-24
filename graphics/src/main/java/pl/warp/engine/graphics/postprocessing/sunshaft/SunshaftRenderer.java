@@ -120,8 +120,8 @@ public class SunshaftRenderer implements Flow<Texture2D, WeightedTexture2D> {
         this.occludedComponent = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
         this.occludedFramebuffer = new TextureFramebuffer(occludedComponent);
 
-        this.componentRenderTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
-        this.componentDepthTexture = new Texture2D(display.getWidth(), display.getHeight(), GL30.GL_DEPTH_COMPONENT32F, GL11.GL_DEPTH_COMPONENT, false, null);
+        this.componentRenderTexture = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);
+        this.componentDepthTexture = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_DEPTH_COMPONENT32F, GL11.GL_DEPTH_COMPONENT, false, null);
         this.componentRenderFramebuffer = new DepthTextureFramebuffer(componentRenderTexture, componentDepthTexture);
 
         this.sunshaftTexture = new Texture2D(display.getWidth() / 2, display.getHeight() / 2, GL30.GL_RGBA32F, GL11.GL_RGBA, false, null);

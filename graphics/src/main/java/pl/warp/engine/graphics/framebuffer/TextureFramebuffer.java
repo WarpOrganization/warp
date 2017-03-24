@@ -64,17 +64,18 @@ public class TextureFramebuffer extends Framebuffer {
             attachDepthBuffer();
         destTex.resize(w, h);
     }
-
-    public void bindDraw() {
-        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, name);
-    }
-
-    public void bindRead() {
-        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, name);
-    }
-
     public TextureShape2D getDestTex() {
         return destTex;
+    }
+
+    @Override
+    public int getWidth() {
+        return destTex.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return destTex.getHeight();
     }
 
 

@@ -18,7 +18,12 @@ public abstract class Framebuffer {
     }
 
     public void bindDraw() {
-        GL30.glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        GL30.glBindFramebuffer(GL_DRAW_FRAMEBUFFER, name);
+        adjustViewport();
+    }
+
+    public void adjustViewport() {
+        GL11.glViewport(0, 0, this.getWidth(), this.getHeight());
     }
 
     public void bindRead() {
@@ -37,18 +42,19 @@ public abstract class Framebuffer {
         GL30.glDeleteFramebuffers(this.name);
     }
 
+    public abstract int getWidth();
+
+
+    public abstract int getHeight();
+
+
     public void clean() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
     public abstract boolean isAssembled();
 
-    public static final Framebuffer SCREEN_FRAMEBUFFER = new Framebuffer(0) {
-        @Override
-        public boolean isAssembled() {
-            return true;
-        }
-    };
+
 
 
 }

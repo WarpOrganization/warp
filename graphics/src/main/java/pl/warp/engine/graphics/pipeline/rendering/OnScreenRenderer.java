@@ -3,7 +3,7 @@ package pl.warp.engine.graphics.pipeline.rendering;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
-import pl.warp.engine.graphics.framebuffer.Framebuffer;
+import pl.warp.engine.graphics.framebuffer.ScreenFramebuffer;
 import pl.warp.engine.graphics.mesh.Quad;
 import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.program.rendering.identity.IdentityProgram;
@@ -21,16 +21,18 @@ public class OnScreenRenderer implements Sink<Texture2D> {
     private Texture2D srcTexture;
     private IdentityProgram identityProgram;
     private Quad quad;
+    private ScreenFramebuffer screenFramebuffer;
 
     public OnScreenRenderer(RenderingConfig config) {
         this.config = config;
     }
 
     @Override
-    public void init(Graphics g) {
+    public void init(Graphics graphics) {
         this.identityProgram = new IdentityProgram();
         this.identityProgram.setExposure(config.getExposure());
         this.quad = new Quad();
+        this.screenFramebuffer = new ScreenFramebuffer(graphics);
     }
 
     @Override
@@ -45,8 +47,8 @@ public class OnScreenRenderer implements Sink<Texture2D> {
 
     @Override
     public void update() {
-        Framebuffer.SCREEN_FRAMEBUFFER.bindDraw();
-        Framebuffer.SCREEN_FRAMEBUFFER.clean();
+        screenFramebuffer.bindDraw();
+        screenFramebuffer.clean();
         identityProgram.use();
         identityProgram.useTexture(srcTexture);
         quad.bind();

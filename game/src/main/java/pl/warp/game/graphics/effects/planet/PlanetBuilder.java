@@ -38,7 +38,7 @@ public class PlanetBuilder {
     }
 
     private Cubemap generateSurface() {
-        PlanetSurfaceGenerator generator = new PlanetSurfaceGenerator(512, 512);
+        PlanetSurfaceGenerator generator = new PlanetSurfaceGenerator(4096, 4096);
         return generator.generate(parent.getContext().getGraphics());
     }
 

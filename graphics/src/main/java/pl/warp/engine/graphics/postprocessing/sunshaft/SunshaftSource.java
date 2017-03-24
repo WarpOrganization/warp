@@ -10,8 +10,8 @@ public class SunshaftSource {
     private Component source;
 
     private float exposure = 0.13f;
-    private float decay = 0.97f;
-    private float density = 1.0f;
+    private float decay = 0.95f;
+    private float density = 0.83f;
     private float weight = 0.2f;
     private float clamp = 2.0f;
 
