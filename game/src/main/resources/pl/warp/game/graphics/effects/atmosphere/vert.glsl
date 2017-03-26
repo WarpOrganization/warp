@@ -28,9 +28,9 @@ float getFragmentRadius(vec3 vertPos);
 void main(void) {
     vec4 vertPos = modelMatrix * vec4(radius * inVertex, 1.0f);
     surfacePos = (modelMatrix * vec4(inVertex, 1)).xyz;
-    normal = normalize(inVertex);
     eyeDir = normalize(vertPos.xyz - cameraPos);
     vec3 planetVertPos = surfacePos - (modelMatrix * vec4(0, 0, 0, 1)).xyz;
+    normal = normalize(planetVertPos);
     planetRadius = length(planetVertPos);
     fragmentRadius = getFragmentRadius(vertPos.xyz);
     gl_Position = projectionMatrix * cameraMatrix * vertPos;

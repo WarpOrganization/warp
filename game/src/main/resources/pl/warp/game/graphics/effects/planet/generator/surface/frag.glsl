@@ -33,6 +33,5 @@ vec3 getHeightColor(float height){
     else {
         color = vec3(0.2 * (max(0, height - 0.4) * 8), 0.2 + 0.2 * (max(0, height - 0.4) * 8), 0.2 * (max(0, height - 0.4) * 8));
     }
-
     return color;
 }
