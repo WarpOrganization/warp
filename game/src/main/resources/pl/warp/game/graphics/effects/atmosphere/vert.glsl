@@ -14,8 +14,11 @@ layout(location = 0) in vec3 inVertex;
 layout(location = 0) in vec2 inTexCoord;
 layout(location = 0) in vec3 inNormal;
 
+smooth out vec3 eyeDir;
+smooth out vec3 surfacePos;
 smooth out float fragmentRadius;
 smooth out float planetRadius;
+smooth out vec3 normal;
 
 #include "util/vec3d"
 
@@ -24,7 +27,10 @@ float getFragmentRadius(vec3 vertPos);
 
 void main(void) {
     vec4 vertPos = modelMatrix * vec4(radius * inVertex, 1.0f);
-    vec3 planetVertPos = (modelMatrix * vec4(1, 0, 0, 1)).xyz - (modelMatrix * vec4(0, 0, 0, 1)).xyz;
+    surfacePos = (modelMatrix * vec4(inVertex, 1)).xyz;
+    normal = normalize(inVertex);
+    eyeDir = normalize(vertPos.xyz - cameraPos);
+    vec3 planetVertPos = surfacePos - (modelMatrix * vec4(0, 0, 0, 1)).xyz;
     planetRadius = length(planetVertPos);
     fragmentRadius = getFragmentRadius(vertPos.xyz);
     gl_Position = projectionMatrix * cameraMatrix * vertPos;

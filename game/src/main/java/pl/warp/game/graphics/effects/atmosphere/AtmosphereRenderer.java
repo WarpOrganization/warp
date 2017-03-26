@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.CustomRenderer;
 import pl.warp.engine.graphics.Environment;
@@ -52,9 +53,9 @@ public class AtmosphereRenderer extends CustomRenderer {
             program.useModelMatrix(stack.topMatrix());
             program.useRotationMatrix(rotation.get(tempMatrix));
             program.useComponent(component);
-            //GL11.glDepthMask(false);
+            GL11.glDepthMask(false);
             sphere.draw();
-            //GL11.glDepthMask(true);
+            GL11.glDepthMask(true);
             stack.pop();
         } else throw new IllegalArgumentException("Can't render a corona without a mesh.");
     }

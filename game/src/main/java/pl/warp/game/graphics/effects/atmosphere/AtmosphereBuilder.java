@@ -14,10 +14,9 @@ import pl.warp.game.scene.GameSceneComponent;
  */
 public class AtmosphereBuilder implements GameComponentBuilder {
 
-
     private GameComponent parent;
     private Vector3f color = new Vector3f(1.0f);
-    private float radius = 1.15f;
+    private float radius = 1.1f;
     private GameContext context;
 
     public AtmosphereBuilder(GameComponent parent) {
@@ -38,9 +37,9 @@ public class AtmosphereBuilder implements GameComponentBuilder {
     @Override
     public GameComponent build() {
         GameComponent atmosphere = new GameSceneComponent(parent);
-        parent.addProperty(new AtmosphereProperty(color, radius));
+        atmosphere.addProperty(new AtmosphereProperty(color, radius));
         AtmosphereContextProperty contextProperty = getContextProperty();
-        parent.addProperty(new CustomRendererProperty(contextProperty.getRenderer()));
+        atmosphere.addProperty(new CustomRendererProperty(contextProperty.getRenderer()));
         return atmosphere;
     }
 
