@@ -4,7 +4,6 @@ import org.joml.Vector3f;
 import pl.warp.engine.graphics.CustomRendererProperty;
 import pl.warp.game.GameContext;
 import pl.warp.game.graphics.effects.GameComponentBuilder;
-import pl.warp.game.graphics.effects.star.StarContextProperty;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameScene;
 import pl.warp.game.scene.GameSceneComponent;
@@ -18,7 +17,7 @@ public class AtmosphereBuilder implements GameComponentBuilder {
 
     private GameComponent parent;
     private Vector3f color = new Vector3f(1.0f);
-    private float radius = 1.07f;
+    private float radius = 1.15f;
     private GameContext context;
 
     public AtmosphereBuilder(GameComponent parent) {
@@ -47,8 +46,8 @@ public class AtmosphereBuilder implements GameComponentBuilder {
 
     private AtmosphereContextProperty getContextProperty() {
         GameScene scene = context.getScene();
-        if (scene.hasEnabledProperty(StarContextProperty.STAR_CONTEXT_PROPERTY_NAME))
-            return scene.getProperty(StarContextProperty.STAR_CONTEXT_PROPERTY_NAME);
+        if (scene.hasEnabledProperty(AtmosphereContextProperty.ATMOSPHERE_CONTEXT_PROPERTY_NAME))
+            return scene.getProperty(AtmosphereContextProperty.ATMOSPHERE_CONTEXT_PROPERTY_NAME);
         else return createContext();
     }
 

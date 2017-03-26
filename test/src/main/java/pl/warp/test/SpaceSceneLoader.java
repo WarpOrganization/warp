@@ -62,6 +62,7 @@ import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.game.GameContextBuilder;
+import pl.warp.game.graphics.effects.atmosphere.AtmosphereBuilder;
 import pl.warp.game.graphics.effects.gasplanet.GasPlanetBuilder;
 import pl.warp.game.graphics.effects.gasplanet.GasPlanetProgram;
 import pl.warp.game.graphics.effects.planet.PlanetBuilder;
@@ -81,7 +82,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import static com.badlogic.gdx.math.MathUtils.random;
@@ -218,7 +218,6 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ringColors.enableAnisotropy(4);
 
             GameComponent ring = new PlanetRingBuilder(gasPlanet, ringColors).build();
-            //Atmosphere atmosphere = new Atmosphere(gasPlanet, new Vector3f(1.0f, 1.0f, 1.0f), 1.07f);
 
             Texture1D starColors = getStarTemperatureTexture();
             GameComponent sun = new StarBuilder(scene, starColors).build();
@@ -326,11 +325,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ParticleSystem dustSystem = new ParticleSystem(new DotParticleAttribute(stage), staticParticleEmitter, staticParticleAnimator);
             controllableGoat.getParent().addProperty(new ParticleEmitterProperty(dustSystem));
 
-            ByteBuffer[] testData = {null, null, null, null, null, null};
             GameComponent planet = new PlanetBuilder(scene).makePlanet();
             TransformProperty planetTransform = planet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             planetTransform.move(new Vector3f(4000f, -200f, -500f));
             planetTransform.scale(new Vector3f(1000.0f));
+            GameComponent atmosphere = new AtmosphereBuilder(planet).build();
 
             generateGOATS(scene);
             //spawnFrigates();

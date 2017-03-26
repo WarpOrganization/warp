@@ -25,12 +25,13 @@ uniform bool lightEnabled;
 uniform vec3 cameraPos;
 
 in vec3 normal;
-in float fragmentRadius;
+smooth in float fragmentRadius;
+smooth in float planetRadius;
 
 #include "util/noise4d"
 
 void main() {
-    if(fragmentRadius < 1.0) discard;
-    fragColor.rgb = vec3(fragmentRadius);
-    fragColor.a = 1.0f;
+    if(fragmentRadius < planetRadius) discard;
+    fragColor.rgb = vec3(1, 1, 2.0) ;
+    fragColor.a = pow(1 - ((fragmentRadius / planetRadius - 1) / (radius - 1)), 3);
 }

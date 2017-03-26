@@ -30,10 +30,8 @@ public class CubemapFramebuffer extends TextureFramebuffer {
     @Override
     protected void attachTexture() {
         GL20.glDrawBuffers(BufferTools.toDirectBuffer(new int[]{GL_COLOR_ATTACHMENT0}));
-        GL11.glViewport(0, 0, 4096, 4096);
         destTex.bind();
         GL32.glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, destTex.getTexture(), 0);
-        GL11.glViewport(0, 0, 1280, 920);
         GLErrors.checkOGLErrors();
     }
 

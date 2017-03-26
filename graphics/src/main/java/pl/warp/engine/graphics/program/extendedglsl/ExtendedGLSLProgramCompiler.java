@@ -57,7 +57,7 @@ public class ExtendedGLSLProgramCompiler {
     private String findProgram(String moduleName) {
         String code = programLoader.loadProgram(moduleName);
         if (code == null)
-            throw new ProgramCompilationException("Unable to resolve program to include: " + moduleName);
+            throw new ProgramCompilationException("Unable to resolve a program to include: " + moduleName);
         else return code;
     }
 

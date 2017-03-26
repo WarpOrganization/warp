@@ -2,8 +2,8 @@
 
 #include "util/noise3d"
 
-uniform float fluidLevel = 0.13f;
-uniform float seed = 129;
+uniform float fluidLevel = 0.5f;
+uniform float seed = 130;
 
 smooth in vec3 spherePos;
 
@@ -20,17 +20,18 @@ void main() {
 
 const float terrainExponent = 1.3f;
 const float mountainsHeight = 0.7f;
+
 float getHeight(vec3 pos) {
-    float n1 = noise(pos, 8, 1.6, 0.5);
-    float n2 = max(0, ridgedNoise(pos, 8, 2, 0.5) - (1 - mountainsHeight));
-    return n1 * 0.5 + n2 * 0.5;
+    float n1 = noise(pos, 8, 3, 0.5);
+    float n2 = max(0,  noise(pos, 8, 2, 0.8) - (1 - mountainsHeight));
+    return 0.5 + n1 + n2;
 }
 
 vec3 getHeightColor(float height){
     vec3 color;
-    if(height < fluidLevel) color = vec3(0, 0, 0.6);
+    if(height < fluidLevel) color = vec3(64.0 / 255, 78.0 / 255, 223.0 / 255);
     else {
-        color = vec3(0.2 * (1 + max(0, height - 0.2) * 25), 1, 0.2);
+        color = vec3(0.2 * (max(0, height - 0.4) * 8), 0.2 + 0.2 * (max(0, height - 0.4) * 8), 0.2 * (max(0, height - 0.4) * 8));
     }
 
     return color;

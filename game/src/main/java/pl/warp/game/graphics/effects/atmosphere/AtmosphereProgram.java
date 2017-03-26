@@ -1,6 +1,7 @@
 package pl.warp.game.graphics.effects.atmosphere;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
@@ -35,6 +36,7 @@ public class AtmosphereProgram extends Program {
     private int unifRotationMatrix;
     private int unifCameraMatrix;
     private int unifCameraRotationMatrix;
+    private int unifCameraPos;
     private int unifColor;
     private int unifRadius;
     private int unifLightEnabled;
@@ -59,6 +61,7 @@ public class AtmosphereProgram extends Program {
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifCameraMatrix = getUniformLocation("cameraMatrix");
         this.unifCameraRotationMatrix = getUniformLocation("cameraRotationMatrix");
+        this.unifCameraPos = getUniformLocation("cameraPos");
         this.unifColor = getUniformLocation("color");
         this.unifRadius = getUniformLocation("radius");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
@@ -82,10 +85,12 @@ public class AtmosphereProgram extends Program {
             throw new IllegalArgumentException("Component needs an enabled atmosphere property in order to render as an atmosphere.");
     }
 
+    private Vector3f cameraPos = new Vector3f();
     public void useCamera(Camera camera) {
         setUniformMatrix4(unifCameraMatrix, camera.getCameraMatrix());
         setUniformMatrix4(unifCameraRotationMatrix, camera.getRotationMatrix());
         setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
+        setUniformV3(unifCameraPos, camera.getPosition(cameraPos));
     }
 
     public void useModelMatrix(Matrix4f modelMatrix) {

@@ -22,7 +22,7 @@ void main(void) {
     vNormal = calculateNormal();
 
     vec4 vPos = modelMatrix * vec4(inVertex, 1.0f);
-    vPos3 = vPos.xyz / vPos.w;
+    vPos3 = vPos.xyz;
     vEyeDir = normalize(vPos3 - cameraPos);
 
     vTexCoord = inTexCoord;
