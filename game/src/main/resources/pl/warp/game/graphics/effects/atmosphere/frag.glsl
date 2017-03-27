@@ -9,6 +9,7 @@ uniform float innerExp;
 uniform float innerMul;
 uniform float outerExp;
 uniform float outerMul;
+uniform float lightMul;
 
 struct SpotLightSource {
     vec3 position;
@@ -21,11 +22,10 @@ struct SpotLightSource {
     float gradient;
 };
 
-const float SPECULAR_EXPONENT = 10.0;
+const float SPECULAR_EXPONENT = 100.0;
 
 uniform SpotLightSource spotLightSources[$MAX_LIGHTS$];
 uniform int numSpotLights;
-
 uniform bool lightEnabled;
 
 uniform vec3 cameraPos;
@@ -37,20 +37,27 @@ smooth in vec3 normal;
 smooth in float fragmentRadius;
 smooth in float planetRadius;
 
+
 #include "util/light"
 
-void renderInner(vec3 light){
-    fragColor.rgb = color;
-    fragColor.a = pow(fragmentRadius / planetRadius, innerExp) * innerMul * length(light);
+vec4 renderInner(vec3 light){
+    vec4 fColor;
+    fColor.rgb = color;
+    fColor.a = pow(fragmentRadius / planetRadius, innerExp) * innerMul * length(light);
+    return fColor;
 }
 
-void renderOuter(vec3 light){
-    fragColor.rgb = color;
-    fragColor.a = pow(1 - ((fragmentRadius / planetRadius - 1) / (radius - 1)), outerExp) * outerMul * length(light);
+vec4 renderOuter(vec3 light){
+    vec4 fColor;
+    fColor.rgb = color;
+    fColor.a = pow(1 - ((fragmentRadius / planetRadius - 1) / (radius - 1)), outerExp) * outerMul * length(light);
+    return fColor;
 }
 
 void main() {
-    vec3 light = getLight(normal, surfacePos, eyeDir, 3, SPECULAR_EXPONENT);
-    if(fragmentRadius < planetRadius) renderInner(light);
-    else renderOuter(light);
+    vec4 fColor;
+    vec3 light = getLight(normal, surfacePos, eyeDir, 3, SPECULAR_EXPONENT) * lightMul;
+    if(fragmentRadius < planetRadius) fColor = renderInner(light);
+    else fColor = renderOuter(light);
+    fragColor = fColor;
 }

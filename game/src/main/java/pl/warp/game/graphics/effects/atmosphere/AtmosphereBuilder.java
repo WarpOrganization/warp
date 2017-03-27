@@ -21,6 +21,7 @@ public class AtmosphereBuilder implements GameComponentBuilder {
     private float innerMul = 0.35f;
     private float outerExp = 3.0f;
     private float outerMul = 1.0f;
+    private float lightMul = 1.0f;
     private GameContext context;
 
     public AtmosphereBuilder(GameComponent parent) {
@@ -31,7 +32,7 @@ public class AtmosphereBuilder implements GameComponentBuilder {
     @Override
     public GameComponent build() {
         GameComponent atmosphere = new GameSceneComponent(parent);
-        atmosphere.addProperty(new AtmosphereProperty(color, radius, innerExp, innerMul, outerExp, outerMul));
+        atmosphere.addProperty(new AtmosphereProperty(color, radius, innerExp, innerMul, outerExp, outerMul, lightMul));
         AtmosphereContextProperty contextProperty = getContextProperty();
         atmosphere.addProperty(new CustomRendererProperty(contextProperty.getRenderer()));
         return atmosphere;
@@ -79,6 +80,11 @@ public class AtmosphereBuilder implements GameComponentBuilder {
 
     public AtmosphereBuilder setOuterMul(float outerMul) {
         this.outerMul = outerMul;
+        return this;
+    }
+
+    public AtmosphereBuilder setLightMul(float lightMul) {
+        this.lightMul = lightMul;
         return this;
     }
 }

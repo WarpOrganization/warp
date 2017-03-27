@@ -215,7 +215,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             GameComponent ring = new PlanetRingBuilder(gasPlanet, ringColors).build();
 
-            new AtmosphereBuilder(gasPlanet).setColor(new Vector3f(2f, 1.2f, 1.2f).mul(0.5f)).setInnerExp(1.5f).setInnerMul(0.8f).build();
+            new AtmosphereBuilder(gasPlanet).setColor(new Vector3f(2f, 1.2f, 1.2f).mul(0.5f)).setLightMul(0.4f).setInnerExp(1.5f).setInnerMul(0.8f).build();
 
             Texture1D starColors = getStarTemperatureTexture();
             GameComponent sun = new StarBuilder(scene, starColors).build();

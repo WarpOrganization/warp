@@ -43,6 +43,7 @@ public class AtmosphereProgram extends Program {
     private int unifInnerMul;
     private int unifOuterExp;
     private int unifOuterMul;
+    private int unifLightMul;
     private int unifLightEnabled;
     private int unifSpotLightCount;
     private int[][] unifSpotLightSources = new int[MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
@@ -72,6 +73,7 @@ public class AtmosphereProgram extends Program {
         this.unifInnerMul = getUniformLocation("innerMul");
         this.unifOuterExp = getUniformLocation("outerExp");
         this.unifOuterMul = getUniformLocation("outerMul");
+        this.unifLightMul = getUniformLocation("lightMul");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
         this.unifSpotLightCount = getUniformLocation("numSpotLights");
     }
@@ -93,6 +95,7 @@ public class AtmosphereProgram extends Program {
             setUniformf(unifInnerMul, property.getInnerMul());
             setUniformf(unifOuterExp, property.getOuterExp());
             setUniformf(unifOuterMul, property.getOuterMul());
+            setUniformf(unifLightMul, property.getLightMul());
         } else
             throw new IllegalArgumentException("Component needs an enabled atmosphere property in order to render as an atmosphere.");
     }
