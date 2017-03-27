@@ -209,15 +209,13 @@ public class SpaceSceneLoader implements GameSceneLoader {
             gasSphereTransform.move(new Vector3f(-1600f, -200f, -500f));
             gasSphereTransform.scale(new Vector3f(1000.0f));
 
-
-            float startR = 1.5f;
-            float endR = 2.5f;
-
             ImageData ringColorsData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ring_colors.png"), PNGDecoder.Format.RGBA);
             ringColors = new Texture1D(ringColorsData.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, true, ringColorsData.getData());
             ringColors.enableAnisotropy(4);
 
             GameComponent ring = new PlanetRingBuilder(gasPlanet, ringColors).build();
+
+            new AtmosphereBuilder(gasPlanet).setColor(new Vector3f(2f, 1.2f, 1.2f).mul(0.5f)).setInnerExp(1.5f).setInnerMul(0.8f).build();
 
             Texture1D starColors = getStarTemperatureTexture();
             GameComponent sun = new StarBuilder(scene, starColors).build();
@@ -329,7 +327,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             TransformProperty planetTransform = planet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             planetTransform.move(new Vector3f(4000f, -200f, -500f));
             planetTransform.scale(new Vector3f(1000.0f));
-            GameComponent atmosphere = new AtmosphereBuilder(planet).build();
+            new AtmosphereBuilder(planet).setColor(new Vector3f(0.8f, 0.8f, 2f)).build();
 
             generateGOATS(scene);
             //spawnFrigates();

@@ -3,8 +3,12 @@ precision highp float;
 
 layout(location = 0) out vec4 fragColor;
 
-uniform vec3 atmColor = vec3(1, 1, 2.5);
+uniform vec3 color;
 uniform float radius;
+uniform float innerExp;
+uniform float innerMul;
+uniform float outerExp;
+uniform float outerMul;
 
 struct SpotLightSource {
     vec3 position;
@@ -35,17 +39,13 @@ smooth in float planetRadius;
 
 #include "util/light"
 
-const float innerExp = 3;
-const float innerMul = 0.5;
 void renderInner(vec3 light){
-    fragColor.rgb = atmColor;
+    fragColor.rgb = color;
     fragColor.a = pow(fragmentRadius / planetRadius, innerExp) * innerMul * length(light);
 }
 
-const float outerExp = 3;
-const float outerMul = 1;
 void renderOuter(vec3 light){
-    fragColor.rgb = atmColor;
+    fragColor.rgb = color;
     fragColor.a = pow(1 - ((fragmentRadius / planetRadius - 1) / (radius - 1)), outerExp) * outerMul * length(light);
 }
 

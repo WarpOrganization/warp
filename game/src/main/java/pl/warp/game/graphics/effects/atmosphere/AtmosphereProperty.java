@@ -14,18 +14,70 @@ public class AtmosphereProperty extends Property<GameComponent> {
     private Vector3f color;
 
     private float atmosphereRadius;
+    private float innerExp;
+    private float innerMul;
+    private float outerExp;
+    private float outerMul;
 
-    public AtmosphereProperty(Vector3f color, float atmosphereRadius) {
+    public AtmosphereProperty(Vector3f color, float atmosphereRadius, float innerExp, float innerMul, float outerExp, float outerMul) {
         super(ATMOSPHERE_PROPERTY_NAME);
         this.color = color;
         this.atmosphereRadius = atmosphereRadius;
+        this.innerExp = innerExp;
+        this.innerMul = innerMul;
+        this.outerExp = outerExp;
+        this.outerMul = outerMul;
+    }
+
+    public static String getAtmospherePropertyName() {
+        return ATMOSPHERE_PROPERTY_NAME;
     }
 
     public Vector3f getColor() {
         return color;
     }
 
+    public void setColor(Vector3f color) {
+        this.color = color;
+    }
+
     public float getAtmosphereRadius() {
         return atmosphereRadius;
+    }
+
+    public void setAtmosphereRadius(float atmosphereRadius) {
+        this.atmosphereRadius = atmosphereRadius;
+    }
+
+    public float getInnerExp() {
+        return innerExp;
+    }
+
+    public void setInnerExp(float innerExp) {
+        this.innerExp = innerExp;
+    }
+
+    public float getInnerMul() {
+        return innerMul;
+    }
+
+    public void setInnerMul(float innerMul) {
+        this.innerMul = innerMul;
+    }
+
+    public float getOuterExp() {
+        return outerExp;
+    }
+
+    public void setOuterExp(float outerExp) {
+        this.outerExp = outerExp;
+    }
+
+    public float getOuterMul() {
+        return outerMul;
+    }
+
+    public void setOuterMul(float outerMul) {
+        this.outerMul = outerMul;
     }
 }

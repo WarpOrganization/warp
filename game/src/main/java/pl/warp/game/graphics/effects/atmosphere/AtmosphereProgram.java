@@ -39,6 +39,10 @@ public class AtmosphereProgram extends Program {
     private int unifCameraPos;
     private int unifColor;
     private int unifRadius;
+    private int unifInnerExp;
+    private int unifInnerMul;
+    private int unifOuterExp;
+    private int unifOuterMul;
     private int unifLightEnabled;
     private int unifSpotLightCount;
     private int[][] unifSpotLightSources = new int[MeshRendererProgram.MAX_SPOT_LIGHT_SOURCES][SPOT_LIGHT_FIELD_NAMES.length];
@@ -64,6 +68,10 @@ public class AtmosphereProgram extends Program {
         this.unifCameraPos = getUniformLocation("cameraPos");
         this.unifColor = getUniformLocation("color");
         this.unifRadius = getUniformLocation("radius");
+        this.unifInnerExp = getUniformLocation("innerExp");
+        this.unifInnerMul = getUniformLocation("innerMul");
+        this.unifOuterExp = getUniformLocation("outerExp");
+        this.unifOuterMul = getUniformLocation("outerMul");
         this.unifLightEnabled = getUniformLocation("lightEnabled");
         this.unifSpotLightCount = getUniformLocation("numSpotLights");
     }
@@ -81,6 +89,10 @@ public class AtmosphereProgram extends Program {
             AtmosphereProperty property = component.getProperty(AtmosphereProperty.ATMOSPHERE_PROPERTY_NAME);
             setUniformV3(unifColor, property.getColor());
             setUniformf(unifRadius, property.getAtmosphereRadius());
+            setUniformf(unifInnerExp, property.getInnerExp());
+            setUniformf(unifInnerMul, property.getInnerMul());
+            setUniformf(unifOuterExp, property.getOuterExp());
+            setUniformf(unifOuterMul, property.getOuterMul());
         } else
             throw new IllegalArgumentException("Component needs an enabled atmosphere property in order to render as an atmosphere.");
     }

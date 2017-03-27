@@ -53,6 +53,7 @@ public class AtmosphereRenderer extends CustomRenderer {
             program.useModelMatrix(stack.topMatrix());
             program.useRotationMatrix(rotation.get(tempMatrix));
             program.useComponent(component);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             GL11.glDepthMask(false);
             sphere.draw();
             GL11.glDepthMask(true);

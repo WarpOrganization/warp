@@ -16,7 +16,11 @@ public class AtmosphereBuilder implements GameComponentBuilder {
 
     private GameComponent parent;
     private Vector3f color = new Vector3f(1.0f);
-    private float radius = 1.1f;
+    private float radius = 1.15f;
+    private float innerExp = 3.0f;
+    private float innerMul = 0.35f;
+    private float outerExp = 3.0f;
+    private float outerMul = 1.0f;
     private GameContext context;
 
     public AtmosphereBuilder(GameComponent parent) {
@@ -24,20 +28,10 @@ public class AtmosphereBuilder implements GameComponentBuilder {
         this.context = parent.getContext();
     }
 
-    public AtmosphereBuilder setColor(Vector3f color) {
-        this.color = color;
-        return this;
-    }
-
-    public AtmosphereBuilder setRadius(float radius) {
-        this.radius = radius;
-        return this;
-    }
-
     @Override
     public GameComponent build() {
         GameComponent atmosphere = new GameSceneComponent(parent);
-        atmosphere.addProperty(new AtmosphereProperty(color, radius));
+        atmosphere.addProperty(new AtmosphereProperty(color, radius, innerExp, innerMul, outerExp, outerMul));
         AtmosphereContextProperty contextProperty = getContextProperty();
         atmosphere.addProperty(new CustomRendererProperty(contextProperty.getRenderer()));
         return atmosphere;
@@ -58,4 +52,33 @@ public class AtmosphereBuilder implements GameComponentBuilder {
         return property;
     }
 
+    public AtmosphereBuilder setColor(Vector3f color) {
+        this.color = color;
+        return this;
+    }
+
+    public AtmosphereBuilder setRadius(float radius) {
+        this.radius = radius;
+        return this;
+    }
+
+    public AtmosphereBuilder setInnerExp(float innerExp) {
+        this.innerExp = innerExp;
+        return this;
+    }
+
+    public AtmosphereBuilder setInnerMul(float innerMul) {
+        this.innerMul = innerMul;
+        return this;
+    }
+
+    public AtmosphereBuilder setOuterExp(float outerExp) {
+        this.outerExp = outerExp;
+        return this;
+    }
+
+    public AtmosphereBuilder setOuterMul(float outerMul) {
+        this.outerMul = outerMul;
+        return this;
+    }
 }
