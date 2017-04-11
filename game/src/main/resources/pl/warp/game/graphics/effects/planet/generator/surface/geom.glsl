@@ -1,4 +1,5 @@
 #version 330
+#extension GL_EXT_geometry_shader : enable
 
 layout (triangles) in;
 layout (triangle_strip) out;
