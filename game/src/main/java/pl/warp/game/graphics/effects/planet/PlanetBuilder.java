@@ -7,6 +7,7 @@ import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.program.pool.ProgramPool;
 import pl.warp.engine.graphics.texture.Cubemap;
+import pl.warp.game.graphics.effects.planet.generator.surface.Biome;
 import pl.warp.game.graphics.effects.planet.generator.surface.PlanetSurfaceGenerator;
 import pl.warp.game.scene.GameComponent;
 import pl.warp.game.scene.GameSceneComponent;
@@ -20,9 +21,11 @@ import pl.warp.game.script.OwnerProperty;
 public class PlanetBuilder {
 
     private GameComponent parent;
+    private Biome[] biomes;
 
-    public PlanetBuilder(GameComponent parent) {
+    public PlanetBuilder(GameComponent parent, Biome[] biomes) {
         this.parent = parent;
+        this.biomes = biomes;
     }
 
     public GameComponent makePlanet() {
@@ -38,7 +41,7 @@ public class PlanetBuilder {
     }
 
     private Cubemap generateSurface() {
-        PlanetSurfaceGenerator generator = new PlanetSurfaceGenerator(4096, 4096);
+        PlanetSurfaceGenerator generator = new PlanetSurfaceGenerator(4096, 4096, biomes);
         return generator.generate(parent.getContext().getGraphics());
     }
 

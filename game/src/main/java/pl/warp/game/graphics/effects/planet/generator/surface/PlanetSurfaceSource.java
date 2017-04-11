@@ -15,11 +15,13 @@ public class PlanetSurfaceSource extends CubemapTextureSource<PlanetSurfaceGener
     public static final ByteBuffer[] INITIAL_CUBEMAP_DATA = {null, null, null, null, null, null};
     private int width, height;
     private Cubemap output;
+    private Biome[] biomes;
 
-    public PlanetSurfaceSource(int width, int height) {
+    public PlanetSurfaceSource(int width, int height, Biome[] biomes) {
         super(new PlanetSurfaceGeneratorProgram());
         this.width = width;
         this.height = height;
+        this.biomes = biomes;
     }
 
     @Override
@@ -36,5 +38,6 @@ public class PlanetSurfaceSource extends CubemapTextureSource<PlanetSurfaceGener
     @Override
     protected void prepareProgram(PlanetSurfaceGeneratorProgram program) {
         super.prepareProgram(program);
+        program.useBiomes(biomes);
     }
 }

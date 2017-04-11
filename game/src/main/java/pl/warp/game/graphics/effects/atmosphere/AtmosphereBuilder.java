@@ -16,7 +16,7 @@ public class AtmosphereBuilder implements GameComponentBuilder {
 
     private GameComponent parent;
     private Vector3f color = new Vector3f(1.0f);
-    private float radius = 1.15f;
+    private float radius = 1.1f;
     private float innerExp = 3.0f;
     private float innerMul = 0.35f;
     private float outerExp = 3.0f;

@@ -40,14 +40,14 @@ smooth in float planetRadius;
 
 #include "util/light"
 
-vec4 renderInner(vec3 light){
+vec4 renderInner(float light){
     vec4 fColor;
     fColor.rgb = color;
     fColor.a = pow(fragmentRadius / planetRadius, innerExp) * innerMul * length(light);
     return fColor;
 }
 
-vec4 renderOuter(vec3 light){
+vec4 renderOuter(float light){
     vec4 fColor;
     fColor.rgb = color;
     fColor.a = pow(1 - ((fragmentRadius / planetRadius - 1) / (radius - 1)), outerExp) * outerMul * length(light);
@@ -56,7 +56,7 @@ vec4 renderOuter(vec3 light){
 
 void main() {
     vec4 fColor;
-    vec3 light = getLight(normal, surfacePos, eyeDir, 3, SPECULAR_EXPONENT) * lightMul;
+    float light = length(getLight(normal, surfacePos, eyeDir, 3, SPECULAR_EXPONENT)) * lightMul;
     if(fragmentRadius < planetRadius) fColor = renderInner(light);
     else fColor = renderOuter(light);
     fragColor = fColor;

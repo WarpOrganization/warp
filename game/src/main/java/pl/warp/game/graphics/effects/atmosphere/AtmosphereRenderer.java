@@ -32,7 +32,7 @@ public class AtmosphereRenderer extends CustomRenderer {
 
     @Override
     public void init() {
-        this.sphere = new Sphere(200, 200);
+        this.sphere = new Sphere(300, 300);
     }
 
     @Override

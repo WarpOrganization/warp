@@ -66,6 +66,7 @@ import pl.warp.game.graphics.effects.atmosphere.AtmosphereBuilder;
 import pl.warp.game.graphics.effects.gasplanet.GasPlanetBuilder;
 import pl.warp.game.graphics.effects.gasplanet.GasPlanetProgram;
 import pl.warp.game.graphics.effects.planet.PlanetBuilder;
+import pl.warp.game.graphics.effects.planet.generator.surface.Biome;
 import pl.warp.game.graphics.effects.ring.PlanetRingBuilder;
 import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
 import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
@@ -323,11 +324,20 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ParticleSystem dustSystem = new ParticleSystem(new DotParticleAttribute(stage), staticParticleEmitter, staticParticleAnimator);
             controllableGoat.getParent().addProperty(new ParticleEmitterProperty(dustSystem));
 
-            GameComponent planet = new PlanetBuilder(scene).makePlanet();
+            Biome[] biomes = {
+                    new Biome(0.0f, 0.0f, new Vector3f(0.2f, 0.2f, 1.0f)),
+                    new Biome(0.0f, 0.2f, new Vector3f(0.3f, 0.3f, 1.0f)),
+                    new Biome(0.1f, 0.2f, new Vector3f(0.4f, 0.4f, 1.0f)),
+                    new Biome(0.1f, 0.4f, new Vector3f(0.4f, 0.4f, 1.0f)),
+                    new Biome(0.9f, 0.9f, new Vector3f(0.8f, 0.8f, 0.3f)),
+                    new Biome(1.2f, 1.3f, new Vector3f(0.4f, 0.2f, 0.3f)),
+                    new Biome(2.0f, 1.5f, new Vector3f(0.8f, 0.8f, 0.8f)),
+            };
+            GameComponent planet = new PlanetBuilder(scene, biomes).makePlanet();
             TransformProperty planetTransform = planet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             planetTransform.move(new Vector3f(4000f, -200f, -500f));
             planetTransform.scale(new Vector3f(1000.0f));
-            new AtmosphereBuilder(planet).setColor(new Vector3f(0.8f, 0.8f, 2f)).build();
+            new AtmosphereBuilder(planet).setColor(new Vector3f(0.8f, 0.8f, 2f)).setLightMul(0.4f).build();
 
             generateGOATS(scene);
             //spawnFrigates();

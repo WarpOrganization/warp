@@ -10,9 +10,10 @@ import pl.warp.engine.graphics.texture.Cubemap;
 public class PlanetSurfaceGenerator {
 
     private PlanetSurfaceSource surfaceSource;
+    private Biome[] biomes;
 
-    public PlanetSurfaceGenerator(int width, int height) {
-        this.surfaceSource = new PlanetSurfaceSource(width, height);
+    public PlanetSurfaceGenerator(int width, int height, Biome[] biomes) {
+        this.surfaceSource = new PlanetSurfaceSource(width, height, biomes);
     }
 
     public Cubemap generate(Graphics graphics){

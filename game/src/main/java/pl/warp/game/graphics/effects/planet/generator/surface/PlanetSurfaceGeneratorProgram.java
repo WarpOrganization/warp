@@ -17,12 +17,22 @@ public class PlanetSurfaceGeneratorProgram extends CubemapRenderingProgram {
     private static final String GEOMETRY_SHADER = "surface/geom";
     private static final String FRAGMENT_SHADER = "surface/frag";
 
+    private static final int MAX_BIOME_COUNT = 30;
+    protected static final ConstantField CONSTANT_FIELD = new ConstantField().set("BIOME_COUNT", PlanetSurfaceGeneratorProgram.MAX_BIOME_COUNT);
+
+    private static final int BIOME_POS = 0;
+    private static final int BIOME_HEIGHT = 1;
+    private static final int BIOME_COLOR = 2;
+    private static final String[] BIOME_FIELD_NAMES =
+            {"pos", "height", "color"};
+
     private int[] unifMatrices;
-    private int unifProjMatrix;
+    private int[][] unifBiomes;
+    private int unifBiomeCount;
 
     public PlanetSurfaceGeneratorProgram() {
         super(VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER,
-                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD,
+                new ExtendedGLSLProgramCompiler(CONSTANT_FIELD,
                         new ExternalProgramLoader(PROGRAM_PATH)));
     }
 
@@ -32,13 +42,32 @@ public class PlanetSurfaceGeneratorProgram extends CubemapRenderingProgram {
         this.unifMatrices = new int[6];
         for (int i = 0; i < 6; i++)
             this.unifMatrices[i] = getUniformLocation("matrices[" + i + "]");
-        this.unifProjMatrix = getUniformLocation("projMatrix");
+        this.unifBiomes = new int[MAX_BIOME_COUNT][BIOME_FIELD_NAMES.length];
+        this.unifBiomeCount = getUniformLocation("biomeCount");
+        loadBiomes();
+    }
+
+    private void loadBiomes() {
+        for(int i = 0; i < MAX_BIOME_COUNT; i++){
+            for(int j = 0; j < BIOME_FIELD_NAMES.length; j++)
+                unifBiomes[i][j] = getUniformLocation("biomes[" + i + "]." + BIOME_FIELD_NAMES[j]);
+        }
     }
 
     @Override
     public void useMatrices(Matrix3f[] matrices) {
         for (int i = 0; i < 6; i++)
             setUniformMatrix3(unifMatrices[i], matrices[i]);
+    }
+
+    public void useBiomes(Biome[] biomes){
+        for(int i = 0; i < biomes.length; i++){
+            Biome biome = biomes[i];
+            setUniformf(unifBiomes[i][BIOME_POS], biome.getPos());
+            setUniformf(unifBiomes[i][BIOME_HEIGHT], biome.getHeight());
+            setUniformV3(unifBiomes[i][BIOME_COLOR], biome.getColor());
+        }
+        setUniformi(unifBiomeCount, biomes.length);
     }
 
 
