@@ -4,6 +4,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
+import pl.warp.engine.audio.decoder.SoundDataDecoded;
+import pl.warp.engine.audio.decoder.WavFileDecoder;
 import pl.warp.engine.core.EngineContext;
 
 import javax.sound.sampled.AudioFormat;
@@ -50,23 +52,16 @@ public class SoundBank {
         IntBuffer buffer = BufferUtils.createIntBuffer(files.size());
         AL10.alGenBuffers(buffer);
 
+        WavFileDecoder decoder = new WavFileDecoder();
+
         for (int i = 0; i < files.size(); i++) {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(new File(EngineContext.GAME_DIR_PATH + path + File.separator + FilenameUtils.getName(files.get(i))));
-
-            AudioFormat format = stream.getFormat();
-
-            int openALFormat = getOpenALFormat(format);
-
-            byte[] b = IOUtils.toByteArray(stream);
-            ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
-            data.flip();
-
-            AL10.alBufferData(buffer.get(i), openALFormat, data, (int) format.getSampleRate());
+            SoundDataDecoded sound = decoder.decode(new File(EngineContext.GAME_DIR_PATH + path + File.separator + FilenameUtils.getName(files.get(i))));
+            AL10.alBufferData(buffer.get(i), sound.getOpenALFormat(), sound.data, sound.frequency);
             sounds.put(FilenameUtils.removeExtension(new File(files.get(i)).getName()), buffer.get(i));
         }
     }
 
-    public static int getOpenALFormat(AudioFormat format) {
+    public static int getOpenALFormat(AudioFormat format) {//TODO spalić wszystkie wystąpienia
         final int MONO = 1;
         final int STEREO = 2;
         int openALFormat = -1;
