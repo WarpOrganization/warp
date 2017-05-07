@@ -11,12 +11,11 @@ import java.nio.*;
 public class SoundDataDecoded {
 
 
-    public ByteBuffer data;
-
-    public int frequency;
-    public int channels;
-    public int bitrate;
-    public int bitsPerChannel;
+    private ByteBuffer data;
+    private int frequency;
+    private int channels;
+    private int bitrate;
+    private int bitsPerChannel;
 
     public int getOpenALFormat()
     {
@@ -46,5 +45,37 @@ public class SoundDataDecoded {
                 break;
         }
         return openALFormat;
+    }
+
+    public ByteBuffer getData() {
+        return data;
+    }
+
+    public void setData(ByteBuffer data) {
+        this.data = data;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
+
+    public void setChannels(int channels) {
+        this.channels = channels;
+    }
+
+    public int getBitrate() {
+        return bitrate;
+    }
+
+    public void setBitrate(int bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setBitsPerChannel(int bitsPerChannel) {
+        this.bitsPerChannel = bitsPerChannel;
     }
 }

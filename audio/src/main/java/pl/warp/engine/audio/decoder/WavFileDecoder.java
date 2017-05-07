@@ -21,29 +21,29 @@ public class WavFileDecoder implements SoundFileDecoder {
 
     @Override
     public SoundDataDecoded decode(File soundFile) throws IOException {
-        AudioInputStream stream = null;
+        AudioInputStream stream;
 
         try {
             stream = AudioSystem.getAudioInputStream(soundFile);
         } catch (UnsupportedAudioFileException e) {
             LOGGER.error(e);
-            return new SoundDataDecoded();
+            throw new RuntimeException(e);
         }
 
         SoundDataDecoded decoded = new SoundDataDecoded();
 
         AudioFormat format = stream.getFormat();
 
-        decoded.frequency = (int)format.getSampleRate();
-        decoded.channels = format.getChannels();
-        decoded.bitrate = 0; //TODO co tu ma być, a może nic?
-        decoded.bitsPerChannel = format.getSampleSizeInBits();
+        decoded.setFrequency((int)format.getSampleRate());
+        decoded.setChannels(format.getChannels());
+        decoded.setBitrate(0);//TODO co tu ma być, a może nic?
+        decoded.setBitsPerChannel(format.getSampleSizeInBits());
 
         byte[] b = IOUtils.toByteArray(stream);
         ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
         data.flip();
 
-        decoded.data = data;
+        decoded.setData(data);
 
         return decoded;
     }

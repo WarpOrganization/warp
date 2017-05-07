@@ -56,7 +56,7 @@ public class SoundBank {
 
         for (int i = 0; i < files.size(); i++) {
             SoundDataDecoded sound = decoder.decode(new File(EngineContext.GAME_DIR_PATH + path + File.separator + FilenameUtils.getName(files.get(i))));
-            AL10.alBufferData(buffer.get(i), sound.getOpenALFormat(), sound.data, sound.frequency);
+            AL10.alBufferData(buffer.get(i), sound.getOpenALFormat(), sound.getData(), sound.getFrequency());
             sounds.put(FilenameUtils.removeExtension(new File(files.get(i)).getName()), buffer.get(i));
         }
     }
