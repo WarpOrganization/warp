@@ -1,21 +1,18 @@
 package pl.warp.engine.audio;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
-import pl.warp.engine.audio.decoder.SoundDataDecoded;
+import pl.warp.engine.audio.decoder.SoundData;
+import pl.warp.engine.audio.decoder.SoundDecoderManager;
 import pl.warp.engine.audio.decoder.WavFileDecoder;
 import pl.warp.engine.core.EngineContext;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,8 +52,9 @@ public class SoundBank {
         WavFileDecoder decoder = new WavFileDecoder();
 
         for (int i = 0; i < files.size(); i++) {
-            SoundDataDecoded sound = decoder.decode(new File(EngineContext.GAME_DIR_PATH + path + File.separator + FilenameUtils.getName(files.get(i))));
-            AL10.alBufferData(buffer.get(i), sound.getOpenALFormat(), sound.getData(), sound.getFrequency());
+            SoundDecoderManager
+                    .decode(path + File.separator + FilenameUtils.getName(files.get(i)))
+                    .fillBufferWithData(buffer.get(i));
             sounds.put(FilenameUtils.removeExtension(new File(files.get(i)).getName()), buffer.get(i));
         }
     }

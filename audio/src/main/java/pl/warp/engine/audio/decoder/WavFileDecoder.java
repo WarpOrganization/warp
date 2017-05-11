@@ -20,7 +20,7 @@ public class WavFileDecoder implements SoundFileDecoder {
     private static final Logger LOGGER = Logger.getLogger(WavFileDecoder.class);
 
     @Override
-    public SoundDataDecoded decode(File soundFile) throws IOException {
+    public SoundData decode(File soundFile) throws IOException {
         AudioInputStream stream;
 
         try {
@@ -30,7 +30,7 @@ public class WavFileDecoder implements SoundFileDecoder {
             throw new RuntimeException(e);
         }
 
-        SoundDataDecoded decoded = new SoundDataDecoded();
+        SoundData decoded = new SoundData();
 
         AudioFormat format = stream.getFormat();
 

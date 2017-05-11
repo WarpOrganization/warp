@@ -8,7 +8,7 @@ import java.io.File;
 public class OggFileDecoder implements SoundFileDecoder {
 
     @Override
-    public SoundDataDecoded decode(File soundFile) {
-        return null;
+    public SoundData decode(File soundFile) {
+        return null;//TODO implement J-OGG
     }
 }

@@ -5,11 +5,16 @@ import org.lwjgl.openal.AL10;
 
 import java.nio.*;
 
+import static org.lwjgl.openal.AL10.alBufferData;
+
 /**
  * Created by Marcin on 30.04.2017.
  */
-public class SoundDataDecoded {
-
+public class SoundData {
+    public int fillBufferWithData(int buffer){
+        alBufferData(buffer, getOpenALFormat(), data, frequency);
+        return buffer;
+    }
 
     private ByteBuffer data;
     private int frequency;
@@ -17,7 +22,7 @@ public class SoundDataDecoded {
     private int bitrate;
     private int bitsPerChannel;
 
-    public int getOpenALFormat()
+    private int getOpenALFormat()
     {
         final int MONO = 1;
         final int STEREO = 2;
@@ -47,35 +52,23 @@ public class SoundDataDecoded {
         return openALFormat;
     }
 
-    public ByteBuffer getData() {
-        return data;
-    }
-
-    public void setData(ByteBuffer data) {
+    void setData(ByteBuffer data) {
         this.data = data;
     }
 
-    public int getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(int frequency) {
+    void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
-    public void setChannels(int channels) {
+    void setChannels(int channels) {
         this.channels = channels;
     }
 
-    public int getBitrate() {
-        return bitrate;
-    }
-
-    public void setBitrate(int bitrate) {
+    void setBitrate(int bitrate) {
         this.bitrate = bitrate;
     }
 
-    public void setBitsPerChannel(int bitsPerChannel) {
+    void setBitsPerChannel(int bitsPerChannel) {
         this.bitsPerChannel = bitsPerChannel;
     }
 }
