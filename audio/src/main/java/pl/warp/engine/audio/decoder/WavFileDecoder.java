@@ -29,22 +29,12 @@ public class WavFileDecoder implements SoundFileDecoder {
             LOGGER.error(e);
             throw new RuntimeException(e);
         }
-
-        SoundData decoded = new SoundData();
-
         AudioFormat format = stream.getFormat();
-
-        decoded.setFrequency((int)format.getSampleRate());
-        decoded.setChannels(format.getChannels());
-        decoded.setBitrate(0);//TODO co tu ma być, a może nic?
-        decoded.setBitsPerChannel(format.getSampleSizeInBits());
 
         byte[] b = IOUtils.toByteArray(stream);
         ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
         data.flip();
 
-        decoded.setData(data);
-
-        return decoded;
+        return new SoundData(data, (int)format.getSampleRate(), format.getChannels(), 0, format.getSampleSizeInBits());
     }
 }

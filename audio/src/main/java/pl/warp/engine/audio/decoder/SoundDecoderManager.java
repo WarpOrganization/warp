@@ -1,7 +1,6 @@
 package pl.warp.engine.audio.decoder;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import pl.warp.engine.core.EngineContext;
 
 import java.io.File;
@@ -16,6 +15,7 @@ public class SoundDecoderManager {
 
     public static SoundData decode(String pathToFile) throws IOException {
         File soundFile = new File(EngineContext.GAME_DIR_PATH + pathToFile);
+        //wiem, że łamie to SOLID, ale i tak będzie tylko używany OGG, więc jak będzie działać to WAV pójdzie sie gonić
         switch (FilenameUtils.getExtension(soundFile.getName())) {
             case "wav":
                 return decoders[0].decode(soundFile);

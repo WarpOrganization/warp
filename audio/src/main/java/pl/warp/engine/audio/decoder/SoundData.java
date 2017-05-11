@@ -2,6 +2,7 @@ package pl.warp.engine.audio.decoder;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
+import pl.warp.engine.audio.SoundBank;
 
 import java.nio.*;
 
@@ -11,16 +12,25 @@ import static org.lwjgl.openal.AL10.alBufferData;
  * Created by Marcin on 30.04.2017.
  */
 public class SoundData {
-    public int fillBufferWithData(int buffer){
-        alBufferData(buffer, getOpenALFormat(), data, frequency);
-        return buffer;
-    }
-
     private ByteBuffer data;
+
     private int frequency;
     private int channels;
     private int bitrate;
     private int bitsPerChannel;
+
+    public SoundData(ByteBuffer data,int frequency, int channels, int bitrate, int bitsPerChannel){
+        this.data = data;
+        this.frequency = frequency;
+        this.channels = channels;
+        this.bitrate = bitrate;
+        this.bitsPerChannel = bitsPerChannel;
+    }
+
+    public int fillBufferWithData(int buffer){
+        alBufferData(buffer, getOpenALFormat(), data, frequency);
+        return buffer;
+    }
 
     private int getOpenALFormat()
     {
@@ -50,25 +60,5 @@ public class SoundData {
                 break;
         }
         return openALFormat;
-    }
-
-    void setData(ByteBuffer data) {
-        this.data = data;
-    }
-
-    void setFrequency(int frequency) {
-        this.frequency = frequency;
-    }
-
-    void setChannels(int channels) {
-        this.channels = channels;
-    }
-
-    void setBitrate(int bitrate) {
-        this.bitrate = bitrate;
-    }
-
-    void setBitsPerChannel(int bitsPerChannel) {
-        this.bitsPerChannel = bitsPerChannel;
     }
 }
