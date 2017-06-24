@@ -6,8 +6,8 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameScriptWithInput;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameScriptWithInput;
 
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.MouseEvent.BUTTON1;

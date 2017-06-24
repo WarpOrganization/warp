@@ -18,9 +18,9 @@ import pl.warp.engine.graphics.particles.dot.DotParticleAttribute;
 import pl.warp.engine.graphics.particles.dot.ParticleStage;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.EventHandler;
-import pl.warp.game.script.GameScript;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.EventHandler;
+import pl.warp.engine.game.script.GameScript;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

@@ -15,7 +15,6 @@ public class DirectionalAccelerationAnimator implements ParticleAnimator {
         this.acceleration = acceleration;
     }
 
-
     private Vector3f temp = new Vector3f();
 
     @Override

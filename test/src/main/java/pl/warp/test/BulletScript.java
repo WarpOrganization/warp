@@ -5,9 +5,9 @@ import pl.warp.engine.core.scene.Listener;
 import pl.warp.engine.core.scene.Property;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.event.CollisionEvent;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.EventHandler;
-import pl.warp.game.script.GameScript;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.EventHandler;
+import pl.warp.engine.game.script.GameScript;
 
 /**
  * @author Hubertus

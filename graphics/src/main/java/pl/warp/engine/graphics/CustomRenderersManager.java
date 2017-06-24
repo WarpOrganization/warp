@@ -26,7 +26,6 @@ public class CustomRenderersManager {
         });
 
     }
-
     public void resize(int newWidth, int newHeight){
         customRenderers.forEach(r -> r.resize(newWidth, newHeight));
     }

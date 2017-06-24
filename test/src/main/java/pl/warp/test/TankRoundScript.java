@@ -13,10 +13,10 @@ import pl.warp.engine.graphics.particles.dot.ParticleStage;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.EventHandler;
-import pl.warp.game.script.GameScript;
-import pl.warp.game.script.OwnerProperty;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.EventHandler;
+import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.game.script.OwnerProperty;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

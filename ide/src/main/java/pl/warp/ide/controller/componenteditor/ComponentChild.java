@@ -1,7 +1,7 @@
 package pl.warp.ide.controller.componenteditor;
 
 import javafx.scene.control.ContextMenu;
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 
 /**
  * @author Jaca777

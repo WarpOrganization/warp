@@ -6,9 +6,9 @@ import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
-import pl.warp.game.GameContext;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameSceneComponent;
+import pl.warp.engine.game.GameContext;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameSceneComponent;
 import pl.warp.ide.controller.camera.ComponentCameraScript;
 import pl.warp.ide.controller.sceneeditor.IDEComponentProperty;
 

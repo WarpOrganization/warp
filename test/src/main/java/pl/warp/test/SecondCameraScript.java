@@ -1,13 +1,11 @@
 package pl.warp.test;
 
-import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameScript;
-import pl.warp.game.script.GameScriptWithInput;
-import pl.warp.game.script.OwnerProperty;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameScriptWithInput;
+import pl.warp.engine.game.script.OwnerProperty;
 
 import java.awt.event.MouseEvent;
 

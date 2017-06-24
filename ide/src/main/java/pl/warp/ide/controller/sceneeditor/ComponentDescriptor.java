@@ -7,7 +7,7 @@ import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
 import pl.warp.engine.graphics.camera.CameraProperty;
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 
 import java.text.DecimalFormat;
 

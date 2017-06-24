@@ -1,8 +1,8 @@
 package pl.warp.ide.controller;
 
-import pl.warp.game.GameContext;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
+import pl.warp.engine.game.GameContext;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
 import pl.warp.ide.controller.componenteditor.ComponentSceneFactory;
 
 /**

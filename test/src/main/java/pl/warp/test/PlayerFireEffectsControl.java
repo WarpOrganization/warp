@@ -3,8 +3,8 @@ package pl.warp.test;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameScriptWithInput;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameScriptWithInput;
 
 import java.awt.event.MouseEvent;
 

@@ -1,6 +1,6 @@
 package pl.warp.ide.controller;
 
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.ide.controller.componenteditor.ComponentEditorController;
 import pl.warp.ide.controller.sceneeditor.SceneEditorController;
 

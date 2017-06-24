@@ -9,9 +9,9 @@ import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameScript;
-import pl.warp.game.script.OwnerProperty;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.game.script.OwnerProperty;
 
 import java.awt.event.KeyEvent;
 

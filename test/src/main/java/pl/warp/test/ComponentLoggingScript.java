@@ -4,11 +4,11 @@ import pl.warp.engine.core.scene.ComponentDeathEvent;
 import pl.warp.engine.core.scene.NameProperty;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.physics.event.CollisionEvent;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.EventHandler;
-import pl.warp.game.script.GameScript;
-import pl.warp.game.script.OwnerProperty;
-import pl.warp.game.script.updatescheduler.DelayScheduling;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.EventHandler;
+import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.game.script.updatescheduler.DelayScheduling;
 
 /**
  * @author Jaca777

@@ -21,11 +21,11 @@ import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
-import pl.warp.game.GameContextBuilder;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
-import pl.warp.game.script.CameraRayTester;
-import pl.warp.game.script.GameScriptManager;
+import pl.warp.engine.game.GameContextBuilder;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.script.CameraRayTester;
+import pl.warp.engine.game.script.GameScriptManager;
 
 import java.io.File;
 

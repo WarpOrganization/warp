@@ -5,9 +5,9 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameScript;
-import pl.warp.game.script.OwnerProperty;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.game.script.OwnerProperty;
 
 import java.awt.event.KeyEvent;
 

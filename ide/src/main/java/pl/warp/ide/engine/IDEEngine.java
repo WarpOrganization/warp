@@ -11,11 +11,11 @@ import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.game.GameContextBuilder;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
-import pl.warp.game.scene.GameSceneComponent;
-import pl.warp.game.scene.GameSceneLoader;
+import pl.warp.engine.game.GameContextBuilder;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.scene.GameSceneComponent;
+import pl.warp.engine.game.scene.GameSceneLoader;
 import pl.warp.ide.controller.camera.FreeCameraScript;
 import pl.warp.ide.controller.sceneeditor.IDEComponentProperty;
 

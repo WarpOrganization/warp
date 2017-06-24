@@ -59,12 +59,12 @@ import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.physics.DupaProperty;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.GameContextBuilder;
-import pl.warp.game.graphics.effects.star.StarBuilder;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
-import pl.warp.game.scene.GameSceneComponent;
-import pl.warp.game.scene.GameSceneLoader;
+import pl.warp.engine.game.GameContextBuilder;
+import pl.warp.engine.game.graphics.effects.star.StarBuilder;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.scene.GameSceneComponent;
+import pl.warp.engine.game.scene.GameSceneLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;

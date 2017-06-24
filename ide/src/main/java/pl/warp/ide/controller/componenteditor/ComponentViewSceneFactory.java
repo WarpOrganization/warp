@@ -5,9 +5,9 @@ import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.skybox.GraphicsSkyboxProperty;
 import pl.warp.engine.graphics.texture.Cubemap;
-import pl.warp.game.GameContext;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
+import pl.warp.engine.game.GameContext;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
 
 /**
  * @author Jaca777

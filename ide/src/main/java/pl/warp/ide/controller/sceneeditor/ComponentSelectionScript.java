@@ -3,10 +3,10 @@ package pl.warp.ide.controller.sceneeditor;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.joml.Vector2f;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
-import pl.warp.game.script.CameraRayTester;
-import pl.warp.game.script.GameScriptWithInput;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.script.CameraRayTester;
+import pl.warp.engine.game.script.GameScriptWithInput;
 
 import java.awt.event.MouseEvent;
 import java.util.Optional;

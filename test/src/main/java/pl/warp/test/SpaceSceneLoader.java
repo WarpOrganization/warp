@@ -61,21 +61,21 @@ import pl.warp.engine.physics.CollisionType;
 import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.GameContextBuilder;
-import pl.warp.game.graphics.effects.atmosphere.AtmosphereBuilder;
-import pl.warp.game.graphics.effects.gasplanet.GasPlanetBuilder;
-import pl.warp.game.graphics.effects.gasplanet.GasPlanetProgram;
-import pl.warp.game.graphics.effects.planet.PlanetBuilder;
-import pl.warp.game.graphics.effects.planet.generator.surface.Biome;
-import pl.warp.game.graphics.effects.ring.PlanetRingBuilder;
-import pl.warp.game.graphics.effects.ring.PlanetRingProgram;
-import pl.warp.game.graphics.effects.ring.PlanetRingProperty;
-import pl.warp.game.graphics.effects.star.StarBuilder;
-import pl.warp.game.graphics.effects.star.StarProgram;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
-import pl.warp.game.scene.GameSceneComponent;
-import pl.warp.game.scene.GameSceneLoader;
+import pl.warp.engine.game.GameContextBuilder;
+import pl.warp.engine.game.graphics.effects.atmosphere.AtmosphereBuilder;
+import pl.warp.engine.game.graphics.effects.gasplanet.GasPlanetBuilder;
+import pl.warp.engine.game.graphics.effects.gasplanet.GasPlanetProgram;
+import pl.warp.engine.game.graphics.effects.planet.PlanetBuilder;
+import pl.warp.engine.game.graphics.effects.planet.generator.surface.Biome;
+import pl.warp.engine.game.graphics.effects.ring.PlanetRingBuilder;
+import pl.warp.engine.game.graphics.effects.ring.PlanetRingProgram;
+import pl.warp.engine.game.graphics.effects.ring.PlanetRingProperty;
+import pl.warp.engine.game.graphics.effects.star.StarBuilder;
+import pl.warp.engine.game.graphics.effects.star.StarProgram;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.scene.GameSceneComponent;
+import pl.warp.engine.game.scene.GameSceneLoader;
 import pl.warp.test.ai.DroneMemoryProperty;
 
 import java.io.File;
@@ -207,7 +207,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             colorsTexture = new Texture1D(decodedColorsTexture.getWidth(), GL11.GL_RGBA, GL11.GL_RGBA, false, decodedColorsTexture.getData());
             gasPlanet = new GasPlanetBuilder(scene, colorsTexture).build();
             TransformProperty gasSphereTransform = gasPlanet.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            gasSphereTransform.move(new Vector3f(-1600f, -200f, -500f));
+            gasSphereTransform.move(new Vector3f(-1600f, -200f, 500));
             gasSphereTransform.scale(new Vector3f(1000.0f));
 
             ImageData ringColorsData = ImageDecoder.decodePNG(Test.class.getResourceAsStream("ring_colors.png"), PNGDecoder.Format.RGBA);
@@ -244,8 +244,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
             controllableGoat.addProperty(renderableMeshProperty);
-            //renderableMeshProperty.disable();
-            allyEngineParticles(controllableGoat);
+            renderableMeshProperty.disable();
+            //allyEngineParticles(controllableGoat);
 
             new KabooomScript(controllableGoat, gasPlanet, 1000.0f);
 

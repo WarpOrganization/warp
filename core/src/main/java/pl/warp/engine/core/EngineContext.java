@@ -7,7 +7,10 @@ import pl.warp.engine.core.scene.script.ScriptManager;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 
 /**
  * @author Jaca777
@@ -19,7 +22,10 @@ public class EngineContext {
 
     private static String getGameDirPath() {
         try {
-            String path = EngineContext.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            ProtectionDomain protectionDomain = EngineContext.class.getProtectionDomain();
+            CodeSource codeSource = protectionDomain.getCodeSource();
+            URL location = codeSource.getLocation();
+            String path = location.getPath();
             File jarFile = new File(URLDecoder.decode(path, "UTF-8"));
             return jarFile.getParent() + File.separator;
         } catch (UnsupportedEncodingException e) {

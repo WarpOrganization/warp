@@ -1,7 +1,7 @@
 package pl.warp.ide.controller.sceneeditor.tree;
 
 import javafx.scene.control.TreeCell;
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.ide.controller.look.ItemLook;
 import pl.warp.ide.controller.sceneeditor.ComponentContextMenu;
 import pl.warp.ide.controller.sceneeditor.SceneEditorController;

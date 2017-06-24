@@ -4,9 +4,9 @@ import org.joml.Vector2f;
 
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameInputHandler;
-import pl.warp.game.script.GameScriptWithInput;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameInputHandler;
+import pl.warp.engine.game.script.GameScriptWithInput;
 
 import java.awt.event.MouseEvent;
 

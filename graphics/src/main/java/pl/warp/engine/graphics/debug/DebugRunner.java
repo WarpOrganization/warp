@@ -1,7 +1,10 @@
 package pl.warp.engine.graphics.debug;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 
 /**
  * @author Jaca777
@@ -14,9 +17,20 @@ public class DebugRunner {
         runMain(aClass);
     }
 
-    private static void runMain(Class<?> aClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private static void runMain(Class<?> aClass) throws ReflectiveOperationException {
+        setupCodesource(aClass);
         Method main = aClass.getMethod("main", String[].class);
         main.setAccessible(true);
         main.invoke(null, (Object) new String[0]);
+    }
+
+    private static void setupCodesource(Class<?> aClass) throws NoSuchFieldException, IllegalAccessException {
+        URL codesourceLocation = DebugRunner.class.getProtectionDomain().getCodeSource().getLocation();
+        ProtectionDomain domain = aClass.getProtectionDomain();
+        CodeSource source = domain.getCodeSource();
+        Class sourceClass = source.getClass();
+        Field location = sourceClass.getDeclaredField("location");
+        location.setAccessible(true);
+        location.set(source, codesourceLocation);
     }
 }

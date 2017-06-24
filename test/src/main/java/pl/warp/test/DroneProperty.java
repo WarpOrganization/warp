@@ -2,7 +2,7 @@ package pl.warp.test;
 
 import pl.warp.engine.core.scene.Component;
 import pl.warp.engine.core.scene.Property;
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 
 import java.util.ArrayList;
 

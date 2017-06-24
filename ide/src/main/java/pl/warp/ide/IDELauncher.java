@@ -9,7 +9,7 @@ import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.game.GameContextBuilder;
+import pl.warp.engine.game.GameContextBuilder;
 import pl.warp.ide.controller.IDEController;
 import pl.warp.ide.engine.IDEEngine;
 import pl.warp.ide.engine.SceneViewRenderer;

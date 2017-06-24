@@ -29,7 +29,7 @@ public class Mesh {
             vertices = -1;
 
     /**
-     * @param verticesNum Buffer containing vertices
+     * @param vertices Buffer containing vertices
      * @param texCoords   Buffer containing texture coordinates
      * @param normals     Buffer containing normals
      * @param indicesNum  Buffer containing indices

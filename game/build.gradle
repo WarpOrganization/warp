@@ -2,6 +2,7 @@ group 'pl.warp'
 version '0.1.2'
 
 apply plugin: 'java'
+apply plugin: 'scala'
 
 repositories {
     jcenter()
@@ -10,6 +11,8 @@ repositories {
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
+    compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.2'
+    compile group: 'io.reactivex', name: 'rxscala_2.11', version: '0.26.5'
     compile project(':core')
     compile project(':physics')
     compile project(':graphics')

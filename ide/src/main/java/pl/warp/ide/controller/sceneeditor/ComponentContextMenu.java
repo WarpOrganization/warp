@@ -2,7 +2,7 @@ package pl.warp.ide.controller.sceneeditor;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.ide.IconUtil;
 
 /**

@@ -35,9 +35,8 @@ public class CallsInjector {
             MethodInsnNode methodInvoc = (MethodInsnNode) instruction;
             if (isOglInstruction(methodInvoc)) {
                 InsnList tracerCall = new InsnList();
-                tracerCall.add(new LdcInsnNode(methodInvoc.name));
                 tracerCall.add(ERROR_CHECK_CALL);
-                newStack.insert(instruction, tracerCall);
+                newStack.insert(methodInvoc, tracerCall);
             }
         }
     }

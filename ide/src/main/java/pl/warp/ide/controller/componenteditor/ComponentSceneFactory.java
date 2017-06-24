@@ -1,7 +1,7 @@
 package pl.warp.ide.controller.componenteditor;
 
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.scene.GameScene;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
 
 /**
  * @author Jaca777

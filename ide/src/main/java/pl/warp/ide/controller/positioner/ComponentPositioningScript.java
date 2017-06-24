@@ -4,9 +4,9 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameInputHandler;
-import pl.warp.game.script.GameScriptWithInput;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameInputHandler;
+import pl.warp.engine.game.script.GameScriptWithInput;
 
 import java.awt.event.KeyEvent;
 

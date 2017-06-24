@@ -7,7 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import org.joml.Vector2f;
 import pl.warp.engine.core.scene.input.*;
-import pl.warp.game.scene.GameScene;
+import pl.warp.engine.game.scene.GameScene;
 
 import static java.awt.event.MouseEvent.NOBUTTON;
 

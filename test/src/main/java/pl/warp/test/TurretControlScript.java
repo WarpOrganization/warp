@@ -5,13 +5,9 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.properties.TransformProperty;
 import pl.warp.engine.core.scene.properties.Transforms;
-import pl.warp.engine.physics.property.GravityProperty;
-import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.game.scene.GameComponent;
-import pl.warp.game.script.GameScript;
-import pl.warp.game.script.OwnerProperty;
-
-import java.awt.event.KeyEvent;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.game.script.OwnerProperty;
 
 /**
  * Created by Marcin on 04.03.2017.

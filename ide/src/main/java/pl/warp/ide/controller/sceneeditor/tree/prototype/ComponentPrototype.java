@@ -1,6 +1,6 @@
 package pl.warp.ide.controller.sceneeditor.tree.prototype;
 
-import pl.warp.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameComponent;
 
 /**
  * @author Jaca777
