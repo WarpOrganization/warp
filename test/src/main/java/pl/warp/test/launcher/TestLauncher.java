@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.warp.launcher.BasicUpdater;
+import pl.warp.launcher.UpdateStatus;
 
 /**
  * @author Hubertus
@@ -25,5 +27,8 @@ public class TestLauncher extends Application{
         primaryStage.setScene(scene);
         primaryStage.setTitle("Warp Demo Launcher");
         primaryStage.show();
+        BasicUpdater basicUpdater = new BasicUpdater();
+        UpdateStatus status = new UpdateStatus();
+        //basicUpdater.update(new PathData("testData","."),false, status);
     }
 }

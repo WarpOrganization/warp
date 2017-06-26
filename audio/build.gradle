@@ -5,7 +5,7 @@ apply plugin: 'java'
 
 def platform=project.properties['platform'] ?: "windows"
 
-project.ext.lwjglNatives = "natives-${platform}"
+project.ext.lwjglNatives = "natives-linux"
 project.ext.lwjglVersion = "3.1.0"
 
 repositories {

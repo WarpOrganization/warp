@@ -6,4 +6,8 @@ package pl.warp.launcher;
  */
 public interface Remote {
     void getFile(DownloadTask downloadTask);
+
+    void setDownloadPrefix(String downloadPrefix);
+
+    void stop();
 }
