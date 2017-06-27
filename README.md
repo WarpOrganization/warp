@@ -11,7 +11,7 @@
  * Gradle
 
 ### License
-Apache License Version 2.0. In other words - you can do with the Engine whatever you want and release the derivative work under any license, as long as you keep the Apache License file with the Warp Engine authorship information.
+GNU Lesser GPL v3.0
 
 ### Video
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=lC9gaXnEA_w
