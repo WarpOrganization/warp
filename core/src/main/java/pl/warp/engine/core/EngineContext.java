@@ -20,7 +20,7 @@ public class EngineContext {
 
     public static final String GAME_DIR_PATH = getGameDirPath();
 
-    private static String getGameDirPath() {
+    private static String getCodeSourceDir() {
         try {
             ProtectionDomain protectionDomain = EngineContext.class.getProtectionDomain();
             CodeSource codeSource = protectionDomain.getCodeSource();
