@@ -3,6 +3,7 @@ package pl.warp.engine.game;
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.scene.EventDispatcher;
+import pl.warp.engine.core.scene.framing.SceneFramingContext;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 import pl.warp.engine.game.script.CameraRayTester;
@@ -66,5 +67,10 @@ public class GameContext extends EngineContext {
 
     protected void setAiManager(AIManager aiManager) {
         this.aiManager = aiManager;
+    }
+
+    @Override
+    protected void setSceneFramingContext(SceneFramingContext sceneFramingContext) {
+        super.setSceneFramingContext(sceneFramingContext);
     }
 }

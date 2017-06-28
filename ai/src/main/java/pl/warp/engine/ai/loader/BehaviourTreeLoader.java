@@ -19,7 +19,7 @@ public class BehaviourTreeLoader {
 
     public static BehaviourTreeBuilder loadXML(String path) {
         try {
-            InputStream stream = new FileInputStream(new File(EngineContext.GAME_DIR_PATH + path));
+            InputStream stream = new FileInputStream(new File(EngineContext.CODESOURCE_DIR + path));
             SAXParserFactory factory = SAXParserFactory.newInstance();
             BehaviourTreeBuilder behaviourTreeBuilder = new BehaviourTreeBuilder();
             SAXParser saxParser = factory.newSAXParser();

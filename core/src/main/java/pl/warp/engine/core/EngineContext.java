@@ -2,6 +2,7 @@ package pl.warp.engine.core;
 
 import pl.warp.engine.core.scene.EventDispatcher;
 import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.scene.framing.SceneFramingContext;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 
@@ -18,9 +19,9 @@ import java.security.ProtectionDomain;
  */
 public class EngineContext {
 
-    public static final String GAME_DIR_PATH = getGameDirPath();
+    public static final String CODESOURCE_DIR = getCodesourceDir();
 
-    private static String getGameDirPath() {
+    private static String getCodesourceDir() {
         try {
             ProtectionDomain protectionDomain = EngineContext.class.getProtectionDomain();
             CodeSource codeSource = protectionDomain.getCodeSource();
@@ -38,6 +39,7 @@ public class EngineContext {
     private ScriptManager scriptManager;
     private Input input;
     private EventDispatcher eventDispatcher;
+    private SceneFramingContext sceneFramingContext;
 
     public Scene getScene() {
         return scene;
@@ -69,5 +71,13 @@ public class EngineContext {
 
     protected void setEventDispatcher(EventDispatcher eventDispatcher) {
         this.eventDispatcher = eventDispatcher;
+    }
+
+    public SceneFramingContext getSceneFramingContext() {
+        return sceneFramingContext;
+    }
+
+    protected void setSceneFramingContext(SceneFramingContext sceneFramingContext) {
+        this.sceneFramingContext = sceneFramingContext;
     }
 }

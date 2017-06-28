@@ -41,7 +41,7 @@ public class MusicSource extends AudioSource {
 
     public void loadNew(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(new File(EngineContext.GAME_DIR_PATH + path));
+            stream = AudioSystem.getAudioInputStream(new File(EngineContext.CODESOURCE_DIR + path));
             format = stream.getFormat();
             openALFormat = SoundBank.getOpenALFormat(format);
             sampleRate = format.getSampleRate();

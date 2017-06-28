@@ -66,13 +66,24 @@ public class FramedComponent extends SceneComponent {
 
     @Override
     public void addProperty(Property property) {
-        //TODO
-        super.addProperty(property);
+        if(property instanceof PropertyFrame)
+            makeProxy(property);
+        else super.addProperty(property);
+
+    }
+
+    private void makeProxy(Property property) {
+
     }
 
     @Override
     public void removeProperty(Property property) {
-        //TODO
-        super.removeProperty(property);
+        if(property instanceof PropertyFrame)
+            closeProxy(property);
+        else super.removeProperty(property);
+    }
+
+    private void closeProxy(Property property) {
+
     }
 }

@@ -3,7 +3,6 @@ package pl.warp.engine.audio;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
-import pl.warp.engine.audio.decoder.SoundData;
 import pl.warp.engine.audio.decoder.SoundDecoderManager;
 import pl.warp.engine.audio.decoder.WavFileDecoder;
 import pl.warp.engine.core.EngineContext;
@@ -34,7 +33,7 @@ public class SoundBank {
     }
 
     public void loadDir(String path) throws URISyntaxException, IOException, UnsupportedAudioFileException {
-        Path myPath = Paths.get(EngineContext.GAME_DIR_PATH + path);
+        Path myPath = Paths.get(EngineContext.CODESOURCE_DIR + path);
         Stream<Path> walk = Files.walk(myPath, 1);
 
 
