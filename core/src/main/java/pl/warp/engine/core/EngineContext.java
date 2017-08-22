@@ -2,7 +2,6 @@ package pl.warp.engine.core;
 
 import pl.warp.engine.core.scene.EventDispatcher;
 import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.framing.SceneFramingContext;
 import pl.warp.engine.core.scene.input.Input;
 import pl.warp.engine.core.scene.script.ScriptManager;
 
@@ -39,7 +38,6 @@ public class EngineContext {
     private ScriptManager scriptManager;
     private Input input;
     private EventDispatcher eventDispatcher;
-    private SceneFramingContext sceneFramingContext;
 
     public Scene getScene() {
         return scene;
@@ -73,11 +71,4 @@ public class EngineContext {
         this.eventDispatcher = eventDispatcher;
     }
 
-    public SceneFramingContext getSceneFramingContext() {
-        return sceneFramingContext;
-    }
-
-    protected void setSceneFramingContext(SceneFramingContext sceneFramingContext) {
-        this.sceneFramingContext = sceneFramingContext;
-    }
 }

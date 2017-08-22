@@ -10,12 +10,12 @@ import pl.warp.engine.core.scene.Component;
  *         Created 2016-07-08 at 14
  */
 public class Transforms {
-    public static Matrix4f getActualTransform(Component component) {
+    public static Matrix4f getAbsoluteTransform(Component component) {
         Matrix4f transformMatrix = new Matrix4f().identity();
         if (component.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
             applyTransform(transformMatrix, component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME));
         if (component.hasParent()) {
-            Matrix4f parentFullTransform = getActualTransform(component.getParent());
+            Matrix4f parentFullTransform = getAbsoluteTransform(component.getParent());
             return parentFullTransform.mul(transformMatrix);
         } else return transformMatrix;
     }

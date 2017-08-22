@@ -65,7 +65,7 @@ public class SpotLight {
     private Vector3f tempPosition = new Vector3f();
 
     public Vector3f getPosition() {
-        Matrix4f fullTransform = Transforms.getActualTransform(owner);
+        Matrix4f fullTransform = Transforms.getAbsoluteTransform(owner);
         return fullTransform.transformPosition(relativePosition, tempPosition);
     }
 
