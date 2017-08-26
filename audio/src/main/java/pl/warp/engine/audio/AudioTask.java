@@ -2,7 +2,7 @@ package pl.warp.engine.audio;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
-import pl.warp.engine.core.EngineTask;
+import pl.warp.engine.core.execution.task.EngineTask;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

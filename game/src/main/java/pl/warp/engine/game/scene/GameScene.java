@@ -1,6 +1,6 @@
 package pl.warp.engine.game.scene;
 
-import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.game.GameContext;
 
 /**

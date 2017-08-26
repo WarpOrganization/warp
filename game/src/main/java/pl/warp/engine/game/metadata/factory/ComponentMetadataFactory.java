@@ -2,8 +2,8 @@ package pl.warp.engine.game.metadata.factory;
 
 import pl.warp.engine.game.metadata.ComponentMetadata;
 import pl.warp.engine.game.metadata.PropertyMetadata;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.property.Property;
 
 import java.util.Set;
 import java.util.stream.Collectors;

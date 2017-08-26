@@ -1,7 +1,7 @@
 package pl.warp.engine.physics;
 
 import com.badlogic.gdx.physics.bullet.collision.*;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.physics.collider.PointCollider;
 
 import java.util.*;

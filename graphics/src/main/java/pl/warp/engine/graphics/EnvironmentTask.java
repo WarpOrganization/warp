@@ -1,8 +1,8 @@
 package pl.warp.engine.graphics;
 
 import org.apache.log4j.Logger;
-import pl.warp.engine.core.EngineTask;
-import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.execution.task.EngineTask;
+import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.graphics.light.SceneLightObserver;
 
 /**

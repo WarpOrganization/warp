@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.light;
 
-import pl.warp.engine.core.scene.Event;
+import pl.warp.engine.core.event.Event;
 
 /**
  * @author Jaca777

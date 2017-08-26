@@ -1,10 +1,10 @@
 package pl.warp.engine.ai;
 
 import pl.warp.engine.ai.behaviortree.BehaviorTreeNotFoundException;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.ComponentDeathEvent;
-import pl.warp.engine.core.scene.SimpleListener;
-import pl.warp.engine.core.scene.observable.PropertyAddedEvent;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.component.ComponentDeathEvent;
+import pl.warp.engine.core.component.SimpleListener;
+import pl.warp.engine.core.property.observable.PropertyAddedEvent;
 
 import java.util.HashSet;
 import java.util.Set;

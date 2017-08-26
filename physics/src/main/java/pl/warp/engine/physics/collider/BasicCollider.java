@@ -7,10 +7,10 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.ComponentDeathEvent;
-import pl.warp.engine.core.scene.Listener;
-import pl.warp.engine.core.scene.SimpleListener;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.component.ComponentDeathEvent;
+import pl.warp.engine.core.event.Listener;
+import pl.warp.engine.core.component.SimpleListener;
 import pl.warp.engine.physics.PhysicsWorld;
 
 /**

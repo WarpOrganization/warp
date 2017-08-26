@@ -1,8 +1,8 @@
 package pl.warp.engine.game.graphics.effects.star;
 
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.updater.Updatable;
-import pl.warp.engine.core.updater.UpdaterTask;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.execution.task.update.Updatable;
+import pl.warp.engine.core.execution.task.update.UpdaterTask;
 import pl.warp.engine.game.graphics.effects.GameComponentBuilder;
 import pl.warp.engine.game.graphics.effects.star.corona.CoronaProgram;
 import pl.warp.engine.game.graphics.effects.star.corona.CoronaProperty;

@@ -1,6 +1,6 @@
 package pl.warp.engine.game.metadata.loader;
 
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.metadata.ComponentMetadata;
 

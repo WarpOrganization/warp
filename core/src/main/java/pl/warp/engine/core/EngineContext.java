@@ -1,9 +1,9 @@
 package pl.warp.engine.core;
 
-import pl.warp.engine.core.scene.EventDispatcher;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.input.Input;
-import pl.warp.engine.core.scene.script.ScriptManager;
+import pl.warp.engine.core.event.EventDispatcher;
+import pl.warp.engine.core.component.Scene;
+import pl.warp.engine.common.input.Input;
+import pl.warp.engine.core.script.ScriptManager;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

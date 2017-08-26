@@ -2,8 +2,8 @@ package pl.warp.ide.controller.componenteditor;
 
 import javafx.scene.control.TreeView;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.core.property.Property;
+import pl.warp.engine.common.properties.TransformProperty;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.game.GameContext;

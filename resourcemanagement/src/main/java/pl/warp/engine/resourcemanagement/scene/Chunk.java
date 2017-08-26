@@ -1,6 +1,6 @@
 package pl.warp.engine.resourcemanagement.scene;
 
-import pl.warp.engine.core.scene.SceneComponent;
+import pl.warp.engine.core.component.SceneComponent;
 
 /**
  * @author Jaca777

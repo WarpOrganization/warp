@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.particles;
 
-import pl.warp.engine.core.SimpleEngineTask;
+import pl.warp.engine.core.execution.task.SimpleEngineTask;
 
 import java.util.List;
 

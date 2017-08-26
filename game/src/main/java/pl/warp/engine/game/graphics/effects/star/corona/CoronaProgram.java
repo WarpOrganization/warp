@@ -2,8 +2,8 @@ package pl.warp.engine.game.graphics.effects.star.corona;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.updater.Updatable;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.execution.task.update.Updatable;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.program.Program;
 import pl.warp.engine.graphics.program.extendedglsl.ConstantField;

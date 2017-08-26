@@ -1,7 +1,7 @@
 package pl.warp.engine.ai.loader;
 
 import pl.warp.engine.ai.behaviortree.BehaviorTree;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 /**
  * @author Hubertus

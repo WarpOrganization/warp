@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.mesh;
 
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.camera.Camera;

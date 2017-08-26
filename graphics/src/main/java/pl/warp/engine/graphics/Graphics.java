@@ -1,7 +1,9 @@
 package pl.warp.engine.graphics;
 
-import pl.warp.engine.core.*;
-import pl.warp.engine.core.updater.UpdaterTask;
+import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.execution.*;
+import pl.warp.engine.core.execution.task.UPSCounterTask;
+import pl.warp.engine.core.execution.task.update.UpdaterTask;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.pipeline.Sink;
 import pl.warp.engine.graphics.program.pool.ProgramPool;

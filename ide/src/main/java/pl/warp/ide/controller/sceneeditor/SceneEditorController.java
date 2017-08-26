@@ -3,7 +3,7 @@ package pl.warp.ide.controller.sceneeditor;
 import javafx.application.Platform;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
-import pl.warp.engine.core.scene.NameProperty;
+import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;

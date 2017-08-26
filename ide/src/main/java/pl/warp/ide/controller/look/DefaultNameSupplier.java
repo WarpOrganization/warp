@@ -1,7 +1,7 @@
 package pl.warp.ide.controller.look;
 
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.NameProperty;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.property.NameProperty;
 
 import java.util.function.Function;
 

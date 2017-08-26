@@ -1,8 +1,8 @@
 package pl.warp.test;
 
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Listener;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.event.Listener;
+import pl.warp.engine.core.property.Property;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.game.scene.GameComponent;

@@ -2,9 +2,9 @@ package pl.warp.engine.graphics.input.glfw;
 
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
-import pl.warp.engine.core.scene.Event;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.input.*;
+import pl.warp.engine.core.event.Event;
+import pl.warp.engine.core.component.Scene;
+import pl.warp.engine.common.input.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;

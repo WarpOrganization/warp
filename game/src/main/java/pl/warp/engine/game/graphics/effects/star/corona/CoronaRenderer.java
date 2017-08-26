@@ -5,7 +5,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.CustomRenderer;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.Graphics;

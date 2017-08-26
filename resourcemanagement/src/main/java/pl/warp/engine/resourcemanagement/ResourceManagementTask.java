@@ -1,6 +1,6 @@
 package pl.warp.engine.resourcemanagement;
 
-import pl.warp.engine.core.EngineTask;
+import pl.warp.engine.core.execution.task.EngineTask;
 
 /**
  * @author Jaca777

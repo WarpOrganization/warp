@@ -2,9 +2,9 @@ package pl.warp.engine.game;
 
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.EngineContext;
-import pl.warp.engine.core.scene.EventDispatcher;
-import pl.warp.engine.core.scene.input.Input;
-import pl.warp.engine.core.scene.script.ScriptManager;
+import pl.warp.engine.core.event.EventDispatcher;
+import pl.warp.engine.common.input.Input;
+import pl.warp.engine.core.script.ScriptManager;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.script.CameraRayTester;
 import pl.warp.engine.graphics.Graphics;

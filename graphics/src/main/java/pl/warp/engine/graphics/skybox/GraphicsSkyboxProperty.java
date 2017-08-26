@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics.skybox;
 
-import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.core.scene.Scene;
+import pl.warp.engine.core.property.Property;
+import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.graphics.texture.Cubemap;
 
 /**

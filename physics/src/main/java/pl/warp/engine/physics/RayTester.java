@@ -3,7 +3,7 @@ package pl.warp.engine.physics;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 import java.util.HashMap;
 import java.util.Map;

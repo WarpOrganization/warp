@@ -1,6 +1,6 @@
 package pl.warp.engine.game.scene;
 
-import pl.warp.engine.core.EngineThread;
+import pl.warp.engine.core.execution.EngineThread;
 
 /**
  * @author Jaca777

@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics.program.rendering.component.terrain;
 
 import org.joml.Vector2f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.program.extendedglsl.LocalProgramLoader;
 import pl.warp.engine.graphics.program.rendering.component.defaultprog.DefaultMeshProgram;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;

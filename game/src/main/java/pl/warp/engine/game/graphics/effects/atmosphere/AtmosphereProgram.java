@@ -2,7 +2,7 @@ package pl.warp.engine.game.graphics.effects.atmosphere;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;

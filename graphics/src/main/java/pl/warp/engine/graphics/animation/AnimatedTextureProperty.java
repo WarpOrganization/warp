@@ -1,8 +1,8 @@
 package pl.warp.engine.graphics.animation;
 
 import org.joml.Vector2f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.property.Property;
 
 /**
  * @author Jaca777

@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics.pipeline.rendering.effects.distortedscreen;
 
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.core.updater.UpdaterTask;
+import pl.warp.engine.core.execution.task.update.UpdaterTask;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.pipeline.rendering.ProgramTextureFlow;
 import pl.warp.engine.graphics.texture.Texture2D;

@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics.program.rendering.component.defaultprog;
 
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;

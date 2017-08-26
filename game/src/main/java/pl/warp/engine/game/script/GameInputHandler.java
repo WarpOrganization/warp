@@ -1,9 +1,9 @@
 package pl.warp.engine.game.script;
 
 import org.joml.Vector2f;
-import pl.warp.engine.core.scene.Scene;
-import pl.warp.engine.core.scene.SimpleListener;
-import pl.warp.engine.core.scene.input.*;
+import pl.warp.engine.core.component.Scene;
+import pl.warp.engine.core.component.SimpleListener;
+import pl.warp.engine.common.input.*;
 import pl.warp.engine.game.GameContext;
 
 /**

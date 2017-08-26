@@ -3,8 +3,8 @@ package pl.warp.engine.graphics.light;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.common.properties.Transforms;
 
 /**
  * @author Jaca777

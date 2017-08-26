@@ -1,6 +1,6 @@
 package pl.warp.engine.game.scaladsl.script
 
-import pl.warp.engine.core.scene.Script
+import pl.warp.engine.core.script.Script
 import pl.warp.engine.game.scene.GameComponent
 import pl.warp.engine.game.script.{GameScript => JavaScript}
 

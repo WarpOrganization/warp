@@ -1,8 +1,8 @@
 package pl.warp.engine.game.graphics.effects.star;
 
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.updater.Updatable;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.execution.task.update.Updatable;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.math.MatrixStack;

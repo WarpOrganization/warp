@@ -2,9 +2,9 @@ package pl.warp.test;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.input.Input;
-import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.common.input.Input;
+import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.properties.Transforms;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.physics.property.GravityProperty;

@@ -3,7 +3,7 @@ package pl.warp.engine.graphics;
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.core.EngineTask;
+import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.WindowManager;

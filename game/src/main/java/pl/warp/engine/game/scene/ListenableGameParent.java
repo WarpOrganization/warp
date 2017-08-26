@@ -1,6 +1,6 @@
 package pl.warp.engine.game.scene;
 
-import pl.warp.engine.core.scene.listenable.ListenableParent;
+import pl.warp.engine.core.component.listenable.ListenableParent;
 import pl.warp.engine.game.GameContext;
 
 /**

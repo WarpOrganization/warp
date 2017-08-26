@@ -5,9 +5,9 @@ import org.joml.Vector3f;
 import pl.warp.engine.ai.behaviortree.LeafNode;
 import pl.warp.engine.ai.behaviortree.Node;
 import pl.warp.engine.ai.behaviortree.Ticker;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.properties.Transforms;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import static java.lang.Math.PI;

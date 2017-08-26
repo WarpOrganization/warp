@@ -1,8 +1,8 @@
 package pl.warp.engine.game.metadata.loader;
 
 import pl.warp.engine.game.metadata.ReflectionUtil;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.property.Property;
 import pl.warp.engine.game.metadata.Metadata;
 import pl.warp.engine.game.metadata.PropertyMetadata;
 import sun.reflect.ReflectionFactory;

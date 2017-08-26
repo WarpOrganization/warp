@@ -1,6 +1,6 @@
 package pl.warp.test;
 
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.property.Property;
 import pl.warp.engine.game.scene.GameComponent;
 
 /**

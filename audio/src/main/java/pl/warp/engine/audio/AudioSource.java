@@ -1,7 +1,7 @@
 package pl.warp.engine.audio;
 
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 import static org.lwjgl.openal.AL10.*;
 

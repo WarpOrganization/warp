@@ -1,6 +1,6 @@
 package pl.warp.engine.ai.behaviortree;
 
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 /**
  * @author Hubertus

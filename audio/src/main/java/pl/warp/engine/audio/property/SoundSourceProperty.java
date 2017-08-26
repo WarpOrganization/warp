@@ -1,7 +1,7 @@
 package pl.warp.engine.audio.property;
 
 import pl.warp.engine.audio.AudioContext;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.property.Property;
 
 /**
  * @author Hubertus

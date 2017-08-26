@@ -4,7 +4,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.ComponentRenderer;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;

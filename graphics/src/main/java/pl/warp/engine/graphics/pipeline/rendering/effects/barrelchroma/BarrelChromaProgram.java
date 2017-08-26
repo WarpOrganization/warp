@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.pipeline.rendering.effects.barrelchroma;
 
-import pl.warp.engine.core.updater.Updatable;
+import pl.warp.engine.core.execution.task.update.Updatable;
 import pl.warp.engine.graphics.program.Program;
 import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;

@@ -1,6 +1,6 @@
 package pl.warp.engine.game.graphics.effects.star;
 
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.property.Property;
 import pl.warp.engine.game.graphics.effects.star.corona.CoronaProgram;
 import pl.warp.engine.game.graphics.effects.star.corona.CoronaRenderer;
 import pl.warp.engine.game.scene.GameComponent;

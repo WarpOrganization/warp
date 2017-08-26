@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
@@ -88,7 +88,7 @@ public class IDELauncher extends Application {
     }
 
     private Boolean isScene(Component component) {
-        return component instanceof pl.warp.engine.core.scene.Scene;
+        return component instanceof pl.warp.engine.core.component.Scene;
     }
 
     private Boolean isCamera(Component component) {

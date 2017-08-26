@@ -1,9 +1,12 @@
 package pl.warp.engine.game.script;
 
 import org.apache.log4j.Logger;
-import pl.warp.engine.core.scene.*;
-import pl.warp.engine.core.scene.script.ScriptInitializationException;
-import pl.warp.engine.core.scene.script.ScriptManager;
+import pl.warp.engine.core.event.Event;
+import pl.warp.engine.core.property.Property;
+import pl.warp.engine.core.component.*;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.ScriptInitializationException;
+import pl.warp.engine.core.script.ScriptManager;
 import pl.warp.engine.game.script.updatescheduler.*;
 
 import java.lang.invoke.MethodHandle;

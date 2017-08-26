@@ -1,7 +1,7 @@
 package pl.warp.engine.ai;
 
-import pl.warp.engine.core.EngineTask;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.execution.task.EngineTask;
+import pl.warp.engine.core.component.Component;
 
 /**
  * @author Hubertus

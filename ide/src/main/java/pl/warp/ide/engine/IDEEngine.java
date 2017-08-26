@@ -2,8 +2,8 @@ package pl.warp.ide.engine;
 
 import javafx.scene.canvas.Canvas;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.input.Input;
-import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.common.input.Input;
+import pl.warp.engine.common.properties.TransformProperty;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.CameraProperty;

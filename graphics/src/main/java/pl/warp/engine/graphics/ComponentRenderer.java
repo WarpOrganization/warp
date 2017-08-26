@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics;
 
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.properties.TransformProperty;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.common.properties.TransformProperty;
 import pl.warp.engine.graphics.math.MatrixStack;
 
 /**

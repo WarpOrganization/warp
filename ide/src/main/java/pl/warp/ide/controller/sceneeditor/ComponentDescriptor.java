@@ -3,9 +3,9 @@ package pl.warp.ide.controller.sceneeditor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.NameProperty;
-import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.core.property.NameProperty;
+import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.properties.Transforms;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.game.scene.GameComponent;
 

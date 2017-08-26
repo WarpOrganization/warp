@@ -1,6 +1,6 @@
 package pl.warp.engine.game.metadata;
 
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 import java.io.Serializable;
 import java.util.HashMap;

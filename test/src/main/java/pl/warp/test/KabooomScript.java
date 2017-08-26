@@ -2,11 +2,11 @@ package pl.warp.test;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Event;
-import pl.warp.engine.core.scene.Property;
-import pl.warp.engine.core.scene.properties.TransformProperty;
-import pl.warp.engine.core.scene.properties.Transforms;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.event.Event;
+import pl.warp.engine.core.property.Property;
+import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.properties.Transforms;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitter;

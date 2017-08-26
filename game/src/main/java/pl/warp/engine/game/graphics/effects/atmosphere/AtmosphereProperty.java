@@ -1,7 +1,7 @@
 package pl.warp.engine.game.graphics.effects.atmosphere;
 
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.property.Property;
 import pl.warp.engine.game.scene.GameComponent;
 
 /**

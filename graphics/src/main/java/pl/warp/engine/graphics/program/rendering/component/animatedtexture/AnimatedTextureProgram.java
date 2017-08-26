@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.program.rendering.component.animatedtexture;
 
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.graphics.program.rendering.component.defaultprog.DefaultMeshProgram;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;

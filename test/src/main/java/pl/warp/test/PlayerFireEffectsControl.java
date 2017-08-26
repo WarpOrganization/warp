@@ -1,6 +1,6 @@
 package pl.warp.test;
 
-import pl.warp.engine.core.scene.NameProperty;
+import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.game.scene.GameComponent;

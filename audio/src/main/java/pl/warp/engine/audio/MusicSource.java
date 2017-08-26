@@ -3,7 +3,7 @@ package pl.warp.engine.audio;
 import org.joml.Vector3f;
 import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.core.EngineContext;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;

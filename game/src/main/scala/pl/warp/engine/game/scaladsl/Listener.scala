@@ -2,7 +2,7 @@ package pl.warp.engine.game.scaladsl
 
 import java.util.function.Consumer
 
-import pl.warp.engine.core.scene.{Event, SimpleListener => JavaListener}
+import pl.warp.engine.core.component.{SimpleListener => JavaListener}
 import pl.warp.engine.game.scene.GameComponent
 
 /**

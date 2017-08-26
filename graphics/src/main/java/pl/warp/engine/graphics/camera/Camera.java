@@ -3,7 +3,7 @@ package pl.warp.engine.graphics.camera;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.updater.Updatable;
+import pl.warp.engine.core.execution.task.update.Updatable;
 import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
 
 

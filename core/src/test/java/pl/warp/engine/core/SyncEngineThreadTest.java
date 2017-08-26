@@ -1,6 +1,8 @@
 package pl.warp.engine.core;
 
 import org.junit.Test;
+import pl.warp.engine.core.execution.*;
+import pl.warp.engine.core.execution.task.EngineTask;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,7 +55,7 @@ public class SyncEngineThreadTest {
         AtomicBoolean flag = new AtomicBoolean();
         SyncEngineThread engineThread = new SyncEngineThread(timer, strategy) {
             @Override
-            protected void runUpdate() {
+            public void runUpdate() {
                 flag.set(true);
             }
         };

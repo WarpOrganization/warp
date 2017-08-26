@@ -2,7 +2,7 @@ package pl.warp.ide.controller.componenteditor.tree;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.property.Property;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.ide.controller.componenteditor.ComponentChild;
 import pl.warp.ide.controller.componenteditor.ComponentEditorController;

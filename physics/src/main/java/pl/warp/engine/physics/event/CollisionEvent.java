@@ -1,7 +1,7 @@
 package pl.warp.engine.physics.event;
 
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Event;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.event.Event;
 
 /**
  * @author Hubertus

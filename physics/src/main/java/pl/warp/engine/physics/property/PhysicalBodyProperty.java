@@ -3,8 +3,8 @@ package pl.warp.engine.physics.property;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
-import pl.warp.engine.core.scene.Property;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.property.Property;
 
 import java.util.Objects;
 

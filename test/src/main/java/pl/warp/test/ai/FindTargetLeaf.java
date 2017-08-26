@@ -3,7 +3,7 @@ package pl.warp.test.ai;
 import pl.warp.engine.ai.behaviortree.LeafNode;
 import pl.warp.engine.ai.behaviortree.Node;
 import pl.warp.engine.ai.behaviortree.Ticker;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.test.DroneProperty;
 
 import java.util.ArrayList;

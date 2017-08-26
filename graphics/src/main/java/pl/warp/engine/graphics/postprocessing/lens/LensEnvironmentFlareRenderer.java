@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.postprocessing.lens;
 
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.Renderer;
 import pl.warp.engine.graphics.math.MatrixStack;

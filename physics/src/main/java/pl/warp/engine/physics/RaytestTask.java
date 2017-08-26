@@ -2,7 +2,7 @@ package pl.warp.engine.physics;
 
 import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 
 /**
  * @author Hubertus

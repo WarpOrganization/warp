@@ -1,7 +1,7 @@
 package pl.warp.engine.ai;
 
 import pl.warp.engine.ai.behaviortree.BehaviorTree;
-import pl.warp.engine.core.scene.observable.ObservableProperty;
+import pl.warp.engine.core.property.observable.ObservableProperty;
 
 /**
  * @author Hubertus

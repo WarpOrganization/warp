@@ -2,7 +2,7 @@ package pl.warp.test;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import pl.warp.engine.core.scene.Component;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.particles.ParticleEmitter;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.graphics.particles.ParticleSystem;
