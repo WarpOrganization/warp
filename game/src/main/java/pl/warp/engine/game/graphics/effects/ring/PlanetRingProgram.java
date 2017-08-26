@@ -2,8 +2,8 @@ package pl.warp.engine.game.graphics.effects.ring;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.common.properties.TransformProperty;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.light.SpotLight;

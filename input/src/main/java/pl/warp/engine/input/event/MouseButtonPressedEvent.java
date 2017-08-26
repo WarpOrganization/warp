@@ -1,4 +1,4 @@
-package pl.warp.engine.common.input;
+package pl.warp.engine.input.event;
 
 import pl.warp.engine.core.event.Event;
 

@@ -2,8 +2,8 @@ package pl.warp.test;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.common.input.Input;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.input.Input;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;

@@ -12,14 +12,12 @@ repositories {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.12'
-    compile project(':core')
-    compile project(':graphics')
-    compile project(':physics')
-    compile project(':audio')
-    compile project(':ai')
+
     compile project(':game')
     compile project(':launcher')
+
+    compile 'org.slf4j:slf4j-api:1.7.12'
+
     testCompile 'junit:junit:4.12'
 }
 

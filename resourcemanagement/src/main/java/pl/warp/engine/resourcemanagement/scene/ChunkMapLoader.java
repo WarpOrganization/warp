@@ -3,7 +3,7 @@ package pl.warp.engine.resourcemanagement.scene;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 
 /**
  * @author Jaca777

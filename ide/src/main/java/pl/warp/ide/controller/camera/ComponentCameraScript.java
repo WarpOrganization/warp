@@ -2,7 +2,7 @@ package pl.warp.ide.controller.camera;
 
 import org.joml.Vector2f;
 
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.script.GameInputHandler;

@@ -1,4 +1,4 @@
-package pl.warp.engine.common.input;
+package pl.warp.engine.input;
 
 import org.joml.Vector2f;
 

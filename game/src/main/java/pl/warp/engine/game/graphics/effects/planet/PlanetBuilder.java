@@ -1,6 +1,6 @@
 package pl.warp.engine.game.graphics.effects.planet;
 
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;

@@ -1,0 +1,25 @@
+group 'pl.warp'
+version '0.1.2'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+def platform=project.properties['platform'] ?: "windows"
+
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+project.ext.lwjglNatives = "natives-${platform}"
+project.ext.lwjglVersion = "3.1.0"
+
+dependencies {
+    compile project(':core')
+
+    compile 'org.joml:joml:1.8.0'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+
+    testCompile 'junit:junit:4.12'
+}
+

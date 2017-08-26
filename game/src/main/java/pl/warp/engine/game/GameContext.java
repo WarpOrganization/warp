@@ -3,7 +3,7 @@ package pl.warp.engine.game;
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.EngineContext;
 import pl.warp.engine.core.event.EventDispatcher;
-import pl.warp.engine.common.input.Input;
+import pl.warp.engine.input.Input;
 import pl.warp.engine.core.script.ScriptManager;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.script.CameraRayTester;
@@ -18,6 +18,7 @@ public class GameContext extends EngineContext {
     private CameraRayTester rayTester;
     private Graphics graphics;
     private AIManager aiManager;
+    private Input input;
 
     public CameraRayTester getRayTester() {
         return rayTester;
@@ -49,10 +50,14 @@ public class GameContext extends EngineContext {
         super.setScriptManager(scriptManager);
     }
 
-    @Override
     protected void setInput(Input input) {
-        super.setInput(input);
+        this.input = input;
     }
+
+    public Input getInput() {
+        return input;
+    }
+
 
     protected void setGraphics(Graphics graphics) {
         this.graphics = graphics;

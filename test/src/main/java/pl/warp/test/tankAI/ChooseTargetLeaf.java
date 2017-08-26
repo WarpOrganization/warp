@@ -5,7 +5,7 @@ import pl.warp.engine.ai.behaviortree.LeafNode;
 import pl.warp.engine.ai.behaviortree.Node;
 import pl.warp.engine.ai.behaviortree.Ticker;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.test.TankProperty;
 
 /**

@@ -2,7 +2,7 @@ package pl.warp.test;
 
 import pl.warp.engine.core.component.ComponentDeathEvent;
 import pl.warp.engine.core.property.NameProperty;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.script.EventHandler;

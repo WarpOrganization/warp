@@ -1,6 +1,6 @@
 package pl.warp.engine.game.graphics.effects.gasplanet;
 
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.execution.task.update.UpdaterTask;
 import pl.warp.engine.game.scene.GameSceneComponent;
 import pl.warp.engine.game.script.OwnerProperty;

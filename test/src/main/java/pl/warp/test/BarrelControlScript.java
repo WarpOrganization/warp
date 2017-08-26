@@ -2,9 +2,9 @@ package pl.warp.test;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.common.input.Input;
-import pl.warp.engine.common.properties.TransformProperty;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.input.Input;
+import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.script.GameScript;
 import pl.warp.engine.game.script.OwnerProperty;

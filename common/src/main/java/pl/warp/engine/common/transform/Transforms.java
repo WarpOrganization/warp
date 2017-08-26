@@ -1,4 +1,4 @@
-package pl.warp.engine.common.properties;
+package pl.warp.engine.common.transform;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;

@@ -3,7 +3,7 @@ package pl.warp.ide.controller.camera;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.game.scene.GameComponent;

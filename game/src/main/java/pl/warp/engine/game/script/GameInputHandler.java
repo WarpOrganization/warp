@@ -3,8 +3,10 @@ package pl.warp.engine.game.script;
 import org.joml.Vector2f;
 import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.component.SimpleListener;
-import pl.warp.engine.common.input.*;
 import pl.warp.engine.game.GameContext;
+import pl.warp.engine.input.Input;
+import pl.warp.engine.input.event.KeyPressedEvent;
+import pl.warp.engine.input.event.MouseButtonPressedEvent;
 
 /**
  * @author Jaca777

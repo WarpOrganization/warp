@@ -9,7 +9,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.graphics.Environment;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;

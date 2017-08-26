@@ -12,7 +12,7 @@ import pl.warp.engine.core.event.Listener;
 import pl.warp.engine.core.component.SimpleListener;
 import pl.warp.engine.core.component.listenable.ChildAddedEvent;
 import pl.warp.engine.core.component.listenable.ChildRemovedEvent;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.physics.collider.BasicCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;

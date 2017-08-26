@@ -3,7 +3,7 @@ package pl.warp.engine.audio;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.execution.task.EngineTask;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.common.transform.Transforms;
 
 import static org.lwjgl.openal.AL10.*;
 

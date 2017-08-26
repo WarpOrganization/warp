@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.common.properties.Transforms;
+import pl.warp.engine.common.transform.Transforms;
 
 /**
  * @author Jaca777

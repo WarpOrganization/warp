@@ -1,7 +1,7 @@
 package pl.warp.ide.controller.positioner;
 
 import org.joml.Vector3f;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.camera.QuaternionCamera;

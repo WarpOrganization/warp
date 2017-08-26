@@ -1,8 +1,7 @@
 package pl.warp.engine.core;
 
-import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.core.component.Scene;
-import pl.warp.engine.common.input.Input;
+import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.core.script.ScriptManager;
 
 import java.io.File;
@@ -36,7 +35,6 @@ public class EngineContext {
 
     private Scene scene;
     private ScriptManager scriptManager;
-    private Input input;
     private EventDispatcher eventDispatcher;
 
     public Scene getScene() {
@@ -55,13 +53,6 @@ public class EngineContext {
         this.scriptManager = scriptManager;
     }
 
-    public Input getInput() {
-        return input;
-    }
-
-    protected void setInput(Input input) {
-        this.input = input;
-    }
 
     public EventDispatcher getEventDispatcher() {
         return eventDispatcher;

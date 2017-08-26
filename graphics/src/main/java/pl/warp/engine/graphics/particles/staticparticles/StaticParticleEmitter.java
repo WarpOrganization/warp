@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.particles.staticparticles;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.graphics.particles.Particle;
 import pl.warp.engine.graphics.particles.ParticleEmitter;
 import pl.warp.engine.graphics.particles.ParticleFactory;

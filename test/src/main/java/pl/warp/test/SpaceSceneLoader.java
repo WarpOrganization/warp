@@ -20,7 +20,7 @@ import pl.warp.engine.core.execution.task.SimpleEngineTask;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.core.event.PoolEventDispatcher;
-import pl.warp.engine.common.properties.TransformProperty;
+import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;

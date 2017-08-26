@@ -14,6 +14,10 @@ repositories {
 }
 
 dependencies {
+
+    compile project(':core')
+    compile project(':common')
+
     compile 'org.slf4j:slf4j-api:1.7.12'
 
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
@@ -21,6 +25,6 @@ dependencies {
 
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
-    compile project(':core')
+
     testCompile 'junit:junit:4.12'
 }

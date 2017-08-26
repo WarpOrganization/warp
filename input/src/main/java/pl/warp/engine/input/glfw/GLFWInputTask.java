@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.input.glfw;
+package pl.warp.engine.input.glfw;
 
 import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
