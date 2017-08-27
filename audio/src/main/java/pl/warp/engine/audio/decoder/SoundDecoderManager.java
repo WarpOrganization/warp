@@ -1,7 +1,7 @@
 package pl.warp.engine.audio.decoder;
 
 import org.apache.commons.io.FilenameUtils;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 
 import java.io.File;
 import java.io.IOException;

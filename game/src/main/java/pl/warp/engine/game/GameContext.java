@@ -1,7 +1,7 @@
 package pl.warp.engine.game;
 
 import pl.warp.engine.ai.AIManager;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.input.Input;
 import pl.warp.engine.core.script.ScriptManager;

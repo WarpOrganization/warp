@@ -1,4 +1,4 @@
-package pl.warp.engine.core;
+package pl.warp.engine.core.context;
 
 import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.event.EventDispatcher;
@@ -17,9 +17,9 @@ import java.security.ProtectionDomain;
  */
 public class EngineContext {
 
-    public static final String CODESOURCE_DIR = getCodesourceDir();
+        public static final String CODESOURCE_DIR = getCodesourceDir();
 
-    private static String getCodesourceDir() {
+        private static String getCodesourceDir() {
         try {
             ProtectionDomain protectionDomain = EngineContext.class.getProtectionDomain();
             CodeSource codeSource = protectionDomain.getCodeSource();

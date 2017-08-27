@@ -3,7 +3,7 @@ package pl.warp.engine.core.component;
 
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.event.Listener;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.core.property.PropertyNotPresentException;
 

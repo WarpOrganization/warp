@@ -5,7 +5,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 import pl.warp.engine.audio.decoder.SoundDecoderManager;
 import pl.warp.engine.audio.decoder.WavFileDecoder;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.UnsupportedAudioFileException;

@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics;
 
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.execution.*;
 import pl.warp.engine.core.execution.task.UPSCounterTask;
 import pl.warp.engine.core.execution.task.update.UpdaterTask;

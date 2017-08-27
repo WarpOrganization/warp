@@ -1,6 +1,6 @@
 package pl.warp.engine.core.component.listenable;
 
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.SceneComponent;
 

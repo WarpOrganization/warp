@@ -1,7 +1,7 @@
 package pl.warp.engine.ai.loader;
 
 import org.xml.sax.SAXException;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;

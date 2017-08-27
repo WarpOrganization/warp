@@ -2,12 +2,15 @@ group 'pl.warp'
 version '0.1.2'
 
 apply plugin: 'java'
+apply plugin: 'scala'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.2'
+
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
@@ -17,4 +20,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.4'
     testCompile 'info.solidsoft.mockito:mockito-java8:2.0.0-beta.4'
+    testCompile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.2.0-SNAP9'
+
 }

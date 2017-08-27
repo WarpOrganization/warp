@@ -4,7 +4,7 @@ import javafx.scene.canvas.Canvas;
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.execution.*;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.event.PoolEventDispatcher;

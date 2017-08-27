@@ -1,6 +1,6 @@
 package pl.warp.engine.core.component;
 
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 
 /**
  * @author Jaca777

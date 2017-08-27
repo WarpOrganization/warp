@@ -1,7 +1,7 @@
 package pl.warp.engine.graphics;
 
 import org.joml.Vector3f;
-import pl.warp.engine.core.EngineContext;
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.core.execution.EngineThread;
 import pl.warp.engine.graphics.camera.Camera;
