@@ -6,7 +6,7 @@ package pl.warp.engine.core.context.graph
   */
 case class Node[+V](value: V, connections: Node[V]*) {
 
-  def checkForCycle(): Unit = {
+  def checkedForCycle(): Node[V] = {
     def checkForCycle(toVisit: Node[V], visited: List[V]): Unit = {
       if (visited.contains(toVisit.value)) {
         throw CycleFoundException(visited :+ toVisit.value)
@@ -16,6 +16,7 @@ case class Node[+V](value: V, connections: Node[V]*) {
       }
     }
     checkForCycle(this, List.empty)
+    this
   }
 
   def accept[A >: V](visitor: GraphVisitor[A]): Unit = {

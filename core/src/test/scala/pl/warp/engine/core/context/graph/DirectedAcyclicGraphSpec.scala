@@ -14,9 +14,9 @@ class DirectedAcyclicGraphSpec extends WordSpecLike with Matchers {
     "add two new nodes" in {
       val graph = new DirectedAcyclicGraph[Int]()
       val newGraph = graph.addEdge(1, 2)
-      val rootNode = newGraph.rootNodes(0)
+      val rootNode = newGraph.rootNodes.head
       rootNode.value should be(1)
-      rootNode.connections(0).value should be(2)
+      rootNode.connections.head.value should be(2)
     }
 
     "connect node to existing one" in {
@@ -31,7 +31,7 @@ class DirectedAcyclicGraphSpec extends WordSpecLike with Matchers {
       val root = Node(1, Node(2), Node(3, Node(4), Node(5)))
       val graph = new DirectedAcyclicGraph[Int](root)
       val newGraph = graph.addEdge(4, 7)
-      val newRoot = newGraph.rootNodes(0)
+      val newRoot = newGraph.rootNodes.head
       newRoot should be(Node(1, Node(2), Node(3, Node(4, Node(7)), Node(5))))
     }
 
@@ -39,7 +39,7 @@ class DirectedAcyclicGraphSpec extends WordSpecLike with Matchers {
       val root = Node(1, Node(2), Node(3, Node(4), Node(5)))
       val graph = new DirectedAcyclicGraph[Int](root)
       val newGraph = graph.addEdge(1, 3)
-      val newRoot = newGraph.rootNodes(0)
+      val newRoot = newGraph.rootNodes.head
       newRoot should be(Node(1, Node(2), Node(3, Node(4), Node(5)), Node(3, Node(4), Node(5))))
     }
 
@@ -74,7 +74,7 @@ class DirectedAcyclicGraphSpec extends WordSpecLike with Matchers {
       intercept[CycleFoundException[Int]] {
         graph.addEdge(5, 6)
           .addEdge(9, 1)
-      }.cycle should contain theSameElementsInOrderAs List(1, 3, 5, 6, 8, 9, 1)
+      }.cycle should contain theSameElementsInOrderAs List(9, 1,3, 5, 6, 8, 9)
     }
 
   }

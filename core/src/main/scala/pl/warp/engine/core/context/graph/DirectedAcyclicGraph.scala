@@ -11,6 +11,11 @@ import scala.annotation.tailrec
   */
 case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
 
+  def addNode[B >: A](e: B): DirectedAcyclicGraph[B] = {
+    val roots: Seq[Node[_ >: A <: B]] = rootNodes :+ Node[B](e)
+    new DirectedAcyclicGraph[B](roots: _*)
+  }
+
   def addEdge[B >: A](from: B, to: B): DirectedAcyclicGraph[B] = {
     val fromOpt = resolveNode(from)
     val toOpt = resolveNode(to)
@@ -22,14 +27,10 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
     }
   }
 
-  def addNode[B >: A](e: B): DirectedAcyclicGraph[B] = {
-    val roots: Seq[Node[_ >: A <: B]] = rootNodes :+ Node[B](e)
-    new DirectedAcyclicGraph[B](roots: _*)
-  }
-
   private def addEdgeAndCreateNodes[B >: A](from: B, to: B): DirectedAcyclicGraph[B] = {
     val toNode = Node[B](to)
     val fromNode = Node[B](from, toNode)
+      .checkedForCycle()
     val roots = rootNodes :+ fromNode
     new DirectedAcyclicGraph[B](roots: _*)
   }
@@ -52,6 +53,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
   private def addEdgeBetweenExistingNodes[B >: A](from: Node[B], to: Node[B]): DirectedAcyclicGraph[B] = {
     val leafs = from.connections :+ to
     val updatedNode = Node[B](from.value, leafs: _*)
+        .checkedForCycle()
     val updatedGraph = replaceNode(from, updatedNode)
     val roots = updatedGraph.rootNodes.filterNot(_ == to)
     new DirectedAcyclicGraph[B](roots: _*)
