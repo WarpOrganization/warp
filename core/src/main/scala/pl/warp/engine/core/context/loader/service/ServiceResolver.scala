@@ -1,6 +1,6 @@
 package pl.warp.engine.core.context.loader.service
 
-import java.lang.reflect.{Constructor, Parameter}
+import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
 import org.reflections.Reflections
 import pl.warp.engine.core.context.annotation.{Qualified, Service, ServiceBuilder}
@@ -27,7 +27,8 @@ private[loader] class ServiceResolver(pckg: String) {
   private def toServiceInfo(serviceClass: Class[_]): ServiceInfo = {
     val builderConstructor = findBuilderConstructor(serviceClass)
     val dependencies = getDependencies(builderConstructor)
-    ServiceInfo(serviceClass, dependencies.toSet)
+    val qualifier = getQualifier(serviceClass)
+    ServiceInfo(serviceClass, qualifier, builderConstructor, dependencies.toList)
   }
 
   private def findBuilderConstructor(serviceClass: Class[_]): Constructor[_] =
@@ -61,7 +62,7 @@ private[loader] class ServiceResolver(pckg: String) {
   private def toDependency(param: Parameter): DependencyInfo =
     DependencyInfo(param.getType, getQualifier(param))
 
-  private def getQualifier(param: Parameter): Option[String] = {
+  private def getQualifier(param: AnnotatedElement): Option[String] = {
     val annotation = param.getAnnotation(classOf[Qualified])
     if(annotation != null) {
       Some(annotation.qualifier())
