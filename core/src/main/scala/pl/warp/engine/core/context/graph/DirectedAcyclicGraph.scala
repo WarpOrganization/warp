@@ -9,6 +9,7 @@ import scala.annotation.tailrec
   * DAG implementation for the service loader.
   * Root node is a node that has no nodes connected to it.
   */
+//OPT we may eventually want to make it mutable
 case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
 
   def addNode[B >: A](e: B): DirectedAcyclicGraph[B] = {
@@ -91,8 +92,9 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
     new DirectedAcyclicGraph[B](rootNodes.map(updateRoot): _*)
   }
 
-  def accept[B >: A](visitor: GraphVisitor[B]): Unit =
+  def accept[B >: A](visitor: GraphVisitor[B]): Unit = {
     for (root <- rootNodes) root.accept(visitor)
+  }
 
 
 }

@@ -4,9 +4,9 @@ import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
 import org.reflections.Reflections
 import pl.warp.engine.core.context.annotation.{Qualified, Service, ServiceBuilder}
-import pl.warp.engine.core.context.loader.service.ServiceResolver.{AmbiguousServiceBuildersDefnitions, NoServiceConstructorFoundException, UnableToResolveServiceBuilderException}
 
 import scala.collection.JavaConverters._
+import ServiceResolver._
 
 /**
   * @author Jaca777
@@ -15,8 +15,8 @@ import scala.collection.JavaConverters._
 private[loader] class ServiceResolver(pckg: String) {
 
   def resolveServiceInfo(): Set[ServiceInfo] = {
-    val classes = resolveServiceClasses()
-    classes.map(toServiceInfo)
+    val classes = resolveServiceClasses().par
+    classes.map(toServiceInfo).seq
   }
 
   private def resolveServiceClasses(): Set[Class[_]] = {
@@ -35,17 +35,17 @@ private[loader] class ServiceResolver(pckg: String) {
     serviceClass.getConstructors match {
       case Array(constr) => constr
       case constrs: Array[Constructor[_]] =>
-        getExplicitConstructor(constrs, serviceClass.getName)
+        getExplicitBuilderConstructor(constrs, serviceClass.getName)
       case Array.empty =>
         throw NoServiceConstructorFoundException(serviceClass.getName)
     }
 
-  private def getExplicitConstructor(constrs: Array[Constructor[_]], className: String): Constructor[_] = {
+  private def getExplicitBuilderConstructor(constrs: Array[Constructor[_]], className: String): Constructor[_] = {
     val explicitConstrs = constrs.filter(isExplicitBuilder)
     explicitConstrs match {
       case Array(constr) => constr
       case a if a.length > 1 =>
-        throw AmbiguousServiceBuildersDefnitions(className)
+        throw AmbiguousServiceBuilderDefinition(className)
       case Array.empty =>
         throw UnableToResolveServiceBuilderException(className)
     }
@@ -75,17 +75,17 @@ private[loader] class ServiceResolver(pckg: String) {
 object ServiceResolver {
   case class NoServiceConstructorFoundException(className: String)
     extends RuntimeException(
-      s"No public constructors found for service class $className"
+      s"No public constructors found for service at $className"
     )
 
-  case class AmbiguousServiceBuildersDefnitions(className: String)
+  case class AmbiguousServiceBuilderDefinition(className: String)
     extends RuntimeException(
-      s"Multiple constructors annotated with @ServiceBuilder found for service class $className"
+      s"Multiple constructors annotated with @ServiceBuilder found for service at $className"
     )
 
   case class UnableToResolveServiceBuilderException(className: String)
     extends RuntimeException(
-      s"Multiple constructors for service class $className found, but none is annotated with @ServiceBuilder"
+      s"Multiple constructors for service at $className found, but none is annotated with @ServiceBuilder"
     )
 
 }

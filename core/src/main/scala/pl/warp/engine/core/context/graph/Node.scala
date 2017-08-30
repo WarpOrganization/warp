@@ -20,8 +20,10 @@ case class Node[+V](value: V, connections: Node[V]*) {
   }
 
   def accept[A >: V](visitor: GraphVisitor[A]): Unit = {
+    visitor.enter()
     for (node <- connections) node.accept(visitor)
-    visitor.visitNode(this)
+    visitor.leave()
+    visitor.visit(value)
   }
 
 
