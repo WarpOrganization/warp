@@ -1,6 +1,7 @@
 package pl.warp.engine.core.context.graph
 
 import scala.annotation.tailrec
+import scala.collection.Map
 
 
 /**
@@ -9,7 +10,6 @@ import scala.annotation.tailrec
   * DAG implementation for the service loader.
   * Root node is a node that has no nodes connected to it.
   */
-//OPT we may eventually want to make it mutable
 case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
 
   def addNode[B >: A](e: B): DirectedAcyclicGraph[B] = {
@@ -38,7 +38,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
 
   private def addEdgeFromExistingNode[B >: A](from: Node[B], to: B): DirectedAcyclicGraph[B] = {
     val newNode = Node[B](to)
-    val newLeafs = from.connections :+ newNode
+    val newLeafs = from.leaves :+ newNode
     val updatedNode = Node(from.value, newLeafs: _*)
     replaceNode(from, updatedNode)
   }
@@ -52,7 +52,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
   }
 
   private def addEdgeBetweenExistingNodes[B >: A](from: Node[B], to: Node[B]): DirectedAcyclicGraph[B] = {
-    val leafs = from.connections :+ to
+    val leafs = from.leaves :+ to
     val updatedNode = Node[B](from.value, leafs: _*)
         .checkedForCycle()
     val updatedGraph = replaceNode(from, updatedNode)
@@ -71,25 +71,45 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
         resolveAcc(tail, visitedNodes)
       case node :: _ if node.value == value => Some(node)
       case Nil => None
-      case node :: tail => resolveAcc(tail ::: node.connections.toList, visitedNodes + node.value)
+      case node :: tail => resolveAcc(tail ::: node.leaves.toList, visitedNodes + node.value)
     }
     resolveAcc(rootNodes.toList, Set.empty)
   }
 
   /**
     * Creates new graph with given node replaced
-    * TODO Think about making it tail-rec
     */
   def replaceNode[B >: A](node: Node[B], newNode: Node[B]): DirectedAcyclicGraph[B] = {
-    def updateRoot(currNode: Node[A]): Node[B] = {
-      if (currNode == node) newNode
-      else {
-        val value = currNode.value
-        val newLeafs = currNode.connections.map(updateRoot)
-        Node[B](value, newLeafs: _*)
+    def update(currNode: Node[A]): Option[Node[B]] = currNode match {
+      case `node` => Some(newNode)
+      case _ =>
+        val updatedLeavesByValue = getUpdatedLeavesByValue(currNode)
+        if(updatedLeavesByValue.isEmpty) {
+          None
+        } else {
+          val newLeaves = currNode.leaves
+            .map(leaf => updatedLeavesByValue.getOrElse(leaf.value, leaf))
+          Some(Node(currNode.value, newLeaves: _*))
+        }
       }
+
+    def getUpdatedLeavesByValue(parentNode: Node[A]): Map[B, Node[B]] = {
+      parentNode.leaves
+        .map(update)
+        .collect {
+          case Some(leaf) => leaf
+        }.map(leaf => leaf.value -> leaf)
+        .toMap
     }
-    new DirectedAcyclicGraph[B](rootNodes.map(updateRoot): _*)
+
+    val updatedRoots = rootNodes
+      .map(root => (root, update(root)))
+      .map {
+        case (_, Some(updatedRoot)) => updatedRoot
+        case (oldRoot, None) => oldRoot
+      }
+
+    DirectedAcyclicGraph[B](updatedRoots: _*)
   }
 
   def accept[B >: A](visitor: GraphVisitor[B]): Unit = {

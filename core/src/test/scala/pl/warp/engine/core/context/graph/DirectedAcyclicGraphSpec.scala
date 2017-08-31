@@ -16,7 +16,7 @@ class DirectedAcyclicGraphSpec extends WordSpecLike with Matchers {
       val newGraph = graph.addEdge(1, 2)
       val rootNode = newGraph.rootNodes.head
       rootNode.value should be(1)
-      rootNode.connections.head.value should be(2)
+      rootNode.leaves.head.value should be(2)
     }
 
     "connect node to existing one" in {
