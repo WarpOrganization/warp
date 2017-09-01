@@ -20,14 +20,11 @@ case class ServiceCreator(
       case None =>
         val dependenciesNumber = service.dependencies.size
         val dependencies = dependencyStack.take(dependenciesNumber)
-        val instance = service.builder.invoke(dependencies: _*)
+        val instance = service.builder.invokeWithArguments(dependencies.toArray: _*)
         ServiceCreator(
           service :: dependencyStack.drop(dependenciesNumber),
           accumulator + (service -> instance)
         )
     }
 
-  override def enter(): ServiceCreator = this
-
-  override def leave(): ServiceCreator = this
 }
