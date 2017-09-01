@@ -25,7 +25,9 @@ private[loader] class ServiceLoader {
   }
 
   private def createServices(serviceGraph: DirectedAcyclicGraph[ServiceInfo]): Map[ServiceInfo, Object] = {
-    ???
+    serviceGraph
+      .accept(ServiceCreator())
+      .accumulator
   }
 
 }

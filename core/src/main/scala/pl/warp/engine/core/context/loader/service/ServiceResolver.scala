@@ -1,5 +1,6 @@
 package pl.warp.engine.core.context.loader.service
 
+import java.lang.invoke.{MethodHandle, MethodHandles}
 import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
 import org.reflections.Reflections
@@ -26,9 +27,10 @@ private[loader] class ServiceResolver(pckg: String) {
 
   private def toServiceInfo(serviceClass: Class[_]): ServiceInfo = {
     val builderConstructor = findBuilderConstructor(serviceClass)
+    val builderHandle = toMethodHandle(builderConstructor)
     val dependencies = getDependencies(builderConstructor)
     val qualifier = getQualifier(serviceClass)
-    ServiceInfo(serviceClass, qualifier, builderConstructor, dependencies.toList)
+    ServiceInfo(serviceClass, qualifier, builderHandle, dependencies.toList)
   }
 
   private def findBuilderConstructor(serviceClass: Class[_]): Constructor[_] =
@@ -53,6 +55,11 @@ private[loader] class ServiceResolver(pckg: String) {
 
   private def isExplicitBuilder(constructor: Constructor[_]): Boolean =
     constructor.getAnnotation(classOf[ServiceBuilder]) != null
+
+  private def toMethodHandle(constructor: Constructor[_]): MethodHandle = {
+    val lookup = MethodHandles.lookup()
+    lookup.unreflectConstructor(constructor)
+  }
 
   private def getDependencies(constr: Constructor[_]): Array[DependencyInfo] ={
     val params = constr.getParameters

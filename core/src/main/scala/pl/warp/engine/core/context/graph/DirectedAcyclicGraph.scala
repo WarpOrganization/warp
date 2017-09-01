@@ -107,7 +107,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
     val updatedRoots = rootNodes
       .map(root => (root, update(root)))
       .map {
-        case (_, Some(updatedRoot)) => updatedRoot
+        case (_,       Some(updatedRoot)) => updatedRoot
         case (oldRoot, None) => oldRoot
       }
 
