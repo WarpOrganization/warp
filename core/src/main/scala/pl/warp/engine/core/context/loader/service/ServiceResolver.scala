@@ -36,7 +36,7 @@ private[loader] class ServiceResolver(pckg: String) {
       case Array(constr) => constr
       case constrs: Array[Constructor[_]] =>
         getExplicitBuilderConstructor(constrs, serviceClass.getName)
-      case Array.empty =>
+      case Array() =>
         throw NoServiceConstructorFoundException(serviceClass.getName)
     }
 
@@ -46,7 +46,7 @@ private[loader] class ServiceResolver(pckg: String) {
       case Array(constr) => constr
       case a if a.length > 1 =>
         throw AmbiguousServiceBuilderDefinition(className)
-      case Array.empty =>
+      case Array() =>
         throw UnableToResolveServiceBuilderException(className)
     }
   }

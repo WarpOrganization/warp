@@ -6,6 +6,7 @@ import pl.warp.engine.core.context.loader.service.ServiceInfo
 /**
   * @author Jaca777
   *         Created 2017-08-31 at 01
+  *         TODO Rethink
   */
 class ServiceCreator {
 
@@ -20,21 +21,18 @@ class ServiceCreator {
     val orderedGroups = groupedByCreationOrder
       .toList
       .sortBy(_._1)
+      .map(_._2)
 
-    for {
-      services <- orderedGroups.map(_._2)
-      createdService <- createServices(services)
-    } yield createdService
-
+  ???
   }
 
   private def getServicesCreationOrder(graph: DirectedAcyclicGraph[ServiceInfo]): Map[ServiceInfo, Int] = {
     val depthResolver = new ServiceDepthResolver
     graph.accept(depthResolver)
-    depthResolver.maxDepths
+    depthResolver.depths
   }
 
-  private def createServices(services: Iterable[ServiceInfo]) = ???
+  private def createServices(services: Iterable[ServiceInfo]): Object = ???
 
 
 }

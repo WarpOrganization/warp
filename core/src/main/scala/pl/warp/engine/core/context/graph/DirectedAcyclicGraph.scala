@@ -10,11 +10,13 @@ import scala.collection.Map
   * DAG implementation for the service loader.
   * Root node is a node that has no nodes connected to it.
   */
-case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
+case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
+
+  def this(rootNodes: Node[A]*) = this(rootNodes.toList)
 
   def addNode[B >: A](e: B): DirectedAcyclicGraph[B] = {
-    val roots: Seq[Node[_ >: A <: B]] = rootNodes :+ Node[B](e)
-    new DirectedAcyclicGraph[B](roots: _*)
+    val roots: List[Node[_ >: A <: B]] = rootNodes :+ Node[B](e)
+    new DirectedAcyclicGraph[B](roots)
   }
 
   def addEdge[B >: A](from: B, to: B): DirectedAcyclicGraph[B] = {
@@ -33,13 +35,13 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
     val fromNode = Node[B](from, toNode)
       .checkedForCycle()
     val roots = rootNodes :+ fromNode
-    new DirectedAcyclicGraph[B](roots: _*)
+    new DirectedAcyclicGraph[B](roots)
   }
 
   private def addEdgeFromExistingNode[B >: A](from: Node[B], to: B): DirectedAcyclicGraph[B] = {
     val newNode = Node[B](to)
     val newLeafs = from.leaves :+ newNode
-    val updatedNode = Node(from.value, newLeafs: _*)
+    val updatedNode = Node(from.value, newLeafs)
     replaceNode(from, updatedNode)
   }
 
@@ -48,16 +50,16 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
     val roots = (if(rootNodes.contains(to)){
       rootNodes.filterNot(_ == to)
     } else rootNodes) :+ newNode
-    new DirectedAcyclicGraph[B](roots: _*)
+    new DirectedAcyclicGraph[B](roots)
   }
 
   private def addEdgeBetweenExistingNodes[B >: A](from: Node[B], to: Node[B]): DirectedAcyclicGraph[B] = {
     val leafs = from.leaves :+ to
-    val updatedNode = Node[B](from.value, leafs: _*)
+    val updatedNode = Node[B](from.value, leafs)
         .checkedForCycle()
     val updatedGraph = replaceNode(from, updatedNode)
     val roots = updatedGraph.rootNodes.filterNot(_ == to)
-    new DirectedAcyclicGraph[B](roots: _*)
+    new DirectedAcyclicGraph[B](roots)
   }
 
 
@@ -71,9 +73,9 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
         resolveAcc(tail, visitedNodes)
       case node :: _ if node.value == value => Some(node)
       case Nil => None
-      case node :: tail => resolveAcc(tail ::: node.leaves.toList, visitedNodes + node.value)
+      case node :: tail => resolveAcc(tail ::: node.leaves, visitedNodes + node.value)
     }
-    resolveAcc(rootNodes.toList, Set.empty)
+    resolveAcc(rootNodes, Set.empty)
   }
 
   /**
@@ -89,7 +91,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
         } else {
           val newLeaves = currNode.leaves
             .map(leaf => updatedLeavesByValue.getOrElse(leaf.value, leaf))
-          Some(Node(currNode.value, newLeaves: _*))
+          Some(Node(currNode.value, newLeaves))
         }
       }
 
@@ -109,12 +111,22 @@ case class DirectedAcyclicGraph[+A](rootNodes: Node[A]*) {
         case (oldRoot, None) => oldRoot
       }
 
-    DirectedAcyclicGraph[B](updatedRoots: _*)
+    DirectedAcyclicGraph[B](updatedRoots)
   }
 
-  def accept[B >: A](visitor: GraphVisitor[B]): Unit = {
-    for (root <- rootNodes) root.accept(visitor)
+  @tailrec
+  final def accept[B >: A, C <: GraphVisitor[B, C]](
+    visitor: C,
+    at: List[Node[B]] = rootNodes
+  ): C = at match {
+    case Nil =>
+      visitor
+    case node :: tail =>
+      accept(node.accept(visitor), tail)
   }
 
+}
 
+object DirectedAcyclicGraph {
+  def apply[V](rootNodes: Node[V]*): DirectedAcyclicGraph[V] = DirectedAcyclicGraph(rootNodes.toList)
 }

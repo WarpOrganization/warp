@@ -6,9 +6,8 @@ package pl.warp.engine.core.context.graph
   *         Created 2016-01-28 at 14
   */
 
-//Resigned from functional approach, performance suffers too much
-abstract class GraphVisitor[A] {
-  def visit(value: A): Unit
-  def enter(): Unit
-  def leave(): Unit
+abstract class GraphVisitor[-A, +Self] { _: Self =>
+  def visit(value: A): Self
+  def enter(): Self
+  def leave(): Self
 }
