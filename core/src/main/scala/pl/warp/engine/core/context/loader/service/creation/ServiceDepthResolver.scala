@@ -23,7 +23,6 @@ case class ServiceDepthResolver private (
 
   override def enter(): ServiceDepthResolver =
     this.copy(depth = depth + 1)
-    ServiceDepthResolver(maxDepths, depth + 1)
 
   override def leave(): ServiceDepthResolver =
     this.copy(depth = depth - 1)
