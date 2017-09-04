@@ -20,8 +20,8 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
   }
 
   def addEdge[B >: A](from: B, to: B): DirectedAcyclicGraph[B] = {
-    val fromOpt = resolveNode(from)
-    val toOpt = resolveNode(to)
+    val fromOpt = findNode(from)
+    val toOpt = findNode(to)
     (fromOpt, toOpt) match {
       case (None,           None)         => addEdgeAndCreateNodes(from, to)
       case (Some(fromNode), None)         => addEdgeFromExistingNode(fromNode, to)
@@ -64,14 +64,21 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
 
 
   /**
-    * Finds node with the given value in graph.
+    * Finds a node with a given value
     */
-  def resolveNode[B >: A](value: B): Option[Node[B]] = {
+  def findNode[B >: A](value: B): Option[Node[B]] =
+    resolveNode(_ == value)
+
+
+  /**
+    * Resolves a node for which the condition evaluates to true
+    */
+  def resolveNode[B >: A](condition: B => Boolean): Option[Node[B]] = {
     @tailrec
     def resolveAcc(toVisit: List[Node[A]], visitedNodes: Set[A]): Option[Node[B]] = toVisit match {
       case node :: tail if visitedNodes.contains(node.value) =>
         resolveAcc(tail, visitedNodes)
-      case node :: _ if node.value == value => Some(node)
+      case node :: _ if condition(node.value) => Some(node)
       case Nil => None
       case node :: tail => resolveAcc(tail ::: node.leaves, visitedNodes + node.value)
     }

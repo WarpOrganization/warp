@@ -18,11 +18,11 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
-
-
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.4'
     testCompile 'info.solidsoft.mockito:mockito-java8:2.0.0-beta.4'
     testCompile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.2.0-SNAP9'
+    testCompile group: 'org.scalamock', name: 'scalamock-scalatest-support_2.12', version: '3.6.0'
+
 
 }

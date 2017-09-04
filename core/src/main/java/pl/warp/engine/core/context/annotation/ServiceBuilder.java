@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.CONSTRUCTOR})
 public @interface ServiceBuilder {
-    String executorName();
+    String executorName() default "serviceLoader";
 }

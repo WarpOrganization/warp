@@ -3,26 +3,21 @@ package pl.warp.engine.core.context.loader.service
 import java.lang.invoke.{MethodHandle, MethodHandles}
 import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
-import org.reflections.Reflections
 import pl.warp.engine.core.context.annotation.{Qualified, Service, ServiceBuilder}
 
 import scala.collection.JavaConverters._
 import ServiceResolver._
+import com.sun.xml.internal.bind.api.ClassResolver
 
 /**
   * @author Jaca777
   *         Created 2017-08-27 at 22
   */
-private[loader] class ServiceResolver(pckg: String) {
+private[loader] class ServiceResolver(classResolver: ClassResolver) {
 
   def resolveServiceInfo(): Set[ServiceInfo] = {
-    val classes = resolveServiceClasses().par
+    val classes = classResolver.resolveServiceClasses().par
     classes.map(toServiceInfo).seq
-  }
-
-  private def resolveServiceClasses(): Set[Class[_]] = {
-    val reflections = new Reflections(pckg)
-    reflections.getTypesAnnotatedWith(classOf[Service]).asScala.toSet
   }
 
   private def toServiceInfo(serviceClass: Class[_]): ServiceInfo = {

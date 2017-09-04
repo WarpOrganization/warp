@@ -16,8 +16,12 @@ private[loader] class ServiceGraphBuilder {
       service <- services
       dependencyInfo <- service.dependencies
       dependencyService = findDependency(service, services, dependencyInfo)
-    } yield (service, dependencyService)
-    buildFromEdges(edges.toList)
+    } yield dependencyService -> service
+    val edgesGraph = buildFromEdges(edges.toList)
+    val standaloneNodes = (services diff edges.flatMap {
+      case (from, to) => List(from, to)
+    }).toList
+    addServiceNodes(edgesGraph, standaloneNodes)
   }
 
   @tailrec
@@ -38,16 +42,26 @@ private[loader] class ServiceGraphBuilder {
     services: Set[ServiceInfo],
     dependencyInfo: DependencyInfo
   ): ServiceInfo = {
-    dependencyInfo.qualifier match {
+    val assignable = services
+      .filter(s => dependencyInfo.t.isAssignableFrom(s.t))
+    val qualified = dependencyInfo.qualifier match {
       case Some(qualifier) =>
-        val qualified = services
-          .filter(_.qualifier.exists(_ == qualifier))
-        val assignable = qualified
-          .filter(s => dependencyInfo.t.isAssignableFrom(s.t))
-        if (assignable.size > 1)
-          throw AmbiguousServiceDependencyException(service, dependencyInfo, qualified)
-        else assignable.head
+        assignable.filter(_.qualifier.exists(_ == qualifier))
+      case None =>
+        assignable
     }
+    if (qualified.size > 1)
+      throw AmbiguousServiceDependencyException(service, dependencyInfo, qualified)
+    else qualified.head
+  }
+
+  @tailrec
+  private def addServiceNodes(
+    graph: DirectedAcyclicGraph[ServiceInfo],
+    nodes: List[ServiceInfo]
+  ): DirectedAcyclicGraph[ServiceInfo] = nodes match {
+    case node :: tail => addServiceNodes(graph.addNode(node), tail)
+    case Nil => graph
   }
 
 }

@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface Service {
     /**
-     * Service qualifier. Empty string makes the context loader generate a name.
+     * Service name.
      */
     String name() default "";
 }

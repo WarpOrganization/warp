@@ -15,7 +15,7 @@ private[loader] class ServiceLoader {
   }
 
   private def resolveServicesInfo(): Set[ServiceInfo] = {
-    val serviceResolver = new ServiceResolver(ServiceLoader.ServiceRootPackage)
+    val serviceResolver = new ServiceResolver(new ClassResolver(ServiceLoader.ServiceRootPackage))
     serviceResolver.resolveServiceInfo()
   }
 
