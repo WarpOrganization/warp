@@ -13,13 +13,13 @@ import java.security.ProtectionDomain;
 
 /**
  * @author Jaca777
- *         Created 2016-12-04 at 14
+ * Created 2016-12-04 at 14
  */
 public class EngineContext {
 
-        public static final String CODESOURCE_DIR = getCodesourceDir();
+    public static final String CODESOURCE_DIR = getCodesourceDir();
 
-        private static String getCodesourceDir() {
+    private static String getCodesourceDir() {
         try {
             ProtectionDomain protectionDomain = EngineContext.class.getProtectionDomain();
             CodeSource codeSource = protectionDomain.getCodeSource();
@@ -32,6 +32,7 @@ public class EngineContext {
         }
         return null;
     }
+
 
     private Scene scene;
     private ScriptManager scriptManager;

@@ -1,13 +1,14 @@
 package pl.warp.engine.game;
 
 import pl.warp.engine.ai.AIManager;
+import pl.warp.engine.core.context.Context;
 import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.event.EventDispatcher;
-import pl.warp.engine.input.Input;
-import pl.warp.engine.core.script.ScriptManager;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.script.CameraRayTester;
+import pl.warp.engine.game.script.GameScriptManager;
 import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.input.Input;
 
 /**
  * @author Jaca777
@@ -15,10 +16,16 @@ import pl.warp.engine.graphics.Graphics;
  */
 public class GameContext extends EngineContext {
 
+    private Context context;
     private CameraRayTester rayTester;
     private Graphics graphics;
     private AIManager aiManager;
     private Input input;
+
+    public GameContext() {
+        this.context = Context.create();
+        this.setScriptManager(context.findOne(GameScriptManager.class).get());
+    }
 
     public CameraRayTester getRayTester() {
         return rayTester;
@@ -45,11 +52,6 @@ public class GameContext extends EngineContext {
         super.setScene(scene);
     }
 
-    @Override
-    protected void setScriptManager(ScriptManager scriptManager) {
-        super.setScriptManager(scriptManager);
-    }
-
     protected void setInput(Input input) {
         this.input = input;
     }
@@ -57,7 +59,6 @@ public class GameContext extends EngineContext {
     public Input getInput() {
         return input;
     }
-
 
     protected void setGraphics(Graphics graphics) {
         this.graphics = graphics;

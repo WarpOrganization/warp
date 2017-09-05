@@ -1,6 +1,7 @@
 package pl.warp.engine.game.script;
 
 import org.apache.log4j.Logger;
+import pl.warp.engine.core.context.annotation.Service;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.core.component.*;
@@ -19,6 +20,8 @@ import java.lang.reflect.Modifier;
  * @author Jaca777
  *         Created 2017-02-07 at 01
  */
+
+@Service
 public class GameScriptManager extends ScriptManager {
 
     private static final Logger LOGGER = Logger.getLogger(GameScriptManager.class);

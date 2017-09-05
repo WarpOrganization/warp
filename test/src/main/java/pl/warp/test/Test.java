@@ -8,18 +8,6 @@ import pl.warp.engine.core.execution.RapidExecutionStrategy;
 import pl.warp.engine.core.execution.SyncEngineThread;
 import pl.warp.engine.core.execution.SyncTimer;
 import pl.warp.engine.core.script.ScriptTask;
-import pl.warp.engine.graphics.Graphics;
-import pl.warp.engine.graphics.RenderingConfig;
-import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.graphics.camera.CameraProperty;
-import pl.warp.engine.input.glfw.GLFWInput;
-import pl.warp.engine.input.glfw.GLFWInputTask;
-import pl.warp.engine.graphics.pipeline.rendering.OnScreenRenderer;
-import pl.warp.engine.graphics.window.GLFWWindowManager;
-import pl.warp.engine.physics.DefaultCollisionStrategy;
-import pl.warp.engine.physics.MovementTask;
-import pl.warp.engine.physics.PhysicsTask;
-import pl.warp.engine.physics.RayTester;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.GameContextBuilder;
 import pl.warp.engine.game.scene.GameComponent;
@@ -27,7 +15,18 @@ import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.scene.GameSceneLoader;
 import pl.warp.engine.game.script.CameraRayTester;
 import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.GameScriptManager;
+import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.graphics.RenderingConfig;
+import pl.warp.engine.graphics.camera.Camera;
+import pl.warp.engine.graphics.camera.CameraProperty;
+import pl.warp.engine.graphics.pipeline.rendering.OnScreenRenderer;
+import pl.warp.engine.graphics.window.GLFWWindowManager;
+import pl.warp.engine.input.glfw.GLFWInput;
+import pl.warp.engine.input.glfw.GLFWInputTask;
+import pl.warp.engine.physics.DefaultCollisionStrategy;
+import pl.warp.engine.physics.MovementTask;
+import pl.warp.engine.physics.PhysicsTask;
+import pl.warp.engine.physics.RayTester;
 
 import java.awt.event.KeyEvent;
 
@@ -47,7 +46,6 @@ public class Test {
         GameContextBuilder contextBuilder = new GameContextBuilder();
         GameContext context = contextBuilder.getGameContext();
 
-        contextBuilder.setScriptManager(new GameScriptManager());
         OnScreenRenderer onScreenRenderer = new OnScreenRenderer(config);
 
         AudioContext audioContext = new AudioContext();

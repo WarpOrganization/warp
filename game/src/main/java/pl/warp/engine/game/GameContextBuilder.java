@@ -2,11 +2,10 @@ package pl.warp.engine.game;
 
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.event.EventDispatcher;
-import pl.warp.engine.input.Input;
-import pl.warp.engine.core.script.ScriptManager;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.script.CameraRayTester;
 import pl.warp.engine.graphics.Graphics;
+import pl.warp.engine.input.Input;
 
 /**
  * @author Jaca777
@@ -30,11 +29,6 @@ public class GameContextBuilder {
 
     public GameContextBuilder setScene(GameScene scene) {
         gameContext.setScene(scene);
-        return this;
-    }
-
-    public GameContextBuilder setScriptManager(ScriptManager scriptManager) {
-        gameContext.setScriptManager(scriptManager);
         return this;
     }
 

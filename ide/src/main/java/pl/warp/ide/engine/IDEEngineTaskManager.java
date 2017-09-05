@@ -4,29 +4,31 @@ import javafx.scene.canvas.Canvas;
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
-import pl.warp.engine.core.context.EngineContext;
-import pl.warp.engine.core.execution.*;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.event.PoolEventDispatcher;
 import pl.warp.engine.core.component.Scene;
-import pl.warp.engine.input.Input;
-import pl.warp.engine.input.InputTask;
+import pl.warp.engine.core.context.EngineContext;
+import pl.warp.engine.core.event.PoolEventDispatcher;
+import pl.warp.engine.core.execution.EngineThread;
+import pl.warp.engine.core.execution.RapidExecutionStrategy;
+import pl.warp.engine.core.execution.SyncEngineThread;
+import pl.warp.engine.core.execution.SyncTimer;
 import pl.warp.engine.core.script.ScriptTask;
+import pl.warp.engine.game.GameContextBuilder;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.script.CameraRayTester;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.pipeline.output.OutputTexture2DRenderer;
 import pl.warp.engine.graphics.window.Display;
+import pl.warp.engine.input.Input;
+import pl.warp.engine.input.InputTask;
 import pl.warp.engine.physics.DefaultCollisionStrategy;
 import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
 import pl.warp.engine.physics.RayTester;
-import pl.warp.engine.game.GameContextBuilder;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.scene.GameScene;
-import pl.warp.engine.game.script.CameraRayTester;
-import pl.warp.engine.game.script.GameScriptManager;
 
 import java.io.File;
 
@@ -111,10 +113,8 @@ public class IDEEngineTaskManager {
     }
 
     private void createScriptThread(Input input, EngineThread graphicsThread) {
-        GameScriptManager scriptManager = new GameScriptManager();
-        contextBuilder.setScriptManager(scriptManager);
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        scriptThread.scheduleTask(new ScriptTask(scriptManager));
+        scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptManager()));
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
             scriptThread.start(); //has to start after the window is created
