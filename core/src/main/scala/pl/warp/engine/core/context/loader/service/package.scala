@@ -9,6 +9,10 @@ case class ServiceInfo(
   qualifier: Option[String],
   builder: MethodHandle,
   dependencies: List[DependencyInfo]
-)
+) {
+  override def toString: String = {
+    t.getName + qualifier.map(" [" + _ + "]").getOrElse("")
+  }
+}
 
 case class DependencyInfo(t: Class[_], qualifier: Option[String])

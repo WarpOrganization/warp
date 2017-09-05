@@ -78,7 +78,8 @@ public class GameScriptManager extends ScriptManager {
 
     private void createHandler(GameScript script, Method method) {
         if (method.getParameterCount() != 1 || !Event.class.isAssignableFrom(method.getParameterTypes()[0]))
-            throw new ScriptInitializationException(new IllegalArgumentException("Event handler method has to receive only the event as parameter."));
+            throw new ScriptInitializationException(
+                    new IllegalArgumentException("Event handler method has to receive only the event as parameter."));
         try {
             bindHandle(script, method);
         } catch (IllegalAccessException e) {
@@ -116,7 +117,8 @@ public class GameScriptManager extends ScriptManager {
         OwnerProperty ownerProperty = field.getAnnotation(OwnerProperty.class);
         Component owner = script.getOwner();
         if (!owner.hasProperty(ownerProperty.name()))
-            throw new ScriptInitializationException(new IllegalStateException("Component has no property named " + ownerProperty.name() + "."));
+            throw new ScriptInitializationException(
+                    new IllegalStateException("Component has no property named " + ownerProperty.name() + "."));
         else {
             setField(script, field, ownerProperty);
         }
