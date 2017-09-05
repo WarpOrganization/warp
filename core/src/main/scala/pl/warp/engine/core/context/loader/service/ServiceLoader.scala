@@ -1,17 +1,21 @@
 package pl.warp.engine.core.context.loader.service
 
+import com.typesafe.scalalogging.LazyLogging
 import pl.warp.engine.core.context.graph.DirectedAcyclicGraph
 
 /**
   * @author Jaca777
   *         Created 2017-08-29 at 22
   */
-private[loader] class ServiceLoader {
+private[loader] class ServiceLoader extends LazyLogging  {
 
-  def loadServices(): Map[ServiceInfo, Object] = {
+  def loadServices(): List[(ServiceInfo, Object)] = {
+    logger.info("Loading application services...")
     val servicesInfo = resolveServicesInfo()
+    logger.info("Creating service graph...")
     val serviceGraph = createGraph(servicesInfo)
-    createServices(serviceGraph)
+    logger.info("Instantiating services...")
+    createServices(serviceGraph).toList
   }
 
   private def resolveServicesInfo(): Set[ServiceInfo] = {

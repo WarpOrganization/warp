@@ -15,9 +15,7 @@ case class ServiceCreator(
   override def visit(service: ServiceInfo): ServiceCreator =
     accumulator.get(service) match {
       case Some(instance) =>
-        this.copy(
-          dependencyStack = instance :: dependencyStack
-        )
+        this.copy(dependencyStack = instance :: dependencyStack)
       case None =>
         val dependenciesNumber = service.dependencies.size
         val dependencies = dependencyStack.take(dependenciesNumber).reverse

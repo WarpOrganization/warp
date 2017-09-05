@@ -17,6 +17,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.12', version: '3.7.2'
 
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.4'
