@@ -31,9 +31,12 @@ case class Node[+V](value: V, leaves: List[Node[V]]) {
         acceptAtLeaf(node.accept(visitor), tail)
     }
 
-    acceptAtLeaf(visitor.enter())
-      .leave()
-      .visit(value)
+    val postLeaves = {
+      if(visitor.enter(value))
+        acceptAtLeaf(visitor)
+      else visitor
+    }
+    postLeaves.visit(value)
   }
 
 

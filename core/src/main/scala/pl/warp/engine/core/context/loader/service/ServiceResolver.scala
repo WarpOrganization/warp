@@ -3,11 +3,8 @@ package pl.warp.engine.core.context.loader.service
 import java.lang.invoke.{MethodHandle, MethodHandles}
 import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
-import pl.warp.engine.core.context.annotation.{Qualified, Service, ServiceBuilder}
-
-import scala.collection.JavaConverters._
-import ServiceResolver._
-import com.sun.xml.internal.bind.api.ClassResolver
+import pl.warp.engine.core.context.annotation.{Qualified, ServiceBuilder}
+import pl.warp.engine.core.context.loader.service.ServiceResolver._
 
 /**
   * @author Jaca777
@@ -20,7 +17,7 @@ private[loader] class ServiceResolver(classResolver: ClassResolver) {
     classes.map(toServiceInfo).seq
   }
 
-  private def toServiceInfo(serviceClass: Class[_]): ServiceInfo = {
+  def toServiceInfo(serviceClass: Class[_]): ServiceInfo = {
     val builderConstructor = findBuilderConstructor(serviceClass)
     val builderHandle = toMethodHandle(builderConstructor)
     val dependencies = getDependencies(builderConstructor)

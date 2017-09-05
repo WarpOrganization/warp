@@ -11,16 +11,16 @@ import scala.annotation.tailrec
   */
 private[loader] class ServiceGraphBuilder {
 
-  def build(services: Set[ServiceInfo]): DirectedAcyclicGraph[ServiceInfo] = {
+  def build(services: List[ServiceInfo]): DirectedAcyclicGraph[ServiceInfo] = {
     val edges = for {
       service <- services
       dependencyInfo <- service.dependencies
       dependencyService = findDependency(service, services, dependencyInfo)
-    } yield dependencyService -> service
-    val edgesGraph = buildFromEdges(edges.toList)
-    val standaloneNodes = (services diff edges.flatMap {
+    } yield service -> dependencyService
+    val edgesGraph = buildFromEdges(edges)
+    val standaloneNodes = services diff edges.flatMap {
       case (from, to) => List(from, to)
-    }).toList
+    }
     addServiceNodes(edgesGraph, standaloneNodes)
   }
 
@@ -39,7 +39,7 @@ private[loader] class ServiceGraphBuilder {
   //OPT we may eventually want to optimize this
   private def findDependency(
     service: ServiceInfo,
-    services: Set[ServiceInfo],
+    services: List[ServiceInfo],
     dependencyInfo: DependencyInfo
   ): ServiceInfo = {
     val assignable = services
@@ -71,7 +71,7 @@ object ServiceGraphBuilder {
   case class AmbiguousServiceDependencyException(
     service: ServiceInfo,
     dependencyInfo: DependencyInfo,
-    assignable: Set[ServiceInfo]
+    assignable: List[ServiceInfo]
   ) extends RuntimeException({
     val serviceMsg = s"Unable to create instance of ${service.t.getName}."
     val causeMsg = dependencyInfo match {

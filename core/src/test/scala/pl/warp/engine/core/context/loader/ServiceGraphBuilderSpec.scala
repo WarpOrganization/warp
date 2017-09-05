@@ -5,8 +5,9 @@ import java.lang.invoke.MethodHandle
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.{Matchers, WordSpecLike}
-import pl.warp.engine.core.context.graph.DirectedAcyclicGraph
+import pl.warp.engine.core.context.graph.{CycleFoundException, DirectedAcyclicGraph}
 import pl.warp.engine.core.context.loader.ServiceGraphBuilderSpec._
+import pl.warp.engine.core.context.loader.service.ServiceGraphBuilder.AmbiguousServiceDependencyException
 import pl.warp.engine.core.context.loader.service.{DependencyInfo, ServiceGraphBuilder, ServiceInfo}
 
 import scala.reflect.ClassTag
@@ -22,7 +23,7 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
     "build 1-elem service graph" in {
       //given
       val graphBuilder = new ServiceGraphBuilder
-      val services = Set(service[A]())
+      val services = List(service[A]())
 
       //when
       val graph = graphBuilder.build(services)
@@ -36,7 +37,7 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
     "build graph with dependent nodes" in {
       //given
       val graphBuilder = new ServiceGraphBuilder
-      val services = Set(
+      val services = List(
         service[A](),
         service[B](dependencies = List(dep[A]())),
         service[C](dependencies = List(dep[A](), dep[B]()))
@@ -48,13 +49,15 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
       //then
       val rootNodes = graph.rootNodes
       rootNodes.size should be(1)
-      rootNodes.map(_.value).head should be(service[A]())
+      rootNodes.map(_.value).head.t should be(classOf[C])
+      graph should containDependency[B -> A]
+      graph should containDependency[C -> A]
     }
 
     "use qualifiers to resolve services" in {
       //given
       val graphBuilder = new ServiceGraphBuilder
-      val services = Set(
+      val services = List(
         service[B](dependencies = List(dep[A](qualifier = Some("test")))),
         service[D](qualifier = Some("test")),
         service[E](qualifier = None)
@@ -64,8 +67,40 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
       val graph = graphBuilder.build(services)
 
       //then
-      graph should containDependency[B -> D]
+      graph should containDependency[(B -> D)]
     }
+
+    "throw exception when a cyclic dependency is present" in {
+      //given
+      val graphBuilder = new ServiceGraphBuilder
+      val services = List(
+        service[A](dependencies = List(dep[C]())),
+        service[B](dependencies = List(dep[A]())),
+        service[C](dependencies = List(dep[B]()))
+      )
+
+      //then
+      intercept[CycleFoundException[ServiceInfo]] {
+        graphBuilder.build(services)
+      }
+    }
+
+    "throw exception when a dependency is ambiguous" in {
+      //given
+      val graphBuilder = new ServiceGraphBuilder
+      val services = List(
+        service[A](dependencies = List(dep[A]())),
+        service[D](),
+        service[E]()
+      )
+
+      //then
+      intercept[AmbiguousServiceDependencyException] {
+        graphBuilder.build(services)
+      }
+    }
+
+
   }
 
 }
@@ -73,14 +108,11 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
 object ServiceGraphBuilderSpec {
 
   class A
-
   class B
-
   class C
-
   class D extends A
-
   class E extends A
+
 
 
   trait GraphMatchers {
@@ -88,9 +120,9 @@ object ServiceGraphBuilderSpec {
     class FileEndsWithExtensionMatcher(from: Class[_], to: Class[_]) extends Matcher[DirectedAcyclicGraph[ServiceInfo]] {
 
       def apply(graph: DirectedAcyclicGraph[ServiceInfo]) = {
-        val node = graph.resolveNode(_.t == to)
+        val node = graph.resolveNode(_.t == from)
         val matches = node match {
-          case Some(b) => b.leaves.exists(_.value.t == from)
+          case Some(b) => b.leaves.exists(_.value.t == to)
           case None => false
         }
         MatchResult(
@@ -112,7 +144,7 @@ object ServiceGraphBuilderSpec {
 
     type ->[A, B]
 
-    implicit def arrowDependencyLike[A: ClassTag, B: ClassTag, Arrow <: ->[A, B]]: DependencyLike[A -> B] = {
+    implicit def arrowDependencyLike[A: ClassTag, B: ClassTag, ->[A, B]]: DependencyLike[A -> B] = {
       DependencyLikeApply[A -> B](
         implicitly[ClassTag[A]].runtimeClass,
         implicitly[ClassTag[B]].runtimeClass
@@ -127,6 +159,7 @@ object ServiceGraphBuilderSpec {
       )
     }
   }
+
 
   trait ServiceBuilders {
     def service[T: ClassTag](

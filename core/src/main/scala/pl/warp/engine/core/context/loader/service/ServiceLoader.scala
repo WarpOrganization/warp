@@ -21,7 +21,7 @@ private[loader] class ServiceLoader {
 
   private def createGraph(servicesInfo: Set[ServiceInfo]): DirectedAcyclicGraph[ServiceInfo] = {
     val graphBuilder = new ServiceGraphBuilder
-    graphBuilder.build(servicesInfo)
+    graphBuilder.build(servicesInfo.toList)
   }
 
   private def createServices(serviceGraph: DirectedAcyclicGraph[ServiceInfo]): Map[ServiceInfo, Object] = {

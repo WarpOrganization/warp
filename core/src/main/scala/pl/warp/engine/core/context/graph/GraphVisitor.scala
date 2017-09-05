@@ -8,6 +8,5 @@ package pl.warp.engine.core.context.graph
 
 abstract class GraphVisitor[-A, +Self] { _: Self =>
   def visit(value: A): Self
-  def enter(): Self = this
-  def leave(): Self = this
+  def enter(value: A): Boolean = true
 }
