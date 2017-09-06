@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
  * @author Jaca777
  *         Created 2016-07-08 at 00
  */
-public class GoatControlScript extends GameScript<GameComponent> {
+public class GoatControlScript extends GameScript {
 
     private static final float MOUSE_ROTATION_SPEED_FACTOR = 0.2f;
 

@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Marcin on 05.03.2017.
  */
-public class PlayerFireEffectsControl extends GameScriptWithInput<GameComponent> {
+public class PlayerFireEffectsControl extends GameScriptWithInput {
 
     private GameComponent mainBarrel;
     private GameComponent secondBarrel;

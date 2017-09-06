@@ -16,7 +16,7 @@ import static java.awt.event.MouseEvent.BUTTON1;
  * @author Jaca777
  *         Created 2017-01-26 at 12
  */
-public class FreeCameraScript extends GameScriptWithInput<GameComponent> {
+public class FreeCameraScript extends GameScriptWithInput {
 
     private static final float CAMERA_SPEED = 0.025f;
     private static final float ROT_SPEED = 0.03f;

@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @author Hubertus
  *         Created 03.03.17
  */
-public class TankRoundScript extends GameScript<GameComponent> {
+public class TankRoundScript extends GameScript {
 
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(40);
 

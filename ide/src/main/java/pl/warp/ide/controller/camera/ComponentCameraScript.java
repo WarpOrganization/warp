@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
  * @author Jaca777
  *         Created 2017-01-29 at 12
  */
-public class ComponentCameraScript extends GameScriptWithInput<GameComponent> {
+public class ComponentCameraScript extends GameScriptWithInput {
 
     private GameComponent rotatingComponent;
     private Camera camera;

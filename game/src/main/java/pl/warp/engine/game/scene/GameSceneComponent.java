@@ -1,6 +1,7 @@
 package pl.warp.engine.game.scene;
 
 import pl.warp.engine.core.component.SceneComponent;
+import pl.warp.engine.core.script.Script;
 import pl.warp.engine.game.GameContext;
 
 /**

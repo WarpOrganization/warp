@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Marcin on 04.03.2017.
  */
-public class SecondCameraScript extends GameScriptWithInput<GameComponent>{
+public class SecondCameraScript extends GameScriptWithInput{
 
     @OwnerProperty(name = CameraProperty.CAMERA_PROPERTY_NAME)
     private  CameraProperty secondCameraProperty;

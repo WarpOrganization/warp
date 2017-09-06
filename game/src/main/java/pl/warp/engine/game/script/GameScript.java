@@ -12,11 +12,11 @@ import pl.warp.engine.game.script.updatescheduler.UpdateScheduler;
  *         Created 2017-01-27 at 17
  */
 
-public abstract class GameScript<T extends GameComponent> extends Script<T> {
+public abstract class GameScript extends Script {
     private GameContext gameContext;
     private UpdateScheduler scheduler;
 
-    public GameScript(T owner) {
+    public GameScript(GameComponent owner) {
         super(owner);
         this.gameContext = owner.getContext();
     }
@@ -39,7 +39,12 @@ public abstract class GameScript<T extends GameComponent> extends Script<T> {
     public void onUpdate(int delta) {
         scheduler.update(delta);
         while (scheduler.pollUpdate())
-            update(delta);
+            update(delta); //todo fix delta
+    }
+
+    @Override
+    public GameComponent getOwner() {
+        return (GameComponent) super.getOwner();
     }
 
     protected abstract void update(int delta);

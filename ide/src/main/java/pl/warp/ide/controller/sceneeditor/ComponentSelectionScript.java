@@ -15,7 +15,7 @@ import java.util.Optional;
  * @author Jaca777
  *         Created 2017-01-27 at 22
  */
-public class ComponentSelectionScript extends GameScriptWithInput<GameScene> {
+public class ComponentSelectionScript extends GameScriptWithInput {
 
     private static final float SELECTION_RANGE = 400;
     private TreeView<GameComponent> sceneTree;

@@ -6,6 +6,7 @@ import pl.warp.engine.core.event.Listener;
 import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.core.property.PropertyNotPresentException;
+import pl.warp.engine.core.script.Script;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -277,4 +278,9 @@ public abstract class SceneComponent implements Component {
         }
     }
 
+    @Override
+    public void addScript(Class<? extends Script> script) {
+        //TODO
+        throw new UnsupportedOperationException();
+    }
 }

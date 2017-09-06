@@ -13,17 +13,17 @@ import java.util.Set;
  */
 public class ScriptManager {
 
-    private Set<Script<?>> scripts = new HashSet<>();
-    private Set<Script<?>> scriptsToAdd = new HashSet<>();
-    private Set<Script<?>> scriptsToRemove = new HashSet<>();
+    private Set<Script> scripts = new HashSet<>();
+    private Set<Script> scriptsToAdd = new HashSet<>();
+    private Set<Script> scriptsToRemove = new HashSet<>();
 
-    public synchronized void addScript(Script<?> script) {
+    public synchronized void addScript(Script script) {
         scriptsToAdd.add(script);
         createDeathListener(script);
 
     }
 
-    private void createDeathListener(Script<?> script) {
+    private void createDeathListener(Script script) {
         SimpleListener.createListener(
                 script.getOwner(),
                 ComponentDeathEvent.COMPONENT_DEATH_EVENT_NAME,
@@ -31,7 +31,7 @@ public class ScriptManager {
         );
     }
 
-    public synchronized void removeScript(Script<?> script) {
+    public synchronized void removeScript(Script script) {
         scriptsToRemove.add(script);
 
     }
@@ -47,7 +47,7 @@ public class ScriptManager {
         }
     }
 
-    public Set<Script<?>> getScripts() {
+    public Set<Script> getScripts() {
         return scripts;
     }
 
@@ -59,7 +59,7 @@ public class ScriptManager {
     }
 
     public synchronized void removeComponentScripts(Component component) {
-        for (Script<?> script : scripts) {
+        for (Script script : scripts) {
             if (script.getOwner() == component)
                 removeScript(script);
         }

@@ -16,7 +16,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author Jaca777
  *         Created 2017-02-12 at 14
  */
-public class FrigateScript extends GameScript<GameComponent> {
+public class FrigateScript extends GameScript {
     private static final float VELOCITY = 10f;
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
 

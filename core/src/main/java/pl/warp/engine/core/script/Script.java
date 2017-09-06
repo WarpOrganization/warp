@@ -7,19 +7,19 @@ import pl.warp.engine.core.component.Component;
  * @author Jaca777
  *         Created 2016-06-26 at 15
  */
-public abstract class Script<T extends Component> {
+public abstract class Script {
 
-    private T owner = null;
+    private Component owner = null;
     private EngineContext context = null;
     private boolean initialized;
 
-    public Script(T owner) {
+    public Script(Component owner) {
         this.owner = owner;
         this.context = owner.getContext();
         context.getScriptManager().addScript(this);
     }
 
-    public T getOwner() {
+    public Component getOwner() {
         return owner;
     }
 

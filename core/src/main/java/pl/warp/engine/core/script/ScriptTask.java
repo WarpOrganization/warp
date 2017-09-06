@@ -49,7 +49,7 @@ public class ScriptTask extends EngineTask {
         });
     }
 
-    protected void initialize(Script<?> s) {
+    protected void initialize(Script s) {
         try {
             manager.initializeScript(s);
         } catch (Exception e) {

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * @author Hubertus
  *         Created 03.03.17
  */
-public class TankGunScript extends GameScript<GameComponent> {
+public class TankGunScript extends GameScript {
 
 
     private static ScheduledExecutorService es = Executors.newScheduledThreadPool(5);

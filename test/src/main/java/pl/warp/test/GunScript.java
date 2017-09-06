@@ -24,7 +24,7 @@ import pl.warp.engine.game.script.updatescheduler.DelayScheduling;
  *         Created 7/12/16
  */
 @DelayScheduling(delayInMillis = 1000 / 57)
-public class GunScript extends GameScript<GameComponent> {
+public class GunScript extends GameScript {
 
     private final Component owner;
     private int cooldown;

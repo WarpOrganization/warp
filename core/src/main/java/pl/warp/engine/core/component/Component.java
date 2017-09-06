@@ -1,9 +1,10 @@
 package pl.warp.engine.core.component;
 
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.event.Listener;
-import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.property.Property;
+import pl.warp.engine.core.script.Script;
 
 import java.util.Optional;
 import java.util.Set;
@@ -65,6 +66,8 @@ public interface Component {
     void addProperty(Property property);
 
     void removeProperty(Property property);
+
+    void addScript(Class<? extends Script> script);
 
     void setParent(Component parent);
 

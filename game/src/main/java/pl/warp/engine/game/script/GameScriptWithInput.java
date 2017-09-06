@@ -6,11 +6,11 @@ import pl.warp.engine.game.scene.GameComponent;
  * @author Jaca777
  *         Created 2017-01-28 at 14
  */
-public abstract class GameScriptWithInput<T extends GameComponent> extends GameScript<T> {
+public abstract class GameScriptWithInput extends GameScript {
 
     private GameInputHandler inputHandler;
 
-    public GameScriptWithInput(T owner) {
+    public GameScriptWithInput(GameComponent owner) {
         super(owner);
     }
 

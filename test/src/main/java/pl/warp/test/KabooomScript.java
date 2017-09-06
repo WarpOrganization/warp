@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  * @author Jaca777
  *         Created 2017-02-12 at 21
  */
-public class KabooomScript extends GameScript<GameComponent> {
+public class KabooomScript extends GameScript {
 
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(40);
 

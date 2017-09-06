@@ -14,7 +14,7 @@ import pl.warp.engine.game.script.GameScript;
  *         Created 7/12/16
  */
 
-public class BulletScript extends GameScript<GameComponent> {
+public class BulletScript extends GameScript {
 
     private int life;
     private Listener<Component, CollisionEvent> collisionListener;

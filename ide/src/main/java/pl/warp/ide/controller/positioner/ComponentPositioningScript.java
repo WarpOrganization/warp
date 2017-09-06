@@ -16,7 +16,7 @@ import static java.awt.event.KeyEvent.*;
  * @author Jaca777
  *         Created 2017-01-29 at 12
  */
-public class ComponentPositioningScript extends GameScriptWithInput<GameComponent> {
+public class ComponentPositioningScript extends GameScriptWithInput {
 
     private static final float COMPONENT_SPEED = 0.025f;
     private static final float ROTATION_SPEED = 0.003f;

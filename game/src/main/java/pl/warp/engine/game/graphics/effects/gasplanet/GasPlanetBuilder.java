@@ -50,7 +50,7 @@ public class GasPlanetBuilder implements GameComponentBuilder {
     private static final float ROTATION_SPEED = 0.00004f;
 
     private void rotate(GameComponent component) {
-        new GameScript<GameComponent>(component) {
+        new GameScript(component) {
 
 
             @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)

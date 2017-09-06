@@ -11,7 +11,7 @@ import pl.warp.engine.game.script.GameScript;
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public class CameraScript extends GameScript<GameComponent> {
+public class CameraScript extends GameScript {
 
     private static final float SPEED = 0.01f;
 
