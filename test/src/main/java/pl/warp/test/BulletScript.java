@@ -3,9 +3,9 @@ package pl.warp.test;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.EventHandler;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.core.script.EventHandler;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.OwnerProperty;
 import pl.warp.engine.physics.event.CollisionEvent;
 
 /**
@@ -13,7 +13,7 @@ import pl.warp.engine.physics.event.CollisionEvent;
  *         Created 7/12/16
  */
 
-public class BulletScript extends GameScript {
+public class BulletScript extends Script {
 
     private int life;
 
@@ -25,12 +25,12 @@ public class BulletScript extends GameScript {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
         this.life = bulletProperty.getTtl();
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         life -= delta;
         if (life < 0)
             if (getOwner().hasParent())

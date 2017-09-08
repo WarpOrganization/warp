@@ -1,4 +1,4 @@
-package pl.warp.engine.game.script;
+package pl.warp.engine.core.script;
 
 /**
  * @author Jaca777

@@ -7,7 +7,7 @@ import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
-import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.core.script.OwnerProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitter;
@@ -20,8 +20,8 @@ import pl.warp.engine.graphics.particles.dot.ParticleStage;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.EventHandler;
-import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.core.script.EventHandler;
+import pl.warp.engine.core.script.Script;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @author Jaca777
  *         Created 2017-02-12 at 21
  */
-public class KabooomScript extends GameScript {
+public class KabooomScript extends Script {
 
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(40);
 
@@ -43,12 +43,12 @@ public class KabooomScript extends GameScript {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
 
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         if (!getOwner().hasEnabledProperty(KaboomedProperty.KABOOMED_PROPERTY_NAME) && (isTooFar() || isInsidePlanet()))
             getOwner().triggerEvent(new KabooomEvent());
     }
@@ -65,7 +65,7 @@ public class KabooomScript extends GameScript {
                 c.getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME).disable();
         });
         getOwner().addProperty(new BulletScript.Bulletproof());
-        kaboom(getOwner());
+        kaboom((GameComponent) getOwner());
         executorService.schedule(() -> resetComponent(getOwner()), 2, TimeUnit.SECONDS);
     }
 

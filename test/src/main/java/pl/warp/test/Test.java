@@ -7,6 +7,7 @@ import pl.warp.engine.core.execution.EngineThread;
 import pl.warp.engine.core.execution.RapidExecutionStrategy;
 import pl.warp.engine.core.execution.SyncEngineThread;
 import pl.warp.engine.core.execution.SyncTimer;
+import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.ScriptTask;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.GameContextBuilder;
@@ -14,7 +15,6 @@ import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.scene.GameSceneLoader;
 import pl.warp.engine.game.script.CameraRayTester;
-import pl.warp.engine.game.script.GameScript;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
@@ -69,7 +69,7 @@ public class Test {
         EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
-            scriptsThread.scheduleTask(new ScriptTask(context.getScriptManager()));
+            scriptsThread.scheduleTask(new ScriptTask(context.getScriptRegistry()));
             GLFWWindowManager windowManager = graphics.getWindowManager();
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
             scriptsThread.start(); //has to start after the window is created
@@ -96,14 +96,14 @@ public class Test {
 
         aiThread.scheduleTask(new AITask(context.getAIManager(), scene));
         aiThread.start();
-        new GameScript(scene) {
+        new Script(scene) {
             @Override
-            public void init() {
+            public void onInit() {
 
             }
 
             @Override
-            public void update(int delta) {
+            public void onUpdate(int delta) {
                 if (input.isKeyDown(KeyEvent.VK_ESCAPE)) {
                     scriptsThread.scheduleOnce(scriptsThread::interrupt);
                     graphicsThread.scheduleOnce(graphicsThread::interrupt);

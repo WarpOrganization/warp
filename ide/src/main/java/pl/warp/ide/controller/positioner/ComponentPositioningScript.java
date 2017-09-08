@@ -30,12 +30,12 @@ public class ComponentPositioningScript extends GameScriptWithInput {
     private TransformProperty componentTransform;
 
     @Override
-    protected void init() {
+    public void onInit() {
         this.componentTransform = getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         GameInputHandler inputHandler = getInputHandler();
         if (inputHandler.wasKeyPressed(KeyEvent.VK_ENTER)) callback.run();
         if (inputHandler.isKeyDown(VK_CONTROL)) rotate(delta);

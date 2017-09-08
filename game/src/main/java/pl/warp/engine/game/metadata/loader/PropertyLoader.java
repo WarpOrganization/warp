@@ -43,7 +43,7 @@ public class PropertyLoader {
             ownerField.setAccessible(true);
             ownerField.set(property, owner);
         } catch (Exception e) {
-            throw new MetadataLoadingException("Failed to init property " + property.getName() + ".");
+            throw new MetadataLoadingException("Failed to onInit property " + property.getName() + ".");
         }
     }
 

@@ -32,13 +32,13 @@ public class ComponentCameraScript extends GameScriptWithInput {
     private TransformProperty rotatingTransform;
 
     @Override
-    protected void init() {
+    public void onInit() {
         this.transform = getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         this.rotatingTransform = rotatingComponent.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         rotate(delta);
         move(delta);
     }

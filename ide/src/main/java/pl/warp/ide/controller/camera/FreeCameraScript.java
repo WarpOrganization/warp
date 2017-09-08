@@ -30,14 +30,14 @@ public class FreeCameraScript extends GameScriptWithInput {
     }
 
     @Override
-    public void init() {
+    public void onInit() {
 
     }
 
     private Vector3f movementVector = new Vector3f();
 
     @Override
-    public void update(int delta) {
+    public void onUpdate(int delta) {
         move(delta);
         rotate(delta);
     }

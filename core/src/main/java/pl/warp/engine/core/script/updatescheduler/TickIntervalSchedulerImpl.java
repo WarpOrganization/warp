@@ -1,4 +1,4 @@
-package pl.warp.engine.game.script.updatescheduler;
+package pl.warp.engine.core.script.updatescheduler;
 
 /**
  * @author Jaca777
@@ -16,17 +16,14 @@ public class TickIntervalSchedulerImpl implements UpdateScheduler {
         this.ticksUntilUpdate = intervalTicks;
     }
 
-    @Override
-    public void update(int delta) {
-        this.ticksUntilUpdate--;
-    }
 
     @Override
-    public boolean pollUpdate() {
+    public int pollUpdates(int delta) {
+        this.ticksUntilUpdate--;
         if(ticksUntilUpdate == 0){
             ticksUntilUpdate = intervalTicks;
-            return true;
-        } else return false;
+            return 1;
+        } else return 0;
     }
 
     public void setIntervalTicks(int intervalTicks) {

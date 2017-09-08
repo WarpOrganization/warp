@@ -1,18 +1,18 @@
 package pl.warp.engine.game.graphics.effects.planet;
 
 import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.game.graphics.effects.planet.generator.surface.Biome;
+import pl.warp.engine.game.graphics.effects.planet.generator.surface.PlanetSurfaceGenerator;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameSceneComponent;
 import pl.warp.engine.graphics.mesh.CustomProgramProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.mesh.shapes.Sphere;
 import pl.warp.engine.graphics.program.pool.ProgramPool;
 import pl.warp.engine.graphics.texture.Cubemap;
-import pl.warp.engine.game.graphics.effects.planet.generator.surface.Biome;
-import pl.warp.engine.game.graphics.effects.planet.generator.surface.PlanetSurfaceGenerator;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.scene.GameSceneComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
 
 /**
  * @author Jaca777
@@ -48,19 +48,19 @@ public class PlanetBuilder {
     private static final float ROTATION_SPEED = 0.00004f;
 
     private void rotate(GameComponent component) {
-        new GameScript(component) {
+        new Script(component) {
 
 
             @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)
             private TransformProperty transform;
 
             @Override
-            protected void init() {
+            public void onInit() {
 
             }
 
             @Override
-            protected void update(int delta) {
+            public void onUpdate(int delta) {
                 transform.rotateY(ROTATION_SPEED * delta);
             }
         };

@@ -5,10 +5,10 @@ import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.EventHandler;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
-import pl.warp.engine.game.script.updatescheduler.DelayScheduling;
+import pl.warp.engine.core.script.EventHandler;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.updatescheduler.DelayScheduling;
 
 /**
  * @author Jaca777
@@ -16,7 +16,7 @@ import pl.warp.engine.game.script.updatescheduler.DelayScheduling;
  */
 
 @DelayScheduling(delayInMillis = ComponentLoggingScript.DELAY)
-public class ComponentLoggingScript extends GameScript {
+public class ComponentLoggingScript extends Script {
 
     public static final int DELAY = 500;
 
@@ -31,12 +31,12 @@ public class ComponentLoggingScript extends GameScript {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
         log("Component name: " + name.getComponentName());
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         log("Component translation: " + transform.getTranslation());
         log("Component scale: " + transform.getScale());
         log("Component rotation: " + transform.getRotation());

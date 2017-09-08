@@ -1,10 +1,10 @@
 package pl.warp.test;
 
 import pl.warp.engine.core.property.NameProperty;
+import pl.warp.engine.game.script.GameScriptWithInput;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.GameScriptWithInput;
 
 import java.awt.event.MouseEvent;
 
@@ -34,8 +34,8 @@ public class PlayerFireEffectsControl extends GameScriptWithInput {
     }
 
     @Override
-    protected void init() {
-        mainBarrel = this.getOwner();
+    public void onInit() {
+        mainBarrel = (GameComponent) this.getOwner();
         emitterProperties = new ParticleEmitterProperty[2][2];
         playerFire = false;
         int n = mainBarrel.getChildrenNumber();
@@ -72,7 +72,7 @@ public class PlayerFireEffectsControl extends GameScriptWithInput {
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         if(super.getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON1)){
             playerFire = true;
             activeBarrel = secondBarrel.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME).isEnabled()? 1 : 0;

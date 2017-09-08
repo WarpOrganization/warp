@@ -1,4 +1,4 @@
-package pl.warp.engine.game.script.updatescheduler;
+package pl.warp.engine.core.script.updatescheduler;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

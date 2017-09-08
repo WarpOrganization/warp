@@ -6,10 +6,11 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameSceneComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.OwnerProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * @author Hubertus
  *         Created 03.03.17
  */
-public class TankGunScript extends GameScript {
+public class TankGunScript extends Script {
 
 
     private static ScheduledExecutorService es = Executors.newScheduledThreadPool(5);
@@ -55,14 +56,14 @@ public class TankGunScript extends GameScript {
     }
 
     @Override
-    protected void init() {
-        createGunParticles(getOwner());
+    public void onInit() {
+        createGunParticles((GameComponent) getOwner());
         this.mesh = gunProperty.getBulletMesh();
         this.material = new Material(gunProperty.getBulletTexture());
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         reload(delta);
         input();
     }
@@ -88,7 +89,7 @@ public class TankGunScript extends GameScript {
             rotation.transform(GUN_OFFSET, gunOffset);
             Transforms.getAbsolutePosition(getOwner(), translation);
             translation.add(gunOffset);
-            GameComponent round = new GameSceneComponent(getContext());
+            GameComponent round = new GameSceneComponent((GameContext) getContext());
             TransformProperty transformProperty = new TransformProperty();
             transformProperty.move(translation);
             round.addProperty(transformProperty);

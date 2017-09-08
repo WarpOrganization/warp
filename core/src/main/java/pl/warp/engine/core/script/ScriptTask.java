@@ -2,6 +2,7 @@ package pl.warp.engine.core.script;
 
 import org.apache.log4j.Logger;
 import pl.warp.engine.core.execution.task.EngineTask;
+import pl.warp.engine.core.script.updatescheduler.UpdateScheduler;
 
 /**
  * @author Jaca777
@@ -11,9 +12,9 @@ public class ScriptTask extends EngineTask {
 
     public static final Logger SCRIPT_TASK_LOGGER = Logger.getLogger(ScriptTask.class);
 
-    private ScriptManager manager;
+    private ScriptRegistry manager;
 
-    public ScriptTask(ScriptManager manager) {
+    public ScriptTask(ScriptRegistry manager) {
         this.manager = manager;
     }
 
@@ -42,7 +43,13 @@ public class ScriptTask extends EngineTask {
             if (!s.isInitialized())
                 initialize(s);
             try {
-                s.onUpdate(delta);
+                UpdateScheduler scheduler = s.getScheduler();
+                int updates = scheduler.pollUpdates(delta);
+                if(updates > 0) {
+                    int deltaPerUpdate = delta / updates;
+                    for (int i = 0; i < updates; i++)
+                        s.onUpdate(deltaPerUpdate); //todo fix delta
+                }
             } catch (Exception e) {
                 SCRIPT_TASK_LOGGER.error("Exception occurred when updating the script.", e);
             }

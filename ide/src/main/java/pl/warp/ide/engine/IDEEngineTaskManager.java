@@ -114,7 +114,7 @@ public class IDEEngineTaskManager {
 
     private void createScriptThread(Input input, EngineThread graphicsThread) {
         EngineThread scriptThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptManager()));
+        scriptThread.scheduleTask(new ScriptTask(contextBuilder.getGameContext().getScriptRegistry()));
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
             scriptThread.start(); //has to start after the window is created

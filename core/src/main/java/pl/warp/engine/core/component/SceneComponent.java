@@ -280,7 +280,6 @@ public abstract class SceneComponent implements Component {
 
     @Override
     public void addScript(Class<? extends Script> script) {
-        //TODO
-        throw new UnsupportedOperationException();
+        //context.getScriptRegistry().addScript(script);
     }
 }

@@ -2,7 +2,7 @@ package pl.warp.engine.core.context;
 
 import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.event.EventDispatcher;
-import pl.warp.engine.core.script.ScriptManager;
+import pl.warp.engine.core.script.ScriptRegistry;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -34,9 +34,14 @@ public class EngineContext {
     }
 
 
+    private Context context;
     private Scene scene;
-    private ScriptManager scriptManager;
+    private ScriptRegistry scriptRegistry;
     private EventDispatcher eventDispatcher;
+
+    public EngineContext() {
+        this.context = Context.create();
+    }
 
     public Scene getScene() {
         return scene;
@@ -46,12 +51,12 @@ public class EngineContext {
         this.scene = scene;
     }
 
-    public ScriptManager getScriptManager() {
-        return scriptManager;
+    public ScriptRegistry getScriptRegistry() {
+        return scriptRegistry;
     }
 
-    protected void setScriptManager(ScriptManager scriptManager) {
-        this.scriptManager = scriptManager;
+    protected void setScriptRegistry(ScriptRegistry scriptRegistry) {
+        this.scriptRegistry = scriptRegistry;
     }
 
 
@@ -63,4 +68,11 @@ public class EngineContext {
         this.eventDispatcher = eventDispatcher;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    protected void setContext(Context context) {
+        this.context = context;
+    }
 }

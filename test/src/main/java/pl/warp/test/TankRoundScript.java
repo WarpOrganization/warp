@@ -14,9 +14,9 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.EventHandler;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.core.script.EventHandler;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.OwnerProperty;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @author Hubertus
  *         Created 03.03.17
  */
-public class TankRoundScript extends GameScript {
+public class TankRoundScript extends Script {
 
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(40);
 
@@ -39,14 +39,14 @@ public class TankRoundScript extends GameScript {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
 
     }
 
     private int timer = -1;
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         if (timer > -1) timer += delta;
         if (timer > 1000)
             if (getOwner().hasParent())
@@ -61,7 +61,7 @@ public class TankRoundScript extends GameScript {
             //TODO destroy tank
         }
         body.setVelocity(new Vector3f(0));
-        kaboom(getOwner());
+        kaboom((GameComponent) getOwner());
         timer = 0;
     }
 

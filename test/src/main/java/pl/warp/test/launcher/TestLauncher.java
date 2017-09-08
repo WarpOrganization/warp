@@ -29,6 +29,6 @@ public class TestLauncher extends Application{
         primaryStage.show();
         BasicUpdater basicUpdater = new BasicUpdater();
         UpdateStatus status = new UpdateStatus();
-        //basicUpdater.update(new PathData("testData","."),false, status);
+        //basicUpdater.onUpdate(new PathData("testData","."),false, status);
     }
 }

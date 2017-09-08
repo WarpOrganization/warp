@@ -6,6 +6,7 @@ import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.game.GameContext;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
@@ -16,18 +17,17 @@ import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameSceneComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.updatescheduler.DelayScheduling;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.updatescheduler.DelayScheduling;
 
 /**
  * @author Hubertus
  *         Created 7/12/16
  */
 @DelayScheduling(delayInMillis = 1000 / 57)
-public class GunScript extends GameScript {
+public class GunScript extends Script {
 
     private final Component owner;
-    private int cooldown;
     private int timer;
     private TransformProperty transformProperty;
     private PhysicalBodyProperty physicalProperty;
@@ -50,7 +50,7 @@ public class GunScript extends GameScript {
     }
 
     @Override
-    public void init() {
+    public void onInit() {
         timer = 0;
         transformProperty = getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         physicalProperty = getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
@@ -64,7 +64,7 @@ public class GunScript extends GameScript {
     }
 
     @Override
-    public void update(int delta) {
+    public void onUpdate(int delta) {
         input();
         cooldown(delta);
     }
@@ -108,8 +108,8 @@ public class GunScript extends GameScript {
             parentVelocity.set(physicalProperty.getVelocity());
             direction.add(parentVelocity.mul(BULLET_MASS));
 
-            GameComponent bullet = new GameSceneComponent(getContext());
-            bullet.addProperty(new BulletProperty(getOwner(), 10000));
+            GameComponent bullet = new GameSceneComponent((GameContext)getContext());
+            bullet.addProperty(new BulletProperty((GameComponent) getOwner(), 10000));
             bullet.addProperty(new RenderableMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();

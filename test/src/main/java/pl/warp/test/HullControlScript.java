@@ -2,23 +2,24 @@ package pl.warp.test;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.input.Input;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.game.GameContext;
+import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
+import pl.warp.engine.input.Input;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
 
 import java.awt.event.KeyEvent;
 
 /**
  * Created by Marcin on 04.03.2017.
  */
-public class HullControlScript extends GameScript {
+public class HullControlScript extends Script {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
 
     @OwnerProperty(name = PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)
@@ -41,14 +42,14 @@ public class HullControlScript extends GameScript {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
         this.tracksAnimation = hullProperty.getTracks().getProperty(AnimatedTextureProperty.ANIMATED_TEXTURE_PROPERTY_NAME);
         this.tracksParticles1 = hullProperty.getTracks().getChild(0).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
         this.tracksParticles2 = hullProperty.getTracks().getChild(1).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         updateDirections();
         if (gravityProperty.isStanding())
             fixVelocity();
@@ -56,7 +57,7 @@ public class HullControlScript extends GameScript {
     }
 
     private void move(int delta) {
-        Input input = getContext().getInput();
+        Input input = ((GameContext)getContext()).getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
             linearMove(-hullProperty.getAcceleration() * delta);
         else if (input.isKeyDown(KeyEvent.VK_S))

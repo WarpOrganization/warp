@@ -5,13 +5,13 @@ import org.joml.Vector3f;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.core.script.Script;
 
 /**
  * @author Jaca777
  *         Created 2016-07-01 at 12
  */
-public class CameraScript extends GameScript {
+public class CameraScript extends Script {
 
     private static final float SPEED = 0.01f;
 
@@ -23,7 +23,7 @@ public class CameraScript extends GameScript {
     }
 
     @Override
-    public void init() {
+    public void onInit() {
         this.parentBody = getOwner().getParent().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         this.parentTransform = getOwner().getParent().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
     }
@@ -31,7 +31,7 @@ public class CameraScript extends GameScript {
     private Vector3f prevVelocity = new Vector3f();
 
     @Override
-    public void update(int delta) {
+    public void onUpdate(int delta) {
         Quaternionf rotation = new Quaternionf(parentTransform.getRotation()).invert();
         Vector3f currentVelocity = new Vector3f(parentBody.getVelocity()).rotate(rotation);
         Vector3f velDelta = new Vector3f();

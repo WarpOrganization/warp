@@ -3,6 +3,7 @@ package pl.warp.ide.controller.sceneeditor;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.joml.Vector2f;
+import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.script.CameraRayTester;
@@ -26,18 +27,18 @@ public class ComponentSelectionScript extends GameScriptWithInput {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
 
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         if (getInputHandler().wasMouseButtonPressed(MouseEvent.BUTTON3))
             select();
     }
 
     private void select() {
-        CameraRayTester rayTester = getContext().getRayTester();
+        CameraRayTester rayTester = ((GameContext)getContext()).getRayTester();
         Vector2f cursorPosition = getInputHandler().getCursorPosition();
         Optional<GameComponent> gameComponent = rayTester.testCameraRay(cursorPosition.x, cursorPosition.y, SELECTION_RANGE);
         gameComponent.ifPresent(this::selectComponent);

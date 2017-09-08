@@ -2,19 +2,20 @@ package pl.warp.test;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import pl.warp.engine.game.GameContext;
 import pl.warp.engine.input.Input;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.OwnerProperty;
 
 import java.awt.event.KeyEvent;
 
 /**
  * Created by Marcin on 04.03.2017.
  */
-public class BarrelControlScript extends GameScript {
+public class BarrelControlScript extends Script {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
 
     @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)
@@ -31,18 +32,18 @@ public class BarrelControlScript extends GameScript {
     }
 
     @Override
-    protected void init() {
+    public void onInit() {
 
     }
 
     @Override
-    protected void update(int delta) {
+    public void onUpdate(int delta) {
         updateDirections();
         move();
     }
 
     private void move() {
-        Input input = getContext().getInput();
+        Input input = ((GameContext)getContext()).getInput();
         transformProperty.rotateX(input.getCursorPositionDelta().y * barrelControlProperty.getElevationSpeed());
         if(transformProperty.getRotation().x > barrelControlProperty.getElevationMIN()/2)
             transformProperty.getRotation().setAngleAxis(barrelControlProperty.getElevationMIN(), 1f,0f,0f);

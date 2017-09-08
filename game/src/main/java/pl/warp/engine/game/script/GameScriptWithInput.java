@@ -1,27 +1,25 @@
 package pl.warp.engine.game.script;
 
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;
+
+import java.util.Objects;
 
 /**
  * @author Jaca777
  *         Created 2017-01-28 at 14
  */
-public abstract class GameScriptWithInput extends GameScript {
+public abstract class GameScriptWithInput extends Script {
 
-    private GameInputHandler inputHandler;
+    private GameInputHandler inputHandler = null;
 
     public GameScriptWithInput(GameComponent owner) {
         super(owner);
     }
 
-    @Override
-    public void onInit() {
-        inputHandler = new GameInputHandler(getContext());
-        super.onInit();
-    }
-
     protected GameInputHandler getInputHandler(){
-        return inputHandler;
+        return Objects.isNull(inputHandler) ? (inputHandler = new GameInputHandler((GameContext) getContext())) : inputHandler;
     }
 
 }

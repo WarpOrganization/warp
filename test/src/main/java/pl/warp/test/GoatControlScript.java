@@ -3,12 +3,13 @@ package pl.warp.test;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import pl.warp.engine.input.Input;
 import pl.warp.engine.common.transform.Transforms;
-import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
+import pl.warp.engine.input.Input;
+import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 import java.awt.event.KeyEvent;
 
@@ -16,7 +17,7 @@ import java.awt.event.KeyEvent;
  * @author Jaca777
  *         Created 2016-07-08 at 00
  */
-public class GoatControlScript extends GameScript {
+public class GoatControlScript extends Script {
 
     private static final float MOUSE_ROTATION_SPEED_FACTOR = 0.2f;
 
@@ -44,12 +45,12 @@ public class GoatControlScript extends GameScript {
 
 
     @Override
-    protected void init() {
+    public void onInit() {
 
     }
 
     @Override
-    public void update(int delta) {
+    public void onUpdate(int delta) {
         updateDirections();
         desiredTorque.set(0, 0, 0);
         move(delta);
@@ -62,7 +63,7 @@ public class GoatControlScript extends GameScript {
 
 
     private void useGun() {
-        Input input = getContext().getInput();
+        Input input = ((GameContext)getContext()).getInput();
         getOwner().<GunProperty>getPropertyIfExists(GunProperty.GUN_PROPERTY_NAME).ifPresent(
                 c -> {
                     if (input.isKeyDown(KeyEvent.VK_CONTROL)) c.setTriggered(true);
@@ -78,7 +79,7 @@ public class GoatControlScript extends GameScript {
     }
 
     private void move(int delta) {
-        Input input = getContext().getInput();
+        Input input = ((GameContext)getContext()).getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
             move(forwardVector, goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_S))
