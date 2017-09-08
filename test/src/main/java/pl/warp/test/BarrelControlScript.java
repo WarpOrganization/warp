@@ -16,9 +16,6 @@ import java.awt.event.KeyEvent;
  */
 public class BarrelControlScript extends GameScript {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private  final float elevationSpeed;
-    private final float elevationMAX;
-    private final float elevationMIN;
 
     @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)
     private  TransformProperty transformProperty;
@@ -26,11 +23,11 @@ public class BarrelControlScript extends GameScript {
     @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
     private GunProperty gunProperty;
 
-    public BarrelControlScript(GameComponent owner, float elevationSpeed, float elevationMAX, float elevationMIN) {
+    @OwnerProperty(name = BarrelControlProperty.BARREL_CONTROL_PROPERTY)
+    private BarrelControlProperty barrelControlProperty;
+
+    public BarrelControlScript(GameComponent owner) {
         super(owner);
-        this.elevationSpeed = elevationSpeed * (float)Math.PI/5000;
-        this.elevationMAX = -(float)Math.toRadians(elevationMAX);
-        this.elevationMIN = -(float)Math.toRadians(elevationMIN);
     }
 
     @Override
@@ -46,11 +43,11 @@ public class BarrelControlScript extends GameScript {
 
     private void move() {
         Input input = getContext().getInput();
-        transformProperty.rotateX(input.getCursorPositionDelta().y * elevationSpeed);
-        if(transformProperty.getRotation().x > elevationMIN/2)
-            transformProperty.getRotation().setAngleAxis(elevationMIN, 1f,0f,0f);
-        else if(transformProperty.getRotation().x < elevationMAX/2)
-            transformProperty.getRotation().setAngleAxis(elevationMAX, 1f,0f,0f);
+        transformProperty.rotateX(input.getCursorPositionDelta().y * barrelControlProperty.getElevationSpeed());
+        if(transformProperty.getRotation().x > barrelControlProperty.getElevationMIN()/2)
+            transformProperty.getRotation().setAngleAxis(barrelControlProperty.getElevationMIN(), 1f,0f,0f);
+        else if(transformProperty.getRotation().x < barrelControlProperty.getElevationMAX()/2)
+            transformProperty.getRotation().setAngleAxis(barrelControlProperty.getElevationMAX(), 1f,0f,0f);
 
         if(input.isKeyDown(KeyEvent.VK_CONTROL)) gunProperty.setTriggered(true);
         else gunProperty.setTriggered(false);

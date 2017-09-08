@@ -10,7 +10,20 @@ import pl.warp.engine.game.scene.GameComponent;
 public class BulletProperty extends Property<GameComponent> {
     public static final String BULLET_PROPERTY_NAME = "bulletProperty";
 
-    public BulletProperty() {
+    private GameComponent playerShip;
+    private int ttl;
+
+    public BulletProperty(GameComponent playerShip, int ttl) {
         super(BULLET_PROPERTY_NAME);
+        this.playerShip = playerShip;
+        this.ttl = ttl;
+    }
+
+    public GameComponent getPlayerShip() {
+        return playerShip;
+    }
+
+    public int getTtl() {
+        return ttl;
     }
 }

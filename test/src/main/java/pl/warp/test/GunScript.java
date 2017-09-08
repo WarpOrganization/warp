@@ -109,7 +109,7 @@ public class GunScript extends GameScript {
             direction.add(parentVelocity.mul(BULLET_MASS));
 
             GameComponent bullet = new GameSceneComponent(getContext());
-            bullet.addProperty(new BulletProperty());
+            bullet.addProperty(new BulletProperty(getOwner(), 10000));
             bullet.addProperty(new RenderableMeshProperty(bulletMesh));
             bullet.addProperty(new GraphicsMaterialProperty(bulletMaterial));
             TransformProperty transformProperty = new TransformProperty();
@@ -123,7 +123,7 @@ public class GunScript extends GameScript {
             bullet.addProperty(physicalBodyProperty);
             bullet.addProperty(new ColliderProperty(new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z))));
             root.addChild(bullet);
-            new BulletScript(bullet, 10000, explosionSpritesheet, getOwner());
+            new BulletScript(bullet);
         }
     }
 }

@@ -7,6 +7,7 @@ import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.game.script.OwnerProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitter;
@@ -34,13 +35,11 @@ public class KabooomScript extends GameScript {
 
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(40);
 
-    private GameComponent planet;
-    private float planetRadius;
+    @OwnerProperty(name = KaboomProperty.KABOOM_PROPERTY_NAME)
+    private KaboomProperty kaboomProperty;
 
-    public KabooomScript(GameComponent owner, GameComponent planet, float planetRadius) {
+    public KabooomScript(GameComponent owner) {
         super(owner);
-        this.planet = planet;
-        this.planetRadius = planetRadius;
     }
 
     @Override
@@ -126,8 +125,8 @@ public class KabooomScript extends GameScript {
 
     public boolean isInsidePlanet() {
         Vector3f ownerPos = Transforms.getAbsolutePosition(getOwner(), vec);
-        Vector3f planetPos = Transforms.getAbsolutePosition(planet, vec2);
-        return ownerPos.distance(planetPos) < planetRadius;
+        Vector3f planetPos = Transforms.getAbsolutePosition(kaboomProperty.getPlanet(), vec2);
+        return ownerPos.distance(planetPos) < kaboomProperty.getPlanetRadius();
     }
 
     public static class KabooomEvent extends Event {

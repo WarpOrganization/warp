@@ -23,29 +23,23 @@ public class GoatControlScript extends GameScript {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(1, 0, 0);
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
-
-    private float movementSpeed;
-    private float rotationSpeed;
-
+    
     @OwnerProperty(name = PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)
     private PhysicalBodyProperty bodyProperty;
 
     @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
     private GunProperty gunProperty;
 
-    private final float brakingForce;
-    private final float arrowKeysRottationSpeed;
+    @OwnerProperty(name = GoatProperty.GOAT_PROPERTY_NAME)
+    private GoatProperty goatProperty;
+    
 
     private Vector3f forwardVector = new Vector3f();
     private Vector3f rightVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
 
-    public GoatControlScript(GameComponent owner, float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRotationSpeed) {
+    public GoatControlScript(GameComponent owner) {
         super(owner);
-        this.movementSpeed = movementSpeed;
-        this.rotationSpeed = rotationSpeed;
-        this.brakingForce = brakingForce;
-        this.arrowKeysRottationSpeed = arrowKeysRotationSpeed;
     }
 
 
@@ -86,13 +80,13 @@ public class GoatControlScript extends GameScript {
     private void move(int delta) {
         Input input = getContext().getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
-            move(forwardVector, movementSpeed * delta);
+            move(forwardVector, goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_S))
-            move(forwardVector, -movementSpeed * delta);
+            move(forwardVector, -goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_A))
-            move(rightVector, movementSpeed * delta);
+            move(rightVector, goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_D))
-            move(rightVector, -movementSpeed * delta);
+            move(rightVector, -goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_SPACE))
             brake(delta);
         if (input.isKeyDown(KeyEvent.VK_P))
@@ -102,17 +96,17 @@ public class GoatControlScript extends GameScript {
         else
             gunProperty.setTriggered(false);
         if (input.isKeyDown(KeyEvent.VK_UP))
-            addDesiredTorque(arrowKeysRottationSpeed, 0, 0);
+            addDesiredTorque(goatProperty.getArrowKeysRotationSpeed(), 0, 0);
         if (input.isKeyDown(KeyEvent.VK_DOWN))
-            addDesiredTorque(-arrowKeysRottationSpeed, 0, 0);
+            addDesiredTorque(-goatProperty.getArrowKeysRotationSpeed(), 0, 0);
         if (input.isKeyDown(KeyEvent.VK_LEFT))
-            addDesiredTorque(0, arrowKeysRottationSpeed, 0);
+            addDesiredTorque(0, goatProperty.getArrowKeysRotationSpeed(), 0);
         if (input.isKeyDown(KeyEvent.VK_RIGHT))
-            addDesiredTorque(0, -arrowKeysRottationSpeed, 0);
+            addDesiredTorque(0, -goatProperty.getArrowKeysRotationSpeed(), 0);
         if (input.isKeyDown(KeyEvent.VK_Q))
-            addDesiredTorque(0, 0, arrowKeysRottationSpeed);
+            addDesiredTorque(0, 0, goatProperty.getArrowKeysRotationSpeed());
         if (input.isKeyDown(KeyEvent.VK_E))
-            addDesiredTorque(0, 0, -arrowKeysRottationSpeed);
+            addDesiredTorque(0, 0, -goatProperty.getArrowKeysRotationSpeed());
     }
 
     private Vector3f tmpForce = new Vector3f();
@@ -129,9 +123,9 @@ public class GoatControlScript extends GameScript {
         torqueChange.set(bodyProperty.getAngularVelocity());
         torqueChange.sub(desiredTorque);
         torqueChange.negate();
-        if (torqueChange.length() > rotationSpeed * delta / bodyProperty.getUniversalRotationInertia()) {
+        if (torqueChange.length() > goatProperty.getRotationSpeed() * delta / bodyProperty.getUniversalRotationInertia()) {
             torqueChange.normalize();
-            torqueChange.mul(rotationSpeed);
+            torqueChange.mul(goatProperty.getRotationSpeed());
             torqueChange.mul(delta);
         } else {
             torqueChange.mul(bodyProperty.getUniversalRotationInertia());
@@ -146,7 +140,7 @@ public class GoatControlScript extends GameScript {
     private void rotate(int delta) {
   /*      Vector2f cursorPosDelta = input.getCursorPositionDelta();
         Vector2f rotation = new Vector2f();
-        cursorPosDelta.mul(rotationSpeed * delta * MOUSE_ROTATION_SPEED_FACTOR, rotation);
+        cursorPosDelta.mul(goatProperty.getRotationSpeed() * delta * MOUSE_ROTATION_SPEED_FACTOR, rotation);
         bodyProperty.addAngularVelocity(new Vector3f(-rotation.y, -rotation.x, 0));
   */
     }
@@ -160,10 +154,10 @@ public class GoatControlScript extends GameScript {
 
     private void brake(int delta) {
         brakingVector.set(bodyProperty.getVelocity());
-        if (brakingVector.length() > brakingForce / bodyProperty.getMass()) {
+        if (brakingVector.length() > goatProperty.getBrakingForce() / bodyProperty.getMass()) {
             brakingVector.normalize();
             brakingVector.negate();
-            brakingVector.mul(brakingForce);
+            brakingVector.mul(goatProperty.getBrakingForce());
         } else {
             brakingVector.negate();
             brakingVector.mul(bodyProperty.getMass());

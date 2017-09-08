@@ -4,9 +4,12 @@ import com.badlogic.gdx.math.Vector3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import pl.warp.engine.core.component.Component;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameSceneComponent;
+import pl.warp.engine.game.script.GameScript;
+import pl.warp.engine.game.script.OwnerProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
@@ -19,10 +22,6 @@ import pl.warp.engine.graphics.particles.dot.ParticleStage;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.scene.GameSceneComponent;
-import pl.warp.engine.game.script.GameScript;
-import pl.warp.engine.game.script.OwnerProperty;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,11 +35,12 @@ public class TankGunScript extends GameScript {
 
 
     private static ScheduledExecutorService es = Executors.newScheduledThreadPool(5);
-    private final int reloadTime;
-    private final float outSpeed;
-    private Component root;
+
+    @OwnerProperty(name = TankGunProperty.TANK_GUN_PROPERTY_NAME)
+    private TankGunProperty tankGunProperty;
+
     @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
-    GunProperty gunProperty;
+    private GunProperty gunProperty;
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, 1);
     private static final Vector3f GUN_OFFSET = new Vector3f(0, 0, 0);
     private Mesh mesh;
@@ -50,11 +50,8 @@ public class TankGunScript extends GameScript {
     private ParticleSystem smokeSystem;
     private ParticleSystem fireSystem;
 
-    public TankGunScript(GameComponent owner, int reloadTime, float outSpeed, Component root) {
+    public TankGunScript(GameComponent owner) {
         super(owner);
-        this.reloadTime = reloadTime;
-        this.outSpeed = outSpeed;
-        this.root = root;
     }
 
     @Override
@@ -85,7 +82,7 @@ public class TankGunScript extends GameScript {
 
     private void shoot() {
         if (reloadLeft <= 0) {
-            reloadLeft = reloadTime;
+            reloadLeft = tankGunProperty.getReloadTime();
             Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner());
             rotation.transform(FORWARD_VECTOR, forwardVector);
             rotation.transform(GUN_OFFSET, gunOffset);
@@ -95,7 +92,7 @@ public class TankGunScript extends GameScript {
             TransformProperty transformProperty = new TransformProperty();
             transformProperty.move(translation);
             round.addProperty(transformProperty);
-            forwardVector.mul(outSpeed);
+            forwardVector.mul(tankGunProperty.getOutSpeed());
             PhysicalBodyProperty bodyProperty = new PhysicalBodyProperty(1, 1, 1, 1);
             bodyProperty.applyForce(forwardVector);
             round.addProperty(bodyProperty);
@@ -103,7 +100,7 @@ public class TankGunScript extends GameScript {
             //round.addProperty(new GravityProperty(new Vector3f(0, -1, 0)));
             round.addProperty(new RenderableMeshProperty(mesh));
             round.addProperty(new GraphicsMaterialProperty(material));
-            root.addChild(round);
+            tankGunProperty.getRoot().addChild(round);
             new TankRoundScript(round);
             fireSystem.setEmit(true);
             smokeSystem.setEmit(true);

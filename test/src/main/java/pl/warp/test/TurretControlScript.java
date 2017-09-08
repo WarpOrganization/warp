@@ -14,14 +14,15 @@ import pl.warp.engine.game.script.OwnerProperty;
  */
 public class TurretControlScript extends GameScript {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private final float rotationSpeed;
 
     @OwnerProperty(name = TransformProperty.TRANSFORM_PROPERTY_NAME)
     private  TransformProperty transformProperty;
 
-    public TurretControlScript(GameComponent owner, float rotationSpeed) {
+    @OwnerProperty(name = TurretProperty.TURRET_PROPERTY_NAME)
+    private TurretProperty turretProperty;
+
+    public TurretControlScript(GameComponent owner) {
         super(owner);
-        this.rotationSpeed = rotationSpeed * (float)Math.PI/5000;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class TurretControlScript extends GameScript {
 
     private void move() {
         Input input = getContext().getInput();
-        transformProperty.rotateY(-input.getCursorPositionDelta().x*rotationSpeed);
+        transformProperty.rotateY(-input.getCursorPositionDelta().x*turretProperty.getRotationSpeed());
     }
 
     private Vector3f forwardVector = new Vector3f();

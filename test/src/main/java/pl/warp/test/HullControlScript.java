@@ -20,10 +20,6 @@ import java.awt.event.KeyEvent;
  */
 public class HullControlScript extends GameScript {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
-    private final float acceleration;
-    private final float rotationSpeed;
-    private final float maxSpeed;
-    private final float brakingForce;
 
     @OwnerProperty(name = PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)
     private PhysicalBodyProperty bodyProperty;
@@ -31,8 +27,8 @@ public class HullControlScript extends GameScript {
     @OwnerProperty(name = GravityProperty.GRAVITY_PROPERTY_NAME)
     private GravityProperty gravityProperty;
 
-    private GameComponent spinningWheel;
-    private GameComponent tracks;
+    @OwnerProperty(name = HullProperty.HULL_PROPERTY_NAME)
+    private HullProperty hullProperty;
 
     private AnimatedTextureProperty tracksAnimation;
     private ParticleEmitterProperty tracksParticles1;
@@ -40,21 +36,15 @@ public class HullControlScript extends GameScript {
 
     private Vector3f forwardVector = new Vector3f();
 
-    public HullControlScript(GameComponent owner, GameComponent spinningWheel, GameComponent tracks, float acceleration, float rotationSpeed, float maxSpeed, float brakingForce) {
+    public HullControlScript(GameComponent owner) {
         super(owner);
-        this.spinningWheel = spinningWheel;
-        this.tracks = tracks;
-        this.acceleration = acceleration;
-        this.rotationSpeed = rotationSpeed;
-        this.maxSpeed = maxSpeed;
-        this.brakingForce = brakingForce;
     }
 
     @Override
     protected void init() {
-        this.tracksAnimation = tracks.getProperty(AnimatedTextureProperty.ANIMATED_TEXTURE_PROPERTY_NAME);
-        this.tracksParticles1 = tracks.getChild(0).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
-        this.tracksParticles2 = tracks.getChild(1).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+        this.tracksAnimation = hullProperty.getTracks().getProperty(AnimatedTextureProperty.ANIMATED_TEXTURE_PROPERTY_NAME);
+        this.tracksParticles1 = hullProperty.getTracks().getChild(0).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
+        this.tracksParticles2 = hullProperty.getTracks().getChild(1).getProperty(ParticleEmitterProperty.PARTICLE_EMITTER_PROPERTY_NAME);
     }
 
     @Override
@@ -68,9 +58,9 @@ public class HullControlScript extends GameScript {
     private void move(int delta) {
         Input input = getContext().getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
-            linearMove(-acceleration * delta);
+            linearMove(-hullProperty.getAcceleration() * delta);
         else if (input.isKeyDown(KeyEvent.VK_S))
-            linearMove(acceleration * delta);
+            linearMove(hullProperty.getAcceleration() * delta);
         else {
             tracksParticles1.getSystem().setEmit(false);
             tracksParticles2.getSystem().setEmit(false);
@@ -78,9 +68,9 @@ public class HullControlScript extends GameScript {
         }
 
         if (input.isKeyDown(KeyEvent.VK_A))
-            anguarMove(0, rotationSpeed, 0);
+            anguarMove(0, hullProperty.getRotationSpeed(), 0);
         else if (input.isKeyDown(KeyEvent.VK_D))
-            anguarMove(0, -rotationSpeed, 0);
+            anguarMove(0, -hullProperty.getRotationSpeed(), 0);
         else anguarMove(0, 0, 0);
     }
 
@@ -89,8 +79,8 @@ public class HullControlScript extends GameScript {
     private void brake() {
         vel.set(bodyProperty.getVelocity());
         vel.negate().normalize();
-        vel.mul(brakingForce);
-        if (bodyProperty.getVelocity().length() > brakingForce / bodyProperty.getMass()) {
+        vel.mul(hullProperty.getBrakingForce());
+        if (bodyProperty.getVelocity().length() > hullProperty.getBrakingForce() / bodyProperty.getMass()) {
             bodyProperty.applyForce(vel);
         } else {
             bodyProperty.getVelocity().set(0);
@@ -105,12 +95,12 @@ public class HullControlScript extends GameScript {
         this.tracksAnimation.setDelta(tracksAnimation.getDelta() + delta);
         rotateWheel(delta);
         forwardVector.normalize().mul(speed);
-        if (bodyProperty.getVelocity().length() < maxSpeed)
+        if (bodyProperty.getVelocity().length() < hullProperty.getMaxSpeed())
             bodyProperty.applyForce(forwardVector);
     }
 
     private void rotateWheel(float delta) {
-        TransformProperty transform = spinningWheel.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        TransformProperty transform = hullProperty.getSpinningWheel().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
         transform.rotateX(delta * -2f);
     }
 

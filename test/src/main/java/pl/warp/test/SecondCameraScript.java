@@ -15,28 +15,26 @@ import java.awt.event.MouseEvent;
 public class SecondCameraScript extends GameScriptWithInput{
 
     @OwnerProperty(name = CameraProperty.CAMERA_PROPERTY_NAME)
-    private  CameraProperty secondCameraProperty;
+    private CameraProperty cameraProperty;
 
-    private CameraProperty mainCameraProperty;
     private RenderableMeshProperty trueGun;
-    private RenderableMeshProperty fakeGun;
-    private RenderableMeshProperty turret;
+
+    @OwnerProperty(name = SecondCameraProperty.SECOND_CAMERA_PROPERTY_NAME)
+    private SecondCameraProperty secondCameraProperty;
+
     private PerspectiveMatrix secondCameraPerspectiveMatrix;
 
     private int currState;
 
 
-    public SecondCameraScript(GameComponent owner, RenderableMeshProperty fakeGun, RenderableMeshProperty turret, CameraProperty mainCameraProperty) {
+    public SecondCameraScript(GameComponent owner) {
         super(owner);
-        this.mainCameraProperty = mainCameraProperty;
-        this.fakeGun = fakeGun;
-        this.turret = turret;
     }
 
     @Override
     protected void init() {
         trueGun = this.getOwner().getParent().getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME);
-        secondCameraPerspectiveMatrix = (PerspectiveMatrix) secondCameraProperty.getCamera().getProjectionMatrix();
+        secondCameraPerspectiveMatrix = (PerspectiveMatrix) cameraProperty.getCamera().getProjectionMatrix();
         currState = 0;
     }
 
@@ -47,17 +45,17 @@ public class SecondCameraScript extends GameScriptWithInput{
 
         switch (currState) {
             case 0:
-                turret.enable();
+                cameraProperty.enable();
                 trueGun.enable();
-                fakeGun.disable();
-                this.getContext().getGraphics().setMainViewCamera(mainCameraProperty.getCamera());
+                secondCameraProperty.getFakeGun().disable();
+                this.getContext().getGraphics().setMainViewCamera(secondCameraProperty.getMainCameraProperty().getCamera());
                 break;
             case 1:
-                turret.disable();
+                secondCameraProperty.getTurret().disable();
                 trueGun.disable();
-                fakeGun.enable();
+                secondCameraProperty.getFakeGun().enable();
                 secondCameraPerspectiveMatrix.setFov(70);
-                this.getContext().getGraphics().setMainViewCamera(secondCameraProperty.getCamera());
+                this.getContext().getGraphics().setMainViewCamera(cameraProperty.getCamera());
                 break;
             case 2:
                 secondCameraPerspectiveMatrix.setFov(30);

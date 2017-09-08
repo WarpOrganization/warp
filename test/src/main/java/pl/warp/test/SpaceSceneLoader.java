@@ -247,7 +247,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
             renderableMeshProperty.disable();
             //allyEngineParticles(controllableGoat);
 
-            new KabooomScript(controllableGoat, gasPlanet, 1000.0f);
+            controllableGoat.addProperty(new KaboomProperty( gasPlanet, 1000.0f));
+            new KabooomScript(controllableGoat);
 
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
@@ -341,7 +342,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             generateGOATS(scene);
             //spawnFrigates();
-            new GoatControlScript(controllableGoat, MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED);
+            controllableGoat.addProperty(new GoatProperty(MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED));
+            new GoatControlScript(controllableGoat);
         });
     }
 
@@ -464,7 +466,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
         int nOfGoats = 30;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
-            new KabooomScript(goat, gasPlanet, 1000.0f);
+            goat.addProperty(new KaboomProperty(gasPlanet, 1000.0f));
+            new KabooomScript(goat);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new RenderableMeshProperty(goatMesh));
             float x = 10 + random.nextFloat() * 200 - 100f;

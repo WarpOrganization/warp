@@ -266,7 +266,8 @@ public class GroundSceneLoader implements GameSceneLoader {
             bulletTexture = new Texture2D(bulletDecodedTexture.getWidth(), bulletDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bulletDecodedTexture.getData());
             playerTankBarrel.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
 
-            new TankGunScript(playerTankBarrel, TANK_COOLDOWN, TANK_GUN_OUT_SPEED, scene);
+            playerTankBarrel.addProperty(new TankGunProperty(TANK_COOLDOWN, TANK_GUN_OUT_SPEED, scene));
+            new TankGunScript(playerTankBarrel);
 
 
             createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
@@ -292,13 +293,17 @@ public class GroundSceneLoader implements GameSceneLoader {
             TransformProperty playerTransform = playerTankHull.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
             playerTransform.move(new Vector3f(90f, 0f, 0f));
 
-            new HullControlScript(playerTankHull, playerTankHull.getChild(3).getChild(0), playerTankHull.getChild(1), TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE);
-            new TurretControlScript(playerTankTurret, TANK_TURRET_ROT_SPEED);
-            new BarrelControlScript(playerTankBarrel, TANK_BARREL_ELEVATION_SPEED, TANK_BARREL_ELEVATION_MAX, TANK_BARREL_ELEVATION_MIN);
-            new SecondCameraScript(secondCameraComponent,
+            playerTankHull.addProperty(new HullProperty(playerTankHull.getChild(3).getChild(0), playerTankHull.getChild(1), TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE));
+            new HullControlScript(playerTankHull);
+            playerTankTurret.addProperty(new TurretProperty(TANK_TURRET_ROT_SPEED));
+            new TurretControlScript(playerTankTurret);
+            playerTankBarrel.addProperty(new BarrelControlProperty(TANK_BARREL_ELEVATION_SPEED, TANK_BARREL_ELEVATION_MAX, TANK_BARREL_ELEVATION_MIN));
+            new BarrelControlScript(playerTankBarrel);
+            secondCameraComponent.addProperty(new SecondCameraProperty(
                     playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
-                    mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME));
+                    mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME)));
+            new SecondCameraScript(secondCameraComponent);
 
             audioManager = AudioManager.INSTANCE;
         });
