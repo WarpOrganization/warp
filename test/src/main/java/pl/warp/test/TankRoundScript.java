@@ -34,7 +34,7 @@ public class TankRoundScript extends Script {
     @OwnerProperty(name = PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)
     private PhysicalBodyProperty body;
 
-    public TankRoundScript(GameComponent owner) {
+    public TankRoundScript(Component owner) {
         super(owner);
     }
 

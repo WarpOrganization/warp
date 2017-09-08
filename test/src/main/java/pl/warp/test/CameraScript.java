@@ -3,9 +3,9 @@ package pl.warp.test;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.common.transform.TransformProperty;
-import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.script.Script;
+import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
 /**
  * @author Jaca777
@@ -18,7 +18,7 @@ public class CameraScript extends Script {
     private PhysicalBodyProperty parentBody;
     private TransformProperty parentTransform;
 
-    public CameraScript(GameComponent owner) {
+    public CameraScript(Component owner) {
         super(owner);
     }
 

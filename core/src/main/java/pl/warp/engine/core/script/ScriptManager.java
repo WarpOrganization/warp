@@ -6,6 +6,8 @@ import pl.warp.engine.core.component.SimpleListener;
 import pl.warp.engine.core.context.annotation.Service;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.property.Property;
+import pl.warp.engine.core.script.metadata.ScriptMetadata;
+import pl.warp.engine.core.script.metadata.ScriptMetadataSupplier;
 import pl.warp.engine.core.script.updatescheduler.*;
 
 import java.lang.invoke.MethodHandle;
@@ -23,6 +25,22 @@ import java.lang.reflect.Modifier;
 public class ScriptManager extends ScriptRegistry {
 
     private static final Logger LOGGER = Logger.getLogger(ScriptManager.class);
+
+    private ScriptMetadataSupplier metadataSupplier;
+
+    public ScriptManager(ScriptMetadataSupplier metadataSupplier) {
+        this.metadataSupplier = metadataSupplier;
+    }
+
+    public void addScript(Component component, Class<? extends Script> scriptClass) {
+        try {
+            ScriptMetadata metadata = metadataSupplier.getMetadata(scriptClass);
+            Script instance = (Script) metadata.getBuilder().invoke(component);
+            addScript(instance);
+        } catch (Throwable throwable) {
+           throw new ScriptInitializationException(throwable);
+        }
+    }
 
     @Override
     public void initializeScript(Script script) {

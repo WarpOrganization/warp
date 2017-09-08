@@ -36,23 +36,32 @@ private[loader] class ServiceGraphBuilder {
         graph
     }
 
+
+
   //OPT we may eventually want to optimize this
   private def findDependency(
     service: ServiceInfo,
     services: List[ServiceInfo],
     dependencyInfo: DependencyInfo
   ): ServiceInfo = {
+    val qualified = findQualified(services, dependencyInfo)
+    if (qualified.size > 1)
+      throw AmbiguousServiceDependencyException(service, dependencyInfo, qualified)
+    else qualified.head
+  }
+
+  private def findQualified(
+    services: List[ServiceInfo],
+      dependencyInfo: DependencyInfo
+  ): List[ServiceInfo] = {
     val assignable = services
       .filter(s => dependencyInfo.t.isAssignableFrom(s.t))
-    val qualified = dependencyInfo.qualifier match {
+    dependencyInfo.qualifier match {
       case Some(qualifier) =>
         assignable.filter(_.qualifier.exists(_ == qualifier))
       case None =>
         assignable
     }
-    if (qualified.size > 1)
-      throw AmbiguousServiceDependencyException(service, dependencyInfo, qualified)
-    else qualified.head
   }
 
   @tailrec

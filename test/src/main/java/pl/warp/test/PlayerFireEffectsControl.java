@@ -1,5 +1,6 @@
 package pl.warp.test;
 
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.game.script.GameScriptWithInput;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
@@ -29,7 +30,7 @@ public class PlayerFireEffectsControl extends GameScriptWithInput {
 
     private int activeBarrel;
 
-    public PlayerFireEffectsControl(GameComponent owner) {
+    public PlayerFireEffectsControl(Component owner) {
         super(owner);
     }
 

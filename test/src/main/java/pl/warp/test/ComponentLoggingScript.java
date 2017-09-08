@@ -1,14 +1,14 @@
 package pl.warp.test;
 
+import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentDeathEvent;
 import pl.warp.engine.core.property.NameProperty;
-import pl.warp.engine.common.transform.TransformProperty;
-import pl.warp.engine.physics.event.CollisionEvent;
-import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.core.script.EventHandler;
-import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.updatescheduler.DelayScheduling;
+import pl.warp.engine.physics.event.CollisionEvent;
 
 /**
  * @author Jaca777
@@ -26,7 +26,7 @@ public class ComponentLoggingScript extends Script {
     @OwnerProperty(name = NameProperty.NAME_PROPERTY_NAME)
     private NameProperty name;
 
-    public ComponentLoggingScript(GameComponent owner) {
+    public ComponentLoggingScript(Component owner) {
         super(owner);
     }
 

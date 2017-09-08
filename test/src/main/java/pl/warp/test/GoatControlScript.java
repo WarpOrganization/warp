@@ -4,10 +4,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.script.OwnerProperty;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.game.GameContext;
-import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.input.Input;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
@@ -39,7 +39,7 @@ public class GoatControlScript extends Script {
     private Vector3f rightVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
 
-    public GoatControlScript(GameComponent owner) {
+    public GoatControlScript(Component owner) {
         super(owner);
     }
 

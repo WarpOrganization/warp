@@ -267,7 +267,7 @@ public class GroundSceneLoader implements GameSceneLoader {
             playerTankBarrel.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
 
             playerTankBarrel.addProperty(new TankGunProperty(TANK_COOLDOWN, TANK_GUN_OUT_SPEED, scene));
-            new TankGunScript(playerTankBarrel);
+            playerTankBarrel.addScript(TankGunScript.class);
 
 
             createTankModel("tankModel/DesertTexture.png", playerTankHull, playerTankTurret, playerTankBarrel);
@@ -294,16 +294,16 @@ public class GroundSceneLoader implements GameSceneLoader {
             playerTransform.move(new Vector3f(90f, 0f, 0f));
 
             playerTankHull.addProperty(new HullProperty(playerTankHull.getChild(3).getChild(0), playerTankHull.getChild(1), TANK_HULL_ACC_SPEED, TANK_HULL_ROT_SPEED, TANK_HULL_MAX_SPEED, TANK_HULL_BRAKING_FORCE));
-            new HullControlScript(playerTankHull);
+            playerTankHull.addScript(HullControlScript.class);
             playerTankTurret.addProperty(new TurretProperty(TANK_TURRET_ROT_SPEED));
-            new TurretControlScript(playerTankTurret);
+           playerTankTurret.addScript(TurretControlScript.class);
             playerTankBarrel.addProperty(new BarrelControlProperty(TANK_BARREL_ELEVATION_SPEED, TANK_BARREL_ELEVATION_MAX, TANK_BARREL_ELEVATION_MIN));
-            new BarrelControlScript(playerTankBarrel);
+            playerTankBarrel.addScript(BarrelControlScript.class);
             secondCameraComponent.addProperty(new SecondCameraProperty(
                     playerTankBarrelFake.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     playerTankTurret.getProperty(RenderableMeshProperty.MESH_PROPERTY_NAME),
                     mainCameraComponent.getProperty(CameraProperty.CAMERA_PROPERTY_NAME)));
-            new SecondCameraScript(secondCameraComponent);
+            secondCameraComponent.addScript(SecondCameraScript.class);
 
             audioManager = AudioManager.INSTANCE;
         });

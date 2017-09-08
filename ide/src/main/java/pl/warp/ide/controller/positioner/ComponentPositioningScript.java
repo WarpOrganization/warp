@@ -4,7 +4,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
-import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.game.script.GameInputHandler;
 import pl.warp.engine.game.script.GameScriptWithInput;
 
@@ -22,7 +22,7 @@ public class ComponentPositioningScript extends GameScriptWithInput {
     private static final float ROTATION_SPEED = 0.003f;
     private Runnable callback;
 
-    public ComponentPositioningScript(GameComponent owner, Runnable positionedCallback) {
+    public ComponentPositioningScript(Component owner, Runnable positionedCallback) {
         super(owner);
         this.callback = positionedCallback;
     }

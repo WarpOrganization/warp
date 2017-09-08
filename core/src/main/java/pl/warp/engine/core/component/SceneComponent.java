@@ -280,6 +280,6 @@ public abstract class SceneComponent implements Component {
 
     @Override
     public void addScript(Class<? extends Script> script) {
-        //context.getScriptRegistry().addScript(script);
+        context.getScriptManager().addScript(this, script);
     }
 }

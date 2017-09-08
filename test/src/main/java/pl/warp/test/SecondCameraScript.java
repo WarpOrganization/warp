@@ -1,13 +1,12 @@
 package pl.warp.test;
 
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.script.OwnerProperty;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.script.GameScriptWithInput;
 import pl.warp.engine.graphics.camera.CameraProperty;
 import pl.warp.engine.graphics.math.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
-import pl.warp.engine.game.scene.GameComponent;
-
-import pl.warp.engine.core.script.OwnerProperty;
 
 import java.awt.event.MouseEvent;
 
@@ -29,7 +28,7 @@ public class SecondCameraScript extends GameScriptWithInput{
     private int currState;
 
 
-    public SecondCameraScript(GameComponent owner) {
+    public SecondCameraScript(Component owner) {
         super(owner);
     }
 

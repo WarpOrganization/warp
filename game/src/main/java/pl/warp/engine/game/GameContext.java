@@ -21,7 +21,7 @@ public class GameContext extends EngineContext {
     private Input input;
 
     public GameContext() {
-        this.setScriptRegistry(getContext().findOne(ScriptManager.class).get());
+        this.setScriptManager(getContext().findOne(ScriptManager.class).get());
     }
 
     public CameraRayTester getRayTester() {

@@ -2,10 +2,9 @@ package pl.warp.test;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.Property;
-import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.core.script.EventHandler;
-import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
 import pl.warp.engine.physics.event.CollisionEvent;
 
 /**
@@ -20,7 +19,7 @@ public class BulletScript extends Script {
     @OwnerProperty(name = BulletProperty.BULLET_PROPERTY_NAME)
     private BulletProperty bulletProperty;
 
-    public BulletScript(GameComponent owner) {
+    public BulletScript(Component owner) {
         super(owner);
     }
 

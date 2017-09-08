@@ -4,10 +4,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.script.OwnerProperty;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.game.GameContext;
-import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitterProperty;
 import pl.warp.engine.input.Input;
@@ -37,7 +37,7 @@ public class HullControlScript extends Script {
 
     private Vector3f forwardVector = new Vector3f();
 
-    public HullControlScript(GameComponent owner) {
+    public HullControlScript(Component owner) {
         super(owner);
     }
 

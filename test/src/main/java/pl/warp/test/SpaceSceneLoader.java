@@ -248,7 +248,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             //allyEngineParticles(controllableGoat);
 
             controllableGoat.addProperty(new KaboomProperty( gasPlanet, 1000.0f));
-            new KabooomScript(controllableGoat);
+            controllableGoat.addScript(KabooomScript.class);
 
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
@@ -263,7 +263,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ImageData bullet2decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet_2.png"), PNGDecoder.Format.RGBA);
             bulletTexture2 = new Texture2D(bullet2decodedTexture.getWidth(), bullet2decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bullet2decodedTexture.getData());
 
-            new GunScript(controllableGoat);
+            controllableGoat.addScript(GunScript.class);
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -343,7 +343,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             generateGOATS(scene);
             //spawnFrigates();
             controllableGoat.addProperty(new GoatProperty(MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED));
-            new GoatControlScript(controllableGoat);
+            controllableGoat.addScript(GoatControlScript.class);
         });
     }
 
@@ -467,7 +467,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new KaboomProperty(gasPlanet, 1000.0f));
-            new KabooomScript(goat);
+            goat.addScript(KabooomScript.class);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new RenderableMeshProperty(goatMesh));
             float x = 10 + random.nextFloat() * 200 - 100f;
@@ -504,7 +504,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             }
             goat.addProperty(new DroneMemoryProperty());
             goat.addProperty(new AIProperty(builder.build(goat)));
-            new GunScript(goat);
+            goat.addScript(GunScript.class);
         }
     }
 

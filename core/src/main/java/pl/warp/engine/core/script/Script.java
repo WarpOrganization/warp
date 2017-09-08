@@ -18,7 +18,6 @@ public abstract class Script {
     public Script(Component owner) {
         this.owner = owner;
         this.context = owner.getContext();
-        context.getScriptRegistry().addScript(this);
     }
 
     public Component getOwner() {
@@ -42,7 +41,7 @@ public abstract class Script {
     public abstract void onUpdate(int delta);
 
     public void stop(){
-        getContext().getScriptRegistry().removeScript(this);
+        getContext().getScriptManager().removeScript(this);
     }
 
     public void setScheduler(UpdateScheduler scheduler) {

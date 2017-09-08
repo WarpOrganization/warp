@@ -4,10 +4,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.game.script.GameScriptWithInput;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.script.GameScriptWithInput;
 
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.MouseEvent.BUTTON1;
@@ -24,7 +24,7 @@ public class FreeCameraScript extends GameScriptWithInput {
     private float cameraSpeed = CAMERA_SPEED;
     private Camera camera;
 
-    public FreeCameraScript(GameComponent owner) {
+    public FreeCameraScript(Component owner) {
         super(owner);
         this.camera = owner.<CameraProperty>getProperty(CameraProperty.CAMERA_PROPERTY_NAME).getCamera();
     }

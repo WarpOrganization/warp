@@ -69,7 +69,7 @@ public class Test {
         EngineThread scriptsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         graphicsThread.scheduleOnce(() -> {
             contextBuilder.setInput(input);
-            scriptsThread.scheduleTask(new ScriptTask(context.getScriptRegistry()));
+            scriptsThread.scheduleTask(new ScriptTask(context.getScriptManager()));
             GLFWWindowManager windowManager = graphics.getWindowManager();
             scriptsThread.scheduleTask(new GLFWInputTask(input, windowManager));
             scriptsThread.start(); //has to start after the window is created

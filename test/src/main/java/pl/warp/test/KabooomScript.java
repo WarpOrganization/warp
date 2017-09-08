@@ -38,7 +38,7 @@ public class KabooomScript extends Script {
     @OwnerProperty(name = KaboomProperty.KABOOM_PROPERTY_NAME)
     private KaboomProperty kaboomProperty;
 
-    public KabooomScript(GameComponent owner) {
+    public KabooomScript(Component owner) {
         super(owner);
     }
 

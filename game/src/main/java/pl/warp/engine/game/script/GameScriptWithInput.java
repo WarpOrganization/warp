@@ -1,8 +1,8 @@
 package pl.warp.engine.game.script;
 
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.game.GameContext;
-import pl.warp.engine.game.scene.GameComponent;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public abstract class GameScriptWithInput extends Script {
 
     private GameInputHandler inputHandler = null;
 
-    public GameScriptWithInput(GameComponent owner) {
+    public GameScriptWithInput(Component owner) {
         super(owner);
     }
 

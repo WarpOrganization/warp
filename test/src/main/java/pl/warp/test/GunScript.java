@@ -44,7 +44,7 @@ public class GunScript extends Script {
 
     private Mesh bulletMesh;
 
-    public GunScript(GameComponent owner) {
+    public GunScript(Component owner) {
         super(owner);
         this.owner = owner;
     }
@@ -123,7 +123,7 @@ public class GunScript extends Script {
             bullet.addProperty(physicalBodyProperty);
             bullet.addProperty(new ColliderProperty(new PointCollider(bullet, bulletTranslation2.set(bulletTranslation.x, bulletTranslation.y, bulletTranslation.z))));
             root.addChild(bullet);
-            new BulletScript(bullet);
+            bullet.addScript(BulletScript.class);
         }
     }
 }

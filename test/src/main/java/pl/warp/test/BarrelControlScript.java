@@ -2,13 +2,13 @@ package pl.warp.test;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.warp.engine.game.GameContext;
-import pl.warp.engine.input.Input;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.game.GameContext;
+import pl.warp.engine.input.Input;
 
 import java.awt.event.KeyEvent;
 
@@ -27,7 +27,7 @@ public class BarrelControlScript extends Script {
     @OwnerProperty(name = BarrelControlProperty.BARREL_CONTROL_PROPERTY)
     private BarrelControlProperty barrelControlProperty;
 
-    public BarrelControlScript(GameComponent owner) {
+    public BarrelControlScript(Component owner) {
         super(owner);
     }
 

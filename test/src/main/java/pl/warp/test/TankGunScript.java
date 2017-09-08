@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameSceneComponent;
@@ -51,7 +52,7 @@ public class TankGunScript extends Script {
     private ParticleSystem smokeSystem;
     private ParticleSystem fireSystem;
 
-    public TankGunScript(GameComponent owner) {
+    public TankGunScript(Component owner) {
         super(owner);
     }
 
@@ -102,7 +103,7 @@ public class TankGunScript extends Script {
             round.addProperty(new RenderableMeshProperty(mesh));
             round.addProperty(new GraphicsMaterialProperty(material));
             tankGunProperty.getRoot().addChild(round);
-            new TankRoundScript(round);
+            round.addScript(TankRoundScript.class);
             fireSystem.setEmit(true);
             smokeSystem.setEmit(true);
             es.schedule(() -> {
