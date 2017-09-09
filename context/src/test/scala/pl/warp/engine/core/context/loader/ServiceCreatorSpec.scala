@@ -67,7 +67,7 @@ class ServiceCreatorSpec extends WordSpecLike with Matchers with MockFactory {
 
   private def toServiceInfo[T: ClassTag]: ServiceInfo = {
     val serviceLoader = new ServiceResolver(mock[ClassResolver])
-    serviceLoader.toServiceInfo(implicitly[ClassTag[T]].runtimeClass)
+    serviceLoader.toDeclaredServiceInfo(implicitly[ClassTag[T]].runtimeClass)
   }
 
 }

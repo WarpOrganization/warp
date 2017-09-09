@@ -5,14 +5,14 @@ import java.lang.reflect.Constructor
 
 
 case class ServiceInfo(
-  t: Class[_],
+  `type`: Class[_],
   qualifier: Option[String],
   builder: MethodHandle,
   dependencies: List[DependencyInfo]
 ) {
   override def toString: String = {
-    t.getName + qualifier.map(" [" + _ + "]").getOrElse("")
+    `type`.getName + qualifier.map(" [" + _ + "]").getOrElse("")
   }
 }
 
-case class DependencyInfo(t: Class[_], qualifier: Option[String])
+case class DependencyInfo(`type`: Class[_], qualifier: Option[String])

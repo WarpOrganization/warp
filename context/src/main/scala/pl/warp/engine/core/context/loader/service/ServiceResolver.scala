@@ -14,10 +14,10 @@ private[loader] class ServiceResolver(classResolver: ClassResolver) {
 
   def resolveServiceInfo(): Set[ServiceInfo] = {
     val classes = classResolver.resolveServiceClasses().par
-    classes.map(toServiceInfo).seq
+    classes.map(toDeclaredServiceInfo).seq
   }
 
-  def toServiceInfo(serviceClass: Class[_]): ServiceInfo = {
+  def toDeclaredServiceInfo(serviceClass: Class[_]): ServiceInfo = {
     val builderConstructor = findBuilderConstructor(serviceClass)
     val builderHandle = toMethodHandle(builderConstructor)
     val dependencies = getDependencies(builderConstructor)

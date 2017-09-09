@@ -1,12 +1,11 @@
 package pl.warp.engine.core.context.loader
 
-
-
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpecLike}
 import pl.warp.engine.core.context.annotation.{Qualified, Service, ServiceBuilder}
+import pl.warp.engine.core.context.loader.ServiceResolverSpec.Test
 import pl.warp.engine.core.context.loader.service.{ClassResolver, DependencyInfo, ServiceResolver}
-import pl.warp.engine.core.context.loader.ServiceResolverSpec._
+import ServiceResolverSpec._
 /**
   * @author Jaca777
   *         Created 2017-09-04 at 10
@@ -24,7 +23,7 @@ class ServiceResolverSpec extends WordSpecLike with Matchers with MockFactory {
 
       //then
       services.size should be(1)
-      services.head.t should be(classOf[Test])
+      services.head.`type` should be(classOf[Test])
       services.head.qualifier should be(Some("test"))
     }
 

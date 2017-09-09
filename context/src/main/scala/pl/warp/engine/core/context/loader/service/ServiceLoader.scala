@@ -9,13 +9,13 @@ import pl.warp.engine.core.context.graph.DirectedAcyclicGraph
   */
 private[loader] class ServiceLoader extends LazyLogging  {
 
-  def loadServices(): List[(ServiceInfo, Object)] = {
+  def loadServices(preloadedServices: List[(ServiceInfo, Object)]): List[(ServiceInfo, Object)] = {
     logger.info("Loading application services...")
-    val servicesInfo = resolveServicesInfo()
+    val servicesInfo = resolveServicesInfo() ++ preloadedServices.map(_._1)
     logger.info("Creating service graph...")
     val serviceGraph = createGraph(servicesInfo)
     logger.info("Instantiating services...")
-    createServices(serviceGraph).toList
+    createServices(serviceGraph, preloadedServices).toList
   }
 
   private def resolveServicesInfo(): Set[ServiceInfo] = {
@@ -23,12 +23,17 @@ private[loader] class ServiceLoader extends LazyLogging  {
     serviceResolver.resolveServiceInfo()
   }
 
-  private def createGraph(servicesInfo: Set[ServiceInfo]): DirectedAcyclicGraph[ServiceInfo] = {
-    val graphBuilder = new ServiceGraphBuilder
+  private def createGraph(
+    servicesInfo: Set[ServiceInfo],
+  ): DirectedAcyclicGraph[ServiceInfo] = {
+    val graphBuilder = new ServiceGraphBuilder()
     graphBuilder.build(servicesInfo.toList)
   }
 
-  private def createServices(serviceGraph: DirectedAcyclicGraph[ServiceInfo]): Map[ServiceInfo, Object] = {
+  private def createServices(
+    serviceGraph: DirectedAcyclicGraph[ServiceInfo],
+    preloadedServices: List[(ServiceInfo, Object)]
+  ): Map[ServiceInfo, Object] = {
     serviceGraph
       .accept(ServiceCreator())
       .accumulator

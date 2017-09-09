@@ -5,13 +5,13 @@ import java.lang.invoke.MethodHandle
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.{Matchers, WordSpecLike}
-import pl.warp.engine.core.context.graph.{CycleFoundException, DirectedAcyclicGraph}
-import pl.warp.engine.core.context.loader.ServiceGraphBuilderSpec._
-import pl.warp.engine.core.context.loader.service.ServiceGraphBuilder.AmbiguousServiceDependencyException
+import pl.warp.engine.core.context.loader.ServiceGraphBuilderSpec.{GraphMatchers, ServiceBuilders}
 import pl.warp.engine.core.context.loader.service.{DependencyInfo, ServiceGraphBuilder, ServiceInfo}
 
 import scala.reflect.ClassTag
-
+import ServiceGraphBuilderSpec._
+import pl.warp.engine.core.context.graph.{CycleFoundException, DirectedAcyclicGraph}
+import pl.warp.engine.core.context.loader.service.ServiceGraphBuilder.AmbiguousServiceDependencyException
 /**
   * @author Jaca777
   *         Created 2017-09-04 at 10
@@ -49,7 +49,7 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
       //then
       val rootNodes = graph.rootNodes
       rootNodes.size should be(1)
-      rootNodes.map(_.value).head.t should be(classOf[C])
+      rootNodes.map(_.value).head.`type` should be(classOf[C])
       graph should containDependency[B -> A]
       graph should containDependency[C -> A]
     }
@@ -99,10 +99,7 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
         graphBuilder.build(services)
       }
     }
-
-
   }
-
 }
 
 object ServiceGraphBuilderSpec {
@@ -120,9 +117,9 @@ object ServiceGraphBuilderSpec {
     class FileEndsWithExtensionMatcher(from: Class[_], to: Class[_]) extends Matcher[DirectedAcyclicGraph[ServiceInfo]] {
 
       def apply(graph: DirectedAcyclicGraph[ServiceInfo]) = {
-        val node = graph.resolveNode(_.t == from)
+        val node = graph.resolveNode(_.`type` == from)
         val matches = node match {
-          case Some(b) => b.leaves.exists(_.value.t == to)
+          case Some(b) => b.leaves.exists(_.value.`type` == to)
           case None => false
         }
         MatchResult(

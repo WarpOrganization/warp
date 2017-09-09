@@ -1,7 +1,7 @@
 package pl.warp.engine.core.context.loader
 
 import com.typesafe.scalalogging.LazyLogging
-import pl.warp.engine.core.context.loader.service.ServiceLoader
+import pl.warp.engine.core.context.loader.service.{ServiceInfo, ServiceLoader}
 
 /**
   * @author Jaca777
@@ -12,8 +12,8 @@ private[core] class ContextLoader extends LazyLogging  {
     try {
       logger.info("Loading the application context...")
       val serviceLoader = new ServiceLoader
-      val services = serviceLoader.loadServices()
-      logger.info("Application context loaded")
+      val services = serviceLoader.loadServices(List.empty)
+      logger.info(s"Application context loaded (Total services: ${services.length})")
       new JavaContextHolder(services)
     } catch {
       case e: RuntimeException =>

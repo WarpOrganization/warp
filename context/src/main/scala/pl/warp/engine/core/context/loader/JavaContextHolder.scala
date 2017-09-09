@@ -29,7 +29,7 @@ private[core] class JavaContextHolder(services: List[(ServiceInfo, Object)]) {
 
   private def findQualified[T](t: Class[T], qualifier: jutil.Optional[String]): List[T] = {
     val assignable = services.filter {
-      case (info, _) => t.isAssignableFrom(info.t)
+      case (info, _) => t.isAssignableFrom(info.`type`)
     }
     qualify(qualifier, assignable)
   }

@@ -1,5 +1,7 @@
 package pl.warp.engine.core.context.loader.service
 
+import java.lang.invoke.MethodHandles
+
 import pl.warp.engine.core.context.graph.DirectedAcyclicGraph
 import pl.warp.engine.core.context.loader.service.ServiceGraphBuilder._
 
@@ -9,7 +11,7 @@ import scala.annotation.tailrec
   * @author Jaca777
   *         Created 2017-08-29 at 22
   */
-private[loader] class ServiceGraphBuilder {
+private[loader] class ServiceGraphBuilder() {
 
   def build(services: List[ServiceInfo]): DirectedAcyclicGraph[ServiceInfo] = {
     val edges = for {
@@ -37,7 +39,6 @@ private[loader] class ServiceGraphBuilder {
     }
 
 
-
   //OPT we may eventually want to optimize this
   private def findDependency(
     service: ServiceInfo,
@@ -55,7 +56,7 @@ private[loader] class ServiceGraphBuilder {
       dependencyInfo: DependencyInfo
   ): List[ServiceInfo] = {
     val assignable = services
-      .filter(s => dependencyInfo.t.isAssignableFrom(s.t))
+      .filter(s => dependencyInfo.`type`.isAssignableFrom(s.`type`))
     dependencyInfo.qualifier match {
       case Some(qualifier) =>
         assignable.filter(_.qualifier.exists(_ == qualifier))
@@ -82,7 +83,7 @@ object ServiceGraphBuilder {
     dependencyInfo: DependencyInfo,
     assignable: List[ServiceInfo]
   ) extends RuntimeException({
-    val serviceMsg = s"Unable to create instance of ${service.t.getName}."
+    val serviceMsg = s"Unable to create instance of ${service.`type`.getName}."
     val causeMsg = dependencyInfo match {
       case DependencyInfo(t, Some(q)) =>
         s"Multiple services qualified with $q and assignable to ${t.getName} found at: "
@@ -90,7 +91,7 @@ object ServiceGraphBuilder {
         s"Multiple services assignable to ${t.getName} found at: "
     }
     val services = assignable
-      .map(_.t.getSimpleName)
+      .map(_.`type`.getSimpleName)
       .mkString(", ")
     serviceMsg + causeMsg + services
   })
