@@ -12,9 +12,9 @@ public class ScriptTask extends EngineTask {
 
     public static final Logger SCRIPT_TASK_LOGGER = Logger.getLogger(ScriptTask.class);
 
-    private ScriptRegistry manager;
+    private ScriptManager manager;
 
-    public ScriptTask(ScriptRegistry manager) {
+    public ScriptTask(ScriptManager manager) {
         this.manager = manager;
     }
 

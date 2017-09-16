@@ -24,7 +24,7 @@ public class ScriptInitializersSupplier {
         this.scriptInitializers = Lists.newArrayList(schedulerInitializer, ownerPropertyInitializer, eventHandlerInitializer);
     }
 
-    public Consumer<? extends Script>[] getScriptInitializers(Class<? extends Script> aClass) {
+    public Consumer<Script>[] getScriptInitializers(Class<? extends Script> aClass) {
        return scriptInitializers
                 .stream()
                 .map(i -> i.getInitializer(aClass))

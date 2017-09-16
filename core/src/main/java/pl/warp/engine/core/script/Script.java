@@ -2,6 +2,7 @@ package pl.warp.engine.core.script;
 
 import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.script.blueprint.ScriptBlueprint;
 import pl.warp.engine.core.script.updatescheduler.UpdateScheduler;
 
 /**
@@ -14,6 +15,7 @@ public abstract class Script {
     private EngineContext context = null;
     private boolean initialized;
     private UpdateScheduler scheduler;
+    private ScriptBlueprint blueprint;
 
     public Script(Component owner) {
         this.owner = owner;
@@ -54,5 +56,13 @@ public abstract class Script {
 
     protected void log(String msg){
         System.out.println(msg); //TODO make a logger
+    }
+
+    protected ScriptBlueprint getBlueprint() {
+        return blueprint;
+    }
+
+    void setBlueprint(ScriptBlueprint blueprint) {
+        this.blueprint = blueprint;
     }
 }

@@ -463,7 +463,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         ArrayList<Component> team2 = new ArrayList<>();
         team1.add(controllableGoat);
         //36n6controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
-        int nOfGoats = 30;
+        int nOfGoats = 300;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new KaboomProperty(gasPlanet, 1000.0f));

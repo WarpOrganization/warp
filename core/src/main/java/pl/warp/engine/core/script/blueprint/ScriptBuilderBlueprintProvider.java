@@ -1,4 +1,4 @@
-package pl.warp.engine.core.script.metadata;
+package pl.warp.engine.core.script.blueprint;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.script.Script;
@@ -12,14 +12,14 @@ import java.lang.reflect.Constructor;
  * @author Jaca777
  * Created 2017-09-08 at 23
  */
-public class ScriptBuilderHandleProvider {
+public class ScriptBuilderBlueprintProvider {
     public MethodHandle getBuilderHandle(Class<? extends Script> aClass) {
         try {
             Constructor<? extends Script> builderConstructor = getBuilderConstructor(aClass);
             MethodHandles.Lookup lookup = MethodHandles.lookup();
             return lookup.unreflectConstructor(builderConstructor);
         } catch (ReflectiveOperationException e) {
-            throw new ScriptInitializationException(e);
+            throw new ScriptInitializationException(aClass, e);
         }
     }
 

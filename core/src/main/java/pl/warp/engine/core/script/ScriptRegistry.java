@@ -1,53 +1,33 @@
 package pl.warp.engine.core.script;
 
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.component.ComponentDeathEvent;
-import pl.warp.engine.core.component.SimpleListener;
+import pl.warp.engine.core.context.annotation.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @author Jaca777
- * Created 2016-06-26 at 21
+ * Created 2017-09-17 at 01
  */
+
+@Service
 public class ScriptRegistry {
 
     private Set<Script> scripts = new HashSet<>();
     private Set<Script> scriptsToAdd = new HashSet<>();
     private Set<Script> scriptsToRemove = new HashSet<>();
 
-    public synchronized void addScript(Script script) {
+    public void addScript(Script script) {
         scriptsToAdd.add(script);
-        createDeathListener(script);
-
-    }
-
-    private void createDeathListener(Script script) {
-        SimpleListener.createListener(
-                script.getOwner(),
-                ComponentDeathEvent.COMPONENT_DEATH_EVENT_NAME,
-                (e) -> removeScript(script)
-        );
-    }
-
-    public synchronized void removeScript(Script script) {
-        scriptsToRemove.add(script);
-    }
-
-    public void initializeScript(Script script) {
-        try {
-            script.onInit();
-            script.setInitialized(true);
-        } catch (Exception e) {
-            script.setInitialized(false);
-            removeScript(script);
-            throw new ScriptInitializationException(e);
-        }
     }
 
     public Set<Script> getScripts() {
         return scripts;
+    }
+
+    public synchronized void removeScript(Script script) {
+        scriptsToRemove.add(script);
     }
 
     public synchronized void update() {
@@ -62,6 +42,5 @@ public class ScriptRegistry {
             if (script.getOwner() == component)
                 removeScript(script);
         }
-
     }
 }

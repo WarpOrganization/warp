@@ -2,6 +2,8 @@ package pl.warp.engine.core.execution.task;
 
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+
 /**
  * @author Jaca777
  *         Created 2016-07-27 at 14
@@ -12,7 +14,7 @@ public class UPSCounterTask extends EngineTask {
     private static final Logger logger = Logger.getLogger(UPSCounterTask.class);
 
     private int pointer = 0;
-    private float[] deltas;
+    private int[] deltas;
     private int deltaValuesToAverage;
     private int sum;
     private float upsAverage;
@@ -23,7 +25,7 @@ public class UPSCounterTask extends EngineTask {
 
     public UPSCounterTask(int sampleSize, boolean log) {
         this.deltaValuesToAverage = sampleSize;
-        this.deltas = new float[sampleSize];
+        this.deltas = new int[sampleSize];
         this.log = log;
     }
 
@@ -40,7 +42,7 @@ public class UPSCounterTask extends EngineTask {
     @Override
     public void update(int delta) {
         applyDelta(delta);
-        if (log) log(delta);
+        if (log) logPretty(delta);
     }
 
 
@@ -67,14 +69,29 @@ public class UPSCounterTask extends EngineTask {
             greatestDelta = delta;
     }
 
-    private void log(long delta) {
+    private void logPretty(long delta) {
         timeSinceLastLog += delta;
         if (timeSinceLastLog > LOGGING_INTERVAL) {
-            logger.debug("Current sample ups average: " + upsAverage);
-            logger.debug("Greatest delta in a current sample: " + greatestDelta);
+            logger.debug("Current sample ups average:       " + upsAverage);
+            float greatestDeltaUps = 1000/greatestDelta;
+            logger.debug("Greatest delta in current sample: "+ greatestDelta + " (makes it " + greatestDeltaUps + " ups)");
+            float p90 = getPercentileDelta(0.9f), p90ups = 1000/p90;
+            logger.debug("p90 delta in current sample:      " + p90 + " (makes it " + p90ups + " ups)");
             timeSinceLastLog -= LOGGING_INTERVAL;
         }
     }
+
+    //No need to make it faster atm. (might be eventually considered OPT)
+    public float getPercentileDelta(float percentile) {
+        if(percentile < 0.0 || percentile > 1.0)
+            throw new IllegalArgumentException("Percentile value not in <0.0, 1.0> bounds.");
+        int[] sortedDeltas = Arrays.stream(deltas)
+                .sorted()
+                .toArray();
+        int p90Index = (int) (sortedDeltas.length * percentile);
+        return sortedDeltas[p90Index];
+    }
+
 
     public float getUpsAverage() {
         return upsAverage;

@@ -1,4 +1,4 @@
-package pl.warp.engine.core.script.metadata;
+package pl.warp.engine.core.script.blueprint;
 
 import pl.warp.engine.core.script.Script;
 
@@ -9,11 +9,11 @@ import java.util.function.Consumer;
  * @author Jaca777
  * Created 2017-09-08 at 22
  */
-public class ScriptMetadata {
+public class ScriptBlueprint {
     private MethodHandle builder;
-    private Consumer<? extends Script>[] initializers;
+    private Consumer<Script>[] initializers;
 
-    public ScriptMetadata(MethodHandle builder, Consumer<? extends Script>[] initializers) {
+    public ScriptBlueprint(MethodHandle builder, Consumer<Script>[] initializers) {
         this.builder = builder;
         this.initializers = initializers;
     }
@@ -22,7 +22,7 @@ public class ScriptMetadata {
         return builder;
     }
 
-    public Consumer<? extends Script>[] getInitializers() {
+    public Consumer<Script>[] getInitializers() {
         return initializers;
     }
 }

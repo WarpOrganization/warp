@@ -36,7 +36,7 @@ public class EngineContext {
 
     private Context context;
     private Scene scene;
-    private ScriptManager scriptRegistry;
+    private ScriptManager scriptManager;
     private EventDispatcher eventDispatcher;
 
     public EngineContext() {
@@ -52,11 +52,11 @@ public class EngineContext {
     }
 
     public ScriptManager getScriptManager() {
-        return scriptRegistry;
+        return scriptManager;
     }
 
-    protected void setScriptManager(ScriptManager scriptRegistry) {
-        this.scriptRegistry = scriptRegistry;
+    protected void setScriptManager(ScriptManager scriptManager) {
+        this.scriptManager = scriptManager;
     }
 
 
