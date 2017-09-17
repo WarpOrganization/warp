@@ -1,7 +1,7 @@
 package pl.warp.test;
 
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.script.GameScriptWithInput;
 import pl.warp.engine.graphics.camera.CameraProperty;

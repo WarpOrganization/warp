@@ -7,7 +7,7 @@ import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.mesh.RenderableMeshProperty;
 import pl.warp.engine.graphics.particles.ParticleEmitter;
@@ -20,7 +20,7 @@ import pl.warp.engine.graphics.particles.dot.ParticleStage;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.core.script.EventHandler;
+import pl.warp.engine.core.script.annotation.EventHandler;
 import pl.warp.engine.core.script.Script;
 
 import java.util.concurrent.Executors;

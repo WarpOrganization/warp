@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.graphics.animation.AnimatedTextureProperty;

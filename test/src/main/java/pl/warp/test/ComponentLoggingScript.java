@@ -4,10 +4,10 @@ import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentDeathEvent;
 import pl.warp.engine.core.property.NameProperty;
-import pl.warp.engine.core.script.EventHandler;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.EventHandler;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
-import pl.warp.engine.core.script.updatescheduler.DelayScheduling;
+import pl.warp.engine.core.script.annotation.DelayScheduling;
 import pl.warp.engine.physics.event.CollisionEvent;
 
 /**

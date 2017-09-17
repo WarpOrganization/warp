@@ -11,7 +11,7 @@ import pl.warp.engine.game.GameContext;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameSceneComponent;
 import pl.warp.engine.core.script.Script;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;

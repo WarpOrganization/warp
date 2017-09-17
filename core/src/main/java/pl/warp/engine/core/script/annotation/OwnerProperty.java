@@ -1,4 +1,4 @@
-package pl.warp.engine.core.script;
+package pl.warp.engine.core.script.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * @author Jaca777
- *         Created 2017-01-28 at 15
+ *         Created 2017-02-07 at 12
  */
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface EventHandler {
-    String eventName();
+@Target(ElementType.FIELD)
+public @interface OwnerProperty {
+    String name();
 }

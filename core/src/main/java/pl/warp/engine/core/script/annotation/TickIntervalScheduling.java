@@ -1,4 +1,4 @@
-package pl.warp.engine.core.script.updatescheduler;
+package pl.warp.engine.core.script.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface DelayScheduling {
-    int delayInMillis();
+public @interface TickIntervalScheduling {
+    int interval();
 }

@@ -3,10 +3,16 @@ package pl.warp.test;
 import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
 import pl.warp.engine.audio.AudioManager;
-import pl.warp.engine.core.component.Component;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.ScriptManager;
+import pl.warp.engine.core.script.annotation.ContextService;
+import pl.warp.engine.core.script.annotation.DelayScheduling;
 import pl.warp.engine.game.GameContext;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameSceneComponent;
 import pl.warp.engine.graphics.material.GraphicsMaterialProperty;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.mesh.Mesh;
@@ -15,10 +21,6 @@ import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.scene.GameSceneComponent;
-import pl.warp.engine.core.script.Script;
-import pl.warp.engine.core.script.updatescheduler.DelayScheduling;
 
 /**
  * @author Hubertus
@@ -36,6 +38,9 @@ public class GunScript extends Script {
     private Material bulletMaterial;
     private AudioManager audioManager;
     private GunProperty gunProperty;
+
+    @ContextService
+    private ScriptManager manager;
 
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(-1, 0, 0);

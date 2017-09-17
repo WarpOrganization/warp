@@ -14,9 +14,9 @@ import pl.warp.engine.physics.event.CollisionEvent;
 import pl.warp.engine.physics.property.GravityProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.core.script.EventHandler;
+import pl.warp.engine.core.script.annotation.EventHandler;
 import pl.warp.engine.core.script.Script;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

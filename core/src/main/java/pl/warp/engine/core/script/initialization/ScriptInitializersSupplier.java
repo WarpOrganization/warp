@@ -19,9 +19,15 @@ public class ScriptInitializersSupplier {
     public ScriptInitializersSupplier(
             SchedulerInitializer schedulerInitializer,
             OwnerPropertyInitializer ownerPropertyInitializer,
-            EventHandlerInitializer eventHandlerInitializer
+            EventHandlerInitializer eventHandlerInitializer,
+            ServiceDependencyInitializer serviceDependencyInitializer
     ) {
-        this.scriptInitializers = Lists.newArrayList(schedulerInitializer, ownerPropertyInitializer, eventHandlerInitializer);
+        this.scriptInitializers = Lists.newArrayList(
+                schedulerInitializer,
+                ownerPropertyInitializer,
+                eventHandlerInitializer,
+                serviceDependencyInitializer
+        );
     }
 
     public Consumer<Script>[] getScriptInitializers(Class<? extends Script> aClass) {

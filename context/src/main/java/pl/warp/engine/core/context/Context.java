@@ -23,17 +23,13 @@ public class Context {
 
     private JavaContextHolder contextHolder;
 
-    public Context(JavaContextHolder contextHolder) {
-        this.contextHolder = withContext(contextHolder);
-    }
-
-    private JavaContextHolder withContext(JavaContextHolder contextHolder) {
-        return contextHolder.add(CONTEXT_SERVICE_INFO, this);
-    }
 
     public static Context create() {
         ContextLoader loader = new ContextLoader();
-        return new Context(loader.loadContext());
+        Context context = new Context();
+        JavaContextHolder contextHolder = loader.loadContext(context);
+        context.setContextHolder(contextHolder);
+        return context;
     }
 
     public <T> Optional<T> findOne(Class<T> type) {
@@ -50,5 +46,9 @@ public class Context {
 
     public <T> List<T> findAll(Class<T> type, String qualifier) {
         return contextHolder.findAll(type, Optional.of(qualifier));
+    }
+
+    private void setContextHolder(JavaContextHolder contextHolder) {
+        this.contextHolder = contextHolder;
     }
 }

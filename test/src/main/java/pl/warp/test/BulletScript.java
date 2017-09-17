@@ -2,8 +2,8 @@ package pl.warp.test;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.Property;
-import pl.warp.engine.core.script.EventHandler;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.EventHandler;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.physics.event.CollisionEvent;
 

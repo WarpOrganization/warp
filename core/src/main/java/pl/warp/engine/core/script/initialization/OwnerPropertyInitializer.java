@@ -3,7 +3,7 @@ package pl.warp.engine.core.script.initialization;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.annotation.Service;
 import pl.warp.engine.core.property.Property;
-import pl.warp.engine.core.script.OwnerProperty;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.ScriptInitializationException;
 
