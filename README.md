@@ -6,7 +6,7 @@
 
 ### Technology Stack
  * Java 1.8
- * LWJGL 2 (OpenGL 4.0)
+ * LWJGL 3 (OpenGL 4.0)
  * JavaFX
  * Gradle
 
