@@ -4,6 +4,7 @@ import pl.warp.engine.ai.behaviortree.BehaviorTreeNotFoundException;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentDeathEvent;
 import pl.warp.engine.core.component.SimpleListener;
+import pl.warp.engine.core.context.annotation.Service;
 import pl.warp.engine.core.property.observable.PropertyAddedEvent;
 
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.Set;
  * @author Hubertus
  *         Created 04.02.17
  */
+
+@Service
 public class AIManager {
     private Set<AIProperty> properties = new HashSet<>();
     private Set<AIProperty> propertiesToAdd = new HashSet<>();

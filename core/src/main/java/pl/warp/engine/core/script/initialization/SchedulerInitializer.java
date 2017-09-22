@@ -3,8 +3,8 @@ package pl.warp.engine.core.script.initialization;
 import pl.warp.engine.core.context.annotation.Service;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.ScriptInitializationException;
-import pl.warp.engine.core.script.annotation.DelayScheduling;
-import pl.warp.engine.core.script.annotation.TickIntervalScheduling;
+import pl.warp.engine.core.script.annotation.ScheduleByDelay;
+import pl.warp.engine.core.script.annotation.ScheduleByTickInterval;
 import pl.warp.engine.core.script.updatescheduler.*;
 
 import java.lang.invoke.MethodHandle;
@@ -35,22 +35,22 @@ public class SchedulerInitializer implements ScriptInitializerGenerator {
     }
 
     private MethodHandle getSchedulerFactory(Class<?> scriptClass) {
-        if (scriptClass.getAnnotation(TickIntervalScheduling.class) != null)
+        if (scriptClass.getAnnotation(ScheduleByTickInterval.class) != null)
             return getTickIntervalSchedulerBuilder(scriptClass);
-        else if (scriptClass.getAnnotation(DelayScheduling.class) != null)
+        else if (scriptClass.getAnnotation(ScheduleByDelay.class) != null)
             return getDelaySchedulerBuilder(scriptClass);
         else return getUpdatePerTickSchedulerBuilder(scriptClass);
     }
 
     private MethodHandle getTickIntervalSchedulerBuilder(Class<?> scriptClass) {
-        TickIntervalScheduling intervalScheduling = scriptClass.getAnnotation(TickIntervalScheduling.class);
+        ScheduleByTickInterval intervalScheduling = scriptClass.getAnnotation(ScheduleByTickInterval.class);
         int ticks = intervalScheduling.interval();
         MethodHandle factory = getConstructor(scriptClass, TickIntervalSchedulerImpl.class, int.class);
         return MethodHandles.insertArguments(factory, 0, ticks);
     }
 
     private MethodHandle getDelaySchedulerBuilder(Class<?> scriptClass) {
-        DelayScheduling intervalScheduling = scriptClass.getAnnotation(DelayScheduling.class);
+        ScheduleByDelay intervalScheduling = scriptClass.getAnnotation(ScheduleByDelay.class);
         int delay = intervalScheduling.delayInMillis();
         MethodHandle factory = getConstructor(scriptClass, DelaySchedulerImpl.class, int.class);
         return MethodHandles.insertArguments(factory, 0, delay);

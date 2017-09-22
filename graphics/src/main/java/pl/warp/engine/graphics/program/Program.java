@@ -5,10 +5,10 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgram;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
-import pl.warp.engine.graphics.program.extendedglsl.LocalProgramLoader;
+import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture;
 
 import java.nio.FloatBuffer;
@@ -44,7 +44,7 @@ public abstract class Program {
     }
 
     public void compile() {
-        this.program = compiler.compile(vertexShaderName, fragmentShaderName);
+        this.program = compiler.compile(vertexShaderName, fragmentShaderName, null);
         GL20.glUseProgram(this.program.getGLProgram());
     }
 

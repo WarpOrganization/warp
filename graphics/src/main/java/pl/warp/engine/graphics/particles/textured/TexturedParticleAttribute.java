@@ -21,8 +21,8 @@ public class TexturedParticleAttribute implements ParticleSystemAttribute<Textur
         return new TexturedParticleFactory(spritesheet);
     }
 
-    @Override
+/*    @Override
     public ParticleRendererFactory<TexturedParticle> getParticleRendererFactory() {
         return TexturedParticleRenderer::new;
-    }
+    }*/
 }

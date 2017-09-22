@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.execution.task.EngineTask;
-import pl.warp.engine.graphics.pipeline.Pipeline;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.graphics.window.WindowManager;
 
@@ -18,12 +17,10 @@ public class RenderingTask extends EngineTask {
 
     private Display display;
     private WindowManager windowManager;
-    private Pipeline pipeline;
 
-    public RenderingTask(Display display, WindowManager windowManager, Pipeline pipeline) { //TODO resize listener
+    public RenderingTask(Display display, WindowManager windowManager) {
         this.display = display;
         this.windowManager = windowManager;
-        this.pipeline = pipeline;
     }
 
     @Override
@@ -31,7 +28,7 @@ public class RenderingTask extends EngineTask {
         logger.info("Initializing rendering task.");
         createOpenGL();
         logger.info("OpenGL capabilities created.");
-        pipeline.init();
+        //initialize pipeline
         logger.info("Initialized pipeline.");
     }
 
@@ -43,13 +40,13 @@ public class RenderingTask extends EngineTask {
 
     @Override
     protected void onClose() {
-        pipeline.destroy();
+        //destroy pipeline
         windowManager.closeWindow();
     }
 
     @Override
     public void update(int delta) {
-        pipeline.update();
+        //update pipeline
         GLErrors.checkOGLErrors();
     }
 

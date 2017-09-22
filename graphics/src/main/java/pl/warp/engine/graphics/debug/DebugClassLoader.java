@@ -16,18 +16,18 @@ public class DebugClassLoader extends ClassLoader{
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         if (name.startsWith("pl.warp"))
-            return injectDebugging(name);
+            return injectDebugCode(name);
         else return super.loadClass(name, resolve);
     }
 
-    private Class<?> injectDebugging(String name) throws ClassNotFoundException {
+    private Class<?> injectDebugCode(String name) throws ClassNotFoundException {
         try {
             String res = name.replace('.', '/') + ".class";
             InputStream is = getResourceAsStream(res);
             ClassReader reader = new ClassReader(is);
             ClassNode node = new ClassNode(Opcodes.ASM5);
             reader.accept(node, 0);
-            if (res.startsWith("pl/warp/engine/graphics")) CallsInjector.inject(node, name);
+            if (res.startsWith("pl/warp/engine/graphics")) DebugCallsInjector.inject(node);
             ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
             node.accept(writer);
             byte code[] = writer.toByteArray();

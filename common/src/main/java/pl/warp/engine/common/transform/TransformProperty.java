@@ -8,7 +8,7 @@ import pl.warp.engine.core.property.Property;
  * @author Jaca777
  *         Created 2016-07-04 at 18
  */
-public class TransformProperty extends Property{
+public class TransformProperty extends Property {
 
     public static final String TRANSFORM_PROPERTY_NAME = "transform";
 

@@ -6,5 +6,5 @@ package pl.warp.engine.graphics.particles;
  */
 public interface ParticleSystemAttribute<T extends Particle> {
     ParticleFactory<T> getParticleFactory();
-    ParticleRendererFactory<T> getParticleRendererFactory();
+/*    ParticleRendererFactory<T> getParticleRendererFactory();*/
 }

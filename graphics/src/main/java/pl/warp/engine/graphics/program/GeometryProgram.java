@@ -1,9 +1,9 @@
 package pl.warp.engine.graphics.program;
 
 import org.lwjgl.opengl.GL20;
-import pl.warp.engine.graphics.program.extendedglsl.ConstantField;
+import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
-import pl.warp.engine.graphics.program.extendedglsl.LocalProgramLoader;
+import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 
 /**
  * @author Jaca777

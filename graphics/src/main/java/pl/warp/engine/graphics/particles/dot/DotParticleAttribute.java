@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.particles.dot;
 
 import pl.warp.engine.graphics.particles.ParticleFactory;
-import pl.warp.engine.graphics.particles.ParticleRendererFactory;
 import pl.warp.engine.graphics.particles.ParticleSystemAttribute;
 
 /**
@@ -20,8 +19,8 @@ public class DotParticleAttribute implements ParticleSystemAttribute<DotParticle
         return new DotParticleFactory(stages);
     }
 
-    @Override
+/*    @Override
     public ParticleRendererFactory<DotParticle> getParticleRendererFactory() {
         return DotParticleRenderer::new;
-    }
+    }*/
 }
