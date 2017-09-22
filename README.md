@@ -2,7 +2,7 @@
 ***
 [![Build Status](https://jenkins.hubertus248.me/job/Warp%20Engine/badge/icon)](https://jenkins.hubertus248.me/blue/organizations/jenkins/Warp%20Engine/activity)
 
-**Warp Engine** is a 3D game engine designed for a convenient and unlimited creation of games set in space. Its aim is to provide tools allowing a developer to make a space-set game without any boundaries nor loading times. Right now, we share with you a ready-to-use library, as well as the Warp Engine IDE (that is not really ready to use right now). 
+**Warp Engine** is a 3D game engine designed for a convenient and unlimited creation of games set in space. Its aim is to provide tools allowing a developer to make a space-set game without any boundaries nor loading times.
 
 ### Technology Stack
  * Java 1.8
