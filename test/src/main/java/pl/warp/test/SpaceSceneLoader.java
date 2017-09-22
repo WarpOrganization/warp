@@ -1,13 +1,10 @@
 package pl.warp.test;
 
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.ai.AIProperty;
 import pl.warp.engine.ai.behaviortree.SequenceNode;
 import pl.warp.engine.ai.loader.BehaviourTreeBuilder;
 import pl.warp.engine.ai.loader.BehaviourTreeLoader;
@@ -15,12 +12,27 @@ import pl.warp.engine.audio.AudioManager;
 import pl.warp.engine.audio.MusicSource;
 import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.audio.playlist.PlayRandomPlayList;
+import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.event.PoolEventDispatcher;
 import pl.warp.engine.core.execution.EngineThread;
 import pl.warp.engine.core.execution.task.SimpleEngineTask;
-import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.NameProperty;
-import pl.warp.engine.core.event.PoolEventDispatcher;
-import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.game.GameContextBuilder;
+import pl.warp.engine.game.graphics.effects.atmosphere.AtmosphereBuilder;
+import pl.warp.engine.game.graphics.effects.gasplanet.GasPlanetBuilder;
+import pl.warp.engine.game.graphics.effects.gasplanet.GasPlanetProgram;
+import pl.warp.engine.game.graphics.effects.planet.PlanetBuilder;
+import pl.warp.engine.game.graphics.effects.planet.generator.surface.Biome;
+import pl.warp.engine.game.graphics.effects.ring.PlanetRingBuilder;
+import pl.warp.engine.game.graphics.effects.ring.PlanetRingProgram;
+import pl.warp.engine.game.graphics.effects.ring.PlanetRingProperty;
+import pl.warp.engine.game.graphics.effects.star.StarBuilder;
+import pl.warp.engine.game.graphics.effects.star.StarProgram;
+import pl.warp.engine.game.scene.GameComponent;
+import pl.warp.engine.game.scene.GameScene;
+import pl.warp.engine.game.scene.GameSceneComponent;
+import pl.warp.engine.game.scene.GameSceneLoader;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraProperty;
@@ -57,25 +69,6 @@ import pl.warp.engine.graphics.texture.Texture1D;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.texture.Texture2DArray;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.engine.physics.CollisionType;
-import pl.warp.engine.physics.collider.BasicCollider;
-import pl.warp.engine.physics.property.ColliderProperty;
-import pl.warp.engine.physics.property.PhysicalBodyProperty;
-import pl.warp.engine.game.GameContextBuilder;
-import pl.warp.engine.game.graphics.effects.atmosphere.AtmosphereBuilder;
-import pl.warp.engine.game.graphics.effects.gasplanet.GasPlanetBuilder;
-import pl.warp.engine.game.graphics.effects.gasplanet.GasPlanetProgram;
-import pl.warp.engine.game.graphics.effects.planet.PlanetBuilder;
-import pl.warp.engine.game.graphics.effects.planet.generator.surface.Biome;
-import pl.warp.engine.game.graphics.effects.ring.PlanetRingBuilder;
-import pl.warp.engine.game.graphics.effects.ring.PlanetRingProgram;
-import pl.warp.engine.game.graphics.effects.ring.PlanetRingProperty;
-import pl.warp.engine.game.graphics.effects.star.StarBuilder;
-import pl.warp.engine.game.graphics.effects.star.StarProgram;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.game.scene.GameScene;
-import pl.warp.engine.game.scene.GameSceneComponent;
-import pl.warp.engine.game.scene.GameSceneLoader;
 import pl.warp.test.ai.DroneMemoryProperty;
 
 import java.io.File;
@@ -172,7 +165,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         cameraComponent.addProperty(new NameProperty("Camera"));
         cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
-        controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+//        controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
         controllableGoat.addProperty(new TransformProperty());
         loaded = true;
     }
@@ -248,7 +241,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             //allyEngineParticles(controllableGoat);
 
             controllableGoat.addProperty(new KaboomProperty( gasPlanet, 1000.0f));
-            controllableGoat.addScript(KabooomScript.class);
+//            controllableGoat.addScript(KabooomScript.class);
 
             Material material = new Material(goatTexture);
             material.setBrightnessTexture(goatBrightnessTexture);
@@ -263,7 +256,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             ImageData bullet2decodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("bullet_2.png"), PNGDecoder.Format.RGBA);
             bulletTexture2 = new Texture2D(bullet2decodedTexture.getWidth(), bullet2decodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, bullet2decodedTexture.getData());
 
-            controllableGoat.addScript(GunScript.class);
+//            controllableGoat.addScript(GunScript.class);
 
             ImageDataArray decodedCubemap = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
             Cubemap cubemap = new Cubemap(decodedCubemap.getWidth(), decodedCubemap.getHeight(), decodedCubemap.getData());
@@ -295,7 +288,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 enemyPortal.addProperty(new ParticleEmitterProperty(new ParticleSystem(new DotParticleAttribute(stages), emitter)));
             }
 
-            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
+//            friageMesh = ObjLoader.read(GunScript.class.getResourceAsStream("frigate_1_heavy.obj"), false).toVAOMesh();
             ImageData frigateDecodedTexture = ImageDecoder.decodePNG(Test.class.getResourceAsStream("frigate_1_heavy.png"), PNGDecoder.Format.RGBA);
             frigateTexture = new Texture2D(frigateDecodedTexture.getWidth(), frigateDecodedTexture.getHeight(), GL11.GL_RGBA, GL11.GL_RGBA, true, frigateDecodedTexture.getData());
             Material frigateMaterial = new Material(frigateTexture);
@@ -343,7 +336,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
             generateGOATS(scene);
             //spawnFrigates();
             controllableGoat.addProperty(new GoatProperty(MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED));
-            controllableGoat.addScript(GoatControlScript.class);
+//            controllableGoat.addScript(GoatControlScript.class);
         });
     }
 
@@ -380,11 +373,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
         material.setShininess(20f);
         material.setBrightnessTexture(goatBrightnessTexture);
         goat.addProperty(new GraphicsMaterialProperty(material));
-        goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+//        goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
         TransformProperty transformProperty = new TransformProperty();
         goat.addProperty(transformProperty);
-        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), goat, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-        goat.addProperty(colliderProperty);
+//        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(10.772f / 2, 1.8f / 2, 13.443f / 2)), goat, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+//        goat.addProperty(colliderProperty);
         return goat;
     }
 
@@ -394,11 +387,11 @@ public class SpaceSceneLoader implements GameSceneLoader {
         frigate.addProperty(new RenderableMeshProperty(friageMesh));
         Material frigateMaterial = new Material(frigateTexture);
         frigate.addProperty(new GraphicsMaterialProperty(frigateMaterial));
-        frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
+//        frigate.addProperty(new PhysicalBodyProperty(20.0f, 38.365f * 3, 15.1f * 3, 11.9f * 3));
         TransformProperty transformProperty = new TransformProperty();
         frigate.addProperty(transformProperty);
-        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(38.365f * 3, 15.1f * 3, 11.9f * 3)), frigate, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
-        frigate.addProperty(colliderProperty);
+//        ColliderProperty colliderProperty = new ColliderProperty(new BasicCollider(new btBoxShape(new Vector3(38.365f * 3, 15.1f * 3, 11.9f * 3)), frigate, new Vector3f(0.0f, 0, 0), CollisionType.COLLISION_NORMAL, CollisionType.COLLISION_NORMAL));
+//        frigate.addProperty(colliderProperty);
         return frigate;
     }
 
@@ -467,7 +460,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new KaboomProperty(gasPlanet, 1000.0f));
-            goat.addScript(KabooomScript.class);
+//            goat.addScript(KabooomScript.class);
             goat.addProperty(new NameProperty("Ship " + i));
             goat.addProperty(new RenderableMeshProperty(goatMesh));
             float x = 10 + random.nextFloat() * 200 - 100f;
@@ -484,7 +477,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 material.setShininess(20f);
                 material.setBrightnessTexture(goatBrightnessTexture);
                 goat.addProperty(new GraphicsMaterialProperty(material));
-                goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
+//                goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
                 goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture, audioManager));
                 goat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
                 team1.add(goat);
@@ -496,15 +489,15 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 material.setShininess(20f);
                 material.setBrightnessTexture(goatBrightnessTexture2);
                 goat.addProperty(new GraphicsMaterialProperty(material));
-                goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2f, 1.8f / 2f, 13.443f / 2f));
+//                goat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2f, 1.8f / 2f, 13.443f / 2f));
                 goat.addProperty(new GunProperty(GUN_COOLDOWN, scene, bulletMesh, boomSpritesheet, bulletTexture2, audioManager));
                 goat.addProperty(new DroneProperty(5, 1, team1, enemyPortal));
                 team2.add(goat);
                 enemyEngineParticles(goat);
             }
             goat.addProperty(new DroneMemoryProperty());
-            goat.addProperty(new AIProperty(builder.build(goat)));
-            goat.addScript(GunScript.class);
+//            goat.addProperty(new AIProperty(builder.build(goat)));
+//            goat.addScript(GunScript.class);
         }
     }
 

@@ -3,7 +3,6 @@ package pl.warp.engine.game;
 import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.game.scene.GameScene;
-import pl.warp.engine.game.script.CameraRayTester;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.input.Input;
 
@@ -18,10 +17,11 @@ public class GameContextBuilder {
         this.gameContext = new GameContext();
     }
 
-    public GameContextBuilder setRayTester(CameraRayTester rayTester) {
+//TODO physics rewrite
+/*    public GameContextBuilder setRayTester(CameraRayTester rayTester) {
         gameContext.setRayTester(rayTester);
         return this;
-    }
+    }*/
 
     public GameContext getGameContext() {
         return gameContext;

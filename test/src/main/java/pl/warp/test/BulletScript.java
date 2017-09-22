@@ -2,10 +2,8 @@ package pl.warp.test;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.Property;
-import pl.warp.engine.core.script.annotation.EventHandler;
-import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
-import pl.warp.engine.physics.event.CollisionEvent;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 
 /**
  * @author Hubertus
@@ -35,19 +33,20 @@ public class BulletScript extends Script {
             if (getOwner().hasParent())
                 getOwner().destroy(); // We are not mean, we won't kill orphans. Nobility quickfix.
     }
+//TODO physics rewrite
 
-    @EventHandler(eventName = CollisionEvent.COLLISION_EVENT_NAME)
-    private synchronized void onCollision(CollisionEvent event) {
-        Component component = event.getSecondComponent();
-        if (component.hasEnabledProperty(Bulletproof.BULLETPROOF_PROPERTY_NAME)) return;
-        if (component != bulletProperty.getPlayerShip() && component.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) {
-            destroy(component);
-        }
-    }
+//    @EventHandler(eventName = CollisionEvent.COLLISION_EVENT_NAME)
+//    private synchronized void onCollision(CollisionEvent event) {
+//        Component component = event.getSecondComponent();
+//        if (component.hasEnabledProperty(Bulletproof.BULLETPROOF_PROPERTY_NAME)) return;
+//        if (component != bulletProperty.getPlayerShip() && component.hasProperty(DroneProperty.DRONE_PROPERTY_NAME)) {
+//            destroy(component);
+//        }
+//    }
 
 
     private void destroy(Component componentHit) {
-        componentHit.triggerEvent(new KabooomScript.KabooomEvent());
+//        componentHit.triggerEvent(new KabooomScript.KabooomEvent());
         if (getOwner().hasParent()) getOwner().destroy();
     }
 

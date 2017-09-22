@@ -25,10 +25,7 @@ import pl.warp.engine.graphics.pipeline.output.OutputTexture2DRenderer;
 import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.input.Input;
 import pl.warp.engine.input.InputTask;
-import pl.warp.engine.physics.DefaultCollisionStrategy;
-import pl.warp.engine.physics.MovementTask;
 import pl.warp.engine.physics.PhysicsTask;
-import pl.warp.engine.physics.RayTester;
 
 import java.io.File;
 

@@ -1,21 +1,11 @@
 package pl.warp.engine.game.script;
 
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
-import pl.warp.engine.game.GameContext;
-import pl.warp.engine.game.scene.GameComponent;
-import pl.warp.engine.graphics.camera.Camera;
-import pl.warp.engine.physics.RayTester;
-
-import java.util.Optional;
-
 /**
  * @author Jaca777
  *         Created 2017-01-28 at 15
  */
-public class CameraRayTester {
+//TODO physics rewrite
+/*public class CameraRayTester {
 
     private GameContext context;
     private RayTester rayTester;
@@ -59,4 +49,4 @@ public class CameraRayTester {
         rayStart.rotate(invertedRotation);
     }
 
-}
+}*/

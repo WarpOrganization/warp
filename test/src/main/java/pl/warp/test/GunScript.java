@@ -1,3 +1,5 @@
+//TODO physics rewrite
+/*
 package pl.warp.test;
 
 import com.badlogic.gdx.math.Vector3;
@@ -22,10 +24,12 @@ import pl.warp.engine.physics.collider.PointCollider;
 import pl.warp.engine.physics.property.ColliderProperty;
 import pl.warp.engine.physics.property.PhysicalBodyProperty;
 
+*/
 /**
  * @author Hubertus
  *         Created 7/12/16
- */
+ *//*
+
 @DelayScheduling(delayInMillis = 1000 / 57)
 public class GunScript extends Script {
 
@@ -132,3 +136,4 @@ public class GunScript extends Script {
         }
     }
 }
+*/

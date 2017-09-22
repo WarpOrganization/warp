@@ -1,6 +1,5 @@
 package pl.warp.test;
 
-import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.execution.EngineThread;
@@ -14,7 +13,6 @@ import pl.warp.engine.game.GameContextBuilder;
 import pl.warp.engine.game.scene.GameComponent;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.game.scene.GameSceneLoader;
-import pl.warp.engine.game.script.CameraRayTester;
 import pl.warp.engine.graphics.Graphics;
 import pl.warp.engine.graphics.RenderingConfig;
 import pl.warp.engine.graphics.camera.Camera;
@@ -23,10 +21,6 @@ import pl.warp.engine.graphics.pipeline.rendering.OnScreenRenderer;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.input.glfw.GLFWInput;
 import pl.warp.engine.input.glfw.GLFWInputTask;
-import pl.warp.engine.physics.DefaultCollisionStrategy;
-import pl.warp.engine.physics.MovementTask;
-import pl.warp.engine.physics.PhysicsTask;
-import pl.warp.engine.physics.RayTester;
 
 import java.awt.event.KeyEvent;
 
@@ -77,11 +71,11 @@ public class Test {
 
 
         EngineThread physicsThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        RayTester rayTester = new RayTester();
-        contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
-        contextBuilder.setAIManager(new AIManager());
-        physicsThread.scheduleTask(new MovementTask(scene));
-        physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
+//        RayTester rayTester = new RayTester();
+//        contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
+//        contextBuilder.setAIManager(new AIManager());
+//        physicsThread.scheduleTask(new MovementTask(scene));
+//        physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
 
 
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
@@ -121,7 +115,7 @@ public class Test {
             case 0:
                 return new SpaceSceneLoader(config, contextBuilder);
             case 1:
-                return new GroundSceneLoader(config, contextBuilder);
+//                return new GroundSceneLoader(config, contextBuilder);
             default:
                 return new SpaceSceneLoader(config, contextBuilder);
         }
