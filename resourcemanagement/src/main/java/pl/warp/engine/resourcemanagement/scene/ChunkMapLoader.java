@@ -34,7 +34,7 @@ public class ChunkMapLoader {
     private Vector3i tempVector = new Vector3i();
 
     private Vector3i getChunkPositionDelta(Component component) {
-        TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        TransformProperty transformProperty = component.getProperty(TransformProperty.NAME);
         Vector3f translation = transformProperty.getTranslation();
         return tempVector.set(
                 getChunkPositionDelta(translation.x),

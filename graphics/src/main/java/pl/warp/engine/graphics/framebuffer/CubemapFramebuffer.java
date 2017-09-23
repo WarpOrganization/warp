@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.framebuffer;
 
 import org.lwjgl.opengl.*;
 import pl.warp.engine.graphics.GLErrors;
-import pl.warp.engine.graphics.math.BufferTools;
+import pl.warp.engine.graphics.utility.BufferTools;
 import pl.warp.engine.graphics.texture.Cubemap;
 
 import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;

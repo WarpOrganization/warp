@@ -12,8 +12,8 @@ import pl.warp.engine.core.component.Component;
 public class Transforms {
     public static Matrix4f getAbsoluteTransform(Component component) {
         Matrix4f transformMatrix = new Matrix4f().identity();
-        if (component.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
-            applyTransform(transformMatrix, component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME));
+        if (component.hasProperty(TransformProperty.NAME))
+            applyTransform(transformMatrix, component.getProperty(TransformProperty.NAME));
         if (component.hasParent()) {
             Matrix4f parentFullTransform = getAbsoluteTransform(component.getParent());
             return parentFullTransform.mul(transformMatrix);
@@ -28,8 +28,8 @@ public class Transforms {
 
     public static Quaternionf getAbsoluteRotation(Component component) {
         Quaternionf rotation = new Quaternionf();
-        if (component.hasProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
-            TransformProperty property = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        if (component.hasProperty(TransformProperty.NAME)) {
+            TransformProperty property = component.getProperty(TransformProperty.NAME);
             rotation.set(property.getRotation());
         }
         if (component.hasParent()) {
@@ -41,8 +41,8 @@ public class Transforms {
     public static Vector3f getAbsolutePosition(Component component, Vector3f dest) {
         dest.zero();
         for (Component comp = component; comp != null; comp = comp.getParent()) {
-            if (comp.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME)) {
-                TransformProperty property = comp.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            if (comp.hasEnabledProperty(TransformProperty.NAME)) {
+                TransformProperty property = comp.getProperty(TransformProperty.NAME);
                 dest.rotate(property.getRotation());
                 dest.mul(property.getScale());
                 dest.add(property.getTranslation());

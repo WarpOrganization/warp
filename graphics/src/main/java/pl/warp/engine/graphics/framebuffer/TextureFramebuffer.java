@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.framebuffer;
 
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import pl.warp.engine.graphics.math.BufferTools;
+import pl.warp.engine.graphics.utility.BufferTools;
 import pl.warp.engine.graphics.texture.TextureShape2D;
 
 import static org.lwjgl.opengl.GL30.*;

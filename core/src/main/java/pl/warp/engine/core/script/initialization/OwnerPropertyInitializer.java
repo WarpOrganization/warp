@@ -49,13 +49,13 @@ public class OwnerPropertyInitializer implements ScriptInitializerGenerator{
     private void loadProperty(Script script, OwnerPropertyDependency dependency) {
         Component owner = script.getOwner();
         OwnerProperty ownerProperty = dependency.getOwnerProperty();
-        if (!owner.hasProperty(ownerProperty.name()))
+        if (!owner.hasProperty(ownerProperty.value()))
             throw new ScriptInitializationException(
                     script.getClass(),
-                    new IllegalStateException("Component has no property named " + ownerProperty.name() + ".")
+                    new IllegalStateException("Component has no property named " + ownerProperty.value() + ".")
             );
         else {
-            Property property = owner.getProperty(ownerProperty.name());
+            Property property = owner.getProperty(ownerProperty.value());
             setProperty(script, dependency.getPropertyField(), property);
         }
     }

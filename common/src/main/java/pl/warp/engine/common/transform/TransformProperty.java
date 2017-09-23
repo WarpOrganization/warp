@@ -10,18 +10,18 @@ import pl.warp.engine.core.property.Property;
  */
 public class TransformProperty extends Property {
 
-    public static final String TRANSFORM_PROPERTY_NAME = "transform";
+    public static final String NAME = "transform";
 
     private Vector3f translation = new Vector3f();
     private Quaternionf rotation = new Quaternionf();
     private Vector3f scale = new Vector3f().set(1);
 
     public TransformProperty() {
-        super(TRANSFORM_PROPERTY_NAME);
+        super(NAME);
     }
 
     protected TransformProperty(Vector3f translation, Quaternionf rotation, Vector3f scale) {
-        super(TRANSFORM_PROPERTY_NAME);
+        super(NAME);
         this.translation = translation;
         this.rotation = rotation;
         this.scale = scale;

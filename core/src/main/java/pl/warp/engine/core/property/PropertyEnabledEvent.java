@@ -1,22 +1,21 @@
 package pl.warp.engine.core.property;
 
 import pl.warp.engine.core.event.Event;
-import pl.warp.engine.core.component.Component;
 
 /**
  * @author Jaca777
  *         Created 2016-12-15 at 17
  */
-public class PropertyEnabledEvent<T extends Component> extends Event {
+public class PropertyEnabledEvent extends Event {
     public static final String PROPERTY_ENABLED_EVENT_NAME = "PropertyEnabledEvent";
-    private Property<T> property;
+    private Property property;
 
-    public PropertyEnabledEvent(Property<T> property) {
+    public PropertyEnabledEvent(Property property) {
         super(PROPERTY_ENABLED_EVENT_NAME);
         this.property = property;
     }
 
-    public Property<T> getProperty() {
+    public Property getProperty() {
         return property;
     }
 }

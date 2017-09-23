@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL31;
-import pl.warp.engine.graphics.math.BufferTools;
+import pl.warp.engine.graphics.utility.BufferTools;
 
 
 import java.nio.FloatBuffer;
@@ -84,10 +84,10 @@ public class Mesh {
     }
 
     /**
-     * @param vertexBuff   Vertex buffer name.
-     * @param texCoordBuff Texture coordinate buffer name.
-     * @param normalBuff   Normal buffer name.
-     * @param indexBuff    Index buffer name.
+     * @param vertexBuff   Vertex buffer value.
+     * @param texCoordBuff Texture coordinate buffer value.
+     * @param normalBuff   Normal buffer value.
+     * @param indexBuff    Index buffer value.
      * @param indices      Number of elements.
      */
     public Mesh(int vertexBuff, int texCoordBuff, int normalBuff, int indexBuff, int indices, int vertices) {
@@ -100,28 +100,28 @@ public class Mesh {
     }
 
     /**
-     * @return vertex buffer name
+     * @return vertex buffer value
      */
     public int getVertexBuff() {
         return vertexBuff;
     }
 
     /**
-     * @return texture coordinate buffer name
+     * @return texture coordinate buffer value
      */
     public int getTexCoordBuff() {
         return texCoordBuff;
     }
 
     /**
-     * @return normal buffer name
+     * @return normal buffer value
      */
     public int getNormalBuff() {
         return normalBuff;
     }
 
     /**
-     * @return index buffer name
+     * @return index buffer value
      */
     public int getIndexBuff() {
         return indexBuff;
@@ -134,14 +134,14 @@ public class Mesh {
 
 
     /**
-     * Sets index buffer name.
+     * Sets index buffer value.
      */
     public void setIndexBuff(int indexBuff) {
         this.indexBuff = indexBuff;
     }
 
     /**
-     * Sets index buffer name.
+     * Sets index buffer value.
      */
     public void setNormalBuff(int normalBuff) {
         this.normalBuff = normalBuff;
@@ -155,14 +155,14 @@ public class Mesh {
     }
 
     /**
-     * Sets texture coordinate buffer name.
+     * Sets texture coordinate buffer value.
      */
     public void setTexCoordBuff(int texCoordBuff) {
         this.texCoordBuff = texCoordBuff;
     }
 
     /**
-     * Sets vertex buffer name.
+     * Sets vertex buffer value.
      */
     public void setVertexBuff(int vertexBuff) {
         this.vertexBuff = vertexBuff;

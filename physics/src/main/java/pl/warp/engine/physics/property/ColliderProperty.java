@@ -8,7 +8,7 @@ import pl.warp.engine.physics.collider.Collider;
  * @author Hubertus
  *         Created 7/3/16
  */
-public class ColliderProperty extends Property<Component> {
+public class ColliderProperty extends Property {
     public static final String COLLIDER_PROPERTY_NAME = "collider";
 
     private Collider collider;

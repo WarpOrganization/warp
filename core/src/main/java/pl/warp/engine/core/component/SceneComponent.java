@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * @author Jaca777
  *         Created 2016-06-27 at 12
  */
-public abstract class SceneComponent implements Component {
+public class SceneComponent implements Component {
 
     private Component parent;
     private EngineContext context;

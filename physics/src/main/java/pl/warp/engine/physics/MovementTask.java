@@ -61,7 +61,7 @@ public class MovementTask extends EngineTask {
     private void move(Component component, float fdelta){
         if (isPhysicalBody(component) && isTransformable(component)) {
             PhysicalBodyProperty physicalBodyProperty = component.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
-            TransformProperty transformProperty = component.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            TransformProperty transformProperty = component.getProperty(TransformProperty.NAME);
             GravityProperty gravityProperty = null;
             if (isGravityAffected(component)) {
                 gravityProperty = component.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
@@ -102,7 +102,7 @@ public class MovementTask extends EngineTask {
     }
 
     private boolean isTransformable(Component component) {
-        return component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        return component.hasEnabledProperty(TransformProperty.NAME);
     }
 
     private boolean isCollidable(Component component) {

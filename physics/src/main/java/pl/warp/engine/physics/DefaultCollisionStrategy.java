@@ -46,8 +46,8 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
                 && (isCollidable(component1) && isCollidable(component2))) {
             ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-            TransformProperty transformProperty1 = component1.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            TransformProperty transformProperty1 = component1.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty2 = component2.getProperty(TransformProperty.NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
 
@@ -110,8 +110,8 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
                 && (isCollidable(component1) && isCollidable(component2))) {
             ColliderProperty collider1 = component1.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
             ColliderProperty collider2 = component2.getProperty(ColliderProperty.COLLIDER_PROPERTY_NAME);
-            TransformProperty transformProperty1 = component1.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
-            TransformProperty transformProperty2 = component2.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+            TransformProperty transformProperty1 = component1.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty2 = component2.getProperty(TransformProperty.NAME);
             PhysicalBodyProperty physicalProperty1 = component1.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
             PhysicalBodyProperty physicalProperty2 = component2.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
 
@@ -167,7 +167,7 @@ public class DefaultCollisionStrategy implements CollisionStrategy {
 
     public void calculateFloorCollision(Component floor, Component body, float depth) {
         GravityProperty gravityProperty = body.getProperty(GravityProperty.GRAVITY_PROPERTY_NAME);
-        TransformProperty transform = body.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+        TransformProperty transform = body.getProperty(TransformProperty.NAME);
         PhysicalBodyProperty bodyProperty = body.getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
         downVector.set(gravityProperty.getDownVector());
         downVector.normalize();

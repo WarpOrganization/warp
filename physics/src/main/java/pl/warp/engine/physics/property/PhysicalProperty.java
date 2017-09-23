@@ -7,7 +7,7 @@ import pl.warp.engine.core.property.Property;
  * @author Hubertus
  *         Created 12.08.16
  */
-public abstract class PhysicalProperty extends Property<Component>{
+public abstract class PhysicalProperty extends Property{
 
     public PhysicalProperty(String name) {
         super(name);

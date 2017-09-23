@@ -84,7 +84,7 @@ public abstract class Program {
 
     /**
      * @param name A Name of an attribute to search for.
-     * @return Location of the attribute with the given name.
+     * @return Location of the attribute with the given value.
      */
     public int getAttributeLocation(String name) {
         return GL20.glGetAttribLocation(program.getGLProgram(), name);
@@ -92,7 +92,7 @@ public abstract class Program {
 
     /**
      * @param name A Name of an uniform to search for.
-     * @return Location of the uniform with the given name.
+     * @return Location of the uniform with the given value.
      */
     public int getUniformLocation(String name) {
         return GL20.glGetUniformLocation(program.getGLProgram(), name);

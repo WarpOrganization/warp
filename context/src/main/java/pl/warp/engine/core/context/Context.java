@@ -14,15 +14,7 @@ import java.util.Optional;
  */
 public class Context {
 
-    private static final ServiceInfo CONTEXT_SERVICE_INFO = new ServiceInfo(
-            Context.class,
-            Option.empty(),
-            null,
-            null
-    );
-
     private JavaContextHolder contextHolder;
-
 
     public static Context create() {
         ContextLoader loader = new ContextLoader();
@@ -46,6 +38,11 @@ public class Context {
 
     public <T> List<T> findAll(Class<T> type, String qualifier) {
         return contextHolder.findAll(type, Optional.of(qualifier));
+    }
+
+    public void addService(Object service) {
+        ServiceInfo serviceInfo = new ServiceInfo(service.getClass(), Option.empty(), null, null);
+        contextHolder.add(serviceInfo, service);
     }
 
     private void setContextHolder(JavaContextHolder contextHolder) {

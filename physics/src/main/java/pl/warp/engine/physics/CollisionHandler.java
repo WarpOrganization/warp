@@ -105,7 +105,7 @@ public class CollisionHandler {
             }
             if (result.hasHit()) {
                 result.getHitPointWorld(contactPos);
-                TransformProperty property = collider.getOwner().getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+                TransformProperty property = collider.getOwner().getProperty(TransformProperty.NAME);
                 PhysicalBodyProperty physicalBodyProperty = collider.getOwner().getProperty(PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME);
                 tmpTranslation.set(physicalBodyProperty.getVelocity());
                 tmpTranslation.normalize();

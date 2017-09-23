@@ -8,7 +8,7 @@ import pl.warp.engine.core.property.Property;
  * @author Hubertus
  *         Created 05.08.16
  */
-public class GravityProperty extends Property<Component> {
+public class GravityProperty extends Property {
 
     public static final String GRAVITY_PROPERTY_NAME = "gravityBodyProperty";
 

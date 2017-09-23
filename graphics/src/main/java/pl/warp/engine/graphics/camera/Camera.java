@@ -3,8 +3,9 @@ package pl.warp.engine.graphics.camera;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.execution.task.update.Updatable;
-import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
+import pl.warp.engine.graphics.utility.projection.ProjectionMatrix;
 
 
 /**
@@ -12,6 +13,8 @@ import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
  *         Created 2016-07-01 at 12
  */
 public interface Camera extends Updatable {
+
+    Component getCameraComponent();
 
     void move(Vector3f v);
 

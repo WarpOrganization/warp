@@ -13,7 +13,7 @@ import pl.warp.engine.core.context.MoreThanOneServiceFoundException
   * @author Jaca777
   *         Created 2017-08-29 at 22
   */
-private[core] class JavaContextHolder(services: List[(ServiceInfo, Object)]) {
+private[core] class JavaContextHolder(var services: List[(ServiceInfo, Object)]) {
   def findOne[T](t: Class[T], qualifier: jutil.Optional[String]): jutil.Optional[T] = {
     findQualified(t, qualifier) match {
       case instance :: Nil =>
@@ -42,7 +42,7 @@ private[core] class JavaContextHolder(services: List[(ServiceInfo, Object)]) {
     }
   }
 
-  private[core] def add(serviceInfo: ServiceInfo, instance: Object) =
-    new JavaContextHolder((serviceInfo, instance) :: services)
+  def add(serviceInfo: ServiceInfo, instance: Object) =
+   services = (serviceInfo, instance) :: services
 
 }

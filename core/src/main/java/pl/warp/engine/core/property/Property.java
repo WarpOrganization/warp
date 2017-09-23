@@ -6,9 +6,9 @@ import pl.warp.engine.core.component.Component;
  * @author Jaca777
  *         Created 2016-06-25 at 18
  */
-public abstract class Property<T extends Component> {
+public abstract class Property{
 
-    private T owner;
+    private Component owner;
     private String name;
     private boolean enabled = false;
     private boolean triggerStateEvents = false;
@@ -21,7 +21,7 @@ public abstract class Property<T extends Component> {
         this.name = name;
     }
 
-    public void setOwner(T owner) {
+    public void setOwner(Component owner) {
         if (this.owner != null) throw new IllegalStateException("Property can't have two owners.");
         else {
             this.owner = owner;
@@ -29,7 +29,7 @@ public abstract class Property<T extends Component> {
         }
     }
 
-    protected T getOwner() {
+    protected Component getOwner() {
         return owner;
     }
 

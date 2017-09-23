@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.common.transform.Transforms;
-import pl.warp.engine.graphics.math.projection.ProjectionMatrix;
+import pl.warp.engine.graphics.utility.projection.ProjectionMatrix;
 
 /**
  * @author Jaca777
@@ -136,4 +136,8 @@ public class QuaternionCamera implements Camera {
         return Transforms.getAbsoluteRotation(cameraComponent).positiveY(upVector).negate();
     }
 
+    @Override
+    public Component getCameraComponent() {
+        return cameraComponent;
+    }
 }

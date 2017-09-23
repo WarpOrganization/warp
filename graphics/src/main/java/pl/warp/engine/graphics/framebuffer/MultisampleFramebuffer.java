@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 import pl.warp.engine.graphics.texture.MultisampleTexture2D;
-import pl.warp.engine.graphics.math.BufferTools;
+import pl.warp.engine.graphics.utility.BufferTools;
 
 
 import static org.lwjgl.opengl.GL30.*;

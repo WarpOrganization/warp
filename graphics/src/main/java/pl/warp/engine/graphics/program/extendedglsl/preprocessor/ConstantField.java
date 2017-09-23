@@ -40,6 +40,6 @@ public class ConstantField {
 
     public <T> T get(String name) {
         if (isSet(name)) return (T) constants.get(name);
-        else throw new NoSuchElementException("Element with a given name " + name + " is not present in the constant field");
+        else throw new NoSuchElementException("Element with a given value " + name + " is not present in the constant field");
     }
 }

@@ -52,7 +52,7 @@ public class SyncTimer implements Timer {
      *   notice, this list of conditions and the following disclaimer in the
      *   documentation and/or other materials provided with the distribution.
      *
-     * * Neither the name of 'LWJGL' nor the names of
+     * * Neither the value of 'LWJGL' nor the names of
      *   its contributors may be used to endorse or promote products derived
      *   from this software without specific prior written permission.
      *
@@ -139,7 +139,7 @@ public class SyncTimer implements Timer {
 
             nextFrame = getTime();
 
-            String osName = System.getProperty("os.name");
+            String osName = System.getProperty("os.value");
 
             if (osName.startsWith("Win")) {
                 // On windows the sleep functions can be highly inaccurate by

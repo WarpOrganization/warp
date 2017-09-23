@@ -16,7 +16,7 @@ public class GLSLShaderCompiler {
     /**
      * @param type       Type of the shader.
      * @param shaderCode Code of the shader.
-     * @return The shader's name.
+     * @return The shader's value.
      */
     public static int compileShader(int type, String shaderCode) {
         int shader = glCreateShader(type);
@@ -37,7 +37,7 @@ public class GLSLShaderCompiler {
     /**
      * Links shaders into a program.
      *
-     * @return The program's name.
+     * @return The program's value.
      */
     public static int createProgram(int[] shaders, String[] outNames) {
         int program = glCreateProgram();

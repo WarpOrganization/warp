@@ -1,6 +1,7 @@
 package pl.warp.engine.core.event;
 
 import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.context.annotation.Service;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,6 +10,7 @@ import java.util.concurrent.Executors;
  * @author Jaca777
  *         Created 2017-02-02 at 13
  */
+@Service
 public class PoolEventDispatcher implements EventDispatcher {
 
     public static final int THREADS = Runtime.getRuntime().availableProcessors() * 4;
