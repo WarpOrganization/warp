@@ -12,20 +12,21 @@ import pl.warp.engine.core.property.PropertyNotPresentException;
 @Service
 public class PhysicsManager {
 
-    private PhysicsWorld mainWorld;
+    private PhysicsTask physicsTask;
 
     public PhysicsManager(PhysicsTask physicsTask) {
-        mainWorld = physicsTask.getMainWorld();
+        this.physicsTask = physicsTask;
     }
 
 
     public void addRigidBody(Component component) {
+        System.out.println("adding goat");
         if (!component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
             throw new PropertyNotPresentException(TransformProperty.TRANSFORM_PROPERTY_NAME);
 
         if (!component.hasEnabledProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME))
             throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
         PhysicsProperty physicsProperty = component.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
-        mainWorld.getDynamicsWorld().addRigidBody(physicsProperty.getRigidBody());
+        physicsTask.getRigidBodyRegistry().addRigidBody(physicsProperty.getRigidBody());
     }
 }

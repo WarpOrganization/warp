@@ -17,7 +17,7 @@ public class PhysicsWorld {
         return dynamicsWorld;
     }
 
-    public void setDynamicsWorld(btDynamicsWorld dynamiscWorld) {
-        this.dynamicsWorld = dynamiscWorld;
+    public void setDynamicsWorld(btDynamicsWorld dynamicsWorld) {
+        this.dynamicsWorld = dynamicsWorld;
     }
 }

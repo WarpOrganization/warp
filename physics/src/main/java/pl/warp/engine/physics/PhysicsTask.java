@@ -23,37 +23,45 @@ public class PhysicsTask extends EngineTask {
     private static Logger logger = Logger.getLogger(PhysicsTask.class);
 
     private PhysicsWorld mainWorld;
+    private RigidBodyRegistry rigidBodyRegistry;
+
+    public PhysicsTask() {
+        rigidBodyRegistry = new RigidBodyRegistry();
+    }
 
     @Override
     protected void onInit() {
         logger.info("initializing physics");
         new SharedLibraryLoader().load("gdx");
         Bullet.init();
+        createPhysicsWorld();
     }
 
     @Override
     protected void onClose() {
     }
 
-
     @Override
     public void update(int delta) {
-        mainWorld.getDynamicsWorld().stepSimulation(delta / 1000f, 4, 1 / 60f);
+        rigidBodyRegistry.processBodies(mainWorld.getDynamicsWorld());
+        mainWorld.getDynamicsWorld().stepSimulation(1/60f);
     }
 
-
-    public void createPhysicsWorld() {
+    private void createPhysicsWorld() {
         btCollisionConfiguration collisionConfig = new btDefaultCollisionConfiguration();
         btDispatcher dispatcher = new btCollisionDispatcher(collisionConfig);
-        btBroadphaseInterface broadphase = new btDbvtBroadphase();
+        btBroadphaseInterface broadPhase = new btDbvtBroadphase();
         btConstraintSolver constraintSolver = new btSequentialImpulseConstraintSolver();
-
-        btDynamicsWorld dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
+        btDynamicsWorld dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadPhase, constraintSolver, collisionConfig);
         dynamicsWorld.setGravity(new Vector3(0, 0, 0));
         mainWorld = new PhysicsWorld(dynamicsWorld);
     }
 
-    public PhysicsWorld getMainWorld() {
+    PhysicsWorld getMainWorld() {
         return mainWorld;
+    }
+
+    RigidBodyRegistry getRigidBodyRegistry() {
+        return rigidBodyRegistry;
     }
 }
