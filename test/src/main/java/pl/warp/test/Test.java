@@ -21,6 +21,7 @@ import pl.warp.engine.graphics.pipeline.rendering.OnScreenRenderer;
 import pl.warp.engine.graphics.window.GLFWWindowManager;
 import pl.warp.engine.input.glfw.GLFWInput;
 import pl.warp.engine.input.glfw.GLFWInputTask;
+import pl.warp.engine.physics.PhysicsTask;
 
 import java.awt.event.KeyEvent;
 
@@ -75,8 +76,9 @@ public class Test {
 //        contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
 //        contextBuilder.setAIManager(new AIManager());
 //        physicsThread.scheduleTask(new MovementTask(scene));
-//        physicsThread.scheduleTask(new PhysicsTask(new DefaultCollisionStrategy(), scene, rayTester));
-
+        PhysicsTask physicsTask = context.getContext().findOne(PhysicsTask.class).get();
+        physicsThread.scheduleTask(physicsTask);
+        physicsThread.start();
 
         EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
         audioThread.scheduleTask(new AudioTask(audioContext));
