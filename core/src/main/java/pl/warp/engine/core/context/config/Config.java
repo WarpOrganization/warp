@@ -15,8 +15,9 @@ public class Config {
     private ConfigurationManager configurationManager;
     private Map<String, Object> values = new TreeMap<>();
 
-    public Config(ConfigurationManager configurationManager) {
+    public Config(ConfigurationManager configurationManager, ConfigLoader configLoader) {
         this.configurationManager = configurationManager;
+        configLoader.loadTo(this);
     }
 
     public void setValue(String name, Object value) {

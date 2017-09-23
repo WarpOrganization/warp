@@ -46,5 +46,4 @@ private[core] class JavaContextHolder(services: List[(ServiceInfo, Object)]) {
 
   private[core] def add(serviceInfo: ServiceInfo, instance: Object) =
     new JavaContextHolder((serviceInfo, instance) :: services)
-
 }
