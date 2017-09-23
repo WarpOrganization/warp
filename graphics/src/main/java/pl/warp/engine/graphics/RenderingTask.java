@@ -3,7 +3,8 @@ package pl.warp.engine.graphics;
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
+import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.graphics.rendering.SceneRenderer;
 
@@ -13,6 +14,7 @@ import pl.warp.engine.graphics.rendering.SceneRenderer;
  */
 
 @Service
+@RegisterTask(thread = "graphics")
 public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;

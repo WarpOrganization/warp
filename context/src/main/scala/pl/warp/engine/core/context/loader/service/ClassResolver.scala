@@ -2,7 +2,7 @@ package pl.warp.engine.core.context.loader.service
 
 import com.typesafe.scalalogging.LazyLogging
 import org.reflections.Reflections
-import pl.warp.engine.core.context.annotation.Service
+import pl.warp.engine.core.context.service.Service
 
 import scala.collection.JavaConverters._
 

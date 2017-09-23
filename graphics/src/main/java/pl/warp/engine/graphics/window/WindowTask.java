@@ -1,7 +1,8 @@
 package pl.warp.engine.graphics.window;
 
 import org.apache.log4j.Logger;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
+import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
 
 /**
@@ -10,6 +11,7 @@ import pl.warp.engine.core.execution.task.EngineTask;
  */
 
 @Service
+@RegisterTask(thread = "graphics")
 public class WindowTask extends EngineTask {
 
     private static final Logger logger = Logger.getLogger(WindowTask.class);

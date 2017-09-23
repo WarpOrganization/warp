@@ -7,4 +7,5 @@ package pl.warp.engine.core.execution;
 public interface Timer {
     void await();
     int getDelta();
+    void setUps(int ups);
 }

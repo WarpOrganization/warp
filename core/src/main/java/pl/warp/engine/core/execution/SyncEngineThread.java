@@ -77,4 +77,8 @@ public class SyncEngineThread implements EngineThread {
     public boolean isRunning() {
         return running;
     }
+
+    protected Timer getTimer() {
+        return timer;
+    }
 }

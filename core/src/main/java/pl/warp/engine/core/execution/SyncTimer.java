@@ -14,7 +14,7 @@ public class SyncTimer implements Timer {
 
     public SyncTimer(int ups) {
         this.ups = ups;
-        this.deltaLimit = (1000 / ups) * 6;
+        calcDeltaLimit(ups);
         this.lastUpdate = System.currentTimeMillis();
     }
 
@@ -35,6 +35,16 @@ public class SyncTimer implements Timer {
 
     public float getFrameUPS() {
         return (delta > 0) ? 1000f / delta : -1;
+    }
+
+    @Override
+    public void setUps(int ups) {
+        this.ups = ups;
+        calcDeltaLimit(ups);
+    }
+
+    private void calcDeltaLimit(int ups) {
+        this.deltaLimit = (1000 / ups) * 6;
     }
 
     /*
