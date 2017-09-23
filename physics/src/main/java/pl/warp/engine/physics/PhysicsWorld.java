@@ -7,5 +7,17 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
  * Created 22.09.2017
  */
 public class PhysicsWorld {
-    private btDynamicsWorld dynamiscWorld;
+    private btDynamicsWorld dynamicsWorld;
+
+    public PhysicsWorld(btDynamicsWorld dynamicsWorld) {
+        this.dynamicsWorld = dynamicsWorld;
+    }
+
+    public btDynamicsWorld getDynamicsWorld() {
+        return dynamicsWorld;
+    }
+
+    public void setDynamicsWorld(btDynamicsWorld dynamiscWorld) {
+        this.dynamicsWorld = dynamiscWorld;
+    }
 }

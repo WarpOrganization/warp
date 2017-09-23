@@ -12,7 +12,10 @@ import pl.warp.engine.core.property.PropertyNotPresentException;
 @Service
 public class PhysicsManager {
 
+    private PhysicsWorld mainWorld;
+
     public PhysicsManager(PhysicsTask physicsTask) {
+        mainWorld = physicsTask.getMainWorld();
     }
 
 
@@ -22,5 +25,7 @@ public class PhysicsManager {
 
         if (!component.hasEnabledProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME))
             throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
+        PhysicsProperty physicsProperty = component.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
+        mainWorld.getDynamicsWorld().addRigidBody(physicsProperty.getRigidBody());
     }
 }

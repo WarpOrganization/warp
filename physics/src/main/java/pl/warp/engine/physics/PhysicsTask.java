@@ -38,6 +38,7 @@ public class PhysicsTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        mainWorld.getDynamicsWorld().stepSimulation(delta / 1000f, 4, 1 / 60f);
     }
 
 
@@ -49,6 +50,7 @@ public class PhysicsTask extends EngineTask {
 
         btDynamicsWorld dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
         dynamicsWorld.setGravity(new Vector3(0, 0, 0));
+        mainWorld = new PhysicsWorld(dynamicsWorld);
     }
 
     public PhysicsWorld getMainWorld() {
