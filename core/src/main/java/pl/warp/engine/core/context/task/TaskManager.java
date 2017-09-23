@@ -41,6 +41,6 @@ public class TaskManager implements ServiceRegistry {
 
     @Override
     public int order() {
-        return 1;
+        return 2;
     }
 }

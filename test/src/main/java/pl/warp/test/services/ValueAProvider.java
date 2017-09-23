@@ -22,4 +22,9 @@ public class ValueAProvider {
     public void onDupaChanged(int dupa) {
         System.out.println(dupa + "s2");
     }
+
+    @ConfigValue("kaczka")
+    public void onKaczka(int kaczka){
+        System.out.println(kaczka);
+    }
 }
