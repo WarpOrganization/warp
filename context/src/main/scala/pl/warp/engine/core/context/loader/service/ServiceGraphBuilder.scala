@@ -48,6 +48,8 @@ private[loader] class ServiceGraphBuilder() {
     val qualified = findQualified(services, dependencyInfo)
     if (qualified.size > 1)
       throw AmbiguousServiceDependencyException(service, dependencyInfo, qualified)
+      if(qualified.size < 1)
+        throw new ServiceNotFoundException(service, dependencyInfo)
     else qualified.head
   }
 
@@ -96,6 +98,19 @@ object ServiceGraphBuilder {
     serviceMsg + causeMsg + services
   })
 
+  case class ServiceNotFoundException(
+    service: ServiceInfo,
+    dependencyInfo: DependencyInfo,
+  ) extends RuntimeException({
+    val serviceMsg = s"Unable to create instance of ${service.`type`.getName}."
+    val causeMsg = dependencyInfo match {
+      case DependencyInfo(t, Some(q)) =>
+        s"No services qualified with $q and assignable to ${t.getName} found "
+      case DependencyInfo(t, None) =>
+        s"No services assignable to ${t.getName} found "
+    }
+    serviceMsg + causeMsg
+  })
 }
 
 

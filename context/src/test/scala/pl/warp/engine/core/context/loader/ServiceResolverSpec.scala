@@ -2,7 +2,7 @@ package pl.warp.engine.core.context.loader
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpecLike}
-import pl.warp.engine.core.context.annotation.{Qualified, Service, ServiceBuilder}
+import pl.warp.engine.core.context.service.{Qualified, Service, ServiceBuilder}
 import pl.warp.engine.core.context.loader.ServiceResolverSpec.Test
 import pl.warp.engine.core.context.loader.service.{ClassResolver, DependencyInfo, ServiceResolver}
 import ServiceResolverSpec._

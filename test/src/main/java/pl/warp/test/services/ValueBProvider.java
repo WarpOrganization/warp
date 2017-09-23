@@ -1,6 +1,6 @@
 package pl.warp.test.services;
 
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 
 /**
  * @author Jaca777

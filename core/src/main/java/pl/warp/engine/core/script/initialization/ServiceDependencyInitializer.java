@@ -1,7 +1,7 @@
 package pl.warp.engine.core.script.initialization;
 
 import pl.warp.engine.core.context.Context;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.ScriptInitializationException;
 import pl.warp.engine.core.script.annotation.ContextService;

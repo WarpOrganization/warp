@@ -1,4 +1,4 @@
-package pl.warp.engine.core.context.annotation;
+package pl.warp.engine.core.context.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,10 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author Jaca777
- * Created 2017-08-29 at 22
+ * Created 2017-09-23 at 15
  */
+
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface RegisterTask {
-    String executorName();
+@Target({ElementType.METHOD})
+public @interface ConfigValue {
+    String value();
+    String dispatcher() default "default";
 }

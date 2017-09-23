@@ -1,6 +1,6 @@
 package pl.warp.engine.core.script.blueprint;
 
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.script.Script;
 
 import java.util.HashMap;

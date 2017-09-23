@@ -2,7 +2,7 @@ package pl.warp.engine.core.script.initialization;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.SimpleListener;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.script.annotation.EventHandler;
 import pl.warp.engine.core.script.Script;

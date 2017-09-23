@@ -3,7 +3,7 @@ package pl.warp.engine.core.context.loader.service
 import java.lang.invoke.{MethodHandle, MethodHandles}
 import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
-import pl.warp.engine.core.context.annotation.{Qualified, ServiceBuilder}
+import pl.warp.engine.core.context.service.{Qualified, ServiceBuilder}
 import pl.warp.engine.core.context.loader.service.ServiceResolver._
 
 /**
