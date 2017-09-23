@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics;
+package pl.warp.engine.graphics.rendering;
 
 /**
  * @author Jaca777

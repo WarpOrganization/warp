@@ -35,14 +35,14 @@ public class GLSLShaderCompiler {
     }
 
     /**
-     * Links shaders into a program.
+     * Links shaders into a program. Skips shader names that equal -1.
      *
      * @return The program's value.
      */
     public static int createProgram(int[] shaders, String[] outNames) {
         int program = glCreateProgram();
         for (int shader : shaders)
-            glAttachShader(program, shader);
+            if(shader != -1) glAttachShader(program, shader);
         for (int i = 0; i < outNames.length; i++) {
             String name = outNames[i];
             GL30.glBindFragDataLocation(program, i, name);

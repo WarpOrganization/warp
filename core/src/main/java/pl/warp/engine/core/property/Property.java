@@ -47,11 +47,11 @@ public abstract class Property{
 
     public void enable() {
         this.enabled = true;
-        if (triggerStateEvents) owner.triggerEvent(new PropertyEnabledEvent<>(this));
+        if (triggerStateEvents) owner.triggerEvent(new PropertyEnabledEvent(this));
     }
 
     public void disable() {
         this.enabled = false;
-        if (triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent<>(this));
+        if (triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent(this));
     }
 }

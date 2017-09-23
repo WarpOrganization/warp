@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.utility;
 
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -17,14 +18,14 @@ public class MatrixStack {
     private static final int DEFAULT_DEPTH = 32;
 
     private int size;
-    private Matrix4f[][] matrixStack;
+    private Matrix4f[] composeMatrixStack;
+    private Matrix3f[] rotationMatrixStack;
     private int top = 0;
 
     public MatrixStack(int size) {
         this.size = size;
-        this.matrixStack = new Matrix4f[size][2];
-        this.matrixStack[top][MATRIX] = new Matrix4f();
-        this.matrixStack[top][R_MATRIX] = new Matrix4f();
+        this.composeMatrixStack = new Matrix4f[size];
+        this.rotationMatrixStack = new Matrix3f[size];
         fill();
     }
 
@@ -34,8 +35,8 @@ public class MatrixStack {
 
     private void fill() {
         for (int i = 0; i < this.size; i++) {
-            matrixStack[i][MATRIX] = new Matrix4f();
-            matrixStack[i][R_MATRIX] = new Matrix4f();
+            composeMatrixStack[i] = new Matrix4f();
+            rotationMatrixStack[i] = new Matrix3f();
         }
     }
 
@@ -43,8 +44,8 @@ public class MatrixStack {
      * Pushes a new matrix onto stack.
      */
     public void push() {
-        matrixStack[++top][MATRIX].set(matrixStack[top - 1][MATRIX]);
-        matrixStack[top][R_MATRIX].set(matrixStack[top - 1][R_MATRIX]);
+        composeMatrixStack[++top].set(composeMatrixStack[top - 1]);
+        rotationMatrixStack[top].set(rotationMatrixStack[top - 1]);
     }
 
     /**
@@ -65,7 +66,7 @@ public class MatrixStack {
      */
     public void translate(float x, float y, float z) {
         tempVector.set(x, y, z);
-        matrixStack[top][MATRIX].translate(tempVector);
+        composeMatrixStack[top].translate(tempVector);
     }
 
     /**
@@ -87,13 +88,13 @@ public class MatrixStack {
      */
     public void rotate(float rad, float x, float y, float z) {
         tempVector.set(x, y, z);
-        matrixStack[top][MATRIX].rotate(rad, tempVector);
-        matrixStack[top][R_MATRIX].rotate(rad, tempVector);
+        composeMatrixStack[top].rotate(rad, tempVector);
+        rotationMatrixStack[top].rotate(rad, tempVector);
     }
 
     public void rotate(Quaternionf quaternion) {
-        matrixStack[top][MATRIX].rotate(quaternion);
-        matrixStack[top][R_MATRIX].rotate(quaternion);
+        composeMatrixStack[top].rotate(quaternion);
+        rotationMatrixStack[top].rotate(quaternion);
     }
 
     /**
@@ -105,11 +106,11 @@ public class MatrixStack {
      */
     public void scale(float x, float y, float z) {
         tempVector.set(x, y, z);
-        matrixStack[top][MATRIX].scale(tempVector);
+        composeMatrixStack[top].scale(tempVector);
     }
 
     public void scale(Vector3f scale) {
-        matrixStack[top][MATRIX].scale(scale);
+        composeMatrixStack[top].scale(scale);
     }
 
     /**
@@ -119,7 +120,7 @@ public class MatrixStack {
      * @param matrix
      */
     public void mul(Matrix4f matrix) {
-        matrixStack[top][MATRIX].mul(matrix, matrixStack[top][MATRIX]);
+        composeMatrixStack[top].mul(matrix, composeMatrixStack[top]);
     }
 
     /**
@@ -133,11 +134,11 @@ public class MatrixStack {
      * @return The topMatrix matrix.
      */
     public Matrix4f topMatrix() {
-        return matrixStack[top][MATRIX];
+        return composeMatrixStack[top];
     }
 
     public void storeTopBuffer(FloatBuffer dest) {
-        matrixStack[top][MATRIX].get(dest);
+        composeMatrixStack[top].get(dest);
     }
 
     /**
@@ -150,12 +151,12 @@ public class MatrixStack {
     /**
      * @return A rotation matrix of the topMatrix matrix.
      */
-    public Matrix4f topRotationMatrix() {
-        return matrixStack[top][R_MATRIX];
+    public Matrix3f topRotationMatrix() {
+        return rotationMatrixStack[top];
     }
 
     public void storeRotationBuffer(FloatBuffer dest) {
-        matrixStack[top][R_MATRIX].get(dest);
+        rotationMatrixStack[top].get(dest);
     }
 
     /**

@@ -1,1 +1,7 @@
-kaczka: 1337
+graphics:
+  ups: 60
+  display:
+    !!pl.warp.engine.graphics.window.Display
+    fullscreen: false
+    width: 1280
+    height: 920

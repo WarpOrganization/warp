@@ -1,6 +1,5 @@
 package pl.warp.engine.graphics.mesh;
 
-import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.property.Property;
 
 /**
@@ -9,12 +8,12 @@ import pl.warp.engine.core.property.Property;
  */
 public class MeshProperty extends Property {
 
-    public static final String MESH_PROPERTY_NAME = "mesh";
+    public static final String NAME = "mesh";
 
     private Mesh mesh;
 
     public MeshProperty(Mesh mesh) {
-        super(MESH_PROPERTY_NAME);
+        super(NAME);
         this.mesh = mesh;
     }
 

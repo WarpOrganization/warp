@@ -22,7 +22,6 @@ public class ExecutorManager implements ServiceRegistry {
         Class<?> serviceClass = service.getClass();
         if(isRegistrableExecutor(serviceClass)) {
             addExecutor((Executor) service);
-            if(isThread(service)) ((EngineThread) service).start();
         }
     }
 
@@ -54,7 +53,7 @@ public class ExecutorManager implements ServiceRegistry {
     }
 
     @Override
-    public int order() {
+    public int getPriority() {
         return 0;
     }
 }

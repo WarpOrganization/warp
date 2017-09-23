@@ -1,10 +1,13 @@
 package pl.warp.engine.input.glfw;
 
+import org.apache.log4j.Logger;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.core.component.Scene;
+import pl.warp.engine.core.component.SceneHolder;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.event.Event;
-import pl.warp.engine.input.*;
+import pl.warp.engine.input.Input;
 import pl.warp.engine.input.event.KeyPressedEvent;
 import pl.warp.engine.input.event.KeyReleasedEvent;
 import pl.warp.engine.input.event.MouseButtonPressedEvent;
@@ -19,12 +22,16 @@ import java.awt.event.MouseEvent;
  */
 
 @SuppressWarnings("Duplicates") //srsly intellij?
+
+@Service
 public class GLFWInput implements Input {
 
-    private Scene scene;
+    private static Logger logger = Logger.getLogger(GLFWInput.class);
 
-    public GLFWInput(Scene scene) {
-        this.scene = scene;
+    private SceneHolder sceneHolder;
+
+    public GLFWInput(SceneHolder sceneHolder) {
+        this.sceneHolder = sceneHolder;
     }
 
     private long windowHandle;
@@ -108,7 +115,12 @@ public class GLFWInput implements Input {
 
 
     private void triggerEvent(Event event) {
-        scene.triggerEvent(event);
+        Scene scene = sceneHolder.getScene();
+        if(scene != null) {
+            scene.triggerEvent(event);
+        } else {
+            logger.warn("Couln");
+        }
     }
 
     @Override

@@ -1,10 +1,7 @@
 package pl.warp.engine.graphics.mesh;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL31;
+import org.lwjgl.opengl.*;
 import pl.warp.engine.graphics.utility.BufferTools;
 
 
@@ -196,6 +193,10 @@ public class Mesh {
      */
     public void render() {
         GL11.glDrawElements(GL11.GL_TRIANGLES, indices, GL11.GL_UNSIGNED_INT, 0);
+    }
+
+    public void renderPatched() {
+        GL11.glDrawElements(GL40.GL_PATCHES, indices, GL11.GL_UNSIGNED_INT, 0);
     }
 
     public void renderInstanced(int instances){

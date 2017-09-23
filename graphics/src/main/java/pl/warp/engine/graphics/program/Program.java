@@ -5,10 +5,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgram;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
-import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 import pl.warp.engine.graphics.texture.Texture;
 
 import java.nio.FloatBuffer;
@@ -21,33 +19,18 @@ public abstract class Program {
 
     protected ExtendedGLSLProgram program = null;
     protected ExtendedGLSLProgramCompiler compiler;
-    protected String vertexShaderName;
-    protected String fragmentShaderName;
+    protected String programName;
 
-    public Program(String vertexShaderName, String fragmentShaderName, ExtendedGLSLProgramCompiler compiler) {
-        this.vertexShaderName = vertexShaderName;
-        this.fragmentShaderName = fragmentShaderName;
+    public Program(String programName, ExtendedGLSLProgramCompiler compiler) {
+        this.programName = programName;
         this.compiler = compiler;
-    }
-
-    public Program(int program, int vertexShader, int fragmentShader) {
-        this.program = new ExtendedGLSLProgram(fragmentShader, vertexShader, program);
-    }
-
-    public Program(String programName) {
-        this(programName + "/vert", programName + "/frag",
-                new ExtendedGLSLProgramCompiler(ConstantField.EMPTY_CONSTANT_FIELD, LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER));
-    }
-
-
-    protected Program() {
+        this.compile();
     }
 
     public void compile() {
-        this.program = compiler.compile(vertexShaderName, fragmentShaderName, null);
+        this.program = compiler.compile(programName);
         GL20.glUseProgram(this.program.getGLProgram());
     }
-
 
     /**
      * Binds the program.

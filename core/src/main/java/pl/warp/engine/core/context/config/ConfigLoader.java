@@ -25,10 +25,20 @@ public class ConfigLoader {
     public void loadTo(Config config){
         logger.info("Loading config...");
         Map<String, Object> values = loadFromYaml();
-        for(Map.Entry<String, Object> entry : values.entrySet()) {
-            config.setValue(entry.getKey(), entry.getValue());
-        }
+        setValues(config, values, "");
         logger.info("Config loaded");
+    }
+
+    private void setValues(Config config, Map<String, Object> values, String acc) {
+        for(Map.Entry<String, Object> entry : values.entrySet()) {
+
+            Object value = entry.getValue();
+            if(value instanceof Map<?, ?>){
+                setValues(config, (Map<String, Object>) value, acc + entry.getKey() + ".");
+            } else {
+                config.setValue(acc + entry.getKey(), value);
+            }
+        }
     }
 
     public Map<String, Object> loadFromYaml(){
@@ -49,5 +59,4 @@ public class ConfigLoader {
 
         }
     }
-
 }

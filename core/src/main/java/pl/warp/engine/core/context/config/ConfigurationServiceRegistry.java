@@ -76,7 +76,7 @@ public class ConfigurationServiceRegistry  implements ServiceRegistry {
     }
 
     @Override
-    public int order() {
+    public int getPriority() {
         return 1;
     }
 }

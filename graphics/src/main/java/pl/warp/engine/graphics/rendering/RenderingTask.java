@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics;
+package pl.warp.engine.graphics.rendering;
 
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
@@ -6,7 +6,8 @@ import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
-import pl.warp.engine.graphics.rendering.SceneRenderer;
+import pl.warp.engine.graphics.GLErrors;
+import pl.warp.engine.graphics.rendering.scene.SceneRenderer;
 
 /**
  * @author Jaca777
@@ -19,7 +20,7 @@ public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;
 
-    public RenderingTask( SceneRenderer sceneRenderer) {
+    public RenderingTask(SceneRenderer sceneRenderer) {
         this.sceneRenderer = sceneRenderer;
     }
 
@@ -53,6 +54,8 @@ public class RenderingTask extends EngineTask {
         GLErrors.checkOGLErrors();
     }
 
-
-
+    @Override
+    public int getPriority() {
+        return 1;
+    }
 }

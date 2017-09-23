@@ -8,7 +8,6 @@ import pl.warp.engine.core.component.SceneComponent;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.graphics.GraphicsThread;
-import pl.warp.engine.graphics.RenderingTask;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraHolder;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
@@ -23,7 +22,6 @@ import pl.warp.engine.graphics.resource.texture.PNGDecoder;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.utility.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.window.Display;
-import pl.warp.engine.graphics.window.WindowTask;
 
 /**
  * @author Jaca777
@@ -35,12 +33,12 @@ public class Test1 {
 
 
     public static void main(String[] args) {
-
         EngineContext engineContext = new EngineContext();
-        GraphicsThread thread = startGraphics(engineContext);
+        GraphicsThread thread = engineContext.getLoadedContext()
+                .findOne(GraphicsThread.class)
+                .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
-
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -104,26 +102,5 @@ public class Test1 {
         );
         Camera camera = new QuaternionCamera(cameraComponent, new TransformProperty(), projection);
         cameraHolder.setCamera(camera);
-
     }
-
-    private static GraphicsThread startGraphics(EngineContext engineContext) {
-        GraphicsThread thread = engineContext.getLoadedContext()
-                .findOne(GraphicsThread.class)
-                .get();
-
-        WindowTask windowTask = engineContext.getLoadedContext()
-                .findOne(WindowTask.class).get();
-        windowTask.setDisplay(DISPLAY);
-        thread.scheduleTask(windowTask);
-
-        RenderingTask renderingTask = engineContext.getLoadedContext()
-                .findOne(RenderingTask.class).get();
-        thread.scheduleTask(renderingTask);
-
-        thread.start();
-        return thread;
-    }
-
-
 }

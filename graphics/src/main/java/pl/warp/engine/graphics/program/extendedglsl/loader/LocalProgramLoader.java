@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
  */
 public class LocalProgramLoader implements ProgramLoader {
 
-    public static final String DEFAULT_PROGRAM_PATH = "pl/warp/engine/graphics/program/rendering/";
+    public static final String DEFAULT_PROGRAM_PATH = "pl/warp/engine/graphics/program/";
     public static final String DEFAULT_PROGRAM_EXTENSION = ".glsl";
 
     public static final LocalProgramLoader DEFAULT_LOCAL_PROGRAM_LOADER = new LocalProgramLoader(DEFAULT_PROGRAM_PATH, DEFAULT_PROGRAM_EXTENSION);

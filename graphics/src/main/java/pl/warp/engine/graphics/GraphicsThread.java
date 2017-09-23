@@ -19,9 +19,5 @@ import pl.warp.engine.core.execution.SyncTimer;
 public class GraphicsThread extends SyncEngineThread{
     public GraphicsThread(Config config) {
         super(new SyncTimer(config.getValue("graphics.ups")), new RapidExecutionStrategy());
-        getTimer()
-
     }
-
-    @ValueS
 }

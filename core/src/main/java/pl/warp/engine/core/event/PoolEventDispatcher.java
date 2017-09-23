@@ -1,7 +1,7 @@
 package pl.warp.engine.core.event;
 
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

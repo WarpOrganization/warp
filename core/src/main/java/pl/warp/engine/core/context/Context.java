@@ -29,7 +29,7 @@ public class Context {
 
     private void processRegistration() {
         List<ServiceRegistry> registries = new ArrayList<>(findAll(ServiceRegistry.class));
-        registries.sort(Comparator.comparingInt(ServiceRegistry::order));
+        registries.sort(Comparator.comparingInt(ServiceRegistry::getPriority));
         for (ServiceRegistry registry : registries) {
             for (Object service : contextHolder.getAllServices()) {
                 registry.registerService(service);

@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics;
+package pl.warp.engine.graphics.rendering;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.graphics.utility.MatrixStack;

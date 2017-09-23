@@ -149,7 +149,7 @@ public class SyncTimer implements Timer {
 
             nextFrame = getTime();
 
-            String osName = System.getProperty("os.value");
+            String osName = System.getProperty("os.name");
 
             if (osName.startsWith("Win")) {
                 // On windows the sleep functions can be highly inaccurate by

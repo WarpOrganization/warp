@@ -6,5 +6,5 @@ package pl.warp.engine.core.context;
  */
 public interface ServiceRegistry {
     void registerService(Object service);
-    int order();
+    int getPriority();
 }

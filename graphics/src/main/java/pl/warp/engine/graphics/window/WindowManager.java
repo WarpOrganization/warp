@@ -2,7 +2,7 @@ package pl.warp.engine.graphics.window;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 
 import java.io.PrintStream;
 

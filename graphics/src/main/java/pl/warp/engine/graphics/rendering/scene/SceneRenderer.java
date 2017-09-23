@@ -1,10 +1,9 @@
-package pl.warp.engine.graphics.rendering;
+package pl.warp.engine.graphics.rendering.scene;
 
 import org.apache.log4j.Logger;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.SceneHolder;
-import pl.warp.engine.core.context.annotation.Service;
-import pl.warp.engine.graphics.RenderingConfig;
+import pl.warp.engine.core.context.service.Service;
 
 
 /**
@@ -17,13 +16,11 @@ public class SceneRenderer {
     private static final Logger logger = Logger.getLogger(SceneRenderer.class);
 
     private SceneHolder sceneHolder;
-    private RenderingConfig config;
     private ComponentRenderer renderer;
 
-    public SceneRenderer(SceneHolder sceneHolder, RenderingConfig config) {
+    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer) {
         this.sceneHolder = sceneHolder;
-        this.config = config;
-        this.renderer = new ComponentRenderer();
+        this.renderer = renderer;
     }
 
     public void init() {

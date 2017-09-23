@@ -40,7 +40,7 @@ public class TaskManager implements ServiceRegistry {
 
 
     @Override
-    public int order() {
+    public int getPriority() {
         return 2;
     }
 }

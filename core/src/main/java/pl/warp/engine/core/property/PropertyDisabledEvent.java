@@ -9,14 +9,14 @@ import pl.warp.engine.core.component.Component;
  */
 public class PropertyDisabledEvent<T extends Component> extends Event {
     public static final String PROPERTY_DISABLED_EVENT_NAME = "PropertyEnabledEvent";
-    private Property<T> property;
+    private Property property;
 
-    public PropertyDisabledEvent(Property<T> property) {
+    public PropertyDisabledEvent(Property property) {
         super(PROPERTY_DISABLED_EVENT_NAME);
         this.property = property;
     }
 
-    public Property<T> getProperty() {
+    public Property getProperty() {
         return property;
     }
 }

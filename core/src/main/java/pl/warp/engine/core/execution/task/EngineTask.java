@@ -32,4 +32,8 @@ public abstract class EngineTask {
     protected abstract void onClose();
 
     public abstract void update(int delta);
+
+    public int getPriority() {
+        return 0;
+    }
 }

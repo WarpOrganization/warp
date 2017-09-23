@@ -12,54 +12,52 @@ public class Display {
     private int width;
     private int height;
 
+    public Display() {
+    }
+
     public Display(boolean fullscreen, int width, int height) {
         this.fullscreen = fullscreen;
         this.width = width;
         this.height = height;
     }
 
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    public void setFullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
+    }
+
     public boolean isVisible() {
         return visible;
     }
 
-    public Display setVisible(boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
-        return this;
     }
 
     public boolean isResizable() {
         return resizable;
     }
 
-    public Display setResizable(boolean resizable) {
+    public void setResizable(boolean resizable) {
         this.resizable = resizable;
-        return this;
     }
 
     public int getWidth() {
         return width;
     }
 
-    public Display setWidth(int width) {
+    public void setWidth(int width) {
         this.width = width;
-        return this;
     }
 
     public int getHeight() {
         return height;
     }
 
-    public Display setHeight(int height) {
+    public void setHeight(int height) {
         this.height = height;
-        return this;
-    }
-
-    public boolean isFullscreen() {
-        return fullscreen;
-    }
-
-    public Display setFullscreen(boolean fullscreen) {
-        this.fullscreen = fullscreen;
-        return this;
     }
 }

@@ -2,9 +2,7 @@ package pl.warp.engine.core.execution;
 
 import pl.warp.engine.core.execution.task.EngineTask;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -32,8 +30,13 @@ public class SyncEngineThread implements EngineThread {
 
     @Override
     public void scheduleTask(EngineTask task) {
-        if (running) scheduleOnce(() -> tasks.add(task));
-        else tasks.add(task);
+        if (running) scheduleOnce(() -> addTask(task));
+        else addTask(task);
+    }
+
+    protected void addTask(EngineTask task) {
+        tasks.add(task);
+        tasks.sort(Comparator.comparingInt(EngineTask::getPriority));
     }
 
     @Override
@@ -56,7 +59,8 @@ public class SyncEngineThread implements EngineThread {
     public void runUpdate() {
         int delta = timer.getDelta();
         for (EngineTask task : tasks) {
-            if (!task.isInitialized()) task.init();
+            if(!task.isInitialized())
+                task.init();
             task.update(delta);
         }
         executionStrategy.execute(scheduledRunnables);
