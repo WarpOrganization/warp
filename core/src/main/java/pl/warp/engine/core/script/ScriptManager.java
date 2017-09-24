@@ -3,7 +3,7 @@ package pl.warp.engine.core.script;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentDeathEvent;
 import pl.warp.engine.core.component.SimpleListener;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.script.blueprint.ScriptBlueprint;
 import pl.warp.engine.core.script.blueprint.ScriptBlueprintSupplier;
 

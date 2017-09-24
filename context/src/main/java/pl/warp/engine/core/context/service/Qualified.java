@@ -1,4 +1,4 @@
-package pl.warp.engine.core.context.annotation;
+package pl.warp.engine.core.context.service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

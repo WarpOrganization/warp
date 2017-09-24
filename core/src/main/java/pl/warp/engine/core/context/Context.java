@@ -5,6 +5,8 @@ import pl.warp.engine.core.context.loader.JavaContextHolder;
 import pl.warp.engine.core.context.loader.service.ServiceInfo;
 import scala.Option;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,13 +25,23 @@ public class Context {
 
     private JavaContextHolder contextHolder;
 
-
     public static Context create() {
         ContextLoader loader = new ContextLoader();
         Context context = new Context();
         JavaContextHolder contextHolder = loader.loadContext(context);
         context.setContextHolder(contextHolder);
+        context.processRegistration();
         return context;
+    }
+
+    private void processRegistration() {
+        List<ServiceRegistry> registries = new ArrayList<>(findAll(ServiceRegistry.class));
+        registries.sort(Comparator.comparingInt(ServiceRegistry::order));
+        for (ServiceRegistry registry : registries) {
+            for (Object service : contextHolder.getAllServices()) {
+                registry.registerService(service);
+            }
+        }
     }
 
     public <T> Optional<T> findOne(Class<T> type) {

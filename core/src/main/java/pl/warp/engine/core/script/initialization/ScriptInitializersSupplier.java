@@ -1,7 +1,7 @@
 package pl.warp.engine.core.script.initialization;
 
 import com.google.common.collect.Lists;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.script.Script;
 
 import java.util.List;

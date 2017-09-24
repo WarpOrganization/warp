@@ -3,7 +3,6 @@ package pl.warp.engine.core.context.loader
 import java.lang.invoke.MethodHandles
 
 import com.typesafe.scalalogging.LazyLogging
-import pl.warp.engine.core.context.Context
 import pl.warp.engine.core.context.loader.service.{ServiceInfo, ServiceLoader}
 
 /**
@@ -12,7 +11,7 @@ import pl.warp.engine.core.context.loader.service.{ServiceInfo, ServiceLoader}
   */
 private[core] class ContextLoader extends LazyLogging  {
 
-  def loadContext(preloadedContext: Context): JavaContextHolder = {
+  def loadContext(preloadedContext: Object): JavaContextHolder = {
     try {
       logger.info("Loading the application context...")
       val serviceLoader = new ServiceLoader
@@ -29,9 +28,9 @@ private[core] class ContextLoader extends LazyLogging  {
 
   private def getContextInfo(preloadedContext: Object) = {
     ServiceInfo(
-      `type` = classOf[Context],
+      `type` = preloadedContext.getClass,
       qualifier = None,
-      builder = MethodHandles.constant(classOf[Context], preloadedContext),
+      builder = MethodHandles.constant(preloadedContext.getClass, preloadedContext),
       dependencies = List.empty
     )
   }

@@ -2,11 +2,11 @@ package pl.warp.engine.core.context.loader
 
 import java.util.Optional
 
-import pl.warp.engine.core.context.annotation.Qualified
+import pl.warp.engine.core.context.service.Qualified
 import pl.warp.engine.core.context.loader.service.ServiceInfo
 import java.{util => jutil}
-import scala.collection.JavaConverters._
 
+import scala.collection.JavaConverters._
 import pl.warp.engine.core.context.MoreThanOneServiceFoundException
 
 /**
@@ -42,7 +42,8 @@ private[core] class JavaContextHolder(services: List[(ServiceInfo, Object)]) {
     }
   }
 
+  def getAllServices: jutil.List[Object] = services.map(_._2).asJava
+
   private[core] def add(serviceInfo: ServiceInfo, instance: Object) =
     new JavaContextHolder((serviceInfo, instance) :: services)
-
 }
