@@ -44,7 +44,7 @@ public class PhysicsTask extends EngineTask {
     @Override
     public void update(int delta) {
         rigidBodyRegistry.processBodies(mainWorld.getDynamicsWorld());
-        mainWorld.getDynamicsWorld().stepSimulation(1/60f);
+        mainWorld.getDynamicsWorld().stepSimulation(delta / 1000f, 4, 1 / 60f);
     }
 
     private void createPhysicsWorld() {

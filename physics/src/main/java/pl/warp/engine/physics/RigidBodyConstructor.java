@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Disposable;
 import pl.warp.engine.common.transform.TransformProperty;
-import pl.warp.engine.core.component.Component;
 
 /**
  * @author Hubertus

@@ -82,8 +82,8 @@
 //    private void brake() {
 //        vel.set(bodyProperty.getVelocity());
 //        vel.negate().normalize();
-//        vel.mul(hullProperty.getBrakingForce());
-//        if (bodyProperty.getVelocity().length() > hullProperty.getBrakingForce() / bodyProperty.getMass()) {
+//        vel.mul(hullProperty.getLinearDamping());
+//        if (bodyProperty.getVelocity().length() > hullProperty.getLinearDamping() / bodyProperty.getMass()) {
 //            bodyProperty.applyForce(vel);
 //        } else {
 //            bodyProperty.getVelocity().set(0);

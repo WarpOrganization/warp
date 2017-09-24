@@ -1,5 +1,6 @@
 package pl.warp.engine.physics;
 
+import com.badlogic.gdx.math.Vector3;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.annotation.Service;
@@ -20,13 +21,13 @@ public class PhysicsManager {
 
 
     public void addRigidBody(Component component) {
-        System.out.println("adding goat");
         if (!component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
             throw new PropertyNotPresentException(TransformProperty.TRANSFORM_PROPERTY_NAME);
 
         if (!component.hasEnabledProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME))
             throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
         PhysicsProperty physicsProperty = component.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
+        physicsProperty.getRigidBody().applyCentralForce(new Vector3(1000,1000,1000));
         physicsTask.getRigidBodyRegistry().addRigidBody(physicsProperty.getRigidBody());
     }
 }

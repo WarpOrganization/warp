@@ -96,7 +96,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 2.0f;
-    private static final float BRAKING_FORCE = 0.2f * 10;
+    private static final float LINEAR_DAMPING = 0.8f;
+    private static final float ANGULAR_DAMPING = 0.6f;
     private static final float ARROWS_ROTATION_SPEED = 2f;
     private static final int GUN_COOLDOWN = 200;
     public static GameComponent MAIN_GOAT;
@@ -174,7 +175,9 @@ public class SpaceSceneLoader implements GameSceneLoader {
         cameraComponent.addProperty(new CameraProperty(camera));
         camera.move(new Vector3f(0, 4f, 15f));
 //        controllableGoat.addProperty(new PhysicalBodyProperty(10f, 10.772f / 2, 1.8f / 2, 13.443f / 2));
-        controllableGoat.addProperty(new TransformProperty());
+        TransformProperty transformProperty = new TransformProperty();
+        controllableGoat.addProperty(transformProperty);
+
         loaded = true;
     }
 
@@ -244,6 +247,15 @@ public class SpaceSceneLoader implements GameSceneLoader {
             boomSpritesheet = new Texture2DArray(spritesheet.getWidth(), spritesheet.getHeight(), spritesheet.getArraySize(), spritesheet.getData());
 
             RenderableMeshProperty renderableMeshProperty = new RenderableMeshProperty(goatMesh);
+            EngineThread physicsThread = contextBuilder.getGameContext().getContext().findOne(PhysicsThread.class).get();
+            RigidBodyConstructor goatBodyConstructor = new RigidBodyConstructor(new btBoxShape(new Vector3(5, 5, 5)), 10);
+
+            TransformProperty transformProperty = controllableGoat.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
+
+            controllableGoat.addProperty(new PhysicsProperty(goatBodyConstructor.construct(transformProperty)));
+            physicsThread.scheduleOnce(() -> physicsManager.addRigidBody(controllableGoat));
+
+
             controllableGoat.addProperty(renderableMeshProperty);
             renderableMeshProperty.disable();
             //allyEngineParticles(controllableGoat);
@@ -343,8 +355,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             generateGOATS(scene);
             //spawnFrigates();
-            controllableGoat.addProperty(new GoatProperty(MOV_SPEED, ROT_SPEED, BRAKING_FORCE, ARROWS_ROTATION_SPEED));
-//            controllableGoat.addScript(GoatControlScript.class);
+            controllableGoat.addProperty(new GoatProperty(MOV_SPEED, ROT_SPEED, LINEAR_DAMPING, ARROWS_ROTATION_SPEED, ANGULAR_DAMPING));
+            controllableGoat.addScript(GoatControlScript.class);
         });
     }
 
@@ -466,7 +478,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         ArrayList<Component> team2 = new ArrayList<>();
         team1.add(controllableGoat);
         //36n6controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
-        int nOfGoats = 20;
+        int nOfGoats = 60;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new KaboomProperty(gasPlanet, 1000.0f));
