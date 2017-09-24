@@ -48,9 +48,7 @@ public abstract class Framebuffer {
     public abstract int getHeight();
 
 
-    public void clean() {
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-    }
+    public abstract void clean();
 
     public abstract boolean isAssembled();
 

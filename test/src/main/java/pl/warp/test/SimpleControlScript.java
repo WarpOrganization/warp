@@ -12,7 +12,6 @@ import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.input.Input;
 
 import static java.awt.event.KeyEvent.*;
-import static java.awt.event.MouseEvent.BUTTON1;
 
 /**
  * @author Jaca777
@@ -22,7 +21,7 @@ public class SimpleControlScript extends Script {
 
 
     private static final float CAMERA_SPEED = 0.025f;
-    private static final float ROT_SPEED = 0.03f;
+    private static final float ROT_SPEED = 0.0001f;
 
     private float cameraSpeed = CAMERA_SPEED;
 
@@ -51,13 +50,14 @@ public class SimpleControlScript extends Script {
     }
 
     private void move(int delta) {
-        if(input.isKeyDown(VK_SHIFT))
+        if (input.isKeyDown(VK_SHIFT))
             cameraSpeed = CAMERA_SPEED * 3;
         else cameraSpeed = CAMERA_SPEED;
 
         movementVector.zero();
-        if (input.isKeyDown(VK_W))
+        if (input.isKeyDown(VK_W)) {
             movementVector.add(0, 0, -1);
+        }
         if (input.isKeyDown(VK_S))
             movementVector.add(0, 0, 1);
         if (input.isKeyDown(VK_A))
@@ -75,14 +75,12 @@ public class SimpleControlScript extends Script {
 
 
     private void rotate(int delta) {
-        if (input.isMouseButtonDown(BUTTON1)) {
-            Vector2f cursorPositionDelta = input.getCursorPositionDelta();
-            transformProperty.rotateX(cursorPositionDelta.y * ROT_SPEED * delta);
-            transformProperty.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
-        }
-        if(input.isKeyDown(VK_Q))
-            transformProperty.rotateZ(ROT_SPEED * delta * 0.01f);
-        if(input.isKeyDown(VK_E))
-            transformProperty.rotateZ(-ROT_SPEED * delta * 0.01f);
+        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
+        transformProperty.rotateX(-cursorPositionDelta.y * ROT_SPEED * delta);
+        transformProperty.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
+        if (input.isKeyDown(VK_Q))
+            transformProperty.rotateZ(ROT_SPEED * delta);
+        if (input.isKeyDown(VK_E))
+            transformProperty.rotateZ(-ROT_SPEED * delta);
     }
 }

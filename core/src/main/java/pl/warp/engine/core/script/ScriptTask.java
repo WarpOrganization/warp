@@ -1,6 +1,8 @@
 package pl.warp.engine.core.script;
 
 import org.apache.log4j.Logger;
+import pl.warp.engine.core.context.service.Service;
+import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.core.script.updatescheduler.UpdateScheduler;
 
@@ -8,6 +10,9 @@ import pl.warp.engine.core.script.updatescheduler.UpdateScheduler;
  * @author Jaca777
  *         Created 2016-06-26 at 21
  */
+
+@Service
+@RegisterTask(thread = "script")
 public class ScriptTask extends EngineTask {
 
     public static final Logger SCRIPT_TASK_LOGGER = Logger.getLogger(ScriptTask.class);

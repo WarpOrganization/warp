@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.context.service.Service;
+import pl.warp.engine.graphics.framebuffer.ScreenFramebuffer;
 
 
 /**
@@ -17,10 +18,12 @@ public class SceneRenderer {
 
     private SceneHolder sceneHolder;
     private ComponentRenderer renderer;
+    private ScreenFramebuffer screenFramebuffer;
 
-    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer) {
+    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer, ScreenFramebuffer screenFramebuffer) {
         this.sceneHolder = sceneHolder;
         this.renderer = renderer;
+        this.screenFramebuffer = screenFramebuffer;
     }
 
     public void init() {
@@ -48,7 +51,8 @@ public class SceneRenderer {
     }
 
     private void initRendering() {
-        //framebuffer stuff...
+        screenFramebuffer.bindDraw();
+        screenFramebuffer.clean();
         renderer.initRendering();
     }
 

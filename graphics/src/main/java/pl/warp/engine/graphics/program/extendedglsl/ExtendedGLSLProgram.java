@@ -42,6 +42,16 @@ public class ExtendedGLSLProgram {
         else throw new IllegalStateException("Unable to get a geometry shader, it's not attached to the program.");
     }
 
+    public int getTcsShader() {
+        if (hasTesselation()) return tcsShader;
+        else throw new IllegalStateException("Unable to get a TCS shader, it's not attached to the program.");
+    }
+
+    public int getTesShader() {
+        if (hasTesselation()) return tesShader;
+        else throw new IllegalStateException("Unable to get a TES shader, it's not attached to the program.");
+    }
+
     public int getGLProgram() {
         return program;
     }

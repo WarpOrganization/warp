@@ -5,3 +5,8 @@ graphics:
     fullscreen: false
     width: 1280
     height: 920
+  upscounter:
+    enabled: true
+    sampleSize: 30
+
+script.ups: 40

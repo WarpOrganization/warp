@@ -58,10 +58,19 @@ public abstract class Program {
 
     public void delete() {
         GL20.glDetachShader(program.getGLProgram(), program.getVertexShader());
-        GL20.glDetachShader(program.getGLProgram(), program.getFragmentShader());
-        GL20.glDeleteProgram(program.getGLProgram());
         GL20.glDeleteShader(program.getVertexShader());
+        GL20.glDetachShader(program.getGLProgram(), program.getFragmentShader());
         GL20.glDeleteShader(program.getFragmentShader());
+        if(program.hasGeometryShader()){
+            GL20.glDetachShader(program.getGLProgram(), program.getGeometryShader());
+        }
+        if(program.hasTesselation()) {
+            GL20.glDetachShader(program.getGLProgram(), program.getTcsShader());
+            GL20.glDeleteShader(program.getTcsShader());
+            GL20.glDetachShader(program.getGLProgram(), program.getTesShader());
+            GL20.glDeleteShader(program.getTesShader());
+        }
+        GL20.glDeleteProgram(program.getGLProgram());
     }
 
 

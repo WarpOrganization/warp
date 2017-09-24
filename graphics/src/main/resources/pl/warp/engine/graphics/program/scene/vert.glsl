@@ -8,9 +8,9 @@ layout(location = 0) in vec3 inVertex;
 layout(location = 1) in vec2 inTexCoord;
 layout(location = 2) in vec3 inNormal;
 
+out vec3 vPos3;
 out vec2 vTexCoord;
 out vec3 vNormal;
-out vec3 vPos3;
 
 void main(void) {
     vNormal = rotationMatrix * inNormal;

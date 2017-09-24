@@ -212,6 +212,12 @@ public class Mesh {
         finalizeRendering();
     }
 
+    public void drawPatched(){
+        bind();
+        renderPatched();
+        finalizeRendering();
+    }
+
     /**
      * Binds each vbo and draws mesh instances.
      * @param instances Number of mesh instances
@@ -233,17 +239,6 @@ public class Mesh {
         GL15.glDeleteBuffers(indexBuff);
     }
 
-    private FloatBuffer tempVertexData;
-
-    public synchronized void setVertexData(float[] vertices) {
-        if (tempVertexData == null || tempVertexData.capacity() < this.vertices * 3)
-            tempVertexData = BufferUtils.createFloatBuffer(this.vertices * 3);
-        tempVertexData.clear();
-        FloatBuffer data = tempVertexData.put(vertices);
-        data.rewind();
-        setBufferData(vertexBuff, data);
-    }
-
     public synchronized void setVertexData(FloatBuffer vertices) {
         setBufferData(vertexBuff, vertices);
     }
@@ -261,6 +256,17 @@ public class Mesh {
 
     public synchronized void setTexCoordData(FloatBuffer texCoords) {
         setBufferData(texCoordBuff, texCoords);
+    }
+
+    private FloatBuffer tempVertexData;
+
+    public synchronized void setVertexData(float[] vertices) {
+        if (tempVertexData == null || tempVertexData.capacity() < this.vertices * 3)
+            tempVertexData = BufferUtils.createFloatBuffer(this.vertices * 3);
+        tempVertexData.clear();
+        FloatBuffer data = tempVertexData.put(vertices);
+        data.rewind();
+        setBufferData(vertexBuff, data);
     }
 
     private FloatBuffer tempNormalData;

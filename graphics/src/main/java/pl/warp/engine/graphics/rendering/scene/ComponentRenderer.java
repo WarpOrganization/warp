@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.rendering.scene;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.service.Service;
@@ -32,6 +34,16 @@ public class ComponentRenderer {
     public void initRendering() {
         sceneRenderingProgram.use();
         sceneRenderingProgram.useCamera(cameraHolder.getCamera());
+        setupGL();
+    }
+
+    private void setupGL() {
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER,0);
+        GL11.glViewport(0,0, 1280, 920);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
     }
 
     private void applyTransformations(Component component) {
@@ -59,7 +71,7 @@ public class ComponentRenderer {
             sceneRenderingProgram.useMatrixStack(matrixStack);
             MeshProperty meshProperty = component.getProperty(MeshProperty.NAME);
             Mesh mesh = meshProperty.getMesh();
-            mesh.render();
+            mesh.draw();
         }
     }
 

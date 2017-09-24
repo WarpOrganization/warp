@@ -27,7 +27,6 @@ jar {
 
 dependencies {
     compile project(':test')
-    compile project(':ide')
 }
 
 task testJar(type: Jar, dependsOn: 'build') {

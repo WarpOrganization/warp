@@ -13,8 +13,13 @@ repositories {
 
 dependencies {
 
-    compile project(':game')
+    compile project(':core')
+    compile project(':graphics')
+    compile project(':audio')
+    compile project(':physics')
+    compile project(':audio')
     compile project(':launcher')
+    compile project(':input')
 
     compile 'org.slf4j:slf4j-api:1.7.12'
 
