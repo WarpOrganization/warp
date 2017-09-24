@@ -2,6 +2,7 @@ package pl.warp.test;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector3f;
@@ -97,8 +98,8 @@ public class SpaceSceneLoader implements GameSceneLoader {
     private static final float ROT_SPEED = 0.05f;
     private static final float MOV_SPEED = 2.0f;
     private static final float LINEAR_DAMPING = 0.8f;
-    private static final float ANGULAR_DAMPING = 0.6f;
-    private static final float ARROWS_ROTATION_SPEED = 2f;
+    private static final float ANGULAR_DAMPING = 0.9f;
+    private static final float ARROWS_ROTATION_SPEED = 0.5f;
     private static final int GUN_COOLDOWN = 200;
     public static GameComponent MAIN_GOAT;
 
@@ -252,7 +253,9 @@ public class SpaceSceneLoader implements GameSceneLoader {
 
             TransformProperty transformProperty = controllableGoat.getProperty(TransformProperty.TRANSFORM_PROPERTY_NAME);
 
-            controllableGoat.addProperty(new PhysicsProperty(goatBodyConstructor.construct(transformProperty)));
+            btRigidBody controllableGoatRigidBody = goatBodyConstructor.construct(transformProperty);
+            controllableGoatRigidBody.setActivationState(4); //disable deactivaion
+            controllableGoat.addProperty(new PhysicsProperty(controllableGoatRigidBody));
             physicsThread.scheduleOnce(() -> physicsManager.addRigidBody(controllableGoat));
 
 

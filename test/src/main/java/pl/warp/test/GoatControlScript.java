@@ -79,6 +79,8 @@ public class GoatControlScript extends Script {
         goatFullRotation.transform(upVector.set(UP_VECTOR)).negate();
     }
 
+    private Vector3f tmpTorque = new Vector3f();
+
     private void move(int delta) {
         Input input = ((GameContext) getContext()).getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
@@ -99,18 +101,18 @@ public class GoatControlScript extends Script {
             gunProperty.setTriggered(true);
         else
             gunProperty.setTriggered(false);
-//        if (input.isKeyDown(KeyEvent.VK_UP))
-//            addDesiredTorque(goatProperty.getArrowKeysRotationSpeed(), 0, 0);
-//        if (input.isKeyDown(KeyEvent.VK_DOWN))
-//            addDesiredTorque(-goatProperty.getArrowKeysRotationSpeed(), 0, 0);
-//        if (input.isKeyDown(KeyEvent.VK_LEFT))
-//            addDesiredTorque(0, goatProperty.getArrowKeysRotationSpeed(), 0);
-//        if (input.isKeyDown(KeyEvent.VK_RIGHT))
-//            addDesiredTorque(0, -goatProperty.getArrowKeysRotationSpeed(), 0);
-//        if (input.isKeyDown(KeyEvent.VK_Q))
-//            addDesiredTorque(0, 0, goatProperty.getArrowKeysRotationSpeed());
-//        if (input.isKeyDown(KeyEvent.VK_E))
-//            addDesiredTorque(0, 0, -goatProperty.getArrowKeysRotationSpeed());
+        if (input.isKeyDown(KeyEvent.VK_UP))
+            addTorque(tmpTorque.set(rightVector).mul(-goatProperty.getArrowKeysRotationSpeed() * delta));
+        if (input.isKeyDown(KeyEvent.VK_DOWN))
+            addTorque(tmpTorque.set(rightVector).mul(goatProperty.getArrowKeysRotationSpeed() * delta));
+        if (input.isKeyDown(KeyEvent.VK_LEFT))
+            addTorque(tmpTorque.set(upVector).mul(-goatProperty.getArrowKeysRotationSpeed() * delta));
+        if (input.isKeyDown(KeyEvent.VK_RIGHT))
+            addTorque(tmpTorque.set(upVector).mul(goatProperty.getArrowKeysRotationSpeed() * delta));
+        if (input.isKeyDown(KeyEvent.VK_Q))
+            addTorque(tmpTorque.set(forwardVector).mul(-goatProperty.getArrowKeysRotationSpeed() * delta));
+        if (input.isKeyDown(KeyEvent.VK_E))
+            addTorque(tmpTorque.set(forwardVector).mul(goatProperty.getArrowKeysRotationSpeed() * delta));
     }
 
     private Vector3f tmpForce = new Vector3f();
@@ -159,7 +161,11 @@ public class GoatControlScript extends Script {
         }
     }
 
-    private Vector3f torqueChange = new Vector3f();
+    private Vector3 convertedTorque = new Vector3();
+
+    private void addTorque(Vector3f torque) {
+        bodyProperty.getRigidBody().applyTorqueImpulse(convertedTorque.set(torque.x, torque.y, torque.z));
+    }
 
 //    private void moveAngular(float delta) {
 //        if (desiredTorque.equals(bodyProperty.getAngularVelocity())) return;

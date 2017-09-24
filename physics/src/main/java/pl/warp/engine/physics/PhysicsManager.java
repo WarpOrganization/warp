@@ -1,6 +1,5 @@
 package pl.warp.engine.physics;
 
-import com.badlogic.gdx.math.Vector3;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.annotation.Service;
@@ -27,7 +26,7 @@ public class PhysicsManager {
         if (!component.hasEnabledProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME))
             throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
         PhysicsProperty physicsProperty = component.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
-        physicsProperty.getRigidBody().applyCentralForce(new Vector3(1000,1000,1000));
+        physicsProperty.getRigidBody().activate();
         physicsTask.getRigidBodyRegistry().addRigidBody(physicsProperty.getRigidBody());
     }
 }
