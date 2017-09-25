@@ -20,7 +20,7 @@ public class AITask extends EngineTask {
 
     @Override
     protected void onInit() {
-        manager.init(scene);
+//        manager.init(scene);
     }
 
     @Override

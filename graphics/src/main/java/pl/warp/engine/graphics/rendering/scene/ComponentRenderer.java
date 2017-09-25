@@ -6,6 +6,8 @@ import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.graphics.camera.CameraHolder;
+import pl.warp.engine.graphics.material.Material;
+import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.MeshProperty;
 import pl.warp.engine.graphics.utility.MatrixStack;
@@ -69,10 +71,21 @@ public class ComponentRenderer {
         if(component.hasEnabledProperty(MeshProperty.NAME)){
             applyTransformations(component);
             sceneRenderingProgram.useMatrixStack(matrixStack);
-            MeshProperty meshProperty = component.getProperty(MeshProperty.NAME);
-            Mesh mesh = meshProperty.getMesh();
-            mesh.draw();
+            Material material = getMaterial(component);
+            sceneRenderingProgram.useMaterial(material);
+            Mesh mesh = getMesh(component);
+            mesh.drawPatched();
         }
+    }
+
+    protected Mesh getMesh(Component component) {
+        MeshProperty meshProperty = component.getProperty(MeshProperty.NAME);
+        return meshProperty.getMesh();
+    }
+
+    protected Material getMaterial(Component component) {
+        MaterialProperty property = component.getProperty(MaterialProperty.NAME);
+        return property.getMaterial();
     }
 
     public void enterChildren() {

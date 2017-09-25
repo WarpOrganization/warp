@@ -31,9 +31,9 @@ public class ExtendedGLSLProgramCompiler {
         String glslFragmentCode = loadAndPreprocess(programName + "/frag");
         if (glslFragmentCode == null) throw new ProgramCompilationException("Fragment shader not found for: " + programName);
         String glslGeometryCode = loadAndPreprocess(programName + "/geom");
-        String glslTesCode = loadAndPreprocess(programName + "/tes");
         String glslTcsCode = loadAndPreprocess(programName + "/tcs");
-        return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode, glslTesCode, glslTcsCode);
+        String glslTesCode = loadAndPreprocess(programName + "/tes");
+        return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode, glslTcsCode, glslTesCode);
     }
 
     private String loadAndPreprocess(String shaderName) {

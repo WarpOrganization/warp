@@ -196,6 +196,7 @@ public class Mesh {
     }
 
     public void renderPatched() {
+        GL40.glPatchParameteri(GL40.GL_PATCH_VERTICES, 3);
         GL11.glDrawElements(GL40.GL_PATCHES, indices, GL11.GL_UNSIGNED_INT, 0);
     }
 

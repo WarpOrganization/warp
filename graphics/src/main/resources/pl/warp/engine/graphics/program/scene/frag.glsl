@@ -1,13 +1,14 @@
 #version 330
 precision mediump float;
 
-in vec3 vPos3;
-in vec2 vTexCoord;
-in vec3 vNormal;
+uniform sampler2D diffuseTexture;
+
+in vec3 fsWorldPos;
+in vec2 fsTexCoord;
+in vec3 fsNormal;
 
 layout(location = 0) out vec4 fragColor;
 
-
 void main(void) {
-    fragColor = vec4(vNormal, 1) + vec4(vTexCoord * 0.001, 0, 0);
+    fragColor = texture(diffuseTexture, fsTexCoord);
 }

@@ -45,11 +45,11 @@ public abstract class Program {
      * @param texture Texture to bind.
      * @param sampler Sampler offset to bind the texture to.
      */
-    public void useTexture(Texture texture, int sampler) {
-        useTexture(texture.getTexture(), texture.getType(), sampler);
+    public void useTexture(int sampler, Texture texture) {
+        useTexture(sampler, texture.getTexture(), texture.getType());
     }
 
-    public void useTexture(int texture, int tType, int sampler) {
+    public void useTexture(int sampler, int texture, int tType) {
         if (texture != -1) {
             GL13.glActiveTexture(GL13.GL_TEXTURE0 + sampler);
             GL11.glBindTexture(tType, texture);

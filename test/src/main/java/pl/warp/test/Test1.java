@@ -84,7 +84,7 @@ public class Test1 {
                 GL11.GL_RGBA,
                 true,
                 imageData.getData());
-        Material material = new Material(diffuse, null, null);
+        Material material = new Material(diffuse);
         MaterialProperty materialProperty = new MaterialProperty(material);
         ship.addProperty(materialProperty);
 
@@ -94,22 +94,36 @@ public class Test1 {
     }
 
     private static void createSphere(Component sphere) {
-        Mesh mesh = SphereBuilder.createShape(64, 64, 5.0f);
+        Mesh mesh = SphereBuilder.createShape(16, 16, 5.0f);
         MeshProperty meshProperty = new MeshProperty(mesh);
         sphere.addProperty(meshProperty);
 
-        ImageData imageData = ImageDecoder.decodePNG(
+        ImageData diffuseImageData = ImageDecoder.decodePNG(
                 Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
                 PNGDecoder.Format.RGBA
         );
         Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
-                imageData.getHeight(),
+                diffuseImageData.getHeight(),
+                diffuseImageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
                 true,
-                imageData.getData());
-        Material material = new Material(diffuse, null, null);
+                diffuseImageData.getData());
+
+        ImageData bumpImageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("wood/wood-stack-1-DISP.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D bump = new Texture2D(
+                diffuseImageData.getHeight(),
+                diffuseImageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                bumpImageData.getData());
+
+        Material material = new Material(diffuse);
+        material.setDisplacement(bump, 2.0f);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
 
