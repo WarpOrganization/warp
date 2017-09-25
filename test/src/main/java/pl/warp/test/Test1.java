@@ -55,12 +55,9 @@ public class Test1 {
 
     private static Component createModels(Scene scene, GraphicsThread graphicsThread) {
         Component ship = new SceneComponent(scene);
-        Component sphere = new SceneComponent(scene);
-
-
         graphicsThread.scheduleOnce( () -> {
             createShip(ship);
-            createSphere(sphere);
+            createSpheres(scene);
         });
 
         return ship;
@@ -93,15 +90,13 @@ public class Test1 {
         property.move(new Vector3f(0, 0, -10f));
     }
 
-    private static void createSphere(Component sphere) {
-        Mesh mesh = SphereBuilder.createShape(16, 16, 5.0f);
-        MeshProperty meshProperty = new MeshProperty(mesh);
-        sphere.addProperty(meshProperty);
+    private static void createSpheres(Component scene) {
 
         ImageData diffuseImageData = ImageDecoder.decodePNG(
                 Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
                 PNGDecoder.Format.RGBA
         );
+
         Texture2D diffuse = new Texture2D(
                 diffuseImageData.getHeight(),
                 diffuseImageData.getHeight(),
@@ -122,6 +117,21 @@ public class Test1 {
                 true,
                 bumpImageData.getData());
 
+        for(int i = 0; i < 20; i++) {
+            for(int j = 0; j < 20; j++) {
+                createSphere(scene, new Vector3f(i * 10, j * 10, 0), diffuse, bump);
+            }
+        }
+
+    }
+
+    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump) {
+        Component sphere = new SceneComponent(scene);
+
+        Mesh mesh = SphereBuilder.createShape(20, 20, 4);
+        MeshProperty meshProperty = new MeshProperty(mesh);
+        sphere.addProperty(meshProperty);
+
         Material material = new Material(diffuse);
         material.setDisplacement(bump, 2.0f);
         MaterialProperty materialProperty = new MaterialProperty(material);
@@ -129,7 +139,7 @@ public class Test1 {
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);
-        property.move(new Vector3f(-10f, 0, -10f));
+        property.move(trans);
     }
 
     private static void setupCamera(EngineContext engineContext) {
@@ -144,9 +154,9 @@ public class Test1 {
                 .findOne(CameraHolder.class)
                 .get();
         PerspectiveMatrix projection = new PerspectiveMatrix(
-                45f,
-                0.01f,
-                100f,
+                55f,
+                0.1f,
+                3000f,
                 DISPLAY.getWidth(),
                 DISPLAY.getHeight()
         );

@@ -19,16 +19,18 @@ public abstract class Program {
 
     protected ExtendedGLSLProgram program = null;
     protected ExtendedGLSLProgramCompiler compiler;
+    protected ProgramAssemblyInfo programAssemblyInfo;
     protected String programName;
 
-    public Program(String programName, ExtendedGLSLProgramCompiler compiler) {
+    public Program(String programName, ProgramAssemblyInfo programAssemblyInfo, ExtendedGLSLProgramCompiler compiler) {
         this.programName = programName;
+        this.programAssemblyInfo = programAssemblyInfo;
         this.compiler = compiler;
         this.compile();
     }
 
     public void compile() {
-        this.program = compiler.compile(programName);
+        this.program = compiler.compile(programName, programAssemblyInfo);
         GL20.glUseProgram(this.program.getGLProgram());
     }
 

@@ -1,52 +1,46 @@
-package pl.warp.engine.graphics.rendering.scene;
+package pl.warp.engine.graphics.rendering.scene.program;
 
 import org.joml.Vector3f;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.program.Program;
+import pl.warp.engine.graphics.program.ProgramAssemblyInfo;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
 import pl.warp.engine.graphics.utility.MatrixStack;
 
 /**
  * @author Jaca777
- * Created 2017-09-23 at 22
+ * Created 2017-09-25 at 16
  */
-public class SceneRenderingProgram extends Program {
-
+public abstract class SceneRenderingProgram extends Program {
     private static final int DIFFUSE_SAMPLER = 0;
-    private static final int DISPLACEMENT_SAMPLER = 1;
 
     private int unifProjectionMatrix;
     private int unifModelMatrix;
     private int unifRotationMatrix;
     private int unifViewMatrix;
     private int unifCameraPos;
-    private int unifDisplacementEnabled;
-    private int unifDisplacementFactor;
 
-
-    public SceneRenderingProgram() {
-        super("scene", ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
+    public SceneRenderingProgram(ProgramAssemblyInfo assemblyInfo) {
+        super("scene",
+                assemblyInfo,
+                ExtendedGLSLProgramCompiler.DEFAULT_COMPILER
+        );
         loadUniforms();
         loadSamplers();
     }
 
-
-    private void loadUniforms() {
+    protected void loadUniforms() {
         this.unifProjectionMatrix = getUniformLocation("projectionMatrix");
         this.unifModelMatrix = getUniformLocation("modelMatrix");
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifViewMatrix = getUniformLocation("viewMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
-        this.unifDisplacementFactor = getUniformLocation("displacementFactor");
-        this.unifDisplacementEnabled = getUniformLocation("displacementEnabled");
     }
 
-    private void loadSamplers() {
+    protected void loadSamplers() {
         setTextureLocation("diffuseTexture", DIFFUSE_SAMPLER);
-        setTextureLocation("displacementMap", DISPLACEMENT_SAMPLER);
     }
-
 
     private Vector3f tempCameraPos = new Vector3f();
 
@@ -63,13 +57,5 @@ public class SceneRenderingProgram extends Program {
 
     public void useMaterial(Material material) {
         useTexture(DIFFUSE_SAMPLER, material.getDiffuseTexture());
-        if(material.hasDisplacementMap()) {
-            useTexture(DISPLACEMENT_SAMPLER, material.getDisplacementMap());
-            setUniformf(unifDisplacementFactor, material.getDisplacementFactor());
-            setUniformb(unifDisplacementEnabled, true);
-        } else {
-            setUniformb(unifDisplacementEnabled, false);
-        }
     }
-
 }

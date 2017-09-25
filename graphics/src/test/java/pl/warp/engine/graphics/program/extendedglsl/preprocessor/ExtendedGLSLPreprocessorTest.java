@@ -17,7 +17,7 @@ public class ExtendedGLSLPreprocessorTest {
                 .set("bar", 3);
         ExtendedGLSLPreprocessor preprocessor = new ExtendedGLSLPreprocessor(constantField, null);
         String sample = "foo bar \"$foo$,\n ab$bar$c\n\n $foo$";
-        String result = preprocessor.preprocess(sample);
+        String result = preprocessor.preprocess(sample, ExtendedGLSLPreprocessor.ShaderType.NONE);
         String expectedResult = "foo bar \"2,\n ab3c\n\n 2";
         assertEquals(expectedResult, result);
     }
@@ -29,6 +29,6 @@ public class ExtendedGLSLPreprocessorTest {
                 .set("bar", 3);
         ExtendedGLSLPreprocessor preprocessor = new ExtendedGLSLPreprocessor(constantField, null);
         String sample = "foo bar \"$abc$,\n ab$bar$c\n\n $foo$";
-        preprocessor.preprocess(sample);
+        preprocessor.preprocess(sample, ExtendedGLSLPreprocessor.ShaderType.NONE);
     }
 }

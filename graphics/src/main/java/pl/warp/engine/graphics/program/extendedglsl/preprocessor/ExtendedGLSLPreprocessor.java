@@ -12,6 +12,18 @@ import java.util.regex.Pattern;
  */
 public class ExtendedGLSLPreprocessor {
 
+    public enum ShaderType {
+        NONE(null), VERTEX("VERT"), TCS("TCS"), TES("TES"), GEOMETRY("GEOM"), FRAGMENT("FRAG");
+        private String id;
+        ShaderType(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
+    }
+
     private ConstantField constantField;
     private ProgramLoader programLoader;
 
@@ -20,9 +32,10 @@ public class ExtendedGLSLPreprocessor {
         this.programLoader = programLoader;
     }
 
-    public String preprocess(String code) {
+    public String preprocess(String code, ShaderType shaderType) {
         String withIncludes = processIncludes(code);
-        return processConstants(withIncludes);
+        String withConstants = processConstants(withIncludes);
+        return processShaderType(withConstants, shaderType);
     }
 
     private static final Pattern INCLUDE_EXPR_PATTERN = Pattern.compile("#include \"(.*)\"");
@@ -57,6 +70,16 @@ public class ExtendedGLSLPreprocessor {
             resultCode = resultCode.replace(matcher.group(), constantField.get(constName).toString());
         }
         return resultCode;
+    }
+
+    protected String processShaderType(String code, ShaderType type) {
+        String typeId = type.getId();
+        String typeDef = (typeId != null) ? "#define " + typeId + "\r\n" : "";
+        if(code.contains("#version")) {
+            return code.replaceFirst("(#version .*)", "$1 \r\n" + typeDef);
+        } else {
+            return typeDef + code;
+        }
     }
 
 }

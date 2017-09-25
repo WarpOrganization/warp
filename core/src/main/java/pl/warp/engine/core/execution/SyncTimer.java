@@ -9,12 +9,10 @@ public class SyncTimer implements Timer {
     private int ups;
     private long lastUpdate;
     private int delta;
-    private int deltaLimit;
     private Sync sync = new Sync();
 
     public SyncTimer(int ups) {
         this.ups = ups;
-        calcDeltaLimit(ups);
         this.lastUpdate = System.currentTimeMillis();
     }
 
@@ -25,7 +23,7 @@ public class SyncTimer implements Timer {
 
     private void recalcDelta() {
         long time = System.currentTimeMillis();
-        this.delta = Math.min((int) (time - this.lastUpdate), deltaLimit);
+        this.delta = (int) (time - this.lastUpdate);
         this.lastUpdate = time;
     }
 
@@ -40,11 +38,6 @@ public class SyncTimer implements Timer {
     @Override
     public void setUps(int ups) {
         this.ups = ups;
-        calcDeltaLimit(ups);
-    }
-
-    private void calcDeltaLimit(int ups) {
-        this.deltaLimit = (1000 / ups) * 6;
     }
 
     /*

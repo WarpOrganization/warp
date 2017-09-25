@@ -19,4 +19,5 @@ public class MaterialProperty extends Property{
     public Material getMaterial() {
         return material;
     }
+
 }
