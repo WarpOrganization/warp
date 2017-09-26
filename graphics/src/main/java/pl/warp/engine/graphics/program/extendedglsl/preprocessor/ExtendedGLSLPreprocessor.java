@@ -1,8 +1,11 @@
 package pl.warp.engine.graphics.program.extendedglsl.preprocessor;
 
+import pl.warp.engine.graphics.program.ProgramAssemblyInfo;
 import pl.warp.engine.graphics.program.extendedglsl.ProgramCompilationException;
 import pl.warp.engine.graphics.program.extendedglsl.loader.ProgramLoader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,10 +35,10 @@ public class ExtendedGLSLPreprocessor {
         this.programLoader = programLoader;
     }
 
-    public String preprocess(String code, ShaderType shaderType) {
+    public String preprocess(String code, ShaderType shaderType, ProgramAssemblyInfo assemblyInfo) {
         String withIncludes = processIncludes(code);
         String withConstants = processConstants(withIncludes);
-        return processShaderType(withConstants, shaderType);
+        return processDefines(withConstants, shaderType, assemblyInfo);
     }
 
     private static final Pattern INCLUDE_EXPR_PATTERN = Pattern.compile("#include \"(.*)\"");
@@ -72,13 +75,29 @@ public class ExtendedGLSLPreprocessor {
         return resultCode;
     }
 
-    protected String processShaderType(String code, ShaderType type) {
-        String typeId = type.getId();
-        String typeDef = (typeId != null) ? "#define " + typeId + "\r\n" : "";
+    protected String processDefines(String code, ShaderType type, ProgramAssemblyInfo assemblyInfo) {
+      List<String> defines = new ArrayList<>();
+      if(type != ShaderType.NONE) {
+          defines.add(type.getId());
+      }
+      if(assemblyInfo.getTessellationProgram() != null){
+          defines.add("SCENE_TESS");
+      }
+      if(assemblyInfo.isGeometryEnabled()) {
+          defines.add("GEOM_ENABLED");
+      }
+      return insertDefines(code, defines);
+    }
+
+    protected String insertDefines(String code, List<String> defines) {
+        StringBuilder defineStatements = new StringBuilder();
+        for(String define : defines) {
+            defineStatements.append("#define ").append(define).append("\n");
+        }
         if(code.contains("#version")) {
-            return code.replaceFirst("(#version .*)", "$1 \r\n" + typeDef);
+            return code.replaceFirst("(#version .*)", "$1 \r\n" + defineStatements.toString());
         } else {
-            return typeDef + code;
+            return defineStatements.toString() + code;
         }
     }
 

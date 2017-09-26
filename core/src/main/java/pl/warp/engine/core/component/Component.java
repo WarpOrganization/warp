@@ -6,7 +6,6 @@ import pl.warp.engine.core.event.Listener;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.core.script.Script;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -23,7 +22,7 @@ public interface Component {
 
     boolean hasProperty(String name);
 
-    <T extends Property> Optional<T> getPropertyIfExists(String name);
+    <T extends Property> T getPropertyOrNull(String name);
 
     boolean hasEnabledProperty(String name);
 

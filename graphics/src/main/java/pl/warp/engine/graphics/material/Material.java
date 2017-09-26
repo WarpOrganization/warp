@@ -8,7 +8,6 @@ import pl.warp.engine.graphics.texture.Texture2D;
  */
 public class Material {
 
-    private TesselationMode tesselationMode;
     private Texture2D diffuseTexture;
     private Texture2D normalMap;
     private Texture2D displacementMap;
@@ -16,7 +15,6 @@ public class Material {
 
     public Material(Texture2D diffuseTexture) {
         this.diffuseTexture = diffuseTexture;
-        this.tesselationMode = TesselationMode.FULL;
     }
 
     public void setNormalMap(Texture2D normalMap) {
@@ -56,12 +54,4 @@ public class Material {
         return displacementMap != null;
     }
 
-    public TesselationMode getTesselationMode() {
-        return tesselationMode;
-    }
-
-    public Material setTesselationMode(TesselationMode tesselationMode) {
-        this.tesselationMode = tesselationMode;
-        return this;
-    }
 }

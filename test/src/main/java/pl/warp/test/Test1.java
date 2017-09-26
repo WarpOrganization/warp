@@ -21,6 +21,8 @@ import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
+import pl.warp.engine.graphics.tessellation.TessellationMode;
+import pl.warp.engine.graphics.tessellation.TessellationModeProperty;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.utility.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.window.Display;
@@ -62,6 +64,7 @@ public class Test1 {
 
         return ship;
     }
+
 
     private static void createShip(Component ship) {
         Mesh mesh = ObjLoader.read(
@@ -117,15 +120,15 @@ public class Test1 {
                 true,
                 bumpImageData.getData());
 
-        for(int i = 0; i < 20; i++) {
-            for(int j = 0; j < 20; j++) {
-                createSphere(scene, new Vector3f(i * 10, j * 10, 0), diffuse, bump);
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++) {
+                createSphere(scene, new Vector3f(i * 10, j * 10, 0), diffuse, bump, i % 2 == 1);
             }
         }
 
     }
 
-    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump) {
+    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, boolean tesselate) {
         Component sphere = new SceneComponent(scene);
 
         Mesh mesh = SphereBuilder.createShape(20, 20, 4);
@@ -140,6 +143,9 @@ public class Test1 {
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);
         property.move(trans);
+        if(!tesselate) {
+            sphere.addProperty(new TessellationModeProperty(TessellationMode.NONE));
+        }
     }
 
     private static void setupCamera(EngineContext engineContext) {
@@ -156,7 +162,7 @@ public class Test1 {
         PerspectiveMatrix projection = new PerspectiveMatrix(
                 55f,
                 0.1f,
-                3000f,
+                10000f,
                 DISPLAY.getWidth(),
                 DISPLAY.getHeight()
         );

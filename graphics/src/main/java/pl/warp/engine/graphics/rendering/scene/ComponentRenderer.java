@@ -4,16 +4,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
+import pl.warp.engine.core.context.config.Config;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.graphics.GLErrors;
-import pl.warp.engine.graphics.camera.CameraHolder;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.MeshProperty;
-import pl.warp.engine.graphics.rendering.scene.program.FlatTessellationRenderingProgram;
-import pl.warp.engine.graphics.rendering.scene.program.NoTessellationRenderingProgram;
-import pl.warp.engine.graphics.rendering.scene.program.TessellationRenderingProgram;
+import pl.warp.engine.graphics.rendering.scene.program.SceneRenderingProgramManager;
+import pl.warp.engine.graphics.tessellation.TessellationMode;
+import pl.warp.engine.graphics.tessellation.TessellationModeProperty;
 import pl.warp.engine.graphics.utility.MatrixStack;
 
 /**
@@ -26,32 +26,17 @@ public class ComponentRenderer {
 
     private MatrixStack matrixStack = new MatrixStack();
 
-    private CameraHolder cameraHolder;
+    private SceneRenderingProgramManager sceneRenderingProgramManager;
+    private TessellationMode defaultTessellationMode;
 
-    //TODO move it away to scene rendering manager (or sth like this)
-    private TessellationRenderingProgram tessellationRenderingProgram;
-    private FlatTessellationRenderingProgram flatTessellationRenderingProgram;
-    private NoTessellationRenderingProgram noTessellationRenderingProgram;
-
-    public ComponentRenderer(CameraHolder cameraHolder) {
-        this.cameraHolder = cameraHolder;
+    public ComponentRenderer(Config config, SceneRenderingProgramManager sceneRenderingProgramManager) {
+        this.defaultTessellationMode = config.getValue("graphics.rendering.defaultTessellation");
+        this.sceneRenderingProgramManager = sceneRenderingProgramManager;
     }
 
     public void init() {
-        this.tessellationRenderingProgram = new TessellationRenderingProgram();
-        this.flatTessellationRenderingProgram = new FlatTessellationRenderingProgram();
-        this.noTessellationRenderingProgram = new NoTessellationRenderingProgram();
-    }
-
-    public void initRendering() {
-        tessellationRenderingProgram.use();
-        tessellationRenderingProgram.useCamera(cameraHolder.getCamera());
-        flatTessellationRenderingProgram.use();
-        flatTessellationRenderingProgram.useCamera(cameraHolder.getCamera());
-        noTessellationRenderingProgram.use();
-        noTessellationRenderingProgram.useCamera(cameraHolder.getCamera());
+        this.sceneRenderingProgramManager.init();
         setupGL();
-        GLErrors.checkOGLErrors();
     }
 
     private void setupGL() {
@@ -63,12 +48,19 @@ public class ComponentRenderer {
         GL11.glDepthMask(true);
     }
 
+    public void initRendering() {
+        this.sceneRenderingProgramManager.update();
+        GLErrors.checkOGLErrors();
+    }
+
+
     public void renderComponent(Component component) {
         if(component.hasEnabledProperty(MeshProperty.NAME)){
             applyTransformations(component);
             Material material = getMaterial(component);
             Mesh mesh = getMesh(component);
-            drawMesh(material, mesh);
+            TessellationMode tesselationMode = getTessellationMode(component);
+            drawMesh(material, mesh, tesselationMode);
         }
     }
 
@@ -91,24 +83,14 @@ public class ComponentRenderer {
         matrixStack.rotate(rotation.getRotation());
     }
 
-    protected void drawMesh(Material material, Mesh mesh) {
-        switch (material.getTesselationMode()) {
+    protected void drawMesh(Material material, Mesh mesh, TessellationMode tessellationMode) {
+        sceneRenderingProgramManager.prepareProgram(material, matrixStack, tessellationMode);
+        switch (tessellationMode) {
             case NONE:
-                noTessellationRenderingProgram.use();
-                noTessellationRenderingProgram.useMaterial(material);
-                noTessellationRenderingProgram.useMatrixStack(matrixStack);
                 mesh.draw();
                 break;
             case FLAT:
-                flatTessellationRenderingProgram.use();
-                flatTessellationRenderingProgram.useMaterial(material);
-                flatTessellationRenderingProgram.useMatrixStack(matrixStack);
-                mesh.drawPatched();
-                break;
-            case FULL:
-                tessellationRenderingProgram.use();
-                tessellationRenderingProgram.useMaterial(material);
-                tessellationRenderingProgram.useMatrixStack(matrixStack);
+            case BEZIER:
                 mesh.drawPatched();
                 break;
         }
@@ -124,6 +106,11 @@ public class ComponentRenderer {
         return property.getMaterial();
     }
 
+    protected TessellationMode getTessellationMode(Component component) {
+        TessellationModeProperty property = component.getPropertyOrNull(TessellationModeProperty.NAME);
+        return (property == null) ? defaultTessellationMode : property.getTessellationMode();
+    }
+
     public void enterChildren() {
         matrixStack.push();
     }
@@ -133,7 +120,7 @@ public class ComponentRenderer {
     }
 
     public void destroy() {
-        tessellationRenderingProgram.delete();
+        sceneRenderingProgramManager.destroy();
     }
 
 }

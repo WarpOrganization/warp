@@ -4,8 +4,11 @@
 
 layout(triangles, equal_spacing, ccw) in;
 
+
+#ifdef SCENE_TESS
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
+#endif
 
 uniform sampler2D displacementMap;
 uniform bool displacementEnabled;
@@ -13,9 +16,9 @@ uniform float displacementFactor;
 
 in patch Patch10 tesPatch;
 
-out vec3 fsWorldPos;
-out vec2 fsTexCoord;
-out vec3 fsNormal;
+out vec3 oWorldPos;
+out vec2 oTexCoord;
+out vec3 oNormal;
 
 void interpolatePatchData();
 void applyDisplacement();
@@ -25,13 +28,17 @@ void main() {
     if(displacementEnabled) {
         applyDisplacement();
     }
-    gl_Position = projectionMatrix * viewMatrix * vec4(fsWorldPos, 1.0);
+    #ifdef SCENE_TESS
+    gl_Position = projectionMatrix * viewMatrix * vec4(oWorldPos, 1.0);
+    #else
+    gl_Position = vec4(oWorldPos, 1.0);
+    #endif
 }
 
 void interpolatePatchData() {
-    fsTexCoord = tessInterpolate2D(tesPatch.texCoord[0], tesPatch.texCoord[1], tesPatch.texCoord[2]);
-    fsNormal = tessInterpolate3D(tesPatch.normal[0], tesPatch.normal[1], tesPatch.normal[2]);
-    fsNormal = normalize(fsNormal);
+    oTexCoord = tessInterpolate2D(tesPatch.texCoord[0], tesPatch.texCoord[1], tesPatch.texCoord[2]);
+    oNormal = tessInterpolate3D(tesPatch.normal[0], tesPatch.normal[1], tesPatch.normal[2]);
+    oNormal = normalize(oNormal);
 
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
@@ -44,7 +51,7 @@ void interpolatePatchData() {
     float vPow2 = pow(v, 2);
     float wPow2 = pow(w, 2);
 
-    fsWorldPos = tesPatch.worldPos_B300 * wPow3 +
+    oWorldPos = tesPatch.worldPos_B300 * wPow3 +
                  tesPatch.worldPos_B030 * uPow3 +
                  tesPatch.worldPos_B003 * vPow3 +
                  tesPatch.worldPos_B210 * 3.0 * wPow2 * u +
@@ -57,6 +64,6 @@ void interpolatePatchData() {
 }
 
 void applyDisplacement() {
-    float displacement = texture(displacementMap, fsTexCoord).r;
-    fsWorldPos += fsNormal * displacement * displacementFactor;
+    float displacement = texture(displacementMap, oTexCoord).r;
+    oWorldPos += oNormal * displacement * displacementFactor;
 }

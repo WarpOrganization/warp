@@ -9,6 +9,7 @@ import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 import pl.warp.engine.graphics.program.extendedglsl.loader.ProgramLoader;
 import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ExtendedGLSLPreprocessor;
+import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
 
 import static pl.warp.engine.graphics.program.extendedglsl.preprocessor.ExtendedGLSLPreprocessor.ShaderType;
 
@@ -30,24 +31,29 @@ public class ExtendedGLSLProgramCompiler {
     }
 
     public ExtendedGLSLProgram compile(String programName, ProgramAssemblyInfo assemblyInfo) {
-        String glslVertexCode = loadAndPreprocess(programName + "/vert", ShaderType.VERTEX);
-        String glslFragmentCode = loadAndPreprocess(programName + "/frag", ShaderType.FRAGMENT);
+        String glslVertexCode = loadAndPreprocess(programName + "/vert", ShaderType.VERTEX, assemblyInfo);
+        String glslFragmentCode = loadAndPreprocess(programName + "/frag", ShaderType.FRAGMENT, assemblyInfo);
         String glslGeometryCode = assemblyInfo.isGeometryEnabled() ?
-                loadAndPreprocess(programName  + "/" + assemblyInfo.getGeometryProgramLocation(), ShaderType.GEOMETRY)
+                loadAndPreprocess(programName  + "/" + assemblyInfo.getGeometryProgramLocation(), ShaderType.GEOMETRY, assemblyInfo)
                 : null;
-        String glslTcsCode = assemblyInfo.isTesselationEnabled() ?
-                loadAndPreprocess(programName + "/" + assemblyInfo.getTcsProgramLocation(), ShaderType.TCS)
+        TessellationProgram tessellationProgram = assemblyInfo.getTessellationProgram();
+        String glslTcsCode = tessellationProgram != null ?
+                preprocess(tessellationProgram.getTcsShader(), ShaderType.TCS, assemblyInfo)
                 : null;
-        String glslTesCode = assemblyInfo.isTesselationEnabled() ?
-                loadAndPreprocess(programName + "/" + assemblyInfo.getTesProgramLocation(), ShaderType.TES)
+        String glslTesCode = tessellationProgram != null ?
+                preprocess(tessellationProgram.getTesShader(), ShaderType.TES, assemblyInfo)
                 : null;
         return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode, glslTcsCode, glslTesCode);
     }
 
-    private String loadAndPreprocess(String shaderName, ShaderType type) {
+    private String loadAndPreprocess(String shaderName, ShaderType type, ProgramAssemblyInfo assemblyInfo) {
         String shaderCode = programLoader.loadProgram(shaderName);
         if (shaderCode == null) throw new ProgramCompilationException(shaderName + " not found");
-        else return glslPreprocessor.preprocess(shaderCode, type);
+        else return preprocess(shaderCode, type, assemblyInfo);
+    }
+
+    private String preprocess(String shaderCode, ShaderType type, ProgramAssemblyInfo assemblyInfo) {
+        return glslPreprocessor.preprocess(shaderCode, type, assemblyInfo);
     }
 
     private ExtendedGLSLProgram compileGLSL(

@@ -73,14 +73,15 @@ public class SceneComponent implements Component {
         else return (T) properties.get(name);
     }
 
+
     @Override
     public boolean hasProperty(String name) {
         return properties.containsKey(name);
     }
 
     @Override
-    public <T extends Property> Optional<T> getPropertyIfExists(String name){
-        return hasProperty(name) ? Optional.of(getProperty(name)) : Optional.empty();
+    public <T extends Property> T getPropertyOrNull(String name){
+        return (T) properties.get(name);
     }
 
     @Override

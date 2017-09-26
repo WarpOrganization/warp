@@ -2,6 +2,7 @@ package pl.warp.engine.graphics.rendering.scene.program;
 
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.program.ProgramAssemblyInfo;
+import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
 
 /**
  * @author Jaca777
@@ -15,12 +16,8 @@ public class TessellationRenderingProgram extends SceneRenderingProgram {
     private int unifDisplacementFactor;
 
 
-    public TessellationRenderingProgram() {
-        super(ProgramAssemblyInfo.withTesselation());
-    }
-
-    public TessellationRenderingProgram(ProgramAssemblyInfo assemblyInfo) {
-        super(assemblyInfo);
+    public TessellationRenderingProgram(TessellationProgram program) {
+        super(ProgramAssemblyInfo.withTesselation(program));
     }
 
     protected void loadUniforms() {

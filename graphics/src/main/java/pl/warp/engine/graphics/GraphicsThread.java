@@ -16,7 +16,7 @@ import pl.warp.engine.core.execution.SyncTimer;
 @Service
 @EnableConfig
 @RegisterExecutor("graphics")
-public class GraphicsThread extends SyncEngineThread{
+public class GraphicsThread extends SyncEngineThread {
     public GraphicsThread(Config config) {
         super(new SyncTimer(config.getValue("graphics.ups")), new RapidExecutionStrategy());
     }

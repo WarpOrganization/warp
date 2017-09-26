@@ -68,9 +68,7 @@ public abstract class Program {
         }
         if(program.hasTesselation()) {
             GL20.glDetachShader(program.getGLProgram(), program.getTcsShader());
-            GL20.glDeleteShader(program.getTcsShader());
             GL20.glDetachShader(program.getGLProgram(), program.getTesShader());
-            GL20.glDeleteShader(program.getTesShader());
         }
         GL20.glDeleteProgram(program.getGLProgram());
     }

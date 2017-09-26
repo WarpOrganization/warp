@@ -1,5 +1,5 @@
 graphics:
-  ups: 1000
+  ups: 10000
   display:
     !!pl.warp.engine.graphics.window.Display
     fullscreen: false
@@ -8,5 +8,7 @@ graphics:
   upscounter:
     enabled: true
     sampleSize: 30
+  rendering:
+    defaultTessellation: !!pl.warp.engine.graphics.tessellation.TessellationMode BEZIER
 
 script.ups: 40

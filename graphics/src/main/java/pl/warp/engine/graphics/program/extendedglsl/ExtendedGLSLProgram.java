@@ -8,11 +8,18 @@ public class ExtendedGLSLProgram {
     private int fragmentShader;
     private int vertexShader;
     private int geometryShader;
-    private int tcsShader;
     private int tesShader;
+    private int tcsShader;
     private int program;
 
-    public ExtendedGLSLProgram(int fragmentShader, int vertexShader, int geometryShader, int tcsShader, int tesShader, int program) {
+    public ExtendedGLSLProgram(
+            int fragmentShader,
+            int vertexShader,
+            int geometryShader,
+            int tesShader,
+            int tcsShader,
+            int program
+    ) {
         this.fragmentShader = fragmentShader;
         this.vertexShader = vertexShader;
         this.geometryShader = geometryShader;
@@ -26,7 +33,7 @@ public class ExtendedGLSLProgram {
     }
 
     public boolean hasTesselation() {
-        return tcsShader > 0 && tesShader > 0;
+        return tesShader > 0;
     }
 
     public int getFragmentShader() {
@@ -42,14 +49,13 @@ public class ExtendedGLSLProgram {
         else throw new IllegalStateException("Unable to get a geometry shader, it's not attached to the program.");
     }
 
-    public int getTcsShader() {
-        if (hasTesselation()) return tcsShader;
-        else throw new IllegalStateException("Unable to get a TCS shader, it's not attached to the program.");
-    }
 
     public int getTesShader() {
-        if (hasTesselation()) return tesShader;
-        else throw new IllegalStateException("Unable to get a TES shader, it's not attached to the program.");
+        return tesShader;
+    }
+
+    public int getTcsShader() {
+        return tcsShader;
     }
 
     public int getGLProgram() {

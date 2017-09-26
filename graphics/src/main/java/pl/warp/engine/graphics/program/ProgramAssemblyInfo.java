@@ -1,65 +1,55 @@
 package pl.warp.engine.graphics.program;
 
+import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
+
 /**
  * @author Jaca777
  * Created 2017-09-25 at 16
  */
 public class ProgramAssemblyInfo {
 
-    private boolean geometryEnabled;
-    private boolean tesselationEnabled;
-    private String tesProgramLocation = "/tes";
-    private String tcsProgramLocation = "/tcs";
+    private boolean geometryEnabled = false;
+    private TessellationProgram tessellationProgram = null;
     private String fragmentProgramLocation = "/frag";
     private String vertexProgramLocation = "/vert";
     private String geometryProgramLocation = "/geom";
-    
-
-    public ProgramAssemblyInfo(boolean geometryEnabled, boolean tesselationEnabled) {
-        this.geometryEnabled = geometryEnabled;
-        this.tesselationEnabled = tesselationEnabled;
-    }
-
 
     public static ProgramAssemblyInfo minimal() {
-        return new ProgramAssemblyInfo(false, false);
+        return new ProgramAssemblyInfo();
     }
 
-    public static ProgramAssemblyInfo withTesselation() {
-        return new ProgramAssemblyInfo(false, true);
+    public static ProgramAssemblyInfo withTesselation(TessellationProgram program) {
+        return new ProgramAssemblyInfo()
+                .setTessellationProgram(program);
     }
 
     public static  ProgramAssemblyInfo withGeometry() {
-        return new ProgramAssemblyInfo(true, false);
+        return new ProgramAssemblyInfo()
+                .setGeometryEnabled(true);
     }
 
-    public static  ProgramAssemblyInfo withTesselationAndGeometry() {
-        return new ProgramAssemblyInfo(true, true);
+    public static  ProgramAssemblyInfo withTesselationAndGeometry(TessellationProgram program) {
+        return new ProgramAssemblyInfo()
+                .setGeometryEnabled(true)
+                .setTessellationProgram(program);
     }
 
     public boolean isGeometryEnabled() {
         return geometryEnabled;
     }
 
-    public boolean isTesselationEnabled() {
-        return tesselationEnabled;
-    }
 
-    public String getTesProgramLocation() {
-        return tesProgramLocation;
-    }
-
-    public ProgramAssemblyInfo setTesProgramLocation(String tesProgramLocation) {
-        this.tesProgramLocation = tesProgramLocation;
+    public ProgramAssemblyInfo setGeometryEnabled(boolean geometryEnabled) {
+        this.geometryEnabled = geometryEnabled;
         return this;
     }
 
-    public String getTcsProgramLocation() {
-        return tcsProgramLocation;
+    public TessellationProgram getTessellationProgram() {
+        return tessellationProgram;
     }
 
-    public ProgramAssemblyInfo setTcsProgramLocation(String tcsProgramLocation) {
-        this.tcsProgramLocation = tcsProgramLocation;
+    public ProgramAssemblyInfo setTessellationProgram(TessellationProgram tessellationProgram) {
+        this.tessellationProgram = tessellationProgram;
         return this;
     }
 
