@@ -9,7 +9,6 @@ import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 import pl.warp.engine.graphics.program.extendedglsl.loader.ProgramLoader;
 import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ExtendedGLSLPreprocessor;
-import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
 
 import static pl.warp.engine.graphics.program.extendedglsl.preprocessor.ExtendedGLSLPreprocessor.ShaderType;
 
@@ -30,20 +29,19 @@ public class ExtendedGLSLProgramCompiler {
         this.glslPreprocessor = new ExtendedGLSLPreprocessor(constants, programLoader);
     }
 
-    public ExtendedGLSLProgram compile(String programName, ProgramAssemblyInfo assemblyInfo) {
-        String glslVertexCode = loadAndPreprocess(programName + "/vert", ShaderType.VERTEX, assemblyInfo);
-        String glslFragmentCode = loadAndPreprocess(programName + "/frag", ShaderType.FRAGMENT, assemblyInfo);
-        String glslGeometryCode = assemblyInfo.isGeometryEnabled() ?
-                loadAndPreprocess(programName  + "/" + assemblyInfo.getGeometryProgramLocation(), ShaderType.GEOMETRY, assemblyInfo)
-                : null;
-        TessellationProgram tessellationProgram = assemblyInfo.getTessellationProgram();
-        String glslTcsCode = tessellationProgram != null ?
-                preprocess(tessellationProgram.getTcsShader(), ShaderType.TCS, assemblyInfo)
-                : null;
-        String glslTesCode = tessellationProgram != null ?
-                preprocess(tessellationProgram.getTesShader(), ShaderType.TES, assemblyInfo)
-                : null;
+    public ExtendedGLSLProgram compile(ProgramAssemblyInfo assemblyInfo) {
+        String glslVertexCode = loadIfExists(assemblyInfo.getVertexShaderLocation(), ShaderType.VERTEX, assemblyInfo);
+        String glslFragmentCode = loadIfExists(assemblyInfo.getFragmentShaderLocation(), ShaderType.FRAGMENT, assemblyInfo);
+        String glslGeometryCode = loadIfExists(assemblyInfo.getGeometryShaderLocation(), ShaderType.GEOMETRY, assemblyInfo);
+        String glslTcsCode = loadIfExists(assemblyInfo.getTcsShaderLocation(), ShaderType.TCS, assemblyInfo);
+        String glslTesCode = loadIfExists(assemblyInfo.getTesShaderLocation(), ShaderType.TES, assemblyInfo);
         return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode, glslTcsCode, glslTesCode);
+    }
+
+    private String loadIfExists(String location, ShaderType type, ProgramAssemblyInfo assemblyInfo) {
+        return location != null ?
+                loadAndPreprocess(location, type, assemblyInfo)
+                : null;
     }
 
     private String loadAndPreprocess(String shaderName, ShaderType type, ProgramAssemblyInfo assemblyInfo) {

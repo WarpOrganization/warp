@@ -80,10 +80,10 @@ public class ExtendedGLSLPreprocessor {
       if(type != ShaderType.NONE) {
           defines.add(type.getId());
       }
-      if(assemblyInfo.getTessellationProgram() != null){
+      if(assemblyInfo.getTcsShaderLocation() != null && assemblyInfo.getFragmentShaderLocation() != null){
           defines.add("SCENE_TESS");
       }
-      if(assemblyInfo.isGeometryEnabled()) {
+      if(assemblyInfo.getGeometryShaderLocation() != null) {
           defines.add("GEOM_ENABLED");
       }
       return insertDefines(code, defines);

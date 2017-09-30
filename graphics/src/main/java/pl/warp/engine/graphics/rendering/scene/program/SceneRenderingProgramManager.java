@@ -3,10 +3,8 @@ package pl.warp.engine.graphics.rendering.scene.program;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.graphics.camera.CameraHolder;
 import pl.warp.engine.graphics.material.Material;
-import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
-import pl.warp.engine.graphics.tessellation.TessellationMode;
-import pl.warp.engine.graphics.tessellation.program.BezierTessellationProgram;
-import pl.warp.engine.graphics.tessellation.program.FlatTessellationProgram;
+import pl.warp.engine.graphics.rendering.scene.SceneTessellationMode;
+import pl.warp.engine.graphics.tessellation.Tessellator;
 import pl.warp.engine.graphics.utility.MatrixStack;
 
 /**
@@ -27,10 +25,8 @@ public class SceneRenderingProgramManager {
     }
 
     public void init() {
-        FlatTessellationProgram flatProgram = new FlatTessellationProgram(LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER);
-        this.flatTessellationRenderingProgram = new TessellationRenderingProgram(flatProgram);
-        BezierTessellationProgram bezierProgram = new BezierTessellationProgram(LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER);
-        this.bezierTessellationRenderingProgram = new TessellationRenderingProgram(bezierProgram);
+        this.flatTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.FLAT_TESSELLATOR_LOCATION);
+        this.bezierTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.BEZIER_TESSELLATOR_LOCATION);
         this.noTessellationRenderingProgram = new NoTessellationRenderingProgram();
     }
 
@@ -46,7 +42,7 @@ public class SceneRenderingProgramManager {
     public void prepareProgram(
             Material material,
             MatrixStack matrixStack,
-            TessellationMode tesselationMode
+            SceneTessellationMode tesselationMode
     ) {
         switch (tesselationMode) {
             case NONE:

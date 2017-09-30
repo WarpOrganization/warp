@@ -8,6 +8,6 @@ import pl.warp.engine.graphics.program.ProgramAssemblyInfo;
  */
 public class NoTessellationRenderingProgram extends SceneRenderingProgram {
     public NoTessellationRenderingProgram() {
-        super(ProgramAssemblyInfo.minimal());
+        super(new ProgramAssemblyInfo("scene"));
     }
 }

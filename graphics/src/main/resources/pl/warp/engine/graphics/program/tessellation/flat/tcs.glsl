@@ -36,8 +36,7 @@ void passPatchData() {
 
 #ifdef SCENE_TESS
 float getTesselationLevel(float dist0, float dist1) {
-    float avgDistance = (dist0 + dist1) / 2.0;
-    return max(1.0, a - b * log(avgDistance));
+    return 3;
 }
 
 void calcTesselationLevels() {

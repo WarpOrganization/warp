@@ -17,21 +17,21 @@ public class GLErrors {
     public static String toString(int error) {
         switch (error) {
             case GL11.GL_INVALID_ENUM:
-                return "Invalid enum.";
+                return "Invalid enum";
             case GL11.GL_INVALID_VALUE:
-                return "Invalid value.";
+                return "Invalid value";
             case GL11.GL_INVALID_OPERATION:
-                return "Invalid operation.";
+                return "Invalid operation";
             case GL11.GL_STACK_OVERFLOW:
-                return "Stack overflow.";
+                return "Stack overflow";
             case GL11.GL_STACK_UNDERFLOW:
-                return "Stack underflow.";
+                return "Stack underflow";
             case GL11.GL_OUT_OF_MEMORY:
-                return "Out of memory.";
+                return "Out of memory";
             case GL30.GL_INVALID_FRAMEBUFFER_OPERATION:
-                return "Invalid framebuffer operation.";
+                return "Invalid framebuffer operation";
             default:
-                return "Unknown error code " + error + ".";
+                return "Unknown error code: " + error;
         }
     }
 }

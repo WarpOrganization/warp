@@ -9,6 +9,6 @@ graphics:
     enabled: true
     sampleSize: 30
   rendering:
-    defaultTessellation: !!pl.warp.engine.graphics.tessellation.TessellationMode BEZIER
+    defaultTessellation: !!pl.warp.engine.graphics.rendering.scene.SceneTessellationMode BEZIER
 
 script.ups: 40

@@ -22,10 +22,7 @@ public abstract class SceneRenderingProgram extends Program {
     private int unifCameraPos;
 
     public SceneRenderingProgram(ProgramAssemblyInfo assemblyInfo) {
-        super("scene",
-                assemblyInfo,
-                ExtendedGLSLProgramCompiler.DEFAULT_COMPILER
-        );
+        super(assemblyInfo, ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
         loadUniforms();
         loadSamplers();
     }

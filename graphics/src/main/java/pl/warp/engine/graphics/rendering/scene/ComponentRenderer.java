@@ -1,19 +1,19 @@
 package pl.warp.engine.graphics.rendering.scene;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.config.Config;
 import pl.warp.engine.core.context.service.Service;
+import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.graphics.GLErrors;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.MeshProperty;
 import pl.warp.engine.graphics.rendering.scene.program.SceneRenderingProgramManager;
-import pl.warp.engine.graphics.tessellation.TessellationMode;
-import pl.warp.engine.graphics.tessellation.TessellationModeProperty;
 import pl.warp.engine.graphics.utility.MatrixStack;
 
 /**
@@ -27,7 +27,9 @@ public class ComponentRenderer {
     private MatrixStack matrixStack = new MatrixStack();
 
     private SceneRenderingProgramManager sceneRenderingProgramManager;
-    private TessellationMode defaultTessellationMode;
+    private SceneTessellationMode defaultTessellationMode;
+    private int query;
+
 
     public ComponentRenderer(Config config, SceneRenderingProgramManager sceneRenderingProgramManager) {
         this.defaultTessellationMode = config.getValue("graphics.rendering.defaultTessellation");
@@ -36,12 +38,13 @@ public class ComponentRenderer {
 
     public void init() {
         this.sceneRenderingProgramManager.init();
+        this.query = GL15.glGenQueries();
         setupGL();
     }
 
     private void setupGL() {
-        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER,0);
-        GL11.glViewport(0,0, 1280, 920);
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
+        GL11.glViewport(0, 0, 1280, 920);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -55,12 +58,22 @@ public class ComponentRenderer {
 
 
     public void renderComponent(Component component) {
-        if(component.hasEnabledProperty(MeshProperty.NAME)){
+        if (component.hasEnabledProperty(MeshProperty.NAME)) {
             applyTransformations(component);
             Material material = getMaterial(component);
             Mesh mesh = getMesh(component);
-            TessellationMode tesselationMode = getTessellationMode(component);
-            drawMesh(material, mesh, tesselationMode);
+            SceneTessellationMode tessellationMode = getTessellationMode(component);
+            if (component.hasProperty(NameProperty.NAME)) {
+                NameProperty nameProperty = component.getProperty(NameProperty.NAME);
+                System.out.println("RENDERING " + nameProperty.getComponentName());
+                GL15.glBeginQuery(GL30.GL_PRIMITIVES_GENERATED, query);
+                drawMesh(material, mesh, tessellationMode);
+                GL15.glEndQuery(GL30.GL_PRIMITIVES_GENERATED);
+                System.out.println("AMOUNT: " + GL15.glGetQueryObjecti(query, GL15.GL_QUERY_RESULT));
+            } else {
+                drawMesh(material, mesh, tessellationMode);
+            }
+
         }
     }
 
@@ -83,7 +96,7 @@ public class ComponentRenderer {
         matrixStack.rotate(rotation.getRotation());
     }
 
-    protected void drawMesh(Material material, Mesh mesh, TessellationMode tessellationMode) {
+    protected void drawMesh(Material material, Mesh mesh, SceneTessellationMode tessellationMode) {
         sceneRenderingProgramManager.prepareProgram(material, matrixStack, tessellationMode);
         switch (tessellationMode) {
             case NONE:
@@ -91,6 +104,7 @@ public class ComponentRenderer {
                 break;
             case FLAT:
             case BEZIER:
+
                 mesh.drawPatched();
                 break;
         }
@@ -106,7 +120,7 @@ public class ComponentRenderer {
         return property.getMaterial();
     }
 
-    protected TessellationMode getTessellationMode(Component component) {
+    protected SceneTessellationMode getTessellationMode(Component component) {
         TessellationModeProperty property = component.getPropertyOrNull(TessellationModeProperty.NAME);
         return (property == null) ? defaultTessellationMode : property.getTessellationMode();
     }

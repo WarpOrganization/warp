@@ -8,6 +8,7 @@ import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.component.SceneComponent;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.context.EngineContext;
+import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.graphics.GraphicsThread;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraHolder;
@@ -16,13 +17,14 @@ import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.Mesh;
 import pl.warp.engine.graphics.mesh.MeshProperty;
+import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.SphereBuilder;
+import pl.warp.engine.graphics.rendering.scene.SceneTessellationMode;
+import pl.warp.engine.graphics.rendering.scene.TessellationModeProperty;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
-import pl.warp.engine.graphics.tessellation.TessellationMode;
-import pl.warp.engine.graphics.tessellation.TessellationModeProperty;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.utility.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.window.Display;
@@ -57,9 +59,30 @@ public class Test1 {
 
     private static Component createModels(Scene scene, GraphicsThread graphicsThread) {
         Component ship = new SceneComponent(scene);
-        graphicsThread.scheduleOnce( () -> {
+        graphicsThread.scheduleOnce(() -> {
+            GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
             createShip(ship);
             createSpheres(scene);
+
+            Component test = new SceneComponent(scene);
+            Mesh mesh = new QuadMesh();
+            ImageData imageData = woodDiffuse;
+            Texture2D diffuse = new Texture2D(
+                    imageData.getHeight(),
+                    imageData.getHeight(),
+                    GL11.GL_RGBA16,
+                    GL11.GL_RGBA,
+                    true,
+                    imageData.getData());
+            Material material = new Material(diffuse);
+            test.addProperty(new MeshProperty(mesh));
+            test.addProperty(new MaterialProperty(material));
+            test.addProperty(new NameProperty("test"));
+            test.addProperty(new TessellationModeProperty(SceneTessellationMode.FLAT));
+            TransformProperty property = new TransformProperty();
+            property.setTranslation(new Vector3f(-10,0,0));
+            property.setScale(new Vector3f(5));
+            test.addProperty(property);
         });
 
         return ship;
@@ -93,42 +116,75 @@ public class Test1 {
         property.move(new Vector3f(0, 0, -10f));
     }
 
+    private static ImageData woodDiffuse = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
+            PNGDecoder.Format.RGBA
+    );
+
+    private static ImageData woodBump = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("wood/wood-stack-1-DISP.png"),
+            PNGDecoder.Format.RGBA
+    );
+
+    private static ImageData stoneDiffuse = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("stone/stone-redstone-2.png"),
+            PNGDecoder.Format.RGBA
+    );
+
+    private static ImageData stoneBump = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("stone/stone-redstone-2-DISP.png"),
+            PNGDecoder.Format.RGBA
+    );
+
     private static void createSpheres(Component scene) {
 
-        ImageData diffuseImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
-                PNGDecoder.Format.RGBA
-        );
 
-        Texture2D diffuse = new Texture2D(
-                diffuseImageData.getHeight(),
-                diffuseImageData.getHeight(),
+
+        Texture2D woodD = new Texture2D(
+                woodDiffuse.getHeight(),
+                woodDiffuse.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
                 true,
-                diffuseImageData.getData());
+                woodDiffuse.getData());
 
-        ImageData bumpImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("wood/wood-stack-1-DISP.png"),
-                PNGDecoder.Format.RGBA
-        );
-        Texture2D bump = new Texture2D(
-                diffuseImageData.getHeight(),
-                diffuseImageData.getHeight(),
+        Texture2D woodB = new Texture2D(
+                woodBump.getHeight(),
+                woodBump.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
                 true,
-                bumpImageData.getData());
+                woodBump.getData());
 
-        for(int i = 0; i < 10; i++) {
-            for(int j = 0; j < 10; j++) {
-                createSphere(scene, new Vector3f(i * 10, j * 10, 0), diffuse, bump, i % 2 == 1);
+        Texture2D stoneD = new Texture2D(
+                stoneDiffuse.getHeight(),
+                stoneDiffuse.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                stoneDiffuse.getData());
+
+        Texture2D stoneB = new Texture2D(
+                stoneBump.getHeight(),
+                stoneBump.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                stoneBump.getData());
+
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+
+                createSphere(scene, new Vector3f(i * 15, j * 15, 0),
+                        ((i+j) % 2 == 0) ? woodD : stoneD,
+                        ((i+j) % 2 == 0) ? woodB : stoneB);
             }
         }
 
     }
 
-    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, boolean tesselate) {
+    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump) {
         Component sphere = new SceneComponent(scene);
 
         Mesh mesh = SphereBuilder.createShape(20, 20, 4);
@@ -136,16 +192,13 @@ public class Test1 {
         sphere.addProperty(meshProperty);
 
         Material material = new Material(diffuse);
-        material.setDisplacement(bump, 2.0f);
+        material.setDisplacement(bump, 1.5f);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);
         property.move(trans);
-        if(!tesselate) {
-            sphere.addProperty(new TessellationModeProperty(TessellationMode.NONE));
-        }
     }
 
     private static void setupCamera(EngineContext engineContext) {

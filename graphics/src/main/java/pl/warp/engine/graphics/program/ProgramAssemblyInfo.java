@@ -1,82 +1,79 @@
 package pl.warp.engine.graphics.program;
 
-import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
-
 /**
  * @author Jaca777
  * Created 2017-09-25 at 16
  */
 public class ProgramAssemblyInfo {
 
-    private boolean geometryEnabled = false;
-    private TessellationProgram tessellationProgram = null;
-    private String fragmentProgramLocation = "/frag";
-    private String vertexProgramLocation = "/vert";
-    private String geometryProgramLocation = "/geom";
+    private String programName;
+    private String fragmentShaderLocation;
+    private String vertexShaderLocation;
+    private String geometryShaderLocation;
+    private String tcsShaderLocation;
+    private String tesShaderLocation;
 
-    public static ProgramAssemblyInfo minimal() {
-        return new ProgramAssemblyInfo();
+    public ProgramAssemblyInfo(String programName) {
+        this.programName = programName;
+        this.vertexShaderLocation = programName + "/vert";
+        this.fragmentShaderLocation = programName + "/frag";
     }
 
-    public static ProgramAssemblyInfo withTesselation(TessellationProgram program) {
-        return new ProgramAssemblyInfo()
-                .setTessellationProgram(program);
+    public ProgramAssemblyInfo() {
     }
 
-    public static  ProgramAssemblyInfo withGeometry() {
-        return new ProgramAssemblyInfo()
-                .setGeometryEnabled(true);
+    public String getProgramName() {
+        return programName;
     }
 
-    public static  ProgramAssemblyInfo withTesselationAndGeometry(TessellationProgram program) {
-        return new ProgramAssemblyInfo()
-                .setGeometryEnabled(true)
-                .setTessellationProgram(program);
+    public String getFragmentShaderLocation() {
+        return fragmentShaderLocation;
     }
 
-    public boolean isGeometryEnabled() {
-        return geometryEnabled;
-    }
-
-
-    public ProgramAssemblyInfo setGeometryEnabled(boolean geometryEnabled) {
-        this.geometryEnabled = geometryEnabled;
+    public ProgramAssemblyInfo setFragmentShaderLocation(String fragmentShaderLocation) {
+        this.fragmentShaderLocation = fragmentShaderLocation;
         return this;
     }
 
-    public TessellationProgram getTessellationProgram() {
-        return tessellationProgram;
+    public String getVertexShaderLocation() {
+        return vertexShaderLocation;
     }
 
-    public ProgramAssemblyInfo setTessellationProgram(TessellationProgram tessellationProgram) {
-        this.tessellationProgram = tessellationProgram;
+    public ProgramAssemblyInfo setVertexShaderLocation(String vertexShaderLocation) {
+        this.vertexShaderLocation = vertexShaderLocation;
         return this;
     }
 
-    public String getFragmentProgramLocation() {
-        return fragmentProgramLocation;
+    public String getGeometryShaderLocation() {
+        return geometryShaderLocation;
     }
 
-    public ProgramAssemblyInfo setFragmentProgramLocation(String fragmentProgramLocation) {
-        this.fragmentProgramLocation = fragmentProgramLocation;
+    public ProgramAssemblyInfo setGeometryShaderLocation(String geometryShaderLocation) {
+        this.geometryShaderLocation = geometryShaderLocation;
         return this;
     }
 
-    public String getVertexProgramLocation() {
-        return vertexProgramLocation;
-    }
-
-    public ProgramAssemblyInfo setVertexProgramLocation(String vertexProgramLocation) {
-        this.vertexProgramLocation = vertexProgramLocation;
+    public ProgramAssemblyInfo setTcsShaderLocation(String tcsShaderLocation) {
+        this.tcsShaderLocation = tcsShaderLocation;
         return this;
     }
 
-    public String getGeometryProgramLocation() {
-        return geometryProgramLocation;
+    public ProgramAssemblyInfo setTesShaderLocation(String tesShaderLocation) {
+        this.tesShaderLocation = tesShaderLocation;
+        return this;
     }
 
-    public ProgramAssemblyInfo setGeometryProgramLocation(String geometryProgramLocation) {
-        this.geometryProgramLocation = geometryProgramLocation;
+    public String getTcsShaderLocation() {
+        return tcsShaderLocation;
+    }
+
+    public String getTesShaderLocation() {
+        return tesShaderLocation;
+    }
+
+    public ProgramAssemblyInfo setTesselator(String tesselatorLocation) {
+        this.tcsShaderLocation = tesselatorLocation + "/tcs";
+        this.tesShaderLocation = tesselatorLocation + "/tes";
         return this;
     }
 }

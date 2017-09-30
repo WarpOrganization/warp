@@ -39,16 +39,11 @@ public class SceneRenderer {
         if(sceneHolder.getScene() != null) {
             initRendering();
             render(sceneHolder.getScene());
-            finalizeRendering();
         } else {
             logger.warn("Unable to render the scene. Scene = null");
         }
     }
 
-
-    private void finalizeRendering() {
-        //...
-    }
 
     private void initRendering() {
         screenFramebuffer.bindDraw();
