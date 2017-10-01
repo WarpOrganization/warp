@@ -2,7 +2,7 @@ package pl.warp.engine.physics;
 
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.property.PropertyNotPresentException;
 
 /**

@@ -1,4 +1,4 @@
-package pl.warp.engine.physics;
+package pl.warp.engine.physics.raytester;
 
 import org.joml.Vector3f;
 import pl.warp.engine.core.component.Component;

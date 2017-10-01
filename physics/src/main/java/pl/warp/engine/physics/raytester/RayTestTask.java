@@ -1,4 +1,4 @@
-package pl.warp.engine.physics;
+package pl.warp.engine.physics.raytester;
 
 import com.badlogic.gdx.math.Vector3;
 import org.joml.Vector3f;
@@ -6,8 +6,9 @@ import pl.warp.engine.core.component.Component;
 
 /**
  * @author Hubertus
- *         Created 01.08.16
+ * Created 01.08.16
  */
+
 public class RayTestTask {
     private Vector3 startPos = new Vector3();
     private Vector3 endPos = new Vector3();

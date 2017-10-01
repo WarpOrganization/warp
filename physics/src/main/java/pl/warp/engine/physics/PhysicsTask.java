@@ -9,8 +9,10 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.log4j.Logger;
-import pl.warp.engine.core.context.annotation.Service;
+import pl.warp.engine.core.context.service.Service;
+import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
+import pl.warp.engine.physics.raytester.RayTestSolver;
 
 /**
  * @author Hubertus
@@ -18,15 +20,18 @@ import pl.warp.engine.core.execution.task.EngineTask;
  */
 
 @Service
+@RegisterTask(thread = "physics")
 public class PhysicsTask extends EngineTask {
 
     private static Logger logger = Logger.getLogger(PhysicsTask.class);
 
     private PhysicsWorld mainWorld;
     private RigidBodyRegistry rigidBodyRegistry;
+    private RayTestSolver rayTestSolver;
 
     public PhysicsTask() {
         rigidBodyRegistry = new RigidBodyRegistry();
+        rayTestSolver = new RayTestSolver();
     }
 
     @Override
@@ -35,6 +40,7 @@ public class PhysicsTask extends EngineTask {
         new SharedLibraryLoader().load("gdx");
         Bullet.init();
         createPhysicsWorld();
+        rayTestSolver.setWorld(mainWorld);
     }
 
     @Override
@@ -45,6 +51,7 @@ public class PhysicsTask extends EngineTask {
     public void update(int delta) {
         rigidBodyRegistry.processBodies(mainWorld.getDynamicsWorld());
         mainWorld.getDynamicsWorld().stepSimulation(delta / 1000f, 4, 1 / 60f);
+        rayTestSolver.update();
     }
 
     private void createPhysicsWorld() {
@@ -63,5 +70,9 @@ public class PhysicsTask extends EngineTask {
 
     RigidBodyRegistry getRigidBodyRegistry() {
         return rigidBodyRegistry;
+    }
+
+    public RayTestSolver getRayTestSolver() {
+        return rayTestSolver;
     }
 }
