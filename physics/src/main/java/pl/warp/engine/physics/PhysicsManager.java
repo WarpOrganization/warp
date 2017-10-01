@@ -25,13 +25,15 @@ public class PhysicsManager {
 
         if (!component.hasEnabledProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME))
             throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
-//        PhysicsProperty physicsProperty = component.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
-//        physicsProperty.getRigidBody().activate();
-//        physicsTask.getRigidBodyRegistry().addRigidBody(physicsProperty.getRigidBody());
         physicsTask.getRigidBodyRegistry().addRigidBody(component);
     }
 
-    public void removeRigidBody(Component component){
-        //TODO
+    public void removeRigidBody(Component component) {
+        if (!component.hasEnabledProperty(TransformProperty.TRANSFORM_PROPERTY_NAME))
+            throw new PropertyNotPresentException(TransformProperty.TRANSFORM_PROPERTY_NAME);
+
+        if (!component.hasEnabledProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME))
+            throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
+        physicsTask.getRigidBodyRegistry().removeRigidBody(component);
     }
 }

@@ -13,11 +13,11 @@ import java.util.Set;
 public class RigidBodyRegistry {
     private Set<Component> toAdd = new HashSet<>();
     private Set<Component> toRemove = new HashSet<>();
-    private ColliderRegistry colliderRegistry;
+    private ColliderComponentRegistry colliderComponentRegistry;
 
 
-    public RigidBodyRegistry(ColliderRegistry colliderRegistry) {
-        this.colliderRegistry = colliderRegistry;
+    public RigidBodyRegistry(ColliderComponentRegistry colliderComponentRegistry) {
+        this.colliderComponentRegistry = colliderComponentRegistry;
     }
 
     public synchronized void addRigidBody(Component component) {
@@ -31,7 +31,7 @@ public class RigidBodyRegistry {
     synchronized void processBodies(btDynamicsWorld dynamicsWorld) {
         if (!toAdd.isEmpty()) {
             for (Component aToAdd : toAdd) {
-                colliderRegistry.addComponennt(aToAdd);
+                colliderComponentRegistry.addComponennt(aToAdd);
                 PhysicsProperty physicsProperty = aToAdd.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
                 dynamicsWorld.addRigidBody(physicsProperty.getRigidBody());
             }
@@ -42,7 +42,7 @@ public class RigidBodyRegistry {
             for (Component aToRemove : toRemove) {
                 PhysicsProperty physicsProperty = aToRemove.getProperty(PhysicsProperty.PHYSICS_PROPERTY_NAME);
                 dynamicsWorld.removeRigidBody(physicsProperty.getRigidBody());
-                colliderRegistry.removeCompoent(physicsProperty.getRigidBody().getUserValue());
+                colliderComponentRegistry.removeCompoent(physicsProperty.getRigidBody().getUserValue());
             }
             toAdd.clear();
         }

@@ -28,12 +28,12 @@ public class PhysicsTask extends EngineTask {
     private PhysicsWorld mainWorld;
     private RigidBodyRegistry rigidBodyRegistry;
     private RayTestSolver rayTestSolver;
-    private ColliderRegistry colliderRegistry;
+    private ColliderComponentRegistry colliderComponentRegistry;
 
     public PhysicsTask() {
-        colliderRegistry = new ColliderRegistry();
-        rigidBodyRegistry = new RigidBodyRegistry(colliderRegistry);
-        rayTestSolver = new RayTestSolver(colliderRegistry);
+        colliderComponentRegistry = new ColliderComponentRegistry();
+        rigidBodyRegistry = new RigidBodyRegistry(colliderComponentRegistry);
+        rayTestSolver = new RayTestSolver(colliderComponentRegistry);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class PhysicsTask extends EngineTask {
         return rayTestSolver;
     }
 
-    public ColliderRegistry getColliderRegistry() {
-        return colliderRegistry;
+    public ColliderComponentRegistry getColliderComponentRegistry() {
+        return colliderComponentRegistry;
     }
 }

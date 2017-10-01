@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @author Hubertus
  * Created 01.10.2017
  */
-public class ColliderRegistry {
+public class ColliderComponentRegistry {
     private HashMap<Integer, Component> components = new HashMap<>();
 
     private int counter = 0;
