@@ -1,6 +1,8 @@
 package pl.warp.engine.physics.raytester;
 
 import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
+import pl.warp.engine.core.component.Component;
+import pl.warp.engine.physics.ColliderRegistry;
 import pl.warp.engine.physics.PhysicsWorld;
 
 import java.util.ArrayList;
@@ -16,9 +18,10 @@ public class RayTestSolver {
     private ClosestRayResultCallback result;
     private ClosestRayResultCallback result2; //used only by physics thread
     private PhysicsWorld world;
+    private ColliderRegistry colliderRegistry;
 
-    public RayTestSolver() {
-
+    public RayTestSolver(ColliderRegistry colliderRegistry) {
+        this.colliderRegistry = colliderRegistry;
     }
 
 
@@ -36,10 +39,12 @@ public class RayTestSolver {
             if (result2.hasHit()) {
                 switch (request.getType()) {
                     case RayTestRequest.ALL_COMPONENTS_HIT:
-
+                        ArrayList<Component> componentsHit = new ArrayList<Component>();
+                        //TODO
                         break;
                     case RayTestRequest.CLOSEST_COMPONENT_HIT:
-
+                        Component c = colliderRegistry.getCompoenent(result2.getCollisionObject().getUserValue());
+                        request.getConsumer().accept(c);
                         break;
                     case RayTestRequest.IS_HIT:
                         request.getConsumer().accept(true);
@@ -48,7 +53,7 @@ public class RayTestSolver {
 
             } else {
                 if (request.isExecuteIfNotHit()) {
-                    if(request.getType()==RayTestRequest.IS_HIT)
+                    if (request.getType() == RayTestRequest.IS_HIT)
                         request.getConsumer().accept(false);
                     else request.getConsumer().accept(null);
                 }
