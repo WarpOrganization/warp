@@ -1,6 +1,5 @@
 package pl.warp.engine.game;
 
-import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.game.scene.GameScene;
 import pl.warp.engine.graphics.Graphics;
@@ -47,8 +46,4 @@ public class GameContextBuilder {
         return this;
     }
 
-    public GameContextBuilder setAIManager(AIManager aiManager) {
-        gameContext.setAiManager(aiManager);
-        return this;
-    }
 }

@@ -1,8 +1,6 @@
 package pl.warp.ide.engine;
 
 import javafx.scene.canvas.Canvas;
-import pl.warp.engine.ai.AIManager;
-import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.Scene;
@@ -26,6 +24,7 @@ import pl.warp.engine.graphics.window.Display;
 import pl.warp.engine.input.Input;
 import pl.warp.engine.input.InputTask;
 import pl.warp.engine.physics.PhysicsTask;
+import pl.warp.engine.physics.raytester.RayTester;
 
 import java.io.File;
 
@@ -35,6 +34,8 @@ import java.io.File;
  *         Created 2017-01-22 at 13
  *         Starts the tasks
  */
+
+//TODO do we even need this?
 public class IDEEngineTaskManager {
 
     private SceneViewRenderer sceneViewRenderer;
@@ -82,7 +83,6 @@ public class IDEEngineTaskManager {
         createScriptThread(input, graphics.getThread());
         createPhysicsThread(scene, graphics.getThread());
         createAudioThread();
-        createAIThread();
         createInputTask();
         initContext();
         graphics.create();
@@ -118,12 +118,6 @@ public class IDEEngineTaskManager {
         });
     }
 
-    private void createAIThread() {
-        EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        AIManager aiManager = new AIManager();
-        aiThread.scheduleOnce(() -> aiThread.scheduleTask(new AITask(aiManager, loadedScene)));
-        aiThread.start();
-    }
 
     private void createAudioThread() {
         AudioContext audioContext = new AudioContext();

@@ -1,6 +1,5 @@
 package pl.warp.engine.game;
 
-import pl.warp.engine.ai.AIManager;
 import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.core.script.ScriptManager;
@@ -16,7 +15,6 @@ public class GameContext extends EngineContext {
 //TODO physics rewrite
 //    private CameraRayTester rayTester;
     private Graphics graphics;
-    private AIManager aiManager;
     private Input input;
 
     public GameContext() {
@@ -30,10 +28,6 @@ public class GameContext extends EngineContext {
 
     public Graphics getGraphics() {
         return graphics;
-    }
-
-    public AIManager getAIManager() {
-        return aiManager;
     }
 
     @Override
@@ -65,10 +59,6 @@ public class GameContext extends EngineContext {
     @Override
     protected void setEventDispatcher(EventDispatcher eventDispatcher) {
         super.setEventDispatcher(eventDispatcher);
-    }
-
-    protected void setAiManager(AIManager aiManager) {
-        this.aiManager = aiManager;
     }
 
 }

@@ -1,6 +1,5 @@
 package pl.warp.test;
 
-import pl.warp.engine.ai.AITask;
 import pl.warp.engine.audio.*;
 import pl.warp.engine.core.execution.EngineThread;
 import pl.warp.engine.core.execution.RapidExecutionStrategy;
@@ -72,7 +71,6 @@ public class Test {
 
 //        RayTester rayTester = new RayTester();
 //        contextBuilder.setRayTester(new CameraRayTester(context, rayTester));
-//        contextBuilder.setAIManager(new AIManager());
 //        physicsThread.scheduleTask(new MovementTask(scene));
 //        EngineThread physicsThread = context.getContext().findOne(PhysicsThread.class).get();
 //        PhysicsTask physicsTask = context.getContext().findOne(PhysicsTask.class).get();
@@ -89,8 +87,6 @@ public class Test {
 
         EngineThread aiThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
 
-        aiThread.scheduleTask(new AITask(context.getAIManager(), scene));
-        aiThread.start();
         new Script(scene) {
             @Override
             public void onInit() {
