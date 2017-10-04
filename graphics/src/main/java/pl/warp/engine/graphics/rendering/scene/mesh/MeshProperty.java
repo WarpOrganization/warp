@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.mesh;
+package pl.warp.engine.graphics.rendering.scene.mesh;
 
 import pl.warp.engine.core.property.Property;
 
@@ -10,14 +10,14 @@ public class MeshProperty extends Property {
 
     public static final String NAME = "mesh";
 
-    private Mesh mesh;
+    private SceneMesh mesh;
 
-    public MeshProperty(Mesh mesh) {
+    public MeshProperty(SceneMesh mesh) {
         super(NAME);
         this.mesh = mesh;
     }
 
-    public Mesh getMesh() {
+    public SceneMesh getMesh() {
         return mesh;
     }
 }

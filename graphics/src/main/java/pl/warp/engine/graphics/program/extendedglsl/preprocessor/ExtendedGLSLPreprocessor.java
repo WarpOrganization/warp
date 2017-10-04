@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class ExtendedGLSLPreprocessor {
 
     public enum ShaderType {
-        NONE(null), VERTEX("VERT"), TCS("TCS"), TES("TES"), GEOMETRY("GEOM"), FRAGMENT("FRAG");
+        NONE(null), VERTEX("VERT"), TCS("TCS"), TES("TES"), GEOMETRY("GEOM"), FRAGMENT("FRAG"), COMPUTE("COMP");
         private String id;
         ShaderType(String id) {
             this.id = id;

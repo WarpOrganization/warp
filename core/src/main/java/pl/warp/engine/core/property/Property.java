@@ -6,7 +6,7 @@ import pl.warp.engine.core.component.Component;
  * @author Jaca777
  *         Created 2016-06-25 at 18
  */
-public abstract class Property{
+public abstract class Property {
 
     private Component owner;
     private String name;

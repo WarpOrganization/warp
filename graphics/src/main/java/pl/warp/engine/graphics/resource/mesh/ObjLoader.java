@@ -2,8 +2,7 @@ package pl.warp.engine.graphics.resource.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.graphics.mesh.VAOMesh;
+import pl.warp.engine.graphics.rendering.scene.mesh.SceneMesh;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -141,24 +140,15 @@ public class ObjLoader {
         }
     }
 
-    public Mesh toMesh() {
-        int size = this.vertices.length + hVertices.size();
-        float[] v = new float[size * 4];
-        float[] t = new float[size * 2];
-        float[] n = new float[size * 3];
-        int[] indices = new int[this.indices.size()];
-        load(v, t, n, indices);
-        return new Mesh(v, t, n, indices);
-    }
 
-    public VAOMesh toVAOMesh() {
+    public SceneMesh toMesh() {
         int size = this.vertices.length + hVertices.size();
         float[] v = new float[size * 3];
         float[] t = new float[size * 2];
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
         load(v, t, n, indices);
-        return new VAOMesh(v, t, n, indices);
+        return new SceneMesh(v, t, n, indices);
     }
 
     private void load(float[] v, float[] t, float[] n, int[] indices) {

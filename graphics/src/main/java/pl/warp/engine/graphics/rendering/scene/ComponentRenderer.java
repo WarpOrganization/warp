@@ -7,12 +7,11 @@ import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.config.Config;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.engine.core.property.NameProperty;
 import pl.warp.engine.graphics.GLErrors;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
-import pl.warp.engine.graphics.mesh.Mesh;
-import pl.warp.engine.graphics.mesh.MeshProperty;
+import pl.warp.engine.graphics.mesh.IndexedMesh;
+import pl.warp.engine.graphics.rendering.scene.mesh.MeshProperty;
 import pl.warp.engine.graphics.rendering.scene.program.SceneRenderingProgramManager;
 import pl.warp.engine.graphics.utility.MatrixStack;
 
@@ -61,19 +60,9 @@ public class ComponentRenderer {
         if (component.hasEnabledProperty(MeshProperty.NAME)) {
             applyTransformations(component);
             Material material = getMaterial(component);
-            Mesh mesh = getMesh(component);
+            IndexedMesh mesh = getMesh(component);
             SceneTessellationMode tessellationMode = getTessellationMode(component);
-            if (component.hasProperty(NameProperty.NAME)) {
-                NameProperty nameProperty = component.getProperty(NameProperty.NAME);
-                System.out.println("RENDERING " + nameProperty.getComponentName());
-                GL15.glBeginQuery(GL30.GL_PRIMITIVES_GENERATED, query);
-                drawMesh(material, mesh, tessellationMode);
-                GL15.glEndQuery(GL30.GL_PRIMITIVES_GENERATED);
-                System.out.println("AMOUNT: " + GL15.glGetQueryObjecti(query, GL15.GL_QUERY_RESULT));
-            } else {
-                drawMesh(material, mesh, tessellationMode);
-            }
-
+            drawMesh(material, mesh, tessellationMode);
         }
     }
 
@@ -96,7 +85,7 @@ public class ComponentRenderer {
         matrixStack.rotate(rotation.getRotation());
     }
 
-    protected void drawMesh(Material material, Mesh mesh, SceneTessellationMode tessellationMode) {
+    protected void drawMesh(Material material, IndexedMesh mesh, SceneTessellationMode tessellationMode) {
         sceneRenderingProgramManager.prepareProgram(material, matrixStack, tessellationMode);
         switch (tessellationMode) {
             case NONE:
@@ -110,7 +99,7 @@ public class ComponentRenderer {
         }
     }
 
-    protected Mesh getMesh(Component component) {
+    protected IndexedMesh getMesh(Component component) {
         MeshProperty meshProperty = component.getProperty(MeshProperty.NAME);
         return meshProperty.getMesh();
     }

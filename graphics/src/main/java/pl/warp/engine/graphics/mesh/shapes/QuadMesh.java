@@ -1,12 +1,12 @@
 package pl.warp.engine.graphics.mesh.shapes;
 
-import pl.warp.engine.graphics.mesh.VAOMesh;
+import pl.warp.engine.graphics.rendering.scene.mesh.SceneMesh;
 
 /**
  * @author Jaca777
  *         Created 2017-02-09 at 01
  */
-public class QuadMesh extends VAOMesh {
+public class QuadMesh extends SceneMesh {
 
     private static final float[] VERTICES = new float[]{
             -1.0f, -1.0f, 0.0f,

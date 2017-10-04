@@ -1,7 +1,8 @@
 package pl.warp.engine.graphics.tessellation;
 
+import org.lwjgl.opengl.GL15;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.engine.graphics.mesh.Mesh;
+import pl.warp.engine.graphics.mesh.IndexedMesh;
 import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
 
 /**
@@ -11,6 +12,10 @@ import pl.warp.engine.graphics.tessellation.program.TessellationProgram;
 
 @Service
 public class Tessellator {
+
+    public enum TessellatorMode {
+        BEZIER, FLAT
+    }
 
     public static final String BEZIER_TESSELLATOR_LOCATION = "tessellation/bezier";
     public static final String FLAT_TESSELLATOR_LOCATION = "tessellation/flat";
@@ -27,7 +32,7 @@ public class Tessellator {
 
     }
 
-    public void tessellate(Mesh mesh, TessellatorMode mode, float tessellationLevel) {
+    public IndexedMesh tessellate(IndexedMesh mesh, TessellatorMode mode, float tessellationLevel) {
         TessellationProgram program = null;
         switch (mode) {
             case FLAT:
@@ -39,11 +44,23 @@ public class Tessellator {
         }
         program.use();
         program.setTessellationLevel(tessellationLevel);
+
+        int vertices = GL15.glGenBuffers();
+        int textureCoords = GL15.glGenBuffers();
+        int normals = GL15.glGenBuffers();
+
+        //todo tessellation
+
+        return null;
     }
 
-
-    public enum TessellatorMode {
-        BEZIER, FLAT
+    public int getVerticesFactor(int level) {
+        int triangles = level / 2;
+        int maxSubtriangles = (level - 1) * 2;
+        int extraTriangles = ((triangles - 1) * triangles) * 2;
+        int innerTriangle = (level % 2);
+        return (maxSubtriangles * triangles - extraTriangles) * 3 + innerTriangle;
     }
+
 
 }

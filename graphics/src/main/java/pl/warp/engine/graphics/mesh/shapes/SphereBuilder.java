@@ -1,6 +1,6 @@
 package pl.warp.engine.graphics.mesh.shapes;
 
-import pl.warp.engine.graphics.mesh.VAOMesh;
+import pl.warp.engine.graphics.rendering.scene.mesh.SceneMesh;
 
 /**
  * @author Jaca777
@@ -8,9 +8,7 @@ import pl.warp.engine.graphics.mesh.VAOMesh;
  */
 public class SphereBuilder {
 
-
-    //Based on Android code.
-    public static VAOMesh createShape(int segmentsH, int segmentsW, float radius) {
+    public static SceneMesh createShape(int segmentsH, int segmentsW, float radius) {
 
         int verticesN = (segmentsW + 1) * (segmentsH + 1);
         int indicesN = 2 * segmentsW * (segmentsH - 1) * 3;
@@ -75,7 +73,7 @@ public class SphereBuilder {
             }
         }
 
-        return new VAOMesh(vertices, textureCoords, normals, indices);
+        return new SceneMesh(vertices, textureCoords, normals, indices);
     }
 }
 
