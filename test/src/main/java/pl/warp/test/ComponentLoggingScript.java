@@ -4,11 +4,10 @@ import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentDeathEvent;
 import pl.warp.engine.core.property.NameProperty;
-import pl.warp.engine.core.script.annotation.EventHandler;
-import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.annotation.DelayScheduling;
-import pl.warp.engine.physics.event.CollisionEvent;
+import pl.warp.engine.core.script.annotation.EventHandler;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 
 /**
  * @author Jaca777
@@ -47,8 +46,9 @@ public class ComponentLoggingScript extends Script {
         log("Component died :(");
     }
 
-    @EventHandler(eventName = CollisionEvent.COLLISION_EVENT_NAME)
+    //TODO physics rewrite
+/*    @EventHandler(eventName = CollisionEvent.COLLISION_EVENT_NAME)
     private void onCollision(CollisionEvent event) {
         log("Component collided with" + event.getSecondComponent() + " at speed " + event.getRelativeSpeed());
-    }
+    }*/
 }

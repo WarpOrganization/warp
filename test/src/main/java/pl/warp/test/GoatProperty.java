@@ -11,15 +11,17 @@ public class GoatProperty extends Property {
 
     private float movementSpeed;
     private float rotationSpeed;
-    private float brakingForce;
+    private float linearDamping;
     private float arrowKeysRotationSpeed;
+    private float angularDamping;
 
-    public GoatProperty(float movementSpeed, float rotationSpeed, float brakingForce, float arrowKeysRotationSpeed) {
+    public GoatProperty(float movementSpeed, float rotationSpeed, float linearDamping, float arrowKeysRotationSpeed, float angualrDamping) {
         super(GOAT_PROPERTY_NAME);
         this.movementSpeed = movementSpeed;
         this.rotationSpeed = rotationSpeed;
-        this.brakingForce = brakingForce;
+        this.linearDamping = linearDamping;
         this.arrowKeysRotationSpeed = arrowKeysRotationSpeed;
+        this.angularDamping = angualrDamping;
     }
 
     public float getMovementSpeed() {
@@ -40,12 +42,12 @@ public class GoatProperty extends Property {
         return this;
     }
 
-    public float getBrakingForce() {
-        return brakingForce;
+    public float getLinearDamping() {
+        return linearDamping;
     }
 
-    public GoatProperty setBrakingForce(float brakingForce) {
-        this.brakingForce = brakingForce;
+    public GoatProperty setLinearDamping(float linearDamping) {
+        this.linearDamping = linearDamping;
         return this;
     }
 
@@ -56,5 +58,13 @@ public class GoatProperty extends Property {
     public GoatProperty setArrowKeysRotationSpeed(float arrowKeysRotationSpeed) {
         this.arrowKeysRotationSpeed = arrowKeysRotationSpeed;
         return this;
+    }
+
+    public float getAngularDamping() {
+        return angularDamping;
+    }
+
+    public void setAngularDamping(float angularDamping) {
+        this.angularDamping = angularDamping;
     }
 }

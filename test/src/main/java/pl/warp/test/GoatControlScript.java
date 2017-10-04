@@ -1,21 +1,22 @@
 package pl.warp.test;
 
+import com.badlogic.gdx.math.Vector3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.core.component.Component;
-import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.game.GameContext;
 import pl.warp.engine.input.Input;
-import pl.warp.engine.physics.property.PhysicalBodyProperty;
+import pl.warp.engine.physics.PhysicsProperty;
 
 import java.awt.event.KeyEvent;
 
 /**
  * @author Jaca777
- *         Created 2016-07-08 at 00
+ * Created 2016-07-08 at 00
  */
 public class GoatControlScript extends Script {
 
@@ -24,16 +25,16 @@ public class GoatControlScript extends Script {
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
     private static final Vector3f RIGHT_VECTOR = new Vector3f(1, 0, 0);
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
-    
-    @OwnerProperty(name = PhysicalBodyProperty.PHYSICAL_BODY_PROPERTY_NAME)
-    private PhysicalBodyProperty bodyProperty;
+
+    @OwnerProperty(name = PhysicsProperty.PHYSICS_PROPERTY_NAME)
+    private PhysicsProperty bodyProperty;
 
     @OwnerProperty(name = GunProperty.GUN_PROPERTY_NAME)
     private GunProperty gunProperty;
 
     @OwnerProperty(name = GoatProperty.GOAT_PROPERTY_NAME)
     private GoatProperty goatProperty;
-    
+
 
     private Vector3f forwardVector = new Vector3f();
     private Vector3f rightVector = new Vector3f();
@@ -55,7 +56,7 @@ public class GoatControlScript extends Script {
         desiredTorque.set(0, 0, 0);
         move(delta);
         rotate(delta);
-        moveAngular(delta);
+//        moveAngular(delta);
         useGun();
     }
 
@@ -63,7 +64,7 @@ public class GoatControlScript extends Script {
 
 
     private void useGun() {
-        Input input = ((GameContext)getContext()).getInput();
+        Input input = ((GameContext) getContext()).getInput();
         getOwner().<GunProperty>getPropertyIfExists(GunProperty.GUN_PROPERTY_NAME).ifPresent(
                 c -> {
                     if (input.isKeyDown(KeyEvent.VK_CONTROL)) c.setTriggered(true);
@@ -78,8 +79,10 @@ public class GoatControlScript extends Script {
         goatFullRotation.transform(upVector.set(UP_VECTOR)).negate();
     }
 
+    private Vector3f tmpTorque = new Vector3f();
+
     private void move(int delta) {
-        Input input = ((GameContext)getContext()).getInput();
+        Input input = ((GameContext) getContext()).getInput();
         if (input.isKeyDown(KeyEvent.VK_W))
             move(forwardVector, goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_S))
@@ -88,8 +91,10 @@ public class GoatControlScript extends Script {
             move(rightVector, goatProperty.getMovementSpeed() * delta);
         if (input.isKeyDown(KeyEvent.VK_D))
             move(rightVector, -goatProperty.getMovementSpeed() * delta);
-        if (input.isKeyDown(KeyEvent.VK_SPACE))
-            brake(delta);
+        if (input.isKeyDown(KeyEvent.VK_M))
+            toggleAngularDamping();
+        if (input.isKeyDown(KeyEvent.VK_N))
+            toggleLinearDamping();
         if (input.isKeyDown(KeyEvent.VK_P))
             stopBody();
         if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
@@ -97,46 +102,89 @@ public class GoatControlScript extends Script {
         else
             gunProperty.setTriggered(false);
         if (input.isKeyDown(KeyEvent.VK_UP))
-            addDesiredTorque(goatProperty.getArrowKeysRotationSpeed(), 0, 0);
+            addTorque(tmpTorque.set(rightVector).mul(-goatProperty.getArrowKeysRotationSpeed() * delta));
         if (input.isKeyDown(KeyEvent.VK_DOWN))
-            addDesiredTorque(-goatProperty.getArrowKeysRotationSpeed(), 0, 0);
+            addTorque(tmpTorque.set(rightVector).mul(goatProperty.getArrowKeysRotationSpeed() * delta));
         if (input.isKeyDown(KeyEvent.VK_LEFT))
-            addDesiredTorque(0, goatProperty.getArrowKeysRotationSpeed(), 0);
+            addTorque(tmpTorque.set(upVector).mul(-goatProperty.getArrowKeysRotationSpeed() * delta));
         if (input.isKeyDown(KeyEvent.VK_RIGHT))
-            addDesiredTorque(0, -goatProperty.getArrowKeysRotationSpeed(), 0);
+            addTorque(tmpTorque.set(upVector).mul(goatProperty.getArrowKeysRotationSpeed() * delta));
         if (input.isKeyDown(KeyEvent.VK_Q))
-            addDesiredTorque(0, 0, goatProperty.getArrowKeysRotationSpeed());
+            addTorque(tmpTorque.set(forwardVector).mul(-goatProperty.getArrowKeysRotationSpeed() * delta));
         if (input.isKeyDown(KeyEvent.VK_E))
-            addDesiredTorque(0, 0, -goatProperty.getArrowKeysRotationSpeed());
+            addTorque(tmpTorque.set(forwardVector).mul(goatProperty.getArrowKeysRotationSpeed() * delta));
     }
 
     private Vector3f tmpForce = new Vector3f();
     private Vector3f desiredTorque = new Vector3f();
+    private Vector3 tmp = new Vector3();
 
     private void move(Vector3f direction, float force) {
-        bodyProperty.applyForce(tmpForce.set(direction).mul(force));
+        tmpForce.set(direction).mul(force);
+        bodyProperty.getRigidBody().applyCentralImpulse(tmp.set(tmpForce.x, tmpForce.y, tmpForce.z));
     }
 
-    private Vector3f torqueChange = new Vector3f();
+    private boolean linearDamping = false;
+    private boolean angularDamping = true;
 
-    private void moveAngular(float delta) {
-        if (desiredTorque.equals(bodyProperty.getAngularVelocity())) return;
-        torqueChange.set(bodyProperty.getAngularVelocity());
-        torqueChange.sub(desiredTorque);
-        torqueChange.negate();
-        if (torqueChange.length() > goatProperty.getRotationSpeed() * delta / bodyProperty.getUniversalRotationInertia()) {
-            torqueChange.normalize();
-            torqueChange.mul(goatProperty.getRotationSpeed());
-            torqueChange.mul(delta);
-        } else {
-            torqueChange.mul(bodyProperty.getUniversalRotationInertia());
+    private void setDamping() {
+        if (linearDamping)
+            if (angularDamping)
+                bodyProperty.getRigidBody().setDamping(goatProperty.getLinearDamping(), goatProperty.getAngularDamping());
+            else
+                bodyProperty.getRigidBody().setDamping(goatProperty.getLinearDamping(), 0);
+        else if (angularDamping)
+            bodyProperty.getRigidBody().setDamping(0, goatProperty.getAngularDamping());
+        else
+            bodyProperty.getRigidBody().setDamping(0, 0);
+    }
+
+    private long lastLinearDampingToggle = 0;
+
+    private void toggleLinearDamping() {
+        if (System.currentTimeMillis() - lastLinearDampingToggle > 1000) {
+            linearDamping = !linearDamping;
+            setDamping();
+            System.out.println("linear damping " + linearDamping);
+            lastLinearDampingToggle = System.currentTimeMillis();
         }
-        bodyProperty.addAngularVelocity(torqueChange.div(bodyProperty.getUniversalRotationInertia()));
     }
 
-    private void addDesiredTorque(float x, float y, float z) {
-        desiredTorque.add(x, y, z);
+    private long lastAngularDampingToggle = 0;
+
+    private void toggleAngularDamping() {
+        if (System.currentTimeMillis() - lastAngularDampingToggle > 1000) {
+            angularDamping = !angularDamping;
+            setDamping();
+            System.out.println("angular damping " + angularDamping);
+            lastAngularDampingToggle = System.currentTimeMillis();
+        }
     }
+
+    private Vector3 convertedTorque = new Vector3();
+
+    private void addTorque(Vector3f torque) {
+        bodyProperty.getRigidBody().applyTorqueImpulse(convertedTorque.set(torque.x, torque.y, torque.z));
+    }
+
+//    private void moveAngular(float delta) {
+//        if (desiredTorque.equals(bodyProperty.getAngularVelocity())) return;
+//        torqueChange.set(bodyProperty.getAngularVelocity());
+//        torqueChange.sub(desiredTorque);
+//        torqueChange.negate();
+//        if (torqueChange.length() > goatProperty.getRotationSpeed() * delta / bodyProperty.getUniversalRotationInertia()) {
+//            torqueChange.normalize();
+//            torqueChange.mul(goatProperty.getRotationSpeed());
+//            torqueChange.mul(delta);
+//        } else {
+//            torqueChange.mul(bodyProperty.getUniversalRotationInertia());
+//        }
+//        bodyProperty.addAngularVelocity(torqueChange.div(bodyProperty.getUniversalRotationInertia()));
+//    }
+//
+//    private void addDesiredTorque(float x, float y, float z) {
+//        desiredTorque.add(x, y, z);
+//    }
 
     private void rotate(int delta) {
   /*      Vector2f cursorPosDelta = input.getCursorPositionDelta();
@@ -147,24 +195,7 @@ public class GoatControlScript extends Script {
     }
 
     private void stopBody() {
-        bodyProperty.setVelocity(new Vector3f(0));
-        bodyProperty.setAngularVelocity(new Vector3f(0));
+        bodyProperty.getRigidBody().setAngularVelocity(new Vector3(0, 0, 0));
+        bodyProperty.getRigidBody().setLinearVelocity(new Vector3(0, 0, 0));
     }
-
-    private Vector3f brakingVector = new Vector3f();
-
-    private void brake(int delta) {
-        brakingVector.set(bodyProperty.getVelocity());
-        if (brakingVector.length() > goatProperty.getBrakingForce() / bodyProperty.getMass()) {
-            brakingVector.normalize();
-            brakingVector.negate();
-            brakingVector.mul(goatProperty.getBrakingForce());
-        } else {
-            brakingVector.negate();
-            brakingVector.mul(bodyProperty.getMass());
-        }
-        brakingVector.mul(delta);
-        bodyProperty.applyForce(brakingVector);
-    }
-
 }

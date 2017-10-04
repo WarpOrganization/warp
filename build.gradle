@@ -40,7 +40,6 @@ jar {
 
 dependencies {
     compile project(':test')
-    compile project(':ide')
 }
 
 task testJar(type: Jar, dependsOn: 'build') {
@@ -49,14 +48,6 @@ task testJar(type: Jar, dependsOn: 'build') {
         attributes 'Main-Class': 'pl.warp.test.TestApp'
     }
     baseName = "warp-${platform}"
-    with jar
-}
-
-task ideJar(type: Jar, dependsOn: 'build') {
-    manifest {
-        attributes 'Main-Class': 'pl.warp.ide.IDELauncher'
-    }
-    baseName = "warp-IDE-${platform}"
     with jar
 }
 
