@@ -36,4 +36,5 @@ public class PhysicsManager {
             throw new PropertyNotPresentException(PhysicsProperty.PHYSICS_PROPERTY_NAME);
         physicsTask.getRigidBodyRegistry().removeRigidBody(component);
     }
+
 }
