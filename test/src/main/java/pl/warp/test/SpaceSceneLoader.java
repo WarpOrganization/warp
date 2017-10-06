@@ -76,6 +76,7 @@ import pl.warp.engine.physics.PhysicsManager;
 import pl.warp.engine.physics.PhysicsProperty;
 import pl.warp.engine.physics.PhysicsThread;
 import pl.warp.engine.physics.RigidBodyConstructor;
+import pl.warp.engine.physics.constraints.BallConstraint;
 import pl.warp.test.ai.DroneMemoryProperty;
 
 import java.io.File;
@@ -482,6 +483,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
         team1.add(controllableGoat);
         //36n6controllableGoat.addProperty(new DroneProperty(5, 1, team2, allyPortal));
         int nOfGoats = 60;
+        PhysicsProperty lastPhysicsProperty = null;
         for (int i = 0; i < nOfGoats; i++) {
             GameComponent goat = new GameSceneComponent(parent);
             goat.addProperty(new KaboomProperty(gasPlanet, 1000.0f));
@@ -495,8 +497,9 @@ public class SpaceSceneLoader implements GameSceneLoader {
             transformProperty.move(new Vector3f(x, y, z));
             goat.addProperty(transformProperty);
 
-            goat.addProperty(new PhysicsProperty(goatBodyConstructor.construct(transformProperty)));
-            physicsThread.scheduleOnce(() -> physicsManager.addRigidBody(goat));
+            PhysicsProperty physicsProperty = new PhysicsProperty(goatBodyConstructor.construct(transformProperty));
+            goat.addProperty(physicsProperty);
+            physicsManager.addRigidBody(goat);
 
             SequenceNode basenode = new SequenceNode();
             //basenode.addChildren(new SpinLeaf());
@@ -512,7 +515,7 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 team1.add(goat);
                 allyEngineParticles(goat);
             } else {
-                transformProperty.move(new Vector3f(0f, 0f, -500f));
+//                transformProperty.move(new Vector3f(0f, 0f, -500f));
                 //transformProperty.getRotation().rotateY((float) Math.PI);
                 Material material = new Material(goatTexture2);
                 material.setShininess(20f);
@@ -524,9 +527,22 @@ public class SpaceSceneLoader implements GameSceneLoader {
                 team2.add(goat);
                 enemyEngineParticles(goat);
             }
+
+            /*
+            * dyndajki test
+            * */
+            if (i % 2 == 1) {
+                BallConstraint constraint = new BallConstraint(
+                        physicsProperty.getRigidBody(),
+                        lastPhysicsProperty.getRigidBody(),
+                        new Vector3f(5.1f, 5.1f, 5.1f),
+                        new Vector3f(-5.1f, -5.1f, -5.1f));
+                physicsManager.addConstraint(constraint);
+            }
             goat.addProperty(new DroneMemoryProperty());
 //            goat.addProperty(new AIProperty(builder.build(goat)));
 //            goat.addScript(GunScript.class);
+            lastPhysicsProperty = physicsProperty;
         }
     }
 

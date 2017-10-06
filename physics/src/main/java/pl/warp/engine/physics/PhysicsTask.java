@@ -29,11 +29,13 @@ public class PhysicsTask extends EngineTask {
     private RigidBodyRegistry rigidBodyRegistry;
     private RayTestSolver rayTestSolver;
     private ColliderComponentRegistry colliderComponentRegistry;
+    private ConstraintRegistry constraintRegistry;
 
     public PhysicsTask() {
         colliderComponentRegistry = new ColliderComponentRegistry();
         rigidBodyRegistry = new RigidBodyRegistry(colliderComponentRegistry);
         rayTestSolver = new RayTestSolver(colliderComponentRegistry);
+        constraintRegistry = new ConstraintRegistry();
     }
 
     @Override
@@ -52,6 +54,7 @@ public class PhysicsTask extends EngineTask {
     @Override
     public void update(int delta) {
         rigidBodyRegistry.processBodies(mainWorld.getDynamicsWorld());
+        constraintRegistry.update(mainWorld.getDynamicsWorld());
         mainWorld.getDynamicsWorld().stepSimulation(delta / 1000f, 4, 1 / 60f);
         rayTestSolver.update();
     }
@@ -80,5 +83,9 @@ public class PhysicsTask extends EngineTask {
 
     public ColliderComponentRegistry getColliderComponentRegistry() {
         return colliderComponentRegistry;
+    }
+
+    public ConstraintRegistry getConstraintRegistry() {
+        return constraintRegistry;
     }
 }
