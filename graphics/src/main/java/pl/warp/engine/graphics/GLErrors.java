@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL30;
  *         Created 2016-07-30 at 23
  */
 public class GLErrors {
+
     public static void checkOGLErrors() {
         int error;
         if ((error = GL11.glGetError()) != GL11.GL_NO_ERROR)

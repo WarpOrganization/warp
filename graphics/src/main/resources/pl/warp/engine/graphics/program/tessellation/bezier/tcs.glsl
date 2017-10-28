@@ -39,12 +39,10 @@ void calcPatchData() {
     tesPatch.worldPos_B003 = oWorldPos[1];
     tesPatch.worldPos_B300 = oWorldPos[2];
 
-    // edges are names according to the opposing vertex
     vec3 edgeB300 = tesPatch.worldPos_B003 - tesPatch.worldPos_B030;
     vec3 edgeB030 = tesPatch.worldPos_B300 - tesPatch.worldPos_B003;
     vec3 edgeB003 = tesPatch.worldPos_B030 - tesPatch.worldPos_B300;
 
-    // Generate two midpoints on each edge
     tesPatch.worldPos_B021 = tesPatch.worldPos_B030 + edgeB300 / 3.0;
     tesPatch.worldPos_B012 = tesPatch.worldPos_B030 + edgeB300 * 2.0 / 3.0;
     tesPatch.worldPos_B102 = tesPatch.worldPos_B003 + edgeB030 / 3.0;
@@ -52,7 +50,6 @@ void calcPatchData() {
     tesPatch.worldPos_B210 = tesPatch.worldPos_B300 + edgeB003 / 3.0;
     tesPatch.worldPos_B120 = tesPatch.worldPos_B300 + edgeB003 * 2.0 / 3.0;
 
-    // Project each midpoint on the plane defined by the nearest vertex and its normal
     tesPatch.worldPos_B021 = projectToPlane(tesPatch.worldPos_B021, tesPatch.worldPos_B030,
                                           tesPatch.normal[0]);
     tesPatch.worldPos_B012 = projectToPlane(tesPatch.worldPos_B012, tesPatch.worldPos_B003,
@@ -66,7 +63,6 @@ void calcPatchData() {
     tesPatch.worldPos_B120 = projectToPlane(tesPatch.worldPos_B120, tesPatch.worldPos_B030,
                                          tesPatch.normal[0]);
 
-    // Handle the center
     vec3 center = (tesPatch.worldPos_B003 + tesPatch.worldPos_B030 + tesPatch.worldPos_B300) / 3.0;
     tesPatch.worldPos_B111 = (tesPatch.worldPos_B021 + tesPatch.worldPos_B012 + tesPatch.worldPos_B102 +
                           tesPatch.worldPos_B201 + tesPatch.worldPos_B210 + tesPatch.worldPos_B120) / 6.0;

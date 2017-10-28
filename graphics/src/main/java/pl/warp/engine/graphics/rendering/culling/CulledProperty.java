@@ -10,5 +10,11 @@ public class CulledProperty extends Property {
     public static final String NAME = "culled";
     private boolean culled;
 
+    public CulledProperty() {
+        super(NAME);
+    }
 
+    public boolean isCulled() {
+        return culled;
+    }
 }

@@ -167,7 +167,7 @@ public class Test1 {
         sphere.addProperty(meshProperty);
 
         Material material = new Material(diffuse);
-        material.setDisplacement(bump, 1.5f);
+        material.setDisplacement(bump, 0.5f);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
 

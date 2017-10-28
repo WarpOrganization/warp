@@ -12,4 +12,16 @@ public class SceneMesh extends VAOMesh {
     public SceneMesh(float[] vertices, float[] texCoords, float[] normals, int[] indices) {
         super(new float[][] {vertices, texCoords, normals}, SIZES, vertices.length, indices);
     }
+
+    public int getVertexBuff() {
+        return getBuffer(0);
+    }
+
+    public int getTexCoordBuff() {
+        return getBuffer(1);
+    }
+
+    public int getNormalBuff() {
+        return getBuffer(2);
+    }
 }
