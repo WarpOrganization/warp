@@ -7,6 +7,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'net.nemerosa.versioning' version '2.0.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'scala'
 
@@ -14,7 +18,7 @@ import org.ajoberstar.grgit.*
 ext.repo = Grgit.open(project.file('.'))
 
 group 'pl.warp'
-version "0.1.2-${ext.repo.branch.current.name}"
+version "${versioning.info.branch}-0.1.2.${versioning.info.build}"
 
 repositories {
     mavenCentral()
@@ -47,7 +51,7 @@ task testJar(type: Jar, dependsOn: 'build') {
     manifest {
         attributes 'Main-Class': 'pl.warp.test.TestApp'
     }
-    baseName = "warp-${platform}"
+    baseName = "Warp-${platform}"
     with jar
 }
 
