@@ -18,7 +18,7 @@ import org.ajoberstar.grgit.*
 ext.repo = Grgit.open(project.file('.'))
 
 group 'pl.warp'
-version "${versioning.info.branch}-0.1.2.${versioning.info.build}"
+version "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}-0.1.2.${versioning.info.build}"
 
 repositories {
     mavenCentral()
