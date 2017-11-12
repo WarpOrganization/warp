@@ -49,8 +49,8 @@ public class BoundingBoxCalculator {
 
     protected void compileProgram() {
         String processedSource = loadSource();
-        int shader = GLSLShaderCompiler.compileShader(GL43.GL_COMPUTE_SHADER, processedSource);
-        this.program = GLSLShaderCompiler.createProgram(new int[] {shader}, new String[0]);
+        int shader = GLSLShaderCompiler.compileShader(GL43.GL_COMPUTE_SHADER, processedSource, "bbox");
+        this.program = GLSLShaderCompiler.createProgram(new int[] {shader}, new String[0], "bbox");
     }
 
     private String loadSource() {

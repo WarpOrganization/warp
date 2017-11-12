@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.rendering.scene;
+package pl.warp.engine.graphics.rendering.scene.tesselation;
 
 import pl.warp.engine.core.property.Property;
 

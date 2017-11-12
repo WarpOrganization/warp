@@ -3,7 +3,9 @@ package pl.warp.engine.graphics.rendering.scene.program;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.graphics.camera.CameraHolder;
 import pl.warp.engine.graphics.material.Material;
-import pl.warp.engine.graphics.rendering.scene.SceneTessellationMode;
+import pl.warp.engine.graphics.rendering.scene.tesselation.NoTessellationRenderingProgram;
+import pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
+import pl.warp.engine.graphics.rendering.scene.tesselation.TessellationRenderingProgram;
 import pl.warp.engine.graphics.tessellation.Tessellator;
 import pl.warp.engine.graphics.utility.MatrixStack;
 

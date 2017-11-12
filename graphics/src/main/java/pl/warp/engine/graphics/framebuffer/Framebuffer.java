@@ -50,7 +50,7 @@ public abstract class Framebuffer {
 
     public abstract void clean();
 
-    public abstract boolean isAssembled();
+    public abstract boolean isComplete();
 
 
 

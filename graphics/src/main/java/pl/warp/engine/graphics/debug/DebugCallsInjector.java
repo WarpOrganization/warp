@@ -19,8 +19,6 @@ public class DebugCallsInjector {
         }
     }
 
-    private static final MethodInsnNode ERROR_CHECK_CALL = new MethodInsnNode(INVOKESTATIC, "pl/warp/engine/graphics/GLErrors", "checkOGLErrors", "()V", false);
-
     private static void injectCalls(MethodNode method) {
         AbstractInsnNode[] instructions = method.instructions.toArray();
         InsnList newStack = new InsnList();
@@ -34,14 +32,16 @@ public class DebugCallsInjector {
         if (instruction.getOpcode() == INVOKESTATIC) {
             MethodInsnNode methodInvoc = (MethodInsnNode) instruction;
             if (isOglInstruction(methodInvoc)) {
-                InsnList tracerCall = new InsnList();
-                tracerCall.add(ERROR_CHECK_CALL);
-                newStack.insert(methodInvoc, tracerCall);
+                newStack.insert(methodInvoc, createDebugCall());
             }
         }
     }
 
-    private static final Pattern GL_PATTERN = Pattern.compile("org/lwjgl/.+");
+    private static MethodInsnNode createDebugCall() {
+        return new MethodInsnNode(INVOKESTATIC, "pl/warp/engine/graphics/GLErrors", "checkOGLErrors", "()V", false);
+    }
+
+    private static final Pattern GL_PATTERN = Pattern.compile("org/lwjgl/opengl/.+");
 
     private static boolean isOglInstruction(MethodInsnNode methodInvok) {
         return GL_PATTERN.matcher(methodInvok.owner).matches() && !methodInvok.name.equals("glGetError");

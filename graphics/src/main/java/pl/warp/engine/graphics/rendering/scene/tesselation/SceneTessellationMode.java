@@ -1,4 +1,4 @@
-package pl.warp.engine.graphics.rendering.scene;
+package pl.warp.engine.graphics.rendering.scene.tesselation;
 
 /**
  * @author Jaca777

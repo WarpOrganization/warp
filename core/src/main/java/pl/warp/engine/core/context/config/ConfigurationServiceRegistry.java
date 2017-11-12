@@ -69,7 +69,7 @@ public class ConfigurationServiceRegistry  implements ServiceRegistry {
                 try {
                     observer.getHandle().invoke(value);
                 } catch (Throwable throwable) {
-                    throw new ServiceConfigurationException("Failed to set config value to: " + name);
+                    throw new ServiceConfigurationException("Failed to set config value to: " + name, throwable);
                 }
             });
         }

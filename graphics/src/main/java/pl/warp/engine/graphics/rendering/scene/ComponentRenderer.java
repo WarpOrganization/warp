@@ -1,18 +1,18 @@
 package pl.warp.engine.graphics.rendering.scene;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 import pl.warp.engine.common.transform.TransformProperty;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.config.Config;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.engine.graphics.GLErrors;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.IndexedMesh;
 import pl.warp.engine.graphics.rendering.scene.mesh.MeshProperty;
 import pl.warp.engine.graphics.rendering.scene.program.SceneRenderingProgramManager;
+import pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
+import pl.warp.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import pl.warp.engine.graphics.utility.MatrixStack;
 
 /**
@@ -27,7 +27,6 @@ public class ComponentRenderer {
 
     private SceneRenderingProgramManager sceneRenderingProgramManager;
     private SceneTessellationMode defaultTessellationMode;
-    private int query;
 
 
     public ComponentRenderer(Config config, SceneRenderingProgramManager sceneRenderingProgramManager) {
@@ -37,7 +36,6 @@ public class ComponentRenderer {
 
     public void init() {
         this.sceneRenderingProgramManager.init();
-        this.query = GL15.glGenQueries();
         setupGL();
     }
 
@@ -52,7 +50,6 @@ public class ComponentRenderer {
 
     public void initRendering() {
         this.sceneRenderingProgramManager.update();
-        GLErrors.checkOGLErrors();
     }
 
 
@@ -85,15 +82,14 @@ public class ComponentRenderer {
         matrixStack.rotate(rotation.getRotation());
     }
 
-    protected void drawMesh(Material material, IndexedMesh mesh, SceneTessellationMode tessellationMode) {
-        sceneRenderingProgramManager.prepareProgram(material, matrixStack, tessellationMode);
-        switch (tessellationMode) {
+    protected void drawMesh(Material material, IndexedMesh mesh, SceneTessellationMode runtimeTesselation) {
+        sceneRenderingProgramManager.prepareProgram(material, matrixStack, runtimeTesselation);
+        switch (runtimeTesselation) {
             case NONE:
                 mesh.draw();
                 break;
             case FLAT:
             case BEZIER:
-
                 mesh.drawPatched();
                 break;
         }

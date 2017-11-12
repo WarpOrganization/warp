@@ -37,7 +37,7 @@ public class ScreenFramebuffer extends Framebuffer {
     }
 
     @Override
-    public boolean isAssembled() {
+    public boolean isComplete() {
         return true;
     }
 

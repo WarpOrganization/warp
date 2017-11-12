@@ -19,6 +19,10 @@ public class ServiceConfigurationException extends RuntimeException{
         super(message);
     }
 
+    public ServiceConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     private static String getMessage(String message, Object service) {
         return "Unable to process service " + service.getClass().getName() + " configuration." + message;
     }

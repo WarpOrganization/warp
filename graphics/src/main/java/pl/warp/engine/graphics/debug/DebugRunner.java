@@ -11,21 +11,21 @@ import java.security.ProtectionDomain;
  *         Created 2017-03-20 at 15
  */
 public class DebugRunner {
-    public static void debugApp(String appClass) throws ReflectiveOperationException {
+
+    public static void debugApp(String appClass, URL codesourceLocation) throws ReflectiveOperationException {
         DebugClassLoader classLoader = new DebugClassLoader();
         Class<?> aClass = classLoader.loadClass(appClass);
-        runMain(aClass);
+        runMain(aClass, codesourceLocation);
     }
 
-    private static void runMain(Class<?> aClass) throws ReflectiveOperationException {
-        setupCodesource(aClass);
+    private static void runMain(Class<?> aClass, URL codesourceLocation) throws ReflectiveOperationException {
+        setupCodesource(aClass, codesourceLocation);
         Method main = aClass.getMethod("main", String[].class);
         main.setAccessible(true);
         main.invoke(null, (Object) new String[0]);
     }
 
-    private static void setupCodesource(Class<?> aClass) throws NoSuchFieldException, IllegalAccessException {
-        URL codesourceLocation = DebugRunner.class.getProtectionDomain().getCodeSource().getLocation();
+    private static void setupCodesource(Class<?> aClass, URL codesourceLocation) throws NoSuchFieldException, IllegalAccessException {
         ProtectionDomain domain = aClass.getProtectionDomain();
         CodeSource source = domain.getCodeSource();
         Class sourceClass = source.getClass();

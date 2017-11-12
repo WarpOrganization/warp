@@ -11,7 +11,7 @@ import java.io.InputStream;
 /**
  * Created by Szymon on 2015-05-30.
  */
-public class DebugClassLoader extends ClassLoader{
+public class DebugClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
@@ -25,7 +25,7 @@ public class DebugClassLoader extends ClassLoader{
             String res = name.replace('.', '/') + ".class";
             InputStream is = getResourceAsStream(res);
             ClassReader reader = new ClassReader(is);
-            ClassNode node = new ClassNode(Opcodes.ASM5);
+            ClassNode node = new ClassNode(Opcodes.ASM6);
             reader.accept(node, 0);
             if (res.startsWith("pl/warp/engine/graphics")) DebugCallsInjector.inject(node);
             ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);

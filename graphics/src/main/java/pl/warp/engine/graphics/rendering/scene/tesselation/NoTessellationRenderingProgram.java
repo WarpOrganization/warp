@@ -1,6 +1,7 @@
-package pl.warp.engine.graphics.rendering.scene.program;
+package pl.warp.engine.graphics.rendering.scene.tesselation;
 
 import pl.warp.engine.graphics.program.ProgramAssemblyInfo;
+import pl.warp.engine.graphics.rendering.scene.program.SceneRenderingProgram;
 
 /**
  * @author Jaca777

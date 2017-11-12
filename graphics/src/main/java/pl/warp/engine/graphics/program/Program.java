@@ -27,6 +27,10 @@ public abstract class Program {
         this.compile();
     }
 
+    public Program(ProgramAssemblyInfo programAssemblyInfo) {
+        this(programAssemblyInfo, ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
+    }
+
     public void compile() {
         this.program = compiler.compile(programAssemblyInfo);
         GL20.glUseProgram(this.program.getGLProgram());

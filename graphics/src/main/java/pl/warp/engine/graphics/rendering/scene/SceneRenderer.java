@@ -3,8 +3,10 @@ package pl.warp.engine.graphics.rendering.scene;
 import org.apache.log4j.Logger;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.SceneHolder;
+import pl.warp.engine.core.context.config.EnableConfig;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.engine.graphics.framebuffer.ScreenFramebuffer;
+import pl.warp.engine.graphics.rendering.scene.gbuffer.GBufferFramebuffer;
+import pl.warp.engine.graphics.rendering.scene.gbuffer.GBufferManager;
 
 
 /**
@@ -13,17 +15,19 @@ import pl.warp.engine.graphics.framebuffer.ScreenFramebuffer;
  */
 
 @Service
+@EnableConfig
 public class SceneRenderer {
     private static final Logger logger = Logger.getLogger(SceneRenderer.class);
 
     private SceneHolder sceneHolder;
     private ComponentRenderer renderer;
-    private ScreenFramebuffer screenFramebuffer;
+    private GBufferManager gBufferManager;
+    private GBufferFramebuffer framebuffer;
 
-    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer, ScreenFramebuffer screenFramebuffer) {
+    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer, GBufferManager gBufferManager) {
         this.sceneHolder = sceneHolder;
         this.renderer = renderer;
-        this.screenFramebuffer = screenFramebuffer;
+        this.gBufferManager = gBufferManager;
     }
 
     public void init() {
@@ -46,8 +50,8 @@ public class SceneRenderer {
 
 
     private void initRendering() {
-        screenFramebuffer.bindDraw();
-        screenFramebuffer.clean();
+        framebuffer.bindDraw();
+        framebuffer.clean();
         renderer.initRendering();
     }
 
@@ -67,10 +71,7 @@ public class SceneRenderer {
     }
 
     private void setupFramebuffer() {
-      //...
+        this.framebuffer = new GBufferFramebuffer(gBufferManager.getGBuffer());
     }
 
-    public void onResize(int newWidth, int newHeight) {
-       //...
-    }
 }

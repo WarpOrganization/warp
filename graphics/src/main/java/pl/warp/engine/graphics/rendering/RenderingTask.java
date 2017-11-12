@@ -8,6 +8,7 @@ import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.graphics.GLErrors;
 import pl.warp.engine.graphics.rendering.scene.SceneRenderer;
+import pl.warp.engine.graphics.rendering.screen.OnScreenRenderer;
 
 /**
  * @author Jaca777
@@ -19,9 +20,11 @@ import pl.warp.engine.graphics.rendering.scene.SceneRenderer;
 public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;
+    private OnScreenRenderer onScreenRenderer;
 
-    public RenderingTask(SceneRenderer sceneRenderer) {
+    public RenderingTask(SceneRenderer sceneRenderer, OnScreenRenderer onScreenRenderer) {
         this.sceneRenderer = sceneRenderer;
+        this.onScreenRenderer = onScreenRenderer;
     }
 
     private static Logger logger = Logger.getLogger(RenderingTask.class);
@@ -32,6 +35,7 @@ public class RenderingTask extends EngineTask {
         createOpenGL();
         logger.info("OpenGL capabilities created.");
         sceneRenderer.init();
+        onScreenRenderer.init();
         //pipeline initialization...
         logger.info("Initialized pipeline.");
     }
@@ -45,6 +49,7 @@ public class RenderingTask extends EngineTask {
     @Override
     protected void onClose() {
         sceneRenderer.destroy();
+        onScreenRenderer.destroy();
         //destroy pipeline
     }
 

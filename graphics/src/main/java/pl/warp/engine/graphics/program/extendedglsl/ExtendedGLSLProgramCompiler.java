@@ -35,7 +35,7 @@ public class ExtendedGLSLProgramCompiler {
         String glslGeometryCode = loadIfExists(assemblyInfo.getGeometryShaderLocation(), ShaderType.GEOMETRY, assemblyInfo);
         String glslTcsCode = loadIfExists(assemblyInfo.getTcsShaderLocation(), ShaderType.TCS, assemblyInfo);
         String glslTesCode = loadIfExists(assemblyInfo.getTesShaderLocation(), ShaderType.TES, assemblyInfo);
-        return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode, glslTcsCode, glslTesCode);
+        return compileGLSL(glslVertexCode, glslFragmentCode, glslGeometryCode, glslTcsCode, glslTesCode, assemblyInfo);
     }
 
     private String loadIfExists(String location, ShaderType type, ProgramAssemblyInfo assemblyInfo) {
@@ -59,23 +59,24 @@ public class ExtendedGLSLProgramCompiler {
             String fragmentShaderCode,
             String geometryShaderCode,
             String tcsShaderCode,
-            String tesShaderCode) {
-        int vertexShader = compileShader(GL20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = compileShader(GL20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-        int geometryShader = compileShader(GL32.GL_GEOMETRY_SHADER, geometryShaderCode);
-        int tcsShader = compileShader(GL40.GL_TESS_CONTROL_SHADER, tcsShaderCode);
-        int tesShader = compileShader(GL40.GL_TESS_EVALUATION_SHADER, tesShaderCode);
+            String tesShaderCode,
+            ProgramAssemblyInfo assemblyInfo) {
+        int vertexShader = compileShader(GL20.GL_VERTEX_SHADER, vertexShaderCode, assemblyInfo);
+        int fragmentShader = compileShader(GL20.GL_FRAGMENT_SHADER, fragmentShaderCode, assemblyInfo);
+        int geometryShader = compileShader(GL32.GL_GEOMETRY_SHADER, geometryShaderCode, assemblyInfo);
+        int tcsShader = compileShader(GL40.GL_TESS_CONTROL_SHADER, tcsShaderCode, assemblyInfo);
+        int tesShader = compileShader(GL40.GL_TESS_EVALUATION_SHADER, tesShaderCode, assemblyInfo);
         int program;
         String[] outNames = ProgramOutputResolver.getOutput(fragmentShaderCode);
         program = GLSLShaderCompiler.createProgram(
-                new int[]{vertexShader, tcsShader, tesShader, geometryShader, fragmentShader}, outNames
+                new int[]{vertexShader, tcsShader, tesShader, geometryShader, fragmentShader}, outNames, assemblyInfo.getProgramName()
         );
         return new ExtendedGLSLProgram(fragmentShader, vertexShader, geometryShader, tcsShader, tesShader, program);
     }
 
-    private int compileShader(int shaderType, String shaderCode) {
+    private int compileShader(int shaderType, String shaderCode, ProgramAssemblyInfo assemblyInfo) {
         return shaderCode == null ? -1
-                : GLSLShaderCompiler.compileShader(shaderType, shaderCode);
+                : GLSLShaderCompiler.compileShader(shaderType, shaderCode, assemblyInfo.getProgramName());
     }
 
 
