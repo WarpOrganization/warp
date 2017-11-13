@@ -1,5 +1,6 @@
 package pl.warp.engine.graphics.rendering.scene.gbuffer;
 
+import pl.warp.engine.core.context.config.Config;
 import pl.warp.engine.core.context.config.ConfigValue;
 import pl.warp.engine.core.context.config.EnableConfig;
 import pl.warp.engine.core.context.service.Service;
@@ -14,10 +15,20 @@ import pl.warp.engine.graphics.window.Display;
 public class GBufferManager {
 
     private GBuffer gBuffer = new GBuffer();
+    private Display display;
 
-    @ConfigValue(value = "graphics.display", dispatcher = "graphics")
-    public void onDisplayChanged(Display newDisplay) {
+    public GBufferManager(Config config) {
+        this.display = config.getValue("graphics.display");
+    }
+
+    public void initialize() {
         this.gBuffer.generate();
+        this.gBuffer.initWithSize(display.getWidth(), display.getHeight());
+    }
+
+    @ConfigValue(value = "graphics.display", dispatcher = "graphics", onlyOnChanges = true)
+    public void resize(Display newDisplay) {
+        this.display = newDisplay;
         this.gBuffer.initWithSize(newDisplay.getWidth(), newDisplay.getHeight());
     }
 

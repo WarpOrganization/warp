@@ -61,9 +61,11 @@ public class SyncEngineThread implements EngineThread {
         for (EngineTask task : tasks) {
             if(!task.isInitialized())
                 task.init();
-            task.update(delta);
         }
         executionStrategy.execute(scheduledRunnables);
+        for (EngineTask task : tasks) {
+            task.update(delta);
+        }
         timer.await();
     }
 

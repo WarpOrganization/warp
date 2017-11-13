@@ -3,6 +3,7 @@ package pl.warp.engine.core.context.config;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import pl.warp.engine.core.context.service.Service;
 
 import java.io.IOException;
@@ -49,7 +50,9 @@ public class ConfigLoader {
         } else {
             try {
                 String yamlContent = IOUtils.toString(stream, Charset.defaultCharset());
-                Yaml yaml = new Yaml();
+                CustomClassLoaderConstructor constr = new CustomClassLoaderConstructor(
+                        Thread.currentThread().getContextClassLoader());
+                Yaml yaml = new Yaml(constr);
                 Map<String, Object> map = (Map<String, Object>) yaml.load(yamlContent);
                 logger.info("Loaded config file");
                 return map;

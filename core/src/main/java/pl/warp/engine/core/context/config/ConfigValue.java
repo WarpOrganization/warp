@@ -15,4 +15,5 @@ import java.lang.annotation.Target;
 public @interface ConfigValue {
     String value();
     String dispatcher() default "default";
+    boolean onlyOnChanges() default false;
 }

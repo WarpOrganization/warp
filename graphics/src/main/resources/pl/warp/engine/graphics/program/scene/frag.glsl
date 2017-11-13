@@ -4,7 +4,6 @@ precision mediump float;
 #include "util/floatPack"
 #include "util/vectorEncoding"
 
-
 uniform sampler2D diffuseTexture;
 uniform sampler2D materialTexture;
 
@@ -36,6 +35,7 @@ void calculateDiffuse() {
 
 void calculateNormal() {
     vec2 encoded = encode(oNormal);
+    comp1.rgb = vec3(encoded.r, encoded.r, encoded.r);
     comp2 |= v2PackSignedNorm(encoded, 11);
 }
 
@@ -45,12 +45,12 @@ void setFlags() {
     uint emissive = 0;
     uint subsurface = 0;
     uint metal = 0;
-    uint s = (beckmann >> 0)
-        | (heidrichSeidel >> 1)
-        | (emissive >> 2)
-        | (subsurface >> 3)
-        | (metal >> 4);
-    comp2 |= s << 24;
+    uint s = (beckmann << 0)
+        | (heidrichSeidel << 1)
+        | (emissive << 2)
+        | (subsurface << 3)
+        | (metal << 4);
+    comp2 |= s << 22;
 }
 
 void setProperties() {

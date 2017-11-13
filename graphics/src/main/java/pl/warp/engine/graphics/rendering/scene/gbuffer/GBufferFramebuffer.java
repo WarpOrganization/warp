@@ -7,9 +7,6 @@ import org.lwjgl.opengl.GL32;
 import pl.warp.engine.graphics.framebuffer.Framebuffer;
 import pl.warp.engine.graphics.framebuffer.FramebufferException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Jaca777
  * Created 2017-10-31 at 22
@@ -27,10 +24,6 @@ public class GBufferFramebuffer extends Framebuffer {
     }
 
     private void init() {
-        List<? super GBuffer> list = new ArrayList<>();
-        Class<? extends GBuffer> c = GBuffer.class;
-        GBuffer cast = c.cast(null);
-        list.add(cast);
         bindDraw();
         GL32.glFramebufferTexture(GL30.GL_DRAW_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, gBuffer.getTextureName(3), 0);
         for(int i = 0; i < 3; i++) {
@@ -53,6 +46,7 @@ public class GBufferFramebuffer extends Framebuffer {
     public int getHeight() {
         return gBuffer.getHeight();
     }
+
     @Override
     public void clean() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

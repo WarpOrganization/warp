@@ -71,6 +71,7 @@ public class SceneRenderer {
     }
 
     private void setupFramebuffer() {
+        this.gBufferManager.initialize();
         this.framebuffer = new GBufferFramebuffer(gBufferManager.getGBuffer());
     }
 

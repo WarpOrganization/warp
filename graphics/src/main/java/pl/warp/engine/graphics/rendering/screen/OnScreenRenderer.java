@@ -1,6 +1,5 @@
 package pl.warp.engine.graphics.rendering.screen;
 
-import org.lwjgl.opengl.GL11;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.graphics.framebuffer.ScreenFramebuffer;
 import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
@@ -31,10 +30,11 @@ public class OnScreenRenderer {
 
     public void update() {
         screenFramebuffer.bindDraw();
+        screenFramebuffer.clean();
         this.identityProgram.use();
-        this.identityProgram.useTexture(gBufferManager.getGBuffer().getTextureName(0), GL11.GL_TEXTURE_2D);
+        this.identityProgram.useGBuffer(gBufferManager.getGBuffer());
+        quadMesh.draw();
         this.quadMesh.bind();
-
     }
 
     public void destroy() {

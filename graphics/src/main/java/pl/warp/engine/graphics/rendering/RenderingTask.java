@@ -56,6 +56,7 @@ public class RenderingTask extends EngineTask {
     @Override
     public void update(int delta) {
         sceneRenderer.update();
+        onScreenRenderer.update();
         GLErrors.checkOGLErrors();
     }
 

@@ -13,13 +13,15 @@ import java.security.ProtectionDomain;
 public class DebugRunner {
 
     public static void debugApp(String appClass, URL codesourceLocation) throws ReflectiveOperationException {
-        DebugClassLoader classLoader = new DebugClassLoader();
-        Class<?> aClass = classLoader.loadClass(appClass);
+
+        ClassLoader classLoader1 = Thread.currentThread().getContextClassLoader();
+        Class<?> aClass = classLoader1.loadClass(appClass);
+        System.out.println(aClass.getClassLoader());
         runMain(aClass, codesourceLocation);
     }
 
     private static void runMain(Class<?> aClass, URL codesourceLocation) throws ReflectiveOperationException {
-        setupCodesource(aClass, codesourceLocation);
+        //setupCodesource(aClass, codesourceLocation);
         Method main = aClass.getMethod("main", String[].class);
         main.setAccessible(true);
         main.invoke(null, (Object) new String[0]);

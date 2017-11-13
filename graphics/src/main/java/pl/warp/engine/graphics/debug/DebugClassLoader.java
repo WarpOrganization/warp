@@ -13,9 +13,14 @@ import java.io.InputStream;
  */
 public class DebugClassLoader extends ClassLoader {
 
+
+    public DebugClassLoader(ClassLoader parent) {
+        super(parent);
+    }
+
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        if (name.startsWith("pl.warp"))
+        if (name.startsWith("pl.warp.engine.graphics"))
             return injectDebugCode(name);
         else return super.loadClass(name, resolve);
     }
@@ -27,7 +32,7 @@ public class DebugClassLoader extends ClassLoader {
             ClassReader reader = new ClassReader(is);
             ClassNode node = new ClassNode(Opcodes.ASM6);
             reader.accept(node, 0);
-            if (res.startsWith("pl/warp/engine/graphics")) DebugCallsInjector.inject(node);
+            DebugCallsInjector.inject(node);
             ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
             node.accept(writer);
             byte code[] = writer.toByteArray();

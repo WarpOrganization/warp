@@ -56,13 +56,13 @@ public class ConfigurationServiceRegistry  implements ServiceRegistry {
             Executor executor = executorManager.getExecutor(configValue.dispatcher());
             RegisteredObserver observer = new RegisteredObserver(handle, executor);
             configurationManager.addObserver(configValue.value(), observer);
-            setValue(configValue.value(), observer);
+            if(!configValue.onlyOnChanges()) notifyValue(configValue.value(), observer);
         } catch (IllegalAccessException e) {
             throw new ServiceConfigurationException("Failed to load config value setter.", service);
         }
     }
 
-    private void setValue(String name, RegisteredObserver observer) {
+    private void notifyValue(String name, RegisteredObserver observer) {
         Object value = config.getValue(name);
         if(value != null) {
             observer.getExecutor().scheduleOnce(() -> {
@@ -72,7 +72,7 @@ public class ConfigurationServiceRegistry  implements ServiceRegistry {
                     throw new ServiceConfigurationException("Failed to set config value to: " + name, throwable);
                 }
             });
-        }
+        } else throw new ServiceConfigurationException(name + " value is not set.");
     }
 
     @Override

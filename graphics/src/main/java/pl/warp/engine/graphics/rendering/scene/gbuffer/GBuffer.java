@@ -1,6 +1,8 @@
 package pl.warp.engine.graphics.rendering.scene.gbuffer;
 
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL42;
 
 /**
  * @author Jaca777
@@ -33,22 +35,21 @@ public class GBuffer {
     private int[] textures = new int[4];
 
     public void generate() {
-        System.out.println("KEK");
         GL11.glGenTextures(textures);
     }
 
     public void initWithSize(int width, int height) {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[0]);
-        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, GL11.GL_RGB, GL11.GL_RGB8, width, height);
+        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL11.GL_RGB8, width, height);
         setDefaultParams();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[1]);
-        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, GL11.GL_R, GL30.GL_R32UI, width, height);
+        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL30.GL_R32UI, width, height);
         setDefaultParams();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[2]);
-        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, GL11.GL_RGB, GL11.GL_RGB4, width, height);
+        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL11.GL_RGB4, width, height);
         setDefaultParams();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[3]);
-        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, GL30.GL_DEPTH_COMPONENT32F, GL30.GL_DEPTH_COMPONENT32F, width, height);
+        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL30.GL_DEPTH_COMPONENT32F, width, height);
         setDefaultParams();
         this.width = width;
         this.height = height;
