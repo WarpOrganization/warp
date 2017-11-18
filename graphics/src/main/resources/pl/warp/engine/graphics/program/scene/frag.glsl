@@ -35,7 +35,6 @@ void calculateDiffuse() {
 
 void calculateNormal() {
     vec2 encoded = encode(oNormal);
-    comp1.rgb = vec3(encoded.r, encoded.r, encoded.r);
     comp2 |= v2PackSignedNorm(encoded, 11);
 }
 

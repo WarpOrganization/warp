@@ -24,7 +24,6 @@ void main(void) {
 vec3 decodeNormal() {
     uint packed = texture(comp2, vTexCoord).r;
     vec2 encoded = v2UnpackSignedNorm(packed, 11);
-//    return decode(encoded);
-    return vec3(encoded.g, encoded.g, encoded.g);
+    return decode(encoded);
 }
 

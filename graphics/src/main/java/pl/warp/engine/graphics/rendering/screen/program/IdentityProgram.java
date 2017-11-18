@@ -13,13 +13,14 @@ public class IdentityProgram extends Program {
 
     public IdentityProgram() {
         super(new ProgramAssemblyInfo("identity"));
+        init();
     }
 
     public void init() {
-        setTextureLocation("comp0", 0);
-        setTextureLocation("comp1", 1);
-        setTextureLocation("comp2", 2);
-        setTextureLocation("comp3", 3);
+        setTextureLocation("comp1", 0);
+        setTextureLocation("comp2", 1);
+        setTextureLocation("comp3", 2);
+        setTextureLocation("comp4", 3);
     }
 
     public void useGBuffer(GBuffer gBuffer) {
