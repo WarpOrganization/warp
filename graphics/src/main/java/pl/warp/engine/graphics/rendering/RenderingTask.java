@@ -8,7 +8,7 @@ import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
 import pl.warp.engine.graphics.GLErrors;
 import pl.warp.engine.graphics.rendering.scene.SceneRenderer;
-import pl.warp.engine.graphics.rendering.screen.OnScreenRenderer;
+import pl.warp.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 
 /**
  * @author Jaca777
@@ -20,11 +20,11 @@ import pl.warp.engine.graphics.rendering.screen.OnScreenRenderer;
 public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;
-    private OnScreenRenderer onScreenRenderer;
+    private ScreenspaceRenderer screenspaceRenderer;
 
-    public RenderingTask(SceneRenderer sceneRenderer, OnScreenRenderer onScreenRenderer) {
+    public RenderingTask(SceneRenderer sceneRenderer, ScreenspaceRenderer screenspaceRenderer) {
         this.sceneRenderer = sceneRenderer;
-        this.onScreenRenderer = onScreenRenderer;
+        this.screenspaceRenderer = screenspaceRenderer;
     }
 
     private static Logger logger = Logger.getLogger(RenderingTask.class);
@@ -35,7 +35,7 @@ public class RenderingTask extends EngineTask {
         createOpenGL();
         logger.info("OpenGL capabilities created.");
         sceneRenderer.init();
-        onScreenRenderer.init();
+        screenspaceRenderer.init();
         //pipeline initialization...
         logger.info("Initialized pipeline.");
     }
@@ -49,14 +49,14 @@ public class RenderingTask extends EngineTask {
     @Override
     protected void onClose() {
         sceneRenderer.destroy();
-        onScreenRenderer.destroy();
+        screenspaceRenderer.destroy();
         //destroy pipeline
     }
 
     @Override
     public void update(int delta) {
         sceneRenderer.update();
-        onScreenRenderer.update();
+        screenspaceRenderer.update();
         GLErrors.checkOGLErrors();
     }
 
