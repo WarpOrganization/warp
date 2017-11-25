@@ -1,5 +1,7 @@
 package pl.warp.engine.graphics.rendering.screenspace.light;
 
+import org.joml.Vector3f;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.core.context.service.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,21 @@ public class SceneLightManager {
     public SceneLightManager() {
         this.lightProperties = new ArrayList<>();
     }
+
+    private List<Vector3f> positions = new ArrayList<>();
+
+    public List<Vector3f> getLightPositions() {
+        for (int i = positions.size(); i < lightProperties.size(); i++) {
+            positions.add(new Vector3f());
+        }
+        for (int i = 0; i < lightProperties.size(); i++) {
+            LightSourceProperty property = lightProperties.get(i);
+            Vector3f position = positions.get(i);
+            Transforms.getAbsolutePosition(property.getOwner(), position); //TODO As always, positioning.
+        }
+        return positions;
+    }
+
 
     public void addLight(LightSourceProperty lightSourceProperty) {
         lightProperties.add(lightSourceProperty);

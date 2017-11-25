@@ -1,8 +1,9 @@
 package pl.warp.engine.graphics.rendering.screenspace.program;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-import pl.warp.engine.core.context.config.Config;
+import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.program.Program;
 import pl.warp.engine.graphics.program.ProgramAssemblyInfo;
 import pl.warp.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
@@ -10,6 +11,9 @@ import pl.warp.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.rendering.scene.gbuffer.GBuffer;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSource;
+import pl.warp.engine.graphics.rendering.screenspace.light.LightSourceProperty;
+
+import java.util.List;
 
 /**
  * @author Jaca777
@@ -21,14 +25,17 @@ public class ScreenspaceProgram extends Program {
     private int uLightNumber;
     private int[] uLightSourcePositions;
     private int[] uLightSourceColors;
+    private int uInverseProjection;
+    private int uInverseCamera;
+    private int uCameraPos;
 
-    public ScreenspaceProgram(Config config) {
-        super(new ProgramAssemblyInfo("identity"), new ExtendedGLSLProgramCompiler(
+    public ScreenspaceProgram(int maxLights) {
+        super(new ProgramAssemblyInfo("screenspace"), new ExtendedGLSLProgramCompiler(
                 new ConstantField()
-                        .set("MAX_LIGHTS", config.getValue("graphics.rendering.maxlights")),
+                        .set("MAX_LIGHTS", maxLights),
                 LocalProgramLoader.DEFAULT_LOCAL_PROGRAM_LOADER
         ));
-        this.sources = config.getValue("graphics.rendering.maxlights");
+        this.sources = maxLights;
         init();
     }
 
@@ -41,7 +48,10 @@ public class ScreenspaceProgram extends Program {
     }
 
     private void loadUniforms() {
+        this.uInverseProjection = getUniformLocation("inverseProjection");
+        this.uCameraPos = getUniformLocation("cameraPos");
         this.uLightNumber = getUniformLocation("lightNumber");
+        this.uInverseCamera = getUniformLocation("inverseCamera");
         this.uLightSourceColors = new int[sources];
         this.uLightSourcePositions = new int[sources];
         for (int i = 0; i < sources; i++) {
@@ -56,11 +66,26 @@ public class ScreenspaceProgram extends Program {
         }
     }
 
-    public void useLights(Vector3f[] positions, LightSource[] sources) {
-        setUniformi(uLightNumber, positions.length);
-        for(int i = 0; i < positions.length; i++) {
-            setUniformV3(uLightSourcePositions[i], positions[i]);
-            setUniformV3(uLightSourceColors[i], sources[i].getColor());
+    public void useLights(List<Vector3f> positions, List<LightSourceProperty> sources) {
+        setUniformi(uLightNumber, positions.size());
+        for(int i = 0; i < positions.size(); i++) {
+            setUniformV3(uLightSourcePositions[i], positions.get(i));
+            LightSource lightSource = sources.get(i).getLightSource();
+            setUniformV3(uLightSourceColors[i], lightSource.getColor());
         }
     }
+
+    private Matrix4f mat = new Matrix4f();
+    private Vector3f cameraPos = new Vector3f();
+    public void useCamera(Camera camera) {
+        camera.getPosition(cameraPos);
+        setUniformV3(uCameraPos, cameraPos);
+        camera.getProjectionMatrix()
+                .getMatrix()
+                .invert(mat);
+        setUniformMatrix4(uInverseProjection, mat);
+        camera.getCameraMatrix().invert(mat);
+        setUniformMatrix4(uInverseCamera, mat);
+    }
+
 }

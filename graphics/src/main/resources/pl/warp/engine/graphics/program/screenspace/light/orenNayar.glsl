@@ -1,16 +1,20 @@
+#define PI 3.1415926535897932384626433832795
+#define epsilon 0.0001
+
 float getOrenNayarRadiance(
   vec3 lightDirection,
   vec3 viewDirection,
   vec3 surfaceNormal,
   float roughness,
-  float albedo) {
+  float albedo
+  ) {
 
   float LdotV = dot(lightDirection, viewDirection);
   float NdotL = dot(lightDirection, surfaceNormal);
   float NdotV = dot(surfaceNormal, viewDirection);
 
   float s = LdotV - NdotL * NdotV;
-  float t = mix(1.0, max(NdotL, NdotV), step(0.0, s));
+  float t = mix(1.0, max(NdotL, NdotV), step(0.0, s)) + epsilon;
 
   float sigma2 = roughness * roughness;
   float A = 1.0 + sigma2 * (albedo / (sigma2 + 0.13) + 0.5 / (sigma2 + 0.33));

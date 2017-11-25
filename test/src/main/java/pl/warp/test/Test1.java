@@ -17,6 +17,9 @@ import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.shapes.SphereBuilder;
 import pl.warp.engine.graphics.rendering.scene.mesh.MeshProperty;
 import pl.warp.engine.graphics.rendering.scene.mesh.SceneMesh;
+import pl.warp.engine.graphics.rendering.screenspace.light.LightSource;
+import pl.warp.engine.graphics.rendering.screenspace.light.LightSourceProperty;
+import pl.warp.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
@@ -50,7 +53,17 @@ public class Test1 {
                 .get();
         Scene scene = sceneHolder.getScene();
         createModels(scene, thread);
+    }
 
+    private static void createLight(Component component) {
+        SceneLightManager sceneLightManager = component.getContext()
+                .getLoadedContext()
+                .findOne(SceneLightManager.class)
+                .get();
+        LightSource lightSource = new LightSource(new Vector3f(130f, 100f, 100f));
+        LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+        component.addProperty(lightSourceProperty);
+        sceneLightManager.addLight(lightSourceProperty);
     }
 
     private static Component createModels(Scene scene, GraphicsThread graphicsThread) {
@@ -58,6 +71,9 @@ public class Test1 {
         graphicsThread.scheduleOnce(() -> {
             createShip(ship);
             createSpheres(scene);
+            Component lsource = new SceneComponent(scene);
+            lsource.addProperty(new TransformProperty().move(new Vector3f(10, 0, 0)));
+            createLight(lsource);
         });
 
         return ship;
@@ -114,7 +130,6 @@ public class Test1 {
     private static void createSpheres(Component scene) {
 
 
-
         Texture2D woodD = new Texture2D(
                 woodDiffuse.getHeight(),
                 woodDiffuse.getHeight(),
@@ -152,8 +167,8 @@ public class Test1 {
             for (int j = 0; j < 10; j++) {
 
                 createSphere(scene, new Vector3f(i * 15, j * 15, 0),
-                        ((i+j) % 2 == 0) ? woodD : stoneD,
-                        ((i+j) % 2 == 0) ? woodB : stoneB);
+                        ((i + j) % 2 == 0) ? woodD : stoneD,
+                        ((i + j) % 2 == 0) ? woodB : stoneB);
             }
         }
 
@@ -179,7 +194,8 @@ public class Test1 {
     private static void setupCamera(EngineContext engineContext) {
         Scene scene = engineContext.getLoadedContext()
                 .findOne(SceneHolder.class)
-                .get().getScene();
+                .get()
+                .getScene();
         Component cameraComponent = new SceneComponent(scene);
         cameraComponent.addProperty(new TransformProperty());
         cameraComponent.addScript(SimpleControlScript.class);

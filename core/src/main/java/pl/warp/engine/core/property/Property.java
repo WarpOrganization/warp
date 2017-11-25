@@ -29,7 +29,7 @@ public abstract class Property {
         }
     }
 
-    protected Component getOwner() {
+    public Component getOwner() {
         return owner;
     }
 

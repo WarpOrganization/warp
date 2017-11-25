@@ -31,16 +31,18 @@ public class TransformProperty extends Property {
         return scale;
     }
 
-    public synchronized void scale(Vector3f value){
+    public synchronized TransformProperty scale(Vector3f value){
         this.scale.mul(value);
+        return this;
     }
 
     public synchronized void setScale(Vector3f scale) {
         this.scale = scale;
     }
 
-    public synchronized void rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
+    public synchronized TransformProperty rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
         rotation.rotate(xAngleInRadians, yAngleInRadians, zAngleInRadians);
+        return this;
     }
 
     public synchronized void rotateLocalX(float angleInRadians) {
@@ -55,16 +57,19 @@ public class TransformProperty extends Property {
         rotation.rotateLocalZ(angleInRadians);
     }
 
-    public synchronized Quaternionf rotateX(float angle) {
-        return rotation.rotateX(angle);
+    public synchronized TransformProperty rotateX(float angle) {
+         rotation.rotateX(angle);
+         return this;
     }
 
-    public synchronized Quaternionf rotateY(float angle) {
-        return rotation.rotateY(angle);
+    public synchronized TransformProperty rotateY(float angle) {
+         rotation.rotateY(angle);
+         return this;
     }
 
-    public synchronized Quaternionf rotateZ(float angle) {
-        return rotation.rotateZ(angle);
+    public synchronized TransformProperty rotateZ(float angle) {
+         rotation.rotateZ(angle);
+         return this;
     }
 
     public synchronized Quaternionf getRotation() {
@@ -79,11 +84,13 @@ public class TransformProperty extends Property {
         this.translation = translation;
     }
 
-    public synchronized void move(Vector3f movement) {
+    public TransformProperty move(Vector3f movement) {
         this.translation.add(movement);
+        return this;
     }
 
-    public synchronized void setRotation(Quaternionf rotation) {
+    public synchronized TransformProperty setRotation(Quaternionf rotation) {
         this.rotation.set(rotation);
+        return this;
     }
 }
