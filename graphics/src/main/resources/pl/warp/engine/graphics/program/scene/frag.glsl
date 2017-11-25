@@ -41,11 +41,11 @@ void calculateNormal() {
 
 void setFlags() {
     uint beckmann = 1;
-    uint heidrichSeidel = 0;
+    uint heidrichSeidel = 1;
     uint emissive = 0;
     uint subsurface = 0;
     uint metal = 0;
-    uint orenNayar = 1;
+    uint orenNayar = 0;
     uint s = (beckmann       << 0)
         |    (heidrichSeidel << 1)
         |    (emissive       << 2)
@@ -58,5 +58,5 @@ void setFlags() {
 void setProperties() {
     comp3.r = materialRoughness;
     comp3.g = materialShininess;
-    comp3.b = 0.0; //threadDir
+    comp3.b = 0.5; //threadDir
 }

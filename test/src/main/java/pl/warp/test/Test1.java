@@ -82,7 +82,7 @@ public class Test1 {
 
     private static void createShip(Component ship) {
         SceneMesh mesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("fighter_1.obj"),
+                Test1.class.getResourceAsStream("pistol.obj"),
                 true).toMesh();
         MeshProperty meshProperty = new MeshProperty(mesh);
         ship.addProperty(meshProperty);

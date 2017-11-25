@@ -7,7 +7,7 @@ float getOrenNayarRadiance(
   vec3 surfaceNormal,
   float roughness,
   float albedo
-  ) {
+) {
 
   float LdotV = dot(lightDirection, viewDirection);
   float NdotL = dot(lightDirection, surfaceNormal);
