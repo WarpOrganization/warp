@@ -15,12 +15,11 @@ import java.nio.ByteBuffer;
 /**
  * Created by Marcin on 30.04.2017.
  */
-public class WavFileDecoder implements SoundFileDecoder {
+public class WavFileDecoder{
 
     private static final Logger LOGGER = Logger.getLogger(WavFileDecoder.class);
 
-    @Override
-    public SoundData decode(File soundFile) throws IOException {
+    public static SoundData decode(File soundFile) throws IOException {
         AudioInputStream stream;
 
         try {
