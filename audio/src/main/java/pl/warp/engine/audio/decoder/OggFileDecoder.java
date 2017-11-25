@@ -1,15 +1,20 @@
 package pl.warp.engine.audio.decoder;
 
+import org.lwjgl.BufferUtils;
+
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
+import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
 import static org.lwjgl.system.MemoryStack.stackMallocInt;
 import static org.lwjgl.system.MemoryStack.stackPop;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 /**
- * Created by Marcin on 30.04.2017.
+ * Created by MarconZet on 30.04.2017.
  */
 public class OggFileDecoder{
 
@@ -25,9 +30,9 @@ public class OggFileDecoder{
         int sampleRate = sampleRateBuffer.get();
         stackPop();
         stackPop();
-    }
-
-    private static ShortBuffer stb_vorbis_decode_filename(String filename, IntBuffer channelsBuffer, IntBuffer sampleRateBuffer) {
-        return null;
+        short[] s = rawAudioBuffer.array();
+        ByteBuffer bb = ByteBuffer.allocate(s.length * 2);
+        bb.asShortBuffer().put(s);
+        return new SoundData(bb, sampleRate, channels, 0, 0);//to determine whether bitrate and bitsPerChannel are needed
     }
 }
