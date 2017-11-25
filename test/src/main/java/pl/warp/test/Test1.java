@@ -60,7 +60,7 @@ public class Test1 {
                 .getLoadedContext()
                 .findOne(SceneLightManager.class)
                 .get();
-        LightSource lightSource = new LightSource(new Vector3f(130f, 100f, 100f));
+        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
         LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
         component.addProperty(lightSourceProperty);
         sceneLightManager.addLight(lightSourceProperty);
@@ -72,7 +72,7 @@ public class Test1 {
             createShip(ship);
             createSpheres(scene);
             Component lsource = new SceneComponent(scene);
-            lsource.addProperty(new TransformProperty().move(new Vector3f(10, 0, 0)));
+            lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
             createLight(lsource);
         });
 
@@ -106,6 +106,11 @@ public class Test1 {
         ship.addProperty(property);
         property.move(new Vector3f(0, 0, -10f));
     }
+
+    private static ImageData white = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("tex.png"),
+            PNGDecoder.Format.RGB
+    );
 
     private static ImageData woodDiffuse = ImageDecoder.decodePNG(
             Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
@@ -168,13 +173,24 @@ public class Test1 {
 
                 createSphere(scene, new Vector3f(i * 15, j * 15, 0),
                         ((i + j) % 2 == 0) ? woodD : stoneD,
-                        ((i + j) % 2 == 0) ? woodB : stoneB);
+                        ((i + j) % 2 == 0) ? woodB : stoneB, 0.15f);
             }
         }
 
+        Texture2D whiteD = new Texture2D(
+                white.getHeight(),
+                white.getHeight(),
+                GL11.GL_RGB16,
+                GL11.GL_RGB,
+                true,
+                white.getData());
+
+        createSphere(scene, new Vector3f(0, 0, 40), whiteD,null, 0.0f);
+        createSphere(scene, new Vector3f(12, 0, 40), whiteD,null, 0.3f);
+        createSphere(scene, new Vector3f(24, 0, 40), whiteD,null, 1.0f);
     }
 
-    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump) {
+    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, float roughness) {
         Component sphere = new SceneComponent(scene);
 
         SceneMesh mesh = SphereBuilder.createShape(20, 20, 4);
@@ -182,7 +198,8 @@ public class Test1 {
         sphere.addProperty(meshProperty);
 
         Material material = new Material(diffuse);
-        material.setDisplacement(bump, 0.5f);
+        if(bump != null) material.setDisplacement(bump, 0.5f);
+        material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
 

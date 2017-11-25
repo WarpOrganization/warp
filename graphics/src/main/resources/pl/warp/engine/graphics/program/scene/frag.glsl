@@ -6,6 +6,8 @@ precision mediump float;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D materialTexture;
+uniform float materialRoughness;
+uniform float materialShininess;
 
 in vec3 oWorldPos;
 in vec2 oTexCoord;
@@ -23,7 +25,6 @@ void setProperties();
 
 void main(void) {
     calculateDiffuse();
-    calculateNormal();
     calculateNormal();
     setFlags();
     setProperties();
@@ -44,19 +45,18 @@ void setFlags() {
     uint emissive = 0;
     uint subsurface = 0;
     uint metal = 0;
-    uint s = (beckmann << 0)
-        | (heidrichSeidel << 1)
-        | (emissive << 2)
-        | (subsurface << 3)
-        | (metal << 4);
+    uint orenNayar = 1;
+    uint s = (beckmann       << 0)
+        |    (heidrichSeidel << 1)
+        |    (emissive       << 2)
+        |    (subsurface     << 3)
+        |    (metal          << 4)
+        |    (orenNayar      << 5);
     comp2 |= s << 22;
 }
 
 void setProperties() {
-    float roughness = 1.0;
-    float shininess = 1.0;
-    float threadDir = 0.0;
-    comp3.r = roughness;
-    comp3.g = shininess;
-    comp3.b = threadDir;
+    comp3.r = materialRoughness;
+    comp3.g = materialShininess;
+    comp3.b = 0.0; //threadDir
 }

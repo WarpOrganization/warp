@@ -12,6 +12,8 @@ public class Material {
     private Texture2D normalMap;
     private Texture2D displacementMap;
     private float displacementFactor;
+    private float roughness = 0.15f;
+    private float shininess = 0.15f;
 
     public Material(Texture2D diffuseTexture) {
         this.diffuseTexture = diffuseTexture;
@@ -54,4 +56,19 @@ public class Material {
         return displacementMap != null;
     }
 
+    public float getRoughness() {
+        return roughness;
+    }
+
+    public void setRoughness(float roughness) {
+        this.roughness = roughness;
+    }
+
+    public float getShininess() {
+        return shininess;
+    }
+
+    public void setShininess(float shininess) {
+        this.shininess = shininess;
+    }
 }

@@ -20,6 +20,8 @@ public abstract class SceneRenderingProgram extends Program {
     private int unifRotationMatrix;
     private int unifViewMatrix;
     private int unifCameraPos;
+    private int unifMaterialShininess;
+    private int unifMaterialRoughness;
 
     public SceneRenderingProgram(ProgramAssemblyInfo assemblyInfo) {
         super(assemblyInfo, ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
@@ -33,6 +35,8 @@ public abstract class SceneRenderingProgram extends Program {
         this.unifRotationMatrix = getUniformLocation("rotationMatrix");
         this.unifViewMatrix = getUniformLocation("viewMatrix");
         this.unifCameraPos = getUniformLocation("cameraPos");
+        this.unifMaterialShininess = getUniformLocation("materialShininess");
+        this.unifMaterialRoughness = getUniformLocation("materialRoughness");
     }
 
     protected void loadSamplers() {
@@ -54,5 +58,7 @@ public abstract class SceneRenderingProgram extends Program {
 
     public void useMaterial(Material material) {
         useTexture(DIFFUSE_SAMPLER, material.getDiffuseTexture());
+        setUniformf(unifMaterialShininess, material.getShininess());
+        setUniformf(unifMaterialRoughness, material.getRoughness());
     }
 }

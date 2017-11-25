@@ -17,6 +17,7 @@ uniform vec3 cameraPos;
 
 uniform int lightNumber;
 uniform LightSource sources[$MAX_LIGHTS$];
+uniform vec3 ambientLight = vec3(0.05);
 
 in vec2 vTexCoord;
 
@@ -29,7 +30,8 @@ vec3 getLight(vec3 scenePos, vec3 normal);
 void main(void) {
     vec3 scenePos = calcScenePos();
     vec3 normal = decodeNormal();
-    vec3 irradiance = getLight(scenePos, normal);
+    float roughness = texture(comp3, vTexCoord).r;
+    vec3 irradiance = getLight(scenePos, normal) + ambientLight;
     fragColor.rgb = texture(comp1, vTexCoord).rgb * irradiance;
     fragColor.a = 1;
 }
@@ -39,12 +41,13 @@ vec3 getLight(vec3 scenePos, vec3 normal) {
     for(int i = 0; i < lightNumber; i++) {
         LightSource source = sources[i];
         vec3 lightDirection = normalize(source.pos - scenePos);
+        float roughness = texture(comp3, vTexCoord).r;
         vec3 eyeDir = normalize(cameraPos - scenePos);
-        vec3 radiance = source.color * getOrenNayarRadiance(lightDirection, eyeDir, normal, 0.5, 0.8);
+        vec3 radiance = source.color * getOrenNayarRadiance(lightDirection, eyeDir, normal, roughness, 0.8);
         float dist = distance(source.pos, scenePos);
         totalIlluminance += radiance * (1.0/dist);//TODO inverse square law
     }
-    return totalIlluminance + 0.2;
+    return totalIlluminance;
 }
 
 vec3 decodeNormal() {
