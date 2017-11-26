@@ -33,6 +33,6 @@ public class OggFileDecoder{
         short[] s = rawAudioBuffer.array();
         ByteBuffer bb = ByteBuffer.allocate(s.length * 2);
         bb.asShortBuffer().put(s);
-        return new SoundData(bb, sampleRate, channels, 0, 0);//to determine whether bitrate and bitsPerChannel are needed
+        return new SoundData(bb, sampleRate, channels, 16);
     }
 }

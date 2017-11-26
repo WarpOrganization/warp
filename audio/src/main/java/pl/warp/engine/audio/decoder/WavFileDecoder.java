@@ -34,6 +34,6 @@ public class WavFileDecoder{
         ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
         data.flip();
 
-        return new SoundData(data, (int)format.getSampleRate(), format.getChannels(), 0, format.getSampleSizeInBits());
+        return new SoundData(data, (int)format.getSampleRate(), format.getChannels(), format.getSampleSizeInBits());
     }
 }
