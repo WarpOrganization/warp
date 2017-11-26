@@ -1,6 +1,8 @@
 package pl.warp.engine.audio;
 
 import org.joml.Vector3f;
+import pl.warp.engine.audio.decoder.SoundData;
+import pl.warp.engine.audio.decoder.SoundDecoderManager;
 import pl.warp.engine.audio.playlist.PlayList;
 import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.component.Component;
@@ -29,6 +31,8 @@ public class MusicSource extends AudioSource {
     private int currentCycles;
     private boolean doneReading;
 
+    private SoundData soundData;
+
     public MusicSource(Component owner, Vector3f offset, boolean isPersistent, PlayList playList) {
         super(owner, offset, isPersistent);
         this.playList = playList;
@@ -41,11 +45,12 @@ public class MusicSource extends AudioSource {
 
     public void loadNew(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(new File(EngineContext.CODESOURCE_DIR + path));
-            format = stream.getFormat();
-            openALFormat = SoundBank.getOpenALFormat(format);
-            sampleRate = format.getSampleRate();
-        } catch (UnsupportedAudioFileException | IOException e) {
+            soundData = SoundDecoderManager.decode(path);
+            //stream = AudioSystem.getAudioInputStream(new File(EngineContext.CODESOURCE_DIR + path));
+            //format = stream.getFormat();
+            //openALFormat = SoundBank.getOpenALFormat(format);
+            //sampleRate = format.getSampleRate();
+        } catch (/*UnsupportedAudioFileException |*/ IOException e) {
             e.printStackTrace();
         }
     }
@@ -77,6 +82,10 @@ public class MusicSource extends AudioSource {
 
     public float getSampleRate() {
         return sampleRate;
+    }
+
+    public SoundData getSoundData() {
+        return soundData;
     }
 
     public int getCurrentCycles() {
