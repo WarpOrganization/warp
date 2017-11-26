@@ -14,6 +14,7 @@ import pl.warp.engine.graphics.utility.MatrixStack;
  */
 public abstract class SceneRenderingProgram extends Program {
     private static final int DIFFUSE_SAMPLER = 0;
+    private static final int NORMAL_MAP_SAMPLER = 1;
 
     private int unifProjectionMatrix;
     private int unifModelMatrix;
@@ -22,6 +23,7 @@ public abstract class SceneRenderingProgram extends Program {
     private int unifCameraPos;
     private int unifMaterialShininess;
     private int unifMaterialRoughness;
+    private int unifHasNormalMap;
 
     public SceneRenderingProgram(ProgramAssemblyInfo assemblyInfo) {
         super(assemblyInfo, ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
@@ -37,10 +39,12 @@ public abstract class SceneRenderingProgram extends Program {
         this.unifCameraPos = getUniformLocation("cameraPos");
         this.unifMaterialShininess = getUniformLocation("materialShininess");
         this.unifMaterialRoughness = getUniformLocation("materialRoughness");
+        this.unifHasNormalMap = getUniformLocation("hasNormalMap");
     }
 
     protected void loadSamplers() {
         setTextureLocation("diffuseTexture", DIFFUSE_SAMPLER);
+        setTextureLocation("normalMap", NORMAL_MAP_SAMPLER);
     }
 
     private Vector3f tempCameraPos = new Vector3f();
@@ -60,5 +64,9 @@ public abstract class SceneRenderingProgram extends Program {
         useTexture(DIFFUSE_SAMPLER, material.getDiffuseTexture());
         setUniformf(unifMaterialShininess, material.getShininess());
         setUniformf(unifMaterialRoughness, material.getRoughness());
+        setUniformb(unifHasNormalMap, material.hasNormalMap());
+        if(material.hasNormalMap()) {
+            useTexture(NORMAL_MAP_SAMPLER, material.getNormalMap());
+        }
     }
 }

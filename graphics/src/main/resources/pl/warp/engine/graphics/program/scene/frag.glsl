@@ -3,9 +3,11 @@ precision mediump float;
 
 #include "util/floatPack"
 #include "util/vectorEncoding"
+#include "util/flags"
 
 uniform sampler2D diffuseTexture;
-uniform sampler2D materialTexture;
+uniform sampler2D normalMap;
+uniform bool hasNormalMap;
 uniform float materialRoughness;
 uniform float materialShininess;
 
@@ -35,23 +37,29 @@ void calculateDiffuse() {
 }
 
 void calculateNormal() {
-    vec2 encoded = encode(oNormal);
+    vec2 encoded;
+    if(hasNormalMap) {
+        //TODO bitangent...?
+        encoded = encode(oNormal);
+    } else {
+        encoded = encode(oNormal);
+    }
     comp2 |= v2PackSignedNorm(encoded, 11);
 }
 
 void setFlags() {
-    uint beckmann = 1;
-    uint heidrichSeidel = 1;
-    uint emissive = 0;
-    uint subsurface = 0;
-    uint metal = 0;
-    uint orenNayar = 0;
-    uint s = (beckmann       << 0)
-        |    (heidrichSeidel << 1)
-        |    (emissive       << 2)
-        |    (subsurface     << 3)
-        |    (metal          << 4)
-        |    (orenNayar      << 5);
+    bool beckmann = true;
+    bool heidrichSeidel = false;
+    bool emissive = false;
+    bool subsurface = false;
+    bool metal = false;
+    bool orenNayar = true;
+    uint s = flag(beckmann,       0)
+        |    flag(heidrichSeidel, 1)
+        |    flag(emissive,       2)
+        |    flag(subsurface,     3)
+        |    flag(metal,          4)
+        |    flag(orenNayar,      5);
     comp2 |= s << 22;
 }
 

@@ -122,6 +122,11 @@ public class Test1 {
             PNGDecoder.Format.RGBA
     );
 
+    private static ImageData woodNorm = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("wood/wood-stack-1-NORM.png"),
+            PNGDecoder.Format.RGBA
+    );
+
     private static ImageData stoneDiffuse = ImageDecoder.decodePNG(
             Test1.class.getResourceAsStream("stone/stone-redstone-2.png"),
             PNGDecoder.Format.RGBA
@@ -129,6 +134,11 @@ public class Test1 {
 
     private static ImageData stoneBump = ImageDecoder.decodePNG(
             Test1.class.getResourceAsStream("stone/stone-redstone-2-DISP.png"),
+            PNGDecoder.Format.RGBA
+    );
+
+    private static ImageData stoneNorm = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("stone/stone-redstone-2-NORM.png"),
             PNGDecoder.Format.RGBA
     );
 
@@ -151,6 +161,14 @@ public class Test1 {
                 true,
                 woodBump.getData());
 
+        Texture2D woodN = new Texture2D(
+                woodNorm.getHeight(),
+                woodNorm.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                woodNorm.getData());
+
         Texture2D stoneD = new Texture2D(
                 stoneDiffuse.getHeight(),
                 stoneDiffuse.getHeight(),
@@ -167,13 +185,25 @@ public class Test1 {
                 true,
                 stoneBump.getData());
 
+        Texture2D stoneN = new Texture2D(
+                stoneNorm.getHeight(),
+                stoneNorm.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                stoneNorm.getData());
+
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
 
-                createSphere(scene, new Vector3f(i * 15, j * 15, 0),
+                createSphere(scene,
+                        new Vector3f(i * 15, j * 15, 0),
                         ((i + j) % 2 == 0) ? woodD : stoneD,
-                        ((i + j) % 2 == 0) ? woodB : stoneB, 0.15f);
+                        ((i + j) % 2 == 0) ? woodB : stoneB,
+                        ((i + j) % 2 == 0) ? woodN : stoneN,
+                        0.15f
+                );
             }
         }
 
@@ -185,12 +215,12 @@ public class Test1 {
                 true,
                 white.getData());
 
-        createSphere(scene, new Vector3f(0, 0, 40), whiteD,null, 0.0f);
-        createSphere(scene, new Vector3f(12, 0, 40), whiteD,null, 0.3f);
-        createSphere(scene, new Vector3f(24, 0, 40), whiteD,null, 1.0f);
+        createSphere(scene, new Vector3f(0, 0, 40), whiteD, null, null, 0.0f);
+        createSphere(scene, new Vector3f(12, 0, 40), whiteD, null, null, 0.3f);
+        createSphere(scene, new Vector3f(24, 0, 40), whiteD, null, null, 1.0f);
     }
 
-    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, float roughness) {
+    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, Texture2D normal, float roughness) {
         Component sphere = new SceneComponent(scene);
 
         SceneMesh mesh = SphereBuilder.createShape(20, 20, 4);
@@ -198,7 +228,8 @@ public class Test1 {
         sphere.addProperty(meshProperty);
 
         Material material = new Material(diffuse);
-        if(bump != null) material.setDisplacement(bump, 0.5f);
+        if (bump != null) material.setDisplacement(bump, 0.5f);
+        material.setNormalMap(normal);
         material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
@@ -214,7 +245,8 @@ public class Test1 {
                 .get()
                 .getScene();
         Component cameraComponent = new SceneComponent(scene);
-        cameraComponent.addProperty(new TransformProperty());
+        cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
+                .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addScript(SimpleControlScript.class);
 
         CameraHolder cameraHolder = engineContext.getLoadedContext()
