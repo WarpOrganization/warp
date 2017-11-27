@@ -17,13 +17,16 @@ import pl.warp.engine.graphics.material.MaterialProperty;
 import pl.warp.engine.graphics.mesh.shapes.SphereBuilder;
 import pl.warp.engine.graphics.rendering.scene.mesh.MeshProperty;
 import pl.warp.engine.graphics.rendering.scene.mesh.SceneMesh;
+import pl.warp.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSource;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import pl.warp.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import pl.warp.engine.graphics.resource.mesh.ObjLoader;
 import pl.warp.engine.graphics.resource.texture.ImageData;
+import pl.warp.engine.graphics.resource.texture.ImageDataArray;
 import pl.warp.engine.graphics.resource.texture.ImageDecoder;
 import pl.warp.engine.graphics.resource.texture.PNGDecoder;
+import pl.warp.engine.graphics.texture.Cubemap;
 import pl.warp.engine.graphics.texture.Texture2D;
 import pl.warp.engine.graphics.utility.projection.PerspectiveMatrix;
 import pl.warp.engine.graphics.window.Display;
@@ -53,6 +56,16 @@ public class Test1 {
                 .get();
         Scene scene = sceneHolder.getScene();
         createModels(scene, thread);
+        createCubemap(scene, thread);
+    }
+
+    private static void createCubemap(Scene scene, GraphicsThread thread) {
+        thread.scheduleOnce(() -> {
+            ImageDataArray imageDataArray = ImageDecoder.decodeCubemap("pl/warp/test/stars3", PNGDecoder.Format.RGBA);
+            Cubemap cubemap = new Cubemap(imageDataArray.getWidth(), imageDataArray.getHeight(), imageDataArray.getData());
+            CubemapProperty cubemapProperty = new CubemapProperty(cubemap);
+            scene.addProperty(cubemapProperty);
+        });
     }
 
     private static void createLight(Component component) {

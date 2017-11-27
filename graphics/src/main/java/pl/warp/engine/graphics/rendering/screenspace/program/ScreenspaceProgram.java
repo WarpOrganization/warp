@@ -12,6 +12,7 @@ import pl.warp.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import pl.warp.engine.graphics.rendering.scene.gbuffer.GBuffer;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSource;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSourceProperty;
+import pl.warp.engine.graphics.texture.Cubemap;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ import java.util.List;
  */
 public class ScreenspaceProgram extends Program {
 
+    private static final int CUBEMAP_SAMPLER = 4;
+
     private int sources;
     private int uLightNumber;
     private int[] uLightSourcePositions;
@@ -28,6 +31,7 @@ public class ScreenspaceProgram extends Program {
     private int uInverseProjection;
     private int uInverseCamera;
     private int uCameraPos;
+    private int uCameraRotation;
 
     public ScreenspaceProgram(int maxLights) {
         super(new ProgramAssemblyInfo("screenspace"), new ExtendedGLSLProgramCompiler(
@@ -40,11 +44,16 @@ public class ScreenspaceProgram extends Program {
     }
 
     public void init() {
+        loadSamplers();
+        loadUniforms();
+    }
+
+    protected void loadSamplers() {
         setTextureLocation("comp1", 0);
         setTextureLocation("comp2", 1);
         setTextureLocation("comp3", 2);
         setTextureLocation("comp4", 3);
-        loadUniforms();
+        setTextureLocation("cube",4);
     }
 
     private void loadUniforms() {
@@ -52,6 +61,7 @@ public class ScreenspaceProgram extends Program {
         this.uCameraPos = getUniformLocation("cameraPos");
         this.uLightNumber = getUniformLocation("lightNumber");
         this.uInverseCamera = getUniformLocation("inverseCamera");
+        this.uCameraRotation = getUniformLocation("rotationCamera");
         this.uLightSourceColors = new int[sources];
         this.uLightSourcePositions = new int[sources];
         for (int i = 0; i < sources; i++) {
@@ -64,6 +74,10 @@ public class ScreenspaceProgram extends Program {
         for (int i = 0; i < 4; i++) {
             useTexture(i, gBuffer.getTextureName(i), GL11.GL_TEXTURE_2D);
         }
+    }
+
+    public void useCubemap(Cubemap cubemap){
+        useTexture(CUBEMAP_SAMPLER, cubemap);
     }
 
     public void useLights(List<Vector3f> positions, List<LightSourceProperty> sources) {
@@ -86,6 +100,8 @@ public class ScreenspaceProgram extends Program {
         setUniformMatrix4(uInverseProjection, mat);
         camera.getCameraMatrix().invert(mat);
         setUniformMatrix4(uInverseCamera, mat);
+        camera.getRotationMatrix().get(mat);
+        setUniformMatrix4(uCameraRotation, mat);
     }
 
 }

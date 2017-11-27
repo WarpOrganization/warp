@@ -54,12 +54,14 @@ void setFlags() {
     bool subsurface = false;
     bool metal = false;
     bool orenNayar = true;
+    bool render = true; //always
     uint s = flag(beckmann,       0)
         |    flag(heidrichSeidel, 1)
         |    flag(emissive,       2)
         |    flag(subsurface,     3)
         |    flag(metal,          4)
-        |    flag(orenNayar,      5);
+        |    flag(orenNayar,      5)
+        |    flag(render,         9);
     comp2 |= s << 22;
 }
 
