@@ -24,6 +24,7 @@ dependencies {
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
 
+    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
 

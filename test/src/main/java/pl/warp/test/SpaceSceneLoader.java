@@ -383,8 +383,9 @@ public class SpaceSceneLoader implements GameSceneLoader {
         audioThread.scheduleOnce(() -> {
             AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
             PlayList playList = new PlayRandomPlayList();
-            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
-            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg");
+            //playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
+            //playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
             MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
             AudioManager.INSTANCE.play(musicSource);
         });
