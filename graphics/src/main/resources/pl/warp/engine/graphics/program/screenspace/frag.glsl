@@ -58,7 +58,7 @@ void processRender(uint flags) {
 }
 
 void processBackground() {
-    vec4 toMapVec = inverse(inverseProjection) * rotationCamera * vec4(vTexCoord.x * 2 - 1, vTexCoord.y * 2 - 1, 1, 0);
+    vec4 toMapVec = inverse(rotationCamera) * inverseProjection  * vec4(vTexCoord.x * 2 - 1, vTexCoord.y * 2 - 1, 1, 1);
     vec3 rotated = normalize(toMapVec.xyz / toMapVec.w);
     fragColor.rgb = texture(cube, rotated.xyz).rgb;
 }
