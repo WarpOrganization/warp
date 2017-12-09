@@ -75,4 +75,6 @@ public interface Component {
     void addListener(Listener<?, ?> listener);
 
     void removeListener(Listener<?, ?> listener);
+
+    int getId();
 }
