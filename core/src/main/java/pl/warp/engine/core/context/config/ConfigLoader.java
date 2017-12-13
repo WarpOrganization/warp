@@ -45,7 +45,7 @@ public class ConfigLoader {
     public Map<String, Object> loadFromYaml(){
         InputStream stream = getClass().getClassLoader().getResourceAsStream(YML_CONFIG_LOCATION);
         if(stream == null) {
-            logger.warn("Configuration file not found");
+            logger.warn("Configuration file not found. Empty config loaded.");
             return new HashMap<>();
         } else {
             try {

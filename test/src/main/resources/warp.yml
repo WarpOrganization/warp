@@ -9,7 +9,7 @@ graphics:
     enabled: true
     sampleSize: 30
   rendering:
-    defaultTessellation: !!pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode BEZIER
+    defaultTessellation: !!pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode NONE
     scene:
       maxLights: 10
 

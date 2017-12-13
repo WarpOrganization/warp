@@ -42,7 +42,7 @@ public class SceneRenderer {
     public void update() {
         if(sceneHolder.getScene() != null) {
             initRendering();
-            render(sceneHolder.getScene());
+            render(sceneHolder.getScene(), false);
         } else {
             logger.warn("Unable to render the scene. Scene = null");
         }
@@ -55,10 +55,10 @@ public class SceneRenderer {
         renderer.initRendering();
     }
 
-    public void render(Component component) {
+    public void render(Component component, boolean dirty) {
         renderer.enterChildren();
-        renderer.renderComponent(component);
-        component.forEachChildren(this::render);
+        boolean componentDirty = renderer.renderComponentAndCheckIfDirty(component, dirty);
+        component.forEachChildren(c -> render(c, componentDirty));
         renderer.leaveChildren();
     }
 

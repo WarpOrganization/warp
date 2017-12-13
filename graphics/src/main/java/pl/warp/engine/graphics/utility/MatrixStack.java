@@ -21,6 +21,7 @@ public class MatrixStack {
     private Matrix4f[] composeMatrixStack;
     private Matrix3f[] rotationMatrixStack;
     private int top = 0;
+    private Matrix3f rotation;
 
     public MatrixStack(int size) {
         this.size = size;
@@ -123,6 +124,14 @@ public class MatrixStack {
         composeMatrixStack[top].mul(matrix, composeMatrixStack[top]);
     }
 
+    public void setTop(Matrix4f topMatrix) {
+        topMatrix().set(topMatrix);
+    }
+
+    public void setTopRotation(Matrix3f rotationMatrix) {
+        topRotationMatrix().set(rotationMatrix);
+    }
+
     /**
      * @return A direct FloatBuffer containing the topMatrix matrix.
      */
@@ -196,6 +205,16 @@ public class MatrixStack {
         @Override
         public void mul(Matrix4f matrix) {
             throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.rotate(matrix)");
+        }
+
+        @Override
+        public void setTop(Matrix4f topMatrix) {
+            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.setTop(topMatrix)");
+        }
+
+        @Override
+        public void setTopRotation(Matrix3f rotationMatrix) {
+            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.setTopRotation(rotationMatrix)");
         }
     };
 

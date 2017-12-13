@@ -14,9 +14,12 @@ import pl.warp.engine.graphics.camera.CameraHolder;
 import pl.warp.engine.graphics.camera.QuaternionCamera;
 import pl.warp.engine.graphics.material.Material;
 import pl.warp.engine.graphics.material.MaterialProperty;
+import pl.warp.engine.graphics.mesh.shapes.QuadMesh;
 import pl.warp.engine.graphics.mesh.shapes.SphereBuilder;
 import pl.warp.engine.graphics.rendering.scene.mesh.MeshProperty;
 import pl.warp.engine.graphics.rendering.scene.mesh.SceneMesh;
+import pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
+import pl.warp.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import pl.warp.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSource;
 import pl.warp.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -84,12 +87,101 @@ public class Test1 {
         graphicsThread.scheduleOnce(() -> {
             createShip(ship);
             createSpheres(scene);
+            createGoats(scene);
+            createCastle(scene);
+            createFloor(scene);
             Component lsource = new SceneComponent(scene);
             lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
             createLight(lsource);
         });
 
         return ship;
+    }
+
+    private static void createCastle(Scene scene) {
+        SceneMesh mesh = ObjLoader.read(
+                Test1.class.getResourceAsStream("castle2.obj"),
+                true).toMesh();
+
+
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("castle_tex.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D diffuse = new Texture2D(
+                imageData.getHeight(),
+                imageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                imageData.getData());
+        Material material = new Material(diffuse);
+        MeshProperty meshProperty = new MeshProperty(mesh);
+        MaterialProperty materialProperty = new MaterialProperty(material);
+        TransformProperty transformProperty = new TransformProperty();
+        transformProperty.move(new Vector3f(0,-30,0));
+        Component component = new SceneComponent(scene);
+        component.addProperty(meshProperty);
+        component.addProperty(materialProperty);
+        component.addProperty(transformProperty);
+    }
+
+    private static void createFloor(Scene scene) {
+        SceneMesh quadMesh = new QuadMesh();
+        Texture2D diffuse = new Texture2D(
+                white.getHeight(),
+                white.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                white.getData());
+        TransformProperty transformProperty = new TransformProperty();
+        transformProperty.rotateX((float) -(Math.PI / 2));
+        transformProperty.scale(new Vector3f(100f));
+        transformProperty.move(new Vector3f(0,-30,0));
+        Material material = new Material(diffuse);
+        MaterialProperty materialProperty = new MaterialProperty(material);
+        MeshProperty meshProperty = new MeshProperty(quadMesh);
+        Component component = new SceneComponent(scene);
+        component.addProperty(meshProperty);
+        component.addProperty(materialProperty);
+        component.addProperty(transformProperty);
+
+    }
+
+    private static void createGoats(Scene scene) {
+        SceneMesh mesh = ObjLoader.read(
+                Test1.class.getResourceAsStream("he-goat.obj"),
+                true).toMesh();
+
+
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("he-goat_tex.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D diffuse = new Texture2D(
+                imageData.getHeight(),
+                imageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                imageData.getData());
+        Material material = new Material(diffuse);
+        for(int x = 0; x < 5; x++){
+            for(int y = 0; y < 5; y++) {
+                for(int z = 0; z < 5; z++) {
+                    MeshProperty meshProperty = new MeshProperty(mesh);
+                    MaterialProperty materialProperty = new MaterialProperty(material);
+                    TransformProperty transformProperty = new TransformProperty();
+                    transformProperty.setTranslation(new Vector3f(x * 5, y * 5, z * 5));
+                    transformProperty.move(new Vector3f(0,0,-50));
+                    Component component = new SceneComponent(scene);
+                    component.addProperty(meshProperty);
+                    component.addProperty(materialProperty);
+                    component.addProperty(transformProperty);
+                }
+            }
+        }
     }
 
 
@@ -246,6 +338,7 @@ public class Test1 {
         material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
+        sphere.addProperty(new TessellationModeProperty(SceneTessellationMode.BEZIER));
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);

@@ -95,8 +95,8 @@ vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float ro
 }
 
 vec3 decodeNormal() {
-    uint packed = texture(comp2, vTexCoord).r;
-    vec2 encoded = v2UnpackSignedNorm(packed, 11);
+    uint pkd = texture(comp2, vTexCoord).r;
+    vec2 encoded = v2UnpackSignedNorm(pkd, 11);
     return decode(encoded);
 }
 

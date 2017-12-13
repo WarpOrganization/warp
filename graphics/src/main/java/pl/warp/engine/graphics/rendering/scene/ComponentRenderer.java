@@ -53,21 +53,34 @@ public class ComponentRenderer {
     }
 
 
-    public void renderComponent(Component component) {
+    public boolean renderComponentAndCheckIfDirty(Component component, boolean dirty) {
         if (component.hasEnabledProperty(MeshProperty.NAME)) {
-            applyTransformations(component);
+            boolean componentDirty = applyTransformations(component, dirty);
             Material material = getMaterial(component);
             IndexedMesh mesh = getMesh(component);
             SceneTessellationMode tessellationMode = getTessellationMode(component);
             drawMesh(material, mesh, tessellationMode);
+            return componentDirty;
         }
+        return false;
     }
 
-    private void applyTransformations(Component component) {
+    private boolean applyTransformations(Component component, boolean dirty) {
         TransformProperty property = component.getProperty(TransformProperty.NAME);
-        applyTranslation(property);
-        applyScale(property);
-        applyRotation(property);
+        if(dirty || property.isDirty()) {
+            System.out.println("ddd");
+            applyTranslation(property);
+            applyScale(property);
+            applyRotation(property);
+            property.updateCaches(matrixStack.topMatrix(), matrixStack.topRotationMatrix());
+            return true;
+        } else {
+            System.out.println("ekk");
+            matrixStack.setTop(property.getTransformCache());
+            matrixStack.setTopRotation(property.getRotationCache());
+            return false;
+        }
+
     }
 
     private void applyTranslation(TransformProperty translation) {
