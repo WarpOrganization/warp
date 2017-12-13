@@ -1,5 +1,6 @@
 package pl.warp.engine.core.context;
 
+import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.event.EventDispatcher;
@@ -39,12 +40,14 @@ public class EngineContext {
     private SceneHolder sceneHolder;
     private ScriptManager scriptManager;
     private EventDispatcher eventDispatcher;
+    private ComponentRegistry componentRegistry;
 
     public EngineContext() {
         this.context = Context.create();
         this.scriptManager = context.findOne(ScriptManager.class).get();
         this.eventDispatcher = context.findOne(EventDispatcher.class).get();
         this.sceneHolder = context.findOne(SceneHolder.class).get();
+        this.componentRegistry = context.findOne(ComponentRegistry.class).get();
         this.sceneHolder.setScene(new Scene(this));
     }
 
@@ -64,5 +67,9 @@ public class EngineContext {
 
     public Context getLoadedContext() {
         return context;
+    }
+
+    public ComponentRegistry getComponentRegistry() {
+        return componentRegistry;
     }
 }

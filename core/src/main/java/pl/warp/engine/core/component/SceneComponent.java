@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 /**
  * @author Jaca777
- *         Created 2016-06-27 at 12
+ * Created 2016-06-27 at 12
  */
 public class SceneComponent implements Component {
 
@@ -25,18 +25,34 @@ public class SceneComponent implements Component {
     private final Set<Listener> listeners = new HashSet<>();
     private final List<Component> children = new LinkedList<>();
     private boolean alive = true;
+    private int id;
 
     public SceneComponent(Component parent) {
         this.parent = parent;
         parent.addChild(this);
         this.context = parent.getContext();
+        id = context.getComponentRegistry().addComponent(this);
     }
 
 
     public SceneComponent(EngineContext context) {
         this.context = context;
+        id = context.getComponentRegistry().addComponent(this);
     }
 
+    public SceneComponent(Component parent, int id) {
+        this.parent = parent;
+        parent.addChild(this);
+        this.context = parent.getContext();
+        context.getComponentRegistry().addComponent(this, id);
+        this.id = id;
+    }
+
+    public SceneComponent(EngineContext context, int id) {
+        this.context = context;
+        context.getComponentRegistry().addComponent(this, id);
+        this.id = id;
+    }
 
     /**
      * Finds a property of a given type. It's not as fast as {@link #getProperty(String)}.
@@ -80,7 +96,7 @@ public class SceneComponent implements Component {
     }
 
     @Override
-    public <T extends Property> T getPropertyOrNull(String name){
+    public <T extends Property> T getPropertyOrNull(String name) {
         return (T) properties.get(name);
     }
 
@@ -106,7 +122,7 @@ public class SceneComponent implements Component {
      */
     @Override
     public <T extends Event> void triggerEvent(T event) {
-        if(alive) getContext().getEventDispatcher().dispatchEvent(this, event);
+        if (alive) getContext().getEventDispatcher().dispatchEvent(this, event);
     }
 
     @Override
@@ -119,7 +135,7 @@ public class SceneComponent implements Component {
      */
     @Override
     public <T extends Event> void triggerOnChildren(T event) {
-        if(alive) forEachChildren(child -> {
+        if (alive) forEachChildren(child -> {
             child.triggerEvent(event);
             child.triggerOnChildren(event);
         });
@@ -163,8 +179,8 @@ public class SceneComponent implements Component {
     public void setParent(Component parent) {
         Component previousParent = this.parent;
         this.parent = parent;
-        if(previousParent != null) previousParent.removeChild(this);
-        if(parent != null) parent.addChild(this);
+        if (previousParent != null) previousParent.removeChild(this);
+        if (parent != null) parent.addChild(this);
     }
 
     @Override
@@ -215,7 +231,7 @@ public class SceneComponent implements Component {
             throw new IllegalStateException("Unable to add a child. The component already has a parent.");
         else synchronized (children) {
             children.add(child);
-            if(child.getParent() != this) child.setParent(this);
+            if (child.getParent() != this) child.setParent(this);
         }
     }
 
@@ -223,7 +239,7 @@ public class SceneComponent implements Component {
     public void removeChild(Component child) {
         synchronized (children) {
             if (children.contains(child)) {
-                if(child.getParent() == this)  child.setParent(null);
+                if (child.getParent() == this) child.setParent(null);
                 children.remove(child);
             } else throw new ChildNotPresentException("Unable to remove a child.");
         }
@@ -232,6 +248,7 @@ public class SceneComponent implements Component {
     @Override
     public synchronized void destroy() {
         if (alive) {
+            context.getComponentRegistry().removeComponent(id);
             if (hasParent())
                 getParent().removeChild(this);
             triggerEvent(new ComponentDeathEvent(this));
@@ -282,5 +299,10 @@ public class SceneComponent implements Component {
     @Override
     public void addScript(Class<? extends Script> script) {
         context.getScriptManager().addScript(this, script);
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }
