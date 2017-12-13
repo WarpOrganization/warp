@@ -68,14 +68,12 @@ public class ComponentRenderer {
     private boolean applyTransformations(Component component, boolean dirty) {
         TransformProperty property = component.getProperty(TransformProperty.NAME);
         if(dirty || property.isDirty()) {
-            System.out.println("ddd");
             applyTranslation(property);
             applyScale(property);
             applyRotation(property);
             property.updateCaches(matrixStack.topMatrix(), matrixStack.topRotationMatrix());
             return true;
         } else {
-            System.out.println("ekk");
             matrixStack.setTop(property.getTransformCache());
             matrixStack.setTopRotation(property.getRotationCache());
             return false;
