@@ -1,0 +1,16 @@
+group 'pl.warp'
+version '0.1.2'
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':core')
+    compile project(':common')
+    compile project(':net')
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.17.Final'
+}

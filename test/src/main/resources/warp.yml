@@ -12,5 +12,8 @@ graphics:
     defaultTessellation: !!pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode NONE
     scene:
       maxLights: 10
+multiplayer:
+  ip: 127.0.0.1
+  port: 6688
 
 script.ups: 40
