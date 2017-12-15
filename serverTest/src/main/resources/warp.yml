@@ -1,0 +1,3 @@
+script.ups: 40
+server:
+  port: 6688

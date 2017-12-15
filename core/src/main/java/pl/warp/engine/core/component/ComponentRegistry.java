@@ -2,6 +2,7 @@ package pl.warp.engine.core.component;
 
 import pl.warp.engine.core.context.service.Service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  */
 @Service
 public class ComponentRegistry {
-    Map<Integer, Component> componentMap = new HashMap<>();
+    private Map<Integer, Component> componentMap = new HashMap<>();
     private int maxId = 0;
 
     public synchronized void addComponent(Component component, int id) throws IdExistsException {
@@ -32,5 +33,9 @@ public class ComponentRegistry {
 
     public synchronized void removeComponent(int id) {
         componentMap.remove(id);
+    }
+
+    public synchronized void getComponents(Collection<Component> target){
+        target.addAll(componentMap.values());
     }
 }
