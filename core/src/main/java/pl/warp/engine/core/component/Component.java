@@ -14,9 +14,6 @@ import java.util.function.Consumer;
  *         Created 2017-01-27 at 19
  */
 public interface Component {
-    <T extends Property> T getProperty(Class<T> c);
-
-    <T extends Property> boolean hasProperty(Class<T> c);
 
     <T extends Property> T getProperty(String name);
 
@@ -26,13 +23,10 @@ public interface Component {
 
     boolean hasEnabledProperty(String name);
 
-    <T extends Property> boolean hasEnabledProperty(Class<T> c);
-
-    Set<Property> getProperties();
 
     <T extends Event> void triggerEvent(T event);
 
-    Set<Listener> getListeners();
+    Set<Listener<?>> getListeners(String eventName);
 
     <T extends Event> void triggerOnChildren(T event);
 
@@ -44,15 +38,8 @@ public interface Component {
 
     boolean hasParent();
 
-    Component getChild(int index);
-
     int getChildrenNumber();
 
-    //Considered redundant
-    <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass);
-
-    //Considered redundant
-    <T extends Property> Set<T> getChildrenProperties(String propertyName);
 
     void addChild(Component child);
 
@@ -72,9 +59,9 @@ public interface Component {
 
     void removeChild(Component component);
 
-    void addListener(Listener<?, ?> listener);
+    void addListener(Listener<?> listener);
 
-    void removeListener(Listener<?, ?> listener);
+    void removeListener(Listener<?> listener);
 
     int getId();
 }

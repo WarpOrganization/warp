@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @author Jaca777
- *         Created 2017-02-02 at 13
+ * Created 2017-02-02 at 13
  */
 @Service
 public class PoolEventDispatcher implements EventDispatcher {
@@ -19,8 +19,8 @@ public class PoolEventDispatcher implements EventDispatcher {
     @Override
     public void dispatchEvent(Component component, Event event) {
         executor.execute(() -> {
-            for (Listener listener : component.getListeners())
-                if (listener.isInterestedIn(event)) listener.handle(event);
+            for (Listener listener : component.getListeners(event.getTypeName()))
+                listener.handle(event);
         });
     }
 }

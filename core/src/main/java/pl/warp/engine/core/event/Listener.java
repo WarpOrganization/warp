@@ -6,26 +6,22 @@ import pl.warp.engine.core.component.Component;
  * @author Jaca777
  *         Created 2016-06-26 at 22
  */
-public abstract class Listener<T extends Component, U extends Event> {
+public abstract class Listener<U extends Event> {
 
-    private T owner;
-    private EventFilterStrategy filterStrategy;
+    private Component owner;
+    private String eventName;
 
-    protected Listener(T owner, EventFilterStrategy filterStrategy) {
+    protected Listener(Component owner, String eventName) {
         this.owner = owner;
-        this.filterStrategy = filterStrategy;
-    }
-
-    protected Listener(T owner, String eventTypeName) {
-        this(owner, new TypeNameBasedEventFilterStrategy(eventTypeName));
-    }
-
-    protected Listener(T owner, Class<U> eventClass) {
-        this(owner, new TypeBasedEventFilterStrategy(eventClass));
+        this.eventName = eventName;
     }
 
     public boolean isInterestedIn(Event event) {
-        return filterStrategy.apply(event);
+        return this.eventName.equals(event.getTypeName());
+    }
+
+    public String getEventName() {
+        return eventName;
     }
 
     public abstract void handle(U event);
@@ -34,7 +30,7 @@ public abstract class Listener<T extends Component, U extends Event> {
         this.owner.removeListener(this);
     }
 
-    public T getOwner() {
+    public Component getOwner() {
         return owner;
     }
 

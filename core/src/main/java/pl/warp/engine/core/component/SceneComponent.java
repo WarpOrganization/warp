@@ -1,17 +1,15 @@
 package pl.warp.engine.core.component;
 
 
+import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.event.Listener;
-import pl.warp.engine.core.context.EngineContext;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.core.property.PropertyNotPresentException;
 import pl.warp.engine.core.script.Script;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Jaca777
@@ -22,8 +20,10 @@ public class SceneComponent implements Component {
     private Component parent;
     private EngineContext context;
     private final Map<String, Property> properties = new HashMap<>();
-    private final Set<Listener> listeners = new HashSet<>();
     private final List<Component> children = new LinkedList<>();
+    //not using Guava Multimap in order to avoid creating unneeded wrappers
+    //Anyway, it's still not the best choice
+    private final Map<String, Set<Listener<?>>> listeners = new HashMap<>();
     private boolean alive = true;
     private int id;
 
@@ -55,31 +55,6 @@ public class SceneComponent implements Component {
     }
 
     /**
-     * Finds a property of a given type. It's not as fast as {@link #getProperty(String)}.
-     *
-     * @throws PropertyNotPresentException
-     */
-    @Override
-    public <T extends Property> T getProperty(Class<T> c) {
-        Optional<Property> optionalProperty = properties.entrySet().stream()
-                .filter(entry -> entry.getValue().getClass().equals(c))
-                .findAny().map(Map.Entry::getValue);
-        if (!optionalProperty.isPresent())
-            throw new PropertyNotPresentException(c);
-        else return (T) optionalProperty.get();
-    }
-
-    /**
-     * Checks whether component has a property of a given type. It's not as fast as {@link #hasProperty(String)}
-     */
-    @Override
-    public <T extends Property> boolean hasProperty(Class<T> c) {
-        return properties.entrySet().stream()
-                .filter(entry -> entry.getValue().getClass().equals(c))
-                .count() > 0;
-    }
-
-    /**
      * @throws PropertyNotPresentException
      */
     @Override
@@ -105,18 +80,6 @@ public class SceneComponent implements Component {
         return hasProperty(name) && getProperty(name).isEnabled();
     }
 
-    @Override
-    public <T extends Property> boolean hasEnabledProperty(Class<T> c) {
-        return hasProperty(c) && getProperty(c).isEnabled();
-    }
-
-    @Override
-    public Set<Property> getProperties() {
-        return properties.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toSet());
-    }
-
     /**
      * Triggers event on this component. No other components are affected.
      */
@@ -126,8 +89,8 @@ public class SceneComponent implements Component {
     }
 
     @Override
-    public Set<Listener> getListeners() {
-        return listeners;
+    public  Set<Listener<?>> getListeners(String eventName) {
+        return listeners.getOrDefault(eventName, Collections.emptySet());
     }
 
     /**
@@ -184,45 +147,8 @@ public class SceneComponent implements Component {
     }
 
     @Override
-    public Component getChild(int index) {
-        return children.get(index);
-    }
-
-    @Override
     public int getChildrenNumber() {
         return children.size();
-    }
-
-    /**
-     * Returns children's components of type T. Children of children are traversed as well (and so on).
-     * It's a bit slower than {@link #getChildrenProperties(String)}.
-     */
-    //Considered redundant
-    @Override
-    public <T extends Property> Set<T> getChildrenProperties(Class<T> propertyClass) {
-        Stream<T> childrenOfChildrenProperties = children.stream()
-                .flatMap(p -> p.getChildrenProperties(propertyClass).stream());
-        Stream<T> childrenProperties = children.stream()
-                .filter(c -> c.hasProperty(propertyClass))
-                .map(c -> c.getProperty(propertyClass));
-        Stream<T> allChildrenProperties = Stream.concat(
-                childrenOfChildrenProperties,
-                childrenProperties);
-        return allChildrenProperties.collect(Collectors.toSet());
-    }
-
-    //Considered redundant
-    @Override
-    public <T extends Property> Set<T> getChildrenProperties(String propertyName) {
-        Stream<T> childrenOfChildrenProperties = children.stream()
-                .flatMap(p -> p.<T>getChildrenProperties(propertyName).stream());
-        Stream<T> childrenProperties = children.stream()
-                .filter(c -> c.hasProperty(propertyName))
-                .map(c -> c.getProperty(propertyName));
-        Stream<T> allChildrenProperties = Stream.concat(
-                childrenOfChildrenProperties,
-                childrenProperties);
-        return allChildrenProperties.collect(Collectors.toSet());
     }
 
     @Override
@@ -283,16 +209,21 @@ public class SceneComponent implements Component {
     }
 
     @Override
-    public void addListener(Listener<?, ?> listener) {
+    public void addListener(Listener<?> listener) {
         synchronized (listeners) {
-            this.listeners.add(listener);
+            if(!this.listeners.containsKey(listener.getEventName()))
+                this.listeners.put(listener.getEventName(), new HashSet<>());
+            this.listeners.get(listener.getEventName())
+                    .add(listener);
         }
     }
 
     @Override
-    public void removeListener(Listener<?, ?> listener) {
+    public void removeListener(Listener<?> listener) {
         synchronized (listeners) {
-            this.listeners.remove(listener);
+            if(!this.listeners.containsKey(listener.getEventName()))
+                throw new NoSuchElementException("Unable to remove nonexistent listener");
+            this.listeners.get(listener.getEventName()).remove(listener);
         }
     }
 
