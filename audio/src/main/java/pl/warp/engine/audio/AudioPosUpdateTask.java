@@ -47,7 +47,7 @@ public class AudioPosUpdateTask extends EngineTask {
     private float[] orientation = new float[6];
 
     private void updateDirections() {
-        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getAudioListener().getComponent());
+        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getAudioListener().getComponent(), new Quaternionf());
         fullRotation.transform(forwardVector.set(FORWARD_VECTOR));
         fullRotation.transform(upVector.set(UP_VECTOR));
         orientation[0] = forwardVector.x;

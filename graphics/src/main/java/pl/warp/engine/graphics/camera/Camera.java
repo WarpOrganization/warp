@@ -1,7 +1,6 @@
 package pl.warp.engine.graphics.camera;
 
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.execution.task.update.Updatable;
@@ -35,8 +34,6 @@ public interface Camera extends Updatable {
     void update(int delta);
 
     Vector3f getPosition(Vector3f dest);
-
-    Quaternionf getNonrealtiveRotation();
 
     Matrix4f getCameraMatrix();
 

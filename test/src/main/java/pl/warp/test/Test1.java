@@ -3,11 +3,14 @@ package pl.warp.test;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import pl.warp.engine.common.transform.TransformProperty;
+import pl.warp.engine.common.transform.Transforms;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.component.SceneComponent;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.context.EngineContext;
+import pl.warp.engine.core.script.Script;
+import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.graphics.GraphicsThread;
 import pl.warp.engine.graphics.camera.Camera;
 import pl.warp.engine.graphics.camera.CameraHolder;
@@ -313,19 +316,45 @@ public class Test1 {
         }
 
         Texture2D whiteD = new Texture2D(
-                white.getHeight(),
+                white.getWidth(),
                 white.getHeight(),
                 GL11.GL_RGB16,
                 GL11.GL_RGB,
                 true,
                 white.getData());
 
-        createSphere(scene, new Vector3f(0, 0, 40), whiteD, null, null, 0.0f);
-        createSphere(scene, new Vector3f(12, 0, 40), whiteD, null, null, 0.3f);
-        createSphere(scene, new Vector3f(24, 0, 40), whiteD, null, null, 1.0f);
+
+        Component a = new SceneComponent(scene);
+        a.addProperty(new TransformProperty().rotateY((float) (Math.PI / 2.0f)).move(new Vector3f(20, 0, 20)));
+        Component b = new SceneComponent(scene);
+        b.addProperty(new TransformProperty().rotateX((float) (Math.PI / 2.0f)).move(new Vector3f(0, 0, 20)));
+        Component sphere = createSphere(b, new Vector3f(0, 0, 40), whiteD, null, null, 0.0f);
+        Vector3f t = Transforms.getAbsolutePosition(sphere, new Vector3f());
+        //t.add(0, -3, 0);
+        createSphere(scene, t.negate(), stoneD, null, null, 0.3f).addScript(S.class);
     }
 
-    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, Texture2D normal, float roughness) {
+    public static class S extends Script {
+
+        @OwnerProperty(TransformProperty.NAME)
+        private TransformProperty p;
+
+        public S(Component owner) {
+            super(owner);
+        }
+
+        @Override
+        public void onInit() {
+
+        }
+
+        @Override
+        public void onUpdate(int delta) {
+           p.rotateY(delta  / 1000f);
+        }
+    }
+
+    private static Component createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, Texture2D normal, float roughness) {
         Component sphere = new SceneComponent(scene);
 
         SceneMesh mesh = SphereBuilder.createShape(20, 20, 4);
@@ -343,6 +372,7 @@ public class Test1 {
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);
         property.move(trans);
+        return sphere;
     }
 
     private static void setupCamera(EngineContext engineContext) {

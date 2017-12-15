@@ -1,5 +1,5 @@
 graphics:
-  ups: 10000
+  ups: 60
   display:
     !!pl.warp.engine.graphics.window.Display
     fullscreen: false

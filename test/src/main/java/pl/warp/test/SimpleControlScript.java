@@ -64,7 +64,7 @@ public class SimpleControlScript extends Script {
             movementVector.add(-1, 0, 0);
         if (input.isKeyDown(VK_D))
             movementVector.add(1, 0, 0);
-        Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner());
+        Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf());
         if (movementVector.lengthSquared() >= 1.0f) {
             movementVector.normalize();
             movementVector.rotate(rotation);

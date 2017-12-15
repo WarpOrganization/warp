@@ -73,13 +73,14 @@ public class QuaternionCamera implements Camera {
     }
 
     private Matrix4f cameraMatrix = new Matrix4f();
+    private Quaternionf rotation = new Quaternionf();
     private Matrix4f rotationMatrix = new Matrix4f();
     private Vector3f cameraPos = new Vector3f();
 
     @Override
     public synchronized void update(int d) {
-        this.cameraMatrix = Transforms.getAbsoluteTransform(cameraComponent).invert();
-        this.rotationMatrix = Transforms.getAbsoluteRotation(cameraComponent).get(tempRotation).invert();
+        Transforms.getImmediateTransform(cameraComponent, cameraMatrix).invert();
+        Transforms.getAbsoluteRotation(cameraComponent, rotation).get(rotationMatrix).invert();
         Transforms.getAbsolutePosition(cameraComponent, cameraPos);
     }
 
@@ -89,10 +90,6 @@ public class QuaternionCamera implements Camera {
         return dest.set(cameraPos);
     }
 
-    @Override
-    public Quaternionf getNonrealtiveRotation() {
-        return Transforms.getAbsoluteRotation(cameraComponent);
-    }
 
     @Override
     public synchronized Matrix4f getCameraMatrix() {
@@ -119,21 +116,21 @@ public class QuaternionCamera implements Camera {
 
     @Override
     public Vector3f getForwardVector() {
-        return Transforms.getAbsoluteRotation(cameraComponent).positiveZ(forwardVector).negate();
+        return rotation.positiveZ(forwardVector).negate();
     }
 
     private Vector3f rightVector = new Vector3f();
 
     @Override
     public Vector3f getRightVector() {
-        return Transforms.getAbsoluteRotation(cameraComponent).positiveX(rightVector).negate();
+        return rotation.positiveX(rightVector).negate();
     }
 
     private Vector3f upVector = new Vector3f();
 
     @Override
     public Vector3f getUpVector() {
-        return Transforms.getAbsoluteRotation(cameraComponent).positiveY(upVector).negate();
+        return rotation.positiveY(upVector).negate();
     }
 
     @Override
