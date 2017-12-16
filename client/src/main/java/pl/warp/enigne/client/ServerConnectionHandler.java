@@ -19,13 +19,18 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
 
     private boolean connected = false;
     private int clientId;
+    private SerializedSceneHolder sceneHolder;
+
+    public ServerConnectionHandler(SerializedSceneHolder sceneHolder) {
+        this.sceneHolder = sceneHolder;
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
         ByteBuf buffer = msg.content();
         int type = buffer.readInt();
         long timestamp = buffer.readLong();
-        System.out.println("server sends message type: " + type);
+//        System.out.println("server sends message type: " + type);
 
         switch (type) {
             case PacketType.PACKET_CONNECTED:
@@ -36,8 +41,8 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
                 System.out.println("Connection refused!");
                 break;
 
-            case PacketType.SCENE_STATE:
-
+            case PacketType.PACKET_SCENE_STATE:
+                sceneHolder.offerScene(timestamp, buffer);
                 break;
         }
     }

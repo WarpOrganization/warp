@@ -1,6 +1,7 @@
 package pl.warp.engine.server;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.socket.DatagramPacket;
 import pl.warp.engine.core.context.service.Service;
 
 import java.util.HashMap;
@@ -30,18 +31,19 @@ public class ClientRegistry {
         return clients.get(clientId);
     }
 
-    public synchronized void updateKeepAlve(int clientId) {
+    public synchronized void updateKeepAlive(int clientId) {
         Client client = clients.get(clientId);
         if (client != null) client.setLastKeepAlive(System.currentTimeMillis());
     }
 
     public synchronized void broadcast(ByteBuf msg) {
-        for (Client client : clients.values()) client.getChannel().writeAndFlush(msg);
+        for (Client client : clients.values())
+            client.getChannel().writeAndFlush(new DatagramPacket(msg, client.getAddress()));
     }
 
     public synchronized void send(int clientId, ByteBuf msg) {
         Client client = clients.get(clientId);
-        if (client != null) client.getChannel().writeAndFlush(msg);
+        if (client != null) client.getChannel().writeAndFlush(new DatagramPacket(msg, client.getAddress()));
     }
 
 }

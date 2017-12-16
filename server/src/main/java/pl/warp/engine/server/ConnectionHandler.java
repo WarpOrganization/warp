@@ -36,7 +36,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                 registerClient(ctx.channel(), msg.sender());
                 break;
             case PacketType.PACKET_KEEP_ALIVE:
-                clientRegistry.updateKeepAlve(buffer.readInt());
+                clientRegistry.updateKeepAlive(buffer.readInt());
                 break;
         }
     }
