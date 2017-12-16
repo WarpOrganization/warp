@@ -35,20 +35,14 @@ jar {
         project.configurations.compile
                 .collect { it.isDirectory() ? it : zipTree(it) }
     }
-
-}
-
-dependencies {
-    compile project(':test')
-}
-
-task testJar(type: Jar, dependsOn: 'build') {
-    zip64 true
     manifest {
         attributes 'Main-Class': 'pl.warp.test.TestApp'
     }
     baseName = "warp-${platform}"
-    with jar
+}
+
+dependencies {
+    compile project(':test')
 }
 
 task ideJar(type: Jar, dependsOn: 'build') {
