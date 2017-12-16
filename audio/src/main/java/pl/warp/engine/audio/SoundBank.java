@@ -58,7 +58,7 @@ public class SoundBank {
         }
     }
 
-    public static int getOpenALFormat(AudioFormat format) {//TODO spalić wszystkie wystąpienia
+    public static int getOpenALFormat(AudioFormat format) {//TODO spalic wszystkie wystapienia
         final int MONO = 1;
         final int STEREO = 2;
         int openALFormat = -1;
