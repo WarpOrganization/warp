@@ -1,4 +1,4 @@
-package pl.warp.serverTest;
+package pl.warp.servertest;
 
 import org.joml.Vector3f;
 import pl.warp.engine.common.transform.TransformProperty;

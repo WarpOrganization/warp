@@ -22,3 +22,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+jar {
+    zip64 true
+    from {
+        configurations.compile
+                .collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes 'Main-Class': 'pl.warp.servertest.Test'
+    }
+    baseName = "warp-server"
+}
