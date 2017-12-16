@@ -60,7 +60,6 @@ public class EngineContext {
         return scriptManager;
     }
 
-
     public EventDispatcher getEventDispatcher() {
         return eventDispatcher;
     }
