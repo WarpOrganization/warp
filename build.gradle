@@ -7,20 +7,25 @@ buildscript {
     }
 }
 
+plugins {
+    id 'net.nemerosa.versioning' version '2.0.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'scala'
 
 import org.ajoberstar.grgit.*
+
 ext.repo = Grgit.open(project.file('.'))
 
 group 'pl.warp'
-version "0.1.2-${ext.repo.branch.current.name}"
+version "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}-0.1.2.${versioning.info.build}"
 
 repositories {
     mavenCentral()
 }
 
-def platform=project.properties['platform'] ?: "windows"
+def platform = project.properties['platform'] ?: "windows"
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
@@ -38,7 +43,7 @@ jar {
     manifest {
         attributes 'Main-Class': 'pl.warp.test.TestApp'
     }
-    baseName = "warp-${platform}"
+    baseName = "Warp-${platform}"
 }
 
 dependencies {
