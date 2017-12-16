@@ -13,4 +13,5 @@ dependencies {
     compile project(':common')
     compile project(':net')
     compile group: 'io.netty', name: 'netty-all', version: '4.1.17.Final'
+    compile 'de.ruedigermoeller:fst:2.56'
 }

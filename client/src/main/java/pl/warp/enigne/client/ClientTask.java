@@ -26,6 +26,7 @@ import java.net.InetSocketAddress;
 public class ClientTask extends EngineTask {
 
     private Config config;
+    private SerializedSceneHolder sceneHolder;
 
     private static int KEEP_ALIVE_INTERVAL = 1000 * 5;
     private InetSocketAddress address;
@@ -34,15 +35,16 @@ public class ClientTask extends EngineTask {
     private Channel ch;
     private ServerConnectionHandler connectionHandler;
 
-    public ClientTask(Config config) {
+    public ClientTask(Config config, SerializedSceneHolder sceneHolder) {
         this.config = config;
+        this.sceneHolder = sceneHolder;
     }
 
     @Override
     protected void onInit() {
         try {
             Bootstrap b = new Bootstrap();
-            connectionHandler = new ServerConnectionHandler();
+            connectionHandler = new ServerConnectionHandler(sceneHolder);
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
