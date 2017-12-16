@@ -19,8 +19,9 @@ import org.ajoberstar.grgit.*
 ext.repo = Grgit.open(project.file('.'))
 
 group 'pl.warp'
-version "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}-0.1.2.${versioning.info.build}"
 
+def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"
+version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
 repositories {
     mavenCentral()
 }
@@ -32,7 +33,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
+subprojects.each { subproject -> evaluationDependsOn(subproject.path) }
 jar.dependsOn subprojects.tasks['classes']
 jar {
     zip64 true
