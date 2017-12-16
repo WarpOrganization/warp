@@ -25,7 +25,7 @@ public class GBuffer {
      *
      * FLAGS:
      *  0x01       0x02              0x04       0x08         0x10    -
-     *  Beckmann | Heidrich–Seidel | Emissive | Subsurface | Metal | -
+     *  Beckmann | Heidrich-Seidel | Emissive | Subsurface | Metal | -
      *
      */
 

@@ -15,7 +15,6 @@ public class SoundDecoderManager {
 
     public static SoundData decode(String pathToFile) throws IOException {
         File soundFile = new File(EngineContext.CODESOURCE_DIR + pathToFile);
-        //wiem, że łamie to SOLID, ale i tak będzie tylko używany OGG, więc jak będzie działać to WAV pójdzie sie gonić
         switch (FilenameUtils.getExtension(soundFile.getName())) {
             case "wav":
                 return decoders[0].decode(soundFile);
