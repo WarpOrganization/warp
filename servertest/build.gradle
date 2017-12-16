@@ -1,5 +1,6 @@
 group 'pl.warp'
-version '0.1.2'
+def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"
+version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
 
 apply plugin: 'java'
 apply plugin: 'scala'
@@ -31,5 +32,5 @@ jar {
     manifest {
         attributes 'Main-Class': 'pl.warp.servertest.Test'
     }
-    baseName = "warp-server"
+    baseName = "Warp-server"
 }
