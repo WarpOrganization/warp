@@ -1,8 +1,12 @@
-group 'pl.warp'
-version '0.1.2'
+import org.ajoberstar.grgit.Grgit
 
 apply plugin: 'java'
 apply plugin: 'scala'
+apply plugin: 'net.nemerosa.versioning'
+
+ext.repo = Grgit.open(project.rootDir)
+group 'pl.warp'
+version "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}-0.1.2.${versioning.info.build}"
 
 repositories {
     jcenter()
@@ -10,6 +14,7 @@ repositories {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
 }
+
 
 dependencies {
 
