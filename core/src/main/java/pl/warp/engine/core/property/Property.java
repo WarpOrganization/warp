@@ -54,4 +54,5 @@ public abstract class Property {
         this.enabled = false;
         if (triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent(this));
     }
+
 }

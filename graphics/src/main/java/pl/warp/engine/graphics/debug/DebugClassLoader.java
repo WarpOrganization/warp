@@ -20,7 +20,9 @@ public class DebugClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        if (name.startsWith("pl.warp.engine.graphics"))
+        Class<?> aClass = findClass(name);
+        if(aClass != null) return aClass;
+        else if (name.startsWith("pl.warp.engine.graphics"))
             return injectDebugCode(name);
         else return super.loadClass(name, resolve);
     }
@@ -41,4 +43,5 @@ public class DebugClassLoader extends ClassLoader {
             throw new ClassNotFoundException(name);
         }
     }
+
 }

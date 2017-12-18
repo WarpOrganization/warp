@@ -34,6 +34,7 @@ public class Context {
             for (Object service : contextHolder.getAllServices()) {
                 registry.registerService(service);
             }
+            registry.finalizeRegistration();
         }
     }
 
