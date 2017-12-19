@@ -1,6 +1,7 @@
 package pl.warp.engine.server;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -22,6 +23,7 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private EventLoopGroup group = new NioEventLoopGroup();
+    private Channel outChannel;
 
     public ServerTask(ClientRegistry clientRegistry) {
         this.clientRegistry = clientRegistry;
@@ -35,7 +37,8 @@ public class ServerTask extends EngineTask {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new ConnectionHandler(clientRegistry));
-            b.bind(PORT).sync();
+            outChannel = b.bind(PORT).sync().channel();
+            clientRegistry.setOutChannel(outChannel);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

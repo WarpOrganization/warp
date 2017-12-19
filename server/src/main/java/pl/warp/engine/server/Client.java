@@ -1,37 +1,30 @@
 package pl.warp.engine.server;
 
-import io.netty.channel.Channel;
-
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Hubertus
  * Created 26.11.2017
  */
 public class Client {
-    private Channel channel;
     private InetSocketAddress address;
     private long lastKeepAlive;
+    private Map<Integer, ServerEventWrapper> eventConfirmations = new HashMap<>();
+    private int id;
+    private int eventDependencyIdCounter = 0;
 
-    public Client(Channel channel, InetSocketAddress address) {
-        this.channel = channel;
+    Client(InetSocketAddress address) {
         this.address = address;
         lastKeepAlive = System.currentTimeMillis();
     }
 
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
-    public long getLastKeepAlive() {
+    long getLastKeepAlive() {
         return lastKeepAlive;
     }
 
-    public void setLastKeepAlive(long lastKeepAlive) {
+    void setLastKeepAlive(long lastKeepAlive) {
         this.lastKeepAlive = lastKeepAlive;
     }
 
@@ -41,5 +34,31 @@ public class Client {
 
     public void setAddress(InetSocketAddress address) {
         this.address = address;
+    }
+
+    synchronized void confirmEvent(int eventDependencyId) {
+        ServerEventWrapper w = eventConfirmations.get(eventDependencyId);
+        if (w != null) w.confirm();
+    }
+
+    synchronized void addEvent(ServerEventWrapper eventWrapper) {
+        eventConfirmations.put(eventWrapper.getDependencyId(), eventWrapper);
+    }
+
+    synchronized void removeEvent(int eventDependencyId) {
+        eventConfirmations.remove(eventDependencyId);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    void setId(int id) {
+        this.id = id;
+    }
+
+    int getNextEventDependencyId() {
+        eventDependencyIdCounter++;
+        return eventDependencyIdCounter;
     }
 }
