@@ -1,7 +1,6 @@
 package pl.warp.engine.core.event;
 
 import pl.warp.engine.core.property.Property;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author Jaca777
@@ -27,7 +26,7 @@ public abstract class Event {
      * Method is generated at runtime.
      */
     public int getType() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -35,6 +34,6 @@ public abstract class Event {
      * Method is generated and inlined at runtime.
      */
     public static int getTypeId(Class<? extends Property> propertyClass){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }
