@@ -52,9 +52,8 @@ public class EngineClassLoader extends ClassLoader {
         InputStream classData = getResourceAsStream(resourceName);
         ClassReader reader = new ClassReader(classData);
         ClassNode node = new ClassNode(Opcodes.ASM6);
-        node.accept(new ClassNode());
-        processor.process(node);
         reader.accept(node, 0);
+        processor.process(node);
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         node.accept(writer);
         byte code[] = writer.toByteArray();

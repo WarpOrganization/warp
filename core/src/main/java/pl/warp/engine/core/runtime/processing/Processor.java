@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
  * Created 2017-12-18 at 22
  */
 public interface Processor {
+    default void initializeProcessing() {}
     void process(ClassNode classNode);
-    void finalizeProcessing();
+    default void finalizeProcessing() {};
 }

@@ -33,6 +33,8 @@ dependencies {
     compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.12', version: '3.7.2'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.18'
     compile group: 'org.ow2.asm', name: 'asm-all', version: '6.0_BETA'
+    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0_BETA'
+
 
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.4'

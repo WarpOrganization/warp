@@ -17,6 +17,16 @@ public class ComposedSteppingProcessor implements Processor {
     }
 
     @Override
+    public void initializeProcessing() {
+        if (currentStep > processors.length)
+            throw new IllegalStateException("Processor doesn't contain processor with step index " + currentStep);
+        else {
+            Processor currentProcessor = processors[currentStep];
+            currentProcessor.initializeProcessing();
+        }
+    }
+
+    @Override
     public void process(ClassNode classNode) {
         if (currentStep > processors.length)
             throw new IllegalStateException("Processor doesn't contain processor with step index " + currentStep);
