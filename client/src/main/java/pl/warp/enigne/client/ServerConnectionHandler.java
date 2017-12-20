@@ -1,14 +1,10 @@
 package pl.warp.enigne.client;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import pl.warp.net.PacketType;
-
-import java.net.InetSocketAddress;
 
 
 /**
@@ -45,19 +41,5 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
                 sceneHolder.offerScene(timestamp, buffer);
                 break;
         }
-    }
-
-
-    private ByteBuf writeHeader(int packetType) {
-        ByteBuf buffer = Unpooled.buffer();
-        buffer.writeInt(packetType);
-        buffer.writeLong(System.currentTimeMillis());
-        buffer.writeInt(clientId);
-        return buffer;
-    }
-
-    void sendKeepAlive(Channel channel, InetSocketAddress address) {
-        if (connected)
-            channel.writeAndFlush(new DatagramPacket(writeHeader(PacketType.PACKET_KEEP_ALIVE), address));
     }
 }

@@ -49,7 +49,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     }
 
     private void registerClient(Channel channel, InetSocketAddress address) {
-        int id = clientRegistry.addClient(new Client(channel, address));
+        int id = clientRegistry.addClient(new Client(address));
         channel.writeAndFlush(
                 new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));
     }
