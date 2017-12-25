@@ -1,11 +1,12 @@
-package pl.warp.engine.core.runtime.idgen;
+package pl.warp.engine.core.runtime.idmethodgen;
 
 
 import org.objectweb.asm.tree.ClassNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.warp.engine.core.runtime.preprocessing.EngineRuntimePreprocessor;
 import pl.warp.engine.core.runtime.processing.Processor;
-import pl.warp.engine.core.runtime.subclass.SubclassResolverProcessor;
+import pl.warp.engine.core.runtime.preprocessing.SubclassResolver;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,26 +15,26 @@ import java.util.List;
  * @author Jaca777
  * Created 2017-12-17 at 19
  */
-public class IdGeneratorProcessor implements Processor {
+public class IdCodeGeneratorProcessor implements Processor<ClassNode> {
 
-    private static final Logger logger = LoggerFactory.getLogger(IdGeneratorProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdCodeGeneratorProcessor.class);
 
     private String superclassName;
-    private SubclassResolverProcessor subclassResolver;
+    private EngineRuntimePreprocessor runtimePreprocessor;
     private List<String> processedSubclasses;
     private IdMethodGenerator generator = new IdMethodGenerator();
 
     private HashMap<String, Integer> ids = new HashMap<>();
 
-    public IdGeneratorProcessor(String superclassName, SubclassResolverProcessor subclassResolver) {
+    public IdCodeGeneratorProcessor(String superclassName, EngineRuntimePreprocessor runtimePreprocessor) {
         this.superclassName = superclassName;
-        this.subclassResolver = subclassResolver;
+        this.runtimePreprocessor = runtimePreprocessor;
     }
 
     @Override
     public void initializeProcessing() {
         logger.info("Generating ids for " + superclassName + " subclasses");
-        this.processedSubclasses = subclassResolver.getSubclasses(superclassName);
+        this.processedSubclasses = runtimePreprocessor.getSubclasses(superclassName);
     }
 
     @Override

@@ -15,9 +15,11 @@ import java.io.InputStream;
  */
 public class EngineClassLoader extends ClassLoader {
 
-    private boolean preprocessing = false;
 
-    private Processor processor;
+    private static final String RUNTIME_PREFIX = "pl.warp.engine.core.runtime";
+    private boolean preprocessing = true;
+
+    private Processor<ClassNode> processor;
 
     public EngineClassLoader(ClassLoader parent) {
         super(parent);
@@ -34,7 +36,6 @@ public class EngineClassLoader extends ClassLoader {
 
     private Class<?> loadProcessedClass(String name) {
         String definedName = preprocessing ? "_" + name : name;
-        System.out.println("Loading " + definedName);
         Class c = findLoadedClass(definedName);
         if (c != null) return c;
         else {
@@ -50,18 +51,31 @@ public class EngineClassLoader extends ClassLoader {
     private Class<?> loadAndProcess(String name, String definedName) throws IOException {
         String resourceName = name.replace('.', '/') + ".class";
         InputStream classData = getResourceAsStream(resourceName);
+        byte[] code = loadAndProcessData(classData);
+        return defineClass(definedName, code, 0, code.length);
+    }
+
+    private byte[] loadAndProcessData(InputStream classData) throws IOException {
         ClassReader reader = new ClassReader(classData);
         ClassNode node = new ClassNode(Opcodes.ASM6);
         reader.accept(node, 0);
-        processor.process(node);
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-        node.accept(writer);
-        byte code[] = writer.toByteArray();
-        return defineClass(name, code, 0, code.length);
+        if(processor != null) processor.process(node);
+        return write(node);
     }
 
+    private void warn(String msg) {
+        System.out.println(" -- Engine Runtime warning -- " + msg);
+    }
+
+    private byte[] write(ClassNode node) {
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        node.accept(writer);
+        return writer.toByteArray();
+    }
+
+
     private boolean isProcessed(String name) {
-        return name.startsWith("pl.warp");
+        return name.startsWith("pl.warp") && !name.startsWith(RUNTIME_PREFIX);
     }
 
     public void startProcessing(Processor processor) {

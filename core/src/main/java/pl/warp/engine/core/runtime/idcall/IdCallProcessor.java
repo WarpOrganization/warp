@@ -7,7 +7,7 @@ import pl.warp.engine.core.runtime.processing.Processor;
  * @author Jaca777
  * Created 2017-12-20 at 23
  */
-public class IdCallProcessor implements Processor {
+public class IdCallProcessor implements Processor<ClassNode> {
     private String[] superclasses;
 
     public IdCallProcessor(String[] superclasses) {

@@ -1,14 +1,12 @@
 package pl.warp.engine.core.runtime.processing;
 
 
-import org.objectweb.asm.tree.ClassNode;
-
 /**
  * @author Jaca777
  * Created 2017-12-18 at 22
  */
-public interface Processor {
+public interface Processor <T> {
     default void initializeProcessing() {}
-    void process(ClassNode classNode);
-    default void finalizeProcessing() {};
+    void process(T t);
+    default void finalizeProcessing() {}
 }

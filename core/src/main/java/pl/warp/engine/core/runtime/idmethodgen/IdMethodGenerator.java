@@ -1,4 +1,4 @@
-package pl.warp.engine.core.runtime.idgen;
+package pl.warp.engine.core.runtime.idmethodgen;
 
 
 import org.objectweb.asm.MethodVisitor;
