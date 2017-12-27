@@ -42,8 +42,8 @@ public class EngineClassLoader extends ClassLoader {
             try {
                 return loadAndProcess(name, definedName);
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+
+                throw new RuntimeException(String.format("Error occured while loading %s class", name), e);
             }
         }
     }
@@ -61,10 +61,6 @@ public class EngineClassLoader extends ClassLoader {
         reader.accept(node, 0);
         if(processor != null) processor.process(node);
         return write(node);
-    }
-
-    private void warn(String msg) {
-        System.out.println(" -- Engine Runtime warning -- " + msg);
     }
 
     private byte[] write(ClassNode node) {

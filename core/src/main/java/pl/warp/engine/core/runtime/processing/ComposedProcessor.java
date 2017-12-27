@@ -21,9 +21,9 @@ public class ComposedProcessor<T> implements Processor<T> {
     }
 
     @Override
-    public void process(T classNode) {
+    public void process(T t) {
         for (Processor<T> processor : processors) {
-            processor.process(classNode);
+            processor.process(t);
         }
     }
 

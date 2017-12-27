@@ -1,5 +1,8 @@
 package pl.warp.engine.core.runtime.preprocessing;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.Map;
  * Created 2017-12-25 at 15
  */
 public class TypeIdProvider {
+
+    private static final Logger logger = LoggerFactory.getLogger(TypeIdProvider.class);
+
     private Map<Integer, String> idToName = new HashMap<>(); //BiMap won't do its work.
     private Map<String, Integer> nameToId = new HashMap<>();
     private SubclassResolver subclassResolver;
@@ -30,10 +36,12 @@ public class TypeIdProvider {
     }
 
     private void generateIds(List<String> classes) {
+        logger.info(String.format("Generating ids for %d classes", classes.size()));
         for (int i = 0; i < classes.size(); i++) {
             String name = classes.get(i);
             idToName.put(i, name);
             nameToId.put(name, i);
+            logger.debug(String.format("%s id: %d", name, i));
         }
     }
 

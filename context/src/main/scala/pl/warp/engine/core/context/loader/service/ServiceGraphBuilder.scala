@@ -49,7 +49,7 @@ private[loader] class ServiceGraphBuilder() {
     if (qualified.size > 1)
       throw AmbiguousServiceDependencyException(service, dependencyInfo, qualified)
       if(qualified.size < 1)
-        throw new ServiceNotFoundException(service, dependencyInfo)
+        throw ServiceNotFoundException(service, dependencyInfo)
     else qualified.head
   }
 

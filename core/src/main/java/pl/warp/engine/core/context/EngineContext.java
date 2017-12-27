@@ -4,6 +4,7 @@ import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.event.EventDispatcher;
+import pl.warp.engine.core.runtime.EngineLauncher;
 import pl.warp.engine.core.script.ScriptManager;
 
 import java.io.File;
@@ -19,21 +20,9 @@ import java.security.ProtectionDomain;
  */
 public class EngineContext {
 
-    public static final String CODESOURCE_DIR = getCodesourceDir();
+    public static final String CODESOURCE_DIR = EngineLauncher.CODESOURCE_DIR;
 
-    private static String getCodesourceDir() {
-        try {
-            ProtectionDomain protectionDomain = EngineContext.class.getProtectionDomain();
-            CodeSource codeSource = protectionDomain.getCodeSource();
-            URL location = codeSource.getLocation();
-            String path = location.getPath();
-            File jarFile = new File(URLDecoder.decode(path, "UTF-8"));
-            return jarFile.getParent() + File.separator;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
 
     private Context context;

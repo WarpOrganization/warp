@@ -55,4 +55,20 @@ public abstract class Property {
         if (triggerStateEvents) owner.triggerEvent(new PropertyDisabledEvent(this));
     }
 
+    /**
+     * Returns generated ID of instance's event type.
+     * Method is generated at runtime.
+     */
+    public int getType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns generated ID of event type.
+     * Method is generated and inlined at runtime.
+     */
+    public static int getTypeId(Class<? extends Property> propertyClass){
+        throw new UnsupportedOperationException();
+    }
+
 }

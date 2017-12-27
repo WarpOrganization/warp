@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.warp.engine.core.runtime.preprocessing.EngineRuntimePreprocessor;
 import pl.warp.engine.core.runtime.processing.Processor;
-import pl.warp.engine.core.runtime.preprocessing.SubclassResolver;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,19 +32,21 @@ public class IdCodeGeneratorProcessor implements Processor<ClassNode> {
 
     @Override
     public void initializeProcessing() {
-        logger.info("Generating ids for " + superclassName + " subclasses");
-        this.processedSubclasses = runtimePreprocessor.getSubclasses(superclassName);
+        logger.info("Generating id methods for " + superclassName + " subclasses");
+        this.processedSubclasses = runtimePreprocessor.getSubclasses(superclassName.replace("/", "."));
+        System.out.println(processedSubclasses);
     }
 
     @Override
     public void process(ClassNode classNode) {
-        String className = classNode.name;
+        String className = classNode.name
+                .replace("/", ".");
         if(processedSubclasses.contains(className))
-            processAndGenerateId(classNode);
+            processAndGenerateId(classNode, className);
     }
 
-    private void processAndGenerateId(ClassNode classNode) {
-        int id = processedSubclasses.indexOf(classNode.name);
+    private void processAndGenerateId(ClassNode classNode, String className) {
+        int id = runtimePreprocessor.getId(className);
         ids.put(classNode.name, id);
         generator.generateIdMethod(id, classNode);
         logger.debug(String.format("Generated methods with id %d for %s class", id, classNode.name));

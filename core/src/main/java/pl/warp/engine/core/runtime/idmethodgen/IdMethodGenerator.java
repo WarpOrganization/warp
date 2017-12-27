@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class IdMethodGenerator {
 
-    public static final String GET_ID_METHOD_NAME = "getId";
+    public static final String GET_ID_METHOD_NAME = "getType";
     public static final String GET_ID_METHOD_DESC = "()I";
 
     private static final Logger logger = LoggerFactory.getLogger(IdMethodGenerator.class);
