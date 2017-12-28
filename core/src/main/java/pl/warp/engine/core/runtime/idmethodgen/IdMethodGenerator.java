@@ -29,6 +29,7 @@ public class IdMethodGenerator {
     protected void checkIfMethodPresent(ClassNode classNode) {
         for (MethodNode method : (List<MethodNode>) classNode.methods) {
             if (method.name.equals(GET_ID_METHOD_NAME) && method.desc.equals(GET_ID_METHOD_DESC)) {
+                logger.warn("getId method should not be overridden by the user");
                 logger.warn("Overriding user-declared method getId for class " + classNode.name);
             }
         }

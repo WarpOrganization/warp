@@ -29,23 +29,22 @@ public class IdCallProcessor implements Processor<ClassNode> {
         this.preprocessor = preprocessor;
     }
 
-
     @Override
     public void process(ClassNode classNode) {
         for (MethodNode method : (List<MethodNode>) classNode.methods) {
-            processMethod(method);
+            processMethod(classNode.name, method);
         }
     }
 
-    private void processMethod(MethodNode methodNode) {
+    private void processMethod(String className, MethodNode methodNode) {
         InsnList instructions = methodNode.instructions;
         AbstractInsnNode[] original = instructions.toArray();
         AbstractInsnNode[] insnNodesCopy = Arrays.copyOf(original, original.length);
-        processInstructions(instructions, insnNodesCopy);
+        processInstructions(className, instructions, insnNodesCopy);
     }
 
 
-    private void processInstructions(InsnList instructions, AbstractInsnNode[] insnNodes) {
+    private void processInstructions(String className, InsnList instructions, AbstractInsnNode[] insnNodes) {
         int lastLdcIndex = -1;
         LdcInsnNode lastLdc = null;
         for (int i = 0; i < insnNodes.length; i++) {
@@ -53,19 +52,22 @@ public class IdCallProcessor implements Processor<ClassNode> {
             if (insn.getOpcode() == Opcodes.LDC) {
                 lastLdcIndex = i;
                 lastLdc = (LdcInsnNode) insn;
-            } else if (insn.getOpcode() == Opcodes.INVOKESTATIC && lastLdcIndex == i - 1) {
-                processInvocation(instructions, lastLdc, (MethodInsnNode) insn);
+            } else if (insn.getOpcode() == Opcodes.INVOKESTATIC && matchesCallPattern((MethodInsnNode) insn)) {
+                if (lastLdcIndex == i - 1) {
+                    processInvocation(instructions, lastLdc, (MethodInsnNode) insn);
+                } else {
+                    logger.error(String.format("Malformed getTypeId call in %s class", className));
+                    logger.error("Engine runtime was unable to inline the type id.");
+                }
             }
         }
     }
 
     private void processInvocation(InsnList instructions, LdcInsnNode lastLdc, MethodInsnNode insn) {
-        if (matchesCallPattern(insn)) {
-            IntInsnNode bipushId = getIdPushInsn(lastLdc);
-            instructions.insertBefore(lastLdc, bipushId);
-            instructions.remove(lastLdc);
-            instructions.remove(insn);
-        }
+        IntInsnNode bipushId = getIdPushInsn(lastLdc);
+        instructions.insertBefore(lastLdc, bipushId);
+        instructions.remove(lastLdc);
+        instructions.remove(insn);
     }
 
     private IntInsnNode getIdPushInsn(LdcInsnNode lastLdc) {

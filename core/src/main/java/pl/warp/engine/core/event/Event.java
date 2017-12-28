@@ -24,7 +24,8 @@ public abstract class Event {
      * Method is generated at runtime.
      */
     public int getType() {
-        throw new UnsupportedOperationException();
+        String msg = String.format("Engine runtime was unable to generate the getTypeId method for %s class", getClass().getName());
+        throw new UnsupportedOperationException(msg);
     }
 
     /**
@@ -32,6 +33,7 @@ public abstract class Event {
      * Method is generated and inlined at runtime.
      */
     public static int getTypeId(Class<? extends Event> eventClass){
-        throw new UnsupportedOperationException();
+        String msg = String.format("Engine runtime was unable to inline type ID for %s class", eventClass.getName());
+        throw new UnsupportedOperationException(msg);
     }
 }

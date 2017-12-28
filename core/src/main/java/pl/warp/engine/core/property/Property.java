@@ -60,7 +60,8 @@ public abstract class Property {
      * Method is generated at runtime.
      */
     public int getType() {
-        throw new UnsupportedOperationException();
+        String msg = String.format("Engine runtime was unable to generate the getTypeId method for %s class", getClass().getName());
+        throw new UnsupportedOperationException(msg);
     }
 
     /**
@@ -68,7 +69,8 @@ public abstract class Property {
      * Method is generated and inlined at runtime.
      */
     public static int getTypeId(Class<? extends Property> propertyClass){
-        throw new UnsupportedOperationException();
+        String msg = String.format("Engine runtime was unable to inline type ID for %s class", propertyClass.getName());
+        throw new UnsupportedOperationException(msg);
     }
 
 }
