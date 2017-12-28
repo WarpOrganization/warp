@@ -1,7 +1,5 @@
 package pl.warp.engine.core.event;
 
-import pl.warp.engine.core.property.Property;
-
 /**
  * @author Jaca777
  *         Created 2016-06-26 at 22
@@ -33,7 +31,7 @@ public abstract class Event {
      * Returns generated ID of event type.
      * Method is generated and inlined at runtime.
      */
-    public static int getTypeId(Class<? extends Property> propertyClass){
+    public static int getTypeId(Class<? extends Event> eventClass){
         throw new UnsupportedOperationException();
     }
 }

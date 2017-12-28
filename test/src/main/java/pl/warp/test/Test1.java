@@ -9,6 +9,8 @@ import pl.warp.engine.core.component.Scene;
 import pl.warp.engine.core.component.SceneComponent;
 import pl.warp.engine.core.component.SceneHolder;
 import pl.warp.engine.core.context.EngineContext;
+import pl.warp.engine.core.event.Event;
+import pl.warp.engine.core.property.PropertyDisabledEvent;
 import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.graphics.GraphicsThread;
@@ -127,6 +129,8 @@ public class Test1 {
         component.addProperty(meshProperty);
         component.addProperty(materialProperty);
         component.addProperty(transformProperty);
+        int i = Event.getTypeId(PropertyDisabledEvent.class);
+        System.out.println(i);
     }
 
     private static void createFloor(Scene scene) {

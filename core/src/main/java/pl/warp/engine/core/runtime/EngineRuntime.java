@@ -27,7 +27,7 @@ public class EngineRuntime {
     private static Processor<ClassNode> createProcessor() {
         IdCodeGeneratorProcessor propertyIdGenerator = new IdCodeGeneratorProcessor(PROPERTY_CLASS_NAME, PREPROCESSOR);
         IdCodeGeneratorProcessor eventIdGenerator = new IdCodeGeneratorProcessor(EVENT_CLASS_NAME, PREPROCESSOR);
-        IdCallProcessor idCallProcessor = new IdCallProcessor(preprocessedTypes);
+        IdCallProcessor idCallProcessor = new IdCallProcessor(preprocessedTypes, PREPROCESSOR);
         return new ComposedProcessor(propertyIdGenerator, eventIdGenerator, idCallProcessor);
     }
 
