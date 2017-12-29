@@ -11,7 +11,7 @@ import java.util.Map;
 public class Client {
     private InetSocketAddress address;
     private long lastKeepAlive;
-    private Map<Integer, ServerEventWrapper> eventConfirmations = new HashMap<>();
+    private Map<Integer, ServerAddressedEnvelope> eventConfirmations = new HashMap<>();
     private int id;
     private int eventDependencyIdCounter = 0;
 
@@ -37,12 +37,12 @@ public class Client {
     }
 
     synchronized void confirmEvent(int eventDependencyId) {
-        ServerEventWrapper w = eventConfirmations.get(eventDependencyId);
-        if (w != null) w.confirm();
+        ServerAddressedEnvelope w = eventConfirmations.get(eventDependencyId);
+        if (w != null) w.setConfirmed(true);
     }
 
-    synchronized void addEvent(ServerEventWrapper eventWrapper) {
-        eventConfirmations.put(eventWrapper.getDependencyId(), eventWrapper);
+    synchronized void addEvent(ServerAddressedEnvelope addressedEnvelope) {
+        eventConfirmations.put(addressedEnvelope.getDependencyId(), addressedEnvelope);
     }
 
     synchronized void removeEvent(int eventDependencyId) {

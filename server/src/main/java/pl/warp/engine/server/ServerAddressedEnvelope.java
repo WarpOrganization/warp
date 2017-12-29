@@ -1,13 +1,12 @@
 package pl.warp.engine.server;
 
-import pl.warp.net.RemoteEventWrapper;
+import pl.warp.net.AddressedEnvelope;
 
 /**
  * @author Hubertus
- * Created 18.12.2017
+ * Created 29.12.2017
  */
-public class ServerEventWrapper extends RemoteEventWrapper{
-
+public class ServerAddressedEnvelope extends AddressedEnvelope {
     private Client targetClient;
 
     public Client getTargetClient() {

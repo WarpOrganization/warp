@@ -22,14 +22,22 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
 
     @Override
     public void dispatchEvent(Component component, Event event) {
-        executor.execute(() -> {
-            for (Listener listener : component.getListeners(event.getTypeName()))
-                listener.handle(event);
-        });
-        if (event instanceof RemoteEvent) {
-            RemoteEvent remoteEvent = (RemoteEvent) event;
-            remoteEvent.setTargetComponentId(component.getId());
-            eventQueue.pushEvent(remoteEvent);
+        if (event instanceof Envelope) {
+            Envelope envelope = (Envelope) event;
+//            remoteEvent.setTargetComponentId(component.getId());
+//            eventQueue.pushEvent(remoteEvent);
+            envelope.setTargetComponentId(component.getId());
+            eventQueue.pushEvent(envelope);
+            executor.execute(() -> {
+                for (Listener listener : component.getListeners(envelope.getContent().getTypeName()))
+                    listener.handle(envelope.getContent());
+            });
+        } else {
+            executor.execute(() -> {
+                for (Listener listener : component.getListeners(event.getTypeName()))
+                    listener.handle(event);
+            });
         }
+
     }
 }

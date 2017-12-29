@@ -5,6 +5,6 @@ package pl.warp.net;
  * Created 18.12.2017
  */
 public interface RemoteEventQueue {
-    void pushEvent(RemoteEvent event);
+    void pushEvent(Envelope event);
     void update();
 }

@@ -1,11 +1,11 @@
 package pl.warp.engine.server;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.socket.DatagramPacket;
 import pl.warp.engine.core.context.service.Service;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -16,39 +16,52 @@ import java.util.Map;
 public class ClientRegistry {
     private Map<Integer, Client> clients = new HashMap<>();
     private int lastId = 0;
-    private Channel outChannel;
+
+    private HashSet<Client> toAdd = new HashSet<>();
+    private HashSet<Integer> toRemove = new HashSet<>();
+    private ConnectionUtil connectionUtil;
+
+    public ClientRegistry(ConnectionUtil connectionUtil){
+        this.connectionUtil = connectionUtil;
+    }
 
     public synchronized int addClient(Client client) {
         lastId++;
         client.setId(lastId);
-        clients.put(lastId, client);
+        //    clients.put(lastId, client);
+        toAdd.add(client);
         return lastId;
     }
 
     public synchronized void removeClient(int clientId) {
-        clients.remove(clientId);
+        toRemove.add(clientId);
+//        clients.remove(clientId);
     }
 
-    public synchronized Client getClient(int clientId) {
+    public Client getClient(int clientId) {
         return clients.get(clientId);
     }
 
-    public synchronized void updateKeepAlive(int clientId) {
+    public void updateKeepAlive(int clientId) {
         Client client = clients.get(clientId);
         if (client != null) client.setLastKeepAlive(System.currentTimeMillis());
     }
 
     public synchronized void broadcast(ByteBuf msg) {
         for (Client client : clients.values())
-            outChannel.writeAndFlush(new DatagramPacket(msg, client.getAddress()));
+            connectionUtil.sendPacket(msg, client);
     }
 
-    public synchronized void send(int clientId, ByteBuf msg) {
-        Client client = clients.get(clientId);
-        if (client != null) outChannel.writeAndFlush(new DatagramPacket(msg, client.getAddress()));
+    public Collection<Client> getClients(){
+        return clients.values();
     }
 
-    public void setOutChannel(Channel channel) {
-        this.outChannel = channel;
+    synchronized void update() {
+        for (int id : toRemove) clients.remove(id);
+
+        toRemove.clear();
+
+        for (Client c : toAdd) clients.put(c.getId(), c);
+        toAdd.clear();
     }
 }
