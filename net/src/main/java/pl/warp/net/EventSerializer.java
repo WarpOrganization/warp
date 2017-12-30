@@ -15,7 +15,7 @@ public class EventSerializer {
             FastSerializable serializableEvent = (FastSerializable) envelope;
             return serializableEvent.serialize();
         } else {
-            return conf.asByteArray(envelope);
+            return conf.asByteArray(envelope.getContent());
         }
     }
 }

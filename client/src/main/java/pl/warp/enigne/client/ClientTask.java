@@ -18,14 +18,16 @@ public class ClientTask extends EngineTask {
 
     private Config config;
     private ConnectionService connectionService;
+    private ClientRemoteEventQueue eventQueue;
 
     private static int KEEP_ALIVE_INTERVAL = 1000 * 5;
     private InetSocketAddress address;
 
 
-    public ClientTask(Config config, ConnectionService connectionService) {
+    public ClientTask(Config config, ConnectionService connectionService, ClientRemoteEventQueue eventQueue) {
         this.config = config;
         this.connectionService = connectionService;
+        this.eventQueue = eventQueue;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class ClientTask extends EngineTask {
             counter = KEEP_ALIVE_INTERVAL;
             connectionService.sendKeepAlive();
         }
+        eventQueue.update();
     }
 
 

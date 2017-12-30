@@ -42,15 +42,17 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
 
     private void resendEvents() {
         long currentTime = System.currentTimeMillis();
-        while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
-                || resendQueue.peek().isConfirmed()) {
-            AddressedEnvelope addressedEnvelope = resendQueue.poll();
-            if (addressedEnvelope.isConfirmed()) {
-                confirmationMap.remove(addressedEnvelope.getDependencyId());
-            } else {
-                addressedEnvelope.setSendTime(currentTime);
-                resendQueue.push(addressedEnvelope);
-                sendEvent(addressedEnvelope);
+        if (!resendQueue.isEmpty()) {
+            while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
+                    || resendQueue.peek().isConfirmed()) {
+                AddressedEnvelope addressedEnvelope = resendQueue.poll();
+                if (addressedEnvelope.isConfirmed()) {
+                    confirmationMap.remove(addressedEnvelope.getDependencyId());
+                } else {
+                    addressedEnvelope.setSendTime(currentTime);
+                    resendQueue.add(addressedEnvelope);
+                    sendEvent(addressedEnvelope);
+                }
             }
         }
     }
@@ -62,9 +64,10 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
             AddressedEnvelope addressedEnvelope = new AddressedEnvelope();
             addressedEnvelope.setConfirmed(false);
             addressedEnvelope.setDependencyId(eventDependencyIdCounter);
+            addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
 
             confirmationMap.put(eventDependencyIdCounter, addressedEnvelope);
-            resendQueue.push(addressedEnvelope);
+            resendQueue.add(addressedEnvelope);
             sendEvent(addressedEnvelope);
         }
     }

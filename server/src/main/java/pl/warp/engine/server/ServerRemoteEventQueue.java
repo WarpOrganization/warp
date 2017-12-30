@@ -50,7 +50,7 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
             ServerAddressedEnvelope addressedEnvelope = resendQueue.poll();
             if (!addressedEnvelope.isConfirmed()) {
                 sendEvent(addressedEnvelope);
-                resendQueue.push(addressedEnvelope);
+                resendQueue.add(addressedEnvelope);
             }
         }
     }
@@ -68,6 +68,7 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
                 addressedEnvelope.setDependencyId(c.getNextEventDependencyId());
                 c.addEvent(addressedEnvelope);
                 sendEvent(addressedEnvelope);
+                resendQueue.add(addressedEnvelope);
             }
         }
     }
