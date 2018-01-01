@@ -1,25 +1,24 @@
 package pl.warp.engine.graphics.mesh;
 
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 /**
  * @author Jaca777
- *         Created 15.01.15 at 15:28
+ * Created 15.01.15 at 15:28
  */
 public class VAOMesh extends IndexedMesh {
 
     protected VAO vao;
 
-    public VAOMesh(float[][] data, int[] sizes, int vertices, int[] indices) {
+    public VAOMesh(float[][] data, int[] sizes, int types[], int vertices, int[] indices) {
         super(data, sizes, vertices, indices);
-        this.vao = createVAO();
+        this.vao = createVAO(sizes, types);
     }
 
-    public VAOMesh(int[] sizes, int indices, int vertices) {
+    public VAOMesh(int[] sizes, int[] types, int indices, int vertices) {
         super(sizes, indices, vertices);
-        this.vao = createVAO();
+        this.vao = createVAO(sizes, types);
     }
 
     @Override
@@ -32,11 +31,8 @@ public class VAOMesh extends IndexedMesh {
         GL30.glBindVertexArray(0);
     }
 
-    private static final int[] VAO_SIZES = {3, 2, 3};
-    private static final int[] VAO_TYPES = {GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_FLOAT};
-
-    protected VAO createVAO() {
-        return new VAO(buffers, indexBuff, VAO_SIZES, VAO_TYPES);
+    protected VAO createVAO(int[] sizes, int[] types) {
+        return new VAO(buffers, indexBuff, sizes, types);
     }
 
     @Override

@@ -8,18 +8,15 @@ import pl.warp.engine.core.component.Component;
  */
 public abstract class Property {
 
-    private Component owner;
     private String name;
+    private Component owner;
     private boolean enabled = false;
     private boolean triggerStateEvents = false;
-
-    public Property() {
-        this.name = getClass().getName();
-    }
 
     public Property(String name) {
         this.name = name;
     }
+
 
     public void setOwner(Component owner) {
         if (this.owner != null) throw new IllegalStateException("Property can't have two owners.");
@@ -31,10 +28,6 @@ public abstract class Property {
 
     public Component getOwner() {
         return owner;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean isEnabled() {
@@ -73,4 +66,7 @@ public abstract class Property {
         throw new UnsupportedOperationException(msg);
     }
 
+    public String getName() {
+        return name;
+    }
 }

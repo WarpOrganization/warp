@@ -1,6 +1,6 @@
 package pl.warp.engine.core.runtime;
 
-import jdk.internal.org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.ClassNode;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.property.Property;
 import pl.warp.engine.core.runtime.idcall.IdCallProcessor;
@@ -20,8 +20,7 @@ public class EngineRuntime {
     public static final String EVENT_CLASS_NAME = "pl/warp/engine/core/event/Event";
 
     private static final Class[] preprocessedTypes = {Property.class, Event.class};
-    private static final EngineRuntimePreprocessor PREPROCESSOR =
-            new EngineRuntimePreprocessor(preprocessedTypes);
+    private static final EngineRuntimePreprocessor PREPROCESSOR = new EngineRuntimePreprocessor(preprocessedTypes);
     private static final Processor PROCESSOR = createProcessor();
 
     private static Processor<ClassNode> createProcessor() {

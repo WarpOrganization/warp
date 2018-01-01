@@ -9,12 +9,12 @@ import pl.warp.engine.core.property.observable.ObservableProperty;
  */
 public class AIProperty extends ObservableProperty {
 
-    public static final String AI_POPERTY_NAME = "aiProperty";
+    public static final String NAME = "aiProperty";
 
     private BehaviorTree behaviorTree;
 
     public AIProperty(BehaviorTree behaviorTree) {
-        super(AI_POPERTY_NAME);
+        super(NAME);
         this.behaviorTree = behaviorTree;
     }
 

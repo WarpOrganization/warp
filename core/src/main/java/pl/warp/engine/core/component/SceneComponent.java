@@ -21,7 +21,7 @@ public class SceneComponent implements Component {
     private EngineContext context;
     private final Map<String, Property> properties = new HashMap<>();
     private final List<Component> children = new LinkedList<>();
-    //not using Guava Multimap in order to avoid creating unneeded wrappers
+    //not using Guava Multimap in order to avoid creating not needed wrappers
     //Anyway, it's still not the best choice
     private final Map<String, Set<Listener<?>>> listeners = new HashMap<>();
     private boolean alive = true;
@@ -58,26 +58,26 @@ public class SceneComponent implements Component {
      * @throws PropertyNotPresentException
      */
     @Override
-    public <T extends Property> T getProperty(String name) {
-        if (!hasProperty(name))
-            throw new PropertyNotPresentException(name);
-        else return (T) properties.get(name);
+    public <T extends Property> T getProperty(String typeId) {
+        if (!hasProperty(typeId))
+            throw new PropertyNotPresentException(typeId);
+        else return (T) properties.get(typeId);
     }
 
 
     @Override
-    public boolean hasProperty(String name) {
-        return properties.containsKey(name);
+    public boolean hasProperty(String id) {
+        return properties.containsKey(id);
     }
 
     @Override
-    public <T extends Property> T getPropertyOrNull(String name) {
-        return (T) properties.get(name);
+    public <T extends Property> T getPropertyOrNull(String id) {
+        return (T) properties.get(id);
     }
 
     @Override
-    public boolean hasEnabledProperty(String name) {
-        return hasProperty(name) && getProperty(name).isEnabled();
+    public boolean hasEnabledProperty(String id) {
+        return hasProperty(id) && getProperty(id).isEnabled();
     }
 
     /**

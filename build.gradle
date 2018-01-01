@@ -51,12 +51,14 @@ dependencies {
     compile project(':test')
 }
 
-task ideJar(type: Jar, dependsOn: 'build') {
-    manifest {
-        attributes 'Main-Class': 'pl.warp.ide.IDELauncher'
+
+task runEngine(type:JavaExec) {
+    main = "pl.warp.engine.core.runtime.EngineLauncher"
+    classpath = sourceSets.main.runtimeClasspath
+    if(project.hasProperty('cl')){
+        args(cl)
     }
-    baseName = "warp-IDE-${platform}"
-    with jar
+    jvmArgs '-Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader'
 }
 
 subprojects {

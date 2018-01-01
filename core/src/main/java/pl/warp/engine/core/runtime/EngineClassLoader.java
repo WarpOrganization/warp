@@ -42,7 +42,6 @@ public class EngineClassLoader extends ClassLoader {
             try {
                 return loadAndProcess(name, definedName);
             } catch (IOException e) {
-
                 throw new RuntimeException(String.format("Error occured while loading %s class", name), e);
             }
         }
@@ -59,7 +58,7 @@ public class EngineClassLoader extends ClassLoader {
         ClassReader reader = new ClassReader(classData);
         ClassNode node = new ClassNode(Opcodes.ASM6);
         reader.accept(node, 0);
-        if(processor != null) processor.process(node);
+        if (processor != null) processor.process(node);
         return write(node);
     }
 

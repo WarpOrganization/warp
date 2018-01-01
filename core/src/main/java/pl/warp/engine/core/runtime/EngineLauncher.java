@@ -20,7 +20,7 @@ import java.util.Arrays;
 public class EngineLauncher {
 
     private static final Logger logger = LoggerFactory.getLogger(EngineLauncher.class);
-    public static final String CODESOURCE_DIR = getCodesourceDir();
+    public static final String CODESOURCE_DIR = getCodesourceDir(); //TODO throw away and make sth like homedir
 
     private static String getCodesourceDir() {
         try {
@@ -51,9 +51,6 @@ public class EngineLauncher {
         runtime.load();
     }
 
-
-
-
     protected static void runEngine(String[] args) throws ReflectiveOperationException {
         String className = args[0];
         Class<?> aClass = Thread.currentThread()
@@ -63,6 +60,5 @@ public class EngineLauncher {
         String[] engineArgs = Arrays.copyOfRange(args, 1, args.length, String[].class);
         main.invoke(null, (Object) engineArgs);
     }
-
 
 }
