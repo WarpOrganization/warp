@@ -61,6 +61,14 @@ task runEngine(type:JavaExec) {
     jvmArgs '-Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader'
 }
 
+
+task runTest(type:JavaExec) {
+    main = "pl.warp.engine.core.runtime.EngineLauncher"
+    classpath = sourceSets.main.runtimeClasspath
+    args "pl.warp.test.Test1"
+    jvmArgs '-Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader'
+}
+
 subprojects {
     test {
         reports.junitXml.enabled = false
