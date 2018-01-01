@@ -38,6 +38,12 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
             case PacketType.PACKET_KEEP_ALIVE:
                 clientRegistry.updateKeepAlive(buffer.readInt());
                 break;
+            case PacketType.PACKET_EVENT:
+                System.out.println("event received");
+                break;
+            case PacketType.PACKET_CONFIRMATION:
+                System.out.println("event confirmation received");
+                break;
         }
     }
 

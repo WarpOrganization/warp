@@ -22,11 +22,13 @@ public class ServerTask extends EngineTask {
 
 
     private ClientRegistry clientRegistry;
+    private ConnectionUtil connectionUtil;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
 
-    public ServerTask(ClientRegistry clientRegistry) {
+    public ServerTask(ClientRegistry clientRegistry, ConnectionUtil connectionUtil) {
         this.clientRegistry = clientRegistry;
+        this.connectionUtil = connectionUtil;
     }
 
     @Override
@@ -38,8 +40,7 @@ public class ServerTask extends EngineTask {
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new ConnectionHandler(clientRegistry));
             outChannel = b.bind(PORT).sync().channel();
-            clientRegistry.setOutChannel(outChannel);
-
+            connectionUtil.setOutChannel(outChannel);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

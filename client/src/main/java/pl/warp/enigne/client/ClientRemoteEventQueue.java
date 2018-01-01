@@ -1,9 +1,8 @@
 package pl.warp.enigne.client;
 
+import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.net.EventSerializer;
-import pl.warp.net.RemoteEvent;
-import pl.warp.net.RemoteEventQueue;
+import pl.warp.net.*;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -17,9 +16,9 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
 
     private static final int EVENT_RESEND_INTERVAL = 600;
 
-    private ArrayDeque<RemoteEvent> events = new ArrayDeque<>();
-    private ArrayDeque<ClientEventWrapper> resendQueue = new ArrayDeque<>();
-    private HashMap<Integer, ClientEventWrapper> confirmationMap = new HashMap<>();
+    private ArrayDeque<Envelope> events = new ArrayDeque<>();
+    private ArrayDeque<AddressedEnvelope> resendQueue = new ArrayDeque<>();
+    private HashMap<Integer, AddressedEnvelope> confirmationMap = new HashMap<>();
 
     private EventSerializer eventSerializer = new EventSerializer();
     private ConnectionService connectionService;
@@ -31,7 +30,7 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
     }
 
     @Override
-    public synchronized void pushEvent(RemoteEvent event) {
+    public synchronized void pushEvent(Envelope event) {
         events.push(event);
     }
 
@@ -43,39 +42,44 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
 
     private void resendEvents() {
         long currentTime = System.currentTimeMillis();
-        while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
-                || resendQueue.peek().isConfirmed()) {
-            ClientEventWrapper eventWrapper = resendQueue.poll();
-            if (eventWrapper.isConfirmed()) {
-                confirmationMap.remove(eventWrapper.getDependencyId());
-            } else {
-                eventWrapper.setSendTime(currentTime);
-                resendQueue.push(eventWrapper);
-                sendEvent(eventWrapper);
+        if (!resendQueue.isEmpty()) {
+            while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
+                    || resendQueue.peek().isConfirmed()) {
+                AddressedEnvelope addressedEnvelope = resendQueue.poll();
+                if (addressedEnvelope.isConfirmed()) {
+                    confirmationMap.remove(addressedEnvelope.getDependencyId());
+                } else {
+                    addressedEnvelope.setSendTime(currentTime);
+                    resendQueue.add(addressedEnvelope);
+                    sendEvent(addressedEnvelope);
+                }
             }
         }
     }
 
     private void sendNewEvents() {
         while (!events.isEmpty()) {
-            RemoteEvent remoteEvent = events.pop();
+            Envelope envelope = events.pop();
             eventDependencyIdCounter++;
-            ClientEventWrapper eventWrapper = new ClientEventWrapper(
-                    eventSerializer.serialize(remoteEvent),
-                    remoteEvent.getTargetComponentId(),
-                    eventDependencyIdCounter);
-            confirmationMap.put(eventDependencyIdCounter, eventWrapper);
-            resendQueue.push(eventWrapper);
-            sendEvent(eventWrapper);
+            AddressedEnvelope addressedEnvelope = new AddressedEnvelope();
+            addressedEnvelope.setConfirmed(false);
+            addressedEnvelope.setDependencyId(eventDependencyIdCounter);
+            addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
+
+            confirmationMap.put(eventDependencyIdCounter, addressedEnvelope);
+            resendQueue.add(addressedEnvelope);
+            sendEvent(addressedEnvelope);
         }
     }
 
-    private void sendEvent(ClientEventWrapper eventWrapper) {
-
+    private void sendEvent(AddressedEnvelope envelope) {
+        ByteBuf packet = connectionService.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length);
+        packet.writeBytes(envelope.getSerializedEventData());
+        connectionService.sendPacket(packet);
     }
 
     public synchronized void confirmEvent(int eventDependencyId) {
-        ClientEventWrapper eventWrapper = confirmationMap.get(eventDependencyId);
-        if (eventWrapper != null) eventWrapper.confirm();
+        AddressedEnvelope addressedEnvelope = confirmationMap.get(eventDependencyId);
+        if (addressedEnvelope != null) addressedEnvelope.setConfirmed(true);
     }
 }

@@ -8,14 +8,14 @@ import org.nustaq.serialization.FSTConfiguration;
  */
 public class EventSerializer {
 
-    FSTConfiguration conf = FSTConfiguration.getDefaultConfiguration();
+    private FSTConfiguration conf = FSTConfiguration.getDefaultConfiguration();
 
-    public byte[] serialize(RemoteEvent remoteEvent) {
-        if (remoteEvent instanceof FastSerializable) {
-            FastSerializable serializableEvent = (FastSerializable) remoteEvent;
+    public byte[] serialize(Envelope envelope) {
+        if (envelope instanceof FastSerializable) {
+            FastSerializable serializableEvent = (FastSerializable) envelope;
             return serializableEvent.serialize();
         } else {
-            return conf.asByteArray(remoteEvent);
+            return conf.asByteArray(envelope.getContent());
         }
     }
 }

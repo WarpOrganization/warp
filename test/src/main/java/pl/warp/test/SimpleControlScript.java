@@ -1,5 +1,6 @@
 package pl.warp.test;
 
+import pl.warp.content.InputEvent;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -10,6 +11,7 @@ import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.annotation.ContextService;
 import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.input.Input;
+import pl.warp.net.Envelope;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -57,6 +59,7 @@ public class SimpleControlScript extends Script {
         movementVector.zero();
         if (input.isKeyDown(VK_W)) {
             movementVector.add(0, 0, -1);
+            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W)));
         }
         if (input.isKeyDown(VK_S))
             movementVector.add(0, 0, 1);
