@@ -1,6 +1,8 @@
-package pl.warp.net;
+package pl.warp.net.event.sender;
 
 import org.nustaq.serialization.FSTConfiguration;
+import pl.warp.net.event.Envelope;
+import pl.warp.net.event.FastSerializable;
 
 /**
  * @author Hubertus

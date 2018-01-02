@@ -1,4 +1,6 @@
-package pl.warp.net;
+package pl.warp.net.event.sender;
+
+import pl.warp.net.event.Envelope;
 
 /**
  * @author Hubertus

@@ -1,4 +1,4 @@
-package pl.warp.net;
+package pl.warp.net.event;
 
 import pl.warp.engine.core.event.Event;
 
