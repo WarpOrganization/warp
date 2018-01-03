@@ -6,7 +6,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
+import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.net.PacketType;
+import pl.warp.engine.net.event.receiver.EventReceiver;
 
 import java.net.InetSocketAddress;
 
@@ -19,10 +21,12 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
 
     public ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
+    private ComponentRegistry componentRegistry;
 
-    public ConnectionHandler(ClientRegistry clientRegistry, ConnectionUtil connectionUtil) {
+    public ConnectionHandler(ClientRegistry clientRegistry, ConnectionUtil connectionUtil, ComponentRegistry componentRegistry) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
+        this.componentRegistry = componentRegistry;
     }
 
     //TODO protocol documentation
@@ -73,7 +77,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     }
 
     private void registerClient(Channel channel, InetSocketAddress address) {
-        int id = clientRegistry.addClient(new Client(address));
+        int id = clientRegistry.addClient(new Client(address, new EventReceiver(componentRegistry)));
         channel.writeAndFlush(
                 new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));
     }

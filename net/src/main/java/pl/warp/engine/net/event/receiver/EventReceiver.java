@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.event.Event;
-import pl.warp.engine.core.script.annotation.ContextService;
 import pl.warp.engine.net.DesynchronizationException;
 
 import java.util.Iterator;
@@ -19,8 +18,12 @@ public class EventReceiver {
     private PriorityQueue<IncomingEnvelope> eventQueue = new PriorityQueue<>(new IncomingEnvelopeComparator());
     private EventDeserializer deserializer = new EventDeserializer();
     private int minDependencyId = 1;
-    @ContextService
+
     private ComponentRegistry componentRegistry;
+
+    public EventReceiver(ComponentRegistry componentRegistry) {
+        this.componentRegistry = componentRegistry;
+    }
 
     public synchronized void addFastSerializableEvent(ByteBuf eventContent, int dependencyId) {
         //TODO implement
@@ -44,11 +47,12 @@ public class EventReceiver {
             if (targetComponent == null) throw new DesynchronizationException("Event target component does not exist.");
 
             targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
+            minDependencyId++;
         }
     }
 
     private boolean checkDependency(int dependencyId) {
-        if (minDependencyId >= dependencyId) return false;
+        if (minDependencyId > dependencyId) return false;
         if (eventQueue.isEmpty()) return true;
 
         Iterator<IncomingEnvelope> iterator = eventQueue.iterator();
