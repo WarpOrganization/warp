@@ -31,7 +31,7 @@ jar {
                 .collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest {
-        attributes 'Main-Class': 'pl.warp.servertest.Test'
+        attributes 'Main-Class': 'pl.warp.engine.core.runtime.EngineLauncher'
     }
     baseName = "Warp-server"
 }
