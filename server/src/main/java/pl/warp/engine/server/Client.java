@@ -1,6 +1,6 @@
 package pl.warp.engine.server;
 
-import pl.warp.net.event.receiver.EventReceiver;
+import pl.warp.engine.net.event.receiver.EventReceiver;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;

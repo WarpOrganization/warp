@@ -1,11 +1,11 @@
-package pl.warp.net.event.receiver;
+package pl.warp.engine.net.event.receiver;
 
 import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.script.annotation.ContextService;
-import pl.warp.net.DesynchronizationException;
+import pl.warp.engine.net.DesynchronizationException;
 
 import java.util.Iterator;
 import java.util.PriorityQueue;

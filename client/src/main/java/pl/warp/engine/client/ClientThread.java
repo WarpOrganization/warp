@@ -1,4 +1,4 @@
-package pl.warp.enigne.client;
+package pl.warp.engine.client;
 
 import pl.warp.engine.core.context.executor.RegisterExecutor;
 import pl.warp.engine.core.context.service.Service;

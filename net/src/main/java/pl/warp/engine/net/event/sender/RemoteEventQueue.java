@@ -1,6 +1,6 @@
-package pl.warp.net.event.sender;
+package pl.warp.engine.net.event.sender;
 
-import pl.warp.net.event.Envelope;
+import pl.warp.engine.net.event.Envelope;
 
 /**
  * @author Hubertus

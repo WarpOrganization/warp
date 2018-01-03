@@ -8,7 +8,7 @@ import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
-import pl.warp.net.PacketType;
+import pl.warp.engine.net.PacketType;
 
 import java.util.ArrayList;
 

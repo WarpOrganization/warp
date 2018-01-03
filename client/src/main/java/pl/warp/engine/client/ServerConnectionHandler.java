@@ -1,11 +1,11 @@
-package pl.warp.enigne.client;
+package pl.warp.engine.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
-import pl.warp.net.PacketType;
-import pl.warp.net.event.receiver.EventReceiver;
+import pl.warp.engine.net.PacketType;
+import pl.warp.engine.net.event.receiver.EventReceiver;
 
 
 /**

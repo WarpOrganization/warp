@@ -1,4 +1,4 @@
-package pl.warp.net.event.receiver;
+package pl.warp.engine.net.event.receiver;
 
 import io.netty.buffer.ByteBuf;
 import org.nustaq.serialization.FSTConfiguration;

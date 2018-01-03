@@ -5,7 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.net.PacketType;
+import pl.warp.engine.net.PacketType;
 
 import java.net.InetSocketAddress;
 

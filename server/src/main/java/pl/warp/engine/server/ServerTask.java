@@ -54,7 +54,7 @@ public class ServerTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-
+        clientRegistry.update();
     }
 
 }

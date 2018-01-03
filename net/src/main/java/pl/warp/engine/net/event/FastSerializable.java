@@ -1,4 +1,4 @@
-package pl.warp.net.event;
+package pl.warp.engine.net.event;
 
 /**
  * @author Hubertus

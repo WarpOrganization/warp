@@ -11,7 +11,7 @@ import pl.warp.engine.core.script.Script;
 import pl.warp.engine.core.script.annotation.ContextService;
 import pl.warp.engine.core.script.annotation.OwnerProperty;
 import pl.warp.engine.input.Input;
-import pl.warp.net.event.Envelope;
+import pl.warp.engine.net.event.Envelope;
 
 import static java.awt.event.KeyEvent.*;
 

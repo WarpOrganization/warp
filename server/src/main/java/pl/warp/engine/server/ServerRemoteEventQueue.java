@@ -2,10 +2,10 @@ package pl.warp.engine.server;
 
 import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.net.event.Envelope;
-import pl.warp.net.event.sender.EventSerializer;
-import pl.warp.net.PacketType;
-import pl.warp.net.event.sender.RemoteEventQueue;
+import pl.warp.engine.net.event.Envelope;
+import pl.warp.engine.net.event.sender.EventSerializer;
+import pl.warp.engine.net.PacketType;
+import pl.warp.engine.net.event.sender.RemoteEventQueue;
 
 import java.util.ArrayDeque;
 import java.util.Collection;

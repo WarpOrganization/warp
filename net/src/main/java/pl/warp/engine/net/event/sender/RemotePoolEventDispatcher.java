@@ -1,12 +1,11 @@
-package pl.warp.net.event.sender;
+package pl.warp.engine.net.event.sender;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.core.event.Listener;
-import pl.warp.engine.core.script.annotation.ContextService;
-import pl.warp.net.event.Envelope;
+import pl.warp.engine.net.event.Envelope;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,10 +19,9 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
     private static final int THREADS = Runtime.getRuntime().availableProcessors() * 4;
     private ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
-    @ContextService
     private RemoteEventQueue eventQueue;
 
-    public RemotePoolEventDispatcher(RemoteEventQueue eventQueue){
+    public RemotePoolEventDispatcher(RemoteEventQueue eventQueue) {
         this.eventQueue = eventQueue;
     }
 

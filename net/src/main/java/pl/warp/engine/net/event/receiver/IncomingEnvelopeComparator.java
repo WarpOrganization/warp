@@ -1,4 +1,4 @@
-package pl.warp.net.event.receiver;
+package pl.warp.engine.net.event.receiver;
 
 import java.util.Comparator;
 

@@ -6,7 +6,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
-import pl.warp.net.PacketType;
+import pl.warp.engine.net.PacketType;
 
 import java.net.InetSocketAddress;
 
@@ -49,6 +49,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                     int dependencyId = buffer.readInt();
                     int targetComponentId = buffer.readInt();
                     client.getEventReceiver().addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
+                    connectionUtil.confirmEvent(dependencyId, client);
                 }
                 System.out.println("event received");
 
@@ -58,7 +59,6 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                 Client c = clientRegistry.getClient(clientId);
                 int id = buffer.readInt();
                 c.confirmEvent(id);
-                connectionUtil.confirmEvent(id, c);
                 System.out.println("event confirmation received");
 
                 break;

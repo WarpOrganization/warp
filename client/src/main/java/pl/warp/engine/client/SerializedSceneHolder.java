@@ -1,4 +1,4 @@
-package pl.warp.enigne.client;
+package pl.warp.engine.client;
 
 import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.context.service.Service;

@@ -1,6 +1,6 @@
 package pl.warp.engine.server;
 
-import pl.warp.net.event.AddressedEnvelope;
+import pl.warp.engine.net.event.AddressedEnvelope;
 
 /**
  * @author Hubertus

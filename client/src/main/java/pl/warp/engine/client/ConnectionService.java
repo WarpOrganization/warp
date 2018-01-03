@@ -1,4 +1,4 @@
-package pl.warp.enigne.client;
+package pl.warp.engine.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -10,7 +10,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import pl.warp.engine.core.context.service.Service;
-import pl.warp.net.PacketType;
+import pl.warp.engine.net.PacketType;
 
 import java.net.InetSocketAddress;
 
