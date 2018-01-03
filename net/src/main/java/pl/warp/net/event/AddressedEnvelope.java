@@ -9,6 +9,8 @@ public class AddressedEnvelope {
     private int dependencyId;
     private long sendTime;
     private boolean confirmed;
+    private int eventType;
+    private int targetComponentId;
 
     public byte[] getSerializedEventData() {
         return serializedEventData;
@@ -40,5 +42,21 @@ public class AddressedEnvelope {
 
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public int getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(int eventType) {
+        this.eventType = eventType;
+    }
+
+    public int getTargetComponentId() {
+        return targetComponentId;
+    }
+
+    public void setTargetComponentId(int targetComponentId) {
+        this.targetComponentId = targetComponentId;
     }
 }

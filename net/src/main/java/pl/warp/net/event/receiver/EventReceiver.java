@@ -3,8 +3,8 @@ package pl.warp.net.event.receiver;
 import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.component.ComponentRegistry;
-import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.event.Event;
+import pl.warp.engine.core.script.annotation.ContextService;
 import pl.warp.net.DesynchronizationException;
 
 import java.util.Iterator;
@@ -14,15 +14,37 @@ import java.util.PriorityQueue;
  * @author Hubertus
  * Created 02.01.2018
  */
-@Service
+
 public class EventReceiver {
     private PriorityQueue<IncomingEnvelope> eventQueue = new PriorityQueue<>(new IncomingEnvelopeComparator());
     private EventDeserializer deserializer = new EventDeserializer();
     private int minDependencyId = 1;
+    @ContextService
     private ComponentRegistry componentRegistry;
 
-    public EventReceiver(ComponentRegistry componentRegistry) {
-        this.componentRegistry = componentRegistry;
+    public synchronized void addFastSerializableEvent(ByteBuf eventContent, int dependencyId) {
+        //TODO implement
+    }
+
+    public synchronized void addEvent(ByteBuf eventContent, int targetComponentId, int eventType, int dependencyId, long timestamp) {
+        if (checkDependency(dependencyId)) {
+            eventQueue.add(new IncomingEnvelope(
+                    deserializer.deserialize(eventContent),
+                    targetComponentId, dependencyId,
+                    eventType,
+                    timestamp));
+            triggerIncomingEvents();
+        }
+    }
+
+    private void triggerIncomingEvents() {
+        while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
+            IncomingEnvelope envelope = eventQueue.peek();
+            Component targetComponent = componentRegistry.getCompoenent(envelope.getTargetComponentId());
+            if (targetComponent == null) throw new DesynchronizationException("Event target component does not exist.");
+
+            targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
+        }
     }
 
     private boolean checkDependency(int dependencyId) {
@@ -38,30 +60,4 @@ public class EventReceiver {
         }
         return true;
     }
-
-    public void addFastSerializableEvent(ByteBuf eventContent, int dependencyId) {
-        //TODO implement
-    }
-
-    public synchronized void addEvent(ByteBuf eventContent, int targetComponentId, int eventType, int dependencyId, long timestamp) {
-        if (checkDependency(dependencyId)) {
-            eventQueue.add(new IncomingEnvelope(
-                    deserializer.deserialize(eventContent),
-                    targetComponentId, dependencyId,
-                    eventType,
-                    timestamp));
-        }
-    }
-
-    public synchronized void trigerIncomingEvents() {
-        while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
-            IncomingEnvelope envelope = eventQueue.peek();
-            Component targetComponent = componentRegistry.getCompoenent(envelope.getTargetComponentId());
-            if (targetComponent == null) throw new DesynchronizationException("Event target component does not exist.");
-
-            targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
-        }
-    }
-
-
 }

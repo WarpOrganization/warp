@@ -27,11 +27,15 @@ public class ConnectionService {
     private InetSocketAddress serverAddress;
     private EventLoopGroup group = new NioEventLoopGroup();
 
-    public ConnectionService(SerializedSceneHolder sceneHolder) {
+    public ConnectionService(SerializedSceneHolder sceneHolder,
+                             ClientRemoteEventQueue eventQueue) {
 
         try {
             Bootstrap b = new Bootstrap();
-            ServerConnectionHandler connectionHandler = new ServerConnectionHandler(sceneHolder);
+            ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
+                    sceneHolder,
+                    this,
+                    eventQueue);
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -79,7 +83,18 @@ public class ConnectionService {
         channel.writeAndFlush(new DatagramPacket(getHeader(PacketType.PACKET_KEEP_ALIVE, 0), serverAddress));
     }
 
-    public void shutdown(){
+    public void shutdown() {
         group.shutdownGracefully();
+    }
+
+    public void confirmEvent(int dependencyId) {
+        ByteBuf packet = getHeader(PacketType.PACKET_EVENT_CONFIRMATION, 4);
+        packet.writeInt(dependencyId);
+        sendPacket(packet);
+    }
+
+    public void setClientCredentials(int clientId, int clientSecret) {
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 }

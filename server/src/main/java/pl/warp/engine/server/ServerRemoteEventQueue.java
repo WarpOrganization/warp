@@ -75,7 +75,10 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
 
     private void sendEvent(ServerAddressedEnvelope addressedEnvelope) {
         addressedEnvelope.setSendTime(System.currentTimeMillis());
-        ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_EVENT, addressedEnvelope.getSerializedEventData().length);
+        ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_EVENT, addressedEnvelope.getSerializedEventData().length + 12);
+        packet.writeInt(addressedEnvelope.getEventType());
+        packet.writeInt(addressedEnvelope.getDependencyId());
+        packet.writeInt(addressedEnvelope.getTargetComponentId());
         packet.writeBytes(addressedEnvelope.getSerializedEventData());
         connectionUtil.sendPacket(packet, addressedEnvelope.getTargetClient());
     }

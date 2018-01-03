@@ -38,7 +38,7 @@ public class ServerTask extends EngineTask {
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new ConnectionHandler(clientRegistry));
+                    .handler(new ConnectionHandler(clientRegistry, connectionUtil));
             outChannel = b.bind(PORT).sync().channel();
             connectionUtil.setOutChannel(outChannel);
         } catch (InterruptedException e) {

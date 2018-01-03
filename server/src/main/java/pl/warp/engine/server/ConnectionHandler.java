@@ -18,9 +18,11 @@ import java.net.InetSocketAddress;
 public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
     public ClientRegistry clientRegistry;
+    private ConnectionUtil connectionUtil;
 
-    public ConnectionHandler(ClientRegistry clientRegistry) {
+    public ConnectionHandler(ClientRegistry clientRegistry, ConnectionUtil connectionUtil) {
         this.clientRegistry = clientRegistry;
+        this.connectionUtil = connectionUtil;
     }
 
     //TODO protocol documentation
@@ -30,19 +32,35 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         int type = buffer.readInt();
         long timestamp = buffer.readLong();
         System.out.println("server got a message type: " + type);
-
+        int clientId;
         switch (type) {
             case PacketType.PACKET_CONNECT:
                 registerClient(ctx.channel(), msg.sender());
                 break;
             case PacketType.PACKET_KEEP_ALIVE:
-                clientRegistry.updateKeepAlive(buffer.readInt());
+                clientId = buffer.readInt();
+                clientRegistry.updateKeepAlive(clientId);
                 break;
             case PacketType.PACKET_EVENT:
+                clientId = buffer.readInt();
+                Client client = clientRegistry.getClient(clientId);
+                if (client != null) {
+                    int eventType = buffer.readInt();
+                    int dependencyId = buffer.readInt();
+                    int targetComponentId = buffer.readInt();
+                    client.getEventReceiver().addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
+                }
                 System.out.println("event received");
+
                 break;
-            case PacketType.PACKET_CONFIRMATION:
+            case PacketType.PACKET_EVENT_CONFIRMATION:
+                clientId = buffer.readInt();
+                Client c = clientRegistry.getClient(clientId);
+                int id = buffer.readInt();
+                c.confirmEvent(id);
+                connectionUtil.confirmEvent(id, c);
                 System.out.println("event confirmation received");
+
                 break;
         }
     }
