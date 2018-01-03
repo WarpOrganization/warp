@@ -40,6 +40,6 @@ public class AITask extends EngineTask {
     }
 
     private boolean hasAi(Component c) {
-        return c.hasEnabledProperty(AIProperty.AI_POPERTY_NAME);
+        return c.hasEnabledProperty(AIProperty.NAME);
     }
 }

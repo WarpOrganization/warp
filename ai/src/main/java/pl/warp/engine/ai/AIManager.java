@@ -28,7 +28,7 @@ public class AIManager {
     }
 
     private void handlePropertyCreated(PropertyAddedEvent event) {
-        if(event.getProperty().getName().equals(AIProperty.AI_POPERTY_NAME)){
+        if(event.getProperty().getName().equals(AIProperty.NAME)){
             addTree((AIProperty) event.getProperty(), event.getOwner());
         }
     }
