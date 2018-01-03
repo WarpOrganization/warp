@@ -29,10 +29,6 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
 
     private int eventDependencyIdCounter = 0;
 
-    public ClientRemoteEventQueue(ConnectionService connectionService) {
-        this.connectionService = connectionService;
-    }
-
     @Override
     public synchronized void pushEvent(Envelope event) {
         events.push(event);
@@ -90,5 +86,9 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
     public synchronized void confirmEvent(int eventDependencyId) {
         AddressedEnvelope addressedEnvelope = confirmationMap.get(eventDependencyId);
         if (addressedEnvelope != null) addressedEnvelope.setConfirmed(true);
+    }
+
+    public void setConnectionService(ConnectionService connectionService) {
+        this.connectionService = connectionService;
     }
 }
