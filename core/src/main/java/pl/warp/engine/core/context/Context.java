@@ -18,10 +18,10 @@ public class Context {
 
     private JavaContextHolder contextHolder;
 
-    public static Context create() {
+    public static Context create(String... profiles) {
         ContextLoader loader = new ContextLoader();
         Context context = new Context();
-        JavaContextHolder contextHolder = loader.loadContext(context);
+        JavaContextHolder contextHolder = loader.loadContext(context, profiles);
         context.setContextHolder(contextHolder);
         context.processRegistration();
         return context;

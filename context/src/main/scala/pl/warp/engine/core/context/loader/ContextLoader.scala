@@ -11,12 +11,15 @@ import pl.warp.engine.core.context.loader.service.{ServiceInfo, ServiceLoader}
   */
 private[core] class ContextLoader extends LazyLogging  {
 
-  def loadContext(preloadedContext: Object): JavaContextHolder = {
+  def loadContext(
+    preloadedContext: Object,
+    profiles: Array[String]
+  ): JavaContextHolder = {
     try {
       logger.info("Loading the application context...")
       val serviceLoader = new ServiceLoader
       val contextInfo = getContextInfo(preloadedContext)
-      val services = serviceLoader.loadServices(List(contextInfo))
+      val services = serviceLoader.loadServices(List(contextInfo), profiles.toSet)
       logger.info(s"Application context loaded (Total services: ${services.length})")
       new JavaContextHolder(services)
     } catch {

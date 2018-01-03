@@ -13,8 +13,13 @@ plugins {
     id 'net.nemerosa.versioning' version '2.0.0'
 }
 
+
 apply plugin: 'java'
 apply plugin: 'scala'
+
+ext {
+    platform = project.properties['platform'] ?: "windows"
+}
 
 import org.ajoberstar.grgit.*
 
@@ -27,8 +32,6 @@ version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
 repositories {
     mavenCentral()
 }
-
-def platform = project.properties['platform'] ?: "windows"
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
@@ -88,6 +91,7 @@ task createRunConfigurations {
         }
     }
 }
+
 
 subprojects {
     test {
