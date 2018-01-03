@@ -5,7 +5,7 @@ graphics:
     !!pl.warp.engine.graphics.window.Display
     fullscreen: false
     width: 1280
-    height: 920
+    height: 720
   upscounter:
     enabled: true
     sampleSize: 30

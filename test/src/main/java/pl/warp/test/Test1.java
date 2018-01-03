@@ -43,7 +43,7 @@ import pl.warp.engine.graphics.window.Display;
  */
 public class Test1 {
 
-    public static final Display DISPLAY = new Display(false, 1280, 920);
+    public static final Display DISPLAY = new Display(false, 1280, 720);
 
 
     public static void main(String[] args) {

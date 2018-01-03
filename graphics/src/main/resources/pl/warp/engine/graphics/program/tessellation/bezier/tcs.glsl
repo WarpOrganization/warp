@@ -19,7 +19,7 @@ in vec3 oWorldPos[];
 in vec2 oTexCoord[];
 in vec3 oNormal[];
 
-out patch Patch10 tesPatch;
+patch out Patch10 tesPatch;
 
 void calcPatchData();
 void calcTesselationLevels();
