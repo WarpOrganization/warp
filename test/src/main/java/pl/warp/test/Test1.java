@@ -154,7 +154,7 @@ public class Test1 {
 
     private static void createGoats(Scene scene) {
         SceneMesh mesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("he-goat.obj"),
+                Test1.class.getResourceAsStream("mug.obj"),
                 true).toMesh();
 
 
@@ -178,6 +178,8 @@ public class Test1 {
                     TransformProperty transformProperty = new TransformProperty();
                     transformProperty.setTranslation(new Vector3f(x * 5, y * 5, z * 5));
                     transformProperty.move(new Vector3f(0,0,-50));
+                    transformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
+                    transformProperty.rotate(x, y, z);
                     Component component = new SceneComponent(scene);
                     component.addProperty(meshProperty);
                     component.addProperty(materialProperty);
