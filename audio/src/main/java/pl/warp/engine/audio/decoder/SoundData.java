@@ -13,13 +13,22 @@ import static org.lwjgl.openal.AL10.alBufferData;
  */
 public class SoundData {
 
+    private int result;
     private ByteBuffer data;
-
     private int frequency;
     private int channels;
     private int bitsPerChannel;
 
     public SoundData(ByteBuffer data,int frequency, int channels, int bitsPerChannel){
+        this.result = 1;
+        this.data = data;
+        this.frequency = frequency;
+        this.channels = channels;
+        this.bitsPerChannel = bitsPerChannel;
+    }
+
+    public SoundData(int result, ByteBuffer data,int frequency, int channels, int bitsPerChannel){
+        this.result = result;
         this.data = data;
         this.frequency = frequency;
         this.channels = channels;
@@ -74,5 +83,9 @@ public class SoundData {
 
     public int getBitsPerChannel() {
         return bitsPerChannel;
+    }
+
+    public int getResult() {
+        return result;
     }
 }

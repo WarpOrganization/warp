@@ -17,6 +17,10 @@ import static org.lwjgl.system.MemoryUtil.memByteBuffer;
 public class OggFileDecoder{
 
     public static SoundData decode(String filename) {
+        int result;
+        int channels;
+        int sampleRate;
+        ByteBuffer rawAudio;
 
         try(MemoryStack stack = stackPush()) {
             IntBuffer channelsBuffer = stackMallocInt(1);
@@ -24,15 +28,18 @@ public class OggFileDecoder{
             IntBuffer sampleRateBuffer = stackMallocInt(1);
             PointerBuffer rawAudioBuffer = stack.pointers(NULL);
 
-            int result = stb_vorbis_decode_filename(filename, channelsBuffer, sampleRateBuffer, rawAudioBuffer);
-            int channels = channelsBuffer.get();
-            int sampleRate = sampleRateBuffer.get();
-            ByteBuffer rawAudio = memByteBuffer(rawAudioBuffer.get(0), result * channels);
+
+            result = stb_vorbis_decode_filename(filename, channelsBuffer, sampleRateBuffer, rawAudioBuffer);
+
+            channels = channelsBuffer.get();
+
+            sampleRate = sampleRateBuffer.get();
+
+            rawAudio = memByteBuffer(rawAudioBuffer.get(0), result * channels);
 
             stackPop();
             stackPop();
-
-            return new SoundData(rawAudio, sampleRate, channels, 16);
         }
+        return new SoundData(result, rawAudio, sampleRate, channels, 16);
     }
 }
