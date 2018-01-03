@@ -1,5 +1,5 @@
-bool isSet(uint flags, int index) {
-    return ((flags >> index) & uint(0x01)) == uint(1);
+bool isSet(int flags, int index) {
+    return ((flags >> index) & int(0x01)) == int(1);
 }
 
 int flag(bool flag, int index){
