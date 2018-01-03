@@ -15,19 +15,20 @@ public class SerializedSceneHolder {
     private ByteBuf serializedScene;
 
 
-    public void offerScene(long timestamp, ByteBuf scene){
-        if(timestamp> latestTimestamp){
+    public void offerScene(long timestamp, ByteBuf scene) {
+        if (timestamp > latestTimestamp) {
             latestTimestamp = timestamp;
             serializedScene = scene;
             used = false;
+            scene.retain();
         }
     }
 
-    public boolean isSceneAvailable(){
+    public boolean isSceneAvailable() {
         return !used;
     }
 
-    public ByteBuf getScene(){
+    public ByteBuf getScene() {
         used = true;
         return serializedScene;
     }

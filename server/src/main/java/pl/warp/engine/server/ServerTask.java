@@ -23,12 +23,14 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
+    private ServerRemoteEventQueue eventQueue;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
 
-    public ServerTask(ClientRegistry clientRegistry, ConnectionUtil connectionUtil) {
+    public ServerTask(ClientRegistry clientRegistry, ConnectionUtil connectionUtil, ServerRemoteEventQueue eventQueue) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
+        this.eventQueue = eventQueue;
     }
 
     @Override
@@ -55,6 +57,7 @@ public class ServerTask extends EngineTask {
     @Override
     public void update(int delta) {
         clientRegistry.update();
+        eventQueue.update();
     }
 
 }
