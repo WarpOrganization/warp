@@ -5,6 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import pl.warp.net.PacketType;
+import pl.warp.net.event.receiver.EventReceiver;
 
 
 /**
@@ -16,22 +17,30 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
     private boolean connected = false;
     private int clientId;
     private SerializedSceneHolder sceneHolder;
+    private EventReceiver eventReceiver = new EventReceiver();
+    private ConnectionService connectionService;
+    private ClientRemoteEventQueue eventQueue;
 
-    public ServerConnectionHandler(SerializedSceneHolder sceneHolder) {
+    public ServerConnectionHandler(SerializedSceneHolder sceneHolder,
+                                   ConnectionService connectionService,
+                                   ClientRemoteEventQueue eventQueue) {
         this.sceneHolder = sceneHolder;
+        this.connectionService = connectionService;
+        this.eventQueue = eventQueue;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
         ByteBuf buffer = msg.content();
-        int type = buffer.readInt();
+        int packetType = buffer.readInt();
         long timestamp = buffer.readLong();
-//        System.out.println("server sends message type: " + type);
+//        System.out.println("server sends message type: " + packetType);
 
-        switch (type) {
+        switch (packetType) {
             case PacketType.PACKET_CONNECTED:
                 connected = true;
                 clientId = buffer.readInt();
+                connectionService.setClientCredentials(clientId, 0);
                 break;
             case PacketType.PACKET_CONNECTION_REFUSED:
                 System.out.println("Connection refused!");
@@ -39,6 +48,18 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
 
             case PacketType.PACKET_SCENE_STATE:
                 sceneHolder.offerScene(timestamp, buffer);
+                break;
+            case PacketType.PACKET_EVENT:
+                int eventType = buffer.readInt();
+                int dependencyId = buffer.readInt();
+                int targetComponentId = buffer.readInt();
+                eventReceiver.addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
+                connectionService.confirmEvent(dependencyId);
+                break;
+
+            case PacketType.PACKET_EVENT_CONFIRMATION:
+                int id = buffer.readInt();
+                eventQueue.confirmEvent(id);
                 break;
         }
     }

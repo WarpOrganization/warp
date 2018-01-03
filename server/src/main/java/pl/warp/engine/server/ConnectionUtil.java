@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
 import pl.warp.engine.core.context.service.Service;
+import pl.warp.net.PacketType;
 
 import java.net.InetSocketAddress;
 
@@ -38,5 +39,10 @@ public class ConnectionUtil {
 
     public void setOutChannel(Channel outChannel) {
         this.outChannel = outChannel;
+    }
+
+    public void confirmEvent(int dependencyId, Client client) {
+        ByteBuf packet = getHeader(PacketType.PACKET_EVENT_CONFIRMATION, 4);
+        packet.writeInt(dependencyId);
     }
 }

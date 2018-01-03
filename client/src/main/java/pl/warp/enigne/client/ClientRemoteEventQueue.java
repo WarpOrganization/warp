@@ -3,6 +3,10 @@ package pl.warp.enigne.client;
 import io.netty.buffer.ByteBuf;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.net.*;
+import pl.warp.net.event.AddressedEnvelope;
+import pl.warp.net.event.Envelope;
+import pl.warp.net.event.sender.EventSerializer;
+import pl.warp.net.event.sender.RemoteEventQueue;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -65,6 +69,8 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
             addressedEnvelope.setConfirmed(false);
             addressedEnvelope.setDependencyId(eventDependencyIdCounter);
             addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
+            addressedEnvelope.setEventType(envelope.getContent().getType());
+            addressedEnvelope.setTargetComponentId(envelope.getTargetComponentId());
 
             confirmationMap.put(eventDependencyIdCounter, addressedEnvelope);
             resendQueue.add(addressedEnvelope);
@@ -73,7 +79,10 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
     }
 
     private void sendEvent(AddressedEnvelope envelope) {
-        ByteBuf packet = connectionService.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length);
+        ByteBuf packet = connectionService.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length + 12);
+        packet.writeInt(envelope.getEventType());
+        packet.writeInt(envelope.getDependencyId());
+        packet.writeInt(envelope.getTargetComponentId());
         packet.writeBytes(envelope.getSerializedEventData());
         connectionService.sendPacket(packet);
     }

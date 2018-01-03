@@ -1,4 +1,4 @@
-package pl.warp.net;
+package pl.warp.net.event.sender;
 
 import pl.warp.engine.core.component.Component;
 import pl.warp.engine.core.context.service.Service;
@@ -6,6 +6,7 @@ import pl.warp.engine.core.event.Event;
 import pl.warp.engine.core.event.EventDispatcher;
 import pl.warp.engine.core.event.Listener;
 import pl.warp.engine.core.script.annotation.ContextService;
+import pl.warp.net.event.Envelope;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

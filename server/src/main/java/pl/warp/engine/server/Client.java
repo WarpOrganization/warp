@@ -1,5 +1,7 @@
 package pl.warp.engine.server;
 
+import pl.warp.net.event.receiver.EventReceiver;
+
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,7 @@ public class Client {
     private Map<Integer, ServerAddressedEnvelope> eventConfirmations = new HashMap<>();
     private int id;
     private int eventDependencyIdCounter = 0;
+    private EventReceiver eventReceiver = new EventReceiver();
 
     Client(InetSocketAddress address) {
         this.address = address;
@@ -60,5 +63,9 @@ public class Client {
     int getNextEventDependencyId() {
         eventDependencyIdCounter++;
         return eventDependencyIdCounter;
+    }
+
+    public EventReceiver getEventReceiver() {
+        return eventReceiver;
     }
 }
