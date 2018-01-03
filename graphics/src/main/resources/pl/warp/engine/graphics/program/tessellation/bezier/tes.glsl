@@ -14,7 +14,7 @@ uniform sampler2D displacementMap;
 uniform bool displacementEnabled;
 uniform float displacementFactor;
 
-in patch Patch10 tesPatch;
+patch in Patch10 tesPatch;
 
 out vec3 oWorldPos;
 out vec2 oTexCoord;

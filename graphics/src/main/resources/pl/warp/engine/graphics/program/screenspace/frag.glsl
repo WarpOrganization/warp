@@ -14,7 +14,7 @@ precision highp float;
 
 //G-buffer
 uniform sampler2D comp1;
-uniform usampler2D comp2;
+uniform isampler2D comp2;
 uniform sampler2D comp3;
 uniform sampler2D comp4;
 uniform samplerCube cube;
@@ -34,13 +34,13 @@ layout(location = 0) out vec4 fragColor;
 
 vec3 decodeNormal();
 vec3 calcScenePos();
-vec3 getLight(vec3 scenePos, vec3 normal, uint flags);
-vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float roughness, uint flags);
-void processRender(uint flags);
+vec3 getLight(vec3 scenePos, vec3 normal, int flags);
+vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float roughness, int flags);
+void processRender(int flags);
 void processBackground();
 
 void main(void) {
-    uint flags = texture(comp2, vTexCoord).r >> 22;
+    int flags = texture(comp2, vTexCoord).r >> 22;
     if(isSet(flags, RENDER)) {
         processRender(flags);
     } else {
@@ -49,7 +49,7 @@ void main(void) {
     fragColor.a = 1;
 }
 
-void processRender(uint flags) {
+void processRender(int flags) {
     vec3 scenePos = calcScenePos();
     vec3 normal = decodeNormal();
     float roughness = texture(comp3, vTexCoord).r;
@@ -63,7 +63,7 @@ void processBackground() {
     fragColor.rgb = texture(cube, rotated.xyz).rgb;
 }
 
-vec3 getLight(vec3 scenePos, vec3 normal, uint flags) {
+vec3 getLight(vec3 scenePos, vec3 normal, int flags) {
     vec3 totalIlluminance = vec3(0);
     float roughness = texture(comp3, vTexCoord).r;
     for(int i = 0; i < lightNumber; i++) {
@@ -73,7 +73,7 @@ vec3 getLight(vec3 scenePos, vec3 normal, uint flags) {
     return totalIlluminance;
 }
 
-vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float roughness, uint flags) {
+vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float roughness, int flags) {
     vec3 lightDirection = normalize(source.pos - scenePos);
     vec3 eyeDirection = normalize(cameraPos - scenePos);
     vec3 radiance = vec3(0);
