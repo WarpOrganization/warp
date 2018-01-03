@@ -14,7 +14,7 @@ precision highp float;
 
 //G-buffer
 uniform sampler2D comp1;
-uniform usampler2D comp2;
+uniform isampler2D comp2;
 uniform sampler2D comp3;
 uniform sampler2D comp4;
 uniform samplerCube cube;
@@ -40,7 +40,7 @@ void processRender(uint flags);
 void processBackground();
 
 void main(void) {
-    uint flags = texture(comp2, vTexCoord).r >> 22;
+    int flags = texture(comp2, vTexCoord).r >> 22;
     if(isSet(flags, RENDER)) {
         processRender(flags);
     } else {
