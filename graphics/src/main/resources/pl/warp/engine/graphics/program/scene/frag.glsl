@@ -44,7 +44,7 @@ void calculateNormal() {
     } else {
         encoded = encode(oNormal);
     }
-    comp2 |= v2PackSignedNorm(encoded, 11);
+    comp2 |= uint(v2PackSignedNorm(encoded, 11));
 }
 
 void setFlags() {
@@ -55,14 +55,14 @@ void setFlags() {
     bool metal = false;
     bool orenNayar = true;
     bool render = true; //always
-    uint s = flag(beckmann,       0)
+    int s = flag(beckmann,       0)
         |    flag(heidrichSeidel, 1)
         |    flag(emissive,       2)
         |    flag(subsurface,     3)
         |    flag(metal,          4)
         |    flag(orenNayar,      5)
         |    flag(render,         9);
-    comp2 |= s << 22;
+    comp2 |= uint(s << 22);
 }
 
 void setProperties() {
