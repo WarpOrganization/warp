@@ -1,6 +1,6 @@
 group 'pl.warp'
-def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"
-version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
+//def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"
+//version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
 
 apply plugin: 'java'
 apply plugin: 'scala'

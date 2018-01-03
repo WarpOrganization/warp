@@ -1,0 +1,1 @@
+java -Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader -jar Warp.jar pl.warp.test.Test1
