@@ -1,1 +1,1 @@
-java -Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader -jar Warp.jar pl.warp.servertest.Test
+java -Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader -jar Warp-server.jar pl.warp.servertest.Test
