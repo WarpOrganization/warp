@@ -77,6 +77,8 @@ public class WindowManager {
 
     private void configureHints(Display display) {
         glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_VISIBLE, display.isVisible() ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, display.isResizable() ? GLFW_TRUE : GLFW_FALSE);
     }

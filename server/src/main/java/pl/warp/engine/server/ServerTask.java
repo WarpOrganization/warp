@@ -6,6 +6,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.core.context.task.RegisterTask;
 import pl.warp.engine.core.execution.task.EngineTask;
@@ -23,12 +24,19 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
+    private ServerRemoteEventQueue eventQueue;
+    private ComponentRegistry componentRegistry;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
 
-    public ServerTask(ClientRegistry clientRegistry, ConnectionUtil connectionUtil) {
+    public ServerTask(ClientRegistry clientRegistry,
+                      ConnectionUtil connectionUtil,
+                      ServerRemoteEventQueue eventQueue,
+                      ComponentRegistry componentRegistry) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
+        this.eventQueue = eventQueue;
+        this.componentRegistry = componentRegistry;
     }
 
     @Override
@@ -38,7 +46,7 @@ public class ServerTask extends EngineTask {
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new ConnectionHandler(clientRegistry, connectionUtil));
+                    .handler(new ConnectionHandler(clientRegistry, connectionUtil, componentRegistry));
             outChannel = b.bind(PORT).sync().channel();
             connectionUtil.setOutChannel(outChannel);
         } catch (InterruptedException e) {
@@ -55,6 +63,7 @@ public class ServerTask extends EngineTask {
     @Override
     public void update(int delta) {
         clientRegistry.update();
+        eventQueue.update();
     }
 
 }

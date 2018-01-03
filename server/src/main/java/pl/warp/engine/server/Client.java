@@ -16,10 +16,11 @@ public class Client {
     private Map<Integer, ServerAddressedEnvelope> eventConfirmations = new HashMap<>();
     private int id;
     private int eventDependencyIdCounter = 0;
-    private EventReceiver eventReceiver = new EventReceiver();
+    private EventReceiver eventReceiver;
 
-    Client(InetSocketAddress address) {
+    Client(InetSocketAddress address, EventReceiver eventReceiver) {
         this.address = address;
+        this.eventReceiver = eventReceiver;
         lastKeepAlive = System.currentTimeMillis();
     }
 

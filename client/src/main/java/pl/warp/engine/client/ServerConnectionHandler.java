@@ -17,16 +17,18 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
     private boolean connected = false;
     private int clientId;
     private SerializedSceneHolder sceneHolder;
-    private EventReceiver eventReceiver = new EventReceiver();
+    private EventReceiver eventReceiver;
     private ConnectionService connectionService;
     private ClientRemoteEventQueue eventQueue;
 
     public ServerConnectionHandler(SerializedSceneHolder sceneHolder,
                                    ConnectionService connectionService,
-                                   ClientRemoteEventQueue eventQueue) {
+                                   ClientRemoteEventQueue eventQueue,
+                                   EventReceiver eventReceiver) {
         this.sceneHolder = sceneHolder;
         this.connectionService = connectionService;
         this.eventQueue = eventQueue;
+        this.eventReceiver = eventReceiver;
     }
 
     @Override

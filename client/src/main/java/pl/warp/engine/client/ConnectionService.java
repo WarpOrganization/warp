@@ -9,8 +9,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import pl.warp.engine.core.component.ComponentRegistry;
 import pl.warp.engine.core.context.service.Service;
 import pl.warp.engine.net.PacketType;
+import pl.warp.engine.net.event.receiver.EventReceiver;
 
 import java.net.InetSocketAddress;
 
@@ -28,14 +30,16 @@ public class ConnectionService {
     private EventLoopGroup group = new NioEventLoopGroup();
 
     public ConnectionService(SerializedSceneHolder sceneHolder,
-                             ClientRemoteEventQueue eventQueue) {
+                             ClientRemoteEventQueue eventQueue,
+                             ComponentRegistry componentRegistry) {
 
         try {
             Bootstrap b = new Bootstrap();
             ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
                     sceneHolder,
                     this,
-                    eventQueue);
+                    eventQueue,
+                    new EventReceiver(componentRegistry));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)

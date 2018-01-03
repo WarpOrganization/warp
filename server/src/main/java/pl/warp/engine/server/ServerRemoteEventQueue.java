@@ -45,12 +45,13 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
 
     private void resendEvents() {
         long currentTime = System.currentTimeMillis();
-
-        while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL || resendQueue.peek().isConfirmed()) {
-            ServerAddressedEnvelope addressedEnvelope = resendQueue.poll();
-            if (!addressedEnvelope.isConfirmed()) {
-                sendEvent(addressedEnvelope);
-                resendQueue.add(addressedEnvelope);
+        if (!resendQueue.isEmpty()) {
+            while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL || resendQueue.peek().isConfirmed()) {
+                ServerAddressedEnvelope addressedEnvelope = resendQueue.poll();
+                if (!addressedEnvelope.isConfirmed()) {
+                    sendEvent(addressedEnvelope);
+                    resendQueue.add(addressedEnvelope);
+                }
             }
         }
     }
