@@ -1,6 +1,6 @@
 ![alt tag](http://i.imgur.com/Gl1JGOT.png)
 ***
-[![Build Status](https://jenkins.hubertus248.me/job/Warp%20Engine/badge/icon)](https://jenkins.hubertus248.me/blue/organizations/jenkins/Warp%20Engine/activity)
+[![Build Status](https://jenkins.b.snet.ovh/buildStatus/icon?job=Warp)](https://jenkins.b.snet.ovh/job/Warp)
 
 **Warp Engine** is a 3D game engine designed for a convenient and unlimited creation of games set in space. Its aim is to provide tools allowing a developer to make a space-set game without any boundaries nor loading times.
 
