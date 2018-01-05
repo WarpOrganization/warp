@@ -181,6 +181,7 @@ public class Test1 {
                     transformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
                     transformProperty.rotate(x, y, z);
                     Component component = new SceneComponent(scene);
+                    component.addScript(AsdfScript.class);
                     component.addProperty(meshProperty);
                     component.addProperty(materialProperty);
                     component.addProperty(transformProperty);
@@ -400,4 +401,25 @@ public class Test1 {
         Camera camera = new QuaternionCamera(cameraComponent, new TransformProperty(), projection);
         cameraHolder.setCamera(camera);
     }
+
+    public static class AsdfScript extends Script {
+
+        @OwnerProperty(TransformProperty.NAME)
+        TransformProperty transProp;
+
+        public AsdfScript(Component component) {
+            super(component);
+        }
+
+        @Override
+        public void onInit() {
+
+        }
+
+        @Override
+        public void onUpdate(int delta) {
+            transProp.rotate(0, 0, delta*0.01f);
+        }
+    }
+
 }

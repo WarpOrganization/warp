@@ -22,7 +22,7 @@ public class ScriptRegistry {
         scriptsToAdd.add(script);
     }
 
-    public Set<Script> getScripts() {
+    public synchronized Set<Script> getScripts() {
         return scripts;
     }
 

@@ -15,11 +15,7 @@ public abstract class Listener<U extends Event> {
         this.owner = owner;
         this.eventName = eventName;
     }
-
-    public boolean isInterestedIn(Event event) {
-        return this.eventName.equals(event.getTypeName());
-    }
-
+    
     public String getEventName() {
         return eventName;
     }
