@@ -70,7 +70,7 @@ public class EngineClassLoader extends ClassLoader {
 
 
     private boolean isProcessed(String name) {
-        return name.startsWith("net.warpgame") && !name.startsWith(RUNTIME_PREFIX);
+        return (name.startsWith("net.warpgame") || name.startsWith("org.nustaq")) && !name.startsWith(RUNTIME_PREFIX);
     }
 
     public void startProcessing(Processor processor) {

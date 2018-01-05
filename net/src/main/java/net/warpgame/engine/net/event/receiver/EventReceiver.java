@@ -42,11 +42,15 @@ public class EventReceiver {
 
     private void triggerIncomingEvents() {
         while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
-            IncomingEnvelope envelope = eventQueue.peek();
+            IncomingEnvelope envelope = eventQueue.poll();
             Component targetComponent = componentRegistry.getCompoenent(envelope.getTargetComponentId());
             if (targetComponent == null) throw new DesynchronizationException("Event target component does not exist.");
+            try {
+                targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
 
-            targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             minDependencyId++;
         }
     }
