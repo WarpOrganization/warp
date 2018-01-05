@@ -56,7 +56,7 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
         }
     }
 
-    private void sendNewEvents() {
+    private synchronized void sendNewEvents() {
         Collection<Client> clients = clientRegistry.getClients();
         while (!events.isEmpty()) {
             Envelope envelope = events.poll();

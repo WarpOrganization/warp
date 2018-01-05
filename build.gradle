@@ -18,7 +18,7 @@ apply plugin: 'java'
 apply plugin: 'scala'
 
 ext {
-    platform = project.properties['platform'] ?: "linux"
+    platform = project.properties['platform'] ?: "windows"
 }
 
 import org.ajoberstar.grgit.*
