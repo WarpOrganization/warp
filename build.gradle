@@ -17,8 +17,15 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'scala'
 
+static def os() {
+    def system = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH)
+    if(system.contains("nux")) return "linux"
+    else if(system.contains("windows")) return "windows"
+    else throw new IllegalStateException("Unsupported operating system")
+}
+
 ext {
-    platform = project.properties['platform'] ?: "linux"
+    platform = project.properties['platform'] ?: os()
 }
 
 import org.ajoberstar.grgit.*

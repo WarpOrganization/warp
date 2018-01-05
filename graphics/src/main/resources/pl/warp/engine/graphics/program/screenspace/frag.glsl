@@ -80,7 +80,7 @@ vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float ro
     vec3 radiance = vec3(0);
 
     if(isSet(flags, OREN_NAYAR)) {
-        float onr /*oboz narodowo-renderowy*/ = getOrenNayarRadiance(lightDirection, eyeDirection, normal, roughness, 0.8);
+        float onr = getOrenNayarRadiance(lightDirection, eyeDirection, normal, roughness, 0.8);
         radiance += source.color * onr;
     }
 
