@@ -54,9 +54,8 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                     int targetComponentId = buffer.readInt();
                     client.getEventReceiver().addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
                     connectionUtil.confirmEvent(dependencyId, client);
+                    System.out.println("event received");
                 }
-                System.out.println("event received");
-
                 break;
             case PacketType.PACKET_EVENT_CONFIRMATION:
                 clientId = buffer.readInt();

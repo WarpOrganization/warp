@@ -40,19 +40,17 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
         resendEvents();
     }
 
-    private void resendEvents() {
+    private synchronized void resendEvents() {
         long currentTime = System.currentTimeMillis();
-        if (!resendQueue.isEmpty()) {
-            while (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
-                    || resendQueue.peek().isConfirmed()) {
-                AddressedEnvelope addressedEnvelope = resendQueue.poll();
-                if (addressedEnvelope.isConfirmed()) {
-                    confirmationMap.remove(addressedEnvelope.getDependencyId());
-                } else {
-                    addressedEnvelope.setSendTime(currentTime);
-                    resendQueue.add(addressedEnvelope);
-                    sendEvent(addressedEnvelope);
-                }
+        while (!resendQueue.isEmpty() && (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
+                || resendQueue.peek().isConfirmed())) {
+            AddressedEnvelope addressedEnvelope = resendQueue.poll();
+            if (addressedEnvelope.isConfirmed()) {
+                confirmationMap.remove(addressedEnvelope.getDependencyId());
+            } else {
+                addressedEnvelope.setSendTime(currentTime);
+                resendQueue.add(addressedEnvelope);
+                sendEvent(addressedEnvelope);
             }
         }
     }
