@@ -32,7 +32,7 @@ import org.ajoberstar.grgit.*
 
 ext.repo = Grgit.open(project.file('.'))
 
-group 'pl.warp'
+group 'net.warpgame'
 
 //def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"
 //version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
@@ -54,7 +54,7 @@ jar {
                 .collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest {
-        attributes 'Main-Class': 'pl.warp.engine.core.runtime.EngineLauncher'
+        attributes 'Main-Class': 'net.warpgame.engine.core.runtime.EngineLauncher'
     }
     baseName = "Warp-${platform}"
 }
@@ -65,12 +65,12 @@ dependencies {
 
 
 task runEngine(type:JavaExec) {
-    main = "pl.warp.engine.core.runtime.EngineLauncher"
+    main = "net.warpgame.engine.core.runtime.EngineLauncher"
     classpath = sourceSets.main.runtimeClasspath
     if(project.hasProperty('cl')){
         args(cl)
     }
-    jvmArgs '-Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader'
+    jvmArgs '-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader'
 }
 
 task createRunConfigurations {
@@ -79,9 +79,9 @@ task createRunConfigurations {
 
     tasks.withType(JavaExec).each { task ->
         def taskName = "Warp Engine Test"
-        def mainClass = "pl.warp.engine.core.runtime.EngineLauncher"
-        def props = "-Djava.system.class.loader=pl.warp.engine.core.runtime.EngineClassLoader"
-        def args = "pl.warp.test.Test1"
+        def mainClass = "net.warpgame.engine.core.runtime.EngineLauncher"
+        def props = "-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader"
+        def args = "net.warpgame.test.Test1"
         def mod = "test_main"
 
         def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
@@ -101,6 +101,8 @@ task createRunConfigurations {
 
 
 subprojects {
+    group 'net.warpgame'
+    version '0.1.2'
     test {
         reports.junitXml.enabled = false
     }

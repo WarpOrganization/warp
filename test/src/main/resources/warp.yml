@@ -2,7 +2,7 @@
 graphics:
   ups: 60
   display:
-    !!pl.warp.engine.graphics.window.Display
+    !!net.warpgame.engine.graphics.window.Display
     fullscreen: false
     width: 1280
     height: 720
@@ -10,7 +10,7 @@ graphics:
     enabled: true
     sampleSize: 30
   rendering:
-    defaultTessellation: !!pl.warp.engine.graphics.rendering.scene.tesselation.SceneTessellationMode NONE
+    defaultTessellation: !!net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode NONE
     scene:
       maxLights: 10
 multiplayer:

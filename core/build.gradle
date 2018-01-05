@@ -1,4 +1,4 @@
-group 'pl.warp'
+group 'net.warpgame'
 version '0.1.2'
 
 apply plugin: 'java'

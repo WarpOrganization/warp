@@ -1,4 +1,4 @@
-group 'pl.warp'
+group 'net.warpgame'
 //def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"
 //version "${branch.replace("origin/", "")}-0.1.2.${versioning.info.build}"
 
@@ -31,7 +31,7 @@ jar {
                 .collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest {
-        attributes 'Main-Class': 'pl.warp.engine.core.runtime.EngineLauncher'
+        attributes 'Main-Class': 'net.warpgame.engine.core.runtime.EngineLauncher'
     }
     baseName = "Warp-server"
 }

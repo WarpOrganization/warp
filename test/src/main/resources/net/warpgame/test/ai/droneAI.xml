@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<baseNode path="net.warpgame.engine.ai.behaviortree.SequenceNode">
+    <node path="net.warpgame.engine.ai.behaviortree.SelectorNode">
+        <node path="net.warpgame.test.ai.HasTargetLeaf"/>
+        <node path="net.warpgame.test.ai.FindTargetLeaf"/>
+    </node>
+    <node path="net.warpgame.engine.ai.behaviortree.InverterNode">
+        <node path="net.warpgame.engine.ai.behaviortree.SequenceNode">
+            <node path="net.warpgame.test.ai.AdjustSteeringLeaf"/>
+            <node path="net.warpgame.test.ai.ShootLeaf"/>
+        </node>
+    </node>
+    <node path="net.warpgame.test.ai.StopShootingLeaf"/>
+</baseNode>
