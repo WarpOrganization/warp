@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Jaca777
  * Created 2017-09-17 at 01
  */
-
+//TODO rethink
 @Service
 public class ScriptRegistry {
 
@@ -18,7 +18,7 @@ public class ScriptRegistry {
     private Set<Script> scriptsToAdd = new HashSet<>();
     private Set<Script> scriptsToRemove = new HashSet<>();
 
-    public void addScript(Script script) {
+    public synchronized void addScript(Script script) {
         scriptsToAdd.add(script);
     }
 

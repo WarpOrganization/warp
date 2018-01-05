@@ -57,7 +57,7 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
         }
     }
 
-    private void sendNewEvents() {
+    private synchronized void sendNewEvents() {
         while (!events.isEmpty()) {
             Envelope envelope = events.pop();
             eventDependencyIdCounter++;
