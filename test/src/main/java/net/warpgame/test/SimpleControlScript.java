@@ -1,6 +1,8 @@
 package net.warpgame.test;
 
 import net.warpgame.content.InputEvent;
+import net.warpgame.engine.core.context.Context;
+import net.warpgame.engine.core.execution.EngineThread;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -37,6 +39,9 @@ public class SimpleControlScript extends Script {
     @ContextService
     private Input input;
 
+    @ContextService
+    private Context context;
+
 
     private Vector3f movementVector = new Vector3f();
 
@@ -49,6 +54,15 @@ public class SimpleControlScript extends Script {
     public void onUpdate(int delta) {
         rotate(delta);
         move(delta);
+        if (input.isKeyDown(VK_ESCAPE)) {
+            context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
+            try {
+                Thread.sleep(60*delta);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.exit(0);
+        }
     }
 
     private void move(int delta) {
