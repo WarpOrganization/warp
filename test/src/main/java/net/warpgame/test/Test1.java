@@ -1,7 +1,5 @@
 package net.warpgame.test;
 
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
@@ -36,6 +34,8 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author Jaca777

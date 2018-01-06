@@ -1,14 +1,19 @@
 package net.warpgame.test;
 
 import net.warpgame.content.InputEvent;
+import net.warpgame.engine.core.context.Context;
+import net.warpgame.engine.core.execution.EngineThread;
+import org.joml.Quaternionf;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.input.Input;
 import net.warpgame.engine.net.event.Envelope;
-import org.joml.Vector3f;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -24,8 +29,6 @@ public class SimpleControlScript extends Script {
 
     private float cameraSpeed = CAMERA_SPEED;
 
-    private boolean forward, backward, left, right, rotateUp, rotateDown, rotateLeft, rotateRight;
-
     public SimpleControlScript(Component owner) {
         super(owner);
     }
@@ -35,6 +38,9 @@ public class SimpleControlScript extends Script {
 
     @ContextService
     private Input input;
+
+    @ContextService
+    private Context context;
 
 
     private Vector3f movementVector = new Vector3f();
@@ -46,8 +52,17 @@ public class SimpleControlScript extends Script {
 
     @Override
     public void onUpdate(int delta) {
-//        rotate(delta);
+        rotate(delta);
         move(delta);
+        if (input.isKeyDown(VK_ESCAPE)) {
+            context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
+            try {
+                Thread.sleep(60*delta);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.exit(0);
+        }
     }
 
     private void move(int delta) {
@@ -56,80 +71,33 @@ public class SimpleControlScript extends Script {
         else cameraSpeed = CAMERA_SPEED;
 
         movementVector.zero();
-        if (input.isKeyDown(VK_W) && !forward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W, true)));
-            forward = true;
+        if (input.isKeyDown(VK_W)) {
+            movementVector.add(0, 0, -1);
+//            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W)));
         }
-        if (input.isKeyDown(VK_S) && !backward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_S, true)));
-            backward = true;
-        }
-        if (input.isKeyDown(VK_A) && !left) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_A, true)));
-            left = true;
-        }
-        if (input.isKeyDown(VK_D) && !right) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_D, true)));
-            right = true;
-        }
-        if (input.isKeyDown(VK_UP) && !rotateUp) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_UP, true)));
-            rotateUp = true;
-        }
-        if (input.isKeyDown(VK_DOWN) && !rotateDown) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_DOWN, true)));
-            rotateDown = true;
-        }
-        if (input.isKeyDown(VK_LEFT) && !rotateLeft) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_LEFT, true)));
-            rotateLeft = true;
-        }
-        if (input.isKeyDown(VK_RIGHT) && !rotateRight) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_RIGHT, true)));
-            rotateRight = true;
-        }
-        if (!input.isKeyDown(VK_W) && forward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W, false)));
-            forward = false;
-        }
-        if (!input.isKeyDown(VK_S) && backward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_S, false)));
-            backward = false;
-        }
-        if (!input.isKeyDown(VK_A) && left) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_A, false)));
-            left = false;
-        }
-        if (!input.isKeyDown(VK_D) && right) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_D, false)));
-            right = false;
-        }
-        if (!input.isKeyDown(VK_UP) && rotateUp) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_UP, false)));
-            rotateUp = false;
-        }
-        if (!input.isKeyDown(VK_DOWN) && rotateDown) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_DOWN, false)));
-            rotateDown = false;
-        }
-        if (!input.isKeyDown(VK_LEFT) && rotateLeft) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_LEFT, false)));
-            rotateLeft = false;
-        }
-        if (!input.isKeyDown(VK_RIGHT) && rotateRight) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_RIGHT, false)));
-            rotateRight = false;
+        if (input.isKeyDown(VK_S))
+            movementVector.add(0, 0, 1);
+        if (input.isKeyDown(VK_A))
+            movementVector.add(-1, 0, 0);
+        if (input.isKeyDown(VK_D))
+            movementVector.add(1, 0, 0);
+        Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf());
+        if (movementVector.lengthSquared() >= 1.0f) {
+            movementVector.normalize();
+            movementVector.rotate(rotation);
+            movementVector.mul(cameraSpeed * delta);
+            transformProperty.move(movementVector);
         }
     }
 
 
-//    private void rotate(int delta) {
-//        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
-//        transformProperty.rotateX(-cursorPositionDelta.y * ROT_SPEED * delta);
-//        transformProperty.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
-//        if (input.isKeyDown(VK_Q))
-//            transformProperty.rotateZ(ROT_SPEED * delta);
-//        if (input.isKeyDown(VK_E))
-//            transformProperty.rotateZ(-ROT_SPEED * delta);
-//    }
+    private void rotate(int delta) {
+        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
+        transformProperty.rotateX(-cursorPositionDelta.y * ROT_SPEED * delta);
+        transformProperty.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
+        if (input.isKeyDown(VK_Q))
+            transformProperty.rotateZ(ROT_SPEED * delta);
+        if (input.isKeyDown(VK_E))
+            transformProperty.rotateZ(-ROT_SPEED * delta);
+    }
 }

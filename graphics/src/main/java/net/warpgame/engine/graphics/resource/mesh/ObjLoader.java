@@ -69,6 +69,7 @@ public class ObjLoader {
             String line = null;
             boolean facesReached = false;
             while (!facesReached && (line = reader.readLine()) != null) {
+                if (line.isEmpty()) continue;
                 String[] data = line.split(" ");
                 switch (data[0]) {
                     case VERTEX:
@@ -89,6 +90,7 @@ public class ObjLoader {
             obj.setupArrays(vertices.size());
 
             while (line != null) {
+                if (line.isEmpty()) continue;
                 if (!line.startsWith("f")) {
                     line = reader.readLine();
                     continue;
