@@ -21,6 +21,7 @@ static def os() {
     def system = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH)
     if(system.contains("nux")) return "linux"
     else if(system.contains("windows")) return "windows"
+    else if(system.contains("mac")) return "macos"
     else throw new IllegalStateException("Unsupported operating system")
 }
 

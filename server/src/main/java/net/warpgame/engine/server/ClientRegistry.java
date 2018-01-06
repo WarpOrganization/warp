@@ -21,7 +21,7 @@ public class ClientRegistry {
     private HashSet<Integer> toRemove = new HashSet<>();
     private ConnectionUtil connectionUtil;
 
-    public ClientRegistry(ConnectionUtil connectionUtil){
+    public ClientRegistry(ConnectionUtil connectionUtil) {
         this.connectionUtil = connectionUtil;
     }
 
@@ -48,11 +48,13 @@ public class ClientRegistry {
     }
 
     public synchronized void broadcast(ByteBuf msg) {
+        if (clients.size() > 1) msg.retain(clients.size() - 1);
+
         for (Client client : clients.values())
             connectionUtil.sendPacket(msg, client);
     }
 
-    public Collection<Client> getClients(){
+    public Collection<Client> getClients() {
         return clients.values();
     }
 

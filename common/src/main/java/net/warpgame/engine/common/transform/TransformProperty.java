@@ -97,7 +97,7 @@ public class TransformProperty extends Property {
 
     public synchronized void setTranslation(Vector3f translation) {
         this.dirty = true;
-        this.translation = translation;
+        this.translation.set(translation);
     }
 
     public TransformProperty move(Vector3f movement) {
