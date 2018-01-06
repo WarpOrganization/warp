@@ -35,7 +35,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         ByteBuf buffer = msg.content();
         int type = buffer.readInt();
         long timestamp = buffer.readLong();
-//        System.out.println("server got a message type: " + type);
+        System.out.println("server got a message type: " + type);
         int clientId;
         switch (type) {
             case PacketType.PACKET_CONNECT:
