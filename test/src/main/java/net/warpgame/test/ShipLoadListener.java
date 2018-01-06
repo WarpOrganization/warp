@@ -56,7 +56,9 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     @Override
     public void handle(LoadShipEvent event) {
         Component ship = new SceneComponent(getOwner(), event.getShipComponentId());
-        ship.addProperty(new TransformProperty());
+        TransformProperty transformProperty = new TransformProperty();
+        transformProperty.move(event.getPos());
+        ship.addProperty(transformProperty);
         ship.addProperty(new MeshProperty(mesh));
         ship.addProperty(new MaterialProperty(material));
     }
