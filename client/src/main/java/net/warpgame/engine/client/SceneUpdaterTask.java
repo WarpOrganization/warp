@@ -49,7 +49,7 @@ public class SceneUpdaterTask extends EngineTask {
     private void updateScene(ByteBuf serializedScene) {
         while (serializedScene.isReadable()) {
             int componentId = serializedScene.readInt();
-            Component c = componentRegistry.getCompoenent(componentId);
+            Component c = componentRegistry.getComponent(componentId);
             if (c != null) {
                 translation.set(
                         serializedScene.readFloat(),
@@ -60,11 +60,17 @@ public class SceneUpdaterTask extends EngineTask {
                         serializedScene.readFloat(),
                         serializedScene.readFloat(),
                         serializedScene.readFloat());
-
-                TransformProperty transformProperty = c.getProperty(TransformProperty.NAME);
-                transformProperty.setTranslation(translation);
-                transformProperty.setRotation(rotation);
-            } else System.out.println("Component with id " + componentId + " not present");
+                try {
+                    TransformProperty transformProperty = c.getProperty(TransformProperty.NAME);
+                    transformProperty.setTranslation(translation);
+                    transformProperty.setRotation(rotation);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Component with id " + componentId + " not present");
+                serializedScene.readerIndex(serializedScene.readerIndex() + 7 * 4);
+            }
         }
     }
 

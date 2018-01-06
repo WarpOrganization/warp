@@ -16,7 +16,8 @@ import java.util.concurrent.Executors;
  */
 @Service
 public class RemotePoolEventDispatcher implements EventDispatcher {
-    private static final int THREADS = Runtime.getRuntime().availableProcessors() * 4;
+    //    private static final int THREADS = Runtime.getRuntime().availableProcessors() * 4;
+    private static final int THREADS = 1;
     private ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
     private RemoteEventQueue eventQueue;

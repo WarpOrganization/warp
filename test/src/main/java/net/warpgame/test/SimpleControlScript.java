@@ -1,17 +1,17 @@
 package net.warpgame.test;
 
-import net.warpgame.content.InputEvent;
-import org.joml.Quaternionf;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.Context;
+import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.input.Input;
-import net.warpgame.engine.net.event.Envelope;
+import org.joml.Quaternionf;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -37,6 +37,9 @@ public class SimpleControlScript extends Script {
     @ContextService
     private Input input;
 
+    @ContextService
+    private Context context;
+
 
     private Vector3f movementVector = new Vector3f();
 
@@ -49,6 +52,15 @@ public class SimpleControlScript extends Script {
     public void onUpdate(int delta) {
         rotate(delta);
         move(delta);
+        if (input.isKeyDown(VK_ESCAPE)) {
+            context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
+            try {
+                Thread.sleep(60*delta);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.exit(0);
+        }
     }
 
     private void move(int delta) {
@@ -59,7 +71,7 @@ public class SimpleControlScript extends Script {
         movementVector.zero();
         if (input.isKeyDown(VK_W)) {
             movementVector.add(0, 0, -1);
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W)));
+//            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W)));
         }
         if (input.isKeyDown(VK_S))
             movementVector.add(0, 0, 1);

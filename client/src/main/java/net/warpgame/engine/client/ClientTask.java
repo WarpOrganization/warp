@@ -32,7 +32,11 @@ public class ClientTask extends EngineTask {
 
     @Override
     protected void onInit() {
-
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         address = SocketUtils.socketAddress(
                 config.getValue("multiplayer.ip"),
                 Integer.parseInt(System.getProperty("port", "" + config.getValue("multiplayer.port"))));

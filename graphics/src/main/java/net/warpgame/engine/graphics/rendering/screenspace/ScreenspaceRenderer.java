@@ -50,9 +50,11 @@ public class ScreenspaceRenderer {
     }
 
     public void update() {
-        prepareFramebuffer();
-        prepareProgram();
-        renderScreenspace();
+        if (cameraHolder.getCamera() != null) {
+            prepareFramebuffer();
+            prepareProgram();
+            renderScreenspace();
+        }//TODO do stuff
     }
 
     protected void prepareFramebuffer() {
@@ -71,7 +73,7 @@ public class ScreenspaceRenderer {
 
     private void prepareCubemap() {
         Scene scene = sceneHolder.getScene();
-        if(scene.hasProperty(CubemapProperty.NAME)) {
+        if (scene.hasProperty(CubemapProperty.NAME)) {
             CubemapProperty cubemapProperty = scene.getProperty(CubemapProperty.NAME);
             this.screenspaceProgram.useCubemap(cubemapProperty.getCubemap());
         }

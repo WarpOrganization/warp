@@ -54,16 +54,15 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                     int targetComponentId = buffer.readInt();
                     client.getEventReceiver().addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
                     connectionUtil.confirmEvent(dependencyId, client);
+//                    System.out.println("event received");
                 }
-                System.out.println("event received");
-
                 break;
             case PacketType.PACKET_EVENT_CONFIRMATION:
                 clientId = buffer.readInt();
                 Client c = clientRegistry.getClient(clientId);
                 int id = buffer.readInt();
                 c.confirmEvent(id);
-                System.out.println("event confirmation received");
+//                System.out.println("event confirmation received");
 
                 break;
         }
@@ -77,8 +76,10 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     }
 
     private void registerClient(Channel channel, InetSocketAddress address) {
-        int id = clientRegistry.addClient(new Client(address, new EventReceiver(componentRegistry)));
+        Client c = new Client(address, new EventReceiver(componentRegistry));
+        int id = clientRegistry.addClient(c);
         channel.writeAndFlush(
                 new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));
+        componentRegistry.getComponent(0).triggerEvent(new ConnectedEvent(c));
     }
 }
