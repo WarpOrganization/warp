@@ -1,12 +1,14 @@
 package net.warpgame.engine.graphics.rendering.culling;
 
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL30;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL30;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 /**
@@ -22,29 +24,34 @@ public class BoundingBoxCalculator {
     private MinMaxCalculator zCalculator = new MinMaxCalculator();
     private MinMaxCalculator yCalculator = new MinMaxCalculator();
 
-    public void compute(Component component) {
-        if(component.hasProperty(MeshProperty.NAME)){
-            MeshProperty property = component.getProperty(MeshProperty.NAME);
-            BoundingBox boundingBox = computeBoundingBox(property.getMesh());
-            component.addProperty(new BoundingBoxProperty(boundingBox));
-        }
+    /**
+     * Returns bounding box of a mesh
+     *
+     * @param mesh  mesh to calculate bounding box
+     * @return      bounding box of a mesh
+     */
+    public BoundingBox compute(SceneMesh mesh) {
+        return computeBoundingBox(mesh);
     }
 
     private synchronized BoundingBox computeBoundingBox(SceneMesh mesh) {
         int vertexBuff = mesh.getVertexBuff();
-        FloatBuffer vertices = GL30.glMapBufferRange(vertexBuff, 0, mesh.getVertexCount(), GL30.GL_MAP_READ_BIT)
-                .asFloatBuffer();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuff);
+        ByteBuffer bb = GL30.glMapBufferRange(GL15.GL_ARRAY_BUFFER, 0, mesh.getVertexCount()*4*3, GL30.GL_MAP_READ_BIT);
+        FloatBuffer vertices = bb.asFloatBuffer();
 
         xCalculator.reset();
         yCalculator.reset();
         zCalculator.reset();
         while (vertices.hasRemaining()) {
-            float x1 = vertices.get(), y1 = vertices.get(), z1 = vertices.get();
-            float x2 = vertices.get(), y2 = vertices.get(), z2 = vertices.get();
-            xCalculator.update(x1, x2);
-            yCalculator.update(y1, y2);
-            zCalculator.update(z1, z2);
+            float x = vertices.get(), y = vertices.get(), z = vertices.get();
+            xCalculator.update(x);
+            yCalculator.update(y);
+            zCalculator.update(z);
         }
+
+        GL15.glUnmapBuffer(GL15.GL_ARRAY_BUFFER);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
         return new BoundingBox(
                 new Vector3f(xCalculator.max, yCalculator.max, zCalculator.max),
@@ -56,14 +63,11 @@ public class BoundingBoxCalculator {
         private float min;
         private float max;
 
-        public void update(float a, float b) {
-            if(a > b) {
-                if(a > max) max = a;
-                if(b < min) min = b;
-            } else {
-                if(b > max) max = b;
-                if(a < min) min = a;
-            }
+        public void update(float a) {
+            if (a > max)
+                max = a;
+            if (a < min)
+                min = a;
         }
 
         public float getMin() {

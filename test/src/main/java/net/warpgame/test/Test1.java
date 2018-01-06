@@ -17,6 +17,9 @@ import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
+import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
+import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
+import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
@@ -169,6 +172,9 @@ public class Test1 {
                 GL11.GL_RGBA,
                 true,
                 imageData.getData());
+
+        BoundingBoxCalculator calc = new BoundingBoxCalculator();
+
         Material material = new Material(diffuse);
         for(int x = 0; x < 5; x++){
             for(int y = 0; y < 5; y++) {
@@ -180,11 +186,13 @@ public class Test1 {
                     transformProperty.move(new Vector3f(0,0,-50));
                     transformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
                     transformProperty.rotate(x, y, z);
+
                     Component component = new SceneComponent(scene);
                     component.addScript(AsdfScript.class);
                     component.addProperty(meshProperty);
                     component.addProperty(materialProperty);
                     component.addProperty(transformProperty);
+                    component.addProperty(new BoundingBoxProperty(calc.compute(mesh)));
                 }
             }
         }
