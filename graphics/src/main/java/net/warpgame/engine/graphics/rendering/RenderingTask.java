@@ -1,5 +1,7 @@
 package net.warpgame.engine.graphics.rendering;
 
+import net.warpgame.engine.core.context.task.InsertAfterTask;
+import net.warpgame.engine.graphics.window.WindowTask;
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -17,6 +19,7 @@ import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 
 @Service
 @RegisterTask(thread = "graphics")
+@InsertAfterTask(WindowTask.class)
 public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;
