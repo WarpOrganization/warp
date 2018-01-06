@@ -49,7 +49,7 @@ public class SceneUpdaterTask extends EngineTask {
     private void updateScene(ByteBuf serializedScene) {
         while (serializedScene.isReadable()) {
             int componentId = serializedScene.readInt();
-            Component c = componentRegistry.getCompoenent(componentId);
+            Component c = componentRegistry.getComponent(componentId);
             if (c != null) {
                 translation.set(
                         serializedScene.readFloat(),

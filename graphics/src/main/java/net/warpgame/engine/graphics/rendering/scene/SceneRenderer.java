@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering.scene;
 
+import net.warpgame.engine.graphics.camera.CameraHolder;
 import org.apache.log4j.Logger;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneHolder;
@@ -22,12 +23,14 @@ public class SceneRenderer {
     private SceneHolder sceneHolder;
     private ComponentRenderer renderer;
     private GBufferManager gBufferManager;
+    private CameraHolder cameraHolder;
     private GBufferFramebuffer framebuffer;
 
-    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer, GBufferManager gBufferManager) {
+    public SceneRenderer(SceneHolder sceneHolder, ComponentRenderer renderer, GBufferManager gBufferManager, CameraHolder cameraHolder) {
         this.sceneHolder = sceneHolder;
         this.renderer = renderer;
         this.gBufferManager = gBufferManager;
+        this.cameraHolder = cameraHolder;
     }
 
     public void init() {
@@ -40,12 +43,12 @@ public class SceneRenderer {
     }
 
     public void update() {
-        if(sceneHolder.getScene() != null) {
+        if (sceneHolder.getScene() != null && cameraHolder.getCamera() != null) {
             initRendering();
             render(sceneHolder.getScene(), false);
         } else {
-            logger.warn("Unable to render the scene. Scene = null");
-        }
+//            logger.warn("Unable to render the scene. Scene = null or Camera = null.");
+        }//TODO do stuff
     }
 
 

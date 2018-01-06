@@ -1,8 +1,5 @@
 package net.warpgame.engine.input.glfw;
 
-import org.apache.log4j.Logger;
-import org.joml.Vector2f;
-import org.lwjgl.glfw.GLFW;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.service.Service;
@@ -12,6 +9,9 @@ import net.warpgame.engine.input.event.KeyPressedEvent;
 import net.warpgame.engine.input.event.KeyReleasedEvent;
 import net.warpgame.engine.input.event.MouseButtonPressedEvent;
 import net.warpgame.engine.input.event.MouseButtonReleasedEvent;
+import org.apache.log4j.Logger;
+import org.joml.Vector2f;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;

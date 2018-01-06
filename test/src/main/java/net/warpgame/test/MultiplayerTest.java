@@ -1,51 +1,57 @@
 package net.warpgame.test;
 
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.graphics.GraphicsThread;
-import net.warpgame.engine.graphics.camera.Camera;
 import net.warpgame.engine.graphics.camera.CameraHolder;
-import net.warpgame.engine.graphics.camera.QuaternionCamera;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
+import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
+import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
-import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import net.warpgame.engine.graphics.resource.texture.ImageData;
+import net.warpgame.engine.graphics.resource.texture.ImageDataArray;
 import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
 import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
+import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
-import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 /**
- * @author Hubertus
- * Created 26.11.2017
+ * @author Jaca777
+ * Created 2017-09-23 at 13
  */
 public class MultiplayerTest {
 
+    public static final Display DISPLAY = new Display(false, 1280, 720);
 
-    public static final Display DISPLAY = new Display(false, 1280, 920);
 
-
-    public static void main(String... args) {
+    public static void main(String[] args) {
         System.out.println();
-        EngineContext engineContext = new EngineContext();
+        EngineContext engineContext = new EngineContext("dev");
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();
         setupScene(engineContext, thread);
-        setupCamera(engineContext);
+    }
+
+    private static void setupListeners(Component root, EngineContext context) {
+        root.addListener(new ShipLoadListener(root, context.getLoadedContext().findOne(GraphicsThread.class).get()));
+        CameraHolder cameraHolder = context.getLoadedContext().findOne(CameraHolder.class).get();
+        root.addListener(new BoardShipListener(root, cameraHolder, DISPLAY, context.getComponentRegistry()));
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -53,10 +59,23 @@ public class MultiplayerTest {
                 .findOne(SceneHolder.class)
                 .get();
         Scene scene = sceneHolder.getScene();
-        createModels(scene, thread);
+//        createModels(scene, thread);
+        createLight(new SceneComponent(scene, 1000000010));
+        createCubemap(scene, thread);
+        setupListeners(scene, engineContext);
+    }
+
+    private static void createCubemap(Scene scene, GraphicsThread thread) {
+        thread.scheduleOnce(() -> {
+            ImageDataArray imageDataArray = ImageDecoder.decodeCubemap("net/warpgame/test/stars3", PNGDecoder.Format.RGBA);
+            Cubemap cubemap = new Cubemap(imageDataArray.getWidth(), imageDataArray.getHeight(), imageDataArray.getData());
+            CubemapProperty cubemapProperty = new CubemapProperty(cubemap);
+            scene.addProperty(cubemapProperty);
+        });
     }
 
     private static void createLight(Component component) {
+        component.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
         SceneLightManager sceneLightManager = component.getContext()
                 .getLoadedContext()
                 .findOne(SceneLightManager.class)
@@ -67,45 +86,14 @@ public class MultiplayerTest {
         sceneLightManager.addLight(lightSourceProperty);
     }
 
-    private static Component createModels(Scene scene, GraphicsThread graphicsThread) {
-        Component ship = new SceneComponent(scene);
+    private static void createModels(Scene scene, GraphicsThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
-            createShip(ship);
             createSpheres(scene);
             Component lsource = new SceneComponent(scene);
             lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
             createLight(lsource);
         });
 
-        return ship;
-    }
-
-
-    private static void createShip(Component ship) {
-        SceneMesh mesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("pistol.obj"),
-                true).toMesh();
-        MeshProperty meshProperty = new MeshProperty(mesh);
-        ship.addProperty(meshProperty);
-
-        ImageData imageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("fighter_1.png"),
-                PNGDecoder.Format.RGBA
-        );
-        Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
-        Material material = new Material(diffuse);
-        MaterialProperty materialProperty = new MaterialProperty(material);
-        ship.addProperty(materialProperty);
-
-        TransformProperty property = new TransformProperty();
-        ship.addProperty(property);
-        property.move(new Vector3f(0, 0, -10f));
     }
 
     private static ImageData white = ImageDecoder.decodePNG(
@@ -123,6 +111,11 @@ public class MultiplayerTest {
             PNGDecoder.Format.RGBA
     );
 
+    private static ImageData woodNorm = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("wood/wood-stack-1-NORM.png"),
+            PNGDecoder.Format.RGBA
+    );
+
     private static ImageData stoneDiffuse = ImageDecoder.decodePNG(
             Test1.class.getResourceAsStream("stone/stone-redstone-2.png"),
             PNGDecoder.Format.RGBA
@@ -130,6 +123,11 @@ public class MultiplayerTest {
 
     private static ImageData stoneBump = ImageDecoder.decodePNG(
             Test1.class.getResourceAsStream("stone/stone-redstone-2-DISP.png"),
+            PNGDecoder.Format.RGBA
+    );
+
+    private static ImageData stoneNorm = ImageDecoder.decodePNG(
+            Test1.class.getResourceAsStream("stone/stone-redstone-2-NORM.png"),
             PNGDecoder.Format.RGBA
     );
 
@@ -152,6 +150,14 @@ public class MultiplayerTest {
                 true,
                 woodBump.getData());
 
+        Texture2D woodN = new Texture2D(
+                woodNorm.getHeight(),
+                woodNorm.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                woodNorm.getData());
+
         Texture2D stoneD = new Texture2D(
                 stoneDiffuse.getHeight(),
                 stoneDiffuse.getHeight(),
@@ -168,30 +174,47 @@ public class MultiplayerTest {
                 true,
                 stoneBump.getData());
 
+        Texture2D stoneN = new Texture2D(
+                stoneNorm.getHeight(),
+                stoneNorm.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                stoneNorm.getData());
+
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
 
-                createSphere(scene, new Vector3f(i * 15, j * 15, 0),
+                createSphere(scene,
+                        new Vector3f(i * 15, j * 15, 0),
                         ((i + j) % 2 == 0) ? woodD : stoneD,
-                        ((i + j) % 2 == 0) ? woodB : stoneB, 0.15f);
+                        ((i + j) % 2 == 0) ? woodB : stoneB,
+                        ((i + j) % 2 == 0) ? woodN : stoneN,
+                        0.15f
+                );
             }
         }
 
         Texture2D whiteD = new Texture2D(
-                white.getHeight(),
+                white.getWidth(),
                 white.getHeight(),
                 GL11.GL_RGB16,
                 GL11.GL_RGB,
                 true,
                 white.getData());
 
-        createSphere(scene, new Vector3f(0, 0, 40), whiteD,null, 0.0f);
-        createSphere(scene, new Vector3f(12, 0, 40), whiteD,null, 0.3f);
-        createSphere(scene, new Vector3f(24, 0, 40), whiteD,null, 1.0f);
+
+        Component a = new SceneComponent(scene);
+        a.addProperty(new TransformProperty().rotateY((float) (Math.PI / 2.0f)).move(new Vector3f(20, 0, 20)));
+        Component b = new SceneComponent(scene);
+        b.addProperty(new TransformProperty().rotateX((float) (Math.PI / 2.0f)).move(new Vector3f(0, 0, 20)));
+        Component sphere = createSphere(b, new Vector3f(0, 0, 40), whiteD, null, null, 0.0f);
+        Vector3f t = Transforms.getAbsolutePosition(sphere, new Vector3f());
+        //t.add(0, -3, 0);
     }
 
-    private static void createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, float roughness) {
+    private static Component createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, Texture2D normal, float roughness) {
         Component sphere = new SceneComponent(scene);
 
         SceneMesh mesh = SphereBuilder.createShape(20, 20, 4);
@@ -199,36 +222,17 @@ public class MultiplayerTest {
         sphere.addProperty(meshProperty);
 
         Material material = new Material(diffuse);
-        if(bump != null) material.setDisplacement(bump, 0.5f);
+        if (bump != null) material.setDisplacement(bump, 0.5f);
+        material.setNormalMap(normal);
         material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
+        sphere.addProperty(new TessellationModeProperty(SceneTessellationMode.BEZIER));
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);
         property.move(trans);
+        return sphere;
     }
 
-    private static void setupCamera(EngineContext engineContext) {
-        Scene scene = engineContext.getLoadedContext()
-                .findOne(SceneHolder.class)
-                .get()
-                .getScene();
-        Component cameraComponent = new SceneComponent(scene);
-        cameraComponent.addProperty(new TransformProperty());
-        cameraComponent.addScript(SimpleControlScript.class);
-
-        CameraHolder cameraHolder = engineContext.getLoadedContext()
-                .findOne(CameraHolder.class)
-                .get();
-        PerspectiveMatrix projection = new PerspectiveMatrix(
-                55f,
-                0.1f,
-                10000f,
-                DISPLAY.getWidth(),
-                DISPLAY.getHeight()
-        );
-        Camera camera = new QuaternionCamera(cameraComponent, new TransformProperty(), projection);
-        cameraHolder.setCamera(camera);
-    }
 }

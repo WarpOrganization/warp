@@ -76,8 +76,10 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     }
 
     private void registerClient(Channel channel, InetSocketAddress address) {
-        int id = clientRegistry.addClient(new Client(address, new EventReceiver(componentRegistry)));
+        Client c = new Client(address, new EventReceiver(componentRegistry));
+        int id = clientRegistry.addClient(c);
         channel.writeAndFlush(
                 new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));
+        componentRegistry.getComponent(0).triggerEvent(new ConnectedEvent(c));
     }
 }

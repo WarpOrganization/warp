@@ -27,7 +27,7 @@ public class ComponentRegistry {
         return maxId - 1;
     }
 
-    public synchronized Component getCompoenent(int id) {
+    public synchronized Component getComponent(int id) {
         return componentMap.get(id);
     }
 

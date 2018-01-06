@@ -31,7 +31,7 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
 
     @Override
     public synchronized void pushEvent(Envelope event) {
-        events.push(event);
+        events.add(event);
     }
 
     @Override

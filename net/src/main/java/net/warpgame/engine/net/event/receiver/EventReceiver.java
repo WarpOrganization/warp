@@ -43,7 +43,7 @@ public class EventReceiver {
     private void triggerIncomingEvents() {
         while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
             IncomingEnvelope envelope = eventQueue.poll();
-            Component targetComponent = componentRegistry.getCompoenent(envelope.getTargetComponentId());
+            Component targetComponent = componentRegistry.getComponent(envelope.getTargetComponentId());
             if (targetComponent == null) throw new DesynchronizationException("Event target component does not exist.");
             try {
                 targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
