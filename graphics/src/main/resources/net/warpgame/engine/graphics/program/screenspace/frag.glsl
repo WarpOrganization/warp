@@ -40,13 +40,13 @@ void processRender(int flags);
 void processBackground();
 
 void main(void) {
-    fragColor.rgb = texture(comp1, vTexCoord).rgb;
-//    int flags = texture(comp2, vTexCoord).r >> 22;
-//    if(isSet(flags, RENDER)) {
-//        processRender(flags);
-//    } else {
-//        processBackground();
-//    }
+//    fragColor.rgb = texture(comp1, vTexCoord).rgb;
+    int flags = texture(comp2, vTexCoord).r >> 22;
+    if(isSet(flags, RENDER)) {
+        processRender(flags);
+    } else {
+        processBackground();
+    }
     fragColor.a = 1;
 }
 
