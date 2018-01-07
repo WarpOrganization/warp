@@ -1,9 +1,11 @@
 package net.warpgame.engine.input.glfw;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.context.task.InsertAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.window.WindowManager;
+import net.warpgame.engine.graphics.window.WindowTask;
 
 /**
  * @author Jaca777
@@ -11,6 +13,7 @@ import net.warpgame.engine.graphics.window.WindowManager;
  */
 @Service
 @RegisterTask(thread = "graphics")
+@InsertAfterTask(WindowTask.class)
 public class GLFWInputTask extends EngineTask {
 
     private GLFWInput input;
