@@ -12,7 +12,7 @@ public class SceneMesh extends VAOMesh {
     private static final int[] TYPES = {GL11.GL_FLOAT, GL11.GL_FLOAT, GL11.GL_FLOAT};
 
     public SceneMesh(float[] vertices, float[] texCoords, float[] normals, int[] indices) {
-        super(new float[][] {vertices, texCoords, normals}, SIZES, TYPES, vertices.length, indices);
+        super(new float[][] {vertices, texCoords, normals}, SIZES, TYPES, vertices.length/3, indices);
     }
 
     public int getVertexBuff() {
