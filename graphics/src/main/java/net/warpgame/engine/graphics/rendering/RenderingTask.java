@@ -1,14 +1,14 @@
 package net.warpgame.engine.graphics.rendering;
 
-import org.apache.log4j.Logger;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.GLErrors;
 import net.warpgame.engine.graphics.rendering.scene.SceneRenderer;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
+import org.apache.log4j.Logger;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author Jaca777
@@ -44,6 +44,8 @@ public class RenderingTask extends EngineTask {
     private void createOpenGL() {
         GL.createCapabilities();
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     @Override

@@ -16,7 +16,7 @@ in vec2 oTexCoord;
 in vec3 oNormal;
 
 //gbuffer
-layout(location = 0) out vec3 comp1; //diffuse R, diffuse G, diffuse B
+layout(location = 0) out vec4 comp1; //diffuse R, diffuse G, diffuse B
 layout(location = 1) out uint comp2; //packed normal_1, normal_2, flags
 layout(location = 2) out vec3 comp3; //roughness, shininess, thread dir
 
@@ -30,10 +30,13 @@ void main(void) {
     calculateNormal();
     setFlags();
     setProperties();
+    if (comp1.a < 0.1) {
+        discard;
+    }
 }
 
 void calculateDiffuse() {
-    comp1 = texture(diffuseTexture, oTexCoord).rgb;
+    comp1 = texture(diffuseTexture, oTexCoord).rgba;
 }
 
 void calculateNormal() {
