@@ -1,5 +1,7 @@
 package net.warpgame.engine.net.event;
 
+import net.warpgame.engine.core.component.Component;
+
 /**
  * @author Hubertus
  * Created 28.12.2017
@@ -10,7 +12,9 @@ public class AddressedEnvelope {
     private long sendTime;
     private boolean confirmed;
     private int eventType;
-    private int targetComponentId;
+    private Component targetComponent;
+    private boolean shouldConfirm;
+    private EventConfirmationEvent bouncerEvent;
 
     public byte[] getSerializedEventData() {
         return serializedEventData;
@@ -52,11 +56,27 @@ public class AddressedEnvelope {
         this.eventType = eventType;
     }
 
-    public int getTargetComponentId() {
-        return targetComponentId;
+    public Component getTargetComponent() {
+        return targetComponent;
     }
 
-    public void setTargetComponentId(int targetComponentId) {
-        this.targetComponentId = targetComponentId;
+    public void setTargetComponent(Component targetComponent) {
+        this.targetComponent = targetComponent;
+    }
+
+    public boolean isShouldConfirm() {
+        return shouldConfirm;
+    }
+
+    public void setShouldConfirm(boolean shouldConfirm) {
+        this.shouldConfirm = shouldConfirm;
+    }
+
+    public EventConfirmationEvent getBouncerEvent() {
+        return bouncerEvent;
+    }
+
+    public void setBouncerEvent(EventConfirmationEvent bouncerEvent) {
+        this.bouncerEvent = bouncerEvent;
     }
 }

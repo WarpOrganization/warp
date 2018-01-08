@@ -73,6 +73,8 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
         addressedEnvelope.setConfirmed(false);
         addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
         addressedEnvelope.setDependencyId(c.getNextEventDependencyId());
+        addressedEnvelope.setTargetComponent(envelope.getTargetComponent());
+        if(envelope.isShouldConfirm()) addressedEnvelope.setShouldConfirm(true);
         c.addEvent(addressedEnvelope);
         sendEvent(addressedEnvelope);
         resendQueue.add(addressedEnvelope);
@@ -83,7 +85,7 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_EVENT, addressedEnvelope.getSerializedEventData().length + 12);
         packet.writeInt(addressedEnvelope.getEventType());
         packet.writeInt(addressedEnvelope.getDependencyId());
-        packet.writeInt(addressedEnvelope.getTargetComponentId());
+        packet.writeInt(addressedEnvelope.getTargetComponent().getId());
         packet.writeBytes(addressedEnvelope.getSerializedEventData());
         connectionUtil.sendPacket(packet, addressedEnvelope.getTargetClient());
     }

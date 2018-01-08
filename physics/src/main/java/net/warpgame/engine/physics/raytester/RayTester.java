@@ -1,6 +1,7 @@
 package net.warpgame.engine.physics.raytester;
 
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.physics.PhysicsTask;
 
@@ -9,6 +10,7 @@ import net.warpgame.engine.physics.PhysicsTask;
  * Created 24.09.16
  */
 @Service
+@Profile("fullPhysics")
 public class RayTester {
 
     private RayTestSolver rayTestSolver;

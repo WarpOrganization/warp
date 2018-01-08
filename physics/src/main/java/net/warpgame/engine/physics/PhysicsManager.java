@@ -2,6 +2,7 @@ package net.warpgame.engine.physics;
 
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.PropertyNotPresentException;
 import net.warpgame.engine.physics.constraints.Constraint;
@@ -11,6 +12,7 @@ import net.warpgame.engine.physics.constraints.Constraint;
  * Created 22.09.2017
  */
 @Service
+@Profile("fullPhysics")
 public class PhysicsManager {
 
     private PhysicsTask physicsTask;

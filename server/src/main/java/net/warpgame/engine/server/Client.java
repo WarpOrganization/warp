@@ -42,7 +42,10 @@ public class Client {
 
     synchronized void confirmEvent(int eventDependencyId) {
         ServerAddressedEnvelope w = eventConfirmations.get(eventDependencyId);
-        if (w != null) w.setConfirmed(true);
+        if (w != null) {
+            w.setConfirmed(true);
+            if (w.isShouldConfirm()) w.getTargetComponent().triggerEvent(w.getBouncerEvent());
+        }
     }
 
     synchronized void addEvent(ServerAddressedEnvelope addressedEnvelope) {

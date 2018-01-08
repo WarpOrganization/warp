@@ -20,10 +20,14 @@ public class SceneUpdaterTask extends EngineTask {
 
     private SerializedSceneHolder sceneHolder;
     private ComponentRegistry componentRegistry;
+    private UpdateBlockerService blockerService;
 
-    public SceneUpdaterTask(SerializedSceneHolder sceneHolder, ComponentRegistry componentRegistry) {
+    public SceneUpdaterTask(SerializedSceneHolder sceneHolder,
+                            ComponentRegistry componentRegistry,
+                            UpdateBlockerService blockerService) {
         this.sceneHolder = sceneHolder;
         this.componentRegistry = componentRegistry;
+        this.blockerService = blockerService;
     }
 
 
@@ -50,7 +54,7 @@ public class SceneUpdaterTask extends EngineTask {
         while (serializedScene.isReadable()) {
             int componentId = serializedScene.readInt();
             Component c = componentRegistry.getComponent(componentId);
-            if (c != null) {
+            if (c != null && !blockerService.isBlocked(c.getId())) {
                 translation.set(
                         serializedScene.readFloat(),
                         serializedScene.readFloat(),
