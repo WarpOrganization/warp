@@ -17,6 +17,9 @@ import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
+import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
+import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
+import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
@@ -44,13 +47,16 @@ import org.lwjgl.opengl.GL11;
 public class Test1 {
 
     public static final Display DISPLAY = new Display(false, 1280, 720);
-
+    private static BoundingBoxCalculator calc;
 
     public static void main(String[] args) {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev");
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
+                .get();
+        calc = engineContext.getLoadedContext()
+                .findOne(BoundingBoxCalculator.class)
                 .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
@@ -90,7 +96,7 @@ public class Test1 {
         graphicsThread.scheduleOnce(() -> {
             createShip(ship);
             createSpheres(scene);
-            createGoats(scene);
+            createMugs(scene);
             createCastle(scene);
             createFloor(scene);
             Component lsource = new SceneComponent(scene);
@@ -152,39 +158,62 @@ public class Test1 {
 
     }
 
-    private static void createGoats(Scene scene) {
-        SceneMesh mesh = ObjLoader.read(
+    private static void createMugs(Scene scene) {
+        SceneMesh mugMesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("mug.obj"),
                 true).toMesh();
-
-
-        ImageData imageData = ImageDecoder.decodePNG(
+        ImageData mugImageData = ImageDecoder.decodePNG(
                 Test1.class.getResourceAsStream("he-goat_tex.png"),
                 PNGDecoder.Format.RGBA
         );
-        Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
-                imageData.getHeight(),
+        Texture2D mugDiffuse = new Texture2D(
+                mugImageData.getHeight(),
+                mugImageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
                 true,
-                imageData.getData());
-        Material material = new Material(diffuse);
-        for(int x = 0; x < 5; x++){
-            for(int y = 0; y < 5; y++) {
-                for(int z = 0; z < 5; z++) {
-                    MeshProperty meshProperty = new MeshProperty(mesh);
-                    MaterialProperty materialProperty = new MaterialProperty(material);
-                    TransformProperty transformProperty = new TransformProperty();
-                    transformProperty.setTranslation(new Vector3f(x * 5, y * 5, z * 5));
-                    transformProperty.move(new Vector3f(0,0,-50));
-                    transformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
-                    transformProperty.rotate(x, y, z);
-                    Component component = new SceneComponent(scene);
-                    component.addScript(AsdfScript.class);
-                    component.addProperty(meshProperty);
-                    component.addProperty(materialProperty);
-                    component.addProperty(transformProperty);
+                mugImageData.getData());
+        Material mugMaterial = new Material(mugDiffuse);
+
+        BoundingBox boundingBoxMesh = calc.compute(mugMesh);
+        ImageData boxImageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("bounding-box.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D boxDiffuse = new Texture2D(
+                boxImageData.getHeight(),
+                boxImageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                boxImageData.getData());
+        Material boxMaterial = new Material(boxDiffuse);
+        for(int x = 0; x < 1; x++){
+            for(int y = 0; y < 1; y++) {
+                for(int z = 0; z < 1; z++) {
+                    MeshProperty mugMeshProperty = new MeshProperty(mugMesh);
+                    MaterialProperty mugMaterialProperty = new MaterialProperty(mugMaterial);
+                    TransformProperty mugTransformProperty = new TransformProperty();
+                    mugTransformProperty.setTranslation(new Vector3f(x * 5, y * 5, z * 5));
+                    mugTransformProperty.move(new Vector3f(0,0,-50));
+                    mugTransformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
+                    mugTransformProperty.rotate(x, y, z);
+
+                    Component mugComponent = new SceneComponent(scene);
+                    mugComponent.addScript(AsdfScript.class);
+                    mugComponent.addProperty(mugMeshProperty);
+                    mugComponent.addProperty(mugMaterialProperty);
+                    mugComponent.addProperty(mugTransformProperty);
+                    mugComponent.addProperty(new BoundingBoxProperty(boundingBoxMesh));
+
+                    MeshProperty boxMeshProperty = new MeshProperty(boundingBoxMesh);
+                    MaterialProperty boxMaterialProperty = new MaterialProperty(boxMaterial);
+                    TransformProperty boxTransformProperty = new TransformProperty();
+
+                    Component boxComponent = new SceneComponent(mugComponent);
+                    mugComponent.addProperty(boxMeshProperty);
+                    mugComponent.addProperty(boxMaterialProperty);
+                    mugComponent.addProperty(boxTransformProperty);
                 }
             }
         }

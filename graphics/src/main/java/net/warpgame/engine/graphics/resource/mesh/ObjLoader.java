@@ -32,7 +32,7 @@ public class ObjLoader {
         /**
          * @param texCoord Texture coordinate of vertex being mixed.
          * @param normal   Normal of vertex being mixed.
-         * @return whether the mixture is possible (both have the same texCoords)
+         * @return         whether the mixture is possible (both have the same texCoords)
          */
         private boolean mix(Vector2f texCoord, Vector3f normal) {
             if (this.texCoord.x != texCoord.x || this.texCoord.y != texCoord.y) {
