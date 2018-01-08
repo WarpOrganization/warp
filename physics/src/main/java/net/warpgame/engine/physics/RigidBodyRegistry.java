@@ -32,17 +32,17 @@ public class RigidBodyRegistry {
         if (!toAdd.isEmpty()) {
             for (Component aToAdd : toAdd) {
                 colliderComponentRegistry.addComponennt(aToAdd);
-                PhysicsProperty physicsProperty = aToAdd.getProperty(PhysicsProperty.NAME);
-                dynamicsWorld.addRigidBody(physicsProperty.getRigidBody());
+                FullPhysicsProperty fullPhysicsProperty = aToAdd.getProperty(FullPhysicsProperty.NAME);
+                dynamicsWorld.addRigidBody(fullPhysicsProperty.getRigidBody());
             }
             toAdd.clear();
         }
 
         if (!toRemove.isEmpty()) {
             for (Component aToRemove : toRemove) {
-                PhysicsProperty physicsProperty = aToRemove.getProperty(PhysicsProperty.NAME);
-                dynamicsWorld.removeRigidBody(physicsProperty.getRigidBody());
-                colliderComponentRegistry.removeCompoent(physicsProperty.getRigidBody().getUserValue());
+                FullPhysicsProperty fullPhysicsProperty = aToRemove.getProperty(FullPhysicsProperty.NAME);
+                dynamicsWorld.removeRigidBody(fullPhysicsProperty.getRigidBody());
+                colliderComponentRegistry.removeCompoent(fullPhysicsProperty.getRigidBody().getUserValue());
             }
             toAdd.clear();
         }

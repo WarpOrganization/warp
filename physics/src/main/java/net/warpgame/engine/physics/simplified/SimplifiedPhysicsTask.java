@@ -1,6 +1,6 @@
 package net.warpgame.engine.physics.simplified;
 
-import net.warpgame.engine.common.SimplePhysicsProperty;
+import net.warpgame.engine.common.physics.SimplePhysicsProperty;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
@@ -39,7 +39,7 @@ public class SimplifiedPhysicsTask extends EngineTask{
 
     @Override
     public void update(int delta) {
-
+        updateComponents();
     }
 
     private ArrayList<Component> components = new ArrayList<>();

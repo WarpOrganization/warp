@@ -1,4 +1,4 @@
-package net.warpgame.engine.common;
+package net.warpgame.engine.common.physics;
 
 import net.warpgame.engine.core.property.Property;
 import org.joml.Matrix3f;
@@ -9,7 +9,7 @@ import org.joml.Vector3f;
  * @author Hubertus
  * Created 07.01.2018
  */
-public class SimplePhysicsProperty extends Property {
+public class SimplePhysicsProperty extends Property implements PhysicsInterface {
 
     public static final String NAME = "simplePhysicsProperty";
 
@@ -20,18 +20,6 @@ public class SimplePhysicsProperty extends Property {
 
     public SimplePhysicsProperty() {
         super(NAME);
-    }
-
-    public void applyForce(Vector3f force) {
-        velocity.add(force.x / mass, force.y / mass, force.z / mass);
-    }
-
-    public void linearStop() {
-        velocity.set(0, 0, 0);
-    }
-
-    public void angularStop() {
-        angularVelocity.set(0, 0, 0, 0.5f);
     }
 
     public Quaternionf getAngularVelocity() {
@@ -46,8 +34,15 @@ public class SimplePhysicsProperty extends Property {
         return velocity;
     }
 
-    public void setVelocity(Vector3f velocity) {
-        this.velocity.set(velocity);
+    @Override
+    public void applyCentralForce(Vector3f force) {
+        velocity.add(force.x / mass, force.y / mass, force.z / mass);
+    }
+
+    @Override
+    public void applyTorque(Vector3f torque) {
+        angularVelocity.set(0, 0, 0, 0.5f);
+        angularVelocity.rotate(torque.x, torque.y, torque.z);
     }
 
     public float getMass() {

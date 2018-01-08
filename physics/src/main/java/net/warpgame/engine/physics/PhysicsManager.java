@@ -27,8 +27,8 @@ public class PhysicsManager {
         if (!component.hasEnabledProperty(TransformProperty.NAME))
             throw new PropertyNotPresentException(TransformProperty.NAME);
 
-        if (!component.hasEnabledProperty(PhysicsProperty.NAME))
-            throw new PropertyNotPresentException(PhysicsProperty.NAME);
+        if (!component.hasEnabledProperty(FullPhysicsProperty.NAME))
+            throw new PropertyNotPresentException(FullPhysicsProperty.NAME);
         physicsTask.getRigidBodyRegistry().addRigidBody(component);
     }
 
@@ -36,8 +36,8 @@ public class PhysicsManager {
         if (!component.hasEnabledProperty(TransformProperty.NAME))
             throw new PropertyNotPresentException(TransformProperty.NAME);
 
-        if (!component.hasEnabledProperty(PhysicsProperty.NAME))
-            throw new PropertyNotPresentException(PhysicsProperty.NAME);
+        if (!component.hasEnabledProperty(FullPhysicsProperty.NAME))
+            throw new PropertyNotPresentException(FullPhysicsProperty.NAME);
         physicsTask.getRigidBodyRegistry().removeRigidBody(component);
     }
 
