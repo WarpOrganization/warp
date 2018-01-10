@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import net.warpgame.engine.core.context.service.Profile;
 import org.apache.log4j.Logger;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
@@ -21,6 +22,7 @@ import net.warpgame.engine.physics.raytester.RayTestSolver;
 
 @Service
 @RegisterTask(thread = "physics")
+@Profile("fullPhysics")
 public class PhysicsTask extends EngineTask {
 
     private static Logger logger = Logger.getLogger(PhysicsTask.class);

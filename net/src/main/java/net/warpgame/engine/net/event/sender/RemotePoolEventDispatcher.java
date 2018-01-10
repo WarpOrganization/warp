@@ -30,7 +30,7 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
     public void dispatchEvent(Component component, Event event) {
         if (event instanceof Envelope) {
             Envelope envelope = (Envelope) event;
-            envelope.setTargetComponentId(component.getId());
+            envelope.setTargetComponent(component);
             eventQueue.pushEvent(envelope);
             executor.execute(() -> {
                 for (Listener listener : component.getListeners(envelope.getContent().getTypeName()))

@@ -2,6 +2,7 @@ package net.warpgame.engine.physics;
 
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.PropertyNotPresentException;
 import net.warpgame.engine.physics.constraints.Constraint;
@@ -11,6 +12,7 @@ import net.warpgame.engine.physics.constraints.Constraint;
  * Created 22.09.2017
  */
 @Service
+@Profile("fullPhysics")
 public class PhysicsManager {
 
     private PhysicsTask physicsTask;
@@ -25,8 +27,8 @@ public class PhysicsManager {
         if (!component.hasEnabledProperty(TransformProperty.NAME))
             throw new PropertyNotPresentException(TransformProperty.NAME);
 
-        if (!component.hasEnabledProperty(PhysicsProperty.NAME))
-            throw new PropertyNotPresentException(PhysicsProperty.NAME);
+        if (!component.hasEnabledProperty(FullPhysicsProperty.NAME))
+            throw new PropertyNotPresentException(FullPhysicsProperty.NAME);
         physicsTask.getRigidBodyRegistry().addRigidBody(component);
     }
 
@@ -34,8 +36,8 @@ public class PhysicsManager {
         if (!component.hasEnabledProperty(TransformProperty.NAME))
             throw new PropertyNotPresentException(TransformProperty.NAME);
 
-        if (!component.hasEnabledProperty(PhysicsProperty.NAME))
-            throw new PropertyNotPresentException(PhysicsProperty.NAME);
+        if (!component.hasEnabledProperty(FullPhysicsProperty.NAME))
+            throw new PropertyNotPresentException(FullPhysicsProperty.NAME);
         physicsTask.getRigidBodyRegistry().removeRigidBody(component);
     }
 

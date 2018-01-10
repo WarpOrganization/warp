@@ -1,10 +1,12 @@
 package net.warpgame.servertest;
 
+import com.badlogic.gdx.physics.bullet.collision.Collision;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
+import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.server.RemoteInput;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -23,7 +25,11 @@ public class MovementScript extends Script {
     @OwnerProperty(TransformProperty.NAME)
     private TransformProperty transformProperty;
 
-    private static final float ROT_SPEED = 0.001f;
+    @OwnerProperty(FullPhysicsProperty.NAME)
+    private FullPhysicsProperty physicsProperty;
+
+    private static final float ROT_SPEED = 0.002f;
+    private static final float MOV_SPEED = 0.04f;
 
     public MovementScript(Component owner) {
         super(owner);
@@ -32,6 +38,8 @@ public class MovementScript extends Script {
     @Override
     public void onInit() {
         input = remoteInputProperty.getRemoteInput();
+        physicsProperty.getRigidBody().setActivationState(Collision.DISABLE_DEACTIVATION);
+        physicsProperty.getRigidBody().activate();
     }
 
     @Override
@@ -41,11 +49,10 @@ public class MovementScript extends Script {
     }
 
     private Vector3f movementVector = new Vector3f();
-    private Vector3f rotationVector = new Vector3f();
 
     private void move(int delta) {
-
         movementVector.zero();
+
         if (input.isForwardPressed()) {
             movementVector.add(-1, 0, 0);
         }
@@ -59,20 +66,30 @@ public class MovementScript extends Script {
         if (movementVector.lengthSquared() >= 1.0f) {
             movementVector.normalize();
             movementVector.rotate(rotation);
-            movementVector.mul(0.025f * delta);
-            transformProperty.move(movementVector);
+            movementVector.mul(MOV_SPEED * delta);
+            physicsProperty.applyCentralForce(movementVector);
         }
     }
 
+    private Vector3f torqueVector = new Vector3f();
+
     private void rotate(int delta) {
         if (input.isRotationUp())
-            transformProperty.rotateZ(ROT_SPEED * delta);
+            torqueVector.add(0, 0, 1);
         if (input.isRotationDown())
-            transformProperty.rotateZ(-ROT_SPEED * delta);
+            torqueVector.add(0, 0, -1);
+
         if (input.isRotationLeft())
-            transformProperty.rotateY(ROT_SPEED * delta);
+            torqueVector.add(1, 0, 0);
+
         if (input.isRotationRight())
-            transformProperty.rotateY(-ROT_SPEED * delta);
+            torqueVector.add(-1, 0, 0);
+
+        if (torqueVector.lengthSquared() >= 1) {
+            torqueVector.mul(delta * ROT_SPEED);
+            physicsProperty.applyTorque(torqueVector);
+            torqueVector.set(0);
+        }
     }
 //    private void rotate(int delta) {
 //        Vector2f cursorPositionDelta = input.getCursorPositionDelta();

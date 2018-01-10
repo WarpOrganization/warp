@@ -64,7 +64,8 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
             addressedEnvelope.setDependencyId(eventDependencyIdCounter);
             addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
             addressedEnvelope.setEventType(envelope.getContent().getType());
-            addressedEnvelope.setTargetComponentId(envelope.getTargetComponentId());
+            addressedEnvelope.setTargetComponent(envelope.getTargetComponent());
+            addressedEnvelope.setShouldConfirm(envelope.isShouldConfirm());
 
             confirmationMap.put(eventDependencyIdCounter, addressedEnvelope);
             resendQueue.add(addressedEnvelope);
@@ -76,14 +77,19 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
         ByteBuf packet = connectionService.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length + 12);
         packet.writeInt(envelope.getEventType());
         packet.writeInt(envelope.getDependencyId());
-        packet.writeInt(envelope.getTargetComponentId());
+        packet.writeInt(envelope.getTargetComponent().getId());
         packet.writeBytes(envelope.getSerializedEventData());
         connectionService.sendPacket(packet);
     }
 
     public synchronized void confirmEvent(int eventDependencyId) {
         AddressedEnvelope addressedEnvelope = confirmationMap.get(eventDependencyId);
-        if (addressedEnvelope != null) addressedEnvelope.setConfirmed(true);
+        if (addressedEnvelope != null) {
+            if(addressedEnvelope.isShouldConfirm()){
+                addressedEnvelope.getTargetComponent().triggerEvent(addressedEnvelope.getBouncerEvent());
+            }
+            addressedEnvelope.setConfirmed(true);
+        }
     }
 
     public void setConnectionService(ConnectionService connectionService) {

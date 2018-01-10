@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.event;
 
+import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.event.Event;
 
 /**
@@ -8,10 +9,16 @@ import net.warpgame.engine.core.event.Event;
  */
 public class Envelope extends Event {
     private Event content;
-    private int targetComponentId;
+    private Component targetComponent;
+    private boolean shouldConfirm = false;
 
     public Envelope(Event content) {
         this.content = content;
+    }
+
+    public Envelope(Event content, boolean shouldConfirm) {
+        this.content = content;
+        this.shouldConfirm = shouldConfirm;
     }
 
     public Event getContent() {
@@ -22,11 +29,19 @@ public class Envelope extends Event {
         this.content = content;
     }
 
-    public int getTargetComponentId() {
-        return targetComponentId;
+    public Component getTargetComponent() {
+        return targetComponent;
     }
 
-    public void setTargetComponentId(int targetComponentId) {
-        this.targetComponentId = targetComponentId;
+    public void setTargetComponent(Component targetComponent) {
+        this.targetComponent = targetComponent;
+    }
+
+    public boolean isShouldConfirm() {
+        return shouldConfirm;
+    }
+
+    public void setShouldConfirm(boolean shouldConfirm) {
+        this.shouldConfirm = shouldConfirm;
     }
 }
