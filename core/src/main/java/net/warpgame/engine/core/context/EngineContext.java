@@ -1,6 +1,5 @@
 package net.warpgame.engine.core.context;
 
-import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneHolder;
@@ -15,7 +14,6 @@ import net.warpgame.engine.core.script.ScriptManager;
 public class EngineContext {
 
     public static final String CODESOURCE_DIR = EngineLauncher.CODESOURCE_DIR;
-
 
 
 

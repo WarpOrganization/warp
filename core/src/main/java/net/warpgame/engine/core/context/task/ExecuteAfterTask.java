@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface InsertAfterTask {
+public @interface ExecuteAfterTask {
     Class<? extends EngineTask> value();
 }

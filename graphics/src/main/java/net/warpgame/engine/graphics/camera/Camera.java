@@ -15,22 +15,6 @@ public interface Camera extends Updatable {
 
     Component getCameraComponent();
 
-    void move(Vector3f v);
-
-    void rotate(float angleXInRadians, float angleYInRadians, float angleZInRadians);
-
-    void rotateLocalX(float angleInRadians);
-
-    void rotateLocalY(float angleInRadians);
-
-    void rotateLocalZ(float angleInRadians);
-
-    void rotateX(float angle);
-
-    void rotateY(float angle);
-
-    void rotateZ(float angle);
-
     void update(int delta);
 
     Vector3f getPosition(Vector3f dest);

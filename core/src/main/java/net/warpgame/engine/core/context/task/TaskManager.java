@@ -53,12 +53,12 @@ public class TaskManager implements ServiceRegistry {
     private void processDependencies(ThreadTaskLoader taskLoader, EngineTask task) {
         Class<? extends EngineTask> aClass = task.getClass();
 
-        if (aClass.getAnnotation(InsertAfterTask.class) != null) {
-            InsertAfterTask annotation = aClass.getAnnotation(InsertAfterTask.class);
+        if (aClass.getAnnotation(ExecuteAfterTask.class) != null) {
+            ExecuteAfterTask annotation = aClass.getAnnotation(ExecuteAfterTask.class);
             Class<? extends EngineTask> value = annotation.value();
             taskLoader.addTaskDependency(value, task.getClass());
-        } else if (aClass.getAnnotation(InsertBeforeTask.class) != null) {
-            InsertBeforeTask annotation = aClass.getAnnotation(InsertBeforeTask.class);
+        } else if (aClass.getAnnotation(ExecuteBeforeTask.class) != null) {
+            ExecuteBeforeTask annotation = aClass.getAnnotation(ExecuteBeforeTask.class);
             Class<? extends EngineTask> value = annotation.value();
             taskLoader.addTaskDependency(task.getClass(), value);
         }
