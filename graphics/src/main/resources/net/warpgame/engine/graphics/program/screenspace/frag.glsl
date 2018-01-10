@@ -12,6 +12,10 @@ precision highp float;
 #include "screenspace/light/heidrichSeidel"
 #include "screenspace/light/light"
 
+#if defined(RETARDED_MODE)
+uniform sampler2D normals;
+#endif
+
 //G-buffer
 uniform sampler2D comp1;
 uniform isampler2D comp2;
@@ -92,7 +96,7 @@ vec3 getLightFromSource(LightSource source, vec3 scenePos, vec3 normal, float ro
     }
 
     float dist = distance(source.pos, scenePos);
-    return radiance * (1.0/dist);//TODO inverse square law, but it looks crappy atm
+    return radiance * (1.0/(dist));//TODO inverse square law, but it looks crappy atm
 }
 
 vec3 decodeNormal() {

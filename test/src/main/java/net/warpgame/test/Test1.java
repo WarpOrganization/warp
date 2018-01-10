@@ -318,7 +318,7 @@ public class Test1 {
 
 
         Texture2D woodD = new Texture2D(
-                woodDiffuse.getHeight(),
+                woodDiffuse.getWidth(),
                 woodDiffuse.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -326,7 +326,7 @@ public class Test1 {
                 woodDiffuse.getData());
 
         Texture2D woodB = new Texture2D(
-                woodBump.getHeight(),
+                woodBump.getWidth(),
                 woodBump.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -334,7 +334,7 @@ public class Test1 {
                 woodBump.getData());
 
         Texture2D woodN = new Texture2D(
-                woodNorm.getHeight(),
+                woodNorm.getWidth(),
                 woodNorm.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -342,7 +342,7 @@ public class Test1 {
                 woodNorm.getData());
 
         Texture2D stoneD = new Texture2D(
-                stoneDiffuse.getHeight(),
+                stoneDiffuse.getWidth(),
                 stoneDiffuse.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -350,7 +350,7 @@ public class Test1 {
                 stoneDiffuse.getData());
 
         Texture2D stoneB = new Texture2D(
-                stoneBump.getHeight(),
+                stoneBump.getWidth(),
                 stoneBump.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -358,7 +358,7 @@ public class Test1 {
                 stoneBump.getData());
 
         Texture2D stoneN = new Texture2D(
-                stoneNorm.getHeight(),
+                stoneNorm.getWidth(),
                 stoneNorm.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,

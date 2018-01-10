@@ -19,7 +19,7 @@ public class Transforms {
         Component firstUndirty = loadDirtyAndFetchTop(component); //see loadDirtyAndFetchCachedTop comment
         if (stack.isEmpty()) {
             TransformProperty transformProperty = component.getProperty(TransformProperty.NAME);
-            return dest.set(transformProperty.getTransformCache());
+            return dest.set(transformProperty.getCachedNonrelativeTransform());
         }
         if (firstUndirty == null) {
             dest.identity();
@@ -27,7 +27,7 @@ public class Transforms {
             dest.identity();
         } else {
             TransformProperty transformProperty = firstUndirty.getProperty(TransformProperty.NAME);
-            dest.set(transformProperty.getTransformCache());
+            dest.set(transformProperty.getCachedNonrelativeTransform());
         }
 
         Component dirty;

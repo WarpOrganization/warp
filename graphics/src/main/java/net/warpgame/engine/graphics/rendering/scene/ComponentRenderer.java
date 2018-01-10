@@ -74,8 +74,8 @@ public class ComponentRenderer {
             property.updateCaches(matrixStack.topMatrix(), matrixStack.topRotationMatrix());
             return true;
         } else {
-            matrixStack.setTop(property.getTransformCache());
-            matrixStack.setTopRotation(property.getRotationCache());
+            matrixStack.setTop(property.getCachedNonrelativeTransform());
+            matrixStack.setTopRotation(property.getCachedNonrelativeRotation());
             return false;
         }
 

@@ -122,11 +122,11 @@ public class TransformProperty extends Property {
         this.dirty = false;
     }
 
-    public Matrix4f getTransformCache() {
+    public Matrix4f getCachedNonrelativeTransform() {
         return transformCache;
     }
 
-    public Matrix3f getRotationCache() {
+    public Matrix3f getCachedNonrelativeRotation() {
         return rotationCache;
     }
 }
