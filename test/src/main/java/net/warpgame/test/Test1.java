@@ -6,7 +6,9 @@ import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
+import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
+import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -37,6 +39,9 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
+import net.warpgame.test.console.Command;
+import net.warpgame.test.console.ConsoleService;
+import net.warpgame.test.console.MoveCameraCommand;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -48,16 +53,21 @@ public class Test1 {
 
     public static final Display DISPLAY = new Display(false, 1280, 720);
     private static BoundingBoxCalculator calc;
+    private static ConsoleService consoleService;
 
     public static void main(String[] args) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev");
+        EngineContext engineContext = new EngineContext(/*"dev"*/);
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();
         calc = engineContext.getLoadedContext()
                 .findOne(BoundingBoxCalculator.class)
                 .get();
+        consoleService = engineContext.getLoadedContext()
+                .findOne(ConsoleService.class)
+                .get();
+        registerCommands(engineContext.getLoadedContext());
         setupScene(engineContext, thread);
         setupCamera(engineContext);
     }
@@ -105,6 +115,22 @@ public class Test1 {
         });
 
         return ship;
+    }
+
+    private static void registerCommands(Context context) {
+        Command exit = new Command("quit", Command.Side.CLIENT, "Closes the game");
+        exit.setExecutor((args) -> {
+            context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.exit(0);
+        });
+        consoleService.registerDefinition(exit);
+
+        consoleService.registerDefinition(new MoveCameraCommand(context.findOne(CameraHolder.class).get()));
     }
 
     private static void createCastle(Scene scene) {

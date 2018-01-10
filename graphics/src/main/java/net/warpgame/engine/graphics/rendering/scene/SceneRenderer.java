@@ -1,13 +1,13 @@
 package net.warpgame.engine.graphics.rendering.scene;
 
-import net.warpgame.engine.graphics.camera.CameraHolder;
-import org.apache.log4j.Logger;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.config.EnableConfig;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBufferFramebuffer;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBufferManager;
+import org.apache.log4j.Logger;
 
 
 /**
