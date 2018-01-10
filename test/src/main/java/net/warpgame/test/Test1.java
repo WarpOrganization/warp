@@ -6,7 +6,9 @@ import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
+import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
+import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -37,6 +39,9 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
+import net.warpgame.test.console.Command;
+import net.warpgame.test.console.ConsoleService;
+import net.warpgame.test.console.MoveCameraCommand;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -48,16 +53,21 @@ public class Test1 {
 
     public static final Display DISPLAY = new Display(false, 1280, 720);
     private static BoundingBoxCalculator calc;
+    private static ConsoleService consoleService;
 
     public static void main(String[] args) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev");
+        EngineContext engineContext = new EngineContext(/*"dev"*/);
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();
         calc = engineContext.getLoadedContext()
                 .findOne(BoundingBoxCalculator.class)
                 .get();
+        consoleService = engineContext.getLoadedContext()
+                .findOne(ConsoleService.class)
+                .get();
+        registerCommands(engineContext.getLoadedContext());
         setupScene(engineContext, thread);
         setupCamera(engineContext);
     }
@@ -85,7 +95,7 @@ public class Test1 {
                 .getLoadedContext()
                 .findOne(SceneLightManager.class)
                 .get();
-        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
+        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(40));
         LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
         component.addProperty(lightSourceProperty);
         sceneLightManager.addLight(lightSourceProperty);
@@ -105,6 +115,22 @@ public class Test1 {
         });
 
         return ship;
+    }
+
+    private static void registerCommands(Context context) {
+        Command exit = new Command("quit", Command.Side.CLIENT, "Closes the game");
+        exit.setExecutor((args) -> {
+            context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.exit(0);
+        });
+        consoleService.registerDefinition(exit);
+
+        consoleService.registerDefinition(new MoveCameraCommand(context.findOne(CameraHolder.class).get()));
     }
 
     private static void createCastle(Scene scene) {
@@ -160,14 +186,14 @@ public class Test1 {
 
     private static void createMugs(Scene scene) {
         SceneMesh mugMesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("mug.obj"),
+                Test1.class.getResourceAsStream("tank.obj"),
                 true).toMesh();
         ImageData mugImageData = ImageDecoder.decodePNG(
                 Test1.class.getResourceAsStream("he-goat_tex.png"),
                 PNGDecoder.Format.RGBA
         );
         Texture2D mugDiffuse = new Texture2D(
-                mugImageData.getHeight(),
+                mugImageData.getWidth(),
                 mugImageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -175,18 +201,22 @@ public class Test1 {
                 mugImageData.getData());
         Material mugMaterial = new Material(mugDiffuse);
 
-        BoundingBox boundingBoxMesh = calc.compute(mugMesh);
+        SceneMesh boundingBoxMesh = ObjLoader.read(
+                Test1.class.getResourceAsStream("boundingbox.obj"),
+                true).toMesh();
         ImageData boxImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("bounding-box.png"),
-                PNGDecoder.Format.RGBA
+                Test1.class.getResourceAsStream("palette.png"),
+                PNGDecoder.Format.RGB
         );
         Texture2D boxDiffuse = new Texture2D(
+                boxImageData.getWidth(),
                 boxImageData.getHeight(),
-                boxImageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
+                GL11.GL_RGB16,
+                GL11.GL_RGB,
                 true,
                 boxImageData.getData());
+        boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         Material boxMaterial = new Material(boxDiffuse);
         for(int x = 0; x < 1; x++){
             for(int y = 0; y < 1; y++) {
@@ -199,21 +229,23 @@ public class Test1 {
                     mugTransformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
                     mugTransformProperty.rotate(x, y, z);
 
+                    BoundingBox bb = calc.compute(mugMesh);
                     Component mugComponent = new SceneComponent(scene);
-                    mugComponent.addScript(AsdfScript.class);
+                    mugComponent.addScript(ConstantRotationScript.class);
                     mugComponent.addProperty(mugMeshProperty);
                     mugComponent.addProperty(mugMaterialProperty);
                     mugComponent.addProperty(mugTransformProperty);
-                    mugComponent.addProperty(new BoundingBoxProperty(boundingBoxMesh));
+                    mugComponent.addProperty(new BoundingBoxProperty(bb));
 
                     MeshProperty boxMeshProperty = new MeshProperty(boundingBoxMesh);
                     MaterialProperty boxMaterialProperty = new MaterialProperty(boxMaterial);
                     TransformProperty boxTransformProperty = new TransformProperty();
-
+                    boxTransformProperty.setTranslation(new Vector3f((bb.max().x+bb.min().x)/2, (bb.max().y+bb.min().y)/2, (bb.max().z+bb.min().z)/2));
+                    boxTransformProperty.scale(new Vector3f((bb.max().x-bb.min().x), (bb.max().y-bb.min().y), (bb.max().z-bb.min().z)));
                     Component boxComponent = new SceneComponent(mugComponent);
-                    mugComponent.addProperty(boxMeshProperty);
-                    mugComponent.addProperty(boxMaterialProperty);
-                    mugComponent.addProperty(boxTransformProperty);
+                    boxComponent.addProperty(boxMeshProperty);
+                    boxComponent.addProperty(boxMaterialProperty);
+                    boxComponent.addProperty(boxTransformProperty);
                 }
             }
         }
@@ -431,12 +463,12 @@ public class Test1 {
         cameraHolder.setCamera(camera);
     }
 
-    public static class AsdfScript extends Script {
+    public static class ConstantRotationScript extends Script {
 
         @OwnerProperty(TransformProperty.NAME)
         TransformProperty transProp;
 
-        public AsdfScript(Component component) {
+        public ConstantRotationScript(Component component) {
             super(component);
         }
 
@@ -447,7 +479,7 @@ public class Test1 {
 
         @Override
         public void onUpdate(int delta) {
-            transProp.rotate(0, 0, delta*0.01f);
+            transProp.rotate(0, delta*0.001f, 0);
         }
     }
 

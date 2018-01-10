@@ -40,7 +40,7 @@ public class GBuffer {
 
     public void initWithSize(int width, int height) {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[0]);
-        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL11.GL_RGB8, width, height);
+        GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL11.GL_RGBA8, width, height);
         setDefaultParams();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[1]);
         GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL30.GL_R32UI, width, height);
