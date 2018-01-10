@@ -46,7 +46,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
         transformProperty.move(new Vector3f(20, 5, 0));
         transformProperty.rotateY((float) (Math.PI/2));
         cameraComponent.addProperty(transformProperty);
-        Camera camera = new QuaternionCamera(cameraComponent, new TransformProperty(), projection);
+        Camera camera = new QuaternionCamera(cameraComponent, projection);
         cameraHolder.setCamera(camera);
         cameraOwner.addScript(MultiplayerControlScript.class);
     }

@@ -459,7 +459,7 @@ public class Test1 {
                 DISPLAY.getWidth(),
                 DISPLAY.getHeight()
         );
-        Camera camera = new QuaternionCamera(cameraComponent, new TransformProperty(), projection);
+        Camera camera = new QuaternionCamera(cameraComponent, projection);
         cameraHolder.setCamera(camera);
     }
 
