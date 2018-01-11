@@ -22,7 +22,10 @@ public class ConsoleService {
         Command help = new Command("help", Command.Side.CLIENT, "Get help.");
         help.setExecutor((args) -> {
             if (args.length > 0)
-                output.println(getHelpText(args[0]));
+                if (getHelpText(args[0]) != null)
+                    output.println(getHelpText(args[0]));
+                else
+                    output.println("No such command");
             else
                 output.println("Use help [command]");
         });
@@ -32,10 +35,17 @@ public class ConsoleService {
         list.setExecutor((args) -> {
             output.println("Available commands:");
             for (Command c : commands) {
-                output.printf("%5s\n", c.getCommand());
+                output.printf("%.5s\n", c.getCommand());
             }
         });
         registerDefinition(list);
+
+        Command print = new Command("print", Command.Side.CLIENT, "prints variables to console");
+        print.setExecutor((args) -> {
+            for (String s : args)
+                output.printf("%jestem s\n", s);
+        });
+        registerDefinition(print);
     }
 
     /**
@@ -47,6 +57,10 @@ public class ConsoleService {
         commands.add(c);
     }
 
+    public void registerVariable(CommandVariable variable) {
+        variables.add(variable);
+    }
+
     /**
      * Executes command
      *
@@ -56,6 +70,7 @@ public class ConsoleService {
         String[] args = line.split(" ");
         String command = args[0];
         args = ArrayUtils.removeElement(args, command);
+        parseVariables(args);
 
         for (Command definition : commands) {
             if (definition.getCommand().equals(command)) {
@@ -69,6 +84,17 @@ public class ConsoleService {
             }
         }
         output.println("No such command. Type 'list' to list available commands");
+    }
+
+    private String[] parseVariables(String... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].startsWith("$")) {
+                for (CommandVariable com : variables)
+                    if (args[i].equals("$" + com.getName()))
+                        args[i] = com.getValue();
+            }
+        }
+        return args;
     }
 
     /**

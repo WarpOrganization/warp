@@ -12,9 +12,11 @@ public class MoveCameraCommand extends Command {
 
     private CameraHolder cameraHolder;
 
-    public MoveCameraCommand(CameraHolder holder) {
+    public MoveCameraCommand(CameraHolder holder, ConsoleService consoleService) {
         super("move", Side.CLIENT, "Moves camera.\nUsage: move [x] [y] [z]");
         this.cameraHolder = holder;
+
+        consoleService.registerVariable(new CommandVariable("camera", holder));
     }
 
     @Override

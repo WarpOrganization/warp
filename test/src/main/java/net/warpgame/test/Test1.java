@@ -130,7 +130,8 @@ public class Test1 {
         });
         consoleService.registerDefinition(exit);
 
-        consoleService.registerDefinition(new MoveCameraCommand(context.findOne(CameraHolder.class).get()));
+        consoleService.registerDefinition(new MoveCameraCommand(context.findOne(CameraHolder.class).get(),
+                consoleService));
     }
 
     private static void createCastle(Scene scene) {
