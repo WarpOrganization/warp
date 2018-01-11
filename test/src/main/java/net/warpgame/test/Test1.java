@@ -67,9 +67,9 @@ public class Test1 {
         consoleService = engineContext.getLoadedContext()
                 .findOne(ConsoleService.class)
                 .get();
-        registerCommands(engineContext.getLoadedContext());
         setupScene(engineContext, thread);
         setupCamera(engineContext);
+        registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -117,7 +117,7 @@ public class Test1 {
         return ship;
     }
 
-    private static void registerCommands(Context context) {
+    private static void registerCommandsAndVariables(Context context) {
         Command exit = new Command("quit", Command.Side.CLIENT, "Closes the game");
         exit.setExecutor((args) -> {
             context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
@@ -130,8 +130,10 @@ public class Test1 {
         });
         consoleService.registerDefinition(exit);
 
-        consoleService.registerDefinition(new MoveCameraCommand(context.findOne(CameraHolder.class).get(),
-                consoleService));
+        CameraHolder ch = context.findOne(CameraHolder.class).get();
+        consoleService.registerDefinition(new MoveCameraCommand(ch, consoleService));
+
+//        consoleService.registerVariable(new CommandVariable("cameraPosX", ch.getCamera()));
     }
 
     private static void createCastle(Scene scene) {
