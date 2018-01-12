@@ -21,19 +21,23 @@ public class ConsoleService {
 
     public ConsoleService() {
         output = System.out;
-        Command help = new Command("help", Command.Side.CLIENT, "Get help.");
+        SimpleCommand help = new SimpleCommand("help", Side.CLIENT,
+                "Get help", "help [command]");
         help.setExecutor((args) -> {
-            if (args.length > 0)
-                if (getHelpText(args[0]) != null)
+            if (args.length > 0) {
+                if (getHelpText(args[0]) != null) {
                     output.println(getHelpText(args[0]));
-                else
+                } else {
                     output.println("No such command");
-            else
-                output.println("Use help [command]");
+                }
+            } else {
+                output.println(help.getUsageText());
+            }
         });
         registerCommand(help);
 
-        Command list = new Command("list", Command.Side.CLIENT, "lists all commands");
+        SimpleCommand list = new SimpleCommand("list", Side.CLIENT,
+                "lists all commands", "list");
         list.setExecutor((args) -> {
             output.println("Available commands:");
             for (Command c : commands.values()) {
@@ -42,14 +46,16 @@ public class ConsoleService {
         });
         registerCommand(list);
 
-        Command print = new Command("print", Command.Side.CLIENT, "prints variables to console");
+        SimpleCommand print = new SimpleCommand("print", Side.CLIENT,
+                "prints variables to console", "print $variable1 [...]");
         print.setExecutor((args) -> {
             for (String s : args)
                 output.printf("%s\n", s);
         });
         registerCommand(print);
 
-        Command variables = new Command("variables", Command.Side.CLIENT);
+        SimpleCommand variables = new SimpleCommand("variables", Side.CLIENT,
+                "Lists all variables", "variables");
         variables.setExecutor((args) -> {
             output.println("Variables:");
             for (String var : getVariables())
@@ -94,7 +100,7 @@ public class ConsoleService {
             return;
         }
 
-        if (command.getSide() == Command.Side.CLIENT) {
+        if (command.getSide() == Side.CLIENT) {
             command.execute(args);
         } else {
             //TODO send command to server

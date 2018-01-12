@@ -39,10 +39,7 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.test.console.Command;
-import net.warpgame.test.console.CommandVariable;
-import net.warpgame.test.console.ConsoleService;
-import net.warpgame.test.console.MoveCameraCommand;
+import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -119,7 +116,10 @@ public class Test1 {
     }
 
     private static void registerCommandsAndVariables(Context context) {
-        Command exit = new Command("quit", Command.Side.CLIENT, "Closes the game");
+        SimpleCommand exit = new SimpleCommand("quit",
+                Side.CLIENT,
+                "Stops the engine and quits",
+                "quit");
         exit.setExecutor((args) -> {
             context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
             try {
@@ -193,10 +193,10 @@ public class Test1 {
     private static void createMugs(Scene scene) {
         SceneLightManager sceneLightManager = scene.getContext().getLoadedContext().findOne(SceneLightManager.class).get();
         SceneMesh mugMesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("tank.obj"),
+                Test1.class.getResourceAsStream("mug.obj"),
                 true).toMesh();
         ImageData mugImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("he-goat_tex.png"),
+                Test1.class.getResourceAsStream("tex.png"),
                 PNGDecoder.Format.RGBA
         );
         Texture2D mugDiffuse = new Texture2D(
