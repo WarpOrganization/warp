@@ -23,7 +23,6 @@ public class ClientInputListener extends Listener<InputEvent> {
 
     @Override
     public void handle(InputEvent inputEvent) {
-//        InputEvent inputEvent = (InputEvent) event.getIncomingEvent();
         switch (inputEvent.getInput()) {
             case VK_W:
                 input.setForwardPressed(inputEvent.isPressed());

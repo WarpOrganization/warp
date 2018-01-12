@@ -10,6 +10,7 @@ public class EventConfirmationEvent extends Event{
     private Event confirmedEvent;
 
     public EventConfirmationEvent(Event confirmedEvent) {
+        super("eventConfirmationEvent");
         this.confirmedEvent = confirmedEvent;
     }
 

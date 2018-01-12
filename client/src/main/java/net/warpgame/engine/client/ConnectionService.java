@@ -11,6 +11,7 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
 
@@ -28,6 +29,7 @@ public class ConnectionService {
     private long clientSecret;//TODO implement
     private InetSocketAddress serverAddress;
     private EventLoopGroup group = new NioEventLoopGroup();
+    private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
 
     public ConnectionService(SerializedSceneHolder sceneHolder,
                              ClientRemoteEventQueue eventQueue,
@@ -100,5 +102,13 @@ public class ConnectionService {
     public void setClientCredentials(int clientId, int clientSecret) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
+    }
+
+    public ClockSynchronizer getClockSynchronizer() {
+        return clockSynchronizer;
+    }
+
+    public void setClockSynchronizer(ClockSynchronizer clockSynchronizer) {
+        this.clockSynchronizer = clockSynchronizer;
     }
 }
