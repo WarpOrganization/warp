@@ -147,7 +147,7 @@ public class Test1 {
                 PNGDecoder.Format.RGBA
         );
         Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
+                imageData.getWidth(),
                 imageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -167,7 +167,7 @@ public class Test1 {
     private static void createFloor(Scene scene) {
         SceneMesh quadMesh = new QuadMesh();
         Texture2D diffuse = new Texture2D(
-                white.getHeight(),
+                white.getWidth(),
                 white.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -188,6 +188,7 @@ public class Test1 {
     }
 
     private static void createMugs(Scene scene) {
+        SceneLightManager sceneLightManager = scene.getContext().getLoadedContext().findOne(SceneLightManager.class).get();
         SceneMesh mugMesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("tank.obj"),
                 true).toMesh();
@@ -221,9 +222,10 @@ public class Test1 {
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         Material boxMaterial = new Material(boxDiffuse);
-        for(int x = 0; x < 1; x++){
-            for(int y = 0; y < 1; y++) {
-                for(int z = 0; z < 1; z++) {
+        boxMaterial.setShininess(1f);
+        for(int x = 0; x < 5; x++){
+            for(int y = 0; y < 5; y++) {
+                for(int z = 0; z < 5; z++) {
                     MeshProperty mugMeshProperty = new MeshProperty(mugMesh);
                     MaterialProperty mugMaterialProperty = new MaterialProperty(mugMaterial);
                     TransformProperty mugTransformProperty = new TransformProperty();
@@ -249,6 +251,11 @@ public class Test1 {
                     boxComponent.addProperty(boxMeshProperty);
                     boxComponent.addProperty(boxMaterialProperty);
                     boxComponent.addProperty(boxTransformProperty);
+
+//                    LightSource lightSource = new LightSource(new Vector3f(1.3f, 0f, 0.5f).mul(20));
+//                    LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+//                    boxComponent.addProperty(lightSourceProperty);
+//                    sceneLightManager.addLight(lightSourceProperty); //CRASHES!!!!
                 }
             }
         }
@@ -267,7 +274,7 @@ public class Test1 {
                 PNGDecoder.Format.RGBA
         );
         Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
+                imageData.getWidth(),
                 imageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
