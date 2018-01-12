@@ -27,12 +27,11 @@ public class Command {
      * @param args      passed parameters
      * @return          true if execution succeeded
      */
-    public boolean execute(String... args) {
-        if (executor != null) {
-            executor.accept(args);
-            return true;
-        }
-        return false;
+    public void execute(String... args) {
+        if (executor == null)
+        throw new IllegalStateException("Executor not defined.");
+
+        executor.accept(args);
     }
 
     /**

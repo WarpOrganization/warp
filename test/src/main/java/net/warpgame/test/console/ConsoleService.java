@@ -4,7 +4,8 @@ import net.warpgame.engine.core.context.service.Service;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author KocproZ
@@ -13,8 +14,8 @@ import java.util.ArrayList;
 @Service
 public class ConsoleService {
 
-    private ArrayList<Command> commands = new ArrayList<>();
-    private ArrayList<CommandVariable> variables = new ArrayList<>();
+    private Map<String, Command> commands = new HashMap<>();
+    private Map<String, CommandVariable> variables = new HashMap<>();
     private PrintStream output;
 
     public ConsoleService() {
@@ -34,7 +35,7 @@ public class ConsoleService {
         Command list = new Command("list", Command.Side.CLIENT, "lists all commands");
         list.setExecutor((args) -> {
             output.println("Available commands:");
-            for (Command c : commands) {
+            for (Command c : commands.values()) {
                 output.printf("%.5s\n", c.getCommand());
             }
         });
@@ -43,7 +44,7 @@ public class ConsoleService {
         Command print = new Command("print", Command.Side.CLIENT, "prints variables to console");
         print.setExecutor((args) -> {
             for (String s : args)
-                output.printf("%jestem s\n", s);
+                output.printf("%s\n", s);
         });
         registerDefinition(print);
     }
@@ -54,11 +55,17 @@ public class ConsoleService {
      * @param c Command to add
      */
     public void registerDefinition(Command c) {
-        commands.add(c);
+        commands.put(c.getCommand(), c);
     }
 
+    /**
+     * Registers variable and adds '$' at the beginning
+     * @param variable    CommandVariable to add
+     */
     public void registerVariable(CommandVariable variable) {
-        variables.add(variable);
+        if (!variable.getName().startsWith("$"))
+            variable = new CommandVariable("$" + variable.getName(), variable.getValue());
+        variables.put(variable.getName(), variable);
     }
 
     /**
@@ -68,33 +75,29 @@ public class ConsoleService {
      */
     public void execute(String line) {
         String[] args = line.split(" ");
-        String command = args[0];
-        args = ArrayUtils.removeElement(args, command);
+        String commandString = args[0];
+        args = ArrayUtils.removeElement(args, commandString);
         parseVariables(args);
 
-        for (Command definition : commands) {
-            if (definition.getCommand().equals(command)) {
-                if (definition.getSide() == Command.Side.CLIENT) {
-                    boolean success = definition.execute(args);
-                    if (!success) output.println(definition.getHelpText());
-                } else {
-                    //TODO send command to server
-                }
-                return;
-            }
+        Command command = commands.get(commandString);
+        if (command == null) {
+            output.println("No such command. Type 'list' to list available commands");
+            return;
         }
-        output.println("No such command. Type 'list' to list available commands");
+
+        if (command.getSide() == Command.Side.CLIENT) {
+            command.execute(args);
+        } else {
+            //TODO send command to server
+        }
     }
 
-    private String[] parseVariables(String... args) {
+    private void parseVariables(String... args) {
         for (int i = 0; i < args.length; i++) {
-            if (args[i].startsWith("$")) {
-                for (CommandVariable com : variables)
-                    if (args[i].equals("$" + com.getName()))
-                        args[i] = com.getValue();
+            if (args[i].startsWith("$") && variables.containsKey(args[i])) {
+                args[i] = variables.get(args[i]).getValue();
             }
         }
-        return args;
     }
 
     /**
@@ -104,10 +107,7 @@ public class ConsoleService {
      * @return help text, null if command not found
      */
     public String getHelpText(String command) {
-        for (Command c : commands)
-            if (c.getCommand().equals(command))
-                return c.getHelpText();
-        return null;
+        return commands.get(command).getHelpText();
     }
 
 }

@@ -10,7 +10,7 @@ public class CommandVariable {
 
     public CommandVariable(String name, Object value) {
         this.name = name;
-        this.value = value;
+        this.value = value; //TODO sub values (camera.x, camera.y, camera.z)
     }
 
     public String getName() {
@@ -18,7 +18,7 @@ public class CommandVariable {
     }
 
     public String getValue() {
-        return value.toString();
+        return value.toString(); //TODO not acceptable
     }
 
 }
