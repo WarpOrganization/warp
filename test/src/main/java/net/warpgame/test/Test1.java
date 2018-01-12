@@ -40,6 +40,7 @@ import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.test.console.Command;
+import net.warpgame.test.console.CommandVariable;
 import net.warpgame.test.console.ConsoleService;
 import net.warpgame.test.console.MoveCameraCommand;
 import org.joml.Vector3f;
@@ -128,12 +129,14 @@ public class Test1 {
             }
             System.exit(0);
         });
-        consoleService.registerDefinition(exit);
+        consoleService.registerCommand(exit);
 
         CameraHolder ch = context.findOne(CameraHolder.class).get();
-        consoleService.registerDefinition(new MoveCameraCommand(ch, consoleService));
+        consoleService.registerCommand(new MoveCameraCommand(ch, consoleService));
 
-//        consoleService.registerVariable(new CommandVariable("cameraPosX", ch.getCamera()));
+
+        consoleService.registerVariable(
+                new CommandVariable("cameraPosX", ch.getCamera().getPosition(new Vector3f())));
     }
 
     private static void createCastle(Scene scene) {
@@ -223,9 +226,9 @@ public class Test1 {
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         Material boxMaterial = new Material(boxDiffuse);
         boxMaterial.setShininess(1f);
-        for(int x = 0; x < 5; x++){
-            for(int y = 0; y < 5; y++) {
-                for(int z = 0; z < 5; z++) {
+        for(int x = 0; x < 2; x++){
+            for(int y = 0; y < 2; y++) {
+                for(int z = 0; z < 2; z++) {
                     MeshProperty mugMeshProperty = new MeshProperty(mugMesh);
                     MaterialProperty mugMaterialProperty = new MaterialProperty(mugMaterial);
                     TransformProperty mugTransformProperty = new TransformProperty();

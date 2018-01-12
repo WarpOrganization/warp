@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author KocproZ
@@ -30,23 +31,31 @@ public class ConsoleService {
             else
                 output.println("Use help [command]");
         });
-        registerDefinition(help);
+        registerCommand(help);
 
         Command list = new Command("list", Command.Side.CLIENT, "lists all commands");
         list.setExecutor((args) -> {
             output.println("Available commands:");
             for (Command c : commands.values()) {
-                output.printf("%.5s\n", c.getCommand());
+                output.printf("%s\n", c.getCommand());
             }
         });
-        registerDefinition(list);
+        registerCommand(list);
 
         Command print = new Command("print", Command.Side.CLIENT, "prints variables to console");
         print.setExecutor((args) -> {
             for (String s : args)
                 output.printf("%s\n", s);
         });
-        registerDefinition(print);
+        registerCommand(print);
+
+        Command variables = new Command("variables", Command.Side.CLIENT);
+        variables.setExecutor((args) -> {
+            output.println("Variables:");
+            for (String var : getVariables())
+                output.printf("%s\n", var);
+        });
+        registerCommand(variables);
     }
 
     /**
@@ -54,7 +63,7 @@ public class ConsoleService {
      *
      * @param c Command to add
      */
-    public void registerDefinition(Command c) {
+    public void registerCommand(Command c) {
         commands.put(c.getCommand(), c);
     }
 
@@ -73,7 +82,7 @@ public class ConsoleService {
      *
      * @param line Line from console to parse
      */
-    public void execute(String line) {
+    public void parseAndExecute(String line) {
         String[] args = line.split(" ");
         String commandString = args[0];
         args = ArrayUtils.removeElement(args, commandString);
@@ -81,7 +90,7 @@ public class ConsoleService {
 
         Command command = commands.get(commandString);
         if (command == null) {
-            output.println("No such command. Type 'list' to list available commands");
+            output.printf("Command '%s' not found. Type 'list' to list available commands\n", commandString);
             return;
         }
 
@@ -92,6 +101,10 @@ public class ConsoleService {
         }
     }
 
+    /**
+     * Replaces '$variable' with value.
+     * @param args    Reference to String[] of variables to parse
+     */
     private void parseVariables(String... args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith("$") && variables.containsKey(args[i])) {
@@ -108,6 +121,10 @@ public class ConsoleService {
      */
     public String getHelpText(String command) {
         return commands.get(command).getHelpText();
+    }
+
+    public Set<String> getVariables() {
+        return variables.keySet();
     }
 
 }
