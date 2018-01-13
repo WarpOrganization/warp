@@ -3,11 +3,14 @@ package net.warpgame.engine.graphics.rendering.scene.program;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.material.Material;
+import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.NoTessellationRenderingProgram;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationRenderingProgram;
 import net.warpgame.engine.graphics.tessellation.Tessellator;
 import net.warpgame.engine.graphics.utility.MatrixStack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jaca777
@@ -15,6 +18,8 @@ import net.warpgame.engine.graphics.utility.MatrixStack;
  */
 @Service
 public class SceneRenderingProgramManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(SceneRenderingProgramManager.class);
 
     private CameraHolder cameraHolder;
 
@@ -27,9 +32,13 @@ public class SceneRenderingProgramManager {
     }
 
     public void init() {
-        this.flatTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.FLAT_TESSELLATOR_LOCATION);
-        this.bezierTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.BEZIER_TESSELLATOR_LOCATION);
-        this.noTessellationRenderingProgram = new NoTessellationRenderingProgram();
+        try {
+            this.flatTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.FLAT_TESSELLATOR_LOCATION);
+            this.bezierTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.BEZIER_TESSELLATOR_LOCATION);
+            this.noTessellationRenderingProgram = new NoTessellationRenderingProgram();
+        } catch (ShaderCompilationException e) {
+            logger.error("Failed to compile scene rendering shaders");
+        }
     }
 
     public void update() {

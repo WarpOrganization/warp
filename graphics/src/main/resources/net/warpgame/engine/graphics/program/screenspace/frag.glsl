@@ -12,9 +12,8 @@ precision highp float;
 #include "screenspace/light/heidrichSeidel"
 #include "screenspace/light/light"
 
-#if defined(RETARDED_MODE)
 uniform sampler2D normals;
-#endif
+
 
 //G-buffer
 uniform sampler2D comp1;
@@ -29,7 +28,7 @@ uniform mat4 rotationCamera;
 uniform vec3 cameraPos;
 
 uniform int lightNumber;
-uniform LightSource sources[$MAX_LIGHTS$];
+uniform LightSource sources[MAX_LIGHTS];
 uniform vec3 ambientLight = vec3(0.05);
 
 in vec2 vTexCoord;
@@ -44,7 +43,7 @@ void processRender(int flags);
 void processBackground();
 
 void main(void) {
-//    fragColor.rgb = texture(comp1, vTexCoord).rgb;
+    fragColor.rgb = texture(comp1, vTexCoord).rgb;
     int flags = texture(comp2, vTexCoord).r >> 22;
     if(isSet(flags, RENDER)) {
         processRender(flags);

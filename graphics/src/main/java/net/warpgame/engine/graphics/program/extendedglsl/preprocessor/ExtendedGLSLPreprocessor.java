@@ -4,8 +4,8 @@ import net.warpgame.engine.graphics.program.ProgramAssemblyInfo;
 import net.warpgame.engine.graphics.program.extendedglsl.ProgramCompilationException;
 import net.warpgame.engine.graphics.program.extendedglsl.loader.ProgramLoader;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +37,7 @@ public class ExtendedGLSLPreprocessor {
 
     public String preprocess(String code, ShaderType shaderType, ProgramAssemblyInfo assemblyInfo) {
         String withIncludes = processIncludes(code);
-        String withConstants = processConstants(withIncludes);
-        return processDefines(withConstants, shaderType, assemblyInfo);
+        return processDefines(withIncludes, shaderType, assemblyInfo);
     }
 
     private static final Pattern INCLUDE_EXPR_PATTERN = Pattern.compile("#include \"(.*)\"");
@@ -61,38 +60,28 @@ public class ExtendedGLSLPreprocessor {
         else return code;
     }
 
-    private static final Pattern CONSTANT_EXPR_PATTERN = Pattern.compile("\\$(\\w*)\\$");
-
-    protected String processConstants(String code) {
-        String resultCode = code;
-        Matcher matcher = CONSTANT_EXPR_PATTERN.matcher(code);
-        while (matcher.find()) {
-            String constName = matcher.group(1);
-            if (!constantField.isSet(constName))
-                throw new ProgramCompilationException("Unknown constant " + constName);
-            resultCode = resultCode.replace(matcher.group(), constantField.get(constName).toString());
-        }
-        return resultCode;
-    }
-
     protected String processDefines(String code, ShaderType type, ProgramAssemblyInfo assemblyInfo) {
-      List<String> defines = new ArrayList<>();
+      Map<String, String> defines = new HashMap<>();
       if(type != ShaderType.NONE) {
-          defines.add(type.getId());
+          defines.put(type.getId(), null);
       }
       if(assemblyInfo.getTcsShaderLocation() != null && assemblyInfo.getFragmentShaderLocation() != null){
-          defines.add("SCENE_TESS");
+          defines.put("SCENE_TESS", null);
       }
       if(assemblyInfo.getGeometryShaderLocation() != null) {
-          defines.add("GEOM_ENABLED");
+          defines.put("GEOM_ENABLED", null);
       }
+      defines.putAll(constantField.getConstants());
       return insertDefines(code, defines);
     }
 
-    protected String insertDefines(String code, List<String> defines) {
+    protected String insertDefines(String code, Map<String, String> defines) {
         StringBuilder defineStatements = new StringBuilder();
-        for(String define : defines) {
-            defineStatements.append("#define ").append(define).append("\n");
+        for(Map.Entry<String, String> define : defines.entrySet()) {
+            StringBuilder defineStatement = defineStatements.append("#define ").append(define.getKey());
+            if(define.getValue() != null)
+                defineStatement.append(" " + define.getValue());
+            defineStatement.append("\n");
         }
         if(code.contains("#version")) {
             return code.replaceFirst("(#version .*)", "$1 \r\n" + defineStatements.toString());
@@ -100,5 +89,4 @@ public class ExtendedGLSLPreprocessor {
             return defineStatements.toString() + code;
         }
     }
-
 }

@@ -42,6 +42,7 @@ public class ClientTask extends EngineTask {
                 Integer.parseInt(System.getProperty("port", "" + config.getValue("multiplayer.port"))));
         connectionService.connect(address);
         eventQueue.setConnectionService(connectionService);
+
     }
 
     @Override

@@ -1,13 +1,17 @@
 package net.warpgame.engine.graphics.program;
 
+import com.google.common.base.Strings;
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL30;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.lwjgl.opengl.GL20.*;
 
 /**
  * @author Jaca777
- *         Created 12.11.14 at 20:42
+ * Created 12.11.14 at 20:42
  */
 public class GLSLShaderCompiler {
 
@@ -27,14 +31,31 @@ public class GLSLShaderCompiler {
         if (log.isEmpty()) logger.info("Shader " + shader + nameInfo + " successfully compiled.");
         else if (log.contains("error")) { //If it looks stupid but works it ain't stupid
             logger.error("Failed to compile shader " + shader + nameInfo + ". Cause: " + log);
+            tryLogErrorLine(log, shaderCode);
             throw new ShaderCompilationException(log);
         } else if (log.contains("warn")) {
-
             logger.warn("Warnings while compiling shader " + shader + nameInfo + ". Cause: " + log);
-        } else  {
+        } else {
             logger.warn("Shader " + shader + nameInfo + " compilation returned a message: " + log);
         }
         return shader;
+    }
+
+    private static final Pattern PATTERN = Pattern.compile("(\\d*):(\\d*):");
+
+    private static void tryLogErrorLine(String log, String shaderCode) {
+        Matcher matcher = PATTERN.matcher(log);
+        boolean found = matcher.find();
+        if (found) {
+            int line = Integer.parseInt(matcher.group(2));
+            int character = Integer.parseInt(matcher.group(1));
+            String[] lines = shaderCode.split("\n");
+            String errorLine = lines[line - 1];
+            String characterPointer = Strings.repeat(" ", character) + "^";
+            logger.error("Error line: ");
+            logger.error(errorLine);
+            logger.error(characterPointer);
+        }
     }
 
     /**
@@ -45,7 +66,7 @@ public class GLSLShaderCompiler {
     public static int createProgram(int[] shaders, String[] outNames, String programName) {
         int program = glCreateProgram();
         for (int shader : shaders)
-            if(shader != -1) glAttachShader(program, shader);
+            if (shader != -1) glAttachShader(program, shader);
         for (int i = 0; i < outNames.length; i++) {
             String name = outNames[i];
             GL30.glBindFragDataLocation(program, i, name);

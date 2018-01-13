@@ -31,6 +31,7 @@ public class QuaternionCamera implements Camera {
         Transforms.getImmediateTransform(cameraComponent, cameraMatrix).invert();
         Transforms.getAbsoluteRotation(cameraComponent, rotation).get(rotationMatrix).invert();
         Transforms.getAbsolutePosition(cameraComponent, cameraPos);
+
     }
 
     @Override

@@ -302,9 +302,6 @@
  */
 
 #define SMAA_GLSL_4
-#define SMAA_PRESET_HIGH
-
-
 
 
 #if defined(SMAA_PRESET_LOW)

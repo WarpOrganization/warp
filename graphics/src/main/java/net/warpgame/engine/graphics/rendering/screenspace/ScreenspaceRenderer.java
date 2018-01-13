@@ -7,10 +7,13 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.framebuffer.ScreenFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
+import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBufferManager;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.rendering.screenspace.program.ScreenspaceProgram;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jaca777
@@ -18,6 +21,8 @@ import net.warpgame.engine.graphics.rendering.screenspace.program.ScreenspacePro
  */
 @Service
 public class ScreenspaceRenderer {
+
+    private static final Logger logger = LoggerFactory.getLogger(ScreenspaceRenderer.class);
 
     private GBufferManager gBufferManager;
     private ScreenFramebuffer screenFramebuffer;
@@ -46,7 +51,11 @@ public class ScreenspaceRenderer {
 
     public void init() {
         this.quadMesh = new QuadMesh();
-        this.screenspaceProgram = new ScreenspaceProgram(maxLights);
+        try {
+            this.screenspaceProgram = new ScreenspaceProgram(maxLights);
+        }catch(ShaderCompilationException e) {
+            logger.error("Failed to compile screenspace rendering program");
+        }
     }
 
     public void update() {
