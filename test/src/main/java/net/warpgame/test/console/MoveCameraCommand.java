@@ -24,7 +24,7 @@ public class MoveCameraCommand extends Command {
             ((TransformProperty)cameraHolder.getCamera().getCameraComponent().getProperty(TransformProperty.NAME))
                     .move(new Vector3f(Float.valueOf(args[0]), Float.valueOf(args[1]), Float.valueOf(args[2])));
         } else {
-
+            //TODO output getUsageText()
         }
     }
 

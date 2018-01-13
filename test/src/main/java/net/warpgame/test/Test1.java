@@ -107,6 +107,7 @@ public class Test1 {
             createMugs(scene);
             createCastle(scene);
             createFloor(scene);
+            createSatellite(scene);
             Component lsource = new SceneComponent(scene);
             lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
             createLight(lsource);
@@ -137,6 +138,36 @@ public class Test1 {
 
         consoleService.registerVariable(
                 new CommandVariable("cameraPosX", ch.getCamera().getPosition(new Vector3f())));
+    }
+
+    private static void createSatellite(Scene scene) {
+        SceneMesh mesh = ObjLoader.read(
+                Test1.class.getResourceAsStream("satellite/satelita.obj"),
+                true).toMesh();
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("satellite/sat_tex.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D diffuse = new Texture2D(
+                imageData.getWidth(),
+                imageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                imageData.getData());
+        Material material = new Material(diffuse);
+        material.setShininess(0.05f);
+
+        MeshProperty meshProperty = new MeshProperty(mesh);
+        TransformProperty transformProperty = new TransformProperty();
+        transformProperty.move(new Vector3f(10f, 10f, -10f));
+        MaterialProperty materialProperty = new MaterialProperty(material);
+
+        Component sat = new SceneComponent(scene);
+        sat.addProperty(meshProperty);
+        sat.addProperty(transformProperty);
+        sat.addProperty(materialProperty);
+        sat.addScript(ConstantRotationScript.class);
     }
 
     private static void createCastle(Scene scene) {
