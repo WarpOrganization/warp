@@ -39,9 +39,7 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.test.console.Command;
-import net.warpgame.test.console.ConsoleService;
-import net.warpgame.test.console.MoveCameraCommand;
+import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -67,9 +65,9 @@ public class Test1 {
         consoleService = engineContext.getLoadedContext()
                 .findOne(ConsoleService.class)
                 .get();
-        registerCommands(engineContext.getLoadedContext());
         setupScene(engineContext, thread);
         setupCamera(engineContext);
+        registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -117,8 +115,11 @@ public class Test1 {
         return ship;
     }
 
-    private static void registerCommands(Context context) {
-        Command exit = new Command("quit", Command.Side.CLIENT, "Closes the game");
+    private static void registerCommandsAndVariables(Context context) {
+        SimpleCommand exit = new SimpleCommand("quit",
+                Side.CLIENT,
+                "Stops the engine and quits",
+                "quit");
         exit.setExecutor((args) -> {
             context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
             try {
@@ -128,9 +129,14 @@ public class Test1 {
             }
             System.exit(0);
         });
-        consoleService.registerDefinition(exit);
+        consoleService.registerCommand(exit);
 
-        consoleService.registerDefinition(new MoveCameraCommand(context.findOne(CameraHolder.class).get()));
+        CameraHolder ch = context.findOne(CameraHolder.class).get();
+        consoleService.registerCommand(new MoveCameraCommand(ch, consoleService));
+
+
+        consoleService.registerVariable(
+                new CommandVariable("cameraPosX", ch.getCamera().getPosition(new Vector3f())));
     }
 
     private static void createCastle(Scene scene) {
@@ -144,7 +150,7 @@ public class Test1 {
                 PNGDecoder.Format.RGBA
         );
         Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
+                imageData.getWidth(),
                 imageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -164,7 +170,7 @@ public class Test1 {
     private static void createFloor(Scene scene) {
         SceneMesh quadMesh = new QuadMesh();
         Texture2D diffuse = new Texture2D(
-                white.getHeight(),
+                white.getWidth(),
                 white.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
@@ -185,11 +191,12 @@ public class Test1 {
     }
 
     private static void createMugs(Scene scene) {
+        SceneLightManager sceneLightManager = scene.getContext().getLoadedContext().findOne(SceneLightManager.class).get();
         SceneMesh mugMesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("tank.obj"),
+                Test1.class.getResourceAsStream("mug.obj"),
                 true).toMesh();
         ImageData mugImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("he-goat_tex.png"),
+                Test1.class.getResourceAsStream("tex.png"),
                 PNGDecoder.Format.RGBA
         );
         Texture2D mugDiffuse = new Texture2D(
@@ -218,9 +225,10 @@ public class Test1 {
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         Material boxMaterial = new Material(boxDiffuse);
-        for(int x = 0; x < 1; x++){
-            for(int y = 0; y < 1; y++) {
-                for(int z = 0; z < 1; z++) {
+        boxMaterial.setShininess(1f);
+        for(int x = 0; x < 2; x++){
+            for(int y = 0; y < 2; y++) {
+                for(int z = 0; z < 2; z++) {
                     MeshProperty mugMeshProperty = new MeshProperty(mugMesh);
                     MaterialProperty mugMaterialProperty = new MaterialProperty(mugMaterial);
                     TransformProperty mugTransformProperty = new TransformProperty();
@@ -246,6 +254,11 @@ public class Test1 {
                     boxComponent.addProperty(boxMeshProperty);
                     boxComponent.addProperty(boxMaterialProperty);
                     boxComponent.addProperty(boxTransformProperty);
+
+//                    LightSource lightSource = new LightSource(new Vector3f(1.3f, 0f, 0.5f).mul(20));
+//                    LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+//                    boxComponent.addProperty(lightSourceProperty);
+//                    sceneLightManager.addLight(lightSourceProperty); //CRASHES!!!!
                 }
             }
         }
@@ -264,7 +277,7 @@ public class Test1 {
                 PNGDecoder.Format.RGBA
         );
         Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
+                imageData.getWidth(),
                 imageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,

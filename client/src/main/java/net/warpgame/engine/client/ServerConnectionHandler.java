@@ -36,13 +36,12 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
         ByteBuf buffer = msg.content();
         int packetType = buffer.readInt();
         long timestamp = buffer.readLong();
-//        System.out.println("server sends message type: " + packetType);
+        if(packetType!= PacketType.PACKET_SCENE_STATE)
+        System.out.println("server sends message type: " + packetType);
 
         switch (packetType) {
             case PacketType.PACKET_CONNECTED:
-                connected = true;
-                clientId = buffer.readInt();
-                connectionService.setClientCredentials(clientId, 0);
+                connected(buffer.readInt());
                 break;
             case PacketType.PACKET_CONNECTION_REFUSED:
                 System.out.println("Connection refused!");
@@ -63,6 +62,26 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
                 int id = buffer.readInt();
                 eventQueue.confirmEvent(id);
                 break;
+            case PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
+                System.out.println(System.currentTimeMillis());
+                System.out.println(timestamp);
+                handleClockSynchronizationResponse(timestamp);
+                break;
         }
+    }
+
+    private void connected(int clientId) {
+        connected = true;
+        connectionService.setClientCredentials(clientId, 0);
+        connectionService.getClockSynchronizer().setRequestTimestamp(System.currentTimeMillis());
+        connectionService.getClockSynchronizer().setWaitingForResponse(true);
+        System.out.println(System.currentTimeMillis());
+
+        connectionService.sendPacket(connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST, 0));
+    }
+
+    private void handleClockSynchronizationResponse(long timestamp) {
+        connectionService.getClockSynchronizer().synchronize(timestamp);
+        connectionService.sendPacket(connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 0));
     }
 }

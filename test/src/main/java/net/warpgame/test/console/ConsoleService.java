@@ -4,7 +4,9 @@ import net.warpgame.engine.core.context.service.Service;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author KocproZ
@@ -13,29 +15,53 @@ import java.util.ArrayList;
 @Service
 public class ConsoleService {
 
-    private ArrayList<Command> commands = new ArrayList<>();
-    private ArrayList<CommandVariable> variables = new ArrayList<>();
+    private Map<String, Command> commands = new HashMap<>();
+    private Map<String, CommandVariable> variables = new HashMap<>();
     private PrintStream output;
 
     public ConsoleService() {
         output = System.out;
-        Command help = new Command("help", Command.Side.CLIENT, "Get help.");
+        SimpleCommand help = new SimpleCommand("help", Side.CLIENT,
+                "Get help", "help [command]");
         help.setExecutor((args) -> {
-            if (args.length > 0)
-                output.println(getHelpText(args[0]));
-            else
-                output.println("Use help [command]");
-        });
-        registerDefinition(help);
-
-        Command list = new Command("list", Command.Side.CLIENT, "lists all commands");
-        list.setExecutor((args) -> {
-            output.println("Available commands:");
-            for (Command c : commands) {
-                output.printf("%5s\n", c.getCommand());
+            if (args.length > 0) {
+                if (getHelpText(args[0]) != null) {
+                    output.println(getHelpText(args[0]));
+                } else {
+                    output.println("No such command");
+                }
+            } else {
+                output.println(help.getUsageText());
             }
         });
-        registerDefinition(list);
+        registerCommand(help);
+
+        SimpleCommand list = new SimpleCommand("list", Side.CLIENT,
+                "lists all commands", "list");
+        list.setExecutor((args) -> {
+            output.println("Available commands:");
+            for (Command c : commands.values()) {
+                output.printf("%s\n", c.getCommand());
+            }
+        });
+        registerCommand(list);
+
+        SimpleCommand print = new SimpleCommand("print", Side.CLIENT,
+                "prints variables to console", "print $variable1 [...]");
+        print.setExecutor((args) -> {
+            for (String s : args)
+                output.printf("%s\n", s);
+        });
+        registerCommand(print);
+
+        SimpleCommand variables = new SimpleCommand("variables", Side.CLIENT,
+                "Lists all variables", "variables");
+        variables.setExecutor((args) -> {
+            output.println("Variables:");
+            for (String var : getVariables())
+                output.printf("%s\n", var);
+        });
+        registerCommand(variables);
     }
 
     /**
@@ -43,8 +69,18 @@ public class ConsoleService {
      *
      * @param c Command to add
      */
-    public void registerDefinition(Command c) {
-        commands.add(c);
+    public void registerCommand(Command c) {
+        commands.put(c.getCommand(), c);
+    }
+
+    /**
+     * Registers variable and adds '$' at the beginning
+     * @param variable    CommandVariable to add
+     */
+    public void registerVariable(CommandVariable variable) {
+        if (!variable.getName().startsWith("$"))
+            variable = new CommandVariable("$" + variable.getName(), variable.getValue());
+        variables.put(variable.getName(), variable);
     }
 
     /**
@@ -52,23 +88,35 @@ public class ConsoleService {
      *
      * @param line Line from console to parse
      */
-    public void execute(String line) {
+    public void parseAndExecute(String line) {
         String[] args = line.split(" ");
-        String command = args[0];
-        args = ArrayUtils.removeElement(args, command);
+        String commandString = args[0];
+        args = ArrayUtils.removeElement(args, commandString);
+        parseVariables(args);
 
-        for (Command definition : commands) {
-            if (definition.getCommand().equals(command)) {
-                if (definition.getSide() == Command.Side.CLIENT) {
-                    boolean success = definition.execute(args);
-                    if (!success) output.println(definition.getHelpText());
-                } else {
-                    //TODO send command to server
-                }
-                return;
+        Command command = commands.get(commandString);
+        if (command == null) {
+            output.printf("Command '%s' not found. Type 'list' to list available commands\n", commandString);
+            return;
+        }
+
+        if (command.getSide() == Side.CLIENT) {
+            command.execute(args);
+        } else {
+            //TODO send command to server
+        }
+    }
+
+    /**
+     * Replaces '$variable' with value.
+     * @param args    Reference to String[] of variables to parse
+     */
+    private void parseVariables(String... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].startsWith("$") && variables.containsKey(args[i])) {
+                args[i] = variables.get(args[i]).getValue();
             }
         }
-        output.println("No such command. Type 'list' to list available commands");
     }
 
     /**
@@ -78,10 +126,11 @@ public class ConsoleService {
      * @return help text, null if command not found
      */
     public String getHelpText(String command) {
-        for (Command c : commands)
-            if (c.getCommand().equals(command))
-                return c.getHelpText();
-        return null;
+        return commands.get(command).getHelpText();
+    }
+
+    public Set<String> getVariables() {
+        return variables.keySet();
     }
 
 }

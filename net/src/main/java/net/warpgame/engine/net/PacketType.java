@@ -12,4 +12,6 @@ public class PacketType {
     public static final int PACKET_SCENE_STATE = 5;
     public static final int PACKET_EVENT = 6;
     public static final int PACKET_EVENT_CONFIRMATION = 7;
+    public static final int PACKET_CLOCK_SYNCHRONIZATION_REQUEST = 8;
+    public static final int PACKET_CLOCK_SYNCHRONIZATION_RESPONSE = 9;
 }

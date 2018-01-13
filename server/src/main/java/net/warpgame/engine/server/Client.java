@@ -1,5 +1,7 @@
 package net.warpgame.engine.server;
 
+import net.warpgame.engine.net.ClockSynchronizer;
+import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
 
 import java.net.InetSocketAddress;
@@ -17,6 +19,8 @@ public class Client {
     private int id;
     private int eventDependencyIdCounter = 0;
     private EventReceiver eventReceiver;
+    private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
+    private ConnectionState connectionState;
 
     Client(InetSocketAddress address, EventReceiver eventReceiver) {
         this.address = address;
@@ -45,15 +49,12 @@ public class Client {
         if (w != null) {
             w.setConfirmed(true);
             if (w.isShouldConfirm()) w.getTargetComponent().triggerEvent(w.getBouncerEvent());
+            eventConfirmations.remove(eventDependencyId);
         }
     }
 
     synchronized void addEvent(ServerAddressedEnvelope addressedEnvelope) {
         eventConfirmations.put(addressedEnvelope.getDependencyId(), addressedEnvelope);
-    }
-
-    synchronized void removeEvent(int eventDependencyId) {
-        eventConfirmations.remove(eventDependencyId);
     }
 
     public int getId() {
@@ -71,5 +72,21 @@ public class Client {
 
     public EventReceiver getEventReceiver() {
         return eventReceiver;
+    }
+
+    public ClockSynchronizer getClockSynchronizer() {
+        return clockSynchronizer;
+    }
+
+    public void setClockSynchronizer(ClockSynchronizer clockSynchronizer) {
+        this.clockSynchronizer = clockSynchronizer;
+    }
+
+    public ConnectionState getConnectionState() {
+        return connectionState;
+    }
+
+    public void setConnectionState(ConnectionState connectionState) {
+        this.connectionState = connectionState;
     }
 }

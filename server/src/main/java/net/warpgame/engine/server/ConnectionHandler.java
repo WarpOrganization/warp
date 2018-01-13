@@ -42,29 +42,57 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                 registerClient(ctx.channel(), msg.sender());
                 break;
             case PacketType.PACKET_KEEP_ALIVE:
-                clientId = buffer.readInt();
-                clientRegistry.updateKeepAlive(clientId);
+                clientRegistry.updateKeepAlive(buffer.readInt());
                 break;
             case PacketType.PACKET_EVENT:
-                clientId = buffer.readInt();
-                Client client = clientRegistry.getClient(clientId);
-                if (client != null) {
-                    int eventType = buffer.readInt();
-                    int dependencyId = buffer.readInt();
-                    int targetComponentId = buffer.readInt();
-                    client.getEventReceiver().addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
-                    connectionUtil.confirmEvent(dependencyId, client);
-//                    System.out.println("event received");
-                }
+                handleEvent(timestamp, buffer);
                 break;
             case PacketType.PACKET_EVENT_CONFIRMATION:
-                clientId = buffer.readInt();
-                Client c = clientRegistry.getClient(clientId);
-                int id = buffer.readInt();
-                c.confirmEvent(id);
-//                System.out.println("event confirmation received");
-
+                handleEventConfirmation(buffer.readInt(), buffer.readInt());
                 break;
+            case PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST:
+                handleClockSynchronizationRequest(buffer.readInt());
+                break;
+            case PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
+                handleClockSynchronizationResponse(buffer.readInt(), timestamp);
+                break;
+
+        }
+    }
+
+    private void handleEvent(long timestamp, ByteBuf buffer) {
+        int clientId = buffer.readInt();
+        Client client = clientRegistry.getClient(clientId);
+        if (client != null) {
+            int eventType = buffer.readInt();
+            int dependencyId = buffer.readInt();
+            int targetComponentId = buffer.readInt();
+            client.getEventReceiver().addEvent(buffer, targetComponentId, eventType, dependencyId, timestamp);
+            connectionUtil.confirmEvent(dependencyId, client);
+        }
+    }
+
+    private void handleEventConfirmation(int clientId, int eventDependencyId) {
+        Client c = clientRegistry.getClient(clientId);
+        c.confirmEvent(eventDependencyId);
+    }
+
+    private void handleClockSynchronizationRequest(int clientId) {
+        Client client = clientRegistry.getClient(clientId);
+        if (client != null) {
+            client.getClockSynchronizer().setRequestTimestamp(System.currentTimeMillis());
+
+            client.getClockSynchronizer().setWaitingForResponse(true);
+            connectionUtil.sendPacket(
+                    connectionUtil.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 0),
+                    client);
+        }
+    }
+
+    private void handleClockSynchronizationResponse(int clientId, long timestamp) {
+        Client client = clientRegistry.getClient(clientId);
+        if (client != null && client.getClockSynchronizer().isWaitingForResponse()) {
+            client.getClockSynchronizer().synchronize(timestamp);
         }
     }
 

@@ -6,6 +6,19 @@ package net.warpgame.test.console;
  */
 public class CommandVariable {
     private String name;
+    private Object value;
 
+    public CommandVariable(String name, Object value) {
+        this.name = name;
+        this.value = value; //TODO sub values (camera.x, camera.y, camera.z)
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value.toString(); //TODO not acceptable
+    }
 
 }

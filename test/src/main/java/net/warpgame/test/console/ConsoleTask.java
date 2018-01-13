@@ -34,6 +34,6 @@ public class ConsoleTask extends EngineTask {
     @Override
     public void update(int delta) {
         String line = scanner.nextLine();
-        consoleService.execute(line);
+        consoleService.parseAndExecute(line);
     }
 }

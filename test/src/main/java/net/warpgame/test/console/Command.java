@@ -1,62 +1,38 @@
 package net.warpgame.test.console;
 
-import java.util.function.Consumer;
-
 /**
  * @author KocproZ
- * Created 2018-01-10 at 07:33
+ * Created 2018-01-12 at 22:58
  */
-public class Command {
+public abstract class Command {
     private String command;
     private String helpText;
-    private Consumer<String[]> executor;
+    private String usageText;
     private Side side;
 
-    public Command(String command, Side side) {
-        this(command, side, "Does something, idk. what");
-    }
-
-    public Command(String command, Side side, String helpText) {
+    protected Command(String command, Side side, String helpText, String usageText) {
         this.command = command;
-        this.helpText = helpText;
         this.side = side;
+        this.helpText = helpText;
+        this.usageText = usageText;
     }
 
-    /**
-     * Executes the command with given parameters (if executor is set).
-     * @param args      passed parameters
-     * @return          true if execution succeeded
-     */
-    public boolean execute(String... args) {
-        if (executor != null) {
-            executor.accept(args);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Set lambda to be executed whe command is invoked.
-     * @param func    lambda
-     */
-    public void setExecutor(Consumer<String[]> func) {
-        executor = func;
-    }
-
-    public Side getSide() {
-        return side;
-    }
+    public abstract void execute(String... args);
 
     public String getHelpText() {
         return helpText;
+    }
+
+    public String getUsageText() {
+        return usageText;
     }
 
     public String getCommand() {
         return command;
     }
 
-    public enum Side {
-        CLIENT, SERVER
+    public Side getSide() {
+        return side;
     }
 
 }
