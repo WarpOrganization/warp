@@ -55,7 +55,7 @@ public class Test1 {
 
     public static void main(String[] args) {
         System.out.println();
-        EngineContext engineContext = new EngineContext(/*"dev"*/);
+        EngineContext engineContext = new EngineContext("dev");
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();

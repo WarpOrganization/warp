@@ -23,7 +23,7 @@ dependencies {
     compile project(':launcher')
     compile project(':input')
     compile project(':client')
-    compile project(':gameContent')
+    compile project(':gamecontent')
 
     compile 'org.slf4j:slf4j-api:1.7.12'
 
