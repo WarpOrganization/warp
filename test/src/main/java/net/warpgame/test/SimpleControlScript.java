@@ -23,7 +23,9 @@ public class SimpleControlScript extends Script {
 
 
     private static final float CAMERA_SPEED = 0.025f;
-    private static final float ROT_SPEED = 0.0001f;
+    private static final float ROTATION_SPEED = 0.0001f;
+    private static final float CAMERA_SPEED_MULTIPLIER = 3f;
+    private static final float ROTATION_SPEED_MULTIPLIER = 7f;
 
     private float cameraSpeed = CAMERA_SPEED;
 
@@ -65,7 +67,7 @@ public class SimpleControlScript extends Script {
 
     private void move(int delta) {
         if (input.isKeyDown(VK_SHIFT))
-            cameraSpeed = CAMERA_SPEED * 3;
+            cameraSpeed = CAMERA_SPEED * CAMERA_SPEED_MULTIPLIER;
         else cameraSpeed = CAMERA_SPEED;
 
         movementVector.zero();
@@ -79,6 +81,11 @@ public class SimpleControlScript extends Script {
             movementVector.add(-1, 0, 0);
         if (input.isKeyDown(VK_D))
             movementVector.add(1, 0, 0);
+        if(input.isKeyDown(VK_SPACE))
+            movementVector.add(0,1,0);
+        if(input.isKeyDown(VK_CONTROL))
+            movementVector.add(0,-1,0);
+
         Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf());
         if (movementVector.lengthSquared() >= 1.0f) {
             movementVector.normalize();
@@ -91,11 +98,15 @@ public class SimpleControlScript extends Script {
 
     private void rotate(int delta) {
         Vector2f cursorPositionDelta = input.getCursorPositionDelta();
-        transformProperty.rotateX(-cursorPositionDelta.y * ROT_SPEED * delta);
-        transformProperty.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
+
+        transformProperty.rotateX(-cursorPositionDelta.y * ROTATION_SPEED * delta);
+        transformProperty.rotateY(-cursorPositionDelta.x * ROTATION_SPEED * delta);
+
+        float multiplier = input.isKeyDown(VK_SHIFT) ? ROTATION_SPEED_MULTIPLIER : 1;
+
         if (input.isKeyDown(VK_Q))
-            transformProperty.rotateZ(ROT_SPEED * delta);
+            transformProperty.rotateZ(ROTATION_SPEED * multiplier * delta);
         if (input.isKeyDown(VK_E))
-            transformProperty.rotateZ(-ROT_SPEED * delta);
+            transformProperty.rotateZ(-ROTATION_SPEED * multiplier * delta);
     }
 }
