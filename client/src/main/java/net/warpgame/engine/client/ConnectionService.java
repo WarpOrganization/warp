@@ -12,8 +12,10 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
+import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
+import net.warpgame.engine.net.event.receiver.InternalEventHandler;
 
 import java.net.InetSocketAddress;
 
@@ -30,10 +32,12 @@ public class ConnectionService {
     private InetSocketAddress serverAddress;
     private EventLoopGroup group = new NioEventLoopGroup();
     private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
+    private ConnectionState connectionState;
 
     public ConnectionService(SerializedSceneHolder sceneHolder,
                              ClientRemoteEventQueue eventQueue,
-                             ComponentRegistry componentRegistry) {
+                             ComponentRegistry componentRegistry,
+                             InternalEventHandler internalEventHandler) {
 
         try {
             Bootstrap b = new Bootstrap();
@@ -41,7 +45,7 @@ public class ConnectionService {
                     sceneHolder,
                     this,
                     eventQueue,
-                    new EventReceiver(componentRegistry));
+                    new EventReceiver(componentRegistry, internalEventHandler));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -51,6 +55,7 @@ public class ConnectionService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        connectionState = ConnectionState.CONNECTING;
     }
 
     void connect(InetSocketAddress address) {
@@ -110,5 +115,13 @@ public class ConnectionService {
 
     public void setClockSynchronizer(ClockSynchronizer clockSynchronizer) {
         this.clockSynchronizer = clockSynchronizer;
+    }
+
+    public ConnectionState getConnectionState() {
+        return connectionState;
+    }
+
+    public void setConnectionState(ConnectionState connectionState) {
+        this.connectionState = connectionState;
     }
 }

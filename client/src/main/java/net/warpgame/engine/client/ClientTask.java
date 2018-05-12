@@ -1,10 +1,12 @@
 package net.warpgame.engine.client;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.SocketUtils;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.net.PacketType;
 
 import java.net.InetSocketAddress;
 
@@ -20,7 +22,8 @@ public class ClientTask extends EngineTask {
     private ConnectionService connectionService;
     private ClientRemoteEventQueue eventQueue;
 
-    private static int KEEP_ALIVE_INTERVAL = 1000 * 5;
+    private static final int KEEP_ALIVE_INTERVAL = 1000 * 5;
+    private static final int CLOCK_SYNC_INTERVAL = 1000;
     private InetSocketAddress address;
 
 
@@ -28,6 +31,7 @@ public class ClientTask extends EngineTask {
         this.config = config;
         this.connectionService = connectionService;
         this.eventQueue = eventQueue;
+        System.out.println(connectionService);
     }
 
     @Override
@@ -55,6 +59,32 @@ public class ClientTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        switch (connectionService.getConnectionState()) {
+            case SYNCHRONIZING:
+                syncClock(delta);
+            case LOADING://TODO: implement
+                break;
+            case LIVE:
+                keepAlive(delta);
+                break;
+        }
+    }
+
+    private int clockCounter = 0;
+
+    private void syncClock(int delta) {
+        clockCounter -= delta;
+        if (clockCounter <= 0) {
+            ByteBuf packet = connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST, 4);
+            int randomInt = (int) (Math.random() * Integer.MAX_VALUE);
+            packet.writeInt(randomInt);
+            connectionService.getClockSynchronizer().startRequest(randomInt, System.currentTimeMillis());
+            connectionService.sendPacket(packet);
+            clockCounter = CLOCK_SYNC_INTERVAL;
+        }
+    }
+
+    private void keepAlive(int delta) {
         counter -= delta;
         if (counter < 0) {
             counter = KEEP_ALIVE_INTERVAL;
@@ -62,6 +92,4 @@ public class ClientTask extends EngineTask {
         }
         eventQueue.update();
     }
-
-
 }

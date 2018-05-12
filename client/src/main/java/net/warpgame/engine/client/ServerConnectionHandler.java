@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
+import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
 
@@ -14,7 +15,6 @@ import net.warpgame.engine.net.event.receiver.EventReceiver;
  */
 public class ServerConnectionHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
-    private boolean connected = false;
     private int clientId;
     private SerializedSceneHolder sceneHolder;
     private EventReceiver eventReceiver;
@@ -36,8 +36,8 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
         ByteBuf buffer = msg.content();
         int packetType = buffer.readInt();
         long timestamp = buffer.readLong();
-        if(packetType!= PacketType.PACKET_SCENE_STATE)
-        System.out.println("server sends message type: " + packetType);
+//        if (packetType != PacketType.PACKET_SCENE_STATE)
+//            System.out.println("server sends message type: " + packetType);
 
         switch (packetType) {
             case PacketType.PACKET_CONNECTED:
@@ -63,25 +63,25 @@ public class ServerConnectionHandler extends SimpleChannelInboundHandler<Datagra
                 eventQueue.confirmEvent(id);
                 break;
             case PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
-                System.out.println(System.currentTimeMillis());
-                System.out.println(timestamp);
-                handleClockSynchronizationResponse(timestamp);
+//                System.out.println(System.currentTimeMillis());
+//                System.out.println(timestamp);
+                handleClockSynchronizationResponse(timestamp, buffer.readInt());
                 break;
         }
     }
 
     private void connected(int clientId) {
-        connected = true;
         connectionService.setClientCredentials(clientId, 0);
-        connectionService.getClockSynchronizer().setRequestTimestamp(System.currentTimeMillis());
-        connectionService.getClockSynchronizer().setWaitingForResponse(true);
-        System.out.println(System.currentTimeMillis());
-
-        connectionService.sendPacket(connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST, 0));
+        connectionService.setConnectionState(ConnectionState.SYNCHRONIZING);
+        //TODO: send state change packet
     }
 
-    private void handleClockSynchronizationResponse(long timestamp) {
-        connectionService.getClockSynchronizer().synchronize(timestamp);
-        connectionService.sendPacket(connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 0));
+    private void handleClockSynchronizationResponse(long timestamp, int requestId) {
+        connectionService.getClockSynchronizer().synchronize(timestamp, requestId);
+        if (connectionService.getClockSynchronizer().getFinishedSynchronizations() >= 3) {
+            connectionService.setConnectionState(ConnectionState.LIVE);
+            //TODO: send state change event
+            //TODO implement state logic
+        }
     }
 }

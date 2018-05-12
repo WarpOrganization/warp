@@ -6,8 +6,8 @@ package net.warpgame.engine.net;
  */
 public enum ConnectionState {
     CONNECTING,
-    SYNCHTRONIZING,
+    SYNCHRONIZING,
     LOADING,
-    CONNECTED,
+    LIVE,
     TIMED_OUT
 }

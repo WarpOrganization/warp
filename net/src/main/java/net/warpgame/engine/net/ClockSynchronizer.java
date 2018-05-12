@@ -7,7 +7,27 @@ package net.warpgame.engine.net;
 public class ClockSynchronizer {
     private long delta;
     private long requestTimestamp;
-    private boolean waitingForResponse;
+    private int finishedSynchronizations = 0;
+    private long minRTT = Integer.MAX_VALUE;
+    private int requestId;
+
+    public void synchronize(long responseTimestamp, int requestId) {
+        if (requestId == this.requestId) {
+            long rtt = System.currentTimeMillis() - requestTimestamp;
+            System.out.println("RTT: " + rtt);
+            if (rtt < minRTT) {
+                delta = System.currentTimeMillis() - responseTimestamp + (rtt / 2);
+                minRTT = rtt;
+                System.out.println("Calculated clock delta: " + delta);
+            }
+            finishedSynchronizations++;
+        }
+    }
+
+    public void startRequest(int requestId, long requestTimestamp){
+        this.requestId = requestId;
+        this.requestTimestamp = requestTimestamp;
+    }
 
     public long getDelta() {
         return delta;
@@ -25,18 +45,23 @@ public class ClockSynchronizer {
         this.requestTimestamp = requestTimestamp;
     }
 
-    public boolean isWaitingForResponse() {
-        return waitingForResponse;
+    public int getFinishedSynchronizations() {
+        return finishedSynchronizations;
     }
 
-    public void setWaitingForResponse(boolean waitingForResponse) {
-        this.waitingForResponse = waitingForResponse;
+    public void setFinishedSynchronizations(int finishedSynchronizations) {
+        this.finishedSynchronizations = finishedSynchronizations;
     }
 
-    public void synchronize(long responseTimestamp) {
-        long rtt = System.currentTimeMillis() - requestTimestamp;
-        delta = System.currentTimeMillis() - responseTimestamp + (rtt / 2);
-        waitingForResponse = false;
-        System.out.println(delta);
+    public int getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
+    }
+
+    public long getMinRTT() {
+        return minRTT;
     }
 }

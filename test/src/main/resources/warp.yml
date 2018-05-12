@@ -13,8 +13,6 @@ graphics:
     defaultTessellation: !!net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode NONE
     scene:
       maxLights: 10
-    smaa:
-      preset: !!net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAAPreset ULTRA
 multiplayer:
   ip: 10.48.1.1
   port: 6688

@@ -7,8 +7,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
+import net.warpgame.engine.net.event.receiver.InternalEventHandler;
 
 import java.net.InetSocketAddress;
 
@@ -22,11 +24,16 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     public ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
     private ComponentRegistry componentRegistry;
+    private InternalEventHandler internalEventHandler;
 
-    public ConnectionHandler(ClientRegistry clientRegistry, ConnectionUtil connectionUtil, ComponentRegistry componentRegistry) {
+    public ConnectionHandler(ClientRegistry clientRegistry,
+                             ConnectionUtil connectionUtil,
+                             ComponentRegistry componentRegistry,
+                             InternalEventHandler internalEventHandler) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
         this.componentRegistry = componentRegistry;
+        this.internalEventHandler = internalEventHandler;
     }
 
     //TODO protocol documentation
@@ -51,10 +58,10 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                 handleEventConfirmation(buffer.readInt(), buffer.readInt());
                 break;
             case PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST:
-                handleClockSynchronizationRequest(buffer.readInt());
+                handleClockSynchronizationRequest(buffer.readInt(), buffer.readInt());
                 break;
             case PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
-                handleClockSynchronizationResponse(buffer.readInt(), timestamp);
+                handleClockSynchronizationResponse(buffer.readInt(), timestamp, buffer.readInt());
                 break;
 
         }
@@ -77,22 +84,24 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         c.confirmEvent(eventDependencyId);
     }
 
-    private void handleClockSynchronizationRequest(int clientId) {
+    private void handleClockSynchronizationRequest(int clientId, int requestId) {
         Client client = clientRegistry.getClient(clientId);
         if (client != null) {
-            client.getClockSynchronizer().setRequestTimestamp(System.currentTimeMillis());
+            client.getClockSynchronizer().startRequest(requestId, System.currentTimeMillis());
 
-            client.getClockSynchronizer().setWaitingForResponse(true);
-            connectionUtil.sendPacket(
-                    connectionUtil.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 0),
-                    client);
+            ByteBuf packet =
+                    connectionUtil.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 4);
+            packet.writeInt(requestId);
+            connectionUtil.sendPacket(packet, client);
         }
     }
 
-    private void handleClockSynchronizationResponse(int clientId, long timestamp) {
+    private void handleClockSynchronizationResponse(int clientId, long timestamp, int requestId) {
         Client client = clientRegistry.getClient(clientId);
-        if (client != null && client.getClockSynchronizer().isWaitingForResponse()) {
-            client.getClockSynchronizer().synchronize(timestamp);
+        if (client != null) {
+            ClockSynchronizer synchronizer = client.getClockSynchronizer();
+            synchronizer.synchronize(timestamp, requestId);
+            if (synchronizer.getFinishedSynchronizations() >= 3) System.out.println(synchronizer.getDelta());
         }
     }
 
@@ -104,7 +113,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     }
 
     private void registerClient(Channel channel, InetSocketAddress address) {
-        Client c = new Client(address, new EventReceiver(componentRegistry));
+        Client c = new Client(address, new EventReceiver(componentRegistry, internalEventHandler));
         int id = clientRegistry.addClient(c);
         channel.writeAndFlush(
                 new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));

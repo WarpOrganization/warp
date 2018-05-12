@@ -2,6 +2,7 @@ package net.warpgame.engine.server;
 
 import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.net.ConnectionState;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,14 +45,16 @@ public class ClientRegistry {
 
     public void updateKeepAlive(int clientId) {
         Client client = clients.get(clientId);
-        if (client != null) client.setLastKeepAlive(System.currentTimeMillis());
+        if (client != null && client.getConnectionState() == ConnectionState.LIVE)
+            client.setLastKeepAlive(System.currentTimeMillis());
     }
 
     public synchronized void broadcast(ByteBuf msg) {
         if (clients.size() > 1) msg.retain(clients.size() - 1);
 
         for (Client client : clients.values())
-            connectionUtil.sendPacket(msg, client);
+            if (client.getConnectionState() == ConnectionState.LIVE)
+                connectionUtil.sendPacket(msg, client);
     }
 
     public Collection<Client> getClients() {
