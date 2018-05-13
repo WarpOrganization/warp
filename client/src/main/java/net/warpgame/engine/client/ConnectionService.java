@@ -9,13 +9,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.receiver.EventReceiver;
-import net.warpgame.engine.net.event.receiver.InternalEventHandler;
 
 import java.net.InetSocketAddress;
 
@@ -34,18 +31,11 @@ public class ConnectionService {
     private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
     private ConnectionState connectionState;
 
-    public ConnectionService(SerializedSceneHolder sceneHolder,
-                             ClientRemoteEventQueue eventQueue,
-                             ComponentRegistry componentRegistry,
-                             InternalEventHandler internalEventHandler) {
+    public ConnectionService(IncomingPacketProcessor packetProcessor) {
 
         try {
             Bootstrap b = new Bootstrap();
-            ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
-                    sceneHolder,
-                    this,
-                    eventQueue,
-                    new EventReceiver(componentRegistry, internalEventHandler));
+            ServerConnectionHandler connectionHandler = new ServerConnectionHandler(packetProcessor);
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -66,14 +56,6 @@ public class ConnectionService {
                         address));
     }
 
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
     public void sendPacket(ByteBuf packetData) {
         channel.writeAndFlush(new DatagramPacket(packetData, serverAddress));
     }
@@ -86,22 +68,31 @@ public class ConnectionService {
         return byteBuf;
     }
 
-    public InetSocketAddress getServerAddress() {
-        return serverAddress;
-    }
-
-    void sendKeepAlive() {
-        channel.writeAndFlush(new DatagramPacket(getHeader(PacketType.PACKET_KEEP_ALIVE, 0), serverAddress));
+    public void confirmEvent(int dependencyId) {
+        ByteBuf packet = getHeader(PacketType.PACKET_EVENT_CONFIRMATION, 4);
+        packet.writeInt(dependencyId);
+        sendPacket(packet);
     }
 
     public void shutdown() {
         group.shutdownGracefully();
     }
 
-    public void confirmEvent(int dependencyId) {
-        ByteBuf packet = getHeader(PacketType.PACKET_EVENT_CONFIRMATION, 4);
-        packet.writeInt(dependencyId);
-        sendPacket(packet);
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+
+    public InetSocketAddress getServerAddress() {
+        return serverAddress;
+    }
+
+    void sendKeepAlive() {
+        channel.writeAndFlush(new DatagramPacket(getHeader(PacketType.PACKET_KEEP_ALIVE, 0), serverAddress));
     }
 
     public void setClientCredentials(int clientId, int clientSecret) {

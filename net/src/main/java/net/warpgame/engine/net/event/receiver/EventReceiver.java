@@ -3,9 +3,9 @@ package net.warpgame.engine.net.event.receiver;
 import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.net.DesynchronizationException;
-import net.warpgame.engine.net.event.InternalEvent;
 
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -14,18 +14,16 @@ import java.util.PriorityQueue;
  * @author Hubertus
  * Created 02.01.2018
  */
-
+@Service
 public class EventReceiver {
     private PriorityQueue<IncomingEnvelope> eventQueue = new PriorityQueue<>(new IncomingEnvelopeComparator());
     private EventDeserializer deserializer = new EventDeserializer();
     private int minDependencyId = 1;
 
     private ComponentRegistry componentRegistry;
-    private InternalEventHandler internalEventHandler;
 
-    public EventReceiver(ComponentRegistry componentRegistry, InternalEventHandler internalEventHandler) {
+    public EventReceiver(ComponentRegistry componentRegistry) {
         this.componentRegistry = componentRegistry;
-        this.internalEventHandler = internalEventHandler;
     }
 
     public synchronized void addFastSerializableEvent(ByteBuf eventContent, int dependencyId) {
@@ -46,18 +44,14 @@ public class EventReceiver {
     private void triggerIncomingEvents() {
         while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
             IncomingEnvelope envelope = eventQueue.poll();
-            if (envelope.getTargetComponentId() == -1) {
-                internalEventHandler.handle((InternalEvent) envelope.getDeserializedEvent());
-            } else {
-                Component targetComponent = componentRegistry.getComponent(envelope.getTargetComponentId());
-                if (targetComponent == null)
-                    throw new DesynchronizationException("Event target component does not exist.");
-                try {
-                    targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
+            Component targetComponent = componentRegistry.getComponent(envelope.getTargetComponentId());
+            if (targetComponent == null)
+                throw new DesynchronizationException("Event target component does not exist.");
+            try {
+                targetComponent.triggerEvent((Event) envelope.getDeserializedEvent());
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             minDependencyId++;
         }

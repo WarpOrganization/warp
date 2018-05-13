@@ -10,7 +10,6 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
-import net.warpgame.engine.net.event.receiver.InternalEventHandler;
 
 import java.net.InetSocketAddress;
 
@@ -24,16 +23,13 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     public ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
     private ComponentRegistry componentRegistry;
-    private InternalEventHandler internalEventHandler;
 
     public ConnectionHandler(ClientRegistry clientRegistry,
                              ConnectionUtil connectionUtil,
-                             ComponentRegistry componentRegistry,
-                             InternalEventHandler internalEventHandler) {
+                             ComponentRegistry componentRegistry) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
         this.componentRegistry = componentRegistry;
-        this.internalEventHandler = internalEventHandler;
     }
 
     //TODO protocol documentation
@@ -113,7 +109,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     }
 
     private void registerClient(Channel channel, InetSocketAddress address) {
-        Client c = new Client(address, new EventReceiver(componentRegistry, internalEventHandler));
+        Client c = new Client(address, new EventReceiver(componentRegistry));
         int id = clientRegistry.addClient(c);
         channel.writeAndFlush(
                 new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));
