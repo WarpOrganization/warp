@@ -1,5 +1,8 @@
 package net.warpgame.test;
 
+import net.warpgame.engine.audio.*;
+import net.warpgame.engine.audio.playlist.PlayList;
+import net.warpgame.engine.audio.playlist.PlayRandomPlayList;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
@@ -9,6 +12,9 @@ import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.execution.RapidExecutionStrategy;
+import net.warpgame.engine.core.execution.SyncEngineThread;
+import net.warpgame.engine.core.execution.SyncTimer;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -43,6 +49,8 @@ import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
+import java.io.File;
+
 /**
  * @author Jaca777
  * Created 2017-09-23 at 13
@@ -67,7 +75,34 @@ public class Test1 {
                 .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
+        setupAudio(engineContext);
         registerCommandsAndVariables(engineContext.getLoadedContext());
+    }
+
+    private static void setupAudio(EngineContext engineContext){
+
+
+        AudioContext audioContext = new AudioContext();
+        AudioManager.INSTANCE = new AudioManager(audioContext);
+        audioContext.setAudioListener(
+                new AudioListener(
+                        engineContext.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent()
+                ));
+
+        EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        audioThread.scheduleTask(new AudioTask(audioContext));
+        audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
+
+        audioThread.scheduleOnce(() -> {
+            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
+            PlayList playList = new PlayRandomPlayList();
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
+            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
+            MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
+            AudioManager.INSTANCE.play(musicSource);
+        });
+
+        audioThread.start();
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
