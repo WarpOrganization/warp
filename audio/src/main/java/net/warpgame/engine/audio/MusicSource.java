@@ -1,5 +1,7 @@
 package net.warpgame.engine.audio;
 
+import net.warpgame.engine.audio.decoder.SoundData;
+import net.warpgame.engine.audio.decoder.SoundDecoderManager;
 import net.warpgame.engine.audio.playlist.PlayList;
 import org.joml.Vector3f;
 import net.warpgame.engine.core.context.EngineContext;
@@ -39,13 +41,16 @@ public class MusicSource extends AudioSource {
         this.playList = playList;
     }
 
+    private SoundData soundData;
+
     public void loadNew(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(new File(EngineContext.CODESOURCE_DIR + path));
-            format = stream.getFormat();
-            openALFormat = SoundBank.getOpenALFormat(format);
-            sampleRate = format.getSampleRate();
-        } catch (UnsupportedAudioFileException | IOException e) {
+            soundData = SoundDecoderManager.decode(path);
+            //stream = AudioSystem.getAudioInputStream(new File(EngineContext.CODESOURCE_DIR + path));
+            //format = stream.getFormat();
+            //openALFormat = SoundBank.getOpenALFormat(format);
+            //sampleRate = format.getSampleRate();
+        } catch (/*UnsupportedAudioFileException |*/ IOException e) {
             e.printStackTrace();
         }
     }
@@ -85,6 +90,10 @@ public class MusicSource extends AudioSource {
 
     public void incrementCurrentCycles() {
         currentCycles++;
+    }
+
+    public SoundData getSoundData() {
+        return soundData;
     }
 
     public boolean isDoneReading() {

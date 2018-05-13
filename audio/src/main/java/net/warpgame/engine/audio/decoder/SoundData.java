@@ -10,18 +10,25 @@ import static org.lwjgl.openal.AL10.alBufferData;
  * Created by Marcin on 30.04.2017.
  */
 public class SoundData {
+    private int result;
     private ByteBuffer data;
-
     private int frequency;
     private int channels;
-    private int bitrate;
     private int bitsPerChannel;
 
-    public SoundData(ByteBuffer data,int frequency, int channels, int bitrate, int bitsPerChannel){
+    public SoundData(ByteBuffer data,int frequency, int channels, int bitsPerChannel){
+        this.result = 1;
         this.data = data;
         this.frequency = frequency;
         this.channels = channels;
-        this.bitrate = bitrate;
+        this.bitsPerChannel = bitsPerChannel;
+    }
+
+    public SoundData(int result, ByteBuffer data,int frequency, int channels, int bitsPerChannel){
+        this.result = result;
+        this.data = data;
+        this.frequency = frequency;
+        this.channels = channels;
         this.bitsPerChannel = bitsPerChannel;
     }
 
@@ -58,5 +65,24 @@ public class SoundData {
                 break;
         }
         return openALFormat;
+    }
+    public ByteBuffer getData() {
+        return data;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int getChannels() {
+        return channels;
+    }
+
+    public int getBitsPerChannel() {
+        return bitsPerChannel;
+    }
+
+    public int getResult() {
+        return result;
     }
 }

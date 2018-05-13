@@ -56,6 +56,8 @@ public class AudioTask extends EngineTask {
 
     byte[] b = new byte[BUFFER_LENGTH];
 
+    boolean oneTime = true;
+
     private void loadBuffers() {
         for (int i = 0; i < context.getMusicPlaying().size(); i++) {
             MusicSource source = context.getMusicPlaying().get(i);
@@ -65,18 +67,22 @@ public class AudioTask extends EngineTask {
                 Queue<Integer> buffers = source.getBuffers();
                 int buffer = buffers.poll();
                 if (!source.isDoneReading()) {
-                    try {
-                        if (source.getStream().read(b) != -1) {
-                            ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
-                            data.flip();
-                            alBufferData(buffer, source.getOpenALFormat(), data, (int) source.getSampleRate());
-                            source.incrementCurrentCycles();
-                            alSourceQueueBuffers(source.getId(), buffer);
-                        } else
-                            source.doneReading();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    /*try {*/
+                    if (oneTime/*source.getStream().read(b) != -1*/) {
+                        oneTime = false;
+                        //ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
+                        //data.flip();
+                        source.getSoundData().fillBufferWithData(buffer);
+                        //alBufferData(buffer, source.getOpenALFormat(), data, (int) source.getSampleRate());
+                        //source.incrementCurrentCycles();
+                        alSourceQueueBuffers(source.getId(), buffer);
+                    } else {
+                        source.doneReading();
+                        oneTime = true;
                     }
+                    /*} catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
                 }
             }
             if (!source.isPlaying()) {

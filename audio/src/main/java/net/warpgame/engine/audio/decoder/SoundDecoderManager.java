@@ -11,18 +11,16 @@ import java.io.IOException;
  */
 public class SoundDecoderManager {
 
-    private static SoundFileDecoder decoders[] = {new WavFileDecoder(), new OggFileDecoder()};
-
     public static SoundData decode(String pathToFile) throws IOException {
-        File soundFile = new File(EngineContext.CODESOURCE_DIR + pathToFile);
-        switch (FilenameUtils.getExtension(soundFile.getName())) {
-            case "wav":
-                return decoders[0].decode(soundFile);
-            case "ogg":
-                return decoders[1].decode(soundFile);
-            default:
-                throw new RuntimeException("No support for "
-                        +FilenameUtils.getExtension(soundFile.getName())+" file system");
+        if (pathToFile.endsWith("wav")) {
+
+            File soundFile = new File(EngineContext.CODESOURCE_DIR + pathToFile);
+            return WavFileDecoder.decode(soundFile);
+        }else if(pathToFile.endsWith("ogg")) {
+            return OggFileDecoder.decode(pathToFile);
+        }else {
+            throw new RuntimeException("No support for "
+                    + pathToFile.substring(pathToFile.length()-3, pathToFile.length()) + " file system");
         }
     }
 }

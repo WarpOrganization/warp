@@ -22,7 +22,7 @@ public class AudioContext {
     public AudioContext() {
         playing = new ArrayList<>();
         commandsQueue = new ArrayBlockingQueue<Command>(10000);
-        soundBank = new SoundBank();
+        soundBank = new SoundBank(this);
         musicPlaying = new ArrayList<>();
     }
 
