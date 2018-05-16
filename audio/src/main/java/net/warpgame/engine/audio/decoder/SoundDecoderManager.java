@@ -17,7 +17,7 @@ public class SoundDecoderManager {
             File soundFile = new File(EngineContext.CODESOURCE_DIR + pathToFile);
             return WavFileDecoder.decode(soundFile);
         }else if(pathToFile.endsWith("ogg")) {
-            return OggFileDecoder.decode(pathToFile);
+            return OggFileDecoder.decode(EngineContext.CODESOURCE_DIR + pathToFile);
         }else {
             throw new RuntimeException("No support for "
                     + pathToFile.substring(pathToFile.length()-3, pathToFile.length()) + " file system");

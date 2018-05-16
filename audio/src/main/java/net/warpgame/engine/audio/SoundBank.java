@@ -38,7 +38,7 @@ public class SoundBank {
         return sounds.get(soundName);
     }
 
-    public void loadDir(String path) throws URISyntaxException, IOException, UnsupportedAudioFileException {
+    public void loadDir(String path) throws IOException {
         Path myPath = Paths.get(EngineContext.CODESOURCE_DIR + path);
         Stream<Path> walk = Files.walk(myPath, 1);
 
@@ -54,8 +54,6 @@ public class SoundBank {
         IntBuffer buffer = BufferUtils.createIntBuffer(files.size());
         AL10.alGenBuffers(buffer);
 
-        WavFileDecoder decoder = new WavFileDecoder();
-
         for (int i = 0; i < files.size(); i++) {
             SoundDecoderManager
                     .decode(path + File.separator + FilenameUtils.getName(files.get(i)))
@@ -64,32 +62,4 @@ public class SoundBank {
         }
     }
 
-    public static int getOpenALFormat(AudioFormat format) {//TODO spalic wszystkie wystapienia
-        final int MONO = 1;
-        final int STEREO = 2;
-        int openALFormat = -1;
-        switch (format.getChannels()) {
-            case MONO:
-                switch (format.getSampleSizeInBits()) {
-                    case 8:
-                        openALFormat = AL10.AL_FORMAT_MONO8;
-                        break;
-                    case 16:
-                        openALFormat = AL10.AL_FORMAT_MONO16;
-                        break;
-                }
-                break;
-            case STEREO:
-                switch (format.getSampleSizeInBits()) {
-                    case 8:
-                        openALFormat = AL10.AL_FORMAT_STEREO8;
-                        break;
-                    case 16:
-                        openALFormat = AL10.AL_FORMAT_STEREO16;
-                        break;
-                }
-                break;
-        }
-        return openALFormat;
-    }
 }

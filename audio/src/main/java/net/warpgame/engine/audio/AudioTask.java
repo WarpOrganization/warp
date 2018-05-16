@@ -67,22 +67,14 @@ public class AudioTask extends EngineTask {
                 Queue<Integer> buffers = source.getBuffers();
                 int buffer = buffers.poll();
                 if (!source.isDoneReading()) {
-                    /*try {*/
-                    if (oneTime/*source.getStream().read(b) != -1*/) {
+                    if (oneTime) {
                         oneTime = false;
-                        //ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
-                        //data.flip();
                         source.getSoundData().fillBufferWithData(buffer);
-                        //alBufferData(buffer, source.getOpenALFormat(), data, (int) source.getSampleRate());
-                        //source.incrementCurrentCycles();
                         alSourceQueueBuffers(source.getId(), buffer);
                     } else {
                         source.doneReading();
                         oneTime = true;
                     }
-                    /*} catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
                 }
             }
             if (!source.isPlaying()) {

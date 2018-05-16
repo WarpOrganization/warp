@@ -3,6 +3,7 @@ package net.warpgame.test;
 import net.warpgame.engine.audio.*;
 import net.warpgame.engine.audio.playlist.PlayList;
 import net.warpgame.engine.audio.playlist.PlayRandomPlayList;
+import net.warpgame.engine.audio.playlist.SingleRunPlayList;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
@@ -50,6 +51,7 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
+import java.util.Optional;
 
 /**
  * @author Jaca777
@@ -95,12 +97,13 @@ public class Test1 {
 
         audioThread.scheduleOnce(() -> {
             AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
-            PlayList playList = new PlayRandomPlayList();
-            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-01_Red_Giant.wav");
-            playList.add("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone-Light_Years-05_In_Time.wav");
-            MusicSource musicSource = AudioManager.INSTANCE.createMusicSource(new Vector3f(), playList);
-            AudioManager.INSTANCE.play(musicSource);
+            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "music");
+            AudioManager.INSTANCE.play(new AudioSource(engineContext.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent(), new Vector3f(0,0,0), true), "Stellardrone-Light_Years-05_In_Time");
+
         });
+
+
+
 
         audioThread.start();
     }

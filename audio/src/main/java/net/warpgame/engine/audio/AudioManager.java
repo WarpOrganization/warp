@@ -91,7 +91,7 @@ public class AudioManager {
     public void loadFiles(String path) {
         try {
             audioContext.getSoundBank().loadDir(path);
-        } catch (URISyntaxException | IOException | UnsupportedAudioFileException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

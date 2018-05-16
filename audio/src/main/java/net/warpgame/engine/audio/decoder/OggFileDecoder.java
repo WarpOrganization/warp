@@ -1,11 +1,13 @@
 package net.warpgame.engine.audio.decoder;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
 import static org.lwjgl.system.MemoryStack.stackMallocInt;
@@ -17,34 +19,29 @@ import static org.lwjgl.system.MemoryUtil.memByteBuffer;
 /**
  * Created by Marcin on 30.04.2017.
  */
-public class OggFileDecoder {
+class OggFileDecoder {
 
 
-    public static SoundData decode(String filename) {
-        int result;
+    static SoundData decode(String filename) {
+        ShortBuffer result;
         int channels;
         int sampleRate;
         ByteBuffer rawAudio;
 
-        try(MemoryStack stack = stackPush()) {
-            IntBuffer channelsBuffer = stackMallocInt(1);
-            stackPush();
-            IntBuffer sampleRateBuffer = stackMallocInt(1);
-            PointerBuffer rawAudioBuffer = stack.pointers(NULL);
+        IntBuffer channelsBuffer = stackMallocInt(1);
+        IntBuffer sampleRateBuffer = stackMallocInt(1);
 
 
-            result = stb_vorbis_decode_filename(filename, channelsBuffer, sampleRateBuffer, rawAudioBuffer);
+        result = stb_vorbis_decode_filename(filename, channelsBuffer, sampleRateBuffer);
 
-            channels = channelsBuffer.get();
+        channels = channelsBuffer.get();
 
-            sampleRate = sampleRateBuffer.get();
+        sampleRate = sampleRateBuffer.get();
 
-            rawAudio = memByteBuffer(rawAudioBuffer.get(0), result * channels);
+        rawAudio = ByteBuffer.allocate(result.capacity() * 2);
+        rawAudio.asShortBuffer().put(result);
 
-            stackPop();
-            stackPop();
-        }
-        return new SoundData(result, rawAudio, sampleRate, channels, 16);
+        return new SoundData(rawAudio, sampleRate, channels, 16);
     }
 
 }

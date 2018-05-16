@@ -46,11 +46,7 @@ public class MusicSource extends AudioSource {
     public void loadNew(String path) {
         try {
             soundData = SoundDecoderManager.decode(path);
-            //stream = AudioSystem.getAudioInputStream(new File(EngineContext.CODESOURCE_DIR + path));
-            //format = stream.getFormat();
-            //openALFormat = SoundBank.getOpenALFormat(format);
-            //sampleRate = format.getSampleRate();
-        } catch (/*UnsupportedAudioFileException |*/ IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

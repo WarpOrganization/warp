@@ -17,15 +17,12 @@ import java.nio.ByteBuffer;
  */
 public class WavFileDecoder{
 
-    private static final Logger LOGGER = Logger.getLogger(WavFileDecoder.class);
-
     public static SoundData decode(File soundFile) throws IOException {
         AudioInputStream stream;
 
         try {
             stream = AudioSystem.getAudioInputStream(soundFile);
         } catch (UnsupportedAudioFileException e) {
-            LOGGER.error(e);
             throw new RuntimeException(e);
         }
         AudioFormat format = stream.getFormat();
