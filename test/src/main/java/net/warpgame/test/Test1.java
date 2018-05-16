@@ -98,7 +98,6 @@ public class Test1 {
         audioThread.scheduleOnce(() -> {
             AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
             AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "music");
-            AudioManager.INSTANCE.play(new AudioSource(engineContext.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent(), new Vector3f(0,0,0), true), "Stellardrone-Light_Years-05_In_Time");
 
         });
 
@@ -530,6 +529,7 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addScript(SimpleControlScript.class);
+        cameraComponent.addScript(MusicScript.class);
 
         CameraHolder cameraHolder = engineContext.getLoadedContext()
                 .findOne(CameraHolder.class)
