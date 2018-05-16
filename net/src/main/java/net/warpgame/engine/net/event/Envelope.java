@@ -7,7 +7,7 @@ import net.warpgame.engine.core.event.Event;
  * @author Hubertus
  * Created 27.12.2017
  */
-public class Envelope extends Event {
+public abstract class Envelope extends Event {
     private Event content;
     private Component targetComponent;
     private boolean shouldConfirm = false;
@@ -44,4 +44,6 @@ public class Envelope extends Event {
     public void setShouldConfirm(boolean shouldConfirm) {
         this.shouldConfirm = shouldConfirm;
     }
+
+    public abstract boolean isInternal();
 }

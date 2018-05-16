@@ -5,6 +5,8 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.AddressedEnvelope;
 import net.warpgame.engine.net.event.Envelope;
+import net.warpgame.engine.net.event.EventAddresedEnvelope;
+import net.warpgame.engine.net.event.InternalMessageAddresedEnvelope;
 import net.warpgame.engine.net.event.sender.EventSerializer;
 import net.warpgame.engine.net.event.sender.RemoteEventQueue;
 
@@ -48,7 +50,6 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
             if (addressedEnvelope.isConfirmed()) {
                 confirmationMap.remove(addressedEnvelope.getDependencyId());
             } else {
-                addressedEnvelope.setSendTime(currentTime);
                 resendQueue.add(addressedEnvelope);
                 sendEvent(addressedEnvelope);
             }
@@ -59,13 +60,15 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
         while (!events.isEmpty()) {
             Envelope envelope = events.pop();
             eventDependencyIdCounter++;
-            AddressedEnvelope addressedEnvelope = new AddressedEnvelope();
+
+            AddressedEnvelope addressedEnvelope =
+                    envelope.isInternal() ? new EventAddresedEnvelope() : new InternalMessageAddresedEnvelope();
             addressedEnvelope.setConfirmed(false);
             addressedEnvelope.setDependencyId(eventDependencyIdCounter);
             addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
             addressedEnvelope.setEventType(envelope.getContent().getType());
-            addressedEnvelope.setTargetComponent(envelope.getTargetComponent());
             addressedEnvelope.setShouldConfirm(envelope.isShouldConfirm());
+            if (!envelope.isInternal()) addressedEnvelope.setTargetComponent(envelope.getTargetComponent());
 
             confirmationMap.put(eventDependencyIdCounter, addressedEnvelope);
             resendQueue.add(addressedEnvelope);
@@ -74,6 +77,12 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
     }
 
     private void sendEvent(AddressedEnvelope envelope) {
+        envelope.setSendTime(System.currentTimeMillis());
+        if (envelope.isInternal()) sendInternalMessage(envelope);
+        else sendStandardEvent(envelope);
+    }
+
+    private void sendStandardEvent(AddressedEnvelope envelope) {
         ByteBuf packet = connectionService.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length + 12);
         packet.writeInt(envelope.getEventType());
         packet.writeInt(envelope.getDependencyId());
@@ -82,17 +91,24 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
         connectionService.sendPacket(packet);
     }
 
-    public synchronized void confirmEvent(int eventDependencyId) {
+    private void sendInternalMessage(AddressedEnvelope envelope) {
+        ByteBuf packet = connectionService.getHeader(PacketType.PACKET_INTERNAL_MESSAGE, envelope.getSerializedEventData().length + 4);
+        packet.writeInt(envelope.getDependencyId());
+        packet.writeBytes(envelope.getSerializedEventData());
+        connectionService.sendPacket(packet);
+    }
+
+    synchronized void confirmEvent(int eventDependencyId) {
         AddressedEnvelope addressedEnvelope = confirmationMap.get(eventDependencyId);
         if (addressedEnvelope != null) {
-            if(addressedEnvelope.isShouldConfirm()){
+            if (addressedEnvelope.isShouldConfirm()) {
                 addressedEnvelope.getTargetComponent().triggerEvent(addressedEnvelope.getBouncerEvent());
             }
             addressedEnvelope.setConfirmed(true);
         }
     }
 
-    public void setConnectionService(ConnectionService connectionService) {
+    void setConnectionService(ConnectionService connectionService) {
         this.connectionService = connectionService;
     }
 }

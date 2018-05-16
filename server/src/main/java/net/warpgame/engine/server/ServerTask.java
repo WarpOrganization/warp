@@ -10,6 +10,7 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.net.event.InternalMessageHandler;
 
 /**
  * @author Hubertus
@@ -26,17 +27,23 @@ public class ServerTask extends EngineTask {
     private ConnectionUtil connectionUtil;
     private ServerRemoteEventQueue eventQueue;
     private ComponentRegistry componentRegistry;
+    private IncomingPacketProcessor packetProcessor;
+    private InternalMessageHandler internalMessageHandler;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
 
     public ServerTask(ClientRegistry clientRegistry,
                       ConnectionUtil connectionUtil,
                       ServerRemoteEventQueue eventQueue,
-                      ComponentRegistry componentRegistry) {
+                      ComponentRegistry componentRegistry,
+                      IncomingPacketProcessor packetProcessor,
+                      InternalMessageHandler internalMessageHandler) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
         this.eventQueue = eventQueue;
         this.componentRegistry = componentRegistry;
+        this.packetProcessor = packetProcessor;
+        this.internalMessageHandler = internalMessageHandler;
     }
 
     @Override
@@ -46,7 +53,14 @@ public class ServerTask extends EngineTask {
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new ConnectionHandler(clientRegistry, connectionUtil, componentRegistry));
+                    .handler(new ConnectionHandler(
+                            clientRegistry,
+                            componentRegistry,
+                            packetProcessor,
+                            connectionUtil,
+                            internalMessageHandler));
+
+
             outChannel = b.bind(PORT).sync().channel();
             connectionUtil.setOutChannel(outChannel);
         } catch (InterruptedException e) {

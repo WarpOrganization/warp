@@ -7,7 +7,7 @@ import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.input.Input;
-import net.warpgame.engine.net.event.Envelope;
+import net.warpgame.engine.net.event.EventEnvelope;
 import org.joml.Vector3f;
 
 import static java.awt.event.KeyEvent.*;
@@ -57,67 +57,67 @@ public class MultiplayerControlScript extends Script {
 
         movementVector.zero();
         if (input.isKeyDown(VK_W) && !forward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_W, true)));
             forward = true;
         }
         if (input.isKeyDown(VK_S) && !backward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_S, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_S, true)));
             backward = true;
         }
         if (input.isKeyDown(VK_A) && !left) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_A, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_A, true)));
             left = true;
         }
         if (input.isKeyDown(VK_D) && !right) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_D, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_D, true)));
             right = true;
         }
         if (input.isKeyDown(VK_UP) && !rotateUp) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_UP, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_UP, true)));
             rotateUp = true;
         }
         if (input.isKeyDown(VK_DOWN) && !rotateDown) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_DOWN, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_DOWN, true)));
             rotateDown = true;
         }
         if (input.isKeyDown(VK_LEFT) && !rotateLeft) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_LEFT, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_LEFT, true)));
             rotateLeft = true;
         }
         if (input.isKeyDown(VK_RIGHT) && !rotateRight) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_RIGHT, true)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_RIGHT, true)));
             rotateRight = true;
         }
         if (!input.isKeyDown(VK_W) && forward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_W, false)));
             forward = false;
         }
         if (!input.isKeyDown(VK_S) && backward) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_S, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_S, false)));
             backward = false;
         }
         if (!input.isKeyDown(VK_A) && left) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_A, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_A, false)));
             left = false;
         }
         if (!input.isKeyDown(VK_D) && right) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_D, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_D, false)));
             right = false;
         }
         if (!input.isKeyDown(VK_UP) && rotateUp) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_UP, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_UP, false)));
             rotateUp = false;
         }
         if (!input.isKeyDown(VK_DOWN) && rotateDown) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_DOWN, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_DOWN, false)));
             rotateDown = false;
         }
         if (!input.isKeyDown(VK_LEFT) && rotateLeft) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_LEFT, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_LEFT, false)));
             rotateLeft = false;
         }
         if (!input.isKeyDown(VK_RIGHT) && rotateRight) {
-            getOwner().triggerEvent(new Envelope(new InputEvent(VK_RIGHT, false)));
+            getOwner().triggerEvent(new EventEnvelope(new InputEvent(VK_RIGHT, false)));
             rotateRight = false;
         }
     }

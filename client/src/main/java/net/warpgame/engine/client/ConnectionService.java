@@ -9,10 +9,12 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
+import net.warpgame.engine.net.event.InternalMessageHandler;
 
 import java.net.InetSocketAddress;
 
@@ -31,11 +33,16 @@ public class ConnectionService {
     private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
     private ConnectionState connectionState;
 
-    public ConnectionService(IncomingPacketProcessor packetProcessor) {
+    public ConnectionService(
+            SerializedSceneHolder sceneHolder,
+            ComponentRegistry componentRegistry,
+            ClientRemoteEventQueue eventQueue,
+            InternalMessageHandler internalMessageHandler) {
 
         try {
             Bootstrap b = new Bootstrap();
-            ServerConnectionHandler connectionHandler = new ServerConnectionHandler(packetProcessor);
+            ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
+                    new IncomingPacketProcessor(this, sceneHolder, componentRegistry, eventQueue, internalMessageHandler));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)

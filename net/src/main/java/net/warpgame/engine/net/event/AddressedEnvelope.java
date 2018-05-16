@@ -6,7 +6,7 @@ import net.warpgame.engine.core.component.Component;
  * @author Hubertus
  * Created 28.12.2017
  */
-public class AddressedEnvelope {
+public abstract class AddressedEnvelope {
     private byte[] serializedEventData;
     private int dependencyId;
     private long sendTime;
@@ -79,4 +79,6 @@ public class AddressedEnvelope {
     public void setBouncerEvent(EventConfirmationEvent bouncerEvent) {
         this.bouncerEvent = bouncerEvent;
     }
+
+    public abstract boolean isInternal();
 }

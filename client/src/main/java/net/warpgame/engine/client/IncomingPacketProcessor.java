@@ -1,8 +1,10 @@
 package net.warpgame.engine.client;
 
 import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
+import net.warpgame.engine.net.event.InternalMessageHandler;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
 
 import static net.warpgame.engine.net.PacketType.*;
@@ -21,11 +23,12 @@ public class IncomingPacketProcessor {
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
-                                   EventReceiver eventReceiver,
-                                   ClientRemoteEventQueue eventQueue) {
+                                   ComponentRegistry componentRegistry,
+                                   ClientRemoteEventQueue eventQueue,
+                                   InternalMessageHandler internalMessageHandler) {
         this.connectionService = connectionService;
         this.sceneHolder = sceneHolder;
-        this.eventReceiver = eventReceiver;
+        this.eventReceiver = new EventReceiver(componentRegistry, internalMessageHandler);
         this.eventQueue = eventQueue;
     }
 
@@ -44,6 +47,9 @@ public class IncomingPacketProcessor {
                 processSceneStatePacket(timestamp, packet);
             case PACKET_EVENT:
                 processEventPacket(timestamp, packet);
+                break;
+            case PACKET_INTERNAL_MESSAGE:
+                processInternalMessagePacket(timestamp, packet);
                 break;
             case PACKET_EVENT_CONFIRMATION:
                 processEventConfirmationPacket(timestamp, packet);
@@ -72,6 +78,12 @@ public class IncomingPacketProcessor {
         int dependencyId = packetData.readInt();
         int targetComponentId = packetData.readInt();
         eventReceiver.addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
+        connectionService.confirmEvent(dependencyId);
+    }
+
+    private void processInternalMessagePacket(long timestamp, ByteBuf packetData) {
+        int dependencyId = packetData.readInt();
+        eventReceiver.addInternalMessage(packetData, dependencyId, timestamp);
         connectionService.confirmEvent(dependencyId);
     }
 

@@ -1,13 +1,14 @@
-package net.warpgame.engine.server;
+package net.warpgame.engine.server.envelope;
 
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.net.event.Envelope;
+import net.warpgame.engine.server.Client;
 
 /**
  * @author Hubertus
  * Created 05.01.2018
  */
-public class ServerEnvelope extends Envelope {
+public abstract class ServerEnvelope extends Envelope {
 
     private Client targetClient;
 
