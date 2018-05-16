@@ -56,8 +56,8 @@ public class SoundBank {
 
         for (int i = 0; i < files.size(); i++) {
             SoundDecoderManager
-                    .decode(path + File.separator + FilenameUtils.getName(files.get(i)))
-                    .fillBufferWithData(buffer.get(i));//better not touch already established spaghetti
+                    .decode(EngineContext.CODESOURCE_DIR+ path + File.separator + FilenameUtils.getName(files.get(i)))
+                    .fillBufferWithData(buffer.get(i));
             sounds.put(FilenameUtils.removeExtension(new File(files.get(i)).getName()), buffer.get(i));
         }
     }
