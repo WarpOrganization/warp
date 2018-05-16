@@ -77,21 +77,6 @@ public class AudioPosUpdateTask extends EngineTask {
                 }
             }
         }
-        for (int i = 0; i < context.getMusicPlaying().size(); i++) {
-            MusicSource source = context.getMusicPlaying().get(i);
-            if (source.isPlaying()) {
-                updateSourcePos(source);
-            }
-            if(source.isDoneReading()) {
-                String next = source.getPlayList().getNextFile();
-                if (next == null) {
-                    context.getMusicPlaying().remove(i);
-                } else {
-                    source.loadNew(next);
-                    source.keepReading();
-                }
-            }
-        }
     }
 
     private void updateSourcePos(AudioSource source) {
