@@ -1,5 +1,6 @@
 package net.warpgame.test;
 
+import net.warpgame.engine.audio.*;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
@@ -9,6 +10,9 @@ import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.execution.RapidExecutionStrategy;
+import net.warpgame.engine.core.execution.SyncEngineThread;
+import net.warpgame.engine.core.execution.SyncTimer;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -43,6 +47,8 @@ import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
+import java.io.File;
+
 /**
  * @author Jaca777
  * Created 2017-09-23 at 13
@@ -67,7 +73,34 @@ public class Test1 {
                 .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
+        setupAudio(engineContext);
         registerCommandsAndVariables(engineContext.getLoadedContext());
+    }
+
+    private static void setupAudio(EngineContext engineContext){
+
+
+        AudioContext audioContext = new AudioContext();
+        AudioManager.INSTANCE = new AudioManager(audioContext);
+        audioContext.setAudioListener(
+                new AudioListener(
+                        engineContext.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent()
+                ));
+
+        EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
+        audioThread.scheduleTask(new AudioTask(audioContext));
+        audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
+
+        audioThread.scheduleOnce(() -> {
+            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
+            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "music");
+
+        });
+
+
+
+
+        audioThread.start();
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -492,6 +525,7 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addScript(SimpleControlScript.class);
+        cameraComponent.addScript(MusicScript.class);
 
         CameraHolder cameraHolder = engineContext.getLoadedContext()
                 .findOne(CameraHolder.class)

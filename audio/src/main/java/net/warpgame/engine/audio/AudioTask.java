@@ -47,7 +47,6 @@ public class AudioTask extends EngineTask {
                 e.printStackTrace();
             }
         }
-        loadBuffers();
     }
 
     public AudioContext getContext() {
@@ -55,39 +54,6 @@ public class AudioTask extends EngineTask {
     }
 
     byte[] b = new byte[BUFFER_LENGTH];
-
-    private void loadBuffers() {
-        for (int i = 0; i < context.getMusicPlaying().size(); i++) {
-            MusicSource source = context.getMusicPlaying().get(i);
-            int n = alGetSourcei(source.getId(), AL_BUFFERS_PROCESSED);
-            for (int j = 0; j < n; j++) source.getBuffers().offer(alSourceUnqueueBuffers(source.getId()));
-            while (!source.getBuffers().isEmpty()) {
-                Queue<Integer> buffers = source.getBuffers();
-                int buffer = buffers.poll();
-                if (!source.isDoneReading()) {
-                    try {
-                        if (source.getStream().read(b) != -1) {
-                            ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
-                            data.flip();
-                            alBufferData(buffer, source.getOpenALFormat(), data, (int) source.getSampleRate());
-                            source.incrementCurrentCycles();
-                            alSourceQueueBuffers(source.getId(), buffer);
-                        } else
-                            source.doneReading();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            if (!source.isPlaying()) {
-                alSourcePlay(source.getId());
-            }
-        }
-    }
-
-    private void updateMusicSources() {
-
-    }
 
     private void initOpenAL() {
         device = ALC10.alcOpenDevice((ByteBuffer) null);
