@@ -44,6 +44,7 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
 
     private synchronized void resendEvents() {
         long currentTime = System.currentTimeMillis();
+//        System.out.println(resendQueue.size());
         while (!resendQueue.isEmpty() && (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
                 || resendQueue.peek().isConfirmed())) {
             AddressedEnvelope addressedEnvelope = resendQueue.poll();
@@ -62,7 +63,7 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
             eventDependencyIdCounter++;
 
             AddressedEnvelope addressedEnvelope =
-                    envelope.isInternal() ? new EventAddresedEnvelope() : new InternalMessageAddresedEnvelope();
+                    envelope.isInternal() ? new InternalMessageAddresedEnvelope() : new EventAddresedEnvelope();
             addressedEnvelope.setConfirmed(false);
             addressedEnvelope.setDependencyId(eventDependencyIdCounter);
             addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));

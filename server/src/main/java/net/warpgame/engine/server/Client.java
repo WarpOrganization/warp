@@ -2,6 +2,7 @@ package net.warpgame.engine.server;
 
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.ConnectionState;
+import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.event.receiver.EventReceiver;
 import net.warpgame.engine.server.envelope.ServerAddresedEnvelope;
 
@@ -20,12 +21,13 @@ public class Client {
     private int id;
     private int eventDependencyIdCounter = 0;
     private EventReceiver eventReceiver;
+    private ConnectionStateHolder connectionStateHolder;
     private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
-    private ConnectionState connectionState;
 
-    Client(InetSocketAddress address, EventReceiver eventReceiver) {
+    Client(InetSocketAddress address, EventReceiver eventReceiver, ConnectionStateHolder connectionStateHolder) {
         this.address = address;
         this.eventReceiver = eventReceiver;
+        this.connectionStateHolder = connectionStateHolder;
         lastKeepAlive = System.currentTimeMillis();
     }
 
@@ -37,11 +39,11 @@ public class Client {
         this.lastKeepAlive = lastKeepAlive;
     }
 
-    public InetSocketAddress getAddress() {
+    InetSocketAddress getAddress() {
         return address;
     }
 
-    public void setAddress(InetSocketAddress address) {
+    void setAddress(InetSocketAddress address) {
         this.address = address;
     }
 
@@ -58,7 +60,7 @@ public class Client {
         eventConfirmations.put(addressedEnvelope.getDependencyId(), addressedEnvelope);
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
@@ -71,23 +73,23 @@ public class Client {
         return eventDependencyIdCounter;
     }
 
-    public EventReceiver getEventReceiver() {
+    EventReceiver getEventReceiver() {
         return eventReceiver;
     }
 
-    public ClockSynchronizer getClockSynchronizer() {
+    ClockSynchronizer getClockSynchronizer() {
         return clockSynchronizer;
     }
 
-    public void setClockSynchronizer(ClockSynchronizer clockSynchronizer) {
+    void setClockSynchronizer(ClockSynchronizer clockSynchronizer) {
         this.clockSynchronizer = clockSynchronizer;
     }
 
-    public ConnectionState getConnectionState() {
-        return connectionState;
+    ConnectionState getConnectionState() {
+        return connectionStateHolder.getConnectionState();
     }
 
-    public void setConnectionState(ConnectionState connectionState) {
-        this.connectionState = connectionState;
+    ConnectionStateHolder getConnectionStateHolder() {
+        return connectionStateHolder;
     }
 }

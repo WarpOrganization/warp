@@ -5,8 +5,8 @@ import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.net.DesynchronizationException;
-import net.warpgame.engine.net.event.InternalMessageEnvelope;
-import net.warpgame.engine.net.event.InternalMessageHandler;
+import net.warpgame.engine.net.event.StateChangeHandler;
+import net.warpgame.engine.net.event.StateChangeRequestMessage;
 
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -21,11 +21,11 @@ public class EventReceiver {
     private int minDependencyId = 1;
 
     private ComponentRegistry componentRegistry;
-    private InternalMessageHandler internalMessageHandler;
+    private StateChangeHandler stateChangeHandler;
 
-    public EventReceiver(ComponentRegistry componentRegistry, InternalMessageHandler internalMessageHandler) {
+    public EventReceiver(ComponentRegistry componentRegistry, StateChangeHandler stateChangeHandler) {
         this.componentRegistry = componentRegistry;
-        this.internalMessageHandler = internalMessageHandler;
+        this.stateChangeHandler = stateChangeHandler;
     }
 
     public synchronized void addFastSerializableEvent(ByteBuf eventContent, int dependencyId) {
@@ -58,7 +58,7 @@ public class EventReceiver {
         while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
             IncomingEnvelope envelope = eventQueue.poll();
             if (envelope.isInternal()) {
-                internalMessageHandler.handleMessage((InternalMessageEnvelope) envelope.getDeserializedEvent());
+                stateChangeHandler.handleMessage((StateChangeRequestMessage) envelope.getDeserializedEvent());
             } else {
                 Component targetComponent = componentRegistry.getComponent(envelope.getTargetComponentId());
                 if (targetComponent == null)

@@ -10,7 +10,7 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.net.event.InternalMessageHandler;
+import net.warpgame.engine.net.event.StateChangeHandler;
 
 /**
  * @author Hubertus
@@ -28,7 +28,7 @@ public class ServerTask extends EngineTask {
     private ServerRemoteEventQueue eventQueue;
     private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
-    private InternalMessageHandler internalMessageHandler;
+    private StateChangeHandler stateChangeHandler;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
 
@@ -37,13 +37,13 @@ public class ServerTask extends EngineTask {
                       ServerRemoteEventQueue eventQueue,
                       ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
-                      InternalMessageHandler internalMessageHandler) {
+                      StateChangeHandler stateChangeHandler) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
         this.eventQueue = eventQueue;
         this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
-        this.internalMessageHandler = internalMessageHandler;
+        this.stateChangeHandler = stateChangeHandler;
     }
 
     @Override
@@ -58,7 +58,8 @@ public class ServerTask extends EngineTask {
                             componentRegistry,
                             packetProcessor,
                             connectionUtil,
-                            internalMessageHandler));
+                            stateChangeHandler,
+                            eventQueue));
 
 
             outChannel = b.bind(PORT).sync().channel();
