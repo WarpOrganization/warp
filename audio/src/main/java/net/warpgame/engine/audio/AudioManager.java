@@ -5,6 +5,7 @@ import net.warpgame.engine.audio.command.DisposeSourceCommand;
 import net.warpgame.engine.audio.command.PauseCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.service.Service;
 import org.joml.Vector3f;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.io.IOException;
  * @author Hubertus
  *         Created 22.12.16
  */
+
+@Service
 public class AudioManager {
 
     public static AudioManager INSTANCE; //TODO remove

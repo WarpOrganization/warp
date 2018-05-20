@@ -78,22 +78,19 @@ public class Test1 {
     }
 
     private static void setupAudio(EngineContext engineContext){
+        AudioContext audioContext = engineContext.getLoadedContext().findOne(AudioContext.class).get();
+        AudioManager audioManager = engineContext.getLoadedContext().findOne(AudioManager.class).get();
+        AudioThread audioThread = engineContext.getLoadedContext().findOne(AudioThread.class).get();
 
-
-        AudioContext audioContext = new AudioContext();
-        AudioManager.INSTANCE = new AudioManager(audioContext);
         audioContext.setAudioListener(
                 new AudioListener(
                         engineContext.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent()
                 ));
 
-        EngineThread audioThread = new SyncEngineThread(new SyncTimer(60), new RapidExecutionStrategy());
-        audioThread.scheduleTask(new AudioTask(audioContext));
-        audioThread.scheduleTask(new AudioPosUpdateTask(audioContext));
 
         audioThread.scheduleOnce(() -> {
-            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
-            AudioManager.INSTANCE.loadFiles("data" + File.separator + "sound" + File.separator + "music");
+            audioManager.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
+            audioManager.loadFiles("data" + File.separator + "sound" + File.separator + "music");
 
         });
 

@@ -1,6 +1,7 @@
 package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.Command;
+import net.warpgame.engine.core.context.service.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.concurrent.BlockingQueue;
  * @author Hubertus
  *         Created 20.12.2016
  */
+@Service
 public class AudioContext {
 
     private AudioListener audioListener;

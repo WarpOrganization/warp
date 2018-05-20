@@ -1,5 +1,8 @@
 package net.warpgame.engine.audio;
 
+import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.context.task.ExecuteAfterTask;
+import net.warpgame.engine.core.context.task.RegisterTask;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -18,13 +21,17 @@ import static org.lwjgl.openal.SOFTHRTF.alcResetDeviceSOFT;
  * @author Hubertus
  *         Created 17.12.16
  */
-public class AudioTask extends EngineTask {
+
+@Service
+@RegisterTask(thread = "audio")
+@ExecuteAfterTask(AudioPosUpdateTask.class)
+public class AudioCommandsTask extends EngineTask {
 
     private AudioContext context;
     private long device;
     private static final int BUFFER_LENGTH = 48000;
 
-    public AudioTask(AudioContext context) {
+    public AudioCommandsTask(AudioContext context) {
         this.context = context;
     }
 

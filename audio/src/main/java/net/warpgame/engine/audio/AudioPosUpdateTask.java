@@ -1,5 +1,7 @@
 package net.warpgame.engine.audio;
 
+import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.context.task.RegisterTask;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -11,6 +13,9 @@ import static org.lwjgl.openal.AL10.*;
  * @author Hubertus
  *         Created 20.12.2016
  */
+
+@Service
+@RegisterTask(thread = "audio")
 public class AudioPosUpdateTask extends EngineTask {
 
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
