@@ -18,12 +18,9 @@ import java.io.IOException;
 @Service
 public class AudioManager {
 
-    public static AudioManager INSTANCE; //TODO remove
-
     private AudioContext audioContext;
 
     public AudioManager(AudioContext audioContext) {
-        INSTANCE = this;
         this.audioContext = audioContext;
     }
 

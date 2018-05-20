@@ -10,6 +10,9 @@ import org.joml.Vector3f;
 
 public class MusicScript extends Script {
 
+    @ContextService
+    private AudioManager audioManager;
+
     private AudioSource audioSource;
     private boolean started;
 
@@ -22,13 +25,13 @@ public class MusicScript extends Script {
 
     @Override
     public void onInit() {
-        audioSource = AudioManager.INSTANCE.createPersistentSource(this.getOwner(), new Vector3f(0,0,0));
+        audioSource = audioManager.createPersistentSource(this.getOwner(), new Vector3f(0,0,0));
     }
 
     @Override
     public void onUpdate(int delta) {
         if(!started) {
-            AudioManager.INSTANCE.play(audioSource, "Stellardrone - Light Years - 10 Messier 45");
+            audioManager.play(audioSource, "Stellardrone - Light Years - 10 Messier 45");
             started = true;
         }
     }

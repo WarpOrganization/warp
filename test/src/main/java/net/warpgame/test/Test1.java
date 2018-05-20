@@ -93,11 +93,6 @@ public class Test1 {
             audioManager.loadFiles("data" + File.separator + "sound" + File.separator + "music");
 
         });
-
-
-
-
-        audioThread.start();
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
