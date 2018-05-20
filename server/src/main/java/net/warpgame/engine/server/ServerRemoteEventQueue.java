@@ -6,6 +6,10 @@ import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.Envelope;
 import net.warpgame.engine.net.event.sender.EventSerializer;
 import net.warpgame.engine.net.event.sender.RemoteEventQueue;
+import net.warpgame.engine.server.envelope.ServerAddresedEnvelope;
+import net.warpgame.engine.server.envelope.ServerAddressedEventEnvelope;
+import net.warpgame.engine.server.envelope.ServerAddressedInternalMessageEnvelope;
+import net.warpgame.engine.server.envelope.ServerEnvelope;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -20,7 +24,7 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
     private static final int EVENT_RESEND_INTERVAL = 600;
 
     private ArrayDeque<ServerEnvelope> events = new ArrayDeque<>();
-    private ArrayDeque<ServerAddressedEnvelope> resendQueue = new ArrayDeque<>();
+    private ArrayDeque<ServerAddresedEnvelope> resendQueue = new ArrayDeque<>();
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
 
@@ -48,7 +52,7 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
         while (!resendQueue.isEmpty()
                 && (currentTime - resendQueue.peek().getSendTime() > EVENT_RESEND_INTERVAL
                 || resendQueue.peek().isConfirmed())) {
-            ServerAddressedEnvelope addressedEnvelope = resendQueue.poll();
+            ServerAddresedEnvelope addressedEnvelope = resendQueue.poll();
             if (!addressedEnvelope.isConfirmed()) {
                 sendEvent(addressedEnvelope);
                 resendQueue.add(addressedEnvelope);
@@ -68,25 +72,38 @@ public class ServerRemoteEventQueue implements RemoteEventQueue {
     }
 
     private void setupEvent(Client c, ServerEnvelope envelope) {
-        ServerAddressedEnvelope addressedEnvelope = new ServerAddressedEnvelope();
+        ServerAddresedEnvelope addressedEnvelope =
+                envelope.isInternal() ? new ServerAddressedInternalMessageEnvelope() : new ServerAddressedEventEnvelope();
         addressedEnvelope.setTargetClient(c);
         addressedEnvelope.setConfirmed(false);
         addressedEnvelope.setSerializedEventData(eventSerializer.serialize(envelope));
         addressedEnvelope.setDependencyId(c.getNextEventDependencyId());
-        addressedEnvelope.setTargetComponent(envelope.getTargetComponent());
-        if(envelope.isShouldConfirm()) addressedEnvelope.setShouldConfirm(true);
+        if (!envelope.isInternal()) addressedEnvelope.setTargetComponent(envelope.getTargetComponent());
+        if (envelope.isShouldConfirm()) addressedEnvelope.setShouldConfirm(true);
         c.addEvent(addressedEnvelope);
         sendEvent(addressedEnvelope);
         resendQueue.add(addressedEnvelope);
     }
 
-    private void sendEvent(ServerAddressedEnvelope addressedEnvelope) {
-        addressedEnvelope.setSendTime(System.currentTimeMillis());
-        ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_EVENT, addressedEnvelope.getSerializedEventData().length + 12);
-        packet.writeInt(addressedEnvelope.getEventType());
-        packet.writeInt(addressedEnvelope.getDependencyId());
-        packet.writeInt(addressedEnvelope.getTargetComponent().getId());
-        packet.writeBytes(addressedEnvelope.getSerializedEventData());
-        connectionUtil.sendPacket(packet, addressedEnvelope.getTargetClient());
+    private void sendEvent(ServerAddresedEnvelope envelope) {
+        envelope.setSendTime(System.currentTimeMillis());
+        if (envelope.isInternal()) sendInternalMessage(envelope);
+        else sendStandardEvent(envelope);
+    }
+
+    private void sendStandardEvent(ServerAddresedEnvelope envelope) {
+        ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length + 12);
+        packet.writeInt(envelope.getEventType());
+        packet.writeInt(envelope.getDependencyId());
+        packet.writeInt(envelope.getTargetComponent().getId());
+        packet.writeBytes(envelope.getSerializedEventData());
+        connectionUtil.sendPacket(packet, envelope.getTargetClient());
+    }
+
+    private void sendInternalMessage(ServerAddresedEnvelope envelope) {
+        ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_INTERNAL_MESSAGE, envelope.getSerializedEventData().length + 4);
+        packet.writeInt(envelope.getDependencyId());
+        packet.writeBytes(envelope.getSerializedEventData());
+        connectionUtil.sendPacket(packet, envelope.getTargetClient());
     }
 }

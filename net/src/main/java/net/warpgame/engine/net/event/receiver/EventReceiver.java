@@ -5,7 +5,8 @@ import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.net.DesynchronizationException;
-import net.warpgame.engine.net.event.InternalEvent;
+import net.warpgame.engine.net.event.StateChangeHandler;
+import net.warpgame.engine.net.event.StateChangeRequestMessage;
 
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -14,18 +15,17 @@ import java.util.PriorityQueue;
  * @author Hubertus
  * Created 02.01.2018
  */
-
 public class EventReceiver {
     private PriorityQueue<IncomingEnvelope> eventQueue = new PriorityQueue<>(new IncomingEnvelopeComparator());
     private EventDeserializer deserializer = new EventDeserializer();
     private int minDependencyId = 1;
 
     private ComponentRegistry componentRegistry;
-    private InternalEventHandler internalEventHandler;
+    private StateChangeHandler stateChangeHandler;
 
-    public EventReceiver(ComponentRegistry componentRegistry, InternalEventHandler internalEventHandler) {
+    public EventReceiver(ComponentRegistry componentRegistry, StateChangeHandler stateChangeHandler) {
         this.componentRegistry = componentRegistry;
-        this.internalEventHandler = internalEventHandler;
+        this.stateChangeHandler = stateChangeHandler;
     }
 
     public synchronized void addFastSerializableEvent(ByteBuf eventContent, int dependencyId) {
@@ -34,7 +34,7 @@ public class EventReceiver {
 
     public synchronized void addEvent(ByteBuf eventContent, int targetComponentId, int eventType, int dependencyId, long timestamp) {
         if (checkDependency(dependencyId)) {
-            eventQueue.add(new IncomingEnvelope(
+            eventQueue.add(new IncomingEventEnvelope(
                     deserializer.deserialize(eventContent),
                     targetComponentId, dependencyId,
                     eventType,
@@ -43,11 +43,22 @@ public class EventReceiver {
         }
     }
 
+    public synchronized void addInternalMessage(ByteBuf messageContent, int dependencyId, long timestamp) {
+        if (checkDependency(dependencyId)) {
+            eventQueue.add(new IncomingInternalMessageEnvelope(
+                    deserializer.deserialize(messageContent),
+                    dependencyId,
+                    timestamp
+            ));
+            triggerIncomingEvents();
+        }
+    }
+
     private void triggerIncomingEvents() {
         while (!eventQueue.isEmpty() && minDependencyId == eventQueue.peek().getDependencyId()) {
             IncomingEnvelope envelope = eventQueue.poll();
-            if (envelope.getTargetComponentId() == -1) {
-                internalEventHandler.handle((InternalEvent) envelope.getDeserializedEvent());
+            if (envelope.isInternal()) {
+                stateChangeHandler.handleMessage((StateChangeRequestMessage) envelope.getDeserializedEvent());
             } else {
                 Component targetComponent = componentRegistry.getComponent(envelope.getTargetComponentId());
                 if (targetComponent == null)

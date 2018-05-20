@@ -15,7 +15,7 @@ import net.warpgame.engine.physics.PhysicsManager;
 import net.warpgame.engine.physics.PhysicsMotionState;
 import net.warpgame.engine.server.Client;
 import net.warpgame.engine.server.ConnectedEvent;
-import net.warpgame.engine.server.ServerEnvelope;
+import net.warpgame.engine.server.envelope.ServerEventEnvelope;
 
 import java.util.ArrayList;
 
@@ -56,9 +56,9 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         physicsProperty.getRigidBody().setMassProps(10, inertia);
         physicsProperty.getRigidBody().activate();
 
-        getOwner().triggerEvent(new ServerEnvelope(new LoadShipEvent(ship.getId(), transformProperty.getTranslation())));
+        getOwner().triggerEvent(new ServerEventEnvelope(new LoadShipEvent(ship.getId(), transformProperty.getTranslation())));
         sendScene(event.getConnectedClient(), ship.getId());
-        getOwner().triggerEvent(new ServerEnvelope(new BoardShipEvent(ship.getId()), event.getConnectedClient()));
+        getOwner().triggerEvent(new ServerEventEnvelope(new BoardShipEvent(ship.getId()), event.getConnectedClient()));
     }
 
     private void sendScene(Client client, int currentShip) {
@@ -68,7 +68,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         for (Component c : components) {
             if (c.getId() != 0 && c.getId() != currentShip) {
                 property = c.getProperty(TransformProperty.NAME);
-                getOwner().triggerEvent(new ServerEnvelope(new LoadShipEvent(c.getId(), property.getTranslation()), client));
+                getOwner().triggerEvent(new ServerEventEnvelope(new LoadShipEvent(c.getId(), property.getTranslation()), client));
             }
         }
     }

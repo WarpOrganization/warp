@@ -1,11 +1,11 @@
-package net.warpgame.engine.net.event.sender;
+package net.warpgame.engine.net.event;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.EventDispatcher;
 import net.warpgame.engine.core.event.Listener;
-import net.warpgame.engine.net.event.Envelope;
+import net.warpgame.engine.net.event.sender.RemoteEventQueue;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
