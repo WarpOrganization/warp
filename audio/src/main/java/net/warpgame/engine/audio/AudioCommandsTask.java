@@ -10,7 +10,9 @@ import net.warpgame.engine.core.execution.task.EngineTask;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Collection;
 import java.util.Queue;
+import java.util.TreeMap;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.ALC10.*;
@@ -24,11 +26,11 @@ import static org.lwjgl.openal.SOFTHRTF.alcResetDeviceSOFT;
 
 @Service
 @RegisterTask(thread = "audio")
-@ExecuteAfterTask(AudioPosUpdateTask.class)
 public class AudioCommandsTask extends EngineTask {
 
     private AudioContext context;
     private long device;
+    private long alcContext;
     private static final int BUFFER_LENGTH = 48000;
 
     public AudioCommandsTask(AudioContext context) {
@@ -42,7 +44,16 @@ public class AudioCommandsTask extends EngineTask {
 
     @Override
     protected void onClose() {
-        //TODO free sources, buffers
+
+        //TODO FREE SOURCES
+
+        TreeMap<String, Integer> soundBank = context.getSoundBank().sounds;
+        IntBuffer buffers = BufferUtils.createIntBuffer(soundBank.size());
+        soundBank.forEach((x, y) -> buffers.put(y));
+        AL10.alDeleteBuffers(buffers);
+
+        ALC10.alcDestroyContext(alcContext);
+        ALC10.alcCloseDevice(device);
     }
 
     @Override
@@ -65,7 +76,7 @@ public class AudioCommandsTask extends EngineTask {
     private void initOpenAL() {
         device = ALC10.alcOpenDevice((ByteBuffer) null);
         ALCCapabilities deviceCaps = ALC.createCapabilities(device);
-        long alcContext = alcCreateContext(device, (IntBuffer) null);
+        alcContext = alcCreateContext(device, (IntBuffer) null);
         alcMakeContextCurrent(alcContext);
         AL.createCapabilities(deviceCaps);
         IntBuffer attr = BufferUtils.createIntBuffer(10)
