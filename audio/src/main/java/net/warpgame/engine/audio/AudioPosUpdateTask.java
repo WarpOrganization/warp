@@ -40,6 +40,8 @@ public class AudioPosUpdateTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        if(context.getAudioListener() == null)
+            return;
         updateDirections();
         updateListener();
         updateSources();

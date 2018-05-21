@@ -80,11 +80,11 @@ public class AudioManager {
     }
 
     public void stop(AudioSource source) {
-
+        throw new UnsupportedOperationException();
     }
 
     public void pause() {
-
+        throw new UnsupportedOperationException();
     }
 
 }
