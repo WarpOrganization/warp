@@ -13,14 +13,10 @@ public class SourceProperty extends Property {
 
     public SourceProperty() {
         super(NAME);
-        audioManager = getOwner().getContext().getLoadedContext().findOne(AudioManager.class).get();
-        audioSource = audioManager.createPersistentSource(getOwner(), new Vector3f(0, 0, 0));
     }
 
     public SourceProperty(String soundName) {
         super(NAME);
-        audioManager = getOwner().getContext().getLoadedContext().findOne(AudioManager.class).get();
-        audioSource = audioManager.createPersistentSource(getOwner(), new Vector3f(0, 0, 0));
         this.soundName = soundName;
     }
 
@@ -42,5 +38,12 @@ public class SourceProperty extends Property {
 
     public void setSoundName(String soundName) {
         this.soundName = soundName;
+    }
+
+    @Override
+    public void enable() {
+        super.enable();
+        audioManager = getOwner().getContext().getLoadedContext().findOne(AudioManager.class).get();
+        audioSource = audioManager.createPersistentSource(getOwner(), new Vector3f(0, 0, 0));
     }
 }

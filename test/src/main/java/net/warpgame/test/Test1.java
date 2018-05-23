@@ -508,6 +508,7 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new ListenerProperty());
+        cameraComponent.addProperty(new SourceProperty("Stellardrone - Light Years - 10 Messier 45"));
         cameraComponent.addScript(SimpleControlScript.class);
         cameraComponent.addScript(MusicScript.class);
 
