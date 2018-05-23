@@ -1,7 +1,10 @@
 package net.warpgame.engine.audio;
 
 import net.warpgame.engine.core.property.Property;
+import org.apache.commons.io.FilenameUtils;
 import org.joml.Vector3f;
+
+import java.io.IOException;
 
 public class SourceProperty extends Property {
 
@@ -9,15 +12,13 @@ public class SourceProperty extends Property {
 
     private AudioManager audioManager;
     private AudioSource audioSource;
+    private String soundFilePath;
     private String soundName;
 
-    public SourceProperty() {
+    public SourceProperty(String soundFilePath) {
         super(NAME);
-    }
-
-    public SourceProperty(String soundName) {
-        super(NAME);
-        this.soundName = soundName;
+        this.soundFilePath = soundFilePath;
+        this.soundName = FilenameUtils.getBaseName(soundFilePath);
     }
 
     public void play() {
@@ -36,14 +37,11 @@ public class SourceProperty extends Property {
         return soundName;
     }
 
-    public void setSoundName(String soundName) {
-        this.soundName = soundName;
-    }
-
     @Override
     public void enable() {
         super.enable();
         audioManager = getOwner().getContext().getLoadedContext().findOne(AudioManager.class).get();
         audioSource = audioManager.createPersistentSource(getOwner(), new Vector3f(0, 0, 0));
+        audioManager.prepereAudioClip(soundFilePath);
     }
 }

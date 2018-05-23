@@ -38,6 +38,10 @@ public class SoundBank {
         return sounds.get(soundName);
     }
 
+    public boolean containsSound(String soundName){
+        return sounds.containsKey(soundName);
+    }
+
     public void loadDir(String path) throws IOException {
         Path myPath = Paths.get(EngineContext.CODESOURCE_DIR + path);
         Stream<Path> walk = Files.walk(myPath, 1);
@@ -62,4 +66,9 @@ public class SoundBank {
         }
     }
 
+    public void loadFile(String pathToFile) throws IOException {
+        int buffer = AL10.alGenBuffers();
+        SoundDecoderManager.decode(EngineContext.CODESOURCE_DIR + File.separator + pathToFile).fillBufferWithData(buffer);
+        sounds.put(FilenameUtils.getBaseName(pathToFile), buffer);
+    }
 }

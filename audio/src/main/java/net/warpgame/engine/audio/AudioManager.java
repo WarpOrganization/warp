@@ -6,6 +6,7 @@ import net.warpgame.engine.audio.command.PauseCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
+import org.apache.commons.io.FilenameUtils;
 import org.joml.Vector3f;
 
 import java.io.IOException;
@@ -19,9 +20,11 @@ import java.io.IOException;
 public class AudioManager {
 
     private AudioContext audioContext;
+    private AudioThread audioThread;
 
-    public AudioManager(AudioContext audioContext) {
+    public AudioManager(AudioContext audioContext, AudioThread audioThread) {
         this.audioContext = audioContext;
+        this.audioThread = audioThread;
     }
 
     public AudioSource createPersistentSource(Component owner, Vector3f offset) {
@@ -36,11 +39,11 @@ public class AudioManager {
         return source;
     }
 
-    public void pause(AudioSource source){
+    void pause(AudioSource source){
         audioContext.putCommand(new PauseCommand(source));
     }
 
-    public void deleteSorce(AudioSource source){
+    void deleteSorce(AudioSource source){
         audioContext.putCommand(new DisposeSourceCommand(source));
     }
 
@@ -67,7 +70,7 @@ public class AudioManager {
         audioContext.putCommand(new PlayCommand(source, soundName));
     }
 
-    public void play(AudioSource source, String soundName) {
+    void play(AudioSource source, String soundName) {
         audioContext.putCommand(new PlayCommand(source, soundName));
     }
 
@@ -79,11 +82,26 @@ public class AudioManager {
         }
     }
 
-    public void stop(AudioSource source) {
+    void prepereAudioClip(String clip) {
+        String name = FilenameUtils.getBaseName(clip);
+        SoundBank soundBank = audioContext.getSoundBank();
+        if(!soundBank.containsSound(name)){
+            audioThread.scheduleOnce(() -> {
+                try {
+                    soundBank.loadFile(clip);
+                } catch (IOException e) {
+                    throw new RuntimeException(String.format("Can't find filed named %s", clip));
+                }
+            });
+
+        }
+    }
+
+    void stop(AudioSource source) {
         throw new UnsupportedOperationException();
     }
 
-    public void pause() {
+    void pause() {
         throw new UnsupportedOperationException();
     }
 

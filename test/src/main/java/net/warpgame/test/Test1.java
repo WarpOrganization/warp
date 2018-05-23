@@ -70,20 +70,7 @@ public class Test1 {
                 .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
-        setupAudio(engineContext);
         registerCommandsAndVariables(engineContext.getLoadedContext());
-    }
-
-    private static void setupAudio(EngineContext engineContext) {
-        //TODO REMOVE
-        AudioManager audioManager = engineContext.getLoadedContext().findOne(AudioManager.class).get();
-        AudioThread audioThread = engineContext.getLoadedContext().findOne(AudioThread.class).get();
-
-        audioThread.scheduleOnce(() -> {
-            audioManager.loadFiles("data" + File.separator + "sound" + File.separator + "effects");
-            audioManager.loadFiles("data" + File.separator + "sound" + File.separator + "music");
-
-        });
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -508,7 +495,7 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new ListenerProperty());
-        cameraComponent.addProperty(new SourceProperty("Stellardrone - Light Years - 10 Messier 45"));
+        cameraComponent.addProperty(new SourceProperty("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
         cameraComponent.addScript(SimpleControlScript.class);
         cameraComponent.addScript(MusicScript.class);
 
