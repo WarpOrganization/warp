@@ -23,6 +23,15 @@ public class AudioSource {
         this.isPersistent = isPersistent;
     }
 
+    public AudioSource(Component owner){
+        this.owner = owner;
+        this.offset = new Vector3f(0,0,0);
+        this.isRelative = false;
+        this.isPersistent = true;
+    }
+
+
+
     public AudioSource(Vector3f offset, boolean isPersistent){
         this.owner = owner;
         this.offset = offset;

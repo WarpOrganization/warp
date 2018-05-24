@@ -1,14 +1,14 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.audio.SourceProperty;
+import net.warpgame.engine.audio.AudioSourceProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 
 public class MusicScript extends Script {
 
-    @OwnerProperty(SourceProperty.NAME)
-    private SourceProperty sourceProperty;
+    @OwnerProperty(AudioSourceProperty.NAME)
+    private AudioSourceProperty audioSourceProperty;
 
 
     public MusicScript(Component owner) {
@@ -17,7 +17,7 @@ public class MusicScript extends Script {
 
     @Override
     public void onInit() {
-        sourceProperty.play();
+        audioSourceProperty.play();
     }
 
     @Override
