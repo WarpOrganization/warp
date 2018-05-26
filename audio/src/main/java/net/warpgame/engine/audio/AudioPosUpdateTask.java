@@ -51,7 +51,7 @@ public class AudioPosUpdateTask extends EngineTask {
 
     private Vector3f forwardVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
-    private Vector3f posVector = new Vector3f();
+
     private Vector3f listenerPosVector = new Vector3f();
     private float[] orientation = new float[6];
 
@@ -76,22 +76,19 @@ public class AudioPosUpdateTask extends EngineTask {
 
     private void updateSources() {
         for (int i = 0; i < context.getPlaying().size(); i++) {
-            AudioSource source = context.getPlaying().get(i);
-            if (source.isPlaying()) {
+            AudioSourceProperty source = context.getPlaying().get(i);
+            if (alGetSourcei(source.getId(), AL_SOURCE_STATE) == AL_PLAYING) {
                 updateSourcePos(source);
             } else {
                 context.getPlaying().remove(i);
-                if (!source.isPersistent()) {
-                    source.dispose();
-                }
             }
         }
     }
 
-    private void updateSourcePos(AudioSource source) {
+    private void updateSourcePos(AudioSourceProperty source) {
+        Vector3f posVector = new Vector3f();
         if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
         else posVector.set(0, 0, 0);
-        posVector.add(source.getOffset());
         alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
 
     }

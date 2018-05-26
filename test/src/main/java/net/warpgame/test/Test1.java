@@ -10,6 +10,7 @@ import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -496,8 +497,9 @@ public class Test1 {
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new AudioListenerProperty());
         cameraComponent.addProperty(new AudioSourceProperty("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
+        AudioSourceProperty property = cameraComponent.getProperty(AudioSourceProperty.NAME);
+        property.play();
         cameraComponent.addScript(SimpleControlScript.class);
-        cameraComponent.addScript(MusicScript.class);
 
         CameraHolder cameraHolder = engineContext.getLoadedContext()
                 .findOne(CameraHolder.class)

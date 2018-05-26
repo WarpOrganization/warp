@@ -1,7 +1,7 @@
 package net.warpgame.engine.audio.command;
 
 import net.warpgame.engine.audio.AudioContext;
-import net.warpgame.engine.audio.AudioSource;
+import net.warpgame.engine.audio.AudioSourceProperty;
 
 import static org.lwjgl.openal.AL10.*;
 
@@ -11,10 +11,10 @@ import static org.lwjgl.openal.AL10.*;
  */
 public class PlayCommand implements Command {
 
-    private final AudioSource source;
+    private final AudioSourceProperty source;
     private final String soundName;
 
-    public PlayCommand(AudioSource source, String soundName) {
+    public PlayCommand(AudioSourceProperty source, String soundName) {
         this.source = source;
         this.soundName = soundName;
     }
