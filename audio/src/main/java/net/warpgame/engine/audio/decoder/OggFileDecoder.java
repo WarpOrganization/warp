@@ -1,6 +1,5 @@
 package net.warpgame.engine.audio.decoder;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
@@ -17,7 +16,6 @@ class OggFileDecoder {
         ShortBuffer shortBuffer;
         int channels;
         int sampleRate;
-        ByteBuffer rawAudio;
 
         IntBuffer channelsBuffer = stackMallocInt(1);
         IntBuffer sampleRateBuffer = stackMallocInt(1);
@@ -28,9 +26,6 @@ class OggFileDecoder {
         channels = channelsBuffer.get();
 
         sampleRate = sampleRateBuffer.get();
-
-        //rawAudio = ByteBuffer.allocate(shortBuffer.capacity() * 2);
-        //rawAudio.asShortBuffer().put(shortBuffer);
 
         return new SoundData(shortBuffer, sampleRate, channels, 16);
     }

@@ -1,12 +1,7 @@
 package net.warpgame.engine.audio;
 
-import net.warpgame.engine.audio.command.CreateSourceCommand;
-import net.warpgame.engine.audio.command.PauseCommand;
-import net.warpgame.engine.audio.command.PlayCommand;
-import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
 import org.apache.commons.io.FilenameUtils;
-import org.joml.Vector3f;
 
 import java.io.IOException;
 
@@ -26,7 +21,7 @@ public class AudioManager {
         this.audioThread = audioThread;
     }
 
-    void prepereAudioClip(String clip) {
+    void prepareAudioClip(String clip) {
         String name = FilenameUtils.getBaseName(clip);
         SoundBank soundBank = audioContext.getSoundBank();
         if(!soundBank.containsSound(name)){

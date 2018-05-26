@@ -51,6 +51,7 @@ public class AudioPosUpdateTask extends EngineTask {
 
     private Vector3f forwardVector = new Vector3f();
     private Vector3f upVector = new Vector3f();
+    private Vector3f posVector = new Vector3f();
 
     private Vector3f listenerPosVector = new Vector3f();
     private float[] orientation = new float[6];
@@ -85,7 +86,6 @@ public class AudioPosUpdateTask extends EngineTask {
     }
 
     private void updateSourcePos(AudioSourceProperty source) {
-        Vector3f posVector = new Vector3f();
         if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
         else posVector.set(0, 0, 0);
         alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
