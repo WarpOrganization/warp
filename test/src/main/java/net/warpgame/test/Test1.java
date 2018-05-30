@@ -496,7 +496,7 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new AudioListenerProperty());
-        cameraComponent.addProperty(new AudioSourceProperty("data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
+        cameraComponent.addProperty(new AudioSourceProperty(EngineContext.CODESOURCE_DIR + File .separator + "data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
         AudioSourceProperty property = cameraComponent.getProperty(AudioSourceProperty.NAME);
         property.play();
         cameraComponent.addScript(SimpleControlScript.class);

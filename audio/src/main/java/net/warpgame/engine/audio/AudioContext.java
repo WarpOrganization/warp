@@ -38,15 +38,15 @@ public class AudioContext {
         return playing;
     }
 
-    public BlockingQueue<Command> getCommandsQueue() {
+    BlockingQueue<Command> getCommandsQueue() {
         return commandsQueue;
     }
 
-    public AudioListenerProperty getAudioListener() {
+    AudioListenerProperty getAudioListener() {
         return audioListener;
     }
 
-    public void setAudioListener(AudioListenerProperty audioListener) {
+    void setAudioListener(AudioListenerProperty audioListener) {
         this.audioListener = audioListener;
     }
 

@@ -42,33 +42,13 @@ public class SoundBank {
         return sounds.containsKey(soundName);
     }
 
-    public void loadDir(String path) throws IOException {
-        Path myPath = Paths.get(EngineContext.CODESOURCE_DIR + path);
-        Stream<Path> walk = Files.walk(myPath, 1);
+    void initAudioClip(AudioClip audioClip){
 
-
-        ArrayList<String> files = new ArrayList<>();
-        Iterator<Path> it = walk.iterator();
-        it.next();
-        for (; it.hasNext(); ) {
-            String p = it.next().toString();
-            files.add(p);
-        }
-
-        IntBuffer buffer = BufferUtils.createIntBuffer(files.size());
-        AL10.alGenBuffers(buffer);
-
-        for (int i = 0; i < files.size(); i++) {
-            SoundDecoderManager
-                    .decode(EngineContext.CODESOURCE_DIR+ path + File.separator + FilenameUtils.getName(files.get(i)))
-                    .fillBufferWithData(buffer.get(i));
-            sounds.put(FilenameUtils.removeExtension(new File(files.get(i)).getName()), buffer.get(i));
-        }
     }
 
-    public void loadFile(String pathToFile) throws IOException {
+    public void loadFile(String file) throws IOException {
         int buffer = AL10.alGenBuffers();
-        SoundDecoderManager.decode(EngineContext.CODESOURCE_DIR + File.separator + pathToFile).fillBufferWithData(buffer);
-        sounds.put(FilenameUtils.getBaseName(pathToFile), buffer);
+        SoundDecoderManager.decode(file).fillBufferWithData(buffer);
+        sounds.put(FilenameUtils.getBaseName(file), buffer);
     }
 }

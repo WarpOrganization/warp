@@ -10,14 +10,12 @@ import static org.lwjgl.openal.AL10.alBufferData;
  * Created by Marcin on 30.04.2017.
  */
 public class SoundData {
-    private int result;
     private ShortBuffer data;
     private int frequency;
     private int channels;
     private int bitsPerChannel;
 
     public SoundData(ShortBuffer data, int frequency, int channels, int bitsPerChannel){
-        this.result = 1;
         this.data = data;
         this.frequency = frequency;
         this.channels = channels;
@@ -25,10 +23,10 @@ public class SoundData {
     }
 
     public void fillBufferWithData(int buffer){
-        alBufferData(buffer, getOpenALFormat(), data, frequency);;
+        alBufferData(buffer, getOpenALFormat(), data, frequency);
     }
 
-    private int getOpenALFormat()
+    public int getOpenALFormat()
     {
         final int MONO = 1;
         final int STEREO = 2;
@@ -56,5 +54,13 @@ public class SoundData {
                 break;
         }
         return openALFormat;
+    }
+
+    public ShortBuffer getData() {
+        return data;
+    }
+
+    public int getFrequency() {
+        return frequency;
     }
 }
