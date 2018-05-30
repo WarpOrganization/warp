@@ -7,7 +7,6 @@ import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.input.Input;
-import net.warpgame.engine.net.event.EventEnvelope;
 import org.joml.Vector3f;
 
 import static java.awt.event.KeyEvent.*;

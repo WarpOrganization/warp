@@ -23,6 +23,7 @@ public class IncomingPacketProcessor {
     private SerializedSceneHolder sceneHolder;
     private EventReceiver eventReceiver;
     private ClientRemoteEventQueue eventQueue;
+    private ComponentRegistry componentRegistry;
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
@@ -33,6 +34,7 @@ public class IncomingPacketProcessor {
         this.sceneHolder = sceneHolder;
         this.eventReceiver = new EventReceiver(componentRegistry, stateChangeHandler);
         this.eventQueue = eventQueue;
+        this.componentRegistry = componentRegistry;
     }
 
     public void processPacket(ByteBuf packet) {
@@ -107,10 +109,10 @@ public class IncomingPacketProcessor {
         connectionService.sendPacket(responsePacket);
 
         if (connectionService.getClockSynchronizer().getFinishedSynchronizations() >= 3) {
-            connectionService.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LOADING);
+            connectionService.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             eventQueue.pushEvent(
                     new InternalMessageEnvelope(
-                            new StateChangeRequestMessage(ConnectionState.LOADING, connectionService.getClientId())));
+                            new StateChangeRequestMessage(ConnectionState.LIVE, connectionService.getClientId())));
         }
     }
 }

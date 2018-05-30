@@ -14,7 +14,7 @@ public abstract class AddressedEnvelope {
     private int eventType;
     private Component targetComponent;
     private boolean shouldConfirm;
-    private EventConfirmationEvent bouncerEvent;
+    private MessageConfirmationEvent bouncerEvent;
 
     public byte[] getSerializedEventData() {
         return serializedEventData;
@@ -72,11 +72,11 @@ public abstract class AddressedEnvelope {
         this.shouldConfirm = shouldConfirm;
     }
 
-    public EventConfirmationEvent getBouncerEvent() {
+    public MessageConfirmationEvent getBouncerEvent() {
         return bouncerEvent;
     }
 
-    public void setBouncerEvent(EventConfirmationEvent bouncerEvent) {
+    public void setBouncerEvent(MessageConfirmationEvent bouncerEvent) {
         this.bouncerEvent = bouncerEvent;
     }
 

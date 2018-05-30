@@ -31,11 +31,15 @@ public class ComponentRegistry {
         return componentMap.get(id);
     }
 
+    public synchronized Component getRootComponent() {
+        return componentMap.get(0);
+    }
+
     public synchronized void removeComponent(int id) {
         componentMap.remove(id);
     }
 
-    public synchronized void getComponents(Collection<Component> target){
+    public synchronized void getComponents(Collection<Component> target) {
         target.addAll(componentMap.values());
     }
 }

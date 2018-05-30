@@ -29,7 +29,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
     private final PhysicsManager physicsManager;
     private Component scene;
 
-    protected ConnectedListener(Component owner, ComponentRegistry componentRegistry, PhysicsManager physicsManager) {
+    ConnectedListener(Component owner, ComponentRegistry componentRegistry, PhysicsManager physicsManager) {
         super(owner, "connectedEvent");
 
         this.componentRegistry = componentRegistry;

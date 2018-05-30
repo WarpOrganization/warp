@@ -106,8 +106,8 @@ public class IncomingPacketProcessor {
             synchronizer.synchronize(timestamp, requestId);
             if (synchronizer.getFinishedSynchronizations() >= 3) {
                 eventQueue.pushEvent(
-                        new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.LOADING), client));
-                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LOADING);
+                        new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.LIVE), client));
+                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             }
         }
     }

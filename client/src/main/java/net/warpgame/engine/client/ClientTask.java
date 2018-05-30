@@ -100,8 +100,6 @@ public class ClientTask extends EngineTask {
         switch (connectionService.getConnectionState()) {
             case SYNCHRONIZING:
                 syncClock(delta);
-            case LOADING://TODO: implement
-                break;
             case LIVE:
                 keepAlive(delta);
                 break;
