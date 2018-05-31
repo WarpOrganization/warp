@@ -21,19 +21,4 @@ public class AudioManager {
         this.audioThread = audioThread;
     }
 
-    void prepareAudioClip(String clip) {
-        String name = FilenameUtils.getBaseName(clip);
-        SoundBank soundBank = audioContext.getSoundBank();
-        if(!soundBank.containsSound(name)){
-            audioThread.scheduleOnce(() -> {
-                try {
-                    soundBank.loadFile(clip);
-                } catch (IOException e) {
-                    throw new RuntimeException(String.format("Can't find filed named %s", clip));
-                }
-            });
-
-        }
-    }
-
 }

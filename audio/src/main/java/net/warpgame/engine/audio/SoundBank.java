@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
  *         Created 23.12.16
  */
 public class SoundBank {
-    TreeMap<String, Integer> sounds = new TreeMap<>();
+    Map<String, Integer> sounds = new TreeMap<>();
 
     private AudioContext context;
 

@@ -42,7 +42,7 @@ public class AudioSourceProperty extends Property {
         audioManager = getOwner().getContext().getLoadedContext().findOne(AudioManager.class).get();
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
         audioContext.putCommand(new CreateSourceCommand(this));
-        audioManager.prepareAudioClip(soundFilePath);
+        audioContext.prepareAudioClip(soundFilePath);
     }
 
     public int getId() {

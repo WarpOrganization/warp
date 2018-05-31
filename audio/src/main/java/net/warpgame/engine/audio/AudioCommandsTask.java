@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 
@@ -47,7 +48,7 @@ public class AudioCommandsTask extends EngineTask {
 
         //TODO FREE SOURCES
 
-        TreeMap<String, Integer> soundBank = context.getSoundBank().sounds;
+        Map<String, Integer> soundBank = context.getSoundBank().sounds;
         IntBuffer buffers = BufferUtils.createIntBuffer(soundBank.size());
         soundBank.forEach((x, y) -> buffers.put(y));
         AL10.alDeleteBuffers(buffers);
