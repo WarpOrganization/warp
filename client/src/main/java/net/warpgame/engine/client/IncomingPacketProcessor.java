@@ -8,7 +8,7 @@ import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.InternalMessageEnvelope;
 import net.warpgame.engine.net.event.StateChangeHandler;
 import net.warpgame.engine.net.event.StateChangeRequestMessage;
-import net.warpgame.engine.net.event.receiver.EventReceiver;
+import net.warpgame.engine.net.event.receiver.MessageReceiver;
 
 import static net.warpgame.engine.net.PacketType.*;
 
@@ -21,7 +21,7 @@ public class IncomingPacketProcessor {
 
     private ConnectionService connectionService;
     private SerializedSceneHolder sceneHolder;
-    private EventReceiver eventReceiver;
+    private MessageReceiver messageReceiver;
     private ClientRemoteEventQueue eventQueue;
     private ComponentRegistry componentRegistry;
 
@@ -32,7 +32,7 @@ public class IncomingPacketProcessor {
                                    StateChangeHandler stateChangeHandler) {
         this.connectionService = connectionService;
         this.sceneHolder = sceneHolder;
-        this.eventReceiver = new EventReceiver(componentRegistry, stateChangeHandler);
+        this.messageReceiver = new MessageReceiver(componentRegistry, stateChangeHandler);
         this.eventQueue = eventQueue;
         this.componentRegistry = componentRegistry;
     }
@@ -49,13 +49,13 @@ public class IncomingPacketProcessor {
                 break;
             case PACKET_SCENE_STATE:
                 processSceneStatePacket(timestamp, packet);
-            case PACKET_EVENT:
+            case PACKET_MESSAGE:
                 processEventPacket(timestamp, packet);
                 break;
             case PACKET_INTERNAL_MESSAGE:
                 processInternalMessagePacket(timestamp, packet);
                 break;
-            case PACKET_EVENT_CONFIRMATION:
+            case PACKET_MESSAGE_CONFIRMATION:
                 processEventConfirmationPacket(timestamp, packet);
                 break;
             case PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
@@ -67,7 +67,7 @@ public class IncomingPacketProcessor {
     private void processConnectedPacket(long timestamp, ByteBuf packetData) {
         int clientId = packetData.readInt();
         connectionService.setClientCredentials(clientId, 0);
-        connectionService.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
+        connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
         eventQueue.pushEvent(
                 new InternalMessageEnvelope(
                         new StateChangeRequestMessage(ConnectionState.SYNCHRONIZING, connectionService.getClientId())));
@@ -85,14 +85,14 @@ public class IncomingPacketProcessor {
         int eventType = packetData.readInt();
         int dependencyId = packetData.readInt();
         int targetComponentId = packetData.readInt();
-        eventReceiver.addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
-        connectionService.confirmEvent(dependencyId);
+        messageReceiver.addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
+        connectionService.sendMessageConfirmationPacket(dependencyId);
     }
 
     private void processInternalMessagePacket(long timestamp, ByteBuf packetData) {
         int dependencyId = packetData.readInt();
-        eventReceiver.addInternalMessage(packetData, dependencyId, timestamp);
-        connectionService.confirmEvent(dependencyId);
+        messageReceiver.addInternalMessage(packetData, dependencyId, timestamp);
+        connectionService.sendMessageConfirmationPacket(dependencyId);
     }
 
     private void processEventConfirmationPacket(long timestamp, ByteBuf packetData) {
@@ -102,14 +102,14 @@ public class IncomingPacketProcessor {
 
     private void processClockSynchronizationResponsePacket(long timestamp, ByteBuf packetData) {
         int requestId = packetData.readInt();
-        connectionService.getClockSynchronizer().synchronize(timestamp, requestId);
+        connectionService.getServer().getClockSynchronizer().synchronize(timestamp, requestId);
 
         ByteBuf responsePacket = connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 4);
         responsePacket.writeInt(requestId);
         connectionService.sendPacket(responsePacket);
 
-        if (connectionService.getClockSynchronizer().getFinishedSynchronizations() >= 3) {
-            connectionService.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
+        if (connectionService.getServer().getClockSynchronizer().getFinishedSynchronizations() >= 3) {
+            connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             eventQueue.pushEvent(
                     new InternalMessageEnvelope(
                             new StateChangeRequestMessage(ConnectionState.LIVE, connectionService.getClientId())));

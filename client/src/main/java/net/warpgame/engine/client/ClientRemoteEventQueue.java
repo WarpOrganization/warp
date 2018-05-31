@@ -84,7 +84,7 @@ public class ClientRemoteEventQueue implements RemoteEventQueue {
     }
 
     private void sendStandardEvent(AddressedEnvelope envelope) {
-        ByteBuf packet = connectionService.getHeader(PacketType.PACKET_EVENT, envelope.getSerializedEventData().length + 12);
+        ByteBuf packet = connectionService.getHeader(PacketType.PACKET_MESSAGE, envelope.getSerializedEventData().length + 12);
         packet.writeInt(envelope.getEventType());
         packet.writeInt(envelope.getDependencyId());
         packet.writeInt(envelope.getTargetComponent().getId());

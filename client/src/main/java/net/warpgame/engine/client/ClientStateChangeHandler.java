@@ -20,6 +20,6 @@ public class ClientStateChangeHandler implements StateChangeHandler {
 
     @Override
     public void handleMessage(StateChangeRequestMessage message) {
-        connectionService.getConnectionStateHolder().setPartnerRequestedConnectionState(message.getConnectionState());
+        connectionService.getServer().getConnectionStateHolder().setPartnerRequestedConnectionState(message.getConnectionState());
     }
 }

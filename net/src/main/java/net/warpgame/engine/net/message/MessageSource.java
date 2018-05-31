@@ -31,5 +31,5 @@ public abstract class MessageSource<T> {
         }
     }
 
-    abstract MessageAddressedEnvelope toAddressedEnvelope(T message);
+    abstract MessageEnvelope toAddressedEnvelope(T message);
 }

@@ -15,7 +15,7 @@ import java.util.PriorityQueue;
  * @author Hubertus
  * Created 02.01.2018
  */
-public class EventReceiver {
+public class MessageReceiver {
     private PriorityQueue<IncomingEnvelope> eventQueue = new PriorityQueue<>(new IncomingEnvelopeComparator());
     private EventDeserializer deserializer = new EventDeserializer();
     private int minDependencyId = 1;
@@ -23,7 +23,7 @@ public class EventReceiver {
     private ComponentRegistry componentRegistry;
     private StateChangeHandler stateChangeHandler;
 
-    public EventReceiver(ComponentRegistry componentRegistry, StateChangeHandler stateChangeHandler) {
+    public MessageReceiver(ComponentRegistry componentRegistry, StateChangeHandler stateChangeHandler) {
         this.componentRegistry = componentRegistry;
         this.stateChangeHandler = stateChangeHandler;
     }

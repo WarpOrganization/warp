@@ -1,19 +1,21 @@
 package net.warpgame.engine.net.message;
 
+import net.warpgame.engine.net.Peer;
+
 /**
  * @author Hubertus
  * Created 30.05.2018
  */
-public class MessageAddressedEnvelope {
+public class MessageEnvelope {
     private byte[] serializedMessage;
     private int dependencyId;
     private long sendTime;
     private boolean confirmed;
     private int messageType;
-    private boolean shouldConfirm;
+    private Peer targetPeer;
 
 
-    public MessageAddressedEnvelope(byte[] serializedMessage, int messageType) {
+    public MessageEnvelope(byte[] serializedMessage, int messageType) {
         this.serializedMessage = serializedMessage;
         this.messageType = messageType;
     }
@@ -58,11 +60,11 @@ public class MessageAddressedEnvelope {
         this.messageType = messageType;
     }
 
-    public boolean isShouldConfirm() {
-        return shouldConfirm;
+    public Peer getTargetPeer() {
+        return targetPeer;
     }
 
-    public void setShouldConfirm(boolean shouldConfirm) {
-        this.shouldConfirm = shouldConfirm;
+    public void setTargetPeer(Peer targetPeer) {
+        this.targetPeer = targetPeer;
     }
 }

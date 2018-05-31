@@ -36,13 +36,13 @@ public class IncomingPacketProcessor {
             case PACKET_KEEP_ALIVE:
                 processKeepAlivePacket(timestamp, clientId, packet);
                 break;
-            case PACKET_EVENT:
+            case PACKET_MESSAGE:
                 processEventPacket(timestamp, clientId, packet);
                 break;
             case PACKET_INTERNAL_MESSAGE:
                 processInternalMessagePacket(timestamp, clientId, packet);
                 break;
-            case PACKET_EVENT_CONFIRMATION:
+            case PACKET_MESSAGE_CONFIRMATION:
                 processEventConfirmationPacket(timestamp, clientId, packet);
                 break;
             case PACKET_CLOCK_SYNCHRONIZATION_REQUEST:
@@ -64,7 +64,7 @@ public class IncomingPacketProcessor {
             int eventType = packetData.readInt();
             int dependencyId = packetData.readInt();
             int targetComponentId = packetData.readInt();
-            client.getEventReceiver().addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
+            client.getMessageReceiver().addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
             connectionUtil.confirmEvent(dependencyId, client);
         }
     }
@@ -74,7 +74,7 @@ public class IncomingPacketProcessor {
 
         if (client != null) {
             int dependencyId = packetData.readInt();
-            client.getEventReceiver().addInternalMessage(packetData, dependencyId, timestamp);
+            client.getMessageReceiver().addInternalMessage(packetData, dependencyId, timestamp);
             connectionUtil.confirmEvent(dependencyId, client);
         }
     }
@@ -82,7 +82,7 @@ public class IncomingPacketProcessor {
     private void processEventConfirmationPacket(long timestamp, int clientId, ByteBuf packetData) {
         int eventDependencyId = packetData.readInt();
         Client c = clientRegistry.getClient(clientId);
-        c.confirmEvent(eventDependencyId);
+        c.confirmMessage(eventDependencyId);
     }
 
     private void processClockSynchronizationRequestPacket(long timestamp, int clientId, ByteBuf packetData) {

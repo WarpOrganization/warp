@@ -6,6 +6,19 @@ package net.warpgame.engine.net.message;
  */
 public abstract class MessageSender {
 
-    abstract void sendMessage(MessageAddressedEnvelope addressedEnvelope);
+    /**
+     * Updates send time and sends message
+     * @param addressedEnvelope message to send
+     */
+    void sendMessage(MessageEnvelope addressedEnvelope){
+        addressedEnvelope.setSendTime(System.currentTimeMillis());
+        send(addressedEnvelope);
+    }
+
+    /**
+     * Sends message without updating send time
+     * @param addressedEnvelope message tp send
+     */
+    public abstract void send(MessageEnvelope addressedEnvelope);
 
 }

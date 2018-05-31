@@ -11,20 +11,20 @@ import net.warpgame.engine.net.event.sender.EventSerializer;
 @Service
 public class EventQueue extends MessageSource<EventEnvelope> {
 
-    private final EnvelopeSigner envelopeSigner;
+    private final EnvelopeAddressingService envelopeAddressingService;
     private EventSerializer eventSerializer;
 
-    public EventQueue(MessageQueue messageQueue, EnvelopeSigner envelopeSigner) {
+    public EventQueue(MessageQueue messageQueue, EnvelopeAddressingService envelopeAddressingService) {
         super(messageQueue);
-        this.envelopeSigner = envelopeSigner;
+        this.envelopeAddressingService = envelopeAddressingService;
         eventSerializer = new EventSerializer();
     }
 
     @Override
-    MessageAddressedEnvelope toAddressedEnvelope(EventEnvelope message) {
+    MessageEnvelope toAddressedEnvelope(EventEnvelope message) {
         //TODO some reflection magic for message type runtime generation.
-        MessageAddressedEnvelope addressedEnvelope = new MessageAddressedEnvelope(eventSerializer.serialize(message), 0);
-        envelopeSigner.sign(addressedEnvelope, message.getEvent().getTargetClientId());
+        MessageEnvelope addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message), 0);
+        envelopeAddressingService.address(addressedEnvelope, message.getEvent().getTargetClientId());
         return addressedEnvelope;
     }
 }

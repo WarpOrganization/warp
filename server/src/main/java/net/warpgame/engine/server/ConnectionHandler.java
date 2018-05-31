@@ -12,7 +12,7 @@ import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.StateChangeHandler;
 import net.warpgame.engine.net.event.StateChangeRequestMessage;
-import net.warpgame.engine.net.event.receiver.EventReceiver;
+import net.warpgame.engine.net.event.receiver.MessageReceiver;
 import net.warpgame.engine.server.envelope.ServerInternalMessageEnvelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +72,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     private void registerClient(Channel channel, InetSocketAddress address) {
         Client c = new Client(
                 address,
-                new EventReceiver(componentRegistry, stateChangeHandler),
+                new MessageReceiver(componentRegistry, stateChangeHandler),
                 new ConnectionStateHolder(componentRegistry.getComponent(0)));
         int id = clientRegistry.addClient(c);
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);

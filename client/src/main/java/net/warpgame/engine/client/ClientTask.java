@@ -97,7 +97,7 @@ public class ClientTask extends EngineTask {
     @Override
     public void update(int delta) {
         eventQueue.update();
-        switch (connectionService.getConnectionState()) {
+        switch (connectionService.getServer().getConnectionState()) {
             case SYNCHRONIZING:
                 syncClock(delta);
             case LIVE:
@@ -114,7 +114,7 @@ public class ClientTask extends EngineTask {
             ByteBuf packet = connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST, 4);
             int randomInt = (int) (Math.random() * Integer.MAX_VALUE);
             packet.writeInt(randomInt);
-            connectionService.getClockSynchronizer().startRequest(randomInt, System.currentTimeMillis());
+            connectionService.getServer().getClockSynchronizer().startRequest(randomInt, System.currentTimeMillis());
             connectionService.sendPacket(packet);
             clockCounter = CLOCK_SYNC_INTERVAL;
         }
@@ -124,7 +124,7 @@ public class ClientTask extends EngineTask {
         counter -= delta;
         if (counter < 0) {
             counter = KEEP_ALIVE_INTERVAL;
-            connectionService.sendKeepAlive();
+            connectionService.sendKeepAlivePacket();
         }
     }
 }
