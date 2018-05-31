@@ -25,6 +25,5 @@ public class PlayCommand implements Command {
         alSourcei(source.getId(), AL_BUFFER, context.getSoundBank().getSound(soundName));
         alSourcei(source.getId(), AL_REFERENCE_DISTANCE, 5);
         alSourcePlay(source.getId());
-        context.getPlaying().add(source);
     }
 }

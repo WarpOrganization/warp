@@ -1,18 +1,17 @@
 package net.warpgame.engine.audio;
 
+import net.warpgame.engine.audio.command.Command;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
 import net.warpgame.engine.core.execution.task.EngineTask;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.Collection;
-import java.util.Queue;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.ALC10.*;
@@ -29,12 +28,13 @@ import static org.lwjgl.openal.SOFTHRTF.alcResetDeviceSOFT;
 public class AudioCommandsTask extends EngineTask {
 
     private AudioContext context;
+    private BlockingQueue<Command> commandsQueue;
     private long device;
     private long alcContext;
-    private static final int BUFFER_LENGTH = 48000;
 
     public AudioCommandsTask(AudioContext context) {
         this.context = context;
+        this.commandsQueue = context.getCommandsQueue();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class AudioCommandsTask extends EngineTask {
 
         //TODO FREE SOURCES
 
-        TreeMap<String, Integer> soundBank = context.getSoundBank().sounds;
+        Map<String, Integer> soundBank = context.getSoundBank().sounds;
         IntBuffer buffers = BufferUtils.createIntBuffer(soundBank.size());
         soundBank.forEach((x, y) -> buffers.put(y));
         AL10.alDeleteBuffers(buffers);
@@ -58,9 +58,9 @@ public class AudioCommandsTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        while (!context.getCommandsQueue().isEmpty()) {
+        while (!commandsQueue.isEmpty()) {
             try {
-                context.getCommandsQueue().take().execute(context);
+                commandsQueue.take().execute(context);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -70,8 +70,6 @@ public class AudioCommandsTask extends EngineTask {
     public AudioContext getContext() {
         return context;
     }
-
-    byte[] b = new byte[BUFFER_LENGTH];
 
     private void initOpenAL() {
         device = ALC10.alcOpenDevice((ByteBuffer) null);

@@ -18,7 +18,7 @@ import static org.lwjgl.openal.AL10.*;
 @Service
 @RegisterTask(thread = "audio")
 @ExecuteAfterTask(AudioCommandsTask.class)
-public class AudioPosUpdateTask extends EngineTask {
+public class AudioUpdateTask extends EngineTask {
 
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
@@ -26,7 +26,7 @@ public class AudioPosUpdateTask extends EngineTask {
 
     private AudioContext context;
 
-    public AudioPosUpdateTask(AudioContext audioContext) {
+    public AudioUpdateTask(AudioContext audioContext) {
         this.context = audioContext;
     }
 
@@ -42,7 +42,7 @@ public class AudioPosUpdateTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        if(context.getAudioListener() == null)
+        if(context.getListener() == null)
             return;
         updateDirections();
         updateListener();
@@ -57,7 +57,7 @@ public class AudioPosUpdateTask extends EngineTask {
     private float[] orientation = new float[6];
 
     private void updateDirections() {
-        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getAudioListener().getOwner(), new Quaternionf());
+        Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getListener().getOwner(), new Quaternionf());
         fullRotation.transform(forwardVector.set(FORWARD_VECTOR));
         fullRotation.transform(upVector.set(UP_VECTOR));
         orientation[0] = forwardVector.x;
@@ -69,7 +69,7 @@ public class AudioPosUpdateTask extends EngineTask {
     }
 
     private void updateListener() {
-        Transforms.getAbsolutePosition(context.getAudioListener().getOwner(), listenerPosVector);
+        Transforms.getAbsolutePosition(context.getListener().getOwner(), listenerPosVector);
         alListener3f(AL_POSITION, listenerPosVector.x, listenerPosVector.y, listenerPosVector.z);
         alListenerfv(AL_ORIENTATION, orientation);
     }
@@ -81,6 +81,7 @@ public class AudioPosUpdateTask extends EngineTask {
                 updateSourcePos(source);
             } else {
                 context.getPlaying().remove(i);
+                source.setPlaying(false);
             }
         }
     }
