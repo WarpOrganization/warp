@@ -27,6 +27,9 @@ class OggFileDecoder {
 
         sampleRate = sampleRateBuffer.get();
 
+        if(shortBuffer == null)
+            throw new RuntimeException("Failed to load an ogg file at " + filename);
+
         return new SoundData(shortBuffer, sampleRate, channels, 16);
     }
 

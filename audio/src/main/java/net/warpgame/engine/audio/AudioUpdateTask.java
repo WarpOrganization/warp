@@ -18,7 +18,7 @@ import static org.lwjgl.openal.AL10.*;
 @Service
 @RegisterTask(thread = "audio")
 @ExecuteAfterTask(AudioCommandsTask.class)
-public class AudioPosUpdateTask extends EngineTask {
+public class AudioUpdateTask extends EngineTask {
 
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
     private static final Vector3f FORWARD_VECTOR = new Vector3f(0, 0, -1);
@@ -26,7 +26,7 @@ public class AudioPosUpdateTask extends EngineTask {
 
     private AudioContext context;
 
-    public AudioPosUpdateTask(AudioContext audioContext) {
+    public AudioUpdateTask(AudioContext audioContext) {
         this.context = audioContext;
     }
 
@@ -81,6 +81,7 @@ public class AudioPosUpdateTask extends EngineTask {
                 updateSourcePos(source);
             } else {
                 context.getPlaying().remove(i);
+                source.setPlaying(false);
             }
         }
     }

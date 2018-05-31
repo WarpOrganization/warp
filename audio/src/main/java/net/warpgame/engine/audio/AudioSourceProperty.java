@@ -11,6 +11,7 @@ public class AudioSourceProperty extends Property {
 
     private int id;
     private boolean isRelative;
+    private boolean isPlaying;
 
 
     private String soundFilePath;
@@ -23,10 +24,13 @@ public class AudioSourceProperty extends Property {
         this.soundFilePath = soundFilePath;
         this.soundName = FilenameUtils.getBaseName(soundFilePath);
         this.isRelative = false;
+        this.isPlaying = false;
     }
 
     public void play() {
         audioContext.putCommand(new PlayCommand(this, soundName));
+        audioContext.getPlaying().add(this);
+        isPlaying = true;
     }
 
     public void stop() {
@@ -40,8 +44,8 @@ public class AudioSourceProperty extends Property {
     @Override
     public void enable() {
         super.enable();
-        audioContext.putCommand(new CreateSourceCommand(this));
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
+        audioContext.putCommand(new CreateSourceCommand(this));
         audioContext.prepareAudioClip(soundFilePath);
     }
 
@@ -55,5 +59,13 @@ public class AudioSourceProperty extends Property {
 
     public boolean isRelative() {
         return isRelative;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
     }
 }
