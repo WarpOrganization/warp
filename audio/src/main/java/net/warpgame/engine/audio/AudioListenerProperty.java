@@ -14,6 +14,6 @@ public class AudioListenerProperty extends Property {
     @Override
     public void enable() {
         super.enable();
-        getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get().setAudioListener(this);
+        getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get().setListener(this);
     }
 }

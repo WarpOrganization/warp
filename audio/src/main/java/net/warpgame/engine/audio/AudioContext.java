@@ -17,25 +17,16 @@ import java.util.concurrent.BlockingQueue;
 @Service
 public class AudioContext {
 
-    private AudioListenerProperty audioListener;
+    private AudioListenerProperty listener;
+    private List<AudioSourceProperty> sources;
     private List<AudioSourceProperty> playing;
-    private BlockingQueue<Command> commandsQueue;
     private SoundBank soundBank;
     private AudioThread audioThread;
 
     public AudioContext(AudioThread audioThread) {
         this.audioThread = audioThread;
         this.playing = new ArrayList<>();
-        this.commandsQueue = new ArrayBlockingQueue<Command>(10000);
         this.soundBank = new SoundBank(this);
-    }
-
-    void putCommand(Command cmd) {
-        try {
-            commandsQueue.put(cmd);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     void prepareAudioClip(String clip) {
@@ -56,16 +47,12 @@ public class AudioContext {
         return playing;
     }
 
-    BlockingQueue<Command> getCommandsQueue() {
-        return commandsQueue;
+    AudioListenerProperty getListener() {
+        return listener;
     }
 
-    AudioListenerProperty getAudioListener() {
-        return audioListener;
-    }
-
-    void setAudioListener(AudioListenerProperty audioListener) {
-        this.audioListener = audioListener;
+    void setListener(AudioListenerProperty listener) {
+        this.listener = listener;
     }
 
     public SoundBank getSoundBank() {

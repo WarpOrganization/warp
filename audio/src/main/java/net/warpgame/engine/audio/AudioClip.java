@@ -21,7 +21,7 @@ public class AudioClip {
         return FilenameUtils.getBaseName(file);
     }
 
-    public String getPaht(){
+    public String getPath(){
         return FilenameUtils.getPath(file);
     }
 }
