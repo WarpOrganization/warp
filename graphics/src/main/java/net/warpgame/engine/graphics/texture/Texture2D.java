@@ -20,20 +20,20 @@ public class Texture2D extends TextureShape2D {
 
     private int width, height;
 
-    public Texture2D(int type, int texture, int internalformat, int format, boolean mipmap, int width, int height) {
-        super(type, texture, internalformat, format, mipmap);
+    public Texture2D(int type, int texture, int internalformat, int format, int width, int height) {
+        super(type, texture, internalformat, format);
         this.width = width;
         this.height = height;
     }
 
-    protected Texture2D(int texture, int width, int height, int internalFormat, int format, boolean mipmap) {
-        super(GL11.GL_TEXTURE_2D, texture, internalFormat, format, mipmap);
+    protected Texture2D(int texture, int width, int height, int internalFormat, int format) {
+        super(GL11.GL_TEXTURE_2D, texture, internalFormat, format);
         this.width = width;
         this.height = height;
     }
 
     public Texture2D(int width, int height, int internalFormat, int format, boolean mipmap, ByteBuffer data) {
-        super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), internalFormat, format, mipmap);
+        super(GL11.GL_TEXTURE_2D, genTexture2D(GL11.GL_TEXTURE_2D, internalFormat, format, width, height, mipmap, data), internalFormat, format);
         this.width = width;
         this.height = height;
         setDefaultParams(mipmap);
@@ -46,18 +46,17 @@ public class Texture2D extends TextureShape2D {
         setParameter(GL11.GL_TEXTURE_WRAP_T, DEFAULT_TEXTURE_WRAP_METHOD);
     }
 
-    public void set(ByteBuffer data) {
+    public void set(ByteBuffer data, boolean mipmap) {
         glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, GL11.GL_UNSIGNED_BYTE, data);
         if (mipmap) genMipmap();
     }
 
-    public void copy(Texture2D src) {
+    public void copy(Texture2D src, boolean mipmap) {
         this.type = src.type;
         this.format = src.format;
         this.internalformat = src.internalformat;
         this.height = src.height;
         this.width = src.width;
-        this.mipmap = src.mipmap;
         bind();
         glTexImage2D(this.type, 0, this.getInternalformat(), this.getWidth(), this.getHeight(), 0, this.getFormat(), GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
         GL43.glCopyImageSubData(src.getTexture(), src.getType(), 0, 0, 0, 0, this.texture, this.type, 0, 0, 0, 0, src.getWidth(), src.getHeight(), 1);
@@ -68,12 +67,12 @@ public class Texture2D extends TextureShape2D {
         int texture = glGenTextures();
         glBindTexture(target, texture);
         glTexImage2D(target, 0, internalformat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        if (mipmap) glGenerateMipmap(target);
+        if (data != null && mipmap) glGenerateMipmap(target);
         return texture;
     }
 
     @Override
-    public void resize(int w, int h) {
+    public void resize(int w, int h, boolean mipmap) {
         this.width = w;
         this.height = h;
         glTexImage2D(this.type, 0, this.internalformat, w, h, 0,
@@ -89,5 +88,10 @@ public class Texture2D extends TextureShape2D {
     @Override
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public void genMipmap() {
+        super.genMipmap();
     }
 }

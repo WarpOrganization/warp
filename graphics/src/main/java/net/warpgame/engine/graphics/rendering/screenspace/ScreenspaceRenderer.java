@@ -5,13 +5,16 @@ import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.camera.CameraHolder;
-import net.warpgame.engine.graphics.framebuffer.ScreenFramebuffer;
+import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBufferManager;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.rendering.screenspace.program.ScreenspaceProgram;
+import net.warpgame.engine.graphics.texture.Texture2D;
+import net.warpgame.engine.graphics.window.Display;
+import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,27 +28,32 @@ public class ScreenspaceRenderer {
     private static final Logger logger = LoggerFactory.getLogger(ScreenspaceRenderer.class);
 
     private GBufferManager gBufferManager;
-    private ScreenFramebuffer screenFramebuffer;
     private ScreenspaceProgram screenspaceProgram;
     private SceneLightManager sceneLightManager;
     private QuadMesh quadMesh;
     private SceneHolder sceneHolder;
     private CameraHolder cameraHolder;
+    private ScreenspaceAlbedoHolder albedoHolder;
+    private Display display;
+
     private int maxLights;
+    private Texture2D destinationTexture;
+    private TextureFramebuffer destinationFramebuffer;
 
     public ScreenspaceRenderer(
             GBufferManager gBufferManager,
-            ScreenFramebuffer screenFramebuffer,
             SceneLightManager sceneLightManager,
             SceneHolder sceneHolder,
             CameraHolder cameraHolder,
+            ScreenspaceAlbedoHolder albedoHolder,
             Config config
     ) {
         this.gBufferManager = gBufferManager;
-        this.screenFramebuffer = screenFramebuffer;
         this.sceneLightManager = sceneLightManager;
         this.sceneHolder = sceneHolder;
         this.cameraHolder = cameraHolder;
+        this.albedoHolder = albedoHolder;
+        this.display = config.getValue("graphics.display");
         this.maxLights = config.getValue("graphics.rendering.scene.maxLights");
     }
 
@@ -56,6 +64,20 @@ public class ScreenspaceRenderer {
         }catch(ShaderCompilationException e) {
             logger.error("Failed to compile screenspace rendering program");
         }
+        initRenderDestination();
+    }
+
+    private void initRenderDestination() {
+        this.destinationTexture = new Texture2D(
+                display.getWidth(),
+                display.getHeight(),
+                GL11.GL_RGBA8,
+                GL11.GL_RGBA,
+                true,
+                null
+        );
+        this.destinationFramebuffer = new TextureFramebuffer(destinationTexture);
+        this.albedoHolder.setAlbedoTex(destinationTexture);
     }
 
     public void update() {
@@ -63,12 +85,13 @@ public class ScreenspaceRenderer {
             prepareFramebuffer();
             prepareProgram();
             renderScreenspace();
+            destinationTexture.genMipmap();
         }//TODO do stuff
     }
 
     protected void prepareFramebuffer() {
-        screenFramebuffer.bindDraw();
-        screenFramebuffer.clean();
+        destinationFramebuffer.bindDraw();
+        destinationFramebuffer.clear();
     }
 
 
@@ -91,7 +114,6 @@ public class ScreenspaceRenderer {
 
     protected void renderScreenspace() {
         quadMesh.draw();
-        this.quadMesh.bind();
     }
 
     public void destroy() {

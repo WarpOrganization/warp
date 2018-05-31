@@ -26,8 +26,8 @@ public class Texture2DArray extends Texture {
     private int height;
     private int size;
 
-    protected Texture2DArray(int texture, int width, int height, int size, int internalformat, int format, boolean mipmap) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, texture, internalformat, format, mipmap);
+    protected Texture2DArray(int texture, int width, int height, int size, int internalformat, int format) {
+        super(GL30.GL_TEXTURE_2D_ARRAY, texture, internalformat, format);
         this.size = size;
         this.width = width;
         this.height = height;
@@ -38,7 +38,7 @@ public class Texture2DArray extends Texture {
     }
 
     public Texture2DArray(int width, int height, int size, ByteBuffer[] data, int internalformat, int format) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, genTexture2DArray(internalformat, format, width, height, size, data), internalformat, format, true);
+        super(GL30.GL_TEXTURE_2D_ARRAY, genTexture2DArray(internalformat, format, width, height, size, data), internalformat, format);
         this.size = size;
         setDefaultParams();
     }
@@ -52,7 +52,7 @@ public class Texture2DArray extends Texture {
     }
 
     public Texture2DArray(int texture, int width, int height, boolean mipmap, int size) {
-        super(GL30.GL_TEXTURE_2D_ARRAY, texture, GL11.GL_RGBA, GL11.GL_RGBA, mipmap);
+        super(GL30.GL_TEXTURE_2D_ARRAY, texture, GL11.GL_RGBA, GL11.GL_RGBA);
         this.size = size;
         this.width = width;
         this.height = height;
@@ -62,12 +62,12 @@ public class Texture2DArray extends Texture {
      * Sets the texture.
      * @param data Must be the same size as texture!
      */
-    public void set(int offset, ByteBuffer data) {
+    public void set(int offset, ByteBuffer data, boolean mipmap) {
         glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, offset, width, height, 1, format, GL_UNSIGNED_BYTE, data);
         if (mipmap) glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
     }
 
-    public void resize(int w, int h) {
+    public void resize(int w, int h, boolean mipmap) {
         this.resize(w,h,size);
         if(mipmap) glGenerateMipmap(this.type);
     }
