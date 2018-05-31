@@ -17,7 +17,6 @@ public class AudioSourceProperty extends Property {
     private String soundName;
 
     private AudioContext audioContext;
-    private AudioCommandsTask audioCommandsTask;
 
     public AudioSourceProperty(String soundFilePath) {
         super(NAME);
@@ -27,7 +26,7 @@ public class AudioSourceProperty extends Property {
     }
 
     public void play() {
-        audioCommandsTask.putCommand(new PlayCommand(this, soundName));
+        audioContext.putCommand(new PlayCommand(this, soundName));
     }
 
     public void stop() {
@@ -41,8 +40,7 @@ public class AudioSourceProperty extends Property {
     @Override
     public void enable() {
         super.enable();
-        audioCommandsTask = getOwner().getContext().getLoadedContext().findOne(AudioCommandsTask.class).get();
-        audioCommandsTask.putCommand(new CreateSourceCommand(this));
+        audioContext.putCommand(new CreateSourceCommand(this));
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
         audioContext.prepareAudioClip(soundFilePath);
     }

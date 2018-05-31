@@ -14,7 +14,7 @@ public class AudioClip {
     }
 
     void init(AudioContext context){
-        context.getSoundBank().initAudioClip(this);
+        context.initAudioClip(this);
     }
 
     public String getName(){
@@ -23,5 +23,17 @@ public class AudioClip {
 
     public String getPath(){
         return FilenameUtils.getPath(file);
+    }
+
+    public String getFile(){
+        return file;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

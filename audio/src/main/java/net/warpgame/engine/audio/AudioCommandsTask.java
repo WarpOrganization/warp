@@ -34,7 +34,7 @@ public class AudioCommandsTask extends EngineTask {
 
     public AudioCommandsTask(AudioContext context) {
         this.context = context;
-        this.commandsQueue = new ArrayBlockingQueue<>(10000);
+        this.commandsQueue = context.getCommandsQueue();
     }
 
     @Override
@@ -69,14 +69,6 @@ public class AudioCommandsTask extends EngineTask {
 
     public AudioContext getContext() {
         return context;
-    }
-
-    void putCommand(Command cmd) {
-        try {
-            commandsQueue.put(cmd);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initOpenAL() {
