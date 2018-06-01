@@ -9,12 +9,14 @@ import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
+import net.warpgame.engine.net.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.physics.PhysicsManager;
 import net.warpgame.engine.physics.PhysicsMotionState;
 import net.warpgame.engine.server.Client;
-import net.warpgame.engine.server.ConnectedEvent;
+import net.warpgame.engine.server.ClientRegistry;
 
 import java.util.ArrayList;
 
@@ -26,13 +28,18 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
 
     private final ComponentRegistry componentRegistry;
     private final PhysicsManager physicsManager;
+    private final ClientRegistry clientRegistry;
     private Component scene;
 
-    ConnectedListener(Component owner, ComponentRegistry componentRegistry, PhysicsManager physicsManager) {
-        super(owner, "connectedEvent");
+    ConnectedListener(Component owner,
+                      ComponentRegistry componentRegistry,
+                      PhysicsManager physicsManager,
+                      ClientRegistry clientRegistry) {
+        super(owner, Event.getTypeId(ConnectedEvent.class));
 
         this.componentRegistry = componentRegistry;
         this.physicsManager = physicsManager;
+        this.clientRegistry = clientRegistry;
     }
 
     @Override
@@ -55,9 +62,14 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         physicsProperty.getRigidBody().setMassProps(10, inertia);
         physicsProperty.getRigidBody().activate();
 
-        getOwner().triggerEvent(new LoadShipEvent(ship.getId(), transformProperty.getTranslation(), event.getConnectedClient().getId()));
-        sendScene(event.getConnectedClient(), ship.getId());
-        getOwner().triggerEvent(new BoardShipEvent(ship.getId(), event.getConnectedClient().getId()));
+        Client client = clientRegistry.getClient(event.getSourceClientId());
+
+        if (client != null) {
+            getOwner().triggerEvent(new LoadShipEvent(ship.getId(), transformProperty.getTranslation(), client.getId()));
+            sendScene(client, ship.getId());
+            getOwner().triggerEvent(new BoardShipEvent(ship.getId(), client.getId()));
+
+        }
     }
 
     private void sendScene(Client client, int currentShip) {

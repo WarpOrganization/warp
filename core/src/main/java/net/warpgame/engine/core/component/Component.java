@@ -26,7 +26,7 @@ public interface Component {
 
     <T extends Event> void triggerEvent(T event);
 
-    Set<Listener<?>> getListeners(String eventName);
+    Set<Listener<?>> getListeners(int eventType);
 
     <T extends Event> void triggerOnChildren(T event);
 

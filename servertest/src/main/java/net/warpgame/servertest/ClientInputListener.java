@@ -2,6 +2,7 @@ package net.warpgame.servertest;
 
 import net.warpgame.content.InputEvent;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.server.RemoteInput;
 
@@ -16,7 +17,7 @@ public class ClientInputListener extends Listener<InputEvent> {
     private RemoteInput input;
 
     protected ClientInputListener(Component owner) {
-        super(owner, "inputEvent");
+        super(owner, Event.getTypeId(InputEvent.class));
         RemoteInputProperty property = owner.getProperty(RemoteInputProperty.NAME);
         input = property.getRemoteInput();
     }

@@ -6,5 +6,7 @@ package net.warpgame.engine.net.internalmessage;
  */
 public enum  InternalMessageContent {
     STATE_CHANGE_SYNCHRONIZING,
-    STATE_CHANGE_LIVE
+    STATE_CHANGE_LIVE,
+    NEW_STATE_SYNCHRONIZING,
+    NEW_STATE_LIVE
 }

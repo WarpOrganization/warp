@@ -23,7 +23,7 @@ public class SceneComponent implements Component {
     private final List<Component> children = new LinkedList<>();
     //not using Guava Multimap in order to avoid creating not needed wrappers
     //Anyway, it's still not the best choice
-    private final Map<String, Set<Listener<?>>> listeners = new HashMap<>();
+    private final Map<Integer, Set<Listener<?>>> listeners = new HashMap<>();
     private boolean alive = true;
     private int id;
 
@@ -89,8 +89,8 @@ public class SceneComponent implements Component {
     }
 
     @Override
-    public  Set<Listener<?>> getListeners(String eventName) {
-        return listeners.getOrDefault(eventName, Collections.emptySet());
+    public  Set<Listener<?>> getListeners(int eventType) {
+        return listeners.getOrDefault(eventType, Collections.emptySet());
     }
 
     /**
@@ -211,9 +211,9 @@ public class SceneComponent implements Component {
     @Override
     public void addListener(Listener<?> listener) {
         synchronized (listeners) {
-            if(!this.listeners.containsKey(listener.getEventName()))
-                this.listeners.put(listener.getEventName(), new HashSet<>());
-            this.listeners.get(listener.getEventName())
+            if(!this.listeners.containsKey(listener.getEventType()))
+                this.listeners.put(listener.getEventType(), new HashSet<>());
+            this.listeners.get(listener.getEventType())
                     .add(listener);
         }
     }
@@ -221,9 +221,9 @@ public class SceneComponent implements Component {
     @Override
     public void removeListener(Listener<?> listener) {
         synchronized (listeners) {
-            if(!this.listeners.containsKey(listener.getEventName()))
+            if(!this.listeners.containsKey(listener.getEventType()))
                 throw new NoSuchElementException("Unable to remove nonexistent listener");
-            this.listeners.get(listener.getEventName()).remove(listener);
+            this.listeners.get(listener.getEventType()).remove(listener);
         }
     }
 

@@ -39,7 +39,7 @@ public class EventHandlerInitializer implements ScriptInitializerGenerator {
                     throw new RuntimeException(throwable); //pass it
                 }
             };
-            SimpleListener.createListener(scriptOwner, data.getEventName(), invoker);
+            SimpleListener.createListener(scriptOwner, data.getEventType(), invoker);
         }
     }
 
@@ -75,20 +75,20 @@ public class EventHandlerInitializer implements ScriptInitializerGenerator {
                     method.getDeclaringClass(),
                     "Event handler method must not be static: " + method.getName()
             );
-        return new EventHandlerData(handler.eventName(), handle);
+        return new EventHandlerData(handler.eventType(), handle);
     }
 
     private class EventHandlerData {
-        private String eventName;
+        private int eventType;
         private MethodHandle handle;
 
-        public EventHandlerData(String eventName, MethodHandle handle) {
-            this.eventName = eventName;
+        public EventHandlerData(int eventType, MethodHandle handle) {
+            this.eventType = eventType;
             this.handle = handle;
         }
 
-        public String getEventName() {
-            return eventName;
+        public int getEventType() {
+            return eventType;
         }
 
         public MethodHandle getHandle() {

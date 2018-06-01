@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.event;
 
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,7 +18,7 @@ public class PoolEventDispatcher implements EventDispatcher {
     @Override
     public void dispatchEvent(Component component, Event event) {
         executor.execute(() -> {
-            for (Listener listener : component.getListeners(event.getTypeName()))
+            for (Listener listener : component.getListeners(event.getType()))
                 listener.handle(event);
         });
     }

@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.event;
 
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.Component;
 
 /**
  * @author Jaca777
@@ -10,16 +9,18 @@ import net.warpgame.engine.core.component.Component;
 public abstract class Listener<U extends Event> {
 
     private Component owner;
-    private String eventName;
+    private int eventType;
+//    private String eventType;
 
-    protected Listener(Component owner, String eventName) {
+    protected Listener(Component owner, int eventType) {
         this.owner = owner;
-        this.eventName = eventName;
+//        this.eventType = eventType;
+        this.eventType = eventType;
     }
     
-    public String getEventName() {
-        return eventName;
-    }
+//    public String getEventType() {
+//        return eventType;
+//    }
 
     public abstract void handle(U event);
 
@@ -31,4 +32,7 @@ public abstract class Listener<U extends Event> {
         return owner;
     }
 
+    public int getEventType() {
+        return eventType;
+    }
 }

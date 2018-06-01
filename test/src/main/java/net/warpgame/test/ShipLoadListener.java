@@ -4,6 +4,7 @@ import net.warpgame.content.LoadShipEvent;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.graphics.material.Material;
@@ -30,7 +31,7 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     Material material;
 
     protected ShipLoadListener(Component owner, EngineThread graphicsThread) {
-        super(owner, "loadShipEvent");
+        super(owner, Event.getTypeId(LoadShipEvent.class));
         this.graphicsThread = graphicsThread;
         graphicsThread.scheduleOnce(this::init);
     }

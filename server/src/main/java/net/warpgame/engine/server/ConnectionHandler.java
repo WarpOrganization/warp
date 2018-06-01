@@ -80,6 +80,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                 new IncomingMessageQueue(messageProcessorsService),
                 new ConnectionStateHolder(componentRegistry.getComponent(0)));
         int id = clientRegistry.addClient(c);
+        c.getConnectionStateHolder().setPeerId(id);
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);
 
         channel.writeAndFlush(

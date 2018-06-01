@@ -24,7 +24,7 @@ public class InternalMessageProcessor implements MessageProcessor {
     @Override
     public void processMessage(Peer sourcePeer, ByteBuf messageContent) {
         InternalMessage message = (InternalMessage) messageDeserializer.deserialize(messageContent);
-        internalMessageHandler.handleMessage(message);
+        internalMessageHandler.handleMessage(message, sourcePeer);
     }
 
     @Override

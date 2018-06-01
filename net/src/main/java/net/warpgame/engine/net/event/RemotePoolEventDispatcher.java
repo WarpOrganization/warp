@@ -35,7 +35,7 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
         }
 
         executor.execute(() -> {
-            for (Listener listener : component.getListeners(event.getTypeName()))
+            for (Listener listener : component.getListeners(event.getType()))
                 listener.handle(event);
         });
     }
