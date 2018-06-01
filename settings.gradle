@@ -1,5 +1,4 @@
 rootProject.name = 'Warp_Engine'
-include 'context'
 include 'core'
 include 'graphics'
 include 'physics'

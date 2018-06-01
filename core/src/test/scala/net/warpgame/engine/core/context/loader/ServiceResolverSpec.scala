@@ -6,6 +6,7 @@ import net.warpgame.engine.core.context.service.{Qualified, Service, ServiceBuil
 import net.warpgame.engine.core.context.loader.ServiceResolverSpec.Test
 import net.warpgame.engine.core.context.loader.service.{ClassResolver, DependencyInfo, ServiceResolver}
 import ServiceResolverSpec._
+import net.warpgame.engine.core.context.service.{Qualified, ServiceBuilder}
 /**
   * @author Jaca777
   *         Created 2017-09-04 at 10

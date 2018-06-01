@@ -5,12 +5,7 @@ import net.warpgame.engine.core.component.ComponentDeathEvent;
 import net.warpgame.engine.core.component.SimpleListener;
 import net.warpgame.engine.core.script.blueprint.ScriptBlueprint;
 import net.warpgame.engine.core.script.blueprint.ScriptBlueprintSupplier;
-import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.ComponentDeathEvent;
-import net.warpgame.engine.core.component.SimpleListener;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.script.blueprint.ScriptBlueprint;
-import net.warpgame.engine.core.script.blueprint.ScriptBlueprintSupplier;
 
 import java.util.Set;
 import java.util.function.Consumer;

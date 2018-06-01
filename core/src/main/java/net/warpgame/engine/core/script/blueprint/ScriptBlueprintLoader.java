@@ -3,7 +3,6 @@ package net.warpgame.engine.core.script.blueprint;
 import net.warpgame.engine.core.script.initialization.ScriptInitializersSupplier;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.script.Script;
-import net.warpgame.engine.core.script.initialization.ScriptInitializersSupplier;
 
 import java.lang.invoke.MethodHandle;
 import java.util.function.Consumer;

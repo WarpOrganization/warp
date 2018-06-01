@@ -2,12 +2,14 @@ package net.warpgame.engine.core.context.loader
 
 import java.util.Optional
 
-import net.warpgame.engine.core.context.service.Qualified
 import net.warpgame.engine.core.context.loader.service.ServiceInfo
 import java.{util => jutil}
 
+import net.warpgame.engine.core.context.MoreThanOneServiceFoundException
+
 import scala.collection.JavaConverters._
 import net.warpgame.engine.core.context.MoreThanOneServiceFoundException
+import net.warpgame.engine.core.context.service.Qualified
 
 /**
   * @author Jaca777

@@ -2,7 +2,6 @@ package net.warpgame.engine.core.context.config;
 
 import net.warpgame.engine.core.context.executor.ExecutorManager;
 import net.warpgame.engine.core.context.ServiceRegistry;
-import net.warpgame.engine.core.context.executor.ExecutorManager;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.execution.Executor;
 

@@ -2,8 +2,6 @@ package net.warpgame.engine.core.context.thread;
 
 import net.warpgame.engine.core.context.ServiceRegistry;
 import net.warpgame.engine.core.context.executor.RegisterExecutor;
-import net.warpgame.engine.core.context.ServiceRegistry;
-import net.warpgame.engine.core.context.executor.RegisterExecutor;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.execution.EngineThread;
 

@@ -1,9 +1,6 @@
 package net.warpgame.engine.audio;
 
 import net.warpgame.engine.core.context.service.Service;
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.IOException;
 
 /**
  * @author Hubertus

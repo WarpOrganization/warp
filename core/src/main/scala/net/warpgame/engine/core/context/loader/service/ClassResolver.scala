@@ -1,6 +1,7 @@
 package net.warpgame.engine.core.context.loader.service
 
 import com.typesafe.scalalogging.LazyLogging
+import net.warpgame.engine.core.context.service.Profile
 import org.reflections.Reflections
 import net.warpgame.engine.core.context.service.{Profile, Service}
 

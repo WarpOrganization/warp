@@ -2,9 +2,7 @@ package net.warpgame.engine.core.script.initialization;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.ScriptInitializationException;

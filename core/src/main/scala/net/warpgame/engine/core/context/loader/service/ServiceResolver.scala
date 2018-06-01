@@ -3,6 +3,7 @@ package net.warpgame.engine.core.context.loader.service
 import java.lang.invoke.{MethodHandle, MethodHandles}
 import java.lang.reflect.{AnnotatedElement, Constructor, Parameter}
 
+import net.warpgame.engine.core.context.service.ServiceBuilder
 import net.warpgame.engine.core.context.service.{Qualified, ServiceBuilder}
 import net.warpgame.engine.core.context.loader.service.ServiceResolver._
 
