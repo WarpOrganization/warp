@@ -1297,7 +1297,6 @@ float4 SMAANeighborhoodBlendingPS(float2 texcoord,
     a.y = SMAASample(blendTex, offset.zw).g; // Top
     a.wz = SMAASample(blendTex, texcoord).xz; // Bottom / Left
 
-    return vec4(offset.zw,1, 1);
     // Is there any blending weight with a value greater than 0.0?
     SMAA_BRANCH
     if (dot(a, float4(1.0, 1.0, 1.0, 1.0)) < 1e-5) {
