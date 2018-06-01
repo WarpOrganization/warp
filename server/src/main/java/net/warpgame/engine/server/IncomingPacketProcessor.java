@@ -3,7 +3,11 @@ package net.warpgame.engine.server;
 import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
+import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
+import net.warpgame.engine.net.internalmessage.InternalMessage;
+import net.warpgame.engine.net.internalmessage.InternalMessageContent;
+import net.warpgame.engine.net.message.InternalMessageQueue;
 
 import static net.warpgame.engine.net.PacketType.*;
 
@@ -16,11 +20,14 @@ public class IncomingPacketProcessor {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
+    private InternalMessageQueue internalMessageQueue;
 
     public IncomingPacketProcessor(ClientRegistry clientRegistry,
-                                   ConnectionUtil connectionUtil) {
+                                   ConnectionUtil connectionUtil,
+                                   InternalMessageQueue internalMessageQueue) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
+        this.internalMessageQueue = internalMessageQueue;
     }
 
     void processPacket(int packetType, long timestamp, ByteBuf packet) {
@@ -84,11 +91,10 @@ public class IncomingPacketProcessor {
         if (client != null) {
             ClockSynchronizer synchronizer = client.getClockSynchronizer();
             synchronizer.synchronize(timestamp, requestId);
+
             if (synchronizer.getFinishedSynchronizations() >= 3) {
-                //TODO refactor internal messages
-//                eventQueue.pushEvent(
-//                        new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.LIVE), client));
-//                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
+                internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, clientId));
+                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             }
         }
     }

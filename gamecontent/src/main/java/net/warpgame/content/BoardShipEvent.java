@@ -1,6 +1,6 @@
 package net.warpgame.content;
 
-import net.warpgame.engine.core.event.Event;
+import net.warpgame.engine.net.event.NetworkEvent;
 
 import java.io.Serializable;
 
@@ -8,11 +8,11 @@ import java.io.Serializable;
  * @author Hubertus
  * Created 05.01.2018
  */
-public class BoardShipEvent extends Event implements Serializable {
+public class BoardShipEvent extends NetworkEvent implements Serializable {
     private int shipComponentId;
 
-    public BoardShipEvent(int shipComponentId) {
-        super("boardShipEvent");
+    public BoardShipEvent(int shipComponentId, int clientId) {
+        super(clientId);
         this.shipComponentId = shipComponentId;
     }
 

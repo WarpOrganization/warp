@@ -5,6 +5,9 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
+import net.warpgame.engine.net.internalmessage.InternalMessage;
+import net.warpgame.engine.net.internalmessage.InternalMessageContent;
+import net.warpgame.engine.net.message.InternalMessageQueue;
 import net.warpgame.engine.net.message.MessageQueue;
 
 import static net.warpgame.engine.net.PacketType.*;
@@ -20,15 +23,18 @@ public class IncomingPacketProcessor {
     private SerializedSceneHolder sceneHolder;
     private MessageQueue messageQueue;
     private ComponentRegistry componentRegistry;
+    private InternalMessageQueue internalMessageQueue;
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
                                    ComponentRegistry componentRegistry,
-                                   MessageQueue messageQueue) {
+                                   MessageQueue messageQueue,
+                                   InternalMessageQueue internalMessageQueue) {
         this.connectionService = connectionService;
         this.sceneHolder = sceneHolder;
         this.messageQueue = messageQueue;
         this.componentRegistry = componentRegistry;
+        this.internalMessageQueue = internalMessageQueue;
     }
 
     public void processPacket(ByteBuf packet) {
@@ -59,10 +65,7 @@ public class IncomingPacketProcessor {
         int clientId = packetData.readInt();
         connectionService.setClientCredentials(clientId, 0);
         connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
-        //TODO refactor internal messages
-        //        eventQueue.pushMessage(
-//                new InternalMessageEnvelope(
-//                        new StateChangeRequestMessage(ConnectionState.SYNCHRONIZING, connectionService.getClientId())));
+        internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, 0));
     }
 
     private void processConnectionRefusedPacket(long timestamp, ByteBuf packetData) {
@@ -98,10 +101,7 @@ public class IncomingPacketProcessor {
 
         if (connectionService.getServer().getClockSynchronizer().getFinishedSynchronizations() >= 3) {
             connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
-            //TODO refactor internal messages
-            //            eventQueue.pushEvent(
-//                    new InternalMessageEnvelope(
-//                            new StateChangeRequestMessage(ConnectionState.LIVE, connectionService.getClientId())));
+            internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, 0));
         }
     }
 }

@@ -14,8 +14,10 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.message.IncomingMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.MessageProcessorsService;
 import net.warpgame.engine.net.message.MessageQueue;
+import net.warpgame.engine.net.message.MessageSourcesService;
 
 import java.net.InetSocketAddress;
 
@@ -31,7 +33,9 @@ public class ClientTask extends EngineTask {
     private ConnectionService connectionService;
     private final SerializedSceneHolder sceneHolder;
     private final ComponentRegistry componentRegistry;
-    private IncomingMessageQueue incomingMessageQueue;
+    private MessageSourcesService messageSourcesService;
+    private InternalMessageQueue internalMessageQueue;
+    private MessageProcessorsService messageProcessorsService;
     private EventLoopGroup group = new NioEventLoopGroup();
     private MessageQueue messageQueue;
 
@@ -45,13 +49,17 @@ public class ClientTask extends EngineTask {
                       SerializedSceneHolder sceneHolder,
                       ComponentRegistry componentRegistry,
                       MessageQueue messageQueue,
-                      IncomingMessageQueue incomingMessageQueue) {
+                      MessageSourcesService messageSourcesService,
+                      InternalMessageQueue internalMessageQueue,
+                      MessageProcessorsService messageProcessorsService) {
         this.config = config;
         this.connectionService = connectionService;
         this.messageQueue = messageQueue;
         this.sceneHolder = sceneHolder;
         this.componentRegistry = componentRegistry;
-        this.incomingMessageQueue = incomingMessageQueue;
+        this.messageSourcesService = messageSourcesService;
+        this.internalMessageQueue = internalMessageQueue;
+        this.messageProcessorsService = messageProcessorsService;
     }
 
     @Override
@@ -65,14 +73,19 @@ public class ClientTask extends EngineTask {
                 config.getValue("multiplayer.ip"),
                 Integer.parseInt(System.getProperty("port", "" + config.getValue("multiplayer.port"))));
         setupConnection();
-        connectionService.connect(address);
+        connectionService.connect(address, messageProcessorsService);
     }
 
     private void setupConnection() {
         try {
             Bootstrap b = new Bootstrap();
             ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
-                    new IncomingPacketProcessor(connectionService, sceneHolder, componentRegistry, messageQueue));
+                    new IncomingPacketProcessor(
+                            connectionService,
+                            sceneHolder,
+                            componentRegistry,
+                            messageQueue,
+                            internalMessageQueue));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -95,6 +108,7 @@ public class ClientTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        messageSourcesService.update();
         messageQueue.update();
         switch (connectionService.getServer().getConnectionState()) {
             case SYNCHRONIZING:

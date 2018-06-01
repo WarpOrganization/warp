@@ -25,14 +25,12 @@ public class ConnectionService {
     private long clientSecret;//TODO implement
     private Server server;
     private ComponentRegistry componentRegistry;
-    private MessageProcessorsService messageProcessorsService;
 
-    public ConnectionService(ComponentRegistry componentRegistry, MessageProcessorsService messageProcessorsService) {
+    public ConnectionService(ComponentRegistry componentRegistry) {
         this.componentRegistry = componentRegistry;
-        this.messageProcessorsService = messageProcessorsService;
     }
 
-    void connect(InetSocketAddress address) {
+    void connect(InetSocketAddress address, MessageProcessorsService messageProcessorsService) {
         server = new Server(
                 address,
                 new IncomingMessageQueue(messageProcessorsService),

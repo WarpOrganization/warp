@@ -2,7 +2,8 @@ package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.net.event.EventMessageProcesor;
+import net.warpgame.engine.net.event.EventMessageProcessor;
+import net.warpgame.engine.net.internalmessage.InternalMessageProcessor;
 
 import java.util.HashMap;
 
@@ -15,9 +16,12 @@ public class MessageProcessorsService {
 
     private HashMap<Integer, MessageProcessor> messageProcessors;
 
-    public MessageProcessorsService(Context context, EventMessageProcesor eventMessageProcesor) {
+    public MessageProcessorsService(Context context,
+                                    EventMessageProcessor eventMessageProcessor,
+                                    InternalMessageProcessor internalMessageProcessor) {
         messageProcessors = new HashMap<>();
-        messageProcessors.put(eventMessageProcesor.getMessageType(), eventMessageProcesor);
+        messageProcessors.put(eventMessageProcessor.getMessageType(), eventMessageProcessor);
+        messageProcessors.put(internalMessageProcessor.getMessageType(), internalMessageProcessor);
         //TODO uncomment when findAll starts working
 //        context
 //                .findAll(MessageProcessor.class)
