@@ -1,5 +1,6 @@
 package net.warpgame.test;
 
+import net.warpgame.engine.audio.*;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
@@ -9,6 +10,7 @@ import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -42,6 +44,8 @@ import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+
+import java.io.File;
 
 /**
  * @author Jaca777
@@ -191,7 +195,7 @@ public class Test1 {
         MeshProperty meshProperty = new MeshProperty(mesh);
         MaterialProperty materialProperty = new MaterialProperty(material);
         TransformProperty transformProperty = new TransformProperty();
-        transformProperty.move(new Vector3f(0,-30,0));
+        transformProperty.move(new Vector3f(0, -30, 0));
         Component component = new SceneComponent(scene);
         component.addProperty(meshProperty);
         component.addProperty(materialProperty);
@@ -210,7 +214,7 @@ public class Test1 {
         TransformProperty transformProperty = new TransformProperty();
         transformProperty.rotateX((float) -(Math.PI / 2));
         transformProperty.scale(new Vector3f(100f));
-        transformProperty.move(new Vector3f(0,-30,0));
+        transformProperty.move(new Vector3f(0, -30, 0));
         Material material = new Material(diffuse);
         MaterialProperty materialProperty = new MaterialProperty(material);
         MeshProperty meshProperty = new MeshProperty(quadMesh);
@@ -257,14 +261,14 @@ public class Test1 {
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         Material boxMaterial = new Material(boxDiffuse);
         boxMaterial.setShininess(1f);
-        for(int x = 0; x < 2; x++){
-            for(int y = 0; y < 2; y++) {
-                for(int z = 0; z < 2; z++) {
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < 2; y++) {
+                for (int z = 0; z < 2; z++) {
                     MeshProperty mugMeshProperty = new MeshProperty(mugMesh);
                     MaterialProperty mugMaterialProperty = new MaterialProperty(mugMaterial);
                     TransformProperty mugTransformProperty = new TransformProperty();
                     mugTransformProperty.setTranslation(new Vector3f(x * 5, y * 5, z * 5));
-                    mugTransformProperty.move(new Vector3f(0,0,-50));
+                    mugTransformProperty.move(new Vector3f(0, 0, -50));
                     mugTransformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
                     mugTransformProperty.rotate(x, y, z);
 
@@ -279,8 +283,8 @@ public class Test1 {
                     MeshProperty boxMeshProperty = new MeshProperty(boundingBoxMesh);
                     MaterialProperty boxMaterialProperty = new MaterialProperty(boxMaterial);
                     TransformProperty boxTransformProperty = new TransformProperty();
-                    boxTransformProperty.setTranslation(new Vector3f((bb.max().x+bb.min().x)/2, (bb.max().y+bb.min().y)/2, (bb.max().z+bb.min().z)/2));
-                    boxTransformProperty.scale(new Vector3f((bb.max().x-bb.min().x), (bb.max().y-bb.min().y), (bb.max().z-bb.min().z)));
+                    boxTransformProperty.setTranslation(new Vector3f((bb.max().x + bb.min().x) / 2, (bb.max().y + bb.min().y) / 2, (bb.max().z + bb.min().z) / 2));
+                    boxTransformProperty.scale(new Vector3f((bb.max().x - bb.min().x), (bb.max().y - bb.min().y), (bb.max().z - bb.min().z)));
                     Component boxComponent = new SceneComponent(mugComponent);
                     boxComponent.addProperty(boxMeshProperty);
                     boxComponent.addProperty(boxMaterialProperty);
@@ -458,7 +462,7 @@ public class Test1 {
 
         @Override
         public void onUpdate(int delta) {
-           p.rotateY(delta  / 1000f);
+            p.rotateY(delta / 1000f);
         }
     }
 
@@ -491,6 +495,10 @@ public class Test1 {
         Component cameraComponent = new SceneComponent(scene);
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
+        cameraComponent.addProperty(new AudioListenerProperty());
+        cameraComponent.addProperty(new AudioSourceProperty(EngineContext.CODESOURCE_DIR + "data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
+        AudioSourceProperty property = cameraComponent.getProperty(AudioSourceProperty.NAME);
+        property.play();
         cameraComponent.addScript(SimpleControlScript.class);
 
         CameraHolder cameraHolder = engineContext.getLoadedContext()
@@ -523,7 +531,7 @@ public class Test1 {
 
         @Override
         public void onUpdate(int delta) {
-            transProp.rotate(0, delta*0.001f, 0);
+            transProp.rotate(0, delta * 0.001f, 0);
         }
     }
 

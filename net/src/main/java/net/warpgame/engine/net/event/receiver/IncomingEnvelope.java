@@ -4,7 +4,7 @@ package net.warpgame.engine.net.event.receiver;
  * @author Hubertus
  * Created 02.01.2018
  */
-public class IncomingEnvelope {
+public abstract class IncomingEnvelope {
     private Object deserializedEvent;
     private int targetComponentId;
     private int dependencyId;
@@ -58,4 +58,6 @@ public class IncomingEnvelope {
     public void setTargetComponentId(int targetComponentId) {
         this.targetComponentId = targetComponentId;
     }
+
+    abstract boolean isInternal();
 }

@@ -14,11 +14,9 @@ public class ClockSynchronizer {
     public void synchronize(long responseTimestamp, int requestId) {
         if (requestId == this.requestId) {
             long rtt = System.currentTimeMillis() - requestTimestamp;
-            System.out.println("RTT: " + rtt);
             if (rtt < minRTT) {
                 delta = System.currentTimeMillis() - responseTimestamp + (rtt / 2);
                 minRTT = rtt;
-                System.out.println("Calculated clock delta: " + delta);
             }
             finishedSynchronizations++;
         }

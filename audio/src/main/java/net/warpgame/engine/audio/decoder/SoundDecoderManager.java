@@ -1,7 +1,7 @@
 package net.warpgame.engine.audio.decoder;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import net.warpgame.engine.core.context.EngineContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,18 +11,15 @@ import java.io.IOException;
  */
 public class SoundDecoderManager {
 
-    private static SoundFileDecoder decoders[] = {new WavFileDecoder(), new OggFileDecoder()};
-
     public static SoundData decode(String pathToFile) throws IOException {
-        File soundFile = new File(EngineContext.CODESOURCE_DIR + pathToFile);
-        switch (FilenameUtils.getExtension(soundFile.getName())) {
+        String extension = FilenameUtils.getExtension(pathToFile);
+        switch (extension) {
             case "wav":
-                return decoders[0].decode(soundFile);
+                return WavFileDecoder.decode(pathToFile);
             case "ogg":
-                return decoders[1].decode(soundFile);
+                return OggFileDecoder.decode(pathToFile);
             default:
-                throw new RuntimeException("No support for "
-                        +FilenameUtils.getExtension(soundFile.getName())+" file system");
+                throw new RuntimeException(String.format("No support for %s file system", FilenameUtils.getBaseName(pathToFile)));
         }
     }
 }

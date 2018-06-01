@@ -1,7 +1,7 @@
 package net.warpgame.engine.audio.command;
 
 import net.warpgame.engine.audio.AudioContext;
-import net.warpgame.engine.audio.AudioSource;
+import net.warpgame.engine.audio.AudioSourceProperty;
 
 import static org.lwjgl.openal.AL10.alGenSources;
 
@@ -11,9 +11,9 @@ import static org.lwjgl.openal.AL10.alGenSources;
  */
 public class CreateSourceCommand implements Command {
 
-    private AudioSource source;
+    private AudioSourceProperty source;
 
-    public CreateSourceCommand(AudioSource source) {
+    public CreateSourceCommand(AudioSourceProperty source) {
         this.source = source;
     }
 
