@@ -7,8 +7,6 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.warpgame.engine.core.runtime.preprocessing.EngineRuntimePreprocessor;
-import net.warpgame.engine.core.runtime.processing.Processor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,25 +45,19 @@ public class IdCallProcessor implements Processor<ClassNode> {
 
 
     private void processInstructions(String className, InsnList instructions, AbstractInsnNode[] insnNodes) {
-        int lastLdcIndex = -1;
         LdcInsnNode lastLdc = null;
         for (int i = 0; i < insnNodes.length; i++) {
             AbstractInsnNode insn = insnNodes[i];
             if (insn.getOpcode() == Opcodes.LDC) {
-                lastLdcIndex = i;
                 lastLdc = (LdcInsnNode) insn;
             } else if (insn.getOpcode() == Opcodes.INVOKESTATIC && matchesCallPattern((MethodInsnNode) insn)) {
-                if (lastLdcIndex == i - 1) {
-                    processInvocation(instructions, lastLdc, (MethodInsnNode) insn);
-                } else {
-                    logger.error(String.format("Malformed getTypeId call in %s class", className));
-                    logger.error("Engine runtime was unable to inline the type id.");
-                }
+                processInvocation(instructions, lastLdc, (MethodInsnNode) insn);
             }
         }
     }
 
     private void processInvocation(InsnList instructions, LdcInsnNode lastLdc, MethodInsnNode insn) {
+        logger.debug("Inlining getTypeId method call in " + insn.owner + " " + insn.name);
         IntInsnNode bipushId = getIdPushInsn(lastLdc);
         instructions.insertBefore(lastLdc, bipushId);
         instructions.remove(lastLdc);
