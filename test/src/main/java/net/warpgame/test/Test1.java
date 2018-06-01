@@ -1,6 +1,7 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.audio.*;
+import net.warpgame.engine.audio.AudioListenerProperty;
+import net.warpgame.engine.audio.AudioSourceProperty;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
@@ -10,7 +11,6 @@ import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
-import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;

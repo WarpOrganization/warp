@@ -10,7 +10,7 @@ import net.warpgame.engine.core.context.loader.service.{DependencyInfo, ServiceG
 
 import scala.reflect.ClassTag
 import ServiceGraphBuilderSpec._
-import net.warpgame.engine.core.context.graph.{CycleFoundException, DirectedAcyclicGraph}
+import net.warpgame.engine.core.context.graph.{CycleFoundException, DAG}
 import net.warpgame.engine.core.context.loader.service.ServiceGraphBuilder.AmbiguousServiceDependencyException
 /**
   * @author Jaca777
@@ -114,9 +114,9 @@ object ServiceGraphBuilderSpec {
 
   trait GraphMatchers {
 
-    class FileEndsWithExtensionMatcher(from: Class[_], to: Class[_]) extends Matcher[DirectedAcyclicGraph[ServiceInfo]] {
+    class FileEndsWithExtensionMatcher(from: Class[_], to: Class[_]) extends Matcher[DAG[ServiceInfo]] {
 
-      def apply(graph: DirectedAcyclicGraph[ServiceInfo]) = {
+      def apply(graph: DAG[ServiceInfo]) = {
         val node = graph.resolveNode(_.`type` == from)
         val matches = node match {
           case Some(b) => b.leaves.exists(_.value.`type` == to)

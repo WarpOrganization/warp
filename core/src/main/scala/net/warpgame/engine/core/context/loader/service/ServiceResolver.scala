@@ -15,7 +15,9 @@ private[loader] class ServiceResolver(classResolver: ClassResolver) {
 
   def resolveServiceInfo(): Set[ServiceInfo] = {
     val classes = classResolver.resolveServiceClasses().par
-    classes.map(toDeclaredServiceInfo).seq
+    val declaredServices = classes.map(toDeclaredServiceInfo).seq
+    val arrayCollectiveServices = getCollectiveServices(declaredServices)
+    declaredServices ++ arrayCollectiveServices
   }
 
   def toDeclaredServiceInfo(serviceClass: Class[_]): ServiceInfo = {
@@ -54,7 +56,7 @@ private[loader] class ServiceResolver(classResolver: ClassResolver) {
     lookup.unreflectConstructor(constructor)
   }
 
-  private def getDependencies(constr: Constructor[_]): Array[DependencyInfo] ={
+  private def getDependencies(constr: Constructor[_]): Array[DependencyInfo] = {
     val params = constr.getParameters
     params.map(toDependency)
   }
@@ -64,15 +66,55 @@ private[loader] class ServiceResolver(classResolver: ClassResolver) {
 
   private def getQualifier(param: AnnotatedElement): Option[String] = {
     val annotation = param.getAnnotation(classOf[Qualified])
-    if(annotation != null) {
+    if (annotation != null) {
       Some(annotation.qualifier())
     } else {
       None
     }
   }
+
+
+  private def getCollectiveServices(
+    declaredServices: Set[ServiceInfo]
+  ): Set[ServiceInfo] = {
+    val arrayDependencies = declaredServices
+      .flatMap(s => s.dependencies)
+      .filter(d => d.`type`.isArray)
+    arrayDependencies.map(toCollectiveServiceInfo(declaredServices))
+  }
+
+  private def toCollectiveServiceInfo
+    (declaredServices: Set[ServiceInfo])
+    (dependencyInfo: DependencyInfo)
+  : ServiceInfo = {
+    val qualified = findQualified(dependencyInfo.`type`, dependencyInfo.qualifier, declaredServices)
+    ServiceInfo(
+      dependencyInfo.`type`,
+      dependencyInfo.qualifier,
+      collectiveServiceBuilder(dependencyInfo, qualified.size),
+      qualified
+    )
+  }
+
+  private def findQualified(`type`: Class[_], qualifier: Option[String], services: Set[ServiceInfo]): List[DependencyInfo] = {
+    val componentType = `type`.getComponentType
+    services.filter(s => componentType.isAssignableFrom(s.`type`) && qualifier.forall(q => s.qualifier.contains(q)))
+      .map(toDependencyInfo)
+      .toList
+  }
+
+  private def toDependencyInfo(serviceInfo: ServiceInfo): DependencyInfo = {
+    DependencyInfo(serviceInfo.`type`, serviceInfo.qualifier)
+  }
+
+  private def collectiveServiceBuilder(depenencyInfo: DependencyInfo, size: Int): MethodHandle =
+    MethodHandles.identity(depenencyInfo.`type`)
+      .asCollector(depenencyInfo.`type`, size)
+
 }
 
 object ServiceResolver {
+
   case class NoServiceConstructorFoundException(className: String)
     extends RuntimeException(
       s"No public constructors found for service at $className"

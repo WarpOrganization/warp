@@ -2,7 +2,7 @@ package net.warpgame.engine.core.context.loader
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpecLike}
-import net.warpgame.engine.core.context.graph.{DirectedAcyclicGraph, Node}
+import net.warpgame.engine.core.context.graph.{DAG, Node}
 import net.warpgame.engine.core.context.loader.service._
 import ServiceCreatorSpec._
 
@@ -19,7 +19,7 @@ class ServiceCreatorSpec extends WordSpecLike with Matchers with MockFactory {
     "create service with no dependencies" in {
       //given
       val creator = ServiceCreator()
-      val graph = DirectedAcyclicGraph[ServiceInfo](Node(toServiceInfo[A]))
+      val graph = DAG[ServiceInfo](Node(toServiceInfo[A]))
 
       //when
       val services = graph.accept(creator).accumulator
@@ -31,7 +31,7 @@ class ServiceCreatorSpec extends WordSpecLike with Matchers with MockFactory {
 
     "create service with multiple dependencies" in {
       val creator = ServiceCreator()
-      val graph = DirectedAcyclicGraph[ServiceInfo](
+      val graph = DAG[ServiceInfo](
         Node(toServiceInfo[C],
           Node(toServiceInfo[A]), Node(toServiceInfo[B]))
       )

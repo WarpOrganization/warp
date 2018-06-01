@@ -2,7 +2,7 @@ package net.warpgame.engine.core.context.loader.service
 
 import java.lang.invoke.MethodHandles
 
-import net.warpgame.engine.core.context.graph.DirectedAcyclicGraph
+import net.warpgame.engine.core.context.graph.DAG
 import net.warpgame.engine.core.context.loader.service.ServiceGraphBuilder._
 
 import scala.annotation.tailrec
@@ -13,7 +13,7 @@ import scala.annotation.tailrec
   */
 private[loader] class ServiceGraphBuilder() {
 
-  def build(services: List[ServiceInfo]): DirectedAcyclicGraph[ServiceInfo] = {
+  def build(services: List[ServiceInfo]): DAG[ServiceInfo] = {
     val edges = for {
       service <- services
       dependencyInfo <- service.dependencies
@@ -29,8 +29,8 @@ private[loader] class ServiceGraphBuilder() {
   @tailrec
   private def buildFromEdges(
     edges: List[(ServiceInfo, ServiceInfo)],
-    graph: DirectedAcyclicGraph[ServiceInfo] = DirectedAcyclicGraph()
-  ): DirectedAcyclicGraph[ServiceInfo] =
+    graph: DAG[ServiceInfo] = DAG()
+  ): DAG[ServiceInfo] =
     edges match {
       case (from, to) :: tail =>
         buildFromEdges(tail, graph.addEdge(from, to))
@@ -69,9 +69,9 @@ private[loader] class ServiceGraphBuilder() {
 
   @tailrec
   private def addServiceNodes(
-    graph: DirectedAcyclicGraph[ServiceInfo],
+    graph: DAG[ServiceInfo],
     nodes: List[ServiceInfo]
-  ): DirectedAcyclicGraph[ServiceInfo] = nodes match {
+  ): DAG[ServiceInfo] = nodes match {
     case node :: tail => addServiceNodes(graph.addNode(node), tail)
     case Nil => graph
   }

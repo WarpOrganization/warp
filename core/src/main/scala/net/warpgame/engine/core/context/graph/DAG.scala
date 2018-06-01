@@ -7,19 +7,19 @@ import scala.collection.Map
 /**
   * @author Jaca777
   *         Created 2015-12-23 at 11
-  * DAG implementation for the service loader.
+  * Directed Acyclic Graph implementation for the service loader.
   * Root node is a node that has no nodes connected to it.
   */
-case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
+case class DAG[+A](rootNodes: List[Node[A]]) {
 
   def this(rootNodes: Node[A]*) = this(rootNodes.toList)
 
-  def addNode[B >: A](e: B): DirectedAcyclicGraph[B] = {
+  def addNode[B >: A](e: B): DAG[B] = {
     val roots: List[Node[_ >: A <: B]] = rootNodes :+ Node[B](e)
-    new DirectedAcyclicGraph[B](roots)
+    new DAG[B](roots)
   }
 
-  def addEdge[B >: A](from: B, to: B): DirectedAcyclicGraph[B] = {
+  def addEdge[B >: A](from: B, to: B): DAG[B] = {
     val fromOpt = findNode(from)
     val toOpt = findNode(to)
     (fromOpt, toOpt) match {
@@ -30,36 +30,36 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
     }
   }
 
-  private def addEdgeAndCreateNodes[B >: A](from: B, to: B): DirectedAcyclicGraph[B] = {
+  private def addEdgeAndCreateNodes[B >: A](from: B, to: B): DAG[B] = {
     val toNode = Node[B](to)
     val fromNode = Node[B](from, toNode)
       .checkedForCycle()
     val roots = rootNodes :+ fromNode
-    new DirectedAcyclicGraph[B](roots)
+    new DAG[B](roots)
   }
 
-  private def addEdgeFromExistingNode[B >: A](from: Node[B], to: B): DirectedAcyclicGraph[B] = {
+  private def addEdgeFromExistingNode[B >: A](from: Node[B], to: B): DAG[B] = {
     val newNode = Node[B](to)
     val newLeafs = from.leaves :+ newNode
     val updatedNode = Node(from.value, newLeafs)
     replaceNode(from, updatedNode)
   }
 
-  private def addEdgeToExistingNode[B >: A](from: B, to: Node[B]): DirectedAcyclicGraph[B] = {
+  private def addEdgeToExistingNode[B >: A](from: B, to: Node[B]): DAG[B] = {
     val newNode = Node[B](from, to)
     val roots = (if(rootNodes.contains(to)){
       rootNodes.filterNot(_ == to)
     } else rootNodes) :+ newNode
-    new DirectedAcyclicGraph[B](roots)
+    new DAG[B](roots)
   }
 
-  private def addEdgeBetweenExistingNodes[B >: A](from: Node[B], to: Node[B]): DirectedAcyclicGraph[B] = {
+  private def addEdgeBetweenExistingNodes[B >: A](from: Node[B], to: Node[B]): DAG[B] = {
     val leafs = from.leaves :+ to
     val updatedNode = Node[B](from.value, leafs)
         .checkedForCycle()
     val updatedGraph = replaceNode(from, updatedNode)
     val roots = updatedGraph.rootNodes.filterNot(_ == to)
-    new DirectedAcyclicGraph[B](roots)
+    new DAG[B](roots)
   }
 
 
@@ -88,7 +88,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
   /**
     * Creates new graph with given node replaced
     */
-  def replaceNode[B >: A](node: Node[B], newNode: Node[B]): DirectedAcyclicGraph[B] = {
+  def replaceNode[B >: A](node: Node[B], newNode: Node[B]): DAG[B] = {
     def update(currNode: Node[A]): Option[Node[B]] = currNode match {
       case `node` => Some(newNode)
       case _ =>
@@ -118,7 +118,7 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
         case (oldRoot, None) => oldRoot
       }
 
-    DirectedAcyclicGraph[B](updatedRoots)
+    DAG[B](updatedRoots)
   }
 
   @tailrec
@@ -134,6 +134,6 @@ case class DirectedAcyclicGraph[+A](rootNodes: List[Node[A]]) {
 
 }
 
-object DirectedAcyclicGraph {
-  def apply[V](rootNodes: Node[V]*): DirectedAcyclicGraph[V] = DirectedAcyclicGraph(rootNodes.toList)
+object DAG {
+  def apply[V](rootNodes: Node[V]*): DAG[V] = DAG(rootNodes.toList)
 }

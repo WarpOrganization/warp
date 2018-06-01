@@ -1,7 +1,7 @@
 package net.warpgame.engine.core.context.loader.service
 
 import com.typesafe.scalalogging.LazyLogging
-import net.warpgame.engine.core.context.graph.DirectedAcyclicGraph
+import net.warpgame.engine.core.context.graph.DAG
 
 /**
   * @author Jaca777
@@ -28,13 +28,13 @@ private[loader] class ServiceLoader extends LazyLogging  {
 
   private def createGraph(
     servicesInfo: Set[ServiceInfo],
-  ): DirectedAcyclicGraph[ServiceInfo] = {
+  ): DAG[ServiceInfo] = {
     val graphBuilder = new ServiceGraphBuilder()
     graphBuilder.build(servicesInfo.toList)
   }
 
   private def createServices(
-    serviceGraph: DirectedAcyclicGraph[ServiceInfo]
+    serviceGraph: DAG[ServiceInfo]
   ): Map[ServiceInfo, Object] = {
     serviceGraph
       .accept(ServiceCreator())
