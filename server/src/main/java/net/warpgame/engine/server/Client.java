@@ -2,7 +2,7 @@ package net.warpgame.engine.server;
 
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.Peer;
-import net.warpgame.engine.net.event.receiver.MessageReceiver;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
 
 import java.net.InetSocketAddress;
 
@@ -14,8 +14,8 @@ public class Client extends Peer {
     private long lastKeepAlive;
     private int id;
 
-    Client(InetSocketAddress address, MessageReceiver messageReceiver, ConnectionStateHolder connectionStateHolder) {
-        super(address, messageReceiver, connectionStateHolder);
+    Client(InetSocketAddress address, IncomingMessageQueue incomingMessageQueue, ConnectionStateHolder connectionStateHolder) {
+        super(address, incomingMessageQueue, connectionStateHolder);
         lastKeepAlive = System.currentTimeMillis();
     }
 
@@ -27,7 +27,7 @@ public class Client extends Peer {
         this.lastKeepAlive = lastKeepAlive;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 

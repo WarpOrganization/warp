@@ -14,7 +14,8 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.StateChangeHandler;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
+import net.warpgame.engine.net.message.MessageQueue;
 
 import java.net.InetSocketAddress;
 
@@ -28,11 +29,11 @@ public class ClientTask extends EngineTask {
 
     private Config config;
     private ConnectionService connectionService;
-    private ClientRemoteEventQueue eventQueue;
     private final SerializedSceneHolder sceneHolder;
     private final ComponentRegistry componentRegistry;
-    private final StateChangeHandler stateChangeHandler;
+    private IncomingMessageQueue incomingMessageQueue;
     private EventLoopGroup group = new NioEventLoopGroup();
+    private MessageQueue messageQueue;
 
     private static final int KEEP_ALIVE_INTERVAL = 1000 * 5;
     private static final int CLOCK_SYNC_INTERVAL = 1000;
@@ -41,16 +42,16 @@ public class ClientTask extends EngineTask {
 
     public ClientTask(Config config,
                       ConnectionService connectionService,
-                      ClientRemoteEventQueue eventQueue,
                       SerializedSceneHolder sceneHolder,
                       ComponentRegistry componentRegistry,
-                      StateChangeHandler stateChangeHandler) {
+                      MessageQueue messageQueue,
+                      IncomingMessageQueue incomingMessageQueue) {
         this.config = config;
         this.connectionService = connectionService;
-        this.eventQueue = eventQueue;
+        this.messageQueue = messageQueue;
         this.sceneHolder = sceneHolder;
         this.componentRegistry = componentRegistry;
-        this.stateChangeHandler = stateChangeHandler;
+        this.incomingMessageQueue = incomingMessageQueue;
     }
 
     @Override
@@ -65,15 +66,13 @@ public class ClientTask extends EngineTask {
                 Integer.parseInt(System.getProperty("port", "" + config.getValue("multiplayer.port"))));
         setupConnection();
         connectionService.connect(address);
-        eventQueue.setConnectionService(connectionService);
-
     }
 
     private void setupConnection() {
         try {
             Bootstrap b = new Bootstrap();
             ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
-                    new IncomingPacketProcessor(connectionService, sceneHolder, componentRegistry, eventQueue, stateChangeHandler));
+                    new IncomingPacketProcessor(connectionService, sceneHolder, componentRegistry, messageQueue));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -96,7 +95,7 @@ public class ClientTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        eventQueue.update();
+        messageQueue.update();
         switch (connectionService.getServer().getConnectionState()) {
             case SYNCHRONIZING:
                 syncClock(delta);

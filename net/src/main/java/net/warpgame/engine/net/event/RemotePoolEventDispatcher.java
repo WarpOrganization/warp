@@ -29,7 +29,9 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
     @Override
     public void dispatchEvent(Component component, Event event) {
         if (event instanceof NetworkEvent) {
-            eventQueue.pushMessage(new EventEnvelope((NetworkEvent) event, component));
+            NetworkEvent networkEvent = (NetworkEvent) event;
+            if (!networkEvent.isTransfered())
+                eventQueue.pushMessage(new EventEnvelope(networkEvent, component));
         }
 
         executor.execute(() -> {

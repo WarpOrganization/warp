@@ -9,6 +9,7 @@ import net.warpgame.engine.core.event.Event;
 public class NetworkEvent extends Event {
     private int targetId;
     private int sourceId;
+    private boolean transfered = false;
 
     /**
      * Event will be sent to server by default
@@ -36,5 +37,13 @@ public class NetworkEvent extends Event {
 
     void setSourceId(int sourceId) {
         this.sourceId = sourceId;
+    }
+
+    public boolean isTransfered() {
+        return transfered;
+    }
+
+    public void setTransfered(boolean transfered) {
+        this.transfered = transfered;
     }
 }

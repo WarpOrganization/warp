@@ -2,7 +2,7 @@ package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.event.EventEnvelope;
-import net.warpgame.engine.net.event.sender.EventSerializer;
+import net.warpgame.engine.net.event.EventSerializer;
 
 /**
  * @author Hubertus

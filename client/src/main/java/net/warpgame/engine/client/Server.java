@@ -2,7 +2,7 @@ package net.warpgame.engine.client;
 
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.Peer;
-import net.warpgame.engine.net.event.receiver.MessageReceiver;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
 
 import java.net.InetSocketAddress;
 
@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
  * Created 31.05.2018
  */
 public class Server extends Peer {
-    public Server(InetSocketAddress address, MessageReceiver messageReceiver, ConnectionStateHolder connectionStateHolder) {
+    public Server(InetSocketAddress address, IncomingMessageQueue messageReceiver, ConnectionStateHolder connectionStateHolder) {
         super(address, messageReceiver, connectionStateHolder);
     }
 }

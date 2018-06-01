@@ -11,9 +11,8 @@ import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.event.StateChangeHandler;
-import net.warpgame.engine.net.event.StateChangeRequestMessage;
-import net.warpgame.engine.net.event.receiver.MessageReceiver;
-import net.warpgame.engine.server.envelope.ServerInternalMessageEnvelope;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
+import net.warpgame.engine.net.message.MessageProcessorsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     private IncomingPacketProcessor packetProcessor;
     private ConnectionUtil connectionUtil;
     private StateChangeHandler stateChangeHandler;
-    private ServerRemoteEventQueue eventQueue;
+    private MessageProcessorsService messageProcessorsService;
     private static final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
 
 
@@ -40,13 +39,13 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                       IncomingPacketProcessor packetProcessor,
                       ConnectionUtil connectionUtil,
                       StateChangeHandler stateChangeHandler,
-                      ServerRemoteEventQueue eventQueue) {
+                      MessageProcessorsService messageProcessorsService) {
         this.clientRegistry = clientRegistry;
         this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.connectionUtil = connectionUtil;
         this.stateChangeHandler = stateChangeHandler;
-        this.eventQueue = eventQueue;
+        this.messageProcessorsService = messageProcessorsService;
     }
 
     /**
@@ -72,7 +71,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     private void registerClient(Channel channel, InetSocketAddress address) {
         Client c = new Client(
                 address,
-                new MessageReceiver(componentRegistry, stateChangeHandler),
+                new IncomingMessageQueue(messageProcessorsService),
                 new ConnectionStateHolder(componentRegistry.getComponent(0)));
         int id = clientRegistry.addClient(c);
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);
@@ -82,6 +81,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
 //        componentRegistry.getComponent(0).triggerEvent(new ConnectedEvent(c));
         logger.info("Client connected from address " + address.toString());
         c.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
-        eventQueue.pushEvent(new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.SYNCHRONIZING)));
+        //TODO refactor internal messages
+        //        eventQueue.pushEvent(new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.SYNCHRONIZING)));
     }
 }

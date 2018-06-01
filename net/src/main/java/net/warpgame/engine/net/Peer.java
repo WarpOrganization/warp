@@ -1,7 +1,7 @@
 package net.warpgame.engine.net;
 
-import net.warpgame.engine.net.event.receiver.MessageReceiver;
 import net.warpgame.engine.net.message.DependencyIdGenerator;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
 import net.warpgame.engine.net.message.MessageEnvelope;
 
 import java.net.InetSocketAddress;
@@ -15,14 +15,14 @@ import java.util.Map;
 public abstract class Peer {
     private Map<Integer, MessageEnvelope> messageConfirmations;
     private InetSocketAddress address;
-    private MessageReceiver messageReceiver;
+    private IncomingMessageQueue incomingMessageQueue;
     private ClockSynchronizer clockSynchronizer;
     private ConnectionStateHolder connectionStateHolder;
     private DependencyIdGenerator dependencyIdGenerator;
 
-    public Peer(InetSocketAddress address, MessageReceiver messageReceiver, ConnectionStateHolder connectionStateHolder) {
+    public Peer(InetSocketAddress address, IncomingMessageQueue incomingMessageQueue, ConnectionStateHolder connectionStateHolder) {
         this.address = address;
-        this.messageReceiver = messageReceiver;
+        this.incomingMessageQueue = incomingMessageQueue;
         this.connectionStateHolder = connectionStateHolder;
         messageConfirmations = new HashMap<>();
         clockSynchronizer = new ClockSynchronizer();
@@ -41,12 +41,12 @@ public abstract class Peer {
         }
     }
 
-    public MessageReceiver getMessageReceiver() {
-        return messageReceiver;
+    public IncomingMessageQueue getIncomingMessageQueue() {
+        return incomingMessageQueue;
     }
 
-    public void setMessageReceiver(MessageReceiver messageReceiver) {
-        this.messageReceiver = messageReceiver;
+    public void setIncomingMessageQueue(IncomingMessageQueue incomingMessageQueue) {
+        this.incomingMessageQueue = incomingMessageQueue;
     }
 
     public InetSocketAddress getAddress() {

@@ -4,7 +4,7 @@ import net.warpgame.engine.core.component.Component;
 
 /**
  * @author Hubertus
- * Created 30.05.2018
+ * Created 31.05.2018
  */
 public class EventEnvelope {
     private NetworkEvent event;

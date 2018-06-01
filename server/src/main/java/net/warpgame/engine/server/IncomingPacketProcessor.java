@@ -3,11 +3,7 @@ package net.warpgame.engine.server;
 import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
-import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.StateChangeRequestMessage;
-import net.warpgame.engine.net.event.sender.RemoteEventQueue;
-import net.warpgame.engine.server.envelope.ServerInternalMessageEnvelope;
 
 import static net.warpgame.engine.net.PacketType.*;
 
@@ -20,14 +16,11 @@ public class IncomingPacketProcessor {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private RemoteEventQueue eventQueue;
 
     public IncomingPacketProcessor(ClientRegistry clientRegistry,
-                                   ConnectionUtil connectionUtil,
-                                   RemoteEventQueue eventQueue) {
+                                   ConnectionUtil connectionUtil) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.eventQueue = eventQueue;
     }
 
     void processPacket(int packetType, long timestamp, ByteBuf packet) {
@@ -37,10 +30,7 @@ public class IncomingPacketProcessor {
                 processKeepAlivePacket(timestamp, clientId, packet);
                 break;
             case PACKET_MESSAGE:
-                processEventPacket(timestamp, clientId, packet);
-                break;
-            case PACKET_INTERNAL_MESSAGE:
-                processInternalMessagePacket(timestamp, clientId, packet);
+                processMessagePacket(timestamp, clientId, packet);
                 break;
             case PACKET_MESSAGE_CONFIRMATION:
                 processEventConfirmationPacket(timestamp, clientId, packet);
@@ -58,23 +48,13 @@ public class IncomingPacketProcessor {
         clientRegistry.updateKeepAlive(clientId);
     }
 
-    private void processEventPacket(long timestamp, int clientId, ByteBuf packetData) {
+    private void processMessagePacket(long timestamp, int clientId, ByteBuf packetData) {
         Client client = clientRegistry.getClient(clientId);
         if (client != null) {
-            int eventType = packetData.readInt();
+            int messageType = packetData.readInt();
             int dependencyId = packetData.readInt();
-            int targetComponentId = packetData.readInt();
-            client.getMessageReceiver().addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
-            connectionUtil.confirmEvent(dependencyId, client);
-        }
-    }
 
-    private void processInternalMessagePacket(long timestamp, int clientId, ByteBuf packetData) {
-        Client client = clientRegistry.getClient(clientId);
-
-        if (client != null) {
-            int dependencyId = packetData.readInt();
-            client.getMessageReceiver().addInternalMessage(packetData, dependencyId, timestamp);
+            client.getIncomingMessageQueue().addMessage(client, messageType, dependencyId, packetData);
             connectionUtil.confirmEvent(dependencyId, client);
         }
     }
@@ -105,9 +85,10 @@ public class IncomingPacketProcessor {
             ClockSynchronizer synchronizer = client.getClockSynchronizer();
             synchronizer.synchronize(timestamp, requestId);
             if (synchronizer.getFinishedSynchronizations() >= 3) {
-                eventQueue.pushEvent(
-                        new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.LIVE), client));
-                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
+                //TODO refactor internal messages
+//                eventQueue.pushEvent(
+//                        new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.LIVE), client));
+//                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             }
         }
     }

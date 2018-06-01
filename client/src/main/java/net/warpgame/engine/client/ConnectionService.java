@@ -8,7 +8,8 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.receiver.MessageReceiver;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
+import net.warpgame.engine.net.message.MessageProcessorsService;
 
 import java.net.InetSocketAddress;
 
@@ -24,16 +25,17 @@ public class ConnectionService {
     private long clientSecret;//TODO implement
     private Server server;
     private ComponentRegistry componentRegistry;
+    private MessageProcessorsService messageProcessorsService;
 
-    public ConnectionService(ComponentRegistry componentRegistry) {
-//        connectionStateHolder = new ConnectionStateHolder(componentRegistry.getComponent(0));
+    public ConnectionService(ComponentRegistry componentRegistry, MessageProcessorsService messageProcessorsService) {
         this.componentRegistry = componentRegistry;
+        this.messageProcessorsService = messageProcessorsService;
     }
 
     void connect(InetSocketAddress address) {
         server = new Server(
                 address,
-                new MessageReceiver(componentRegistry, new ClientStateChangeHandler(this)),
+                new IncomingMessageQueue(messageProcessorsService),
                 new ConnectionStateHolder(componentRegistry.getRootComponent())
         );
         channel.writeAndFlush(

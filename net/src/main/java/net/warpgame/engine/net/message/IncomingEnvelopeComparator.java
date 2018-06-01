@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.event.receiver;
+package net.warpgame.engine.net.message;
 
 import java.util.Comparator;
 
@@ -10,6 +10,6 @@ public class IncomingEnvelopeComparator implements Comparator<IncomingEnvelope> 
 
     @Override
     public int compare(IncomingEnvelope o1, IncomingEnvelope o2) {
-        return o1.getDependencyId() - o2.getDependencyId();
+        return o1.getMessageDependencyId() - o2.getMessageDependencyId();
     }
 }

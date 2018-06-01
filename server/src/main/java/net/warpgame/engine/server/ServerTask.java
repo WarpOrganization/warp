@@ -11,6 +11,8 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.net.event.StateChangeHandler;
+import net.warpgame.engine.net.message.MessageProcessorsService;
+import net.warpgame.engine.net.message.MessageQueue;
 
 /**
  * @author Hubertus
@@ -25,25 +27,28 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private ServerRemoteEventQueue eventQueue;
     private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
     private StateChangeHandler stateChangeHandler;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
+    private MessageQueue messageQueue;
+    private MessageProcessorsService messageProcessorsService;
 
     public ServerTask(ClientRegistry clientRegistry,
                       ConnectionUtil connectionUtil,
-                      ServerRemoteEventQueue eventQueue,
                       ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
-                      StateChangeHandler stateChangeHandler) {
+                      StateChangeHandler stateChangeHandler,
+                      MessageQueue messageQueue,
+                      MessageProcessorsService messageProcessorsService) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.eventQueue = eventQueue;
         this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.stateChangeHandler = stateChangeHandler;
+        this.messageQueue = messageQueue;
+        this.messageProcessorsService = messageProcessorsService;
     }
 
     @Override
@@ -59,7 +64,8 @@ public class ServerTask extends EngineTask {
                             packetProcessor,
                             connectionUtil,
                             stateChangeHandler,
-                            eventQueue));
+                            messageProcessorsService
+                    ));
 
 
             outChannel = b.bind(PORT).sync().channel();
@@ -78,7 +84,7 @@ public class ServerTask extends EngineTask {
     @Override
     public void update(int delta) {
         clientRegistry.update();
-        eventQueue.update();
+        messageQueue.update();
     }
 
 }

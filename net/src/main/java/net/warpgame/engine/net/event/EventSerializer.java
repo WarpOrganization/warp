@@ -1,6 +1,5 @@
-package net.warpgame.engine.net.event.sender;
+package net.warpgame.engine.net.event;
 
-import net.warpgame.engine.net.event.EventEnvelope;
 import org.nustaq.serialization.FSTConfiguration;
 
 /**
@@ -26,12 +25,12 @@ public class EventSerializer {
     public byte[] serialize(EventEnvelope envelope) {
         byte[] serializedEvent;
         serializedEvent = conf.asSharedByteArray(envelope, length);
-        byte[] out = new byte[serializedEvent.length + 4];
+        byte[] out = new byte[serializedEvent.length + 8];
 
         writeInt(out, envelope.getEvent().getType(), 0);
         writeInt(out, envelope.getTargetComponent().getId(), 4);
 
-        System.arraycopy(serializedEvent, 0, out, 4, serializedEvent.length);
+        System.arraycopy(serializedEvent, 0, out, 8, serializedEvent.length);
         return out;
     }
 
