@@ -1,35 +1,49 @@
 package net.warpgame.engine.graphics.framebuffer;
 
+import net.warpgame.engine.graphics.texture.Texture2D;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+
 /**
  * @author Jaca777
  * Created 2018-01-06 at 18
  */
 public class TextureFramebuffer extends Framebuffer {
-    public TextureFramebuffer(int name) {
-        super(name);
+
+    private Texture2D destTexture;
+
+    public TextureFramebuffer(Texture2D destTexture) {
+        super(GL30.glGenFramebuffers());
+        this.destTexture = destTexture;
+        initialize();
+    }
+
+    private void initialize() {
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, getName());
+        GL20.glDrawBuffers(GL30.GL_COLOR_ATTACHMENT0);
+        GL30.glFramebufferTexture2D(
+                GL30.GL_FRAMEBUFFER,
+                GL30.GL_COLOR_ATTACHMENT0,
+                GL11.GL_TEXTURE_2D,
+                destTexture.getTexture(),
+                0
+        );
     }
 
     @Override
     public int getWidth() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return destTexture.getWidth();
     }
 
     @Override
     public int getHeight() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return destTexture.getHeight();
     }
 
     @Override
-    public void clean() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public void clear() {
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
 
-    @Override
-    public boolean isComplete() {
-        //TODO
-        throw new UnsupportedOperationException();
-    }
 }

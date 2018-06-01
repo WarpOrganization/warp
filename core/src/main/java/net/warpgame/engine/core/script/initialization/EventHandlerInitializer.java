@@ -2,8 +2,6 @@ package net.warpgame.engine.core.script.initialization;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SimpleListener;
-import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.SimpleListener;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.script.annotation.EventHandler;

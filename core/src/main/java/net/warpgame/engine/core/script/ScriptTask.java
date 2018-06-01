@@ -4,9 +4,7 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.script.updatescheduler.UpdateScheduler;
 import org.apache.log4j.Logger;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.core.script.updatescheduler.UpdateScheduler;
 
 /**
  * @author Jaca777

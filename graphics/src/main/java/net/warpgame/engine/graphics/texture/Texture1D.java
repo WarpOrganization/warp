@@ -17,7 +17,7 @@ public class Texture1D extends Texture {
     private static final int DEFAULT_TEXTURE_WRAP_METHOD = GL11.GL_REPEAT;
 
     public Texture1D(int size, int internalformat, int format, boolean mipmap, ByteBuffer data) {
-        super(GL11.GL_TEXTURE_1D, genTexture1D(internalformat, format, size, mipmap, data), internalformat, format, mipmap);
+        super(GL11.GL_TEXTURE_1D, genTexture1D(internalformat, format, size, mipmap, data), internalformat, format);
         setDefaultParams(mipmap);
     }
 

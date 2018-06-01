@@ -48,9 +48,11 @@ public abstract class Framebuffer {
     public abstract int getHeight();
 
 
-    public abstract void clean();
+    public abstract void clear();
 
-    public abstract boolean isComplete();
+    public boolean isComplete() {
+        return GL30.glCheckFramebufferStatus(getName()) == GL30.GL_FRAMEBUFFER_COMPLETE;
+    }
 
 
 

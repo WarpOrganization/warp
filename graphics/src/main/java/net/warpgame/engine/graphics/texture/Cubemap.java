@@ -20,7 +20,7 @@ public class Cubemap extends TextureShape2D {
     private int height;
 
     public Cubemap(int width, int height, ByteBuffer[] data) {
-        super(GL13.GL_TEXTURE_CUBE_MAP, genCubemap(GL11.GL_RGBA, GL11.GL_RGBA, width, height, data, false), GL11.GL_RGBA, GL11.GL_RGBA, false);
+        super(GL13.GL_TEXTURE_CUBE_MAP, genCubemap(GL11.GL_RGBA, GL11.GL_RGBA, width, height, data, false), GL11.GL_RGBA, GL11.GL_RGBA);
         this.width = width;
         this.height = height;
         setDefaultParams();
@@ -34,7 +34,7 @@ public class Cubemap extends TextureShape2D {
         setParameter(GL12.GL_TEXTURE_WRAP_R, GL12.GL_CLAMP_TO_EDGE);
     }
 
-    public void resize(int w, int h) {
+    public void resize(int w, int h, boolean mipmap) {
         bind();
         for (int i = 0; i < 6; i++) {
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalformat, width, height, 0,

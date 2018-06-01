@@ -1,8 +1,6 @@
 package net.warpgame.engine.graphics.rendering.culling;
 
-import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL15;

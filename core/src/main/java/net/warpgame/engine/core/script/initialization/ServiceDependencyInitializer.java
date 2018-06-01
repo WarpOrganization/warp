@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.script.initialization;
 
 import net.warpgame.engine.core.context.Context;
-import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.ScriptInitializationException;
