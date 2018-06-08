@@ -2,6 +2,7 @@ package net.warpgame.engine.physics;
 
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.property.Property;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class RigidBodyRegistry {
         if (!toAdd.isEmpty()) {
             for (Component aToAdd : toAdd) {
                 colliderComponentRegistry.addComponennt(aToAdd);
-                FullPhysicsProperty fullPhysicsProperty = aToAdd.getProperty(FullPhysicsProperty.NAME);
+                FullPhysicsProperty fullPhysicsProperty = aToAdd.getProperty(Property.getTypeId(FullPhysicsProperty.class));
                 dynamicsWorld.addRigidBody(fullPhysicsProperty.getRigidBody());
             }
             toAdd.clear();
@@ -40,7 +41,7 @@ public class RigidBodyRegistry {
 
         if (!toRemove.isEmpty()) {
             for (Component aToRemove : toRemove) {
-                FullPhysicsProperty fullPhysicsProperty = aToRemove.getProperty(FullPhysicsProperty.NAME);
+                FullPhysicsProperty fullPhysicsProperty = aToRemove.getProperty(Property.getTypeId(FullPhysicsProperty.class));
                 dynamicsWorld.removeRigidBody(fullPhysicsProperty.getRigidBody());
                 colliderComponentRegistry.removeCompoent(fullPhysicsProperty.getRigidBody().getUserValue());
             }

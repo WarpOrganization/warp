@@ -3,6 +3,7 @@ package net.warpgame.test;
 import net.warpgame.content.InputEvent;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -29,7 +30,7 @@ public class MultiplayerControlScript extends Script {
         super(owner);
     }
 
-    @OwnerProperty(TransformProperty.NAME)
+    @OwnerProperty(@IdOf(TransformProperty.class))
     private TransformProperty transformProperty;
 
     @ContextService

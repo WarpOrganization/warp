@@ -1,5 +1,7 @@
 package net.warpgame.engine.core.script.annotation;
 
+import net.warpgame.engine.core.component.IdOf;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,5 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface OwnerProperty {
-    String value();
+    IdOf value();
 }

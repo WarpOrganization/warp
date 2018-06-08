@@ -7,8 +7,6 @@ import org.apache.commons.io.FilenameUtils;
 
 public class AudioSourceProperty extends Property {
 
-    public static final String NAME = "source";
-
     private int id;
     private boolean isRelative;
     private boolean isPlaying;
@@ -20,7 +18,6 @@ public class AudioSourceProperty extends Property {
     private AudioContext audioContext;
 
     public AudioSourceProperty(String soundFilePath) {
-        super(NAME);
         this.soundFilePath = soundFilePath;
         this.soundName = FilenameUtils.getBaseName(soundFilePath);
         this.isRelative = false;

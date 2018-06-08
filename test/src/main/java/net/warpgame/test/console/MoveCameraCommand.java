@@ -1,6 +1,7 @@
 package net.warpgame.test.console;
 
 import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import org.joml.Vector3f;
 
@@ -21,7 +22,7 @@ public class MoveCameraCommand extends Command {
 
     public void execute(String... args) {
         if (args.length == 3) {
-            ((TransformProperty)cameraHolder.getCamera().getCameraComponent().getProperty(TransformProperty.NAME))
+            ((TransformProperty)cameraHolder.getCamera().getCameraComponent().getProperty(Property.getTypeId(TransformProperty.class)))
                     .move(new Vector3f(Float.valueOf(args[0]), Float.valueOf(args[1]), Float.valueOf(args[2])));
         } else {
             //TODO output getUsageText()

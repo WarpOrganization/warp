@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.property;
 
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.Component;
 
 /**
  * @author Jaca777
@@ -9,14 +8,9 @@ import net.warpgame.engine.core.component.Component;
  */
 public abstract class Property {
 
-    private String name;
     private Component owner;
     private boolean enabled = false;
     private boolean triggerStateEvents = false;
-
-    public Property(String name) {
-        this.name = name;
-    }
 
 
     public void setOwner(Component owner) {
@@ -65,9 +59,5 @@ public abstract class Property {
     public static int getTypeId(Class<? extends Property> propertyClass){
         String msg = String.format("Engine runtime was unable to inline type ID for %s class", propertyClass.getName());
         throw new UnsupportedOperationException(msg);
-    }
-
-    public String getName() {
-        return name;
     }
 }

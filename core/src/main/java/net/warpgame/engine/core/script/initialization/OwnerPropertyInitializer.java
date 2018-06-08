@@ -49,13 +49,13 @@ public class OwnerPropertyInitializer implements ScriptInitializerGenerator{
     private void loadProperty(Script script, OwnerPropertyDependency dependency) {
         Component owner = script.getOwner();
         OwnerProperty ownerProperty = dependency.getOwnerProperty();
-        if (!owner.hasProperty(ownerProperty.value()))
+        if (!owner.hasProperty(ownerProperty.value().id()))
             throw new ScriptInitializationException(
                     script.getClass(),
                     new IllegalStateException("Component has no property named " + ownerProperty.value() + ".")
             );
         else {
-            Property property = owner.getProperty(ownerProperty.value());
+            Property property = owner.getProperty(ownerProperty.value().id());
             setProperty(script, dependency.getPropertyField(), property);
         }
     }
@@ -67,7 +67,7 @@ public class OwnerPropertyInitializer implements ScriptInitializerGenerator{
         } catch (Throwable throwable) {
             throw new ScriptInitializationException(
                     script.getClass(),
-                    "Failed to set field to: " + property.getName(),
+                    "Failed to set field to instance of " + property.getClass().getName(),
                     throwable
             );
         }

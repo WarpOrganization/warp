@@ -4,6 +4,7 @@ import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
@@ -105,8 +106,8 @@ public class ScreenspaceRenderer {
 
     private void prepareCubemap() {
         Scene scene = sceneHolder.getScene();
-        if (scene.hasProperty(CubemapProperty.NAME)) {
-            CubemapProperty cubemapProperty = scene.getProperty(CubemapProperty.NAME);
+        if (scene.hasProperty(Property.getTypeId(CubemapProperty.class))) {
+            CubemapProperty cubemapProperty = scene.getProperty(Property.getTypeId(CubemapProperty.class));
             this.screenspaceProgram.useCubemap(cubemapProperty.getCubemap());
         }
     }

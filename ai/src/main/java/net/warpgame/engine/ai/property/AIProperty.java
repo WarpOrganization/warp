@@ -9,12 +9,9 @@ import net.warpgame.engine.core.property.observable.ObservableProperty;
  */
 public class AIProperty extends ObservableProperty {
 
-    public static final String AI_POPERTY_NAME = "aiProperty";
-
     private BehaviorTree behaviorTree;
 
     public AIProperty(BehaviorTree behaviorTree) {
-        super(AI_POPERTY_NAME);
         this.behaviorTree = behaviorTree;
     }
 

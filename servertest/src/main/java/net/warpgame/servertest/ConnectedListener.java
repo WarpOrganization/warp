@@ -11,6 +11,7 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.net.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.physics.PhysicsManager;
@@ -78,7 +79,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         TransformProperty property;
         for (Component c : components) {
             if (c.getId() != 0 && c.getId() != currentShip) {
-                property = c.getProperty(TransformProperty.NAME);
+                property = c.getProperty(Property.getTypeId(TransformProperty.class));
                 getOwner().triggerEvent(new LoadShipEvent(c.getId(), property.getTranslation(), client.getId()));
             }
         }

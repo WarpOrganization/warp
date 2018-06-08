@@ -7,12 +7,10 @@ import net.warpgame.engine.core.event.Event;
  *         Created 2017-01-28 at 14
  */
 public class MouseButtonPressedEvent extends Event {
-    public static final String MOUSE_BUTTON_PRESSED_EVENT_NAME = "mouseButtonPressedEvent";
 
     private int button;
 
     public MouseButtonPressedEvent(int button) {
-        super(MOUSE_BUTTON_PRESSED_EVENT_NAME);
         this.button = button;
     }
 

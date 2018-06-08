@@ -19,7 +19,7 @@ public class SceneComponent implements Component {
 
     private Component parent;
     private EngineContext context;
-    private final Map<String, Property> properties = new HashMap<>();
+    private final Map<Integer, Property> properties = new HashMap<>();
     private final List<Component> children = new LinkedList<>();
     //not using Guava Multimap in order to avoid creating not needed wrappers
     //Anyway, it's still not the best choice
@@ -58,7 +58,7 @@ public class SceneComponent implements Component {
      * @throws PropertyNotPresentException
      */
     @Override
-    public <T extends Property> T getProperty(String typeId) {
+    public <T extends Property> T getProperty(int typeId) {
         if (!hasProperty(typeId))
             throw new PropertyNotPresentException(typeId);
         else return (T) properties.get(typeId);
@@ -66,18 +66,18 @@ public class SceneComponent implements Component {
 
 
     @Override
-    public boolean hasProperty(String id) {
-        return properties.containsKey(id);
+    public boolean hasProperty(int typeId) {
+        return properties.containsKey(typeId);
     }
 
     @Override
-    public <T extends Property> T getPropertyOrNull(String id) {
-        return (T) properties.get(id);
+    public <T extends Property> T getPropertyOrNull(int typeId) {
+        return (T) properties.get(typeId);
     }
 
     @Override
-    public boolean hasEnabledProperty(String id) {
-        return hasProperty(id) && getProperty(id).isEnabled();
+    public boolean hasEnabledProperty(int typeId) {
+        return hasProperty(typeId) && getProperty(typeId).isEnabled();
     }
 
     /**
@@ -199,13 +199,13 @@ public class SceneComponent implements Component {
 
     @Override
     public void addProperty(Property property) {
-        this.properties.put(property.getName(), property);
+        this.properties.put(property.getType(), property);
         property.setOwner(this);
     }
 
     @Override
     public void removeProperty(Property property) {
-        this.properties.remove(property.getName());
+        this.properties.remove(property.getType());
     }
 
     @Override

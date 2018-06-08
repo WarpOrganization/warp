@@ -8,12 +8,10 @@ import net.warpgame.engine.graphics.texture.Cubemap;
  * Created 2017-11-27 at 18
  */
 public class CubemapProperty extends Property {
-    public static final String NAME = "cubemapProperty";
 
     private Cubemap cubemap;
 
     public CubemapProperty(Cubemap cubemap) {
-        super(NAME);
         this.cubemap = cubemap;
     }
 

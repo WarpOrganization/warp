@@ -4,13 +4,11 @@ import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
-import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.Scene;
-import net.warpgame.engine.core.component.SceneComponent;
-import net.warpgame.engine.core.component.SceneHolder;
+import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -448,7 +446,7 @@ public class Test1 {
 
     public static class S extends Script {
 
-        @OwnerProperty(TransformProperty.NAME)
+        @OwnerProperty(@IdOf(TransformProperty.class))
         private TransformProperty p;
 
         public S(Component owner) {
@@ -497,7 +495,7 @@ public class Test1 {
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new AudioListenerProperty());
         cameraComponent.addProperty(new AudioSourceProperty(EngineContext.CODESOURCE_DIR + "data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
-        AudioSourceProperty property = cameraComponent.getProperty(AudioSourceProperty.NAME);
+        AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
         property.play();
         cameraComponent.addScript(SimpleControlScript.class);
 
@@ -517,7 +515,7 @@ public class Test1 {
 
     public static class ConstantRotationScript extends Script {
 
-        @OwnerProperty(TransformProperty.NAME)
+        @OwnerProperty(@IdOf(TransformProperty.class))
         TransformProperty transProp;
 
         public ConstantRotationScript(Component component) {

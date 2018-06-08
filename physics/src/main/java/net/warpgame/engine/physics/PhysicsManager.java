@@ -4,6 +4,7 @@ import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.PropertyNotPresentException;
 import net.warpgame.engine.physics.constraints.Constraint;
 
@@ -24,20 +25,20 @@ public class PhysicsManager {
 
 
     public void addRigidBody(Component component) {
-        if (!component.hasEnabledProperty(TransformProperty.NAME))
-            throw new PropertyNotPresentException(TransformProperty.NAME);
+        if (!component.hasEnabledProperty(Property.getTypeId(TransformProperty.class)))
+            throw new PropertyNotPresentException(Property.getTypeId(TransformProperty.class));
 
-        if (!component.hasEnabledProperty(FullPhysicsProperty.NAME))
-            throw new PropertyNotPresentException(FullPhysicsProperty.NAME);
+        if (!component.hasEnabledProperty(Property.getTypeId(FullPhysicsProperty.class)))
+            throw new PropertyNotPresentException(Property.getTypeId(FullPhysicsProperty.class));
         physicsTask.getRigidBodyRegistry().addRigidBody(component);
     }
 
     public void removeRigidBody(Component component) {
-        if (!component.hasEnabledProperty(TransformProperty.NAME))
-            throw new PropertyNotPresentException(TransformProperty.NAME);
+        if (!component.hasEnabledProperty(Property.getTypeId(TransformProperty.class)))
+            throw new PropertyNotPresentException(Property.getTypeId(TransformProperty.class));
 
-        if (!component.hasEnabledProperty(FullPhysicsProperty.NAME))
-            throw new PropertyNotPresentException(FullPhysicsProperty.NAME);
+        if (!component.hasEnabledProperty(Property.getTypeId(FullPhysicsProperty.class)))
+            throw new PropertyNotPresentException(Property.getTypeId(FullPhysicsProperty.class));
         physicsTask.getRigidBodyRegistry().removeRigidBody(component);
     }
 

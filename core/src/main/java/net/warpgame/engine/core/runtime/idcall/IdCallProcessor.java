@@ -32,19 +32,19 @@ public class IdCallProcessor implements Processor<ClassNode> {
     @Override
     public void process(ClassNode classNode) {
         for (MethodNode method : (List<MethodNode>) classNode.methods) {
-            processMethod(classNode.name, method);
+            processMethod(method);
         }
     }
 
-    private void processMethod(String className, MethodNode methodNode) {
+    private void processMethod(MethodNode methodNode) {
         InsnList instructions = methodNode.instructions;
         AbstractInsnNode[] original = instructions.toArray();
         AbstractInsnNode[] insnNodesCopy = Arrays.copyOf(original, original.length);
-        processInstructions(className, instructions, insnNodesCopy);
+        processInstructions(instructions, insnNodesCopy);
     }
 
 
-    private void processInstructions(String className, InsnList instructions, AbstractInsnNode[] insnNodes) {
+    private void processInstructions(InsnList instructions, AbstractInsnNode[] insnNodes) {
         LdcInsnNode lastLdc = null;
         for (int i = 0; i < insnNodes.length; i++) {
             AbstractInsnNode insn = insnNodes[i];
@@ -57,7 +57,6 @@ public class IdCallProcessor implements Processor<ClassNode> {
     }
 
     private void processInvocation(InsnList instructions, LdcInsnNode lastLdc, MethodInsnNode insn) {
-        logger.debug("Inlining getTypeId method call in " + insn.owner + " " + insn.name);
         IntInsnNode bipushId = getIdPushInsn(lastLdc);
         instructions.insertBefore(lastLdc, bipushId);
         instructions.remove(lastLdc);

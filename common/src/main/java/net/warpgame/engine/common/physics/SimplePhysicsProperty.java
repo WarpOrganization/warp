@@ -11,16 +11,10 @@ import org.joml.Vector3f;
  */
 public class SimplePhysicsProperty extends Property implements PhysicsInterface {
 
-    public static final String NAME = "simplePhysicsProperty";
-
     private Vector3f velocity = new Vector3f();
     private Quaternionf angularVelocity = new Quaternionf();
     private float mass;
     private Matrix3f inertia;
-
-    public SimplePhysicsProperty() {
-        super(NAME);
-    }
 
     public Quaternionf getAngularVelocity() {
         return angularVelocity;

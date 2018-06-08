@@ -30,7 +30,7 @@ public class AIManager {
 
     //TODO but why
     private void handlePropertyCreated(PropertyAddedEvent event) {
-        if (event.getProperty().getName().equals(AIProperty.NAME)) {
+        if (event.getProperty() instanceof AIProperty) {
             addTree((AIProperty) event.getProperty(), event.getOwner());
         }
     }

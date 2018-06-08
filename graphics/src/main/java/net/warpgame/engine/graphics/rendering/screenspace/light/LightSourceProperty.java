@@ -7,11 +7,9 @@ import net.warpgame.engine.core.property.Property;
  * Created 2017-11-18 at 21
  */
 public class LightSourceProperty extends Property {
-    public static final String NAME = "lightSource";
     private LightSource lightSource;
 
     public LightSourceProperty(LightSource lightSource) {
-        super(NAME);
         this.lightSource = lightSource;
     }
 

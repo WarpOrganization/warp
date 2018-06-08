@@ -1,11 +1,10 @@
 package net.warpgame.engine.graphics.rendering.scene;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.IndexedMesh;
@@ -14,6 +13,8 @@ import net.warpgame.engine.graphics.rendering.scene.program.SceneRenderingProgra
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import net.warpgame.engine.graphics.utility.MatrixStack;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 /**
  * @author Jaca777
@@ -54,7 +55,7 @@ public class ComponentRenderer {
 
 
     public boolean renderComponentAndCheckIfDirty(Component component, boolean dirty) {
-        if (component.hasEnabledProperty(MeshProperty.NAME)) {
+        if (component.hasEnabledProperty(Property.getTypeId(MeshProperty.class))) {
             boolean componentDirty = applyTransformations(component, dirty);
             Material material = getMaterial(component);
             IndexedMesh mesh = getMesh(component);
@@ -66,7 +67,7 @@ public class ComponentRenderer {
     }
 
     private boolean applyTransformations(Component component, boolean dirty) {
-        TransformProperty property = component.getProperty(TransformProperty.NAME);
+        TransformProperty property = component.getProperty(Property.getTypeId(TransformProperty.class));
         if(dirty || property.isDirty()) {
             applyTranslation(property);
             applyScale(property);
@@ -107,17 +108,17 @@ public class ComponentRenderer {
     }
 
     protected IndexedMesh getMesh(Component component) {
-        MeshProperty meshProperty = component.getProperty(MeshProperty.NAME);
+        MeshProperty meshProperty = component.getProperty(Property.getTypeId(MeshProperty.class));
         return meshProperty.getMesh();
     }
 
     protected Material getMaterial(Component component) {
-        MaterialProperty property = component.getProperty(MaterialProperty.NAME);
+        MaterialProperty property = component.getProperty(Property.getTypeId(MaterialProperty.class));
         return property.getMaterial();
     }
 
     protected SceneTessellationMode getTessellationMode(Component component) {
-        TessellationModeProperty property = component.getPropertyOrNull(TessellationModeProperty.NAME);
+        TessellationModeProperty property = component.getPropertyOrNull(Property.getTypeId(TessellationModeProperty.class));
         return (property == null) ? defaultTessellationMode : property.getTessellationMode();
     }
 

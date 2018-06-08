@@ -11,8 +11,7 @@ import java.util.Arrays;
  *         Created 2016-12-26 at 20
  */
 public class ObservableProperty extends Property {
-    public ObservableProperty(String name, ObservableValue... values) {
-        super(name);
+    public ObservableProperty(ObservableValue... values) {
         Arrays.asList(values).forEach(c -> c.registerObserver(s -> stateChanged((ObservableValue<?>) s)));
     }
 

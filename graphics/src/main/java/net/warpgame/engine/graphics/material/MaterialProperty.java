@@ -7,12 +7,10 @@ import net.warpgame.engine.core.property.Property;
  * Created 2017-09-23 at 14
  */
 public class MaterialProperty extends Property{
-    public static final String NAME = "material";
 
     private Material material;
 
     public MaterialProperty(Material material) {
-        super(NAME);
         this.material = material;
     }
 

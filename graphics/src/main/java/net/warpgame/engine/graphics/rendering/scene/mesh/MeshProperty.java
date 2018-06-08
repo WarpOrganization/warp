@@ -8,12 +8,9 @@ import net.warpgame.engine.core.property.Property;
  */
 public class MeshProperty extends Property {
 
-    public static final String NAME = "mesh";
-
     private SceneMesh mesh;
 
     public MeshProperty(SceneMesh mesh) {
-        super(NAME);
         this.mesh = mesh;
     }
 

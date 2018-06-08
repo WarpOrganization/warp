@@ -15,13 +15,13 @@ import java.util.function.Consumer;
  */
 public interface Component {
 
-    <T extends Property> T getProperty(String name);
+    <T extends Property> T getProperty(int type);
 
-    boolean hasProperty(String name);
+    boolean hasProperty(int type);
 
-    <T extends Property> T getPropertyOrNull(String name);
+    <T extends Property> T getPropertyOrNull(int type);
 
-    boolean hasEnabledProperty(String name);
+    boolean hasEnabledProperty(int type);
 
 
     <T extends Event> void triggerEvent(T event);

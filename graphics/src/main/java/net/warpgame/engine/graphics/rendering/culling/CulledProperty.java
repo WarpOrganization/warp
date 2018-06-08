@@ -7,11 +7,9 @@ import net.warpgame.engine.core.property.Property;
  * Created 2017-09-30 at 23
  */
 public class CulledProperty extends Property {
-    public static final String NAME = "culled";
     private boolean culled;
 
     public CulledProperty() {
-        super(NAME);
     }
 
     public boolean isCulled() {

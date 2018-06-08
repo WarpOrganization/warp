@@ -8,6 +8,7 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.net.PacketType;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class SceneSynchronizationTask extends EngineTask {
         int counter = 0;
 
         for (Component c : components) {
-            if (c.hasEnabledProperty(TransformProperty.NAME)) {
+            if (c.hasEnabledProperty(Property.getTypeId(TransformProperty.class))) {
                 serializeComponent(c, out);
                 counter++;
                 if (counter >= MAX_SERIALIZED_COMPONENTS) {
@@ -79,7 +80,7 @@ public class SceneSynchronizationTask extends EngineTask {
     }
 
     private void serializeComponent(Component c, ByteBuf buffer) {
-        TransformProperty transformProperty = c.getProperty(TransformProperty.NAME);
+        TransformProperty transformProperty = c.getProperty(Property.getTypeId(TransformProperty.class));
         buffer.writeInt(c.getId());
         buffer.writeFloat(transformProperty.getTranslation().x);
         buffer.writeFloat(transformProperty.getTranslation().y);

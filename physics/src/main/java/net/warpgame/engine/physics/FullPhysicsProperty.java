@@ -16,7 +16,6 @@ public class FullPhysicsProperty extends Property implements PhysicsInterface {
     private btRigidBody rigidBody;
 
     public FullPhysicsProperty(btRigidBody rigidBody) {
-        super(NAME);
         this.rigidBody = rigidBody;
     }
 
