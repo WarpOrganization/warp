@@ -6,7 +6,6 @@ import net.warpgame.engine.core.component.ComponentDeathEvent;
 import net.warpgame.engine.core.component.SimpleListener;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
-import net.warpgame.engine.core.property.observable.PropertyAddedEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,18 +23,11 @@ public class AIManager {
 
     private final Object AIContextMutex = new Object();
 
-    public void init(Component scene) {
-        SimpleListener.createListener(scene, Event.getTypeId(PropertyAddedEvent.class), this::handlePropertyCreated);
+    void handlePropertyCreated(AIProperty property) {
+        addTree(property, property.getOwner());
     }
 
-    //TODO but why
-    private void handlePropertyCreated(PropertyAddedEvent event) {
-        if (event.getProperty() instanceof AIProperty) {
-            addTree((AIProperty) event.getProperty(), event.getOwner());
-        }
-    }
-
-    public void addTree(AIProperty property, Component owner) {
+    private void addTree(AIProperty property, Component owner) {
         synchronized (AIContextMutex) {
             propertiesToAdd.add(property);
             createDeathListener(property, owner);
@@ -60,7 +52,7 @@ public class AIManager {
         return properties;
     }
 
-    public void update() {
+    void update() {
         synchronized (AIContextMutex) {
             properties.addAll(propertiesToAdd);
             if (!properties.containsAll(propertiesToRemove))
