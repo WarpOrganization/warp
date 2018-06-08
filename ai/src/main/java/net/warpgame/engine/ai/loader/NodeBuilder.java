@@ -13,18 +13,17 @@ public class NodeBuilder {
     private String path;
     private ArrayList<NodeBuilder> children = new ArrayList<>();
 
-    public Node build() throws Exception {
-        Class<?> clazz = null;
-        clazz = Class.forName(path);
-        Constructor<?> ctor = clazz.getConstructor();
-        Node node = (Node) ctor.newInstance();
-        children.forEach(child -> {
-            try {
-                node.addChild(child.build());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    public Node build() throws BehaviourTreeBuildException {
+        Node node;
+        try {
+            Class<?> clazz;
+            clazz = Class.forName(path);
+            Constructor<?> ctor = clazz.getConstructor();
+            node = (Node) ctor.newInstance();
+        }catch (Exception e){
+            throw new BehaviourTreeBuildException(e);
+        }
+        children.forEach(child -> node.addChild(child.build()));
         return node;
     }
 
