@@ -74,30 +74,32 @@ task runEngine(type:JavaExec) {
     jvmArgs '-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader'
 }
 
-task createRunConfigurations {
+static def createConfiguration(taskName, mainClass, mod) {
     def runConfigurationsDir = new File(".idea/runConfigurations")
     runConfigurationsDir.mkdirs()
 
-    tasks.withType(JavaExec).each { task ->
-        def taskName = "Warp Engine Test"
-        def mainClass = "net.warpgame.engine.core.runtime.EngineLauncher"
-        def props = "-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader"
-        def args = "net.warpgame.test.Test1"
-        def mod = "test_main"
+    def launcherClass = "net.warpgame.engine.core.runtime.EngineLauncher"
+    def props = "-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader"
 
-        def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
-        def xml = new MarkupBuilder(writer)
+    def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
+    def xml = new MarkupBuilder(writer)
 
-        xml.component(name: "ProjectRunConfigurationManager") {
-            configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
-                option(name: 'MAIN_CLASS_NAME', value: mainClass)
-                option(name: 'VM_PARAMETERS', value: props)
-                option(name: 'PROGRAM_PARAMETERS', value: args)
-                option(name: 'WORKING_DIRECTORY', value: 'file://$PROJECT_DIR$')
-                module(name: mod)
-            }
+    xml.component(name: "ProjectRunConfigurationManager") {
+        configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
+            option(name: 'MAIN_CLASS_NAME', value: launcherClass)
+            option(name: 'VM_PARAMETERS', value: props)
+            option(name: 'PROGRAM_PARAMETERS', value: mainClass)
+            option(name: 'WORKING_DIRECTORY', value: 'file://$PROJECT_DIR$')
+            module(name: mod)
         }
     }
+}
+
+task createRunConfigurations {
+
+    createConfiguration("SP - Warp Engine Test", "net.warpgame.test.Test1", "test_main")
+    createConfiguration("MP - Server Test", "net.warpgane.servertest.Test", "setvertest_main")
+    createConfiguration("MP - Client Test", "net.warpgame.test.MultiplayerTest", "test_main")
 }
 
 
