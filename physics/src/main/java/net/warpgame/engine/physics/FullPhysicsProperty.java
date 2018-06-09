@@ -3,7 +3,11 @@ package net.warpgame.engine.physics;
 import com.badlogic.gdx.math.Vector3;
 import net.warpgame.engine.common.physics.PhysicsInterface;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.physics.constraints.Constraint;
 import org.joml.Vector3f;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Hubertus
@@ -12,6 +16,7 @@ import org.joml.Vector3f;
 public class FullPhysicsProperty extends Property implements PhysicsInterface {
 
     private RigidBody rigidBody;
+    private Set<Constraint> constraints = new HashSet<>();
 
     public FullPhysicsProperty(RigidBody rigidBody) {
         this.rigidBody = rigidBody;
@@ -59,5 +64,26 @@ public class FullPhysicsProperty extends Property implements PhysicsInterface {
 
     public void activate() {
         rigidBody.getBulletRigidBody().activate();
+    }
+
+    public void removeConstraint(Constraint constraint) {
+        removeConstraint(constraint.getID());
+    }
+
+    public void removeConstraint(int constraintId) {
+        getOwner()
+                .getContext()
+                .getLoadedContext()
+                .findOne(PhysicsService.class)
+                .get()
+                .removeConstraint(constraintId);
+    }
+
+    void internalRemoveConstraint(Constraint constraint){
+        constraints.remove(constraint);
+    }
+
+    void addConstraint(Constraint constraint) {
+        constraints.add(constraint);
     }
 }

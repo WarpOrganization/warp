@@ -20,7 +20,7 @@ import net.warpgame.engine.physics.constraints.Constraint;
 public class PhysicsService {
 
     private PhysicsTask physicsTask;
-    private IDDispatcher constraintIDDispatcher = new IDDispatcher();
+    private IdDispatcher constraintIdDispatcher = new IdDispatcher();
 
     public PhysicsService(PhysicsTask physicsTask) {
         this.physicsTask = physicsTask;
@@ -54,13 +54,21 @@ public class PhysicsService {
         );
     }
 
-    public void addConstraint(Constraint constraintDefinition) {
-        constraintDefinition.setID(constraintIDDispatcher.getNextID());
-        physicsTask.getConstraintRegistry().addConstraint(constraintDefinition);
+    /**
+     * Please use *ConstraintType*.createConstraint() to create constraints.
+     * Registers constraint in ConstraintRegistry and adds it to PhysicsWorld.
+     */
+    public void addConstraint(Constraint constraint) {
+        constraint.setID(constraintIdDispatcher.getNextID());
+        physicsTask.getConstraintRegistry().addConstraint(constraint);
+        constraint.getProperty1().addConstraint(constraint);
+        constraint.getProperty2().addConstraint(constraint);
     }
 
-    public void removeConstraint(int id) {
-        physicsTask.getConstraintRegistry().removeConstraint(id);
+    void removeConstraint(int constraintId) {
+        Constraint constraint = physicsTask.getConstraintRegistry().getConstraint(constraintId);
+        constraint.getProperty1().internalRemoveConstraint(constraint);
+        constraint.getProperty2().internalRemoveConstraint(constraint);
+        physicsTask.getConstraintRegistry().removeConstraint(constraintId);
     }
-
 }

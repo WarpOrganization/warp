@@ -29,7 +29,10 @@ public class RigidBody implements Disposable {
         this.bulletRigidBody = bulletRigidBody;
     }
 
-    btRigidBody getBulletRigidBody() {
+    /**
+     * Interfering with native btRigidBody can be unsafe.
+     */
+    public btRigidBody getBulletRigidBody() {
         return bulletRigidBody;
     }
 
