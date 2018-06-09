@@ -17,6 +17,10 @@ public class RigidBodyConstructor {
         this.mass = mass;
     }
 
+    /**
+     * @param transformProperty - rigid body owner's transform property
+     * @return RigidBody ready to be used in FullPhysicsProperty() constructor
+     */
     public RigidBody construct(TransformProperty transformProperty) {
         if (!rigidBodyShapeConstructor.isConstructed()) rigidBodyShapeConstructor.construct();
 

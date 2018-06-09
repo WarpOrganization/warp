@@ -18,6 +18,9 @@ public class RigidBody implements Disposable {
         this.physicsMotionState = physicsMotionState;
     }
 
+    /**
+     * Changes position of rigid body collider relative to owner component's transform property.
+     */
     public void setOffset(Vector3f translationOffset, Quaternionf rotationOffset){
         physicsMotionState.setOffset(translationOffset, rotationOffset);
     }
