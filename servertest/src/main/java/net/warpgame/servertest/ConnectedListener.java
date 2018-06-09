@@ -1,8 +1,5 @@
 package net.warpgame.servertest;
 
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.content.LoadShipEvent;
 import net.warpgame.engine.common.transform.TransformProperty;
@@ -14,10 +11,12 @@ import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.net.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
-import net.warpgame.engine.physics.PhysicsManager;
-import net.warpgame.engine.physics.PhysicsMotionState;
+import net.warpgame.engine.physics.PhysicsService;
+import net.warpgame.engine.physics.RigidBodyConstructor;
+import net.warpgame.engine.physics.shapeconstructors.RigidBodyBoxShapeConstructor;
 import net.warpgame.engine.server.Client;
 import net.warpgame.engine.server.ClientRegistry;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
@@ -28,18 +27,18 @@ import java.util.ArrayList;
 public class ConnectedListener extends Listener<ConnectedEvent> {
 
     private final ComponentRegistry componentRegistry;
-    private final PhysicsManager physicsManager;
+    private final PhysicsService physicsService;
     private final ClientRegistry clientRegistry;
     private Component scene;
 
     ConnectedListener(Component owner,
                       ComponentRegistry componentRegistry,
-                      PhysicsManager physicsManager,
+                      PhysicsService physicsService,
                       ClientRegistry clientRegistry) {
         super(owner, Event.getTypeId(ConnectedEvent.class));
 
         this.componentRegistry = componentRegistry;
-        this.physicsManager = physicsManager;
+        this.physicsService = physicsService;
         this.clientRegistry = clientRegistry;
     }
 
@@ -51,17 +50,11 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         ship.addProperty(new RemoteInputProperty());
         ship.addListener(new ClientInputListener(ship));
         ship.addScript(MovementScript.class);
-        FullPhysicsProperty physicsProperty = new FullPhysicsProperty(
-                new btRigidBody(
-                        10,
-                        new PhysicsMotionState(transformProperty),
-                        new btBoxShape(new Vector3(2, 2, 2))));
+        RigidBodyBoxShapeConstructor shapeConstructor = new RigidBodyBoxShapeConstructor(new Vector3f(2, 2, 2));
+        RigidBodyConstructor constructor = new RigidBodyConstructor(shapeConstructor, 10f);
+        FullPhysicsProperty physicsProperty = new FullPhysicsProperty(constructor.construct(transformProperty));
+
         ship.addProperty(physicsProperty);
-        physicsManager.addRigidBody(ship);
-        Vector3 inertia = new Vector3();
-        physicsProperty.getRigidBody().getCollisionShape().calculateLocalInertia(10, inertia);
-        physicsProperty.getRigidBody().setMassProps(10, inertia);
-        physicsProperty.getRigidBody().activate();
 
         Client client = clientRegistry.getClient(event.getSourceClientId());
 

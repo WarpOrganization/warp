@@ -1,6 +1,7 @@
 package net.warpgame.engine.physics;
 
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.property.Property;
 
@@ -14,12 +15,6 @@ import java.util.Set;
 public class RigidBodyRegistry {
     private Set<Component> toAdd = new HashSet<>();
     private Set<Component> toRemove = new HashSet<>();
-    private ColliderComponentRegistry colliderComponentRegistry;
-
-
-    public RigidBodyRegistry(ColliderComponentRegistry colliderComponentRegistry) {
-        this.colliderComponentRegistry = colliderComponentRegistry;
-    }
 
     public synchronized void addRigidBody(Component component) {
         toAdd.add(component);
@@ -32,9 +27,10 @@ public class RigidBodyRegistry {
     synchronized void processBodies(btDynamicsWorld dynamicsWorld) {
         if (!toAdd.isEmpty()) {
             for (Component aToAdd : toAdd) {
-                colliderComponentRegistry.addComponennt(aToAdd);
                 FullPhysicsProperty fullPhysicsProperty = aToAdd.getProperty(Property.getTypeId(FullPhysicsProperty.class));
-                dynamicsWorld.addRigidBody(fullPhysicsProperty.getRigidBody());
+                btRigidBody bulletRigidBody = fullPhysicsProperty.getRigidBody().getBulletRigidBody();
+                dynamicsWorld.addRigidBody(bulletRigidBody);
+                bulletRigidBody.activate();
             }
             toAdd.clear();
         }
@@ -42,8 +38,7 @@ public class RigidBodyRegistry {
         if (!toRemove.isEmpty()) {
             for (Component aToRemove : toRemove) {
                 FullPhysicsProperty fullPhysicsProperty = aToRemove.getProperty(Property.getTypeId(FullPhysicsProperty.class));
-                dynamicsWorld.removeRigidBody(fullPhysicsProperty.getRigidBody());
-                colliderComponentRegistry.removeCompoent(fullPhysicsProperty.getRigidBody().getUserValue());
+                dynamicsWorld.removeRigidBody(fullPhysicsProperty.getRigidBody().getBulletRigidBody());
             }
             toAdd.clear();
         }

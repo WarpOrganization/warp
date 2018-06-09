@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Profile;
 import org.apache.log4j.Logger;
 import net.warpgame.engine.core.context.service.Service;
@@ -30,13 +31,11 @@ public class PhysicsTask extends EngineTask {
     private PhysicsWorld mainWorld;
     private RigidBodyRegistry rigidBodyRegistry;
     private RayTestSolver rayTestSolver;
-    private ColliderComponentRegistry colliderComponentRegistry;
     private ConstraintRegistry constraintRegistry;
 
-    public PhysicsTask() {
-        colliderComponentRegistry = new ColliderComponentRegistry();
-        rigidBodyRegistry = new RigidBodyRegistry(colliderComponentRegistry);
-        rayTestSolver = new RayTestSolver(colliderComponentRegistry);
+    public PhysicsTask(ComponentRegistry componentRegistry) {
+        rigidBodyRegistry = new RigidBodyRegistry();
+        rayTestSolver = new RayTestSolver(componentRegistry);
         constraintRegistry = new ConstraintRegistry();
     }
 
@@ -81,10 +80,6 @@ public class PhysicsTask extends EngineTask {
 
     public RayTestSolver getRayTestSolver() {
         return rayTestSolver;
-    }
-
-    public ColliderComponentRegistry getColliderComponentRegistry() {
-        return colliderComponentRegistry;
     }
 
     public ConstraintRegistry getConstraintRegistry() {

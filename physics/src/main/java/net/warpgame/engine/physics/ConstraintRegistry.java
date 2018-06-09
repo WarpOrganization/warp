@@ -41,26 +41,26 @@ public class ConstraintRegistry {
                 case Constraint.BALL_CONSTRAINT:
                     BallConstraint ballConstraint = (BallConstraint) c;
                     btPoint2PointConstraint bConstraint = new btPoint2PointConstraint(
-                            ballConstraint.getBody1(),
-                            ballConstraint.getBody2(),
+                            ballConstraint.getBody1().getBulletRigidBody(),
+                            ballConstraint.getBody2().getBulletRigidBody(),
                             ballConstraint.getPivot1(),
                             ballConstraint.getPivot2());
                     addToWorld(world, bConstraint, c.getID());
                     break;
                 case Constraint.CONE_CONSTRAINT:
-                    //TODO
+                    //TODO implement support for CONE_CONSTRAINT
                     break;
                 case Constraint.FIXED_CONSTRAINT:
-                    //TODO
+                    //TODO implement support for FIXED_CONSTRAINT
                     break;
                 case Constraint.GENERIC_CONSTRAINT:
-                    //TODO
+                    //TODO implement support fot GENERIC_CONSTRAINT
                     break;
                 case Constraint.HINGE_CONSTRAINT:
-                    //TODO
+                    //TODO implement support for HINGE_CONSTRAINT
                     break;
                 case Constraint.SLIDER_CONSTRAINT:
-                    //TODO
+                    //TODO implement support for SLIDER_CONSTRAINT
                     break;
             }
         }

@@ -16,7 +16,7 @@ import java.util.Set;
  */
 
 @Service
-public class AIManager {
+public class AIService {
     private Set<AIProperty> properties = new HashSet<>();
     private Set<AIProperty> propertiesToAdd = new HashSet<>();
     private Set<AIProperty> propertiesToRemove = new HashSet<>();

@@ -10,11 +10,11 @@ import net.warpgame.engine.core.property.Property;
  */
 public class AITask extends EngineTask {
 
-    private AIManager manager;
+    private AIService manager;
     private Component scene;
 
 
-    public AITask(AIManager manager, Component scene) {
+    public AITask(AIService manager, Component scene) {
         this.manager = manager;
         this.scene = scene;
     }

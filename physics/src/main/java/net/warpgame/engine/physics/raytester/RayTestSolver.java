@@ -2,7 +2,7 @@ package net.warpgame.engine.physics.raytester;
 
 import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.physics.ColliderComponentRegistry;
+import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.physics.PhysicsWorld;
 
 import java.util.ArrayList;
@@ -18,10 +18,10 @@ public class RayTestSolver {
     private ClosestRayResultCallback result;
     private ClosestRayResultCallback result2; //used only by physics thread
     private PhysicsWorld world;
-    private ColliderComponentRegistry colliderComponentRegistry;
+    private ComponentRegistry componentRegistry;
 
-    public RayTestSolver(ColliderComponentRegistry colliderComponentRegistry) {
-        this.colliderComponentRegistry = colliderComponentRegistry;
+    public RayTestSolver(ComponentRegistry componentRegistry) {
+        this.componentRegistry = componentRegistry;
     }
 
 
@@ -43,7 +43,8 @@ public class RayTestSolver {
                         //TODO
                         break;
                     case RayTestRequest.CLOSEST_COMPONENT_HIT:
-                        Component c = colliderComponentRegistry.getCompoenent(result2.getCollisionObject().getUserValue());
+                        Component c = componentRegistry
+                                .getComponent(result2.getCollisionObject().getUserValue());
                         request.getConsumer().accept(c);
                         break;
                     case RayTestRequest.IS_HIT:

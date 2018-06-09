@@ -16,7 +16,7 @@ public class AIProperty extends Property {
         getOwner()
                 .getContext()
                 .getLoadedContext()
-                .findOne(AIManager.class)
+                .findOne(AIService.class)
                 .get()
                 .handlePropertyCreated(this);
     }

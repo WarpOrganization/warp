@@ -1,7 +1,7 @@
 package net.warpgame.engine.physics.constraints;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
+import net.warpgame.engine.physics.RigidBody;
 import org.joml.Vector3f;
 
 /**
@@ -10,12 +10,12 @@ import org.joml.Vector3f;
  */
 public class BallConstraint extends Constraint {
 
-    private final btRigidBody body1;
-    private final btRigidBody body2;
+    private final RigidBody body1;
+    private final RigidBody body2;
     private final Vector3 pivot1;
     private final Vector3 pivot2;
 
-    public BallConstraint(btRigidBody body1, btRigidBody body2, Vector3f pivot1, Vector3f pivot2) {
+    public BallConstraint(RigidBody body1, RigidBody body2, Vector3f pivot1, Vector3f pivot2) {
 
         this.pivot1 = new Vector3(pivot1.x, pivot1.y, pivot1.z);
         this.pivot2 = new Vector3(pivot2.x, pivot2.y, pivot2.z);
@@ -28,11 +28,11 @@ public class BallConstraint extends Constraint {
         return Constraint.BALL_CONSTRAINT;
     }
 
-    public btRigidBody getBody1() {
+    public RigidBody getBody1() {
         return body1;
     }
 
-    public btRigidBody getBody2() {
+    public RigidBody getBody2() {
         return body2;
     }
 

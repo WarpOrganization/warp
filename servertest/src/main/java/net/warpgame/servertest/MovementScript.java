@@ -1,12 +1,12 @@
 package net.warpgame.servertest;
 
-import com.badlogic.gdx.physics.bullet.collision.Collision;
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.common.transform.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
+import net.warpgame.engine.physics.Collision;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.server.RemoteInput;
 import org.joml.Quaternionf;
@@ -40,8 +40,8 @@ public class MovementScript extends Script {
     @Override
     public void onInit() {
         input = remoteInputProperty.getRemoteInput();
-        physicsProperty.getRigidBody().setActivationState(Collision.DISABLE_DEACTIVATION);
-        physicsProperty.getRigidBody().activate();
+        physicsProperty.setActivationState(Collision.ActivationState.DISABLE_DEACTIVATION);
+        physicsProperty.activate();
     }
 
     @Override
