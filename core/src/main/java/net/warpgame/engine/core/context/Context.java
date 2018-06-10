@@ -1,14 +1,12 @@
 package net.warpgame.engine.core.context;
 
+import com.google.common.collect.ImmutableSet;
 import net.warpgame.engine.core.context.loader.ContextLoader;
 import net.warpgame.engine.core.context.loader.JavaContextHolder;
 import net.warpgame.engine.core.context.loader.service.ServiceInfo;
 import scala.Option;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Jaca777
@@ -16,6 +14,7 @@ import java.util.Optional;
  */
 public class Context {
 
+    private Set<String> profiles;
     private JavaContextHolder contextHolder;
 
     public static Context create(String... profiles) {
@@ -23,8 +22,21 @@ public class Context {
         Context context = new Context();
         JavaContextHolder contextHolder = loader.loadContext(context, profiles);
         context.setContextHolder(contextHolder);
+        context.setProfiles(profiles);
         context.processRegistration();
         return context;
+    }
+
+    private void setProfiles(String[] profiles) {
+        this.profiles = ImmutableSet.copyOf(profiles);
+    }
+
+    public Set<String> getProfiles() {
+        return profiles;
+    }
+
+    public boolean isProfileEnabled(String profile) {
+        return this.profiles.contains(profile);
     }
 
     private void processRegistration() {
