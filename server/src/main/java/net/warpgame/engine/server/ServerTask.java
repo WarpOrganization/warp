@@ -10,7 +10,11 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.net.event.StateChangeHandler;
+import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
+import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.MessageProcessorsService;
+import net.warpgame.engine.net.message.MessageQueue;
+import net.warpgame.engine.net.message.MessageSourcesService;
 
 /**
  * @author Hubertus
@@ -25,25 +29,34 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private ServerRemoteEventQueue eventQueue;
     private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
-    private StateChangeHandler stateChangeHandler;
+    private InternalMessageHandler internalMessageHandler;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
+    private MessageQueue messageQueue;
+    private MessageProcessorsService messageProcessorsService;
+    private InternalMessageQueue internalMessageQueue;
+    private MessageSourcesService messageSourcesService;
 
     public ServerTask(ClientRegistry clientRegistry,
                       ConnectionUtil connectionUtil,
-                      ServerRemoteEventQueue eventQueue,
                       ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
-                      StateChangeHandler stateChangeHandler) {
+                      InternalMessageHandler internalMessageHandler,
+                      MessageQueue messageQueue,
+                      MessageProcessorsService messageProcessorsService,
+                      InternalMessageQueue internalMessageQueue,
+                      MessageSourcesService messageSourcesService) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.eventQueue = eventQueue;
         this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
-        this.stateChangeHandler = stateChangeHandler;
+        this.internalMessageHandler = internalMessageHandler;
+        this.messageQueue = messageQueue;
+        this.messageProcessorsService = messageProcessorsService;
+        this.internalMessageQueue = internalMessageQueue;
+        this.messageSourcesService = messageSourcesService;
     }
 
     @Override
@@ -58,8 +71,10 @@ public class ServerTask extends EngineTask {
                             componentRegistry,
                             packetProcessor,
                             connectionUtil,
-                            stateChangeHandler,
-                            eventQueue));
+                            internalMessageHandler,
+                            messageProcessorsService,
+                            internalMessageQueue
+                    ));
 
 
             outChannel = b.bind(PORT).sync().channel();
@@ -78,7 +93,8 @@ public class ServerTask extends EngineTask {
     @Override
     public void update(int delta) {
         clientRegistry.update();
-        eventQueue.update();
+        messageSourcesService.update();
+        messageQueue.update();
     }
 
 }

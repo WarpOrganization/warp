@@ -5,12 +5,10 @@ package net.warpgame.engine.core.property;
  *         Created 2017-01-21 at 17
  */
 public class NameProperty extends Property {
-    public static final String NAME = "value";
 
     private String componentName;
 
     public NameProperty(String componentName) {
-        super(NAME);
         this.componentName = componentName;
     }
 

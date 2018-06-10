@@ -5,21 +5,16 @@ import net.warpgame.engine.core.component.Component;
 
 /**
  * @author Hubertus
- *         Created 19.01.2017
+ * Created 19.01.2017
  */
 public class BehaviourTreeBuilder {
 
     private NodeBuilder baseNode;
 
 
-    public BehaviorTree build(Component owner) {
+    public BehaviorTree build(Component owner) throws BehaviourTreeBuildException {
         BehaviorTree tree = null;
-
-        try {
-            tree = new BehaviorTree(baseNode.build(), owner);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        tree = new BehaviorTree(baseNode.build(), owner);
         return tree;
     }
 

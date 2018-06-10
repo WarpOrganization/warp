@@ -6,10 +6,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.net.ClockSynchronizer;
-import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
+import net.warpgame.engine.net.message.IncomingMessageQueue;
+import net.warpgame.engine.net.message.MessageProcessorsService;
 
 import java.net.InetSocketAddress;
 
@@ -23,27 +23,30 @@ public class ConnectionService {
     private Channel channel;
     private int clientId;
     private long clientSecret;//TODO implement
-    private InetSocketAddress serverAddress;
-    private ClockSynchronizer clockSynchronizer = new ClockSynchronizer();
-    private ConnectionStateHolder connectionStateHolder;
+    private Server server;
+    private ComponentRegistry componentRegistry;
 
     public ConnectionService(ComponentRegistry componentRegistry) {
-        connectionStateHolder = new ConnectionStateHolder(componentRegistry.getComponent(0));
+        this.componentRegistry = componentRegistry;
     }
 
-    void connect(InetSocketAddress address) {
-        this.serverAddress = address;
+    void connect(InetSocketAddress address, MessageProcessorsService messageProcessorsService) {
+        server = new Server(
+                address,
+                new IncomingMessageQueue(messageProcessorsService),
+                new ConnectionStateHolder(componentRegistry.getRootComponent())
+        );
         channel.writeAndFlush(
                 new DatagramPacket(
                         Unpooled.buffer().writeInt(PacketType.PACKET_CONNECT).writeLong(System.currentTimeMillis()),
                         address));
     }
 
-    void sendPacket(ByteBuf packetData) {
-        channel.writeAndFlush(new DatagramPacket(packetData, serverAddress));
+    public void sendPacket(ByteBuf packetData) {
+        channel.writeAndFlush(new DatagramPacket(packetData, server.getAddress()));
     }
 
-    ByteBuf getHeader(int packetType, int initialCapacity) {
+    public ByteBuf getHeader(int packetType, int initialCapacity) {
         ByteBuf byteBuf = Unpooled.buffer(initialCapacity + 16, 2048);
         byteBuf.writeInt(packetType);
         byteBuf.writeLong(System.currentTimeMillis());
@@ -51,14 +54,14 @@ public class ConnectionService {
         return byteBuf;
     }
 
-    void confirmEvent(int dependencyId) {
-        ByteBuf packet = getHeader(PacketType.PACKET_EVENT_CONFIRMATION, 4);
+    void sendMessageConfirmationPacket(int dependencyId) {
+        ByteBuf packet = getHeader(PacketType.PACKET_MESSAGE_CONFIRMATION, 4);
         packet.writeInt(dependencyId);
         sendPacket(packet);
     }
 
-    void sendKeepAlive() {
-        channel.writeAndFlush(new DatagramPacket(getHeader(PacketType.PACKET_KEEP_ALIVE, 0), serverAddress));
+    void sendKeepAlivePacket() {
+        channel.writeAndFlush(new DatagramPacket(getHeader(PacketType.PACKET_KEEP_ALIVE, 0), server.getAddress()));
     }
 
     public Channel getChannel() {
@@ -70,28 +73,12 @@ public class ConnectionService {
     }
 
     public InetSocketAddress getServerAddress() {
-        return serverAddress;
+        return server.getAddress();
     }
 
     void setClientCredentials(int clientId, int clientSecret) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-    }
-
-    ClockSynchronizer getClockSynchronizer() {
-        return clockSynchronizer;
-    }
-
-    public void setClockSynchronizer(ClockSynchronizer clockSynchronizer) {
-        this.clockSynchronizer = clockSynchronizer;
-    }
-
-    ConnectionState getConnectionState() {
-        return connectionStateHolder.getConnectionState();
-    }
-
-    ConnectionStateHolder getConnectionStateHolder() {
-        return connectionStateHolder;
     }
 
     public int getClientId() {
@@ -100,5 +87,9 @@ public class ConnectionService {
 
     public void setClientId(int clientId) {
         this.clientId = clientId;
+    }
+
+    public Server getServer() {
+        return server;
     }
 }

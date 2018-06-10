@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.execution;
 
 import net.warpgame.engine.core.context.executor.RegisterExecutor;
-import net.warpgame.engine.core.context.executor.RegisterExecutor;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.concurrent.ExecutorService;

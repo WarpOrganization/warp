@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.script;
 
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.HashSet;

@@ -13,11 +13,11 @@ import java.io.InputStream;
 
 /**
  * @author Hubertus
- *         Created 19.01.2017
+ * Created 19.01.2017
  */
 public class BehaviourTreeLoader {
 
-    public static BehaviourTreeBuilder loadXML(String path) {
+    public static BehaviourTreeBuilder loadXML(String path) throws BehaviourTreeLoadException {
         try {
             InputStream stream = new FileInputStream(new File(EngineContext.CODESOURCE_DIR + path));
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -27,9 +27,7 @@ public class BehaviourTreeLoader {
             saxParser.parse(stream, handler);
             return behaviourTreeBuilder;
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new BehaviourTreeLoadException(e);
         }
-       return null;
     }
-
 }

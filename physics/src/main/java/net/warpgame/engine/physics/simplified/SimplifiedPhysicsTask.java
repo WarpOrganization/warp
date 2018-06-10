@@ -8,6 +8,7 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.core.property.Property;
 
 import java.util.ArrayList;
 
@@ -47,9 +48,9 @@ public class SimplifiedPhysicsTask extends EngineTask{
         components.clear();
         componentRegistry.getComponents(components);
         for(Component component: components){
-            if(component.hasEnabledProperty(SimplePhysicsProperty.NAME)){
-                TransformProperty transformProperty = component.getProperty(TransformProperty.NAME);
-                SimplePhysicsProperty physicsProperty = component.getProperty(SimplePhysicsProperty.NAME);
+            if(component.hasEnabledProperty(Property.getTypeId((SimplePhysicsProperty.class)))){
+                TransformProperty transformProperty = component.getProperty(Property.getTypeId(TransformProperty.class));
+                SimplePhysicsProperty physicsProperty = component.getProperty(Property.getTypeId(SimplePhysicsProperty.class));
                 transformProperty.move(physicsProperty.getVelocity());
                 transformProperty.getRotation().mul(physicsProperty.getAngularVelocity());
 

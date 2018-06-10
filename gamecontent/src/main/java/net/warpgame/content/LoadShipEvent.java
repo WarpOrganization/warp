@@ -1,6 +1,6 @@
 package net.warpgame.content;
 
-import net.warpgame.engine.core.event.Event;
+import net.warpgame.engine.net.event.NetworkEvent;
 import org.joml.Vector3f;
 
 import java.io.Serializable;
@@ -9,12 +9,12 @@ import java.io.Serializable;
  * @author Hubertus
  * Created 05.01.2018
  */
-public class LoadShipEvent extends Event implements Serializable {
+public class LoadShipEvent extends NetworkEvent implements Serializable {
     private int shipComponentId;
     private Vector3f pos;
 
-    public LoadShipEvent(int shipComponentId, Vector3f pos) {
-        super("loadShipEvent");
+    public LoadShipEvent(int shipComponentId, Vector3f pos, int clientId) {
+        super(clientId);
         this.shipComponentId = shipComponentId;
         this.pos = pos;
     }

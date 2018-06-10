@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.rendering;
 
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
+import net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAARenderer;
 import net.warpgame.engine.graphics.window.WindowTask;
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
@@ -14,7 +15,7 @@ import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 
 /**
  * @author Jaca777
- *         Created 2016-06-25 at 21
+ * Created 2016-06-25 at 21
  */
 
 @Service
@@ -24,10 +25,16 @@ public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;
     private ScreenspaceRenderer screenspaceRenderer;
+    private SMAARenderer smaaRenderer;
 
-    public RenderingTask(SceneRenderer sceneRenderer, ScreenspaceRenderer screenspaceRenderer) {
+    public RenderingTask(
+            SceneRenderer sceneRenderer,
+            ScreenspaceRenderer screenspaceRenderer,
+            SMAARenderer smaaRenderer
+    ) {
         this.sceneRenderer = sceneRenderer;
         this.screenspaceRenderer = screenspaceRenderer;
+        this.smaaRenderer = smaaRenderer;
     }
 
     private static Logger logger = Logger.getLogger(RenderingTask.class);
@@ -39,6 +46,7 @@ public class RenderingTask extends EngineTask {
         logger.info("OpenGL capabilities created.");
         sceneRenderer.init();
         screenspaceRenderer.init();
+        smaaRenderer.initialize();
         //pipeline initialization...
         logger.info("Initialized pipeline.");
     }
@@ -55,6 +63,7 @@ public class RenderingTask extends EngineTask {
     protected void onClose() {
         sceneRenderer.destroy();
         screenspaceRenderer.destroy();
+        smaaRenderer.destroy();
         //destroy pipeline
     }
 
@@ -62,6 +71,7 @@ public class RenderingTask extends EngineTask {
     public void update(int delta) {
         sceneRenderer.update();
         screenspaceRenderer.update();
+        smaaRenderer.update();
         GLErrors.checkOGLErrors();
     }
 

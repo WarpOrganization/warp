@@ -7,8 +7,6 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.warpgame.engine.core.runtime.preprocessing.EngineRuntimePreprocessor;
-import net.warpgame.engine.core.runtime.processing.Processor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,33 +32,26 @@ public class IdCallProcessor implements Processor<ClassNode> {
     @Override
     public void process(ClassNode classNode) {
         for (MethodNode method : (List<MethodNode>) classNode.methods) {
-            processMethod(classNode.name, method);
+            processMethod(method);
         }
     }
 
-    private void processMethod(String className, MethodNode methodNode) {
+    private void processMethod(MethodNode methodNode) {
         InsnList instructions = methodNode.instructions;
         AbstractInsnNode[] original = instructions.toArray();
         AbstractInsnNode[] insnNodesCopy = Arrays.copyOf(original, original.length);
-        processInstructions(className, instructions, insnNodesCopy);
+        processInstructions(instructions, insnNodesCopy);
     }
 
 
-    private void processInstructions(String className, InsnList instructions, AbstractInsnNode[] insnNodes) {
-        int lastLdcIndex = -1;
+    private void processInstructions(InsnList instructions, AbstractInsnNode[] insnNodes) {
         LdcInsnNode lastLdc = null;
         for (int i = 0; i < insnNodes.length; i++) {
             AbstractInsnNode insn = insnNodes[i];
             if (insn.getOpcode() == Opcodes.LDC) {
-                lastLdcIndex = i;
                 lastLdc = (LdcInsnNode) insn;
             } else if (insn.getOpcode() == Opcodes.INVOKESTATIC && matchesCallPattern((MethodInsnNode) insn)) {
-                if (lastLdcIndex == i - 1) {
-                    processInvocation(instructions, lastLdc, (MethodInsnNode) insn);
-                } else {
-                    logger.error(String.format("Malformed getTypeId call in %s class", className));
-                    logger.error("Engine runtime was unable to inline the type id.");
-                }
+                processInvocation(instructions, lastLdc, (MethodInsnNode) insn);
             }
         }
     }

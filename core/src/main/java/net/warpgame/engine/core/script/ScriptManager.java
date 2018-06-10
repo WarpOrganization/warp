@@ -3,14 +3,10 @@ package net.warpgame.engine.core.script;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentDeathEvent;
 import net.warpgame.engine.core.component.SimpleListener;
+import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.script.blueprint.ScriptBlueprint;
 import net.warpgame.engine.core.script.blueprint.ScriptBlueprintSupplier;
-import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.ComponentDeathEvent;
-import net.warpgame.engine.core.component.SimpleListener;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.script.blueprint.ScriptBlueprint;
-import net.warpgame.engine.core.script.blueprint.ScriptBlueprintSupplier;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -51,7 +47,7 @@ public class ScriptManager {
     private void createDeathListener(Script script) {
         SimpleListener.createListener(
                 script.getOwner(),
-                ComponentDeathEvent.COMPONENT_DEATH_EVENT_NAME,
+                Event.getTypeId(ComponentDeathEvent.class),
                 (e) -> registry.removeScript(script)
         );
     }
@@ -71,7 +67,7 @@ public class ScriptManager {
 
     private void invokeInitializers(Script script) {
         Consumer<Script>[] initializers = script.getBlueprint().getInitializers();
-        for(Consumer<Script> initializer : initializers) {
+        for (Consumer<Script> initializer : initializers) {
             initializer.accept(script);
         }
     }

@@ -14,7 +14,10 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.StateChangeHandler;
+import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.MessageProcessorsService;
+import net.warpgame.engine.net.message.MessageQueue;
+import net.warpgame.engine.net.message.MessageSourcesService;
 
 import java.net.InetSocketAddress;
 
@@ -28,11 +31,13 @@ public class ClientTask extends EngineTask {
 
     private Config config;
     private ConnectionService connectionService;
-    private ClientRemoteEventQueue eventQueue;
     private final SerializedSceneHolder sceneHolder;
     private final ComponentRegistry componentRegistry;
-    private final StateChangeHandler stateChangeHandler;
+    private MessageSourcesService messageSourcesService;
+    private InternalMessageQueue internalMessageQueue;
+    private MessageProcessorsService messageProcessorsService;
     private EventLoopGroup group = new NioEventLoopGroup();
+    private MessageQueue messageQueue;
 
     private static final int KEEP_ALIVE_INTERVAL = 1000 * 5;
     private static final int CLOCK_SYNC_INTERVAL = 1000;
@@ -41,16 +46,20 @@ public class ClientTask extends EngineTask {
 
     public ClientTask(Config config,
                       ConnectionService connectionService,
-                      ClientRemoteEventQueue eventQueue,
                       SerializedSceneHolder sceneHolder,
                       ComponentRegistry componentRegistry,
-                      StateChangeHandler stateChangeHandler) {
+                      MessageQueue messageQueue,
+                      MessageSourcesService messageSourcesService,
+                      InternalMessageQueue internalMessageQueue,
+                      MessageProcessorsService messageProcessorsService) {
         this.config = config;
         this.connectionService = connectionService;
-        this.eventQueue = eventQueue;
+        this.messageQueue = messageQueue;
         this.sceneHolder = sceneHolder;
         this.componentRegistry = componentRegistry;
-        this.stateChangeHandler = stateChangeHandler;
+        this.messageSourcesService = messageSourcesService;
+        this.internalMessageQueue = internalMessageQueue;
+        this.messageProcessorsService = messageProcessorsService;
     }
 
     @Override
@@ -64,16 +73,19 @@ public class ClientTask extends EngineTask {
                 config.getValue("multiplayer.ip"),
                 Integer.parseInt(System.getProperty("port", "" + config.getValue("multiplayer.port"))));
         setupConnection();
-        connectionService.connect(address);
-        eventQueue.setConnectionService(connectionService);
-
+        connectionService.connect(address, messageProcessorsService);
     }
 
     private void setupConnection() {
         try {
             Bootstrap b = new Bootstrap();
             ServerConnectionHandler connectionHandler = new ServerConnectionHandler(
-                    new IncomingPacketProcessor(connectionService, sceneHolder, componentRegistry, eventQueue, stateChangeHandler));
+                    new IncomingPacketProcessor(
+                            connectionService,
+                            sceneHolder,
+                            componentRegistry,
+                            messageQueue,
+                            internalMessageQueue));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -96,12 +108,11 @@ public class ClientTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        eventQueue.update();
-        switch (connectionService.getConnectionState()) {
+        messageSourcesService.update();
+        messageQueue.update();
+        switch (connectionService.getServer().getConnectionState()) {
             case SYNCHRONIZING:
                 syncClock(delta);
-            case LOADING://TODO: implement
-                break;
             case LIVE:
                 keepAlive(delta);
                 break;
@@ -116,7 +127,7 @@ public class ClientTask extends EngineTask {
             ByteBuf packet = connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_REQUEST, 4);
             int randomInt = (int) (Math.random() * Integer.MAX_VALUE);
             packet.writeInt(randomInt);
-            connectionService.getClockSynchronizer().startRequest(randomInt, System.currentTimeMillis());
+            connectionService.getServer().getClockSynchronizer().startRequest(randomInt, System.currentTimeMillis());
             connectionService.sendPacket(packet);
             clockCounter = CLOCK_SYNC_INTERVAL;
         }
@@ -126,7 +137,7 @@ public class ClientTask extends EngineTask {
         counter -= delta;
         if (counter < 0) {
             counter = KEEP_ALIVE_INTERVAL;
-            connectionService.sendKeepAlive();
+            connectionService.sendKeepAlivePacket();
         }
     }
 }

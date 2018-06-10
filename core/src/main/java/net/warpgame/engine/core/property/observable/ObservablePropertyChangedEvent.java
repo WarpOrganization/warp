@@ -8,13 +8,10 @@ import net.warpgame.engine.core.event.Event;
  */
 public class ObservablePropertyChangedEvent<T> extends Event {
 
-    public static final String OBSERVABLE_PROPERTY_CHANGED_EVENT_NAME = "ObservablePropertyChangedEvent";
-
     private ObservableProperty property;
     private ObservableValue<T> changedValue;
 
     public ObservablePropertyChangedEvent(ObservableProperty property, ObservableValue<T> changedValue) {
-        super(OBSERVABLE_PROPERTY_CHANGED_EVENT_NAME);
         this.property = property;
         this.changedValue = changedValue;
     }

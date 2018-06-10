@@ -7,11 +7,9 @@ import net.warpgame.engine.core.property.Property;
  * Created 2017-09-26 at 15
  */
 public class TessellationModeProperty extends Property {
-    public static final String NAME = "tessellationMode";
     private SceneTessellationMode tessellationMode;
 
     public TessellationModeProperty(SceneTessellationMode tessellationMode) {
-        super(NAME);
         this.tessellationMode = tessellationMode;
     }
 

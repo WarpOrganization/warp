@@ -5,10 +5,10 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.InternalMessageEnvelope;
-import net.warpgame.engine.net.event.StateChangeHandler;
-import net.warpgame.engine.net.event.StateChangeRequestMessage;
-import net.warpgame.engine.net.event.receiver.EventReceiver;
+import net.warpgame.engine.net.internalmessage.InternalMessage;
+import net.warpgame.engine.net.internalmessage.InternalMessageContent;
+import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.MessageQueue;
 
 import static net.warpgame.engine.net.PacketType.*;
 
@@ -21,18 +21,20 @@ public class IncomingPacketProcessor {
 
     private ConnectionService connectionService;
     private SerializedSceneHolder sceneHolder;
-    private EventReceiver eventReceiver;
-    private ClientRemoteEventQueue eventQueue;
+    private MessageQueue messageQueue;
+    private ComponentRegistry componentRegistry;
+    private InternalMessageQueue internalMessageQueue;
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
                                    ComponentRegistry componentRegistry,
-                                   ClientRemoteEventQueue eventQueue,
-                                   StateChangeHandler stateChangeHandler) {
+                                   MessageQueue messageQueue,
+                                   InternalMessageQueue internalMessageQueue) {
         this.connectionService = connectionService;
         this.sceneHolder = sceneHolder;
-        this.eventReceiver = new EventReceiver(componentRegistry, stateChangeHandler);
-        this.eventQueue = eventQueue;
+        this.messageQueue = messageQueue;
+        this.componentRegistry = componentRegistry;
+        this.internalMessageQueue = internalMessageQueue;
     }
 
     public void processPacket(ByteBuf packet) {
@@ -47,14 +49,11 @@ public class IncomingPacketProcessor {
                 break;
             case PACKET_SCENE_STATE:
                 processSceneStatePacket(timestamp, packet);
-            case PACKET_EVENT:
-                processEventPacket(timestamp, packet);
+            case PACKET_MESSAGE:
+                processMessagePacket(timestamp, packet);
                 break;
-            case PACKET_INTERNAL_MESSAGE:
-                processInternalMessagePacket(timestamp, packet);
-                break;
-            case PACKET_EVENT_CONFIRMATION:
-                processEventConfirmationPacket(timestamp, packet);
+            case PACKET_MESSAGE_CONFIRMATION:
+                processMessageConfirmationPacket(timestamp, packet);
                 break;
             case PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
                 processClockSynchronizationResponsePacket(timestamp, packet);
@@ -65,10 +64,8 @@ public class IncomingPacketProcessor {
     private void processConnectedPacket(long timestamp, ByteBuf packetData) {
         int clientId = packetData.readInt();
         connectionService.setClientCredentials(clientId, 0);
-        connectionService.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
-        eventQueue.pushEvent(
-                new InternalMessageEnvelope(
-                        new StateChangeRequestMessage(ConnectionState.SYNCHRONIZING, connectionService.getClientId())));
+        connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
+        internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, 0));
     }
 
     private void processConnectionRefusedPacket(long timestamp, ByteBuf packetData) {
@@ -79,38 +76,32 @@ public class IncomingPacketProcessor {
         sceneHolder.offerScene(timestamp, packetData);
     }
 
-    private void processEventPacket(long timestamp, ByteBuf packetData) {
-        int eventType = packetData.readInt();
+    private void processMessagePacket(long timestamp, ByteBuf packetData) {
+        int messageType = packetData.readInt();
         int dependencyId = packetData.readInt();
-        int targetComponentId = packetData.readInt();
-        eventReceiver.addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
-        connectionService.confirmEvent(dependencyId);
+        connectionService
+                .getServer()
+                .getIncomingMessageQueue()
+                .addMessage(connectionService.getServer(), messageType, dependencyId, packetData);
+        connectionService.sendMessageConfirmationPacket(dependencyId);
     }
 
-    private void processInternalMessagePacket(long timestamp, ByteBuf packetData) {
-        int dependencyId = packetData.readInt();
-        eventReceiver.addInternalMessage(packetData, dependencyId, timestamp);
-        connectionService.confirmEvent(dependencyId);
-    }
-
-    private void processEventConfirmationPacket(long timestamp, ByteBuf packetData) {
-        int eventId = packetData.readInt();
-        eventQueue.confirmEvent(eventId);
+    private void processMessageConfirmationPacket(long timestamp, ByteBuf packetData) {
+        int messageDependencyId = packetData.readInt();
+        connectionService.getServer().confirmMessage(messageDependencyId);
     }
 
     private void processClockSynchronizationResponsePacket(long timestamp, ByteBuf packetData) {
         int requestId = packetData.readInt();
-        connectionService.getClockSynchronizer().synchronize(timestamp, requestId);
+        connectionService.getServer().getClockSynchronizer().synchronize(timestamp, requestId);
 
         ByteBuf responsePacket = connectionService.getHeader(PacketType.PACKET_CLOCK_SYNCHRONIZATION_RESPONSE, 4);
         responsePacket.writeInt(requestId);
         connectionService.sendPacket(responsePacket);
 
-        if (connectionService.getClockSynchronizer().getFinishedSynchronizations() >= 3) {
-            connectionService.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LOADING);
-            eventQueue.pushEvent(
-                    new InternalMessageEnvelope(
-                            new StateChangeRequestMessage(ConnectionState.LOADING, connectionService.getClientId())));
+        if (connectionService.getServer().getClockSynchronizer().getFinishedSynchronizations() >= 3) {
+            connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
+            internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, 0));
         }
     }
 }

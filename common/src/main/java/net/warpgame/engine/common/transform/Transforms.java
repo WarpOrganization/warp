@@ -1,5 +1,6 @@
 package net.warpgame.engine.common.transform;
 
+import net.warpgame.engine.core.property.Property;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -18,21 +19,21 @@ public class Transforms {
     public synchronized static Matrix4f getImmediateTransform(Component component, Matrix4f dest) {
         Component firstUndirty = loadDirtyAndFetchTop(component); //see loadDirtyAndFetchCachedTop comment
         if (stack.isEmpty()) {
-            TransformProperty transformProperty = component.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty = component.getProperty(Property.getTypeId(TransformProperty.class));
             return dest.set(transformProperty.getCachedNonrelativeTransform());
         }
         if (firstUndirty == null) {
             dest.identity();
-        } else if (!firstUndirty.hasProperty(TransformProperty.NAME)) {
+        } else if (!firstUndirty.hasProperty(Property.getTypeId(TransformProperty.class))) {
             dest.identity();
         } else {
-            TransformProperty transformProperty = firstUndirty.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty = firstUndirty.getProperty(Property.getTypeId(TransformProperty.class));
             dest.set(transformProperty.getCachedNonrelativeTransform());
         }
 
         Component dirty;
         while ((dirty = stack.poll()) != null) {
-            TransformProperty transformProperty = dirty.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty = dirty.getProperty(Property.getTypeId(TransformProperty.class));
             applyTransform(dest, transformProperty);
 
         }
@@ -42,22 +43,22 @@ public class Transforms {
     public synchronized static Quaternionf getAbsoluteRotation(Component component, Quaternionf dest) {
         Component firstUndirty = loadDirtyAndFetchTop(component);
         if (stack.isEmpty()) {
-            TransformProperty transformProperty = component.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty = component.getProperty(Property.getTypeId(TransformProperty.class));
             return dest.set(transformProperty.getRotation());
         }
         if (firstUndirty == null) {
             dest.identity();
-        } else if (!firstUndirty.hasProperty(TransformProperty.NAME)) {
+        } else if (!firstUndirty.hasProperty(Property.getTypeId(TransformProperty.class))) {
             dest.identity();
         } else {
-            TransformProperty transformProperty = firstUndirty.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty = firstUndirty.getProperty(Property.getTypeId(TransformProperty.class));
             dest.set(transformProperty.getRotation());
 
         }
 
         Component dirty;
         while ((dirty = stack.poll()) != null) {
-            TransformProperty transformProperty = dirty.getProperty(TransformProperty.NAME);
+            TransformProperty transformProperty = dirty.getProperty(Property.getTypeId(TransformProperty.class));
             dest.mul(transformProperty.getRotation());
         }
 
@@ -77,7 +78,7 @@ public class Transforms {
         stack.clear();
         int lastDirty = 0;
         int iteration = 0;
-        for (Component comp = component; comp != null && comp.hasProperty(TransformProperty.NAME); comp = comp.getParent()) {
+        for (Component comp = component; comp != null && comp.hasProperty(Property.getTypeId(TransformProperty.class)); comp = comp.getParent()) {
             iteration++;
             if (isDirty(comp)) lastDirty = iteration;
             stack.push(comp);
@@ -94,7 +95,7 @@ public class Transforms {
     }
 
     private static boolean isDirty(Component comp) {
-        return comp.<TransformProperty>getProperty(TransformProperty.NAME).isDirty();
+        return comp.<TransformProperty>getProperty(Property.getTypeId(TransformProperty.class)).isDirty();
     }
 
     private static void applyTransform(Matrix4f matrix, TransformProperty transform) {

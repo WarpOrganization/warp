@@ -9,12 +9,10 @@ import net.warpgame.engine.server.RemoteInput;
  */
 public class RemoteInputProperty extends Property {
 
-    public static final String NAME = "remoteInput";
-
     private RemoteInput remoteInput = new RemoteInput();
 
     public RemoteInputProperty() {
-        super(NAME);
+
     }
 
     public RemoteInput getRemoteInput() {

@@ -12,8 +12,6 @@ import net.warpgame.engine.core.property.Property;
  */
 public class TransformProperty extends Property {
 
-    public static final String NAME = "transform";
-
     private Vector3f translation = new Vector3f();
     private Quaternionf rotation = new Quaternionf();
     private Vector3f scale = new Vector3f().set(1);
@@ -22,15 +20,13 @@ public class TransformProperty extends Property {
     private Matrix4f transformCache = new Matrix4f();
     private Matrix3f rotationCache = new Matrix3f();
 
-    public TransformProperty() {
-        super(NAME);
-    }
-
     protected TransformProperty(Vector3f translation, Quaternionf rotation, Vector3f scale) {
-        super(NAME);
         this.translation = translation;
         this.rotation = rotation;
         this.scale = scale;
+    }
+
+    public TransformProperty() {
     }
 
     public synchronized Vector3f getScale() {

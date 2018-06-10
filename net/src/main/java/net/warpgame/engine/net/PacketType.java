@@ -28,19 +28,14 @@ public class PacketType {
     public static final int PACKET_SCENE_STATE = 5;
     /**
      * Body:
-     * (int) eventType, (int) eventDependencyId, (int) targetComponentId, (byte[]) serializedEventData
+     * (int) messageType, (int) eventDependencyId, (byte[]) serializedMessageData
      */
-    public static final int PACKET_EVENT = 6;
-    /**
-     * Body:
-     * (int) eventDependencyId, (byte[]) serializedMessageData
-     */
-    public static final int PACKET_INTERNAL_MESSAGE = 7;
+    public static final int PACKET_MESSAGE = 6;
     /**
      * Body:
      * (int) eventDependencyId
      */
-    public static final int PACKET_EVENT_CONFIRMATION = 8;
+    public static final int PACKET_MESSAGE_CONFIRMATION = 8;
     /**
      * Body:
      * (int) requestId

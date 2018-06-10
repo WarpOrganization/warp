@@ -5,9 +5,9 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.event.StateChangeRequestMessage;
-import net.warpgame.engine.net.event.sender.RemoteEventQueue;
-import net.warpgame.engine.server.envelope.ServerInternalMessageEnvelope;
+import net.warpgame.engine.net.internalmessage.InternalMessage;
+import net.warpgame.engine.net.internalmessage.InternalMessageContent;
+import net.warpgame.engine.net.message.InternalMessageQueue;
 
 import static net.warpgame.engine.net.PacketType.*;
 
@@ -20,14 +20,14 @@ public class IncomingPacketProcessor {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private RemoteEventQueue eventQueue;
+    private InternalMessageQueue internalMessageQueue;
 
     public IncomingPacketProcessor(ClientRegistry clientRegistry,
                                    ConnectionUtil connectionUtil,
-                                   RemoteEventQueue eventQueue) {
+                                   InternalMessageQueue internalMessageQueue) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.eventQueue = eventQueue;
+        this.internalMessageQueue = internalMessageQueue;
     }
 
     void processPacket(int packetType, long timestamp, ByteBuf packet) {
@@ -36,13 +36,10 @@ public class IncomingPacketProcessor {
             case PACKET_KEEP_ALIVE:
                 processKeepAlivePacket(timestamp, clientId, packet);
                 break;
-            case PACKET_EVENT:
-                processEventPacket(timestamp, clientId, packet);
+            case PACKET_MESSAGE:
+                processMessagePacket(timestamp, clientId, packet);
                 break;
-            case PACKET_INTERNAL_MESSAGE:
-                processInternalMessagePacket(timestamp, clientId, packet);
-                break;
-            case PACKET_EVENT_CONFIRMATION:
+            case PACKET_MESSAGE_CONFIRMATION:
                 processEventConfirmationPacket(timestamp, clientId, packet);
                 break;
             case PACKET_CLOCK_SYNCHRONIZATION_REQUEST:
@@ -58,23 +55,13 @@ public class IncomingPacketProcessor {
         clientRegistry.updateKeepAlive(clientId);
     }
 
-    private void processEventPacket(long timestamp, int clientId, ByteBuf packetData) {
+    private void processMessagePacket(long timestamp, int clientId, ByteBuf packetData) {
         Client client = clientRegistry.getClient(clientId);
         if (client != null) {
-            int eventType = packetData.readInt();
+            int messageType = packetData.readInt();
             int dependencyId = packetData.readInt();
-            int targetComponentId = packetData.readInt();
-            client.getEventReceiver().addEvent(packetData, targetComponentId, eventType, dependencyId, timestamp);
-            connectionUtil.confirmEvent(dependencyId, client);
-        }
-    }
 
-    private void processInternalMessagePacket(long timestamp, int clientId, ByteBuf packetData) {
-        Client client = clientRegistry.getClient(clientId);
-
-        if (client != null) {
-            int dependencyId = packetData.readInt();
-            client.getEventReceiver().addInternalMessage(packetData, dependencyId, timestamp);
+            client.getIncomingMessageQueue().addMessage(client, messageType, dependencyId, packetData);
             connectionUtil.confirmEvent(dependencyId, client);
         }
     }
@@ -82,7 +69,7 @@ public class IncomingPacketProcessor {
     private void processEventConfirmationPacket(long timestamp, int clientId, ByteBuf packetData) {
         int eventDependencyId = packetData.readInt();
         Client c = clientRegistry.getClient(clientId);
-        c.confirmEvent(eventDependencyId);
+        c.confirmMessage(eventDependencyId);
     }
 
     private void processClockSynchronizationRequestPacket(long timestamp, int clientId, ByteBuf packetData) {
@@ -104,10 +91,10 @@ public class IncomingPacketProcessor {
         if (client != null) {
             ClockSynchronizer synchronizer = client.getClockSynchronizer();
             synchronizer.synchronize(timestamp, requestId);
+
             if (synchronizer.getFinishedSynchronizations() >= 3) {
-                eventQueue.pushEvent(
-                        new ServerInternalMessageEnvelope(new StateChangeRequestMessage(ConnectionState.LOADING), client));
-                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LOADING);
+                internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, clientId));
+                client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             }
         }
     }

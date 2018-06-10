@@ -5,6 +5,7 @@ import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.graphics.camera.Camera;
 import net.warpgame.engine.graphics.camera.CameraHolder;
@@ -26,7 +27,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
                                 CameraHolder cameraHolder,
                                 Display display,
                                 ComponentRegistry componentRegistry) {
-        super(owner, "boardShipEvent");
+        super(owner, Event.getTypeId(BoardShipEvent.class));
         this.cameraHolder = cameraHolder;
         projection = new PerspectiveMatrix(
                 55f,
@@ -44,7 +45,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
         Component cameraComponent = new SceneComponent(cameraOwner, 1000000001);
         TransformProperty transformProperty = new TransformProperty();
         transformProperty.move(new Vector3f(20, 5, 0));
-        transformProperty.rotateY((float) (Math.PI/2));
+        transformProperty.rotateY((float) (Math.PI / 2));
         cameraComponent.addProperty(transformProperty);
         Camera camera = new QuaternionCamera(cameraComponent, projection);
         cameraHolder.setCamera(camera);

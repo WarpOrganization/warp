@@ -1,39 +1,52 @@
 package net.warpgame.engine.physics;
 
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
-import com.badlogic.gdx.utils.Disposable;
 import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.physics.shapeconstructors.RigidBodyShapeConstructor;
 
 /**
  * @author Hubertus
  * Created 23.09.2017
  */
-public class RigidBodyConstructor implements Disposable {
+public class RigidBodyConstructor {
+    private RigidBodyShapeConstructor rigidBodyShapeConstructor;
+    private float mass;
 
-    private final btCollisionShape shape;
-    private final btRigidBody.btRigidBodyConstructionInfo constructionInfo;
-    private static Vector3 localInertia = new Vector3();
-
-    public RigidBodyConstructor(btCollisionShape shape, float mass) {
-        this.shape = shape;
-        if (mass > 0f)
-            shape.calculateLocalInertia(mass, localInertia);
-        else
-            localInertia.set(0, 0, 0);
-        this.constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(mass, null, shape, localInertia);
+    public RigidBodyConstructor(RigidBodyShapeConstructor rigidBodyShapeConstructor, float mass) {
+        this.rigidBodyShapeConstructor = rigidBodyShapeConstructor;
+        this.mass = mass;
     }
 
-    public btRigidBody construct(TransformProperty transformProperty) {
-        btRigidBody body = new btRigidBody(constructionInfo);
-        body.setMotionState(new PhysicsMotionState(transformProperty));
-        return body;
+    /**
+     * @param transformProperty - rigid body owner's transform property
+     * @return RigidBody ready to be used in FullPhysicsProperty() constructor
+     */
+    public RigidBody construct(TransformProperty transformProperty) {
+        if (!rigidBodyShapeConstructor.isConstructed()) rigidBodyShapeConstructor.construct();
+
+        PhysicsMotionState motionState = new PhysicsMotionState(transformProperty);
+        btRigidBody bulletRigidBody = new btRigidBody(
+                mass,
+                motionState,
+                rigidBodyShapeConstructor.getShape(),
+                rigidBodyShapeConstructor.calculateInertia(mass));
+
+        return new RigidBody(bulletRigidBody, motionState);
     }
 
-    @Override
-    public void dispose() {
-        shape.dispose();
-        constructionInfo.dispose();
+    public RigidBodyShapeConstructor getRigidBodyShapeConstructor() {
+        return rigidBodyShapeConstructor;
+    }
+
+    public void setRigidBodyShapeConstructor(RigidBodyShapeConstructor rigidBodyShapeConstructor) {
+        this.rigidBodyShapeConstructor = rigidBodyShapeConstructor;
+    }
+
+    public float getMass() {
+        return mass;
+    }
+
+    public void setMass(float mass) {
+        this.mass = mass;
     }
 }

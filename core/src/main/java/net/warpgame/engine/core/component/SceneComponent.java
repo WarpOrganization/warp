@@ -19,11 +19,11 @@ public class SceneComponent implements Component {
 
     private Component parent;
     private EngineContext context;
-    private final Map<String, Property> properties = new HashMap<>();
+    private final Map<Integer, Property> properties = new HashMap<>();
     private final List<Component> children = new LinkedList<>();
     //not using Guava Multimap in order to avoid creating not needed wrappers
     //Anyway, it's still not the best choice
-    private final Map<String, Set<Listener<?>>> listeners = new HashMap<>();
+    private final Map<Integer, Set<Listener<?>>> listeners = new HashMap<>();
     private boolean alive = true;
     private int id;
 
@@ -58,7 +58,7 @@ public class SceneComponent implements Component {
      * @throws PropertyNotPresentException
      */
     @Override
-    public <T extends Property> T getProperty(String typeId) {
+    public <T extends Property> T getProperty(int typeId) {
         if (!hasProperty(typeId))
             throw new PropertyNotPresentException(typeId);
         else return (T) properties.get(typeId);
@@ -66,18 +66,18 @@ public class SceneComponent implements Component {
 
 
     @Override
-    public boolean hasProperty(String id) {
-        return properties.containsKey(id);
+    public boolean hasProperty(int typeId) {
+        return properties.containsKey(typeId);
     }
 
     @Override
-    public <T extends Property> T getPropertyOrNull(String id) {
-        return (T) properties.get(id);
+    public <T extends Property> T getPropertyOrNull(int typeId) {
+        return (T) properties.get(typeId);
     }
 
     @Override
-    public boolean hasEnabledProperty(String id) {
-        return hasProperty(id) && getProperty(id).isEnabled();
+    public boolean hasEnabledProperty(int typeId) {
+        return hasProperty(typeId) && getProperty(typeId).isEnabled();
     }
 
     /**
@@ -89,8 +89,8 @@ public class SceneComponent implements Component {
     }
 
     @Override
-    public  Set<Listener<?>> getListeners(String eventName) {
-        return listeners.getOrDefault(eventName, Collections.emptySet());
+    public  Set<Listener<?>> getListeners(int eventType) {
+        return listeners.getOrDefault(eventType, Collections.emptySet());
     }
 
     /**
@@ -199,21 +199,21 @@ public class SceneComponent implements Component {
 
     @Override
     public void addProperty(Property property) {
-        this.properties.put(property.getName(), property);
+        this.properties.put(property.getType(), property);
         property.setOwner(this);
     }
 
     @Override
     public void removeProperty(Property property) {
-        this.properties.remove(property.getName());
+        this.properties.remove(property.getType());
     }
 
     @Override
     public void addListener(Listener<?> listener) {
         synchronized (listeners) {
-            if(!this.listeners.containsKey(listener.getEventName()))
-                this.listeners.put(listener.getEventName(), new HashSet<>());
-            this.listeners.get(listener.getEventName())
+            if(!this.listeners.containsKey(listener.getEventType()))
+                this.listeners.put(listener.getEventType(), new HashSet<>());
+            this.listeners.get(listener.getEventType())
                     .add(listener);
         }
     }
@@ -221,9 +221,9 @@ public class SceneComponent implements Component {
     @Override
     public void removeListener(Listener<?> listener) {
         synchronized (listeners) {
-            if(!this.listeners.containsKey(listener.getEventName()))
+            if(!this.listeners.containsKey(listener.getEventType()))
                 throw new NoSuchElementException("Unable to remove nonexistent listener");
-            this.listeners.get(listener.getEventName()).remove(listener);
+            this.listeners.get(listener.getEventType()).remove(listener);
         }
     }
 

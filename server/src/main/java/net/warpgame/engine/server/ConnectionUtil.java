@@ -42,7 +42,7 @@ public class ConnectionUtil {
     }
 
     public void confirmEvent(int dependencyId, Client client) {
-        ByteBuf packet = getHeader(PacketType.PACKET_EVENT_CONFIRMATION, 4);
+        ByteBuf packet = getHeader(PacketType.PACKET_MESSAGE_CONFIRMATION, 4);
         packet.writeInt(dependencyId);
         sendPacket(packet, client.getAddress());
     }

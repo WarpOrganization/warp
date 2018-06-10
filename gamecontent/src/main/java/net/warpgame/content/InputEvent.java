@@ -1,6 +1,7 @@
 package net.warpgame.content;
 
-import net.warpgame.engine.core.event.Event;
+
+import net.warpgame.engine.net.event.NetworkEvent;
 
 import java.io.Serializable;
 
@@ -8,12 +9,11 @@ import java.io.Serializable;
  * @author Hubertus
  * Created 30.12.2017
  */
-public class InputEvent extends Event implements Serializable {
+public class InputEvent extends NetworkEvent implements Serializable {
     private int input;
     private boolean pressed;
 
     public InputEvent(int input, boolean pressed) {
-        super("inputEvent");
         this.input = input;
         this.pressed = pressed;
     }

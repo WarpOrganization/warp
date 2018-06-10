@@ -7,12 +7,9 @@ import net.warpgame.engine.core.property.Property;
  * Created 2017-12-28 at 19
  */
 public class BoundingBoxProperty extends Property {
-    public static final String NAME = "boundingBoxProperty";
-
     private BoundingBox boundingBox;
 
     public BoundingBoxProperty(BoundingBox boundingBox) {
-        super(NAME);
         this.boundingBox = boundingBox;
     }
 

@@ -20,7 +20,6 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':context')
 
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.2'
 

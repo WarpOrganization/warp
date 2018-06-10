@@ -32,7 +32,7 @@ public class ScreenFramebuffer extends Framebuffer {
     }
 
     @Override
-    public void clean() {
+    public void clear() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
@@ -40,7 +40,6 @@ public class ScreenFramebuffer extends Framebuffer {
     public boolean isComplete() {
         return true;
     }
-
 
     @ConfigValue("graphics.display")
     public void onDisplayChanged(Display newDisplay) {

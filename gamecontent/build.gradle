@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compile project(':core')
+    compile project(':net')
 
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.joml:joml:1.8.0'

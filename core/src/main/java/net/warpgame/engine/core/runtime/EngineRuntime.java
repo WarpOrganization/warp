@@ -2,6 +2,7 @@ package net.warpgame.engine.core.runtime;
 
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.runtime.idannotation.IdAnnotationProcessor;
 import net.warpgame.engine.core.runtime.idcall.IdCallProcessor;
 import net.warpgame.engine.core.runtime.idmethodgen.IdCodeGeneratorProcessor;
 import net.warpgame.engine.core.runtime.preprocessing.EngineRuntimePreprocessor;
@@ -27,7 +28,8 @@ public class EngineRuntime {
         IdCodeGeneratorProcessor propertyIdGenerator = new IdCodeGeneratorProcessor(PROPERTY_CLASS_NAME, PREPROCESSOR);
         IdCodeGeneratorProcessor eventIdGenerator = new IdCodeGeneratorProcessor(EVENT_CLASS_NAME, PREPROCESSOR);
         IdCallProcessor idCallProcessor = new IdCallProcessor(preprocessedTypes, PREPROCESSOR);
-        return new ComposedProcessor(propertyIdGenerator, eventIdGenerator, idCallProcessor);
+        IdAnnotationProcessor idAnnotationProcessor = new IdAnnotationProcessor(PREPROCESSOR);
+        return new ComposedProcessor<>(propertyIdGenerator, eventIdGenerator, idCallProcessor, idAnnotationProcessor);
     }
 
     public void load() {

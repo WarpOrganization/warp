@@ -1,7 +1,8 @@
 package net.warpgame.engine.ai;
 
-import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.core.property.Property;
 
 /**
  * @author Hubertus
@@ -9,11 +10,11 @@ import net.warpgame.engine.core.component.Component;
  */
 public class AITask extends EngineTask {
 
-    private AIManager manager;
+    private AIService manager;
     private Component scene;
 
 
-    public AITask(AIManager manager, Component scene) {
+    public AITask(AIService manager, Component scene) {
         this.manager = manager;
         this.scene = scene;
     }
@@ -40,6 +41,6 @@ public class AITask extends EngineTask {
     }
 
     private boolean hasAi(Component c) {
-        return c.hasEnabledProperty(AIProperty.NAME);
+        return c.hasEnabledProperty(Property.getTypeId(AIProperty.class));
     }
 }

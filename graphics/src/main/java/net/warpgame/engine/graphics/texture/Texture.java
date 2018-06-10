@@ -4,9 +4,6 @@ import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-import java.nio.ByteBuffer;
-
-import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
@@ -20,14 +17,12 @@ public abstract class Texture {
             internalformat,
             format;
 
-    protected boolean mipmap;
 
-    public Texture(int type, int texture, int internalformat, int format, boolean mipmap) {
+    public Texture(int type, int texture, int internalformat, int format) {
         this.type = type;
         this.texture = texture;
         this.internalformat = internalformat;
         this.format = format;
-        this.mipmap = mipmap;
     }
 
     public void enableAnisotropy(int level) {
@@ -83,7 +78,4 @@ public abstract class Texture {
         return format;
     }
 
-    public boolean isMipmap() {
-        return mipmap;
-    }
 }
