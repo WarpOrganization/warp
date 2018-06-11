@@ -46,7 +46,7 @@ public class RenderingTask extends EngineTask {
         logger.info("OpenGL capabilities created.");
         sceneRenderer.init();
         screenspaceRenderer.init();
-//        smaaRenderer.initialize();
+        smaaRenderer.initialize();
         //pipeline initialization...
         logger.info("Initialized pipeline.");
     }
@@ -63,7 +63,7 @@ public class RenderingTask extends EngineTask {
     protected void onClose() {
         sceneRenderer.destroy();
         screenspaceRenderer.destroy();
-//        smaaRenderer.destroy();
+        smaaRenderer.destroy();
         //destroy pipeline
     }
 
@@ -71,7 +71,7 @@ public class RenderingTask extends EngineTask {
     public void update(int delta) {
         sceneRenderer.update();
         screenspaceRenderer.update();
-//        smaaRenderer.update();
+        smaaRenderer.update();
         GLErrors.checkOGLErrors();
     }
 
