@@ -119,6 +119,7 @@ public class Test1 {
     }
 
     private static void registerCommandsAndVariables(Context context) {
+        consoleService.initConsole();
         SimpleCommand exit = new SimpleCommand("quit",
                 Side.CLIENT,
                 "Stops the engine and quits",

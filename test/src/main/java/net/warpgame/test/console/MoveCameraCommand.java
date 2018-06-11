@@ -12,10 +12,12 @@ import org.joml.Vector3f;
 public class MoveCameraCommand extends Command {
 
     private CameraHolder cameraHolder; //TODO make output available
+    private ConsoleService consoleService;
 
     public MoveCameraCommand(CameraHolder holder, ConsoleService consoleService) {
         super("move", Side.CLIENT, "Moves camera", "move [x] [y] [z]");
         this.cameraHolder = holder;
+        this.consoleService = consoleService;
 
         consoleService.registerVariable(new CommandVariable("camera", holder));
     }
@@ -25,7 +27,7 @@ public class MoveCameraCommand extends Command {
             ((TransformProperty)cameraHolder.getCamera().getCameraComponent().getProperty(Property.getTypeId(TransformProperty.class)))
                     .move(new Vector3f(Float.valueOf(args[0]), Float.valueOf(args[1]), Float.valueOf(args[2])));
         } else {
-            //TODO output getUsageText()
+            consoleService.printToConsole(getUsageText());
         }
     }
 
