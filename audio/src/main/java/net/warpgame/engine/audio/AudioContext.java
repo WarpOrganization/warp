@@ -2,13 +2,10 @@ package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.Command;
 import net.warpgame.engine.core.context.service.Service;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Hubertus
@@ -27,14 +24,13 @@ public class AudioContext {
     private List<AudioClip> allBuffers;
     private BlockingQueue<Integer> freeBuffers;
 
-    private SoundBank soundBank;
-
     public AudioContext() {
-        this.playingSources = new ArrayList<>();
         this.commandsQueue = new ArrayBlockingQueue<>(10000);
+        this.allSources = Collections.synchronizedList(new LinkedList<>());
+        this.playingSources = new ArrayList<>();
         this.freeSources = new ArrayBlockingQueue<>(100);
+        this.allBuffers = Collections.synchronizedList(new LinkedList<>());
         this.freeBuffers = new ArrayBlockingQueue<>(100);
-        this.soundBank = new SoundBank(this);
     }
 
     public List<AudioSourceProperty> getPlayingSources() {
@@ -47,10 +43,6 @@ public class AudioContext {
 
     void setListener(AudioListenerProperty listener) {
         this.listener = listener;
-    }
-
-    public SoundBank getSoundBank() {
-        return soundBank;
     }
 
     void putCommand(Command cmd) {
@@ -69,15 +61,23 @@ public class AudioContext {
         return freeBuffers.take();
     }
 
-    public BlockingQueue<Integer> getFreeSources() {
+    BlockingQueue<Integer> getFreeSources() {
         return freeSources;
     }
 
-    public BlockingQueue<Integer> getFreeBuffers() {
+    BlockingQueue<Integer> getFreeBuffers() {
         return freeBuffers;
     }
 
     BlockingQueue<Command> getCommandsQueue() {
         return commandsQueue;
+    }
+
+    List<AudioSourceProperty> getAllSources() {
+        return allSources;
+    }
+
+    List<AudioClip> getAllBuffers() {
+        return allBuffers;
     }
 }

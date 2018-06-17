@@ -1,5 +1,7 @@
 package net.warpgame.engine.audio;
 
+
+import com.sun.istack.internal.NotNull;
 import jdk.nashorn.internal.objects.annotations.Function;
 import net.warpgame.engine.audio.command.FillBufferWithData;
 import net.warpgame.engine.audio.decoder.SoundData;
@@ -17,12 +19,13 @@ public class AudioClip {
         this.file = file;
     }
 
-    void init(AudioContext context){
+    void init(@NotNull AudioContext context){
         if(id == -1) {
             try {
                 SoundData data = SoundDecoderManager.decode(file);
                 id = context.getBuffer();
-                context.putCommand(new FillBufferWithData(id, data));
+                context.getAllBuffers().add(this);
+                context.putCommand(new FillBufferWithData(this, data));
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -33,10 +36,6 @@ public class AudioClip {
         return FilenameUtils.getBaseName(file);
     }
 
-    public String getPath(){
-        return FilenameUtils.getPath(file);
-    }
-
     public String getFile(){
         return file;
     }
@@ -45,7 +44,4 @@ public class AudioClip {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

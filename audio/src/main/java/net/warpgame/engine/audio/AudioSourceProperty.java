@@ -1,6 +1,5 @@
 package net.warpgame.engine.audio;
 
-import net.warpgame.engine.audio.command.CreateSourceCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
 import net.warpgame.engine.core.property.Property;
 
@@ -22,7 +21,7 @@ public class AudioSourceProperty extends Property {
     public void play() {
         audioContext.putCommand(new PlayCommand(this, audioClip));
         audioContext.getPlayingSources().add(this);
-        isPlaying = true;
+        setPlaying(true);
     }
 
     public void stop() {
@@ -37,15 +36,16 @@ public class AudioSourceProperty extends Property {
     public void enable() {
         super.enable();
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
-        audioContext.putCommand(new CreateSourceCommand(this));
+        try {
+            id = audioContext.getSource();
+            audioContext.getAllSources().add(this);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public boolean isRelative() {
@@ -56,7 +56,7 @@ public class AudioSourceProperty extends Property {
         return isPlaying;
     }
 
-    public void setPlaying(boolean playing) {
+    void setPlaying(boolean playing) {
         isPlaying = playing;
     }
 

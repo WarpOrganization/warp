@@ -46,11 +46,6 @@ public class AudioCommandsTask extends EngineTask {
 
         //TODO FREE SOURCES
 
-        Map<String, Integer> soundBank = context.getSoundBank().sounds;
-        IntBuffer buffers = BufferUtils.createIntBuffer(soundBank.size());
-        soundBank.forEach((x, y) -> buffers.put(y));
-        AL10.alDeleteBuffers(buffers);
-
         ALC10.alcDestroyContext(alcContext);
         ALC10.alcCloseDevice(device);
     }
