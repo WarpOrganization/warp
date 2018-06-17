@@ -2,6 +2,7 @@ package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.AttachBufferCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
+import net.warpgame.engine.audio.command.SetLoopingCommand;
 import net.warpgame.engine.core.property.Property;
 
 public class AudioSourceProperty extends Property {
@@ -9,7 +10,7 @@ public class AudioSourceProperty extends Property {
     private int id;
 
     private boolean isPlaying;
-
+    private boolean loop;
     private AudioClip audioClip;
 
     private AudioContext audioContext;
@@ -64,5 +65,14 @@ public class AudioSourceProperty extends Property {
         this.audioClip = audioClip;
         audioClip.init(audioContext);
         audioContext.putCommand(new AttachBufferCommand(this));
+    }
+
+    public boolean isLoop() {
+        return loop;
+    }
+
+    public void setLoop(boolean loop) {
+        this.loop = loop;
+        audioContext.putCommand(new SetLoopingCommand(this, loop));
     }
 }

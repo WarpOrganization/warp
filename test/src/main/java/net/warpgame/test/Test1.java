@@ -502,15 +502,9 @@ public class Test1 {
         cameraComponent.addProperty(new AudioListenerProperty());
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-        URL url = Test1.class.getResource("sound" + File.separator + "music" + File.separator + "szum.ogg");
-        String path = null;
-        try {
-            path = Paths.get(url.toURI()).toString();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        AudioClip audioClip = new AudioClip(path);
+        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "szum.ogg"));
         property.setAudioClip(audioClip);
+        property.setLoop(true);
         property.play();
         cameraComponent.addScript(SimpleControlScript.class);
 
@@ -526,6 +520,17 @@ public class Test1 {
         );
         Camera camera = new QuaternionCamera(cameraComponent, projection);
         cameraHolder.setCamera(camera);
+    }
+
+    private static String resourceToPath(String resource){
+        URL url = Test1.class.getResource(resource);
+        String path = null;
+        try {
+            path = Paths.get(url.toURI()).toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return path;
     }
 
     public static class ConstantRotationScript extends Script {
