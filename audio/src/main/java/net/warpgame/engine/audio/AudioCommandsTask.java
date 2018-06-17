@@ -9,6 +9,7 @@ import net.warpgame.engine.core.execution.task.EngineTask;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
@@ -43,8 +44,11 @@ public class AudioCommandsTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        context.getAllBuffers().stream().map(AudioClip::getId).forEach(AL10::alDeleteBuffers);
+        context.getFreeBuffers().forEach(AL10::alDeleteBuffers);
 
-        //TODO FREE SOURCES
+        context.getAllSources().stream().map(AudioSourceProperty::getId).forEach(AL10::alDeleteBuffers);
+        context.getFreeSources().forEach(AL10::alDeleteBuffers);
 
         ALC10.alcDestroyContext(alcContext);
         ALC10.alcCloseDevice(device);
