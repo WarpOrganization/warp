@@ -3,7 +3,6 @@ package net.warpgame.engine.audio;
 import net.warpgame.engine.audio.command.CreateSourceCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
 import net.warpgame.engine.core.property.Property;
-import org.apache.commons.io.FilenameUtils;
 
 public class AudioSourceProperty extends Property {
 
@@ -11,22 +10,18 @@ public class AudioSourceProperty extends Property {
     private boolean isRelative;
     private boolean isPlaying;
 
-
-    private String soundFilePath;
-    private String soundName;
+    private AudioClip audioClip;
 
     private AudioContext audioContext;
 
-    public AudioSourceProperty(String soundFilePath) {
-        this.soundFilePath = soundFilePath;
-        this.soundName = FilenameUtils.getBaseName(soundFilePath);
+    public AudioSourceProperty() {
         this.isRelative = false;
         this.isPlaying = false;
     }
 
     public void play() {
-        audioContext.putCommand(new PlayCommand(this, soundName));
-        audioContext.getPlaying().add(this);
+        audioContext.putCommand(new PlayCommand(this, audioClip));
+        audioContext.getPlayingSources().add(this);
         isPlaying = true;
     }
 
@@ -43,7 +38,6 @@ public class AudioSourceProperty extends Property {
         super.enable();
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
         audioContext.putCommand(new CreateSourceCommand(this));
-        audioContext.prepareAudioClip(soundFilePath);
     }
 
     public int getId() {
@@ -64,5 +58,14 @@ public class AudioSourceProperty extends Property {
 
     public void setPlaying(boolean playing) {
         isPlaying = playing;
+    }
+
+    public AudioClip getAudioClip() {
+        return audioClip;
+    }
+
+    public void setAudioClip(AudioClip audioClip) {
+        this.audioClip = audioClip;
+        audioClip.init(audioContext);
     }
 }

@@ -1,5 +1,6 @@
 package net.warpgame.test;
 
+import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
 import net.warpgame.engine.common.transform.TransformProperty;
@@ -42,8 +43,6 @@ import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-
-import java.io.File;
 
 /**
  * @author Jaca777
@@ -495,8 +494,10 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new AudioListenerProperty());
-        cameraComponent.addProperty(new AudioSourceProperty(EngineContext.CODESOURCE_DIR + "data" + File.separator + "sound" + File.separator + "music" + File.separator + "Stellardrone - Light Years - 10 Messier 45.ogg"));
+        cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
+        AudioClip audioClip = new AudioClip("C:\\Users\\Marcin\\IdeaProjects\\warp\\test\\out\\production\\resources\\net\\warpgame\\test\\sound\\music\\Stellardrone - Light Years - 10 Messier 45.ogg");
+        property.setAudioClip(audioClip);
         property.play();
         cameraComponent.addScript(SimpleControlScript.class);
 
