@@ -2,8 +2,7 @@ package net.warpgame.engine.audio;
 
 
 import com.sun.istack.internal.NotNull;
-import jdk.nashorn.internal.objects.annotations.Function;
-import net.warpgame.engine.audio.command.FillBufferWithData;
+import net.warpgame.engine.audio.command.FillBufferCommand;
 import net.warpgame.engine.audio.decoder.SoundData;
 import net.warpgame.engine.audio.decoder.SoundDecoderManager;
 import org.apache.commons.io.FilenameUtils;
@@ -25,7 +24,7 @@ public class AudioClip {
                 SoundData data = SoundDecoderManager.decode(file);
                 id = context.getBuffer();
                 context.getAllBuffers().add(this);
-                context.putCommand(new FillBufferWithData(this, data));
+                context.putCommand(new FillBufferCommand(this, data));
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }

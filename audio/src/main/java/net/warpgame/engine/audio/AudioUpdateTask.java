@@ -110,8 +110,7 @@ public class AudioUpdateTask extends EngineTask {
     }
 
     private void updateSourcePos(AudioSourceProperty source) {
-        if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
-        else posVector.set(0, 0, 0);
+        Transforms.getAbsolutePosition(source.getOwner(), posVector);
         alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
 
     }

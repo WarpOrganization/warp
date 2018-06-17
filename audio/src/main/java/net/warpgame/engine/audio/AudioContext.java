@@ -27,13 +27,13 @@ public class AudioContext {
     public AudioContext() {
         this.commandsQueue = new ArrayBlockingQueue<>(10000);
         this.allSources = Collections.synchronizedList(new LinkedList<>());
-        this.playingSources = new ArrayList<>();
+        this.playingSources = Collections.synchronizedList(new ArrayList<>());
         this.freeSources = new ArrayBlockingQueue<>(100);
         this.allBuffers = Collections.synchronizedList(new LinkedList<>());
         this.freeBuffers = new ArrayBlockingQueue<>(100);
     }
 
-    public List<AudioSourceProperty> getPlayingSources() {
+    List<AudioSourceProperty> getPlayingSources() {
         return playingSources;
     }
 

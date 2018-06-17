@@ -1,12 +1,13 @@
 package net.warpgame.engine.audio;
 
+import net.warpgame.engine.audio.command.AttachBufferCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
 import net.warpgame.engine.core.property.Property;
 
 public class AudioSourceProperty extends Property {
 
     private int id;
-    private boolean isRelative;
+
     private boolean isPlaying;
 
     private AudioClip audioClip;
@@ -14,12 +15,11 @@ public class AudioSourceProperty extends Property {
     private AudioContext audioContext;
 
     public AudioSourceProperty() {
-        this.isRelative = false;
         this.isPlaying = false;
     }
 
     public void play() {
-        audioContext.putCommand(new PlayCommand(this, audioClip));
+        audioContext.putCommand(new PlayCommand(this));
         audioContext.getPlayingSources().add(this);
         setPlaying(true);
     }
@@ -48,10 +48,6 @@ public class AudioSourceProperty extends Property {
         return id;
     }
 
-    public boolean isRelative() {
-        return isRelative;
-    }
-
     public boolean isPlaying() {
         return isPlaying;
     }
@@ -67,5 +63,6 @@ public class AudioSourceProperty extends Property {
     public void setAudioClip(AudioClip audioClip) {
         this.audioClip = audioClip;
         audioClip.init(audioContext);
+        audioContext.putCommand(new AttachBufferCommand(this));
     }
 }

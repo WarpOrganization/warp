@@ -6,12 +6,12 @@ import net.warpgame.engine.audio.decoder.SoundData;
 
 import static org.lwjgl.openal.AL10.alBufferData;
 
-public class FillBufferWithData implements Command {
+public class FillBufferCommand implements Command {
 
     private AudioClip clip;
     private SoundData soundData;
 
-    public FillBufferWithData(AudioClip clip, SoundData soundData) {
+    public FillBufferCommand(AudioClip clip, SoundData soundData) {
         this.clip = clip;
         this.soundData = soundData;
     }

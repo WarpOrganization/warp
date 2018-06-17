@@ -3,17 +3,19 @@ package net.warpgame.engine.audio.command;
 import net.warpgame.engine.audio.AudioContext;
 import net.warpgame.engine.audio.AudioSourceProperty;
 
-import static org.lwjgl.openal.AL10.*;
+import static org.lwjgl.openal.AL10.AL_BUFFER;
+import static org.lwjgl.openal.AL10.alSourcei;
 
-public class PlayCommand implements Command {
+public class AttachBufferCommand implements Command {
+
     private AudioSourceProperty source;
 
-    public PlayCommand(AudioSourceProperty source) {
+    public AttachBufferCommand(AudioSourceProperty source) {
         this.source = source;
     }
 
     @Override
     public void execute(AudioContext context) {
-        alSourcePlay(source.getId());
+        alSourcei(source.getId(), AL_BUFFER, source.getAudioClip().getId());
     }
 }

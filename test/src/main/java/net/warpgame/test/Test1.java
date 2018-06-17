@@ -45,6 +45,10 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Jaca777
@@ -498,7 +502,14 @@ public class Test1 {
         cameraComponent.addProperty(new AudioListenerProperty());
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-        AudioClip audioClip = new AudioClip(EngineContext.CODESOURCE_DIR + "data" + File.separator + "sound"+ File.separator + "music" + File.separator +"Stellardrone - Light Years - 10 Messier 45.ogg");
+        URL url = Test1.class.getResource("sound" + File.separator + "music" + File.separator + "szum.ogg");
+        String path = null;
+        try {
+            path = Paths.get(url.toURI()).toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        AudioClip audioClip = new AudioClip(path);
         property.setAudioClip(audioClip);
         property.play();
         cameraComponent.addScript(SimpleControlScript.class);
