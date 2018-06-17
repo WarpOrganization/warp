@@ -44,6 +44,8 @@ import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
+import java.io.File;
+
 /**
  * @author Jaca777
  * Created 2017-09-23 at 13
@@ -496,7 +498,7 @@ public class Test1 {
         cameraComponent.addProperty(new AudioListenerProperty());
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-        AudioClip audioClip = new AudioClip("C:\\Users\\Marcin\\IdeaProjects\\warp\\test\\out\\production\\resources\\net\\warpgame\\test\\sound\\music\\Stellardrone - Light Years - 10 Messier 45.ogg");
+        AudioClip audioClip = new AudioClip(EngineContext.CODESOURCE_DIR + "data" + File.separator + "sound"+ File.separator + "music" + File.separator +"Stellardrone - Light Years - 10 Messier 45.ogg");
         property.setAudioClip(audioClip);
         property.play();
         cameraComponent.addScript(SimpleControlScript.class);
