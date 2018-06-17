@@ -15,7 +15,7 @@ public class AttachBufferCommand implements Command {
     }
 
     @Override
-    public void execute(AudioContext context) {
+    public void execute() {
         alSourcei(source.getId(), AL_BUFFER, source.getAudioClip().getId());
     }
 }

@@ -17,7 +17,7 @@ public class FillBufferCommand implements Command {
     }
 
     @Override
-    public void execute(AudioContext context) {
+    public void execute() {
         alBufferData(clip.getId(), soundData.getOpenALFormat(), soundData.getData(), soundData.getFrequency());
     }
 }

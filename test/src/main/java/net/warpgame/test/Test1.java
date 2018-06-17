@@ -74,7 +74,18 @@ public class Test1 {
                 .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
+        createAudioSources(engineContext);
         registerCommandsAndVariables(engineContext.getLoadedContext());
+    }
+
+    private static void createAudioSources(EngineContext context) {
+        Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
+        cameraComponent.addProperty(new AudioSourceProperty());
+        AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
+        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
+        property.setAudioClip(audioClip);
+        property.setLoop(true);
+        property.play();
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -500,12 +511,6 @@ public class Test1 {
         cameraComponent.addProperty(new TransformProperty().move(new Vector3f(-10, -20, 60))
                 .rotate((float) (Math.PI / 4), -(float) (Math.PI / 4), (float) 0));
         cameraComponent.addProperty(new AudioListenerProperty());
-        cameraComponent.addProperty(new AudioSourceProperty());
-        AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "szum.ogg"));
-        property.setAudioClip(audioClip);
-        property.setLoop(true);
-        property.play();
         cameraComponent.addScript(SimpleControlScript.class);
 
         CameraHolder cameraHolder = engineContext.getLoadedContext()

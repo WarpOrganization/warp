@@ -58,15 +58,11 @@ public class AudioCommandsTask extends EngineTask {
     public void update(int delta) {
         while (!commandsQueue.isEmpty()) {
             try {
-                commandsQueue.take().execute(context);
+                commandsQueue.take().execute();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public AudioContext getContext() {
-        return context;
     }
 
     private void initOpenAL() {

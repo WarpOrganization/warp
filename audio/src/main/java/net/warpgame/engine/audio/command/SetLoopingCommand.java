@@ -15,7 +15,7 @@ public class SetLoopingCommand implements Command {
     }
 
     @Override
-    public void execute(AudioContext context) {
+    public void execute() {
         AL10.alSourcei(source.getId(), AL10.AL_LOOPING, looping? AL10.AL_TRUE: AL10.AL_FALSE);
     }
 }

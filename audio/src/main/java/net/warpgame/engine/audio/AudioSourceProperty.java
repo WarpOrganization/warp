@@ -20,8 +20,7 @@ public class AudioSourceProperty extends Property {
     }
 
     public void play() {
-        audioContext.putCommand(new PlayCommand(this));
-        audioContext.getPlayingSources().add(this);
+        audioContext.putCommand(new PlayCommand(this, audioContext.getPlayingSources()));
         setPlaying(true);
     }
 
