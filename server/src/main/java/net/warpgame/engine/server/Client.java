@@ -12,7 +12,6 @@ import java.net.InetSocketAddress;
  */
 public class Client extends Peer {
     private long lastKeepAlive;
-    private int id;
 
     Client(InetSocketAddress address, IncomingMessageQueue incomingMessageQueue, ConnectionStateHolder connectionStateHolder) {
         super(address, incomingMessageQueue, connectionStateHolder);
@@ -25,13 +24,5 @@ public class Client extends Peer {
 
     void setLastKeepAlive(long lastKeepAlive) {
         this.lastKeepAlive = lastKeepAlive;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    void setId(int id) {
-        this.id = id;
     }
 }
