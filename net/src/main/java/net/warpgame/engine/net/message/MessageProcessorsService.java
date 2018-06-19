@@ -16,18 +16,13 @@ public class MessageProcessorsService {
 
     private HashMap<Integer, MessageProcessor> messageProcessors;
 
-    public MessageProcessorsService(Context context,
-                                    EventMessageProcessor eventMessageProcessor,
-                                    InternalMessageProcessor internalMessageProcessor) {
+    public MessageProcessorsService(Context context) {
         messageProcessors = new HashMap<>();
-        messageProcessors.put(eventMessageProcessor.getMessageType(), eventMessageProcessor);
-        messageProcessors.put(internalMessageProcessor.getMessageType(), internalMessageProcessor);
-        //TODO uncomment when findAll starts working
-//        context
-//                .findAll(MessageProcessor.class)
-//                .forEach(
-//                        messageProcessor ->
-//                                messageProcessors.put(messageProcessor.getMessageType(), messageProcessor));
+        context
+                .findAll(MessageProcessor.class)
+                .forEach(
+                        messageProcessor ->
+                                messageProcessors.put(messageProcessor.getMessageType(), messageProcessor));
     }
 
     public MessageProcessor getMessageProcessor(int messageType) {

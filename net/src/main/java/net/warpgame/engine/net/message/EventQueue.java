@@ -1,6 +1,7 @@
 package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.net.event.ConfirmableNetworkEvent;
 import net.warpgame.engine.net.event.EventEnvelope;
 import net.warpgame.engine.net.event.EventSerializer;
 
@@ -23,7 +24,13 @@ public class EventQueue extends MessageSource<EventEnvelope> {
     @Override
     MessageEnvelope toAddressedEnvelope(EventEnvelope message) {
         //TODO some reflection magic for message type runtime generation.
-        MessageEnvelope addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message), 0);
+        MessageEnvelope addressedEnvelope;
+        if (message.getEvent() instanceof ConfirmableNetworkEvent)
+            addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message),
+                    0,
+                    ((ConfirmableNetworkEvent) message.getEvent()).getConfirmationConsumer());
+        else
+            addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message), 0);
         envelopeAddressingService.address(addressedEnvelope, message.getEvent().getTargetClientId());
         return addressedEnvelope;
     }

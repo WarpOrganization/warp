@@ -19,6 +19,7 @@ public abstract class Peer {
     private ClockSynchronizer clockSynchronizer;
     private ConnectionStateHolder connectionStateHolder;
     private DependencyIdGenerator dependencyIdGenerator;
+    private int id = 0;
 
     public Peer(InetSocketAddress address, IncomingMessageQueue incomingMessageQueue, ConnectionStateHolder connectionStateHolder) {
         this.address = address;
@@ -36,7 +37,8 @@ public abstract class Peer {
     public void confirmMessage(int dependencyId) {
         MessageEnvelope envelope = messageConfirmations.get(dependencyId);
         if (envelope != null) {
-            envelope.setConfirmed(true);
+            envelope.confirm();
+
             messageConfirmations.remove(dependencyId);
         }
     }
@@ -83,5 +85,13 @@ public abstract class Peer {
 
     public void setDependencyIdGenerator(DependencyIdGenerator dependencyIdGenerator) {
         this.dependencyIdGenerator = dependencyIdGenerator;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
