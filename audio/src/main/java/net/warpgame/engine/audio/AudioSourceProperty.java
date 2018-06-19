@@ -19,16 +19,17 @@ public class AudioSourceProperty extends Property {
         this.isPlaying = false;
     }
 
-    public void play() {
+    public AudioSourceProperty play() {
         audioContext.putCommand(new PlayCommand(this, audioContext.getPlayingSources()));
         setPlaying(true);
+        return this;
     }
 
-    public void stop() {
+    public AudioSourceProperty stop() {
         throw new UnsupportedOperationException("Stop command is not implemented");
     }
 
-    public void pause() {
+    public AudioSourceProperty pause() {
         throw new UnsupportedOperationException("Pause command is not implemented");
     }
 
@@ -60,7 +61,7 @@ public class AudioSourceProperty extends Property {
         return audioClip;
     }
 
-    public void setAudioClip(AudioClip audioClip) {
+    public AudioSourceProperty(AudioClip audioClip) {
         this.audioClip = audioClip;
         audioClip.init(audioContext);
         audioContext.putCommand(new AttachBufferCommand(this));
@@ -70,8 +71,9 @@ public class AudioSourceProperty extends Property {
         return loop;
     }
 
-    public void setLoop(boolean loop) {
+    public AudioSourceProperty setLoop(boolean loop) {
         this.loop = loop;
         audioContext.putCommand(new SetLoopingCommand(this, loop));
+        return this;
     }
 }

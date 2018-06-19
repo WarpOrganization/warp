@@ -74,18 +74,47 @@ public class Test1 {
                 .get();
         setupScene(engineContext, thread);
         setupCamera(engineContext);
-        createAudioSources(engineContext);
+        createAudioSources(engineContext, thread);
         registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
-    private static void createAudioSources(EngineContext context) {
+    private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
         AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
         property.setAudioClip(audioClip);
         property.setLoop(true);
-        property.play();
+
+        createAudioBall(context, thread, audioClip);
+    }
+
+    private static Component createAudioBall(EngineContext context, GraphicsThread thread, AudioClip audioClip) {
+
+        Component component = new SceneComponent(context);
+        thread.scheduleOnce( () -> {
+            SceneMesh mesh = SphereBuilder.createShape(20, 20, 1f);
+            component.addProperty(new MeshProperty(mesh));
+
+            ImageData imageData = ImageDecoder.decodePNG(
+                    Test1.class.getResourceAsStream("fighter_1.png"),
+                    PNGDecoder.Format.RGBA
+            );
+            Texture2D diffuse = new Texture2D(
+                    imageData.getWidth(),
+                    imageData.getHeight(),
+                    GL11.GL_RGBA16,
+                    GL11.GL_RGBA,
+                    true,
+                    imageData.getData());
+
+            component.addProperty(new MaterialProperty(new Material(diffuse)));
+
+            component.addProperty(new TransformProperty().move(new Vector3f(-10, 0, 2)));
+        });
+        component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
+
+        return component;
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {

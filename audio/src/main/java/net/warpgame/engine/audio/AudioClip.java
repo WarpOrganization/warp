@@ -18,7 +18,7 @@ public class AudioClip {
         this.file = file;
     }
 
-    void init(@NotNull AudioContext context){
+    void init(AudioContext context){
         if(id == -1) {
             try {
                 SoundData data = SoundDecoderManager.decode(file);
