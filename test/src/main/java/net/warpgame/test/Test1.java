@@ -93,7 +93,7 @@ public class Test1 {
 
         Component component = new SceneComponent(context);
         thread.scheduleOnce( () -> {
-            SceneMesh mesh = SphereBuilder.createShape(20, 20, 1f);
+            StaticMesh mesh = SphereBuilder.createShape(20, 20, 1f);
             component.addProperty(new MeshProperty(mesh));
 
             ImageData imageData = ImageDecoder.decodePNG(
