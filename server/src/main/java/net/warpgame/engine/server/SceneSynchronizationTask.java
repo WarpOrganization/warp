@@ -29,11 +29,6 @@ public class SceneSynchronizationTask extends EngineTask {
      */
     private static final int HEADER_SIZE = 4 + 8;
 
-    //id (1), serializationType (1), translation (3), rotation (4)
-    //private static final int SERIALIZED_COMPONENT_TRANSLATION_SIZE = 4 * (1 + 1 + 3 + 4);
-    //id (1), serializationType (1), translation (3), rotation (4), velocity (4)
-    //private static final int SERIALIZED_COMPONENT_FULL_SIZE = 4 * (1 + 1 + 3 + 3 + 4);
-
     private static final int MAX_PACKET_SIZE = 2048;
 
     private static final int SCENE_SYNCHRONIZATION_INTERVAL = 50;

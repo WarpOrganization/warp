@@ -40,6 +40,7 @@ public class SimplifiedPhysicsSimulationService {
     private Quaternionf rotation = new Quaternionf();
 
     private void simulate(int delta) {
+        float secondsDelta = delta / 1000f;
         TransformProperty transformProperty;
         SimplifiedPhysicsProperty physicsProperty;
         for (Component component : components) {
@@ -48,12 +49,12 @@ public class SimplifiedPhysicsSimulationService {
                 physicsProperty = component.getProperty(Property.getTypeId(SimplifiedPhysicsProperty.class));
                 transformProperty.move(movementVector
                         .set(physicsProperty.getVelocity())
-                        .mul(delta));
+                        .mul(secondsDelta));
 
                 AxisAngle4f angularVelocity = physicsProperty.getAngularVelocity();
                 rotation.set(0, 0, 0, 1);
                 rotation.rotateAxis(
-                        angularVelocity.angle * delta,
+                        angularVelocity.angle * secondsDelta,
                         angularVelocity.x,
                         angularVelocity.y,
                         angularVelocity.z);
