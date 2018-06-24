@@ -1,13 +1,10 @@
 package net.warpgame.engine.graphics.rendering.scene.program;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.graphics.animation.AnimatedModelProperty;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.NoTessellationRenderingProgram;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationRenderingProgram;
-import net.warpgame.engine.graphics.tessellation.Tessellator;
 import net.warpgame.engine.graphics.utility.MatrixStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +20,7 @@ public class SceneRenderingProgramManager {
 
     private CameraHolder cameraHolder;
 
-    private TessellationRenderingProgram bezierTessellationRenderingProgram;
-    private TessellationRenderingProgram flatTessellationRenderingProgram;
-    private NoTessellationRenderingProgram noTessellationRenderingProgram;
+    private SceneRenderingProgram sceneRenderingProgram;
 
     public SceneRenderingProgramManager(CameraHolder cameraHolder) {
         this.cameraHolder = cameraHolder;
@@ -33,50 +28,29 @@ public class SceneRenderingProgramManager {
 
     public void init() {
         try {
-            this.flatTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.FLAT_TESSELLATOR_LOCATION);
-            this.bezierTessellationRenderingProgram = new TessellationRenderingProgram(Tessellator.BEZIER_TESSELLATOR_LOCATION);
-            this.noTessellationRenderingProgram = new NoTessellationRenderingProgram();
+            this.sceneRenderingProgram = new SceneRenderingProgram();
         } catch (ShaderCompilationException e) {
             logger.error("Failed to compile scene rendering shaders");
         }
     }
 
     public void update() {
-        bezierTessellationRenderingProgram.use();
-        bezierTessellationRenderingProgram.useCamera(cameraHolder.getCamera());
-        flatTessellationRenderingProgram.use();
-        flatTessellationRenderingProgram.useCamera(cameraHolder.getCamera());
-        noTessellationRenderingProgram.use();
-        noTessellationRenderingProgram.useCamera(cameraHolder.getCamera());
+        sceneRenderingProgram.use();
+        sceneRenderingProgram.useCamera(cameraHolder.getCamera());
     }
 
     public void prepareProgram(
             Material material,
             MatrixStack matrixStack,
-            SceneTessellationMode tesselationMode
-    ) {
-        switch (tesselationMode) {
-            case NONE:
-                noTessellationRenderingProgram.use();
-                noTessellationRenderingProgram.useMaterial(material);
-                noTessellationRenderingProgram.useMatrixStack(matrixStack);
-                break;
-            case FLAT:
-                flatTessellationRenderingProgram.use();
-                flatTessellationRenderingProgram.useMaterial(material);
-                flatTessellationRenderingProgram.useMatrixStack(matrixStack);
-                break;
-            case BEZIER:
-                bezierTessellationRenderingProgram.use();
-                bezierTessellationRenderingProgram.useMaterial(material);
-                bezierTessellationRenderingProgram.useMatrixStack(matrixStack);
-                break;
-        }
+            AnimatedModelProperty animatedModelProperty
+            ) {
+        sceneRenderingProgram.use();
+        sceneRenderingProgram.useMaterial(material);
+        sceneRenderingProgram.useMatrixStack(matrixStack);
+        sceneRenderingProgram.useAnimationData(animatedModelProperty);
     }
 
     public void destroy() {
-        bezierTessellationRenderingProgram.delete();
-        flatTessellationRenderingProgram.delete();
-        noTessellationRenderingProgram.delete();
+        sceneRenderingProgram.delete();
     }
 }

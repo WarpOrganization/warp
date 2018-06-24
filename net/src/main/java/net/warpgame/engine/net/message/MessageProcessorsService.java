@@ -1,9 +1,6 @@
 package net.warpgame.engine.net.message;
 
-import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.net.event.EventMessageProcessor;
-import net.warpgame.engine.net.internalmessage.InternalMessageProcessor;
 
 import java.util.HashMap;
 
@@ -16,13 +13,11 @@ public class MessageProcessorsService {
 
     private HashMap<Integer, MessageProcessor> messageProcessors;
 
-    public MessageProcessorsService(Context context) {
+    public MessageProcessorsService(MessageProcessor[] processors) {
         messageProcessors = new HashMap<>();
-        context
-                .findAll(MessageProcessor.class)
-                .forEach(
-                        messageProcessor ->
-                                messageProcessors.put(messageProcessor.getMessageType(), messageProcessor));
+        for(MessageProcessor processor : processors) {
+            messageProcessors.put(processor.getMessageType(), processor);
+        }
     }
 
     public MessageProcessor getMessageProcessor(int messageType) {

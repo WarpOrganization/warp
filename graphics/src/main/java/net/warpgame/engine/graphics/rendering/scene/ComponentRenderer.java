@@ -2,16 +2,14 @@ package net.warpgame.engine.graphics.rendering.scene;
 
 import net.warpgame.engine.common.transform.TransformProperty;
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.graphics.animation.AnimatedModelProperty;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.IndexedMesh;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.program.SceneRenderingProgramManager;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import net.warpgame.engine.graphics.utility.MatrixStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -27,11 +25,8 @@ public class ComponentRenderer {
     private MatrixStack matrixStack = new MatrixStack();
 
     private SceneRenderingProgramManager sceneRenderingProgramManager;
-    private SceneTessellationMode defaultTessellationMode;
 
-
-    public ComponentRenderer(Config config, SceneRenderingProgramManager sceneRenderingProgramManager) {
-        this.defaultTessellationMode = config.getValue("graphics.rendering.defaultTessellation");
+    public ComponentRenderer(SceneRenderingProgramManager sceneRenderingProgramManager) {
         this.sceneRenderingProgramManager = sceneRenderingProgramManager;
     }
 
@@ -55,12 +50,12 @@ public class ComponentRenderer {
 
 
     public boolean renderComponentAndCheckIfDirty(Component component, boolean dirty) {
-        if (component.hasEnabledProperty(Property.getTypeId(MeshProperty.class))) {
+        if (component.hasEnabledProperty(Property.getTypeId(MeshProperty.class)) ||
+                component.hasEnabledProperty(Property.getTypeId(AnimatedModelProperty.class))) {
             boolean componentDirty = applyTransformations(component, dirty);
             Material material = getMaterial(component);
             IndexedMesh mesh = getMesh(component);
-            SceneTessellationMode tessellationMode = getTessellationMode(component);
-            drawMesh(material, mesh, tessellationMode);
+            drawMesh(material, mesh, component.getPropertyOrNull(Property.getTypeId(AnimatedModelProperty.class)));
             return componentDirty;
         }
         return false;
@@ -79,7 +74,6 @@ public class ComponentRenderer {
             matrixStack.setTopRotation(property.getCachedNonrelativeRotation());
             return false;
         }
-
     }
 
     private void applyTranslation(TransformProperty translation) {
@@ -94,22 +88,21 @@ public class ComponentRenderer {
         matrixStack.rotate(rotation.getRotation());
     }
 
-    protected void drawMesh(Material material, IndexedMesh mesh, SceneTessellationMode runtimeTesselation) {
-        sceneRenderingProgramManager.prepareProgram(material, matrixStack, runtimeTesselation);
-        switch (runtimeTesselation) {
-            case NONE:
-                mesh.draw();
-                break;
-            case FLAT:
-            case BEZIER:
-                mesh.drawPatched();
-                break;
-        }
+    protected void drawMesh(Material material, IndexedMesh mesh, AnimatedModelProperty animatedModelProperty) {
+        sceneRenderingProgramManager.prepareProgram(material, matrixStack, animatedModelProperty);
+        mesh.draw();
     }
 
     protected IndexedMesh getMesh(Component component) {
-        MeshProperty meshProperty = component.getProperty(Property.getTypeId(MeshProperty.class));
-        return meshProperty.getMesh();
+        IndexedMesh mesh = null;
+        if(component.hasEnabledProperty(Property.getTypeId(MeshProperty.class))) {
+            MeshProperty meshProperty = component.getProperty(Property.getTypeId(MeshProperty.class));
+            mesh = meshProperty.getMesh();
+        } else if (component.hasEnabledProperty(Property.getTypeId(AnimatedModelProperty.class))) {
+            AnimatedModelProperty meshProperty = component.getProperty(Property.getTypeId(AnimatedModelProperty.class));
+            mesh = meshProperty.getAnimatedModel().getMesh();
+        }
+        return mesh;
     }
 
     protected Material getMaterial(Component component) {
@@ -117,10 +110,6 @@ public class ComponentRenderer {
         return property.getMaterial();
     }
 
-    protected SceneTessellationMode getTessellationMode(Component component) {
-        TessellationModeProperty property = component.getPropertyOrNull(Property.getTypeId(TessellationModeProperty.class));
-        return (property == null) ? defaultTessellationMode : property.getTessellationMode();
-    }
 
     public void enterChildren() {
         matrixStack.push();

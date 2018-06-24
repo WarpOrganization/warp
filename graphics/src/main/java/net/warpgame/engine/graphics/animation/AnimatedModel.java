@@ -1,6 +1,5 @@
 package net.warpgame.engine.graphics.animation;
 
-import net.warpgame.engine.graphics.mesh.StaticMesh;
 import org.joml.Matrix4f;
 
 /**
@@ -8,21 +7,22 @@ import org.joml.Matrix4f;
  * Created 2018-06-09 at 15
  */
 public class AnimatedModel {
-    private StaticMesh mesh;
+
+    private AnimatedMesh mesh;
     private Joint rootJoint;
     private int jointCount;
 
     private Animator animator;
 
-    public AnimatedModel(StaticMesh mesh, Joint root, int jointCount) {
+    public AnimatedModel(AnimatedMesh mesh, Joint root, int jointCount) {
         this.mesh = mesh;
         this.rootJoint = root;
         this.jointCount = jointCount;
-        this.animator = new Animator();
+        this.animator = new Animator(this);
         root.calculateInverseBindTransform(new Matrix4f());
     }
 
-    public StaticMesh getMesh() {
+    public AnimatedMesh getMesh() {
         return mesh;
     }
 

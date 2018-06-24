@@ -14,9 +14,9 @@ public class Joint {
     private String name;
     private List<Joint> children = new ArrayList<>();
 
-    private Matrix4f animationTransform;
+    private Matrix4f animationTransform = new Matrix4f();
     private Matrix4f localBindTransform;
-    private Matrix4f inverseBindTransform;
+    private Matrix4f inverseBindTransform = new Matrix4f();
 
     public Joint(int index, String name, Matrix4f localBindTransform) {
         this.index = index;
@@ -59,4 +59,6 @@ public class Joint {
     public Matrix4f getInverseBindTransform() {
         return inverseBindTransform;
     }
+
+
 }
