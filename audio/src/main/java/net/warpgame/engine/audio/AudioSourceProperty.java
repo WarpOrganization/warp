@@ -3,6 +3,7 @@ package net.warpgame.engine.audio;
 import net.warpgame.engine.audio.command.AttachBufferCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
 import net.warpgame.engine.audio.command.SetLoopingCommand;
+import net.warpgame.engine.audio.command.SetRelativeCommand;
 import net.warpgame.engine.core.property.Property;
 
 public class AudioSourceProperty extends Property {
@@ -17,6 +18,13 @@ public class AudioSourceProperty extends Property {
 
     public AudioSourceProperty() {
         this.isPlaying = false;
+        this.id = -1;
+    }
+
+    public AudioSourceProperty(AudioClip audioClip) {
+        setAudioClip(audioClip);
+        this.isPlaying = false;
+        this.id = -1;
     }
 
     public AudioSourceProperty play() {
@@ -37,6 +45,10 @@ public class AudioSourceProperty extends Property {
     public void enable() {
         super.enable();
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
+        audioContext.putCommand(new SetRelativeCommand(this, false));
+        if(audioClip != null) {
+            setAudioClip(audioClip);
+        }
         try {
             id = audioContext.getSource();
             audioContext.getAllSources().add(this);
@@ -61,10 +73,15 @@ public class AudioSourceProperty extends Property {
         return audioClip;
     }
 
-    public AudioSourceProperty(AudioClip audioClip) {
+    public void setAudioClip(AudioClip audioClip) {
         this.audioClip = audioClip;
-        audioClip.init(audioContext);
-        audioContext.putCommand(new AttachBufferCommand(this));
+        if (!(id == -1)) {
+            if (audioClip.getId() == -1) {
+                audioClip.init(audioContext);
+            }
+            audioContext.putCommand(new AttachBufferCommand(this));
+        }
+
     }
 
     public boolean isLoop() {

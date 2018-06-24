@@ -80,13 +80,13 @@ public class Test1 {
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
         cameraComponent.addProperty(new AudioSourceProperty());
-        AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
+        //AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
         AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
-        //TODO compilation error
+        //property.setLoop(true);
         //property.setAudioClip(audioClip);
-        property.setLoop(true);
-
-        createAudioBall(context, thread, audioClip);
+        //property.play();
+        Component ball = createAudioBall(context, thread, audioClip);
+        ball.hasParent();
     }
 
     private static Component createAudioBall(EngineContext context, GraphicsThread thread, AudioClip audioClip) {
@@ -109,12 +109,15 @@ public class Test1 {
                     imageData.getData());
 
             component.addProperty(new MaterialProperty(new Material(diffuse)));
-
-            component.addProperty(new TransformProperty().move(new Vector3f(-10, 0, 2)));
+            TransformProperty transformProperty = new TransformProperty();
+            transformProperty.move(new Vector3f(-10, 0, 2));
+            component.addProperty(transformProperty);
+            component.addProperty(new AudioSourceProperty());
+            AudioSourceProperty sourceProperty = component.getProperty(Property.getTypeId(AudioSourceProperty.class));
+            sourceProperty.setAudioClip(audioClip);
+            sourceProperty.setLoop(true);
+            sourceProperty.play();
         });
-        //TODO compilation error
-        //component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
-
         return component;
     }
 
