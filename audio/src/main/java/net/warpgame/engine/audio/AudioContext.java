@@ -1,17 +1,9 @@
 package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.Command;
-import net.warpgame.engine.audio.command.CreateAudioClipCommand;
-import net.warpgame.engine.audio.decoder.SoundData;
-import net.warpgame.engine.audio.decoder.SoundDecoderManager;
 import net.warpgame.engine.core.context.service.Service;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -22,38 +14,27 @@ import java.util.concurrent.BlockingQueue;
 @Service
 public class AudioContext {
 
-    private AudioListenerProperty listener;
-    private List<AudioSourceProperty> sources;
-    private List<AudioSourceProperty> playing;
-    Map<String, Integer> sounds = new TreeMap<>();
     private BlockingQueue<Command> commandsQueue;
-    private SoundBank soundBank;
+    private AudioListenerProperty listener;
 
-    private AudioThread audioThread;
+    private List<AudioSourceProperty> allSources;
+    private List<AudioSourceProperty> playingSources;
+    private BlockingQueue<Integer> freeSources;
 
-    public AudioContext(AudioThread audioThread) {
-        this.audioThread = audioThread;
-        this.playing = new ArrayList<>();
+    private List<AudioClip> allBuffers;
+    private BlockingQueue<Integer> freeBuffers;
+
+    public AudioContext() {
         this.commandsQueue = new ArrayBlockingQueue<>(10000);
-        this.soundBank = new SoundBank(this);
+        this.allSources = Collections.synchronizedList(new LinkedList<>());
+        this.playingSources = Collections.synchronizedList(new ArrayList<>());
+        this.freeSources = new ArrayBlockingQueue<>(100);
+        this.allBuffers = Collections.synchronizedList(new LinkedList<>());
+        this.freeBuffers = new ArrayBlockingQueue<>(100);
     }
 
-    void prepareAudioClip(String clip) {
-        String name = FilenameUtils.getBaseName(clip);
-        if(!soundBank.containsSound(name)){
-            audioThread.scheduleOnce(() -> {
-                try {
-                    soundBank.loadFile(clip);
-                } catch (IOException e) {
-                    throw new RuntimeException(String.format("Can't find filed named %s", clip));
-                }
-            });
-
-        }
-    }
-
-    public List<AudioSourceProperty> getPlaying() {
-        return playing;
+    List<AudioSourceProperty> getPlayingSources() {
+        return playingSources;
     }
 
     AudioListenerProperty getListener() {
@@ -64,23 +45,6 @@ public class AudioContext {
         this.listener = listener;
     }
 
-    public SoundBank getSoundBank() {
-        return soundBank;
-    }
-
-    void initAudioClip(AudioClip audioClip){
-        if(!sounds.containsKey(audioClip.getFile())){
-            try {
-                SoundData data = SoundDecoderManager.decode(audioClip.getFile());
-                this.putCommand(new CreateAudioClipCommand(audioClip, data, sounds));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            audioClip.setId(sounds.get(audioClip.getFile()));
-        }
-    }
-
     void putCommand(Command cmd) {
         try {
             commandsQueue.put(cmd);
@@ -89,7 +53,31 @@ public class AudioContext {
         }
     }
 
+    int getSource() throws InterruptedException {
+        return freeSources.take();
+    }
+
+    int getBuffer() throws InterruptedException {
+        return freeBuffers.take();
+    }
+
+    BlockingQueue<Integer> getFreeSources() {
+        return freeSources;
+    }
+
+    BlockingQueue<Integer> getFreeBuffers() {
+        return freeBuffers;
+    }
+
     BlockingQueue<Command> getCommandsQueue() {
         return commandsQueue;
+    }
+
+    List<AudioSourceProperty> getAllSources() {
+        return allSources;
+    }
+
+    List<AudioClip> getAllBuffers() {
+        return allBuffers;
     }
 }

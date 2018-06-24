@@ -51,6 +51,7 @@ public class SceneUpdaterTask extends EngineTask {
     private Vector3f translation = new Vector3f();
     private Quaternionf rotation = new Quaternionf();
 
+    //TODO refactor
     private void updateScene(ByteBuf serializedScene) {
         while (serializedScene.isReadable()) {
             int componentId = serializedScene.readInt();

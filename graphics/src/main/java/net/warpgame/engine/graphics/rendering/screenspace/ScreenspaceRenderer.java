@@ -86,7 +86,7 @@ public class ScreenspaceRenderer {
             prepareFramebuffer();
             prepareProgram();
             renderScreenspace();
-            destinationTexture.genMipmap();
+//            destinationTexture.genMipmap();
         }//TODO do stuff
     }
 

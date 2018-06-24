@@ -1,40 +1,35 @@
 package net.warpgame.engine.audio;
 
-import net.warpgame.engine.audio.command.CreateSourceCommand;
+import net.warpgame.engine.audio.command.AttachBufferCommand;
 import net.warpgame.engine.audio.command.PlayCommand;
+import net.warpgame.engine.audio.command.SetLoopingCommand;
 import net.warpgame.engine.core.property.Property;
-import org.apache.commons.io.FilenameUtils;
 
 public class AudioSourceProperty extends Property {
 
     private int id;
-    private boolean isRelative;
+
     private boolean isPlaying;
-
-
-    private String soundFilePath;
-    private String soundName;
+    private boolean loop;
+    private AudioClip audioClip;
 
     private AudioContext audioContext;
 
-    public AudioSourceProperty(String soundFilePath) {
-        this.soundFilePath = soundFilePath;
-        this.soundName = FilenameUtils.getBaseName(soundFilePath);
-        this.isRelative = false;
+    public AudioSourceProperty() {
         this.isPlaying = false;
     }
 
-    public void play() {
-        audioContext.putCommand(new PlayCommand(this, soundName));
-        audioContext.getPlaying().add(this);
-        isPlaying = true;
+    public AudioSourceProperty play() {
+        audioContext.putCommand(new PlayCommand(this, audioContext.getPlayingSources()));
+        setPlaying(true);
+        return this;
     }
 
-    public void stop() {
+    public AudioSourceProperty stop() {
         throw new UnsupportedOperationException("Stop command is not implemented");
     }
 
-    public void pause() {
+    public AudioSourceProperty pause() {
         throw new UnsupportedOperationException("Pause command is not implemented");
     }
 
@@ -42,27 +37,43 @@ public class AudioSourceProperty extends Property {
     public void enable() {
         super.enable();
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
-        audioContext.putCommand(new CreateSourceCommand(this));
-        audioContext.prepareAudioClip(soundFilePath);
+        try {
+            id = audioContext.getSource();
+            audioContext.getAllSources().add(this);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isRelative() {
-        return isRelative;
-    }
-
     public boolean isPlaying() {
         return isPlaying;
     }
 
-    public void setPlaying(boolean playing) {
+    void setPlaying(boolean playing) {
         isPlaying = playing;
+    }
+
+    public AudioClip getAudioClip() {
+        return audioClip;
+    }
+
+    public AudioSourceProperty(AudioClip audioClip) {
+        this.audioClip = audioClip;
+        audioClip.init(audioContext);
+        audioContext.putCommand(new AttachBufferCommand(this));
+    }
+
+    public boolean isLoop() {
+        return loop;
+    }
+
+    public AudioSourceProperty setLoop(boolean loop) {
+        this.loop = loop;
+        audioContext.putCommand(new SetLoopingCommand(this, loop));
+        return this;
     }
 }

@@ -1,17 +1,17 @@
 package net.warpgame.engine.graphics.rendering;
 
+import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
+import net.warpgame.engine.core.context.task.RegisterTask;
+import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.GLErrors;
 import net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAARenderer;
+import net.warpgame.engine.graphics.rendering.scene.SceneRenderer;
+import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 import net.warpgame.engine.graphics.window.WindowTask;
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.context.task.RegisterTask;
-import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.graphics.GLErrors;
-import net.warpgame.engine.graphics.rendering.scene.SceneRenderer;
-import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 
 /**
  * @author Jaca777

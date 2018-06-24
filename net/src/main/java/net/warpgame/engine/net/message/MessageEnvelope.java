@@ -2,6 +2,9 @@ package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.net.Peer;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 /**
  * @author Hubertus
  * Created 30.05.2018
@@ -13,11 +16,26 @@ public class MessageEnvelope {
     private boolean confirmed;
     private int messageType;
     private Peer targetPeer;
-
+    private boolean wantsConfirmation;
+    private Consumer<Peer> confirmationConsumer;
 
     public MessageEnvelope(byte[] serializedMessage, int messageType) {
         this.serializedMessage = serializedMessage;
         this.messageType = messageType;
+        this.wantsConfirmation = false;
+    }
+
+    public MessageEnvelope(byte[] serializedMessage, int messageType, Consumer<Peer> confirmationConsumer) {
+        this.serializedMessage = serializedMessage;
+        this.messageType = messageType;
+        this.confirmationConsumer = confirmationConsumer;
+        this.wantsConfirmation = true;
+    }
+
+    public void confirm(){
+        confirmed = true;
+        if(wantsConfirmation)
+            confirmationConsumer.accept(targetPeer);
     }
 
     public byte[] getSerializedMessage() {
@@ -66,5 +84,21 @@ public class MessageEnvelope {
 
     public void setTargetPeer(Peer targetPeer) {
         this.targetPeer = targetPeer;
+    }
+
+    public boolean isWantsConfirmation() {
+        return wantsConfirmation;
+    }
+
+    public void setWantsConfirmation(boolean wantsConfirmation) {
+        this.wantsConfirmation = wantsConfirmation;
+    }
+
+    public Consumer<Peer> getConfirmationConsumer() {
+        return confirmationConsumer;
+    }
+
+    public void setConfirmationConsumer(Consumer<Peer> confirmationConsumer) {
+        this.confirmationConsumer = confirmationConsumer;
     }
 }

@@ -22,10 +22,6 @@ public class SoundData {
         this.bitsPerChannel = bitsPerChannel;
     }
 
-    public void fillBufferWithData(int buffer){
-        alBufferData(buffer, getOpenALFormat(), data, frequency);
-    }
-
     public int getOpenALFormat()
     {
         final int MONO = 1;

@@ -7,6 +7,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.common.transform.Transforms;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL10;
+
+import java.nio.IntBuffer;
 
 import static org.lwjgl.openal.AL10.*;
 
@@ -35,6 +39,7 @@ public class AudioUpdateTask extends EngineTask {
 
     }
 
+
     @Override
     protected void onClose() {
 
@@ -42,11 +47,29 @@ public class AudioUpdateTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        checkFreeBuffersAndSources();
         if(context.getListener() == null)
             return;
         updateDirections();
         updateListener();
         updateSources();
+    }
+
+    private void checkFreeBuffersAndSources() {
+        if(context.getFreeBuffers().size() < 10) {
+            IntBuffer intBuffer = BufferUtils.createIntBuffer(50);
+            AL10.alGenBuffers(intBuffer);
+            while (intBuffer.hasRemaining()) {
+                context.getFreeBuffers().add(intBuffer.get());
+            }
+        }
+        if(context.getFreeSources().size() < 10) {
+            IntBuffer intBuffer = BufferUtils.createIntBuffer(50);
+            AL10.alGenSources(intBuffer);
+            while (intBuffer.hasRemaining()) {
+                context.getFreeSources().add(intBuffer.get());
+            }
+        }
     }
 
     private Vector3f forwardVector = new Vector3f();
@@ -75,20 +98,19 @@ public class AudioUpdateTask extends EngineTask {
     }
 
     private void updateSources() {
-        for (int i = 0; i < context.getPlaying().size(); i++) {
-            AudioSourceProperty source = context.getPlaying().get(i);
+        for (int i = 0; i < context.getPlayingSources().size(); i++) {
+            AudioSourceProperty source = context.getPlayingSources().get(i);
             if (alGetSourcei(source.getId(), AL_SOURCE_STATE) == AL_PLAYING) {
                 updateSourcePos(source);
             } else {
-                context.getPlaying().remove(i);
+                context.getPlayingSources().remove(i);
                 source.setPlaying(false);
             }
         }
     }
 
     private void updateSourcePos(AudioSourceProperty source) {
-        if (!source.isRelative()) Transforms.getAbsolutePosition(source.getOwner(), posVector);
-        else posVector.set(0, 0, 0);
+        Transforms.getAbsolutePosition(source.getOwner(), posVector);
         alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
 
     }

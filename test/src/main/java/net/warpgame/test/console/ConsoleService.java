@@ -1,5 +1,7 @@
 package net.warpgame.test.console;
 
+import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.service.Service;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -18,9 +20,23 @@ public class ConsoleService {
     private Map<String, Command> commands = new HashMap<>();
     private Map<String, CommandVariable> variables = new HashMap<>();
     private PrintStream output;
+    private SceneHolder sceneHolder;
+    private SceneComponent consoleComponent;
 
-    public ConsoleService() {
+    public ConsoleService(SceneHolder holder) {
+        sceneHolder = holder;
         output = System.out;
+    }
+
+    public void printToConsole(String text) {
+        output.println(text);
+    }
+
+    /**
+     * Registers basic commands
+     */
+    public void initConsole() {
+        consoleComponent = new SceneComponent(sceneHolder.getScene());
         SimpleCommand help = new SimpleCommand("help", Side.CLIENT,
                 "Get help", "help [command]");
         help.setExecutor((args) -> {
@@ -34,7 +50,6 @@ public class ConsoleService {
                 output.println(help.getUsageText());
             }
         });
-        registerCommand(help);
 
         SimpleCommand list = new SimpleCommand("list", Side.CLIENT,
                 "lists all commands", "list");
@@ -44,7 +59,6 @@ public class ConsoleService {
                 output.printf("%s\n", c.getCommand());
             }
         });
-        registerCommand(list);
 
         SimpleCommand print = new SimpleCommand("print", Side.CLIENT,
                 "prints variables to console", "print $variable1 [...]");
@@ -52,7 +66,6 @@ public class ConsoleService {
             for (String s : args)
                 output.printf("%s\n", s);
         });
-        registerCommand(print);
 
         SimpleCommand variables = new SimpleCommand("variables", Side.CLIENT,
                 "Lists all variables", "variables");
@@ -61,6 +74,10 @@ public class ConsoleService {
             for (String var : getVariables())
                 output.printf("%s\n", var);
         });
+
+        registerCommand(help);
+        registerCommand(list);
+        registerCommand(print);
         registerCommand(variables);
     }
 
@@ -88,7 +105,7 @@ public class ConsoleService {
      *
      * @param line Line from console to parse
      */
-    public void parseAndExecute(String line) {
+    void parseAndExecute(String line) {
         String[] args = line.split(" ");
         String commandString = args[0];
         args = ArrayUtils.removeElement(args, commandString);
@@ -103,6 +120,7 @@ public class ConsoleService {
         if (command.getSide() == Side.CLIENT) {
             command.execute(args);
         } else {
+//            consoleComponent.triggerEvent();
             //TODO send command to server
         }
     }

@@ -3,27 +3,22 @@ package net.warpgame.engine.audio.command;
 import net.warpgame.engine.audio.AudioContext;
 import net.warpgame.engine.audio.AudioSourceProperty;
 
+import java.util.List;
+
 import static org.lwjgl.openal.AL10.*;
 
-/**
- * @author Hubertus
- *         Created 22.12.16
- */
 public class PlayCommand implements Command {
+    private AudioSourceProperty source;
+    private List<AudioSourceProperty> playingSources;
 
-    private final AudioSourceProperty source;
-    private final String soundName;
-
-    public PlayCommand(AudioSourceProperty source, String soundName) {
+    public PlayCommand(AudioSourceProperty source, List<AudioSourceProperty> playingSources) {
         this.source = source;
-        this.soundName = soundName;
+        this.playingSources = playingSources;
     }
 
     @Override
-    public void execute(AudioContext context) {
-        alSourcei(source.getId(), AL_SOURCE_RELATIVE, source.isRelative() ? AL_TRUE : AL_FALSE);
-        alSourcei(source.getId(), AL_BUFFER, context.getSoundBank().getSound(soundName));
-        alSourcei(source.getId(), AL_REFERENCE_DISTANCE, 5);
+    public void execute() {
         alSourcePlay(source.getId());
+        playingSources.add(source);
     }
 }

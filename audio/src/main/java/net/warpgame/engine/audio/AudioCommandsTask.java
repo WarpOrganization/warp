@@ -9,6 +9,7 @@ import net.warpgame.engine.core.execution.task.EngineTask;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
@@ -43,13 +44,11 @@ public class AudioCommandsTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        context.getAllBuffers().stream().map(AudioClip::getId).forEach(AL10::alDeleteBuffers);
+        context.getFreeBuffers().forEach(AL10::alDeleteBuffers);
 
-        //TODO FREE SOURCES
-
-        Map<String, Integer> soundBank = context.getSoundBank().sounds;
-        IntBuffer buffers = BufferUtils.createIntBuffer(soundBank.size());
-        soundBank.forEach((x, y) -> buffers.put(y));
-        AL10.alDeleteBuffers(buffers);
+        context.getAllSources().stream().map(AudioSourceProperty::getId).forEach(AL10::alDeleteBuffers);
+        context.getFreeSources().forEach(AL10::alDeleteBuffers);
 
         ALC10.alcDestroyContext(alcContext);
         ALC10.alcCloseDevice(device);
@@ -59,15 +58,11 @@ public class AudioCommandsTask extends EngineTask {
     public void update(int delta) {
         while (!commandsQueue.isEmpty()) {
             try {
-                commandsQueue.take().execute(context);
+                commandsQueue.take().execute();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public AudioContext getContext() {
-        return context;
     }
 
     private void initOpenAL() {

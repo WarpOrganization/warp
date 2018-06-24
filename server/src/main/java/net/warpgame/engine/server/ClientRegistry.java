@@ -29,14 +29,13 @@ public class ClientRegistry {
     public synchronized int addClient(Client client) {
         lastId++;
         client.setId(lastId);
-        //    clients.put(lastId, client);
         toAdd.add(client);
         return lastId;
     }
 
+    //TODO this probably should be used somewhere
     public synchronized void removeClient(int clientId) {
         toRemove.add(clientId);
-//        clients.remove(clientId);
     }
 
     public Client getClient(int clientId) {
