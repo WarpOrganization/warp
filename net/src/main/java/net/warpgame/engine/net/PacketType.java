@@ -4,45 +4,45 @@ package net.warpgame.engine.net;
  * @author Hubertus
  * Created 10.12.2017
  */
-public class PacketType {
+public enum PacketType {
     /**
      * Packet with no body
      */
-    public static final int PACKET_CONNECT = 1;
+    PACKET_CONNECT,
     /**
      * Body:
      * (int) clientId
      */
-    public static final int PACKET_CONNECTED = 2;
+    PACKET_CONNECTED,
     /**
      * Packet with no body
      */
-    public static final int PACKET_CONNECTION_REFUSED = 3;
+    PACKET_CONNECTION_REFUSED,
     /**
      * Packet with no body
      */
-    public static final int PACKET_KEEP_ALIVE = 4;
+    PACKET_KEEP_ALIVE,
     /**
      *
      */
-    public static final int PACKET_SCENE_STATE = 5;
+    PACKET_SCENE_STATE,
     /**
      * Body:
      * (int) messageType, (int) eventDependencyId, (byte[]) serializedMessageData
      */
-    public static final int PACKET_MESSAGE = 6;
+    PACKET_MESSAGE,
     /**
      * Body:
      * (int) eventDependencyId
      */
-    public static final int PACKET_MESSAGE_CONFIRMATION = 8;
+    PACKET_MESSAGE_CONFIRMATION,
     /**
      * Body:
      * (int) requestId
      */
-    public static final int PACKET_CLOCK_SYNCHRONIZATION_REQUEST = 9;
+    PACKET_CLOCK_SYNCHRONIZATION_REQUEST,
     /**
      * (int) requestId
      */
-    public static final int PACKET_CLOCK_SYNCHRONIZATION_RESPONSE = 10;
+    PACKET_CLOCK_SYNCHRONIZATION_RESPONSE
 }

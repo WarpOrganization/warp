@@ -88,6 +88,7 @@ public class Test1 {
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
         AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
+        //TODO compilation error
         //property.setAudioClip(audioClip);
         property.setLoop(true);
 
@@ -573,6 +574,7 @@ public class Test1 {
         material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
+        sphere.addProperty(new TessellationModeProperty(SceneTessellationMode.BEZIER));
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);

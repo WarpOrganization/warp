@@ -11,16 +11,15 @@ import java.util.HashMap;
 @Service
 public class MessageProcessorsService {
 
-    private HashMap<Integer, MessageProcessor> messageProcessors;
+    private HashMap<Integer, MessageProcessor> messageProcessorsMap;
 
-    public MessageProcessorsService(MessageProcessor[] processors) {
-        messageProcessors = new HashMap<>();
-        for(MessageProcessor processor : processors) {
-            messageProcessors.put(processor.getMessageType(), processor);
-        }
+    public MessageProcessorsService(MessageProcessor[] messageProcessors) {
+        messageProcessorsMap = new HashMap<>();
+        for(MessageProcessor messageProcessor : messageProcessors)
+            messageProcessorsMap.put(messageProcessor.getMessageType(), messageProcessor);
     }
 
     public MessageProcessor getMessageProcessor(int messageType) {
-        return messageProcessors.get(messageType);
+        return messageProcessorsMap.get(messageType);
     }
 }

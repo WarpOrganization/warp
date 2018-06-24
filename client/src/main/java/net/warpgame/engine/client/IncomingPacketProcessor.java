@@ -1,16 +1,12 @@
 package net.warpgame.engine.client;
 
 import io.netty.buffer.ByteBuf;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.internalmessage.InternalMessage;
 import net.warpgame.engine.net.internalmessage.InternalMessageContent;
 import net.warpgame.engine.net.message.InternalMessageQueue;
-import net.warpgame.engine.net.message.MessageQueue;
-
-import static net.warpgame.engine.net.PacketType.*;
 
 /**
  * @author Hubertus
@@ -21,24 +17,19 @@ public class IncomingPacketProcessor {
 
     private ConnectionService connectionService;
     private SerializedSceneHolder sceneHolder;
-    private MessageQueue messageQueue;
-    private ComponentRegistry componentRegistry;
     private InternalMessageQueue internalMessageQueue;
+    private PacketType[] packetTypes = PacketType.values();
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
-                                   ComponentRegistry componentRegistry,
-                                   MessageQueue messageQueue,
                                    InternalMessageQueue internalMessageQueue) {
         this.connectionService = connectionService;
         this.sceneHolder = sceneHolder;
-        this.messageQueue = messageQueue;
-        this.componentRegistry = componentRegistry;
         this.internalMessageQueue = internalMessageQueue;
     }
 
     public void processPacket(ByteBuf packet) {
-        int packetType = packet.readInt();
+        PacketType packetType = packetTypes[packet.readInt()];
         long timestamp = packet.readLong();
         switch (packetType) {
             case PACKET_CONNECTED:

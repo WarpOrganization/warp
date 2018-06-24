@@ -83,8 +83,6 @@ public class ClientTask extends EngineTask {
                     new IncomingPacketProcessor(
                             connectionService,
                             sceneHolder,
-                            componentRegistry,
-                            messageQueue,
                             internalMessageQueue));
             b.group(group)
                     .channel(NioDatagramChannel.class)
