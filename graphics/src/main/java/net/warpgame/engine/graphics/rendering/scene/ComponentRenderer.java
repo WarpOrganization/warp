@@ -8,7 +8,7 @@ import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.IndexedMesh;
-import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
+import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.rendering.scene.program.SceneRenderingProgramManager;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;

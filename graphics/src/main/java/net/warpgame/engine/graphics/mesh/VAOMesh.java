@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.mesh;
 
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL30;
 
 /**
@@ -11,13 +12,13 @@ public class VAOMesh extends IndexedMesh {
 
     protected VAO vao;
 
-    public VAOMesh(float[][] data, int[] sizes, int types[], int vertices, int[] indices) {
-        super(data, sizes, vertices, indices);
+    public VAOMesh(float[][] fData, int[] sizes, int types[], int vertices, int[] indices) {
+        super(toDirectBuffers(fData), sizes, vertices, indices);
         this.vao = createVAO(sizes, types);
     }
 
-    public VAOMesh(int[] sizes, int[] types, int indices, int vertices) {
-        super(sizes, indices, vertices);
+    public VAOMesh(float[][] fData, int[][] iData, int[] sizes, int types[], int vertices, int[] indices) {
+        super(ArrayUtils.addAll(toDirectBuffers(fData), toDirectBuffers(iData)), sizes, vertices, indices);
         this.vao = createVAO(sizes, types);
     }
 

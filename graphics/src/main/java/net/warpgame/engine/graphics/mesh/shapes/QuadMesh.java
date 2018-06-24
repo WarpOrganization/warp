@@ -1,12 +1,12 @@
 package net.warpgame.engine.graphics.mesh.shapes;
 
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 
 /**
  * @author Jaca777
  *         Created 2017-02-09 at 01
  */
-public class QuadMesh extends SceneMesh {
+public class QuadMesh extends StaticMesh {
 
     private static final float[] VERTICES = new float[]{
             -1.0f, -1.0f, 0.0f,

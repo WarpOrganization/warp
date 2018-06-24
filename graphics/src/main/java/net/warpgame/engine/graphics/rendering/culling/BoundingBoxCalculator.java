@@ -1,7 +1,7 @@
 package net.warpgame.engine.graphics.rendering.culling;
 
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
@@ -28,11 +28,11 @@ public class BoundingBoxCalculator {
      * @param mesh  mesh to calculate bounding box
      * @return      bounding box of a mesh
      */
-    public BoundingBox compute(SceneMesh mesh) {
+    public BoundingBox compute(StaticMesh mesh) {
         return computeBoundingBox(mesh);
     }
 
-    private synchronized BoundingBox computeBoundingBox(SceneMesh mesh) {
+    private synchronized BoundingBox computeBoundingBox(StaticMesh mesh) {
         int vertexBuff = mesh.getVertexBuff();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuff);
         ByteBuffer bb = GL30.glMapBufferRange(GL15.GL_ARRAY_BUFFER, 0, mesh.getVertexCount()*4*3, GL30.GL_MAP_READ_BIT);
