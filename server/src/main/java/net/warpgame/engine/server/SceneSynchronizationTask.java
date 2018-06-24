@@ -10,6 +10,9 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.net.PacketType;
+import net.warpgame.engine.net.SerializationType;
+import net.warpgame.engine.physics.FullPhysicsProperty;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
@@ -21,10 +24,17 @@ import java.util.ArrayList;
 @Service
 @RegisterTask(thread = "server")
 public class SceneSynchronizationTask extends EngineTask {
-
+    /**
+     * @see PacketType
+     */
     private static final int HEADER_SIZE = 4 + 8;
-    private static final int SERIALIZED_COMPONENT_SIZE = 4 * (1 + 3 + 3 + 3 + 4);
-    private static final int MAX_SERIALIZED_COMPONENTS = (2048 - HEADER_SIZE) / SERIALIZED_COMPONENT_SIZE;
+
+    //id (1), serializationType (1), translation (3), rotation (4)
+    //private static final int SERIALIZED_COMPONENT_TRANSLATION_SIZE = 4 * (1 + 1 + 3 + 4);
+    //id (1), serializationType (1), translation (3), rotation (4), velocity (4)
+    //private static final int SERIALIZED_COMPONENT_FULL_SIZE = 4 * (1 + 1 + 3 + 3 + 4);
+
+    private static final int MAX_PACKET_SIZE = 2048;
 
     private static final int SCENE_SYNCHRONIZATION_INTERVAL = 50;
 
@@ -63,23 +73,33 @@ public class SceneSynchronizationTask extends EngineTask {
         components.clear();
         componentRegistry.getComponents(components);
         ByteBuf out = getBuffer();
-        int counter = 0;
-
+        int spaceLeft = MAX_PACKET_SIZE;
+        spaceLeft -= HEADER_SIZE;
         for (Component c : components) {
             if (c.hasEnabledProperty(Property.getTypeId(TransformProperty.class))) {
-                serializeComponent(c, out);
-                counter++;
-                if (counter >= MAX_SERIALIZED_COMPONENTS) {
+
+                if (c.hasEnabledProperty(Property.getTypeId(FullPhysicsProperty.class))) {
+                    out.writeInt(SerializationType.POSITION_AND_VELOCITY.ordinal());
+                    serializeComponentPosition(c, out);
+                    serializeComponentVelocity(c, out);
+                    spaceLeft -= SerializationType.Size.POSITION_AND_VELOCITY_SIZE;
+                } else {
+                    out.writeInt(SerializationType.POSITION.ordinal());
+                    serializeComponentPosition(c, out);
+                    spaceLeft -= SerializationType.Size.POSITION_SIZE;
+                }
+
+                if (spaceLeft < SerializationType.Size.POSITION_AND_VELOCITY_SIZE) {
                     clientRegistry.broadcast(out);
-                    counter = 0;
+                    spaceLeft = MAX_PACKET_SIZE - HEADER_SIZE;
                     out = getBuffer();
                 }
             }
         }
-        if (counter > 0) clientRegistry.broadcast(out);
+        if (spaceLeft < MAX_PACKET_SIZE - HEADER_SIZE) clientRegistry.broadcast(out);
     }
 
-    private void serializeComponent(Component c, ByteBuf buffer) {
+    private void serializeComponentPosition(Component c, ByteBuf buffer) {
         TransformProperty transformProperty = c.getProperty(Property.getTypeId(TransformProperty.class));
         buffer.writeInt(c.getId());
         buffer.writeFloat(transformProperty.getTranslation().x);
@@ -91,10 +111,20 @@ public class SceneSynchronizationTask extends EngineTask {
         buffer.writeFloat(transformProperty.getRotation().w);
     }
 
+    private Vector3f velocity = new Vector3f();
+
+    private void serializeComponentVelocity(Component c, ByteBuf buffer) {
+        FullPhysicsProperty physicsProperty = c.getProperty(Property.getTypeId(FullPhysicsProperty.class));
+        physicsProperty.getVelocity(velocity);
+        buffer.writeFloat(velocity.x);
+        buffer.writeFloat(velocity.y);
+        buffer.writeFloat(velocity.z);
+    }
+
     private ByteBuf getBuffer() {
         return Unpooled
                 .buffer(2048, 2048)
-                .writeInt(PacketType.PACKET_SCENE_STATE)
+                .writeInt(PacketType.PACKET_SCENE_STATE.ordinal())
                 .writeLong(System.currentTimeMillis());
     }
 }

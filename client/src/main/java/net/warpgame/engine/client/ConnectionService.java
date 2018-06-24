@@ -38,7 +38,7 @@ public class ConnectionService {
         );
         channel.writeAndFlush(
                 new DatagramPacket(
-                        Unpooled.buffer().writeInt(PacketType.PACKET_CONNECT).writeLong(System.currentTimeMillis()),
+                        Unpooled.buffer().writeInt(PacketType.PACKET_CONNECT.ordinal()).writeLong(System.currentTimeMillis()),
                         address));
     }
 
@@ -46,9 +46,9 @@ public class ConnectionService {
         channel.writeAndFlush(new DatagramPacket(packetData, server.getAddress()));
     }
 
-    public ByteBuf getHeader(int packetType, int initialCapacity) {
+    public ByteBuf getHeader(PacketType packetType, int initialCapacity) {
         ByteBuf byteBuf = Unpooled.buffer(initialCapacity + 16, 2048);
-        byteBuf.writeInt(packetType);
+        byteBuf.writeInt(packetType.ordinal());
         byteBuf.writeLong(System.currentTimeMillis());
         byteBuf.writeInt(clientId);
         return byteBuf;

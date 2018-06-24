@@ -9,8 +9,6 @@ import net.warpgame.engine.net.internalmessage.InternalMessage;
 import net.warpgame.engine.net.internalmessage.InternalMessageContent;
 import net.warpgame.engine.net.message.InternalMessageQueue;
 
-import static net.warpgame.engine.net.PacketType.*;
-
 /**
  * @author Hubertus
  * Created 13.05.2018
@@ -30,7 +28,7 @@ public class IncomingPacketProcessor {
         this.internalMessageQueue = internalMessageQueue;
     }
 
-    void processPacket(int packetType, long timestamp, ByteBuf packet) {
+    void processPacket(PacketType packetType, long timestamp, ByteBuf packet) {
         int clientId = packet.readInt();
         switch (packetType) {
             case PACKET_KEEP_ALIVE:

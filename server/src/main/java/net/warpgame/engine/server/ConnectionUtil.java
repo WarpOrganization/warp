@@ -18,9 +18,9 @@ public class ConnectionUtil {
 
     private Channel outChannel;
 
-    public ByteBuf getHeader(int packetType, int initialCapacity) {
+    public ByteBuf getHeader(PacketType packetType, int initialCapacity) {
         ByteBuf byteBuf = Unpooled.buffer(initialCapacity + 12, 2048);
-        byteBuf.writeInt(packetType);
+        byteBuf.writeInt(packetType.ordinal());
         byteBuf.writeLong(System.currentTimeMillis());
         return byteBuf;
     }

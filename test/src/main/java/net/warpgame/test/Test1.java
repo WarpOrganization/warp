@@ -47,7 +47,6 @@ import org.lwjgl.opengl.GL11;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -83,7 +82,8 @@ public class Test1 {
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
         AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
-        property.setAudioClip(audioClip);
+        //TODO compilation error
+        //property.setAudioClip(audioClip);
         property.setLoop(true);
 
         createAudioBall(context, thread, audioClip);
@@ -112,7 +112,8 @@ public class Test1 {
 
             component.addProperty(new TransformProperty().move(new Vector3f(-10, 0, 2)));
         });
-        component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
+        //TODO compilation error
+        //component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
 
         return component;
     }

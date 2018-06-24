@@ -36,7 +36,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     private MessageProcessorsService messageProcessorsService;
     private InternalMessageQueue internalMessageQueue;
     private static final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
-
+    private PacketType[] packetTypes = PacketType.values();
 
     ConnectionHandler(ClientRegistry clientRegistry,
                       ComponentRegistry componentRegistry,
@@ -61,7 +61,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
         ByteBuf packet = msg.content();
-        int packetType = packet.readInt();
+        PacketType packetType = packetTypes[packet.readInt()];
         long timeStamp = packet.readLong();
         if (packetType == PacketType.PACKET_CONNECT) registerClient(ctx.channel(), msg.sender());
         else packetProcessor.processPacket(packetType, timeStamp, packet);
@@ -84,7 +84,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);
 
         channel.writeAndFlush(
-                new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED).writeInt(id), address));
+                new DatagramPacket(writeHeader(PacketType.PACKET_CONNECTED.ordinal()).writeInt(id), address));
 //        componentRegistry.getComponent(0).triggerEvent(new ConnectedEvent(c));
         logger.info("Client connected from address " + address.toString());
         c.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);

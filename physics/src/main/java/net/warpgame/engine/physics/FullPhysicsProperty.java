@@ -79,6 +79,15 @@ public class FullPhysicsProperty extends Property implements PhysicsInterface {
                 .removeConstraint(constraintId);
     }
 
+    public Vector3f getVelocity() {
+        return getVelocity(new Vector3f());
+    }
+
+    public Vector3f getVelocity(Vector3f out){
+        Vector3 bulletVelocity = rigidBody.getBulletRigidBody().getLinearVelocity();
+        return out.set(bulletVelocity.x, bulletVelocity.y, bulletVelocity.z);
+    }
+
     void internalRemoveConstraint(Constraint constraint){
         constraints.remove(constraint);
     }
