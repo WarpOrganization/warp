@@ -9,8 +9,8 @@ import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
-import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.MeshProperty;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import net.warpgame.engine.graphics.resource.texture.ImageData;
 import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 public class ShipLoadListener extends Listener<LoadShipEvent> {
 
     private final EngineThread graphicsThread;
-    private SceneMesh mesh;
+    private StaticMesh mesh;
     private ImageData imageData;
     private Texture2D diffuse;
     Material material;

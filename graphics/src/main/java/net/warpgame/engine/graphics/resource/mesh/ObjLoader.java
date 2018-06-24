@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.resource.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -143,14 +143,14 @@ public class ObjLoader {
     }
 
 
-    public SceneMesh toMesh() {
+    public StaticMesh toMesh() {
         int size = this.vertices.length + hVertices.size();
         float[] v = new float[size * 3];
         float[] t = new float[size * 2];
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
         load(v, t, n, indices);
-        return new SceneMesh(v, t, n, indices);
+        return new StaticMesh(v, t, n, indices);
     }
 
     private void load(float[] v, float[] t, float[] n, int[] indices) {

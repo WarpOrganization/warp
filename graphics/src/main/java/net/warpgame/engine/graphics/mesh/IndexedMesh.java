@@ -1,10 +1,10 @@
 package net.warpgame.engine.graphics.mesh;
 
+import net.warpgame.engine.graphics.utility.BufferTools;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import net.warpgame.engine.graphics.utility.BufferTools;
 
-
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -20,7 +20,7 @@ public class IndexedMesh {
     protected int indices = -1;
     protected int vertices = -1;
 
-    public IndexedMesh(FloatBuffer[] data, int[] sizes, IntBuffer indices, int indicesCount, int verticesCount) {
+    public IndexedMesh(ByteBuffer[] data, int[] sizes, IntBuffer indices, int indicesCount, int verticesCount) {
         loadBuffers(data, indices);
         this.sizes = sizes;
         this.indices = indicesCount;
@@ -32,7 +32,7 @@ public class IndexedMesh {
         this(createBuffers(sizes.length), sizes, GL15.glGenBuffers(), indices, vertices);
     }
 
-    private static int[] createBuffers(int bufferCount) {
+    protected static int[] createBuffers(int bufferCount) {
         int[] buffers = new int[bufferCount];
         for (int i = 0; i < buffers.length; i++) {
             buffers[i] = GL15.glGenBuffers();
@@ -40,11 +40,11 @@ public class IndexedMesh {
         return buffers;
     }
 
-    protected void loadBuffers(FloatBuffer[] data, IntBuffer indices) {
+    protected void loadBuffers(ByteBuffer[] data, IntBuffer indices) {
         this.buffers = new int[data.length];
 
         for (int i = 0; i < data.length; i++) {
-            FloatBuffer buffer = data[i];
+            ByteBuffer buffer = data[i];
             int bufferName = GL15.glGenBuffers();
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, bufferName);
             GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
@@ -56,17 +56,22 @@ public class IndexedMesh {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
     }
 
-    public IndexedMesh(float[][] data, int[] sizes, int vertices, int[] indices) {
-        this(toDirectBuffers(data),
-                sizes,
-                BufferTools.toDirectBuffer(indices),
-                indices.length, vertices);
+    public IndexedMesh(ByteBuffer[] data, int[] sizes, int vertices, int[] indices) {
+        this(data, sizes, BufferTools.toDirectBuffer(indices), indices.length, vertices);
     }
 
-    private static FloatBuffer[] toDirectBuffers(float[][] data) {
-        FloatBuffer[] buffers = new FloatBuffer[data.length];
+    protected static ByteBuffer[] toDirectBuffers(float[][] data) {
+        ByteBuffer[] buffers = new ByteBuffer[data.length];
+        for (int i = 0; i < data.length; i++) {
+            buffers[i] = BufferTools.toDirectByteBuffer(data[i]);
+        }
+        return buffers;
+    }
+
+    protected static ByteBuffer[] toDirectBuffers(int[][] data) {
+        ByteBuffer[] buffers = new ByteBuffer[data.length];
         for (int i = 0; i < buffers.length; i++) {
-            buffers[i] = BufferTools.toDirectBuffer(data[i]);
+            buffers[i] = BufferTools.toDirectByteBuffer(data[i]);
         }
         return buffers;
     }

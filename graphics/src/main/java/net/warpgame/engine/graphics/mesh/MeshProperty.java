@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.rendering.scene.mesh;
+package net.warpgame.engine.graphics.mesh;
 
 import net.warpgame.engine.core.property.Property;
 
@@ -8,13 +8,13 @@ import net.warpgame.engine.core.property.Property;
  */
 public class MeshProperty extends Property {
 
-    private SceneMesh mesh;
+    private StaticMesh mesh;
 
-    public MeshProperty(SceneMesh mesh) {
+    public MeshProperty(StaticMesh mesh) {
         this.mesh = mesh;
     }
 
-    public SceneMesh getMesh() {
+    public StaticMesh getMesh() {
         return mesh;
     }
 }

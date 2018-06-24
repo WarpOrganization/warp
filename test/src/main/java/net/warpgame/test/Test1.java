@@ -22,8 +22,8 @@ import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
-import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.MeshProperty;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
@@ -143,7 +143,7 @@ public class Test1 {
     }
 
     private static void createSatellite(Scene scene) {
-        SceneMesh mesh = ObjLoader.read(
+        StaticMesh mesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("satellite/satelita.obj"),
                 true).toMesh();
         ImageData imageData = ImageDecoder.decodePNG(
@@ -173,7 +173,7 @@ public class Test1 {
     }
 
     private static void createCastle(Scene scene) {
-        SceneMesh mesh = ObjLoader.read(
+        StaticMesh mesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("castle2.obj"),
                 true).toMesh();
 
@@ -201,7 +201,7 @@ public class Test1 {
     }
 
     private static void createFloor(Scene scene) {
-        SceneMesh quadMesh = new QuadMesh();
+        StaticMesh quadMesh = new QuadMesh();
         Texture2D diffuse = new Texture2D(
                 white.getWidth(),
                 white.getHeight(),
@@ -224,8 +224,7 @@ public class Test1 {
     }
 
     private static void createMugs(Scene scene) {
-        SceneLightManager sceneLightManager = scene.getContext().getLoadedContext().findOne(SceneLightManager.class).get();
-        SceneMesh mugMesh = ObjLoader.read(
+        StaticMesh mugMesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("mug.obj"),
                 true).toMesh();
         ImageData mugImageData = ImageDecoder.decodePNG(
@@ -241,7 +240,7 @@ public class Test1 {
                 mugImageData.getData());
         Material mugMaterial = new Material(mugDiffuse);
 
-        SceneMesh boundingBoxMesh = ObjLoader.read(
+        StaticMesh boundingBoxMesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("boundingbox.obj"),
                 true).toMesh();
         ImageData boxImageData = ImageDecoder.decodePNG(
@@ -299,7 +298,7 @@ public class Test1 {
 
 
     private static void createShip(Component ship) {
-        SceneMesh mesh = ObjLoader.read(
+        StaticMesh mesh = ObjLoader.read(
                 Test1.class.getResourceAsStream("pistol.obj"),
                 true).toMesh();
         MeshProperty meshProperty = new MeshProperty(mesh);
@@ -467,7 +466,7 @@ public class Test1 {
     private static Component createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, Texture2D normal, float roughness) {
         Component sphere = new SceneComponent(scene);
 
-        SceneMesh mesh = SphereBuilder.createShape(20, 20, 4);
+        StaticMesh mesh = SphereBuilder.createShape(20, 20, 4);
         MeshProperty meshProperty = new MeshProperty(mesh);
         sphere.addProperty(meshProperty);
 

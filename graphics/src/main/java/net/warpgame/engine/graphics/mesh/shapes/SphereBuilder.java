@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.mesh.shapes;
 
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 
 /**
  * @author Jaca777
@@ -8,7 +8,7 @@ import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
  */
 public class SphereBuilder {
 
-    public static SceneMesh createShape(int segmentsH, int segmentsW, float radius) {
+    public static StaticMesh createShape(int segmentsH, int segmentsW, float radius) {
 
         int verticesN = (segmentsW + 1) * (segmentsH + 1);
         int indicesN = 2 * segmentsW * (segmentsH - 1) * 3;
@@ -73,7 +73,7 @@ public class SphereBuilder {
             }
         }
 
-        return new SceneMesh(vertices, textureCoords, normals, indices);
+        return new StaticMesh(vertices, textureCoords, normals, indices);
     }
 }
 

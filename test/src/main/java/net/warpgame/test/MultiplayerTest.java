@@ -12,8 +12,8 @@ import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
-import net.warpgame.engine.graphics.rendering.scene.mesh.MeshProperty;
-import net.warpgame.engine.graphics.rendering.scene.mesh.SceneMesh;
+import net.warpgame.engine.graphics.mesh.MeshProperty;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
 import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
@@ -217,7 +217,7 @@ public class MultiplayerTest {
     private static Component createSphere(Component scene, Vector3f trans, Texture2D diffuse, Texture2D bump, Texture2D normal, float roughness) {
         Component sphere = new SceneComponent(scene);
 
-        SceneMesh mesh = SphereBuilder.createShape(20, 20, 4);
+        StaticMesh mesh = SphereBuilder.createShape(20, 20, 4);
         MeshProperty meshProperty = new MeshProperty(mesh);
         sphere.addProperty(meshProperty);
 

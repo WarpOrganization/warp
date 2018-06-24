@@ -90,6 +90,31 @@ public class BufferTools {
         return createByteBuffer(capacity << 3).asDoubleBuffer();
     }
 
+    /**
+     * Stores array in a direct byte buffer.
+     *
+     * @param data Array to be stored in a direct buffer.
+     * @return Direct buffer containing array.
+     */
+    public static ByteBuffer toDirectByteBuffer(float[] data) {
+        ByteBuffer buffer = createByteBuffer(data.length * 4);
+        buffer.asFloatBuffer()
+                .put(data);
+        return buffer;
+    }
+
+    /**
+     * Stores array in a direct byte buffer.
+     *
+     * @param data Array to be stored in a direct buffer.
+     * @return Direct buffer containing array.
+     */
+    public static ByteBuffer toDirectByteBuffer(int[] data) {
+        ByteBuffer buffer = createByteBuffer(data.length  * 4);
+        buffer.asIntBuffer()
+                .put(data);
+        return buffer;
+    }
 
     /**
      * Stores array in a direct buffer.
