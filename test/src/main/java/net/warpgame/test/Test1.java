@@ -155,7 +155,6 @@ public class Test1 {
     private static Component createModels(Scene scene, GraphicsThread graphicsThread) {
         Component ship = new SceneComponent(scene);
         graphicsThread.scheduleOnce(() -> {
-            createShip(ship);
             createSpheres(scene);
             createMugs(scene);
             createCastle(scene);
@@ -392,34 +391,6 @@ public class Test1 {
                 }
             }
         }
-    }
-
-
-    private static void createShip(Component ship) {
-        StaticMesh mesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("pistol.obj"),
-                true).toMesh();
-        MeshProperty meshProperty = new MeshProperty(mesh);
-        ship.addProperty(meshProperty);
-
-        ImageData imageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("fighter_1.png"),
-                PNGDecoder.Format.RGBA
-        );
-        Texture2D diffuse = new Texture2D(
-                imageData.getWidth(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
-        Material material = new Material(diffuse);
-        MaterialProperty materialProperty = new MaterialProperty(material);
-        ship.addProperty(materialProperty);
-
-        TransformProperty property = new TransformProperty();
-        ship.addProperty(property);
-        property.move(new Vector3f(0, 0, -10f));
     }
 
     private static ImageData white = ImageDecoder.decodePNG(
