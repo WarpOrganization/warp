@@ -574,7 +574,6 @@ public class Test1 {
         material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
-        sphere.addProperty(new TessellationModeProperty(SceneTessellationMode.BEZIER));
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);
