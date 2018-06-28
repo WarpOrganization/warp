@@ -14,7 +14,7 @@ public class EventSerializer {
 
     public byte[] serialize(EventEnvelope envelope) {
         byte[] serializedEvent;
-        serializedEvent = conf.asSharedByteArray(envelope, length);
+        serializedEvent = conf.asSharedByteArray(envelope.getEvent(), length);
         byte[] out = new byte[serializedEvent.length + 8];
 
         writeInt(out, envelope.getEvent().getType(), 0);

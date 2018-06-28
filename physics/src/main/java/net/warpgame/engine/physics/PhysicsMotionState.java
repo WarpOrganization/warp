@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 
 /**
  * @author Hubertus

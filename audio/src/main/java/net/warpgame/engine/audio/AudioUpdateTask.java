@@ -6,7 +6,7 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.common.transform.Transforms;
+import net.warpgame.engine.core.property.Transforms;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 

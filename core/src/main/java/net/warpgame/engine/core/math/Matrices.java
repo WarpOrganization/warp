@@ -1,4 +1,4 @@
-package net.warpgame.engine.common.math;
+package net.warpgame.engine.core.math;
 
 import org.joml.Matrix4f;
 

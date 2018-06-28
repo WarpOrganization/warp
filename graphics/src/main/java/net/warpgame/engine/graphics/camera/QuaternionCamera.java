@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.camera;
 
-import net.warpgame.engine.common.transform.Transforms;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.graphics.utility.projection.ProjectionMatrix;
 import org.joml.Matrix4f;

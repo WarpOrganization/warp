@@ -1,7 +1,7 @@
 package net.warpgame.test;
 
 import net.warpgame.content.InputEvent;
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.script.Script;

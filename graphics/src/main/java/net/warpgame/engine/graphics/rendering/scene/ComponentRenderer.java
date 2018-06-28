@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.rendering.scene;
 
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;

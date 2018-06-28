@@ -1,7 +1,7 @@
 package net.warpgame.engine.physics;
 
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.physics.shapeconstructors.RigidBodyShapeConstructor;
 
 /**

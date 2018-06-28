@@ -1,6 +1,6 @@
 package net.warpgame.servertest;
 
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.context.EngineContext;

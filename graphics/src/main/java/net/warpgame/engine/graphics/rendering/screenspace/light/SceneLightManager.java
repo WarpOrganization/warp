@@ -1,7 +1,7 @@
 package net.warpgame.engine.graphics.rendering.screenspace.light;
 
 import org.joml.Vector3f;
-import net.warpgame.engine.common.transform.Transforms;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.ArrayList;
