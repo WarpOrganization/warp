@@ -13,20 +13,24 @@ import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
+import net.warpgame.engine.graphics.animation.*;
+import net.warpgame.engine.graphics.animation.colladaloader.ColladaLoader;
+import net.warpgame.engine.graphics.animation.colladaloader.datastructures.AnimatedModelData;
+import net.warpgame.engine.graphics.animation.colladaloader.datastructures.AnimationData;
+import net.warpgame.engine.graphics.animation.dataloader.AnimatedModelLoader;
+import net.warpgame.engine.graphics.animation.dataloader.AnimationLoader;
 import net.warpgame.engine.graphics.camera.Camera;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.camera.QuaternionCamera;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
+import net.warpgame.engine.graphics.mesh.MeshProperty;
+import net.warpgame.engine.graphics.mesh.StaticMesh;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
-import net.warpgame.engine.graphics.mesh.MeshProperty;
-import net.warpgame.engine.graphics.mesh.StaticMesh;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -48,6 +52,8 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Jaca777
@@ -80,13 +86,13 @@ public class Test1 {
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
         cameraComponent.addProperty(new AudioSourceProperty());
-        //AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
+        AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
         AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
-        //property.setLoop(true);
+        //TODO compilation error
         //property.setAudioClip(audioClip);
-        //property.play();
-        Component ball = createAudioBall(context, thread, audioClip);
-        ball.hasParent();
+        property.setLoop(true);
+
+        createAudioBall(context, thread, audioClip);
     }
 
     private static Component createAudioBall(EngineContext context, GraphicsThread thread, AudioClip audioClip) {
@@ -109,15 +115,11 @@ public class Test1 {
                     imageData.getData());
 
             component.addProperty(new MaterialProperty(new Material(diffuse)));
-            TransformProperty transformProperty = new TransformProperty();
-            transformProperty.move(new Vector3f(-10, 0, 2));
-            component.addProperty(transformProperty);
-            component.addProperty(new AudioSourceProperty());
-            AudioSourceProperty sourceProperty = component.getProperty(Property.getTypeId(AudioSourceProperty.class));
-            sourceProperty.setAudioClip(audioClip);
-            sourceProperty.setLoop(true);
-            sourceProperty.play();
+
+            component.addProperty(new TransformProperty().move(new Vector3f(-10, 0, 2)));
         });
+        //component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
+
         return component;
     }
 
@@ -159,12 +161,58 @@ public class Test1 {
             createCastle(scene);
             createFloor(scene);
             createSatellite(scene);
+            createAnimated(scene);
             Component lsource = new SceneComponent(scene);
             lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
             createLight(lsource);
         });
 
         return ship;
+    }
+
+    private static void createAnimated(Scene scene) {
+        AnimatedModelData animatedModelData = ColladaLoader.loadColladaModel(Test1.class.getResourceAsStream("model.dae"), 3);
+        AnimationData animationData = ColladaLoader.loadColladaAnimation(Test1.class.getResourceAsStream("model.dae"));
+        AnimatedModel model = AnimatedModelLoader.loadData(animatedModelData);
+
+        Map<String, Integer> nameToJointId = new HashMap<>();
+        genJointNameToJointIds(model.getRootJoint(), nameToJointId);
+        Animation animation = AnimationLoader.loadAnimation(animationData, nameToJointId);
+
+        AnimatedModelProperty animatedModelProperty = new AnimatedModelProperty(model);
+        Component c = new SceneComponent(scene);
+        c.addProperty(new TransformProperty().move(new Vector3f(0, 0, 10)));
+        c.addProperty(animatedModelProperty);
+        AnimatorTask animatorTask = c.getContext()
+                .getLoadedContext()
+                .findOne(AnimatorTask.class)
+                .get();
+        animatorTask.addAnimator(model.getAnimator());
+
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("gosciu.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D diffuse = new Texture2D(
+                imageData.getWidth(),
+                imageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                imageData.getData());
+        Material material = new Material(diffuse);
+        material.setShininess(0.05f);
+        MaterialProperty materialProperty = new MaterialProperty(material);
+        c.addProperty(materialProperty);
+
+        model.getAnimator().startAnimation(animation);
+    }
+
+    private static void genJointNameToJointIds(Joint joint, Map<String, Integer> nameToJointId) {
+        nameToJointId.put(joint.getName(), joint.getIndex());
+        for(Joint childJoint : joint.getChildren()) {
+            genJointNameToJointIds(childJoint, nameToJointId);
+        }
     }
 
     private static void registerCommandsAndVariables(Context context) {

@@ -14,8 +14,6 @@ import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.mesh.StaticMesh;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode;
-import net.warpgame.engine.graphics.rendering.scene.tesselation.TessellationModeProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -227,7 +225,6 @@ public class MultiplayerTest {
         material.setRoughness(roughness);
         MaterialProperty materialProperty = new MaterialProperty(material);
         sphere.addProperty(materialProperty);
-        sphere.addProperty(new TessellationModeProperty(SceneTessellationMode.BEZIER));
 
         TransformProperty property = new TransformProperty();
         sphere.addProperty(property);

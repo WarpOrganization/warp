@@ -9,7 +9,6 @@ graphics:
     enabled: true
     sampleSize: 30
   rendering:
-    defaultTessellation: !!net.warpgame.engine.graphics.rendering.scene.tesselation.SceneTessellationMode NONE
     scene:
       maxLights: 10
     smaa:
