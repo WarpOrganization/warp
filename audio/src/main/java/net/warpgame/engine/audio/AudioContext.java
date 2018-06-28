@@ -14,7 +14,6 @@ import java.util.concurrent.BlockingQueue;
 @Service
 public class AudioContext {
 
-    private BlockingQueue<Command> commandsQueue;
     private AudioListenerProperty listener;
 
     private List<AudioSourceProperty> allSources;
@@ -25,7 +24,6 @@ public class AudioContext {
     private BlockingQueue<Integer> freeBuffers;
 
     public AudioContext() {
-        this.commandsQueue = new ArrayBlockingQueue<>(10000);
         this.allSources = Collections.synchronizedList(new LinkedList<>());
         this.playingSources = Collections.synchronizedList(new ArrayList<>());
         this.freeSources = new ArrayBlockingQueue<>(100);
@@ -45,14 +43,6 @@ public class AudioContext {
         this.listener = listener;
     }
 
-    void putCommand(Command cmd) {
-        try {
-            commandsQueue.put(cmd);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     int getSource() throws InterruptedException {
         return freeSources.take();
     }
@@ -67,10 +57,6 @@ public class AudioContext {
 
     BlockingQueue<Integer> getFreeBuffers() {
         return freeBuffers;
-    }
-
-    BlockingQueue<Command> getCommandsQueue() {
-        return commandsQueue;
     }
 
     List<AudioSourceProperty> getAllSources() {

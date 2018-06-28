@@ -1,7 +1,8 @@
-package net.warpgame.engine.audio.command;
+package net.warpgame.engine.audio.command.buffer;
 
 import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioContext;
+import net.warpgame.engine.audio.command.Command;
 import net.warpgame.engine.audio.decoder.SoundData;
 
 import static org.lwjgl.openal.AL10.alBufferData;
