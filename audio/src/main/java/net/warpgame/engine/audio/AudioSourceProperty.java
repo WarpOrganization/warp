@@ -28,6 +28,7 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty play() {
+        if(id == -1 ) throw new AudioSourcePropertyNotInitialisedException("play");
         audioContext.putCommand(new PlayCommand(this, audioContext.getPlayingSources()));
         setPlaying(true);
         return this;
@@ -40,6 +41,8 @@ public class AudioSourceProperty extends Property {
     public AudioSourceProperty pause() {
         throw new UnsupportedOperationException("Pause command is not implemented");
     }
+
+
 
     @Override
     public void enable() {
@@ -89,6 +92,7 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty setLoop(boolean loop) {
+        if(id == -1) throw new AudioSourcePropertyNotInitialisedException("loop");
         this.loop = loop;
         audioContext.putCommand(new SetLoopingCommand(this, loop));
         return this;
