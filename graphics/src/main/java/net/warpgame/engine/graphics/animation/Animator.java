@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.animation;
 
-import net.warpgame.engine.common.math.Matrices;
+import net.warpgame.engine.core.math.Matrices;
 import org.joml.Matrix4f;
 
 /**

@@ -1,6 +1,5 @@
-package net.warpgame.engine.common.transform;
+package net.warpgame.engine.core.property;
 
-import net.warpgame.engine.core.property.Property;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;

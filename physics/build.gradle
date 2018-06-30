@@ -9,7 +9,6 @@ repositories {
 
 dependencies {
     compile project(':core')
-    compile project(':common')
     compile group: 'com.badlogicgames.gdx', name: 'gdx-bullet', version: '1.9.3'
     compile group: 'com.badlogicgames.gdx', name: 'gdx-bullet-platform', version: '1.9.3', classifier: 'natives-desktop'
     compile group: 'com.badlogicgames.gdx', name: 'gdx-platform', version: '1.9.3', classifier: 'natives-desktop'

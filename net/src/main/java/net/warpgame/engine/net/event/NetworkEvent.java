@@ -2,11 +2,13 @@ package net.warpgame.engine.net.event;
 
 import net.warpgame.engine.core.event.Event;
 
+import java.io.Serializable;
+
 /**
  * @author Hubertus
  * Created 30.05.2018
  */
-public class NetworkEvent extends Event {
+public class NetworkEvent extends Event implements Serializable {
     private int targetId;
     private int sourceId;
     private boolean transfered = false;

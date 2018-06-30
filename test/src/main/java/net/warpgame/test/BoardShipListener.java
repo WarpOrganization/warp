@@ -1,7 +1,7 @@
 package net.warpgame.test;
 
 import net.warpgame.content.BoardShipEvent;
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.SceneComponent;

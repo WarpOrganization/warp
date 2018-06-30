@@ -1,6 +1,6 @@
 package net.warpgame.test.console;
 
-import net.warpgame.engine.common.transform.TransformProperty;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import org.joml.Vector3f;
