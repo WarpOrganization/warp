@@ -26,6 +26,7 @@ public class ClientMessageSender extends MessageSender {
                 .getHeader(PacketType.PACKET_MESSAGE, addressedEnvelope.getSerializedMessage().length + 8);
         packet.writeInt(addressedEnvelope.getMessageType());
         packet.writeInt(addressedEnvelope.getDependencyId());
+        packet.writeBytes(addressedEnvelope.getSerializedMessage());
         connectionService.sendPacket(packet);
     }
 }

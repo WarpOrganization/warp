@@ -20,6 +20,11 @@ public class FullPhysicsProperty extends Property {
 
     public FullPhysicsProperty(RigidBody rigidBody) {
         this.rigidBody = rigidBody;
+
+    }
+
+    @Override
+    public void init(){
         rigidBody
                 .getBulletRigidBody()
                 .setUserValue(getOwner().getId());
