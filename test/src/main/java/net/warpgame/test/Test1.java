@@ -88,8 +88,8 @@ public class Test1 {
         AudioSourceProperty property = new AudioSourceProperty();
         AudioClip audioClip = new AudioClip( EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
         property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
-        component.addProperty(new TransformProperty());
         component.addProperty(property);
+        component.addProperty(new TransformProperty());
 
     }
 
