@@ -3,14 +3,13 @@ package net.warpgame.test;
 import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
-import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -86,20 +85,12 @@ public class Test1 {
     }
 
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
-        Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
-        cameraComponent.addProperty(new AudioSourceProperty());
-        AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
-        //TODO compilation error
-        //property.setAudioClip(audioClip);
-        //property.setLoop(true);
-
-        createAudioBall(context, thread, audioClip);
-    }
-
-    private static Component createAudioBall(EngineContext context, GraphicsThread thread, AudioClip audioClip) {
-
         Component component = new SceneComponent(context);
+        AudioSourceProperty property = new AudioSourceProperty();
+        AudioClip audioClip = new AudioClip( EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
+        property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
+        component.addProperty(property);
+        component.addProperty(new TransformProperty());
         thread.scheduleOnce( () -> {
             StaticMesh mesh = SphereBuilder.createShape(20, 20, 1f);
             component.addProperty(new MeshProperty(mesh));

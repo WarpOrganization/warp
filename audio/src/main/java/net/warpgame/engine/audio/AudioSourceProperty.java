@@ -2,8 +2,10 @@ package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.*;
 import net.warpgame.engine.audio.command.buffer.AttachBufferCommand;
+import net.warpgame.engine.audio.command.source.PauseSourceCommand;
 import net.warpgame.engine.audio.command.source.PlaySourceCommand;
 import net.warpgame.engine.audio.command.source.SetSourceIntCommand;
+import net.warpgame.engine.audio.command.source.StopSourceCommand;
 import net.warpgame.engine.core.property.Property;
 import static org.lwjgl.openal.AL10.*;
 
@@ -46,16 +48,19 @@ public class AudioSourceProperty extends Property {
     public AudioSourceProperty play() {
         if(id == -1) throw new RuntimeException("Playing clip before assigning source to component is forbidden");
         commandQueue.add(new PlaySourceCommand(this, audioContext.getPlayingSources()));
+        audioContext.getPlayingSources().add(this);
         isPlaying = true;
         return this;
     }
 
     public AudioSourceProperty stop() {
-        throw new UnsupportedOperationException("Stop is not implemented");
+        commandQueue.add(new StopSourceCommand(this));
+        return this;
     }
 
     public AudioSourceProperty pause() {
-        throw new UnsupportedOperationException("Pause is not implemented");
+        commandQueue.add(new PauseSourceCommand(this));
+        return this;
     }
 
 
@@ -95,6 +100,7 @@ public class AudioSourceProperty extends Property {
         return playOnStartup;
     }
 
+    //it will play the moment you add property to component
     public AudioSourceProperty setPlayOnStartup(boolean playOnStartup) {
         this.playOnStartup = playOnStartup;
         return this;
