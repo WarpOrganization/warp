@@ -2,9 +2,9 @@ package net.warpgame.engine.core.context.loader
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpecLike}
-import net.warpgame.engine.core.context.graph.Node
 import net.warpgame.engine.core.context.loader.service._
 import ServiceCreatorSpec._
+import net.warpgame.engine.core.graph.{DAG, Node}
 
 import scala.reflect.ClassTag
 

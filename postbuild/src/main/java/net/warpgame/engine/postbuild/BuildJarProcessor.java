@@ -29,13 +29,10 @@ public class BuildJarProcessor {
         return buildJarLoader.loadClasses(jarFile);
     }
 
-    //1. laduje klasy ktore chce <-
-    //2. processing
-    //3. przewalanie jara calego <-
 
     private ClassTree resolveClassTree(BuildClasses buildClasses) {
-        ClassTreeResolver resolver = new ClassTreeResolver();
-        return resolver.resolveClassTree(buildClasses);
+        ClassTreeResolver resolver = new ClassTreeResolver(buildClasses);
+        return resolver.resolveClassTree();
     }
 
 }

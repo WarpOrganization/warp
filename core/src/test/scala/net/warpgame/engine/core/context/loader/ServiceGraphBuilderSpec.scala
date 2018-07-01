@@ -10,7 +10,6 @@ import net.warpgame.engine.core.context.loader.service.{DependencyInfo, ServiceG
 
 import scala.reflect.ClassTag
 import ServiceGraphBuilderSpec._
-import net.warpgame.engine.core.context.graph.DAG
 import net.warpgame.engine.core.context.loader.service.ServiceGraphBuilder.AmbiguousServiceDependencyException
 import net.warpgame.engine.core.graph.{CycleFoundException, DAG}
 /**
