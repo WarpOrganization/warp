@@ -11,7 +11,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.Arrays;
 
 /**
  * @author Jaca777
@@ -38,27 +37,27 @@ public class EngineLauncher {
 
     public static void main(String[] args) throws ReflectiveOperationException {
         try {
-            loadRuntime();
-            runEngine(args);
+            EngineRuntime engineRuntime = loadRuntime();
+            runEngine(args, engineRuntime);
         } catch (ReflectiveOperationException e) {
             logger.error("Runtime launcher encountered a problem while running the engine app.");
             throw e;
         }
     }
 
-    private static void loadRuntime() {
+    private static EngineRuntime loadRuntime() {
         EngineRuntime runtime = new EngineRuntime();
         runtime.load();
+        return runtime;
     }
 
-    protected static void runEngine(String[] args) throws ReflectiveOperationException {
+    protected static void runEngine(String[] args, EngineRuntime runtime) throws ReflectiveOperationException {
         String className = args[0];
         Class<?> aClass = Thread.currentThread()
                 .getContextClassLoader()
                 .loadClass(className);
-        Method main = aClass.getMethod("main", String[].class);
-        String[] engineArgs = Arrays.copyOfRange(args, 1, args.length, String[].class);
-        main.invoke(null, (Object) engineArgs);
+        Method main = aClass.getMethod("start", EngineRuntime.class);
+            main.invoke(null, runtime);
     }
 
 }

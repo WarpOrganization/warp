@@ -10,6 +10,7 @@ import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -48,7 +49,6 @@ import net.warpgame.test.console.*;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -65,9 +65,11 @@ public class Test1 {
     private static BoundingBoxCalculator calc;
     private static ConsoleService consoleService;
 
-    public static void main(String[] args) {
+    public static void start(EngineRuntime runtime) {
+
         System.out.println();
         EngineContext engineContext = new EngineContext("dev");
+        engineContext.getLoadedContext().addService(runtime.getIdRegistry());//TODO delete dis plz
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();
@@ -77,6 +79,7 @@ public class Test1 {
         consoleService = engineContext.getLoadedContext()
                 .findOne(ConsoleService.class)
                 .get();
+        System.out.println(TransformProperty.class.getName());
         setupScene(engineContext, thread);
         setupCamera(engineContext);
         createAudioSources(engineContext, thread);
@@ -87,12 +90,12 @@ public class Test1 {
         Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
+//        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
         //TODO compilation error
         //property.setAudioClip(audioClip);
         property.setLoop(true);
 
-        createAudioBall(context, thread, audioClip);
+     //   createAudioBall(context, thread, audioClip);
     }
 
     private static Component createAudioBall(EngineContext context, GraphicsThread thread, AudioClip audioClip) {
