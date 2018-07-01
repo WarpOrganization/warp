@@ -2,7 +2,7 @@ package net.warpgame.engine.core.context.loader
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpecLike}
-import net.warpgame.engine.core.context.graph.{DAG, Node}
+import net.warpgame.engine.core.context.graph.Node
 import net.warpgame.engine.core.context.loader.service._
 import ServiceCreatorSpec._
 

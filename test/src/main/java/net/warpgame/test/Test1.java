@@ -3,12 +3,14 @@ package net.warpgame.test;
 import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
-
 import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -64,11 +66,10 @@ public class Test1 {
     private static BoundingBoxCalculator calc;
     private static ConsoleService consoleService;
 
-    public static void start(EngineRuntime runtime) {
-
+    public static void start(EngineRuntime engineRuntime) {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev");
-        engineContext.getLoadedContext().addService(runtime.getIdRegistry());//TODO delete dis plz
+        engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();
@@ -78,7 +79,6 @@ public class Test1 {
         consoleService = engineContext.getLoadedContext()
                 .findOne(ConsoleService.class)
                 .get();
-        System.out.println(TransformProperty.class.getName());
         setupScene(engineContext, thread);
         setupCamera(engineContext);
         createAudioSources(engineContext, thread);
@@ -89,23 +89,40 @@ public class Test1 {
         Component cameraComponent = context.getLoadedContext().findOne(CameraHolder.class).get().getCamera().getCameraComponent();
         cameraComponent.addProperty(new AudioSourceProperty());
         AudioSourceProperty property = cameraComponent.getProperty(Property.getTypeId(AudioSourceProperty.class));
-//        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
+        AudioClip audioClip = new AudioClip(resourceToPath("sound" + File.separator + "music" + File.separator + "looperman-l-2425253-0130702-ronnylistenup.wav"));
         //TODO compilation error
         //property.setAudioClip(audioClip);
-        property.setLoop(true);
+        //property.setLoop(true);
 
-     //   createAudioBall(context, thread, audioClip);
+        createAudioBall(context, thread, audioClip);
     }
 
     private static Component createAudioBall(EngineContext context, GraphicsThread thread, AudioClip audioClip) {
 
         Component component = new SceneComponent(context);
-        AudioSourceProperty property = new AudioSourceProperty();
-        AudioClip audioClip = new AudioClip( EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
-        property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
-        component.addProperty(new TransformProperty());
-        component.addProperty(property);
+        thread.scheduleOnce( () -> {
+            StaticMesh mesh = SphereBuilder.createShape(20, 20, 1f);
+            component.addProperty(new MeshProperty(mesh));
 
+            ImageData imageData = ImageDecoder.decodePNG(
+                    Test1.class.getResourceAsStream("fighter_1.png"),
+                    PNGDecoder.Format.RGBA
+            );
+            Texture2D diffuse = new Texture2D(
+                    imageData.getWidth(),
+                    imageData.getHeight(),
+                    GL11.GL_RGBA16,
+                    GL11.GL_RGBA,
+                    true,
+                    imageData.getData());
+
+            component.addProperty(new MaterialProperty(new Material(diffuse)));
+
+            component.addProperty(new TransformProperty().move(new Vector3f(-10, 0, 2)));
+        });
+        //component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
+
+        return component;
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {

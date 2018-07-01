@@ -1,7 +1,7 @@
 package net.warpgame.engine.core.context.loader.service
 
 import com.typesafe.scalalogging.LazyLogging
-import net.warpgame.engine.core.context.graph.DAG
+import net.warpgame.engine.core.graph.DAG
 
 /**
   * @author Jaca777
