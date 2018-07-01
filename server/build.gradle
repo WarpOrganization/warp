@@ -10,7 +10,6 @@ repositories {
 
 dependencies {
     compile project(':core')
-    compile project(':common')
     compile project(':net')
     compile project(':physics')
     compile group: 'io.netty', name: 'netty-all', version: '4.1.17.Final'

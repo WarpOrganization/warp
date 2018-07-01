@@ -98,7 +98,7 @@ static def createConfiguration(taskName, mainClass, mod) {
 task createRunConfigurations {
 
     createConfiguration("SP - Warp Engine Test", "net.warpgame.test.Test1", "test_main")
-    createConfiguration("MP - Server Test", "net.warpgane.servertest.Test", "servertest_main")
+    createConfiguration("MP - Server Test", "net.warpgame.servertest.Test", "servertest_main")
     createConfiguration("MP - Client Test", "net.warpgame.test.MultiplayerTest", "test_main")
 }
 

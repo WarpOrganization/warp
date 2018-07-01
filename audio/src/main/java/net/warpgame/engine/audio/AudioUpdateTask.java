@@ -6,7 +6,7 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.common.transform.Transforms;
+import net.warpgame.engine.core.property.Transforms;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 
@@ -47,12 +47,15 @@ public class AudioUpdateTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        checkFreeBuffersAndSources();
-        if(context.getListener() == null)
-            return;
-        updateDirections();
-        updateListener();
-        updateSources();
+        try {
+            checkFreeBuffersAndSources();
+            if(context.getListener() == null)
+                return;
+            updateListener();
+            updateSources();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkFreeBuffersAndSources() {
@@ -79,7 +82,7 @@ public class AudioUpdateTask extends EngineTask {
     private Vector3f listenerPosVector = new Vector3f();
     private float[] orientation = new float[6];
 
-    private void updateDirections() {
+    private void updateListener() {
         Quaternionf fullRotation = Transforms.getAbsoluteRotation(context.getListener().getOwner(), new Quaternionf());
         fullRotation.transform(forwardVector.set(FORWARD_VECTOR));
         fullRotation.transform(upVector.set(UP_VECTOR));
@@ -89,17 +92,17 @@ public class AudioUpdateTask extends EngineTask {
         orientation[3] = upVector.x;
         orientation[4] = upVector.y;
         orientation[5] = upVector.z;
-    }
 
-    private void updateListener() {
         Transforms.getAbsolutePosition(context.getListener().getOwner(), listenerPosVector);
         alListener3f(AL_POSITION, listenerPosVector.x, listenerPosVector.y, listenerPosVector.z);
         alListenerfv(AL_ORIENTATION, orientation);
     }
 
-    private void updateSources() {
+    private void updateSources() throws InterruptedException {
         for (int i = 0; i < context.getPlayingSources().size(); i++) {
             AudioSourceProperty source = context.getPlayingSources().get(i);
+            while(source.getCommandQueue().size() > 0)
+                source.getCommandQueue().take().execute();
             if (alGetSourcei(source.getId(), AL_SOURCE_STATE) == AL_PLAYING) {
                 updateSourcePos(source);
             } else {

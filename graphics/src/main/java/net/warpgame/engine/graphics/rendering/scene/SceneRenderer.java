@@ -47,7 +47,8 @@ public class SceneRenderer {
             initRendering();
             render(sceneHolder.getScene(), false);
         } else {
-            logger.warn("Unable to render the scene. Scene = null or Camera = null.");
+            //TODO uncomment
+            //logger.warn("Unable to render the scene. Scene = null or Camera = null.");
         }//TODO do stuff
     }
 

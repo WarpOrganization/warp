@@ -28,7 +28,7 @@ public enum PacketType {
     PACKET_SCENE_STATE,
     /**
      * Body:
-     * (int) messageType, (int) eventDependencyId, (byte[]) serializedMessageData
+     * (int) messageType, (int) messageDependencyId, (byte[]) serializedMessageData
      */
     PACKET_MESSAGE,
     /**

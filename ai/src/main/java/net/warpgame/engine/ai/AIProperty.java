@@ -13,6 +13,10 @@ public class AIProperty extends Property {
 
     public AIProperty(BehaviorTree behaviorTree) {
         this.behaviorTree = behaviorTree;
+    }
+
+    @Override
+    public void init(){
         getOwner()
                 .getContext()
                 .getLoadedContext()

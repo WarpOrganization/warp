@@ -1,12 +1,14 @@
 package net.warpgame.engine.audio;
 
 
-import net.warpgame.engine.audio.command.FillBufferCommand;
+import net.warpgame.engine.audio.command.Command;
+import net.warpgame.engine.audio.command.buffer.FillBufferCommand;
 import net.warpgame.engine.audio.decoder.SoundData;
 import net.warpgame.engine.audio.decoder.SoundDecoderManager;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
 
 public class AudioClip {
     private int id;
@@ -17,15 +19,16 @@ public class AudioClip {
         this.file = file;
     }
 
-    void init(AudioContext context){
+    void init(AudioContext context, BlockingQueue<Command> commandQueue){
         if(id == -1) {
             try {
                 SoundData data = SoundDecoderManager.decode(file);
                 id = context.getBuffer();
                 context.getAllBuffers().add(this);
-                context.putCommand(new FillBufferCommand(this, data));
+                commandQueue.add(new FillBufferCommand(this, data));
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
+                throw new RuntimeException("Unable to get buffer id for AudioClip");
             }
         }
     }

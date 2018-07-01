@@ -1,7 +1,7 @@
 package net.warpgame.servertest;
 
-import net.warpgame.engine.common.transform.TransformProperty;
-import net.warpgame.engine.common.transform.Transforms;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.script.Script;

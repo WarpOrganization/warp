@@ -201,6 +201,7 @@ public class SceneComponent implements Component {
     public void addProperty(Property property) {
         this.properties.put(property.getType(), property);
         property.setOwner(this);
+        property.init();
     }
 
     @Override

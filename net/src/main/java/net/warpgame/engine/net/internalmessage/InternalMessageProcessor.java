@@ -29,6 +29,7 @@ public class InternalMessageProcessor implements MessageProcessor {
 
     @Override
     public int getMessageType() {
+        //TODO implement runtime messageType generation
         return 1;
     }
 }
