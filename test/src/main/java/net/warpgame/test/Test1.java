@@ -3,13 +3,13 @@ package net.warpgame.test;
 import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
-import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -54,6 +54,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @author Jaca777
@@ -83,6 +84,14 @@ public class Test1 {
         registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
+    public static class Sup extends Property{
+        public Supplier<Float> supplier;
+
+        public Sup(Supplier<Float> supplier) {
+            this.supplier = supplier;
+        }
+    }
+
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         Component component = new SceneComponent(context);
         AudioSourceProperty property = new AudioSourceProperty();
@@ -91,7 +100,14 @@ public class Test1 {
         component.addProperty(property);
         component.addProperty(new TransformProperty());
 
+        component.addProperty(new Sup(() -> 5f));
+
+        component.addScript(ZoneDrawerScript.class);
+
     }
+
+
+
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
         SceneHolder sceneHolder = engineContext.getLoadedContext()
