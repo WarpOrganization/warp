@@ -37,8 +37,12 @@ public class NetworkEvent extends Event implements Serializable {
         return targetId;
     }
 
-    void setSourceId(int sourceId) {
+    public void setSourceId(int sourceId) {
         this.sourceId = sourceId;
+    }
+
+    void setTargetId(int targetId){
+        this.targetId = targetId;
     }
 
     public boolean isTransfered() {

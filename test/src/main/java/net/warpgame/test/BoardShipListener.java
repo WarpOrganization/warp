@@ -41,6 +41,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
 
     @Override
     public void handle(BoardShipEvent event) {
+        System.out.println("board ship");
         Component cameraOwner = componentRegistry.getComponent(event.getShipComponentId());
         Component cameraComponent = new SceneComponent(cameraOwner, 1000000001);
         TransformProperty transformProperty = new TransformProperty();

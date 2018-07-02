@@ -44,6 +44,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
 
     @Override
     public void handle(ConnectedEvent event) {
+        System.out.println("client connected");
         Component ship = new SceneComponent(getOwner());
         TransformProperty transformProperty = new TransformProperty();
         ship.addProperty(transformProperty);

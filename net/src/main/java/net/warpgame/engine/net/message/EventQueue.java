@@ -1,6 +1,7 @@
 package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.event.ConfirmableNetworkEvent;
 import net.warpgame.engine.net.event.EventEnvelope;
 import net.warpgame.engine.net.event.EventSerializer;
@@ -14,10 +15,14 @@ public class EventQueue extends MessageSource<EventEnvelope> {
 
     private final EnvelopeAddressingService envelopeAddressingService;
     private EventSerializer eventSerializer;
+    private ConnectionTools connectionTools;
 
-    public EventQueue(MessageQueue messageQueue, EnvelopeAddressingService envelopeAddressingService) {
+    public EventQueue(MessageQueue messageQueue,
+                      EnvelopeAddressingService envelopeAddressingService,
+                      ConnectionTools connectionTools) {
         super(messageQueue);
         this.envelopeAddressingService = envelopeAddressingService;
+        this.connectionTools = connectionTools;
         eventSerializer = new EventSerializer();
     }
 
@@ -25,6 +30,7 @@ public class EventQueue extends MessageSource<EventEnvelope> {
     MessageEnvelope toAddressedEnvelope(EventEnvelope message) {
         //TODO some reflection magic for message type runtime generation.
         MessageEnvelope addressedEnvelope;
+        message.getEvent().setSourceId(connectionTools.getPeerId());
         if (message.getEvent() instanceof ConfirmableNetworkEvent)
             addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message),
                     0,

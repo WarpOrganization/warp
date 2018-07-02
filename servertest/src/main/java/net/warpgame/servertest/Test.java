@@ -15,7 +15,7 @@ import org.joml.Vector3f;
 public class Test {
 
     public static void main(String... args) {
-        EngineContext engineContext = new EngineContext("dev", "fullPhysics");
+        EngineContext engineContext = new EngineContext("dev", "fullPhysics", "server");
 //        Component root = new SceneComponent(engineContext);
         engineContext.getScene().addListener(new ConnectedListener(
                 engineContext.getScene(),
