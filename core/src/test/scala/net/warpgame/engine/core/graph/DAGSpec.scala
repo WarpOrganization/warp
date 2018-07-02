@@ -1,5 +1,6 @@
-package net.warpgame.engine.core.context.graph
+package net.warpgame.engine.core.graph
 
+import net.warpgame.engine.core.graph.{CycleFoundException, DAG, Node}
 import org.scalatest.{Matchers, WordSpecLike}
 
 

@@ -24,6 +24,9 @@ public class EngineRuntime {
     private static final EngineRuntimePreprocessor PREPROCESSOR = new EngineRuntimePreprocessor(preprocessedTypes);
     private static final Processor PROCESSOR = createProcessor();
 
+    private IdRegistry idRegistry; //IDK XD TODO sth
+
+
     private static Processor<ClassNode> createProcessor() {
         IdCodeGeneratorProcessor propertyIdGenerator = new IdCodeGeneratorProcessor(PROPERTY_CLASS_NAME, PREPROCESSOR);
         IdCodeGeneratorProcessor eventIdGenerator = new IdCodeGeneratorProcessor(EVENT_CLASS_NAME, PREPROCESSOR);
@@ -32,14 +35,19 @@ public class EngineRuntime {
         return new ComposedProcessor<>(propertyIdGenerator, eventIdGenerator, idCallProcessor, idAnnotationProcessor);
     }
 
-    public void load() {
+    protected void load() {
         EngineClassLoader classLoader = (EngineClassLoader) Thread.currentThread().getContextClassLoader();
         PREPROCESSOR.preprocess();
+        this.idRegistry = new IdRegistry(PREPROCESSOR);
         startProcessing(classLoader);
     }
 
     private void startProcessing(EngineClassLoader classLoader) {
         PROCESSOR.initializeProcessing();
         classLoader.startProcessing(PROCESSOR);
+    }
+
+    public IdRegistry getIdRegistry() {
+        return idRegistry;
     }
 }

@@ -1,0 +1,16 @@
+group 'net.warpgame'
+version '0.1.2'
+
+apply plugin: 'java'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':core')
+
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile group: 'org.ow2.asm', name: 'asm-all', version: '6.0_BETA'
+}

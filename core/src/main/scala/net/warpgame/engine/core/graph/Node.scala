@@ -1,4 +1,4 @@
-package net.warpgame.engine.core.context.graph
+package net.warpgame.engine.core.graph
 
 import scala.annotation.tailrec
 

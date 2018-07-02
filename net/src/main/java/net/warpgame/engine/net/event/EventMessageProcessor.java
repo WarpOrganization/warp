@@ -4,10 +4,12 @@ import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.DesynchronizationException;
 import net.warpgame.engine.net.Peer;
 import net.warpgame.engine.net.message.BasicMessageDeserializer;
 import net.warpgame.engine.net.message.MessageProcessor;
+import net.warpgame.engine.net.serialization.Serializers;
 
 /**
  * @author Hubertus
@@ -18,8 +20,13 @@ public class EventMessageProcessor implements MessageProcessor {
 
     private BasicMessageDeserializer basicMessageDeserializer;
     private ComponentRegistry componentRegistry;
+    private ConnectionTools connectionTools;
+    private Serializers serializers;
 
-    public EventMessageProcessor(ComponentRegistry componentRegistry) {
+    public EventMessageProcessor(ComponentRegistry componentRegistry,
+                                 ConnectionTools connectionTools,
+                                 Serializers serializers) {
+        this.connectionTools = connectionTools;
         this.basicMessageDeserializer = new BasicMessageDeserializer();
         this.componentRegistry = componentRegistry;
     }
@@ -33,6 +40,9 @@ public class EventMessageProcessor implements MessageProcessor {
         if (targetComponent == null) throw new DesynchronizationException("Target component not found");
         NetworkEvent networkEvent = (NetworkEvent) basicMessageDeserializer.deserialize(messageContent);
         networkEvent.setTransfered(true);
+        networkEvent.setSourceId(sourcePeer.getId());
+        networkEvent.setTargetId(connectionTools.getPeerId());
+
         targetComponent.triggerEvent(networkEvent);
     }
 

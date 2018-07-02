@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.PacketType;
 
 import java.net.InetSocketAddress;
@@ -14,7 +15,7 @@ import java.net.InetSocketAddress;
  * Created 29.12.2017
  */
 @Service
-public class ConnectionUtil {
+public class ConnectionUtil implements ConnectionTools {
 
     private Channel outChannel;
 
@@ -45,5 +46,10 @@ public class ConnectionUtil {
         ByteBuf packet = getHeader(PacketType.PACKET_MESSAGE_CONFIRMATION, 4);
         packet.writeInt(dependencyId);
         sendPacket(packet, client.getAddress());
+    }
+
+    @Override
+    public int getPeerId() {
+        return 0;
     }
 }

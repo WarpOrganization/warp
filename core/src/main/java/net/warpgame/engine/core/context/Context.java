@@ -68,7 +68,7 @@ public class Context {
 
     public void addService(Object service) {
         ServiceInfo serviceInfo = new ServiceInfo(service.getClass(), Option.empty(), null, null);
-        contextHolder.add(serviceInfo, service);
+        contextHolder = contextHolder.add(serviceInfo, service);
     }
 
     private void setContextHolder(JavaContextHolder contextHolder) {

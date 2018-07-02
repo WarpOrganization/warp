@@ -7,6 +7,7 @@ import io.netty.channel.socket.DatagramPacket;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionStateHolder;
+import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.message.IncomingMessageQueue;
 import net.warpgame.engine.net.message.MessageProcessorsService;
@@ -18,7 +19,7 @@ import java.net.InetSocketAddress;
  * Created 19.12.2017
  */
 @Service
-public class ConnectionService {
+public class ConnectionService implements ConnectionTools {
 
     private Channel channel;
     private int clientId;
@@ -91,5 +92,10 @@ public class ConnectionService {
 
     public Server getServer() {
         return server;
+    }
+
+    @Override
+    public int getPeerId() {
+        return clientId;
     }
 }

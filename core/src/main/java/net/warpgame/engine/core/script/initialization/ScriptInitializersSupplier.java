@@ -1,9 +1,9 @@
 package net.warpgame.engine.core.script.initialization;
 
-import com.google.common.collect.Lists;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.script.Script;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -16,18 +16,8 @@ public class ScriptInitializersSupplier {
 
     private List<ScriptInitializerGenerator> scriptInitializers;
 
-    public ScriptInitializersSupplier(
-            SchedulerInitializer schedulerInitializer,
-            OwnerPropertyInitializer ownerPropertyInitializer,
-            EventHandlerInitializer eventHandlerInitializer,
-            ServiceDependencyInitializer serviceDependencyInitializer
-    ) {
-        this.scriptInitializers = Lists.newArrayList(
-                schedulerInitializer,
-                ownerPropertyInitializer,
-                eventHandlerInitializer,
-                serviceDependencyInitializer
-        );
+    public ScriptInitializersSupplier(ScriptInitializerGenerator[] initializerGenerators) {
+        this.scriptInitializers = Arrays.asList(initializerGenerators);
     }
 
     public Consumer<Script>[] getScriptInitializers(Class<? extends Script> aClass) {
