@@ -2,10 +2,7 @@ package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.*;
 import net.warpgame.engine.audio.command.buffer.AttachBufferCommand;
-import net.warpgame.engine.audio.command.source.PauseSourceCommand;
-import net.warpgame.engine.audio.command.source.PlaySourceCommand;
-import net.warpgame.engine.audio.command.source.SetSourceIntCommand;
-import net.warpgame.engine.audio.command.source.StopSourceCommand;
+import net.warpgame.engine.audio.command.source.*;
 import net.warpgame.engine.core.property.Property;
 import static org.lwjgl.openal.AL10.*;
 
@@ -17,12 +14,12 @@ public class AudioSourceProperty extends Property {
 
     private int id = -1;
 
-    private float pitch;
-    private float gain;
+    private float pitch = 1f;
+    private float volume = 0.5f;
 
-    private float maxDistance;
-    private float rolloffFactor;
-    private float referenceDistance;
+    private float maxDistance = 1f;
+    private float minDistance = 5f;
+    private float rollOffFactor = 1;
 
     private float minGain;
     private float maxGain;
@@ -42,7 +39,9 @@ public class AudioSourceProperty extends Property {
     private AudioContext audioContext;
 
     public AudioSourceProperty() {
-
+        setPitch(pitch).setVolume(volume)
+                .setMaxDistance(maxDistance).setMinDistance(minDistance)
+                .setRollOffFactor(rollOffFactor).setLooping(looping);
     }
 
     public AudioSourceProperty play() {
@@ -128,5 +127,55 @@ public class AudioSourceProperty extends Property {
 
     BlockingQueue<Command> getCommandQueue() {
         return commandQueue;
+    }
+
+    public float getPitch() {
+        return pitch;
+    }
+
+    public AudioSourceProperty setPitch(float pitch) {
+        this.pitch = pitch;
+        commandQueue.add(new SetSourceFloatCommand(this, AL_PITCH, pitch));
+        return this;
+    }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public AudioSourceProperty setVolume(float volume) {
+        this.volume = volume;
+        commandQueue.add(new SetSourceFloatCommand(this, AL_GAIN, volume));
+        return this;
+    }
+
+    public float getMaxDistance() {
+        return maxDistance;
+    }
+
+    public AudioSourceProperty setMaxDistance(float maxDistance) {
+        this.maxDistance = maxDistance;
+        commandQueue.add(new SetSourceFloatCommand(this, AL_MAX_DISTANCE, maxDistance));
+        return this;
+    }
+
+    public float getMinDistance() {
+        return minDistance;
+    }
+
+    public AudioSourceProperty setMinDistance(float minDistance) {
+        this.minDistance = minDistance;
+        commandQueue.add(new SetSourceFloatCommand(this, AL_REFERENCE_DISTANCE, minDistance));
+        return this;
+    }
+
+    public float getRollOffFactor() {
+        return rollOffFactor;
+    }
+
+    public AudioSourceProperty setRollOffFactor(float rollOffFactor) {
+        this.rollOffFactor = rollOffFactor;
+        commandQueue.add(new SetSourceFloatCommand(this, AL_ROLLOFF_FACTOR, rollOffFactor));
+        return this;
     }
 }
