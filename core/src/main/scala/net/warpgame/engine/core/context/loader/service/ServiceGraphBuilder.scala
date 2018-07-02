@@ -2,8 +2,8 @@ package net.warpgame.engine.core.context.loader.service
 
 import java.lang.invoke.MethodHandles
 
-import net.warpgame.engine.core.context.graph.DAG
 import net.warpgame.engine.core.context.loader.service.ServiceGraphBuilder._
+import net.warpgame.engine.core.graph.DAG
 
 import scala.annotation.tailrec
 

@@ -3,13 +3,13 @@ package net.warpgame.test;
 import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
-import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
@@ -65,9 +65,10 @@ public class Test1 {
     private static BoundingBoxCalculator calc;
     private static ConsoleService consoleService;
 
-    public static void main(String[] args) {
+    public static void start(EngineRuntime engineRuntime) {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev");
+        engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();
@@ -88,8 +89,29 @@ public class Test1 {
         AudioSourceProperty property = new AudioSourceProperty();
         AudioClip audioClip = new AudioClip( EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
         property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
-        component.addProperty(new TransformProperty());
         component.addProperty(property);
+        component.addProperty(new TransformProperty());
+        thread.scheduleOnce( () -> {
+            StaticMesh mesh = SphereBuilder.createShape(20, 20, 1f);
+            component.addProperty(new MeshProperty(mesh));
+
+            ImageData imageData = ImageDecoder.decodePNG(
+                    Test1.class.getResourceAsStream("fighter_1.png"),
+                    PNGDecoder.Format.RGBA
+            );
+            Texture2D diffuse = new Texture2D(
+                    imageData.getWidth(),
+                    imageData.getHeight(),
+                    GL11.GL_RGBA16,
+                    GL11.GL_RGBA,
+                    true,
+                    imageData.getData());
+
+            component.addProperty(new MaterialProperty(new Material(diffuse)));
+
+            component.addProperty(new TransformProperty().move(new Vector3f(-10, 0, 2)));
+        });
+        //component.addProperty((new AudioSourceProperty()).setAudioClip(audioClip));
 
     }
 

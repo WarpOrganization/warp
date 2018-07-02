@@ -1,4 +1,4 @@
-package net.warpgame.engine.core.context.graph
+package net.warpgame.engine.core.graph
 
 import scala.annotation.tailrec
 import scala.collection.Map
@@ -136,4 +136,5 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
 
 object DAG {
   def apply[V](rootNodes: Node[V]*): DAG[V] = DAG(rootNodes.toList)
+  def empty[A] = new DAG[A](List.empty[Node[A]])
 }
