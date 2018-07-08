@@ -16,7 +16,7 @@ public class Serializers {
 
     public Serializers(SerializationIO[] serializers) {
         for (SerializationIO serializationIO : serializers) {
-            serializationIOMap.put(serializationIO.getType(), serializationIO);
+//            serializationIOMap.put(serializationIO.getType(), serializationIO);
             classSerializationIOMap.put(serializationIO.getTargetClass(), serializationIO);
         }
     }
