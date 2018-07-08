@@ -41,11 +41,11 @@ public class InternalMessage implements Serializable {
     }
 
     @Service
-    public static class InternalMessageSerializationIO extends Serialization<InternalMessage> {
+    public static class InternalMessageSerialization extends Serialization<InternalMessage> {
 
         private InternalMessageContent[] internalMessageContentValues = InternalMessageContent.values();
 
-        public InternalMessageSerializationIO() {
+        public InternalMessageSerialization() {
             super(InternalMessage.class);
         }
 

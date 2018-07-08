@@ -16,9 +16,9 @@ public class ConnectedEvent extends NetworkEvent {
     private ConnectedEvent(){}
 
     @Service
-    public static class ConnectedEventSerializationIO extends Serialization<ConnectedEvent> {
+    public static class ConnectedEventSerialization extends Serialization<ConnectedEvent> {
 
-        public ConnectedEventSerializationIO() {
+        public ConnectedEventSerialization() {
             super(ConnectedEvent.class);
         }
 

@@ -7,6 +7,7 @@ import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.EngineContext;
+import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.graphics.GraphicsThread;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.material.Material;
@@ -37,9 +38,10 @@ public class MultiplayerTest {
     public static final Display DISPLAY = new Display(false, 1280, 720);
 
 
-    public static void main(String[] args) {
+    public static void start(EngineRuntime engineRuntime) {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev", "fullPhysics");
+        engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();

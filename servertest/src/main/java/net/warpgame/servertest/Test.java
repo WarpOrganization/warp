@@ -1,9 +1,10 @@
 package net.warpgame.servertest;
 
-import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.context.EngineContext;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.physics.PhysicsService;
 import net.warpgame.engine.server.ClientRegistry;
 import org.joml.Vector3f;
@@ -14,8 +15,10 @@ import org.joml.Vector3f;
  */
 public class Test {
 
-    public static void main(String... args) {
+    public static void start(EngineRuntime engineRuntime) {
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "server");
+        engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
+
 //        Component root = new SceneComponent(engineContext);
         engineContext.getScene().addListener(new ConnectedListener(
                 engineContext.getScene(),
