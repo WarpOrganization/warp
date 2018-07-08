@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.serialization;
+package net.warpgame.engine.core.serialization;
 
 /**
  * @author Hubertus

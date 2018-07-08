@@ -9,7 +9,7 @@ import net.warpgame.engine.net.DesynchronizationException;
 import net.warpgame.engine.net.Peer;
 import net.warpgame.engine.net.message.BasicMessageDeserializer;
 import net.warpgame.engine.net.message.MessageProcessor;
-import net.warpgame.engine.net.serialization.Serializers;
+import net.warpgame.engine.core.serialization.Serializers;
 
 /**
  * @author Hubertus

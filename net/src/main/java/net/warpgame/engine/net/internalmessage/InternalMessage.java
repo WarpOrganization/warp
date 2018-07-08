@@ -1,9 +1,9 @@
 package net.warpgame.engine.net.internalmessage;
 
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.net.serialization.SerializationBuffer;
-import net.warpgame.engine.net.serialization.SerializationIO;
-import net.warpgame.engine.net.serialization.Serializers;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
+import net.warpgame.engine.core.serialization.Serialization;
+import net.warpgame.engine.core.serialization.Serializers;
 
 import java.io.Serializable;
 
@@ -41,7 +41,7 @@ public class InternalMessage implements Serializable {
     }
 
     @Service
-    public static class InternalMessageSerializationIO extends SerializationIO<InternalMessage> {
+    public static class InternalMessageSerializationIO extends Serialization<InternalMessage> {
 
         private InternalMessageContent[] internalMessageContentValues = InternalMessageContent.values();
 

@@ -1,9 +1,9 @@
 package net.warpgame.engine.net.event;
 
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.net.serialization.SerializationBuffer;
-import net.warpgame.engine.net.serialization.SerializationIO;
-import net.warpgame.engine.net.serialization.Serializers;
+import net.warpgame.engine.core.serialization.Serialization;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
+import net.warpgame.engine.core.serialization.Serializers;
 
 /**
  * @author Hubertus
@@ -16,7 +16,7 @@ public class ConnectedEvent extends NetworkEvent {
     private ConnectedEvent(){}
 
     @Service
-    public static class ConnectedEventSerializationIO extends SerializationIO<ConnectedEvent>{
+    public static class ConnectedEventSerializationIO extends Serialization<ConnectedEvent> {
 
         public ConnectedEventSerializationIO() {
             super(ConnectedEvent.class);

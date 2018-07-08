@@ -1,13 +1,13 @@
-package net.warpgame.engine.net.serialization;
+package net.warpgame.engine.core.serialization;
 
 /**
  * @author Hubertus
  * Created 01.07.2018
  */
-public abstract class SerializationIO<T> {
+public abstract class Serialization<T> {
     private Class<T> targetClass;
 
-    public SerializationIO(Class<T> targetClass){
+    public Serialization(Class<T> targetClass){
         this.targetClass = targetClass;
     }
 
@@ -19,7 +19,7 @@ public abstract class SerializationIO<T> {
     }
 
     /**
-     * Returns generated ID of object this SerializationIO operates on.
+     * Returns generated ID of object this Serialization operates on.
      * Method is generated at runtime.
      */
     public int getType() {
@@ -28,11 +28,11 @@ public abstract class SerializationIO<T> {
     }
 
     /**
-     * Returns generated ID object this SerializationIO operates on.
+     * Returns generated ID object this Serialization operates on.
      * Method is generated and inlined at runtime.
      */
-    public static int getTypeId(Class<?> propertyClass){
-        String msg = String.format("Engine runtime was unable to inline type ID for %s class", propertyClass.getName());
+    public static int getTypeId(Class<?> clazz){
+        String msg = String.format("Engine runtime was unable to inline type ID for %s class", clazz.getName());
         throw new UnsupportedOperationException(msg);
     }
 }
