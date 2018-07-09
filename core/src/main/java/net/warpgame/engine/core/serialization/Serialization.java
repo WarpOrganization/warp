@@ -11,8 +11,8 @@ public abstract class Serialization<T> {
         this.targetClass = targetClass;
     }
 
-    public abstract void serialize(T object, SerializationBuffer buffer, Serializers serializers);
-    public abstract T deserialize(SerializationBuffer buffer, Serializers serializers);
+    public abstract void serialize(T object, Serializer serializer);
+    public abstract T deserialize(Deserializer deserializer);
 
     public Class<T> getTargetClass() {
         return targetClass;

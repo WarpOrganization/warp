@@ -1,9 +1,7 @@
 package net.warpgame.engine.net.event;
 
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.serialization.Serialization;
-import net.warpgame.engine.core.serialization.SerializationBuffer;
-import net.warpgame.engine.core.serialization.Serializers;
+import net.warpgame.engine.core.serialization.*;
 
 /**
  * @author Hubertus
@@ -23,12 +21,12 @@ public class ConnectedEvent extends NetworkEvent {
         }
 
         @Override
-        public void serialize(ConnectedEvent object, SerializationBuffer buffer, Serializers serializers) {
+        public void serialize(ConnectedEvent object, Serializer serializer) {
 
         }
 
         @Override
-        public ConnectedEvent deserialize(SerializationBuffer buffer, Serializers serializers) {
+        public ConnectedEvent deserialize(Deserializer deserializer) {
             return new ConnectedEvent();
         }
     }

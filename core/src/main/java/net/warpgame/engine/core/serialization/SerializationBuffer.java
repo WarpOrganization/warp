@@ -33,6 +33,11 @@ public class SerializationBuffer {
         writerIndex++;
     }
 
+    public void write(byte val) {
+        buffer[writerIndex] = val;
+        writerIndex++;
+    }
+
     public void write(char val) {
         for (int i = CHAR_SIZE - 1; i >= 0; i--) {
             buffer[writerIndex + i] = (byte) (val & 0xFF);
@@ -83,6 +88,11 @@ public class SerializationBuffer {
         return buffer[writerIndex - 1] == (byte) 0;
     }
 
+    public byte readByte() {
+        readerIndex++;
+        return buffer[readerIndex - 1];
+    }
+
     public char readChar() {
         char val = 0;
         for (int i = 0; i < CHAR_SIZE; i++) {
@@ -129,5 +139,14 @@ public class SerializationBuffer {
 
     public double readDouble() {
         return Double.longBitsToDouble(readLong());
+    }
+
+    public String readString() {
+        int length = readInt();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            stringBuilder.append(readChar());
+        }
+        return stringBuilder.toString();
     }
 }
