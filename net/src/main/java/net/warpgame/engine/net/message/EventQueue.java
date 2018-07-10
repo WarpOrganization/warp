@@ -1,6 +1,8 @@
 package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
+import net.warpgame.engine.core.serialization.Serializers;
 import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.event.ConfirmableNetworkEvent;
 import net.warpgame.engine.net.event.EventEnvelope;
@@ -16,13 +18,17 @@ public class EventQueue extends MessageSource<EventEnvelope> {
     private final EnvelopeAddressingService envelopeAddressingService;
     private EventSerializer eventSerializer;
     private ConnectionTools connectionTools;
+    private Serializers serializers;
+    private SerializationBuffer buffer = new SerializationBuffer(1500);
 
     public EventQueue(MessageQueue messageQueue,
                       EnvelopeAddressingService envelopeAddressingService,
-                      ConnectionTools connectionTools) {
+                      ConnectionTools connectionTools,
+                      Serializers serializers) {
         super(messageQueue);
         this.envelopeAddressingService = envelopeAddressingService;
         this.connectionTools = connectionTools;
+        this.serializers = serializers;
         eventSerializer = new EventSerializer();
     }
 
@@ -31,12 +37,17 @@ public class EventQueue extends MessageSource<EventEnvelope> {
         //TODO some reflection magic for message type runtime generation.
         MessageEnvelope addressedEnvelope;
         message.getEvent().setSourceId(connectionTools.getPeerId());
+
+        buffer.setWriterIndex(0);
+        buffer.write(message.getEvent().getType());
+        buffer.write(message.getTargetComponent().getId());
+        serializers.serialize(buffer, message.getEvent());
         if (message.getEvent() instanceof ConfirmableNetworkEvent)
-            addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message),
+            addressedEnvelope = new MessageEnvelope(buffer.getWrittenData(),
                     0,
                     ((ConfirmableNetworkEvent) message.getEvent()).getConfirmationConsumer());
         else
-            addressedEnvelope = new MessageEnvelope(eventSerializer.serialize(message), 0);
+            addressedEnvelope = new MessageEnvelope(buffer.getWrittenData(), 0);
         envelopeAddressingService.address(addressedEnvelope, message.getEvent().getTargetClientId());
         return addressedEnvelope;
     }
