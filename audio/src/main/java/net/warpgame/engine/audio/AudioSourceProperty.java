@@ -39,13 +39,11 @@ public class AudioSourceProperty extends Property {
     private AudioContext audioContext;
 
     public AudioSourceProperty() {
-        setPitch(pitch).setVolume(volume)
-                .setMaxDistance(maxDistance).setMinDistance(minDistance)
-                .setRollOffFactor(rollOffFactor).setLooping(looping);
+
     }
 
     public AudioSourceProperty play() {
-        if(id == -1) throw new RuntimeException("Playing clip before assigning source to component is forbidden");
+        if(id == -1) throw new RuntimeException("Playing clip before adding property to component is forbidden");
         commandQueue.add(new PlaySourceCommand(this, audioContext.getPlayingSources()));
         audioContext.getPlayingSources().add(this);
         isPlaying = true;
@@ -65,8 +63,7 @@ public class AudioSourceProperty extends Property {
 
 
     @Override
-    public void enable() {
-        super.enable();
+    public void init() {
         audioContext = getOwner().getContext().getLoadedContext().findOne(AudioContext.class).get();
         if(audioClip != null)
             setAudioClip(audioClip);
@@ -77,6 +74,12 @@ public class AudioSourceProperty extends Property {
             e.printStackTrace();
             throw new RuntimeException("Unable to get source id for AudioSourceProperty");
         }
+        this.setPitch(pitch)
+                .setVolume(volume)
+                .setMaxDistance(maxDistance)
+                .setMinDistance(minDistance)
+                .setRollOffFactor(rollOffFactor)
+                .setLooping(looping);
         if(playOnStartup) play();
     }
 

@@ -1,8 +1,6 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.audio.AudioClip;
-import net.warpgame.engine.audio.AudioListenerProperty;
-import net.warpgame.engine.audio.AudioSourceProperty;
+import net.warpgame.engine.audio.*;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.property.Transforms;
@@ -97,17 +95,22 @@ public class Test1 {
     }
 
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
-        Component component = new SceneComponent(context);
-        AudioSourceProperty property = new AudioSourceProperty();
-        AudioClip audioClip = new AudioClip( EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
-        property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
-        component.addProperty(property);
-        component.addProperty(new TransformProperty());
+        try {
+            Component component = new SceneComponent(context);
+            AudioSourceProperty property = new AudioSourceProperty();
+            AudioClip audioClip = new AudioClip(EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
+            property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
+            component.addProperty(property);
+            component.addProperty(new TransformProperty());
 
-        component.addProperty(new Sup(() -> 5f));
+            component.addProperty(new Sup(() -> 5f));
 
-        component.addScript(ZoneDrawerScript.class);
-
+            component.addScript(ZoneDrawerScript.class);
+        } catch (Exception e) {
+            System.out.println("Failed to init Audio module");
+            e.printStackTrace();
+            context.getLoadedContext().findOne(AudioThread.class).get().interrupt();
+        }
     }
 
 
