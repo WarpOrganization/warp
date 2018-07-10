@@ -59,4 +59,12 @@ public class SoundData {
     public int getFrequency() {
         return frequency;
     }
+
+    public int getChannels() {
+        return channels;
+    }
+
+    public int getBitsPerChannel() {
+        return bitsPerChannel;
+    }
 }

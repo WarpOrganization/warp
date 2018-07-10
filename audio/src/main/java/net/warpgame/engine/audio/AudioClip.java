@@ -12,7 +12,11 @@ import java.util.concurrent.BlockingQueue;
 
 public class AudioClip {
     private int id;
+
     private String file;
+    private int frequency;
+    private int channels;
+    private int bitsPerChannel;
 
     public AudioClip(String file) {
         this.id = -1;
@@ -26,6 +30,9 @@ public class AudioClip {
                 id = context.getBuffer();
                 context.getAllBuffers().add(this);
                 commandQueue.add(new FillBufferCommand(this, data));
+                frequency = data.getFrequency();
+                channels = data.getChannels();
+                bitsPerChannel = data.getBitsPerChannel();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Unable to get buffer id for AudioClip");
@@ -45,4 +52,15 @@ public class AudioClip {
         return id;
     }
 
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int getChannels() {
+        return channels;
+    }
+
+    public int getBitsPerChannel() {
+        return bitsPerChannel;
+    }
 }

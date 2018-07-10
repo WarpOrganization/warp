@@ -47,6 +47,8 @@ import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.test.console.*;
 import org.joml.Vector3f;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
@@ -94,6 +96,36 @@ public class Test1 {
         }
     }
 
+    public class Sc extends Script {
+
+        @OwnerProperty(@IdOf(AudioSourceProperty.class))
+        private AudioSourceProperty sourceProperty;
+        private int lastChange = 0;
+        private boolean lt = false;
+
+        public Sc(Component owner) {
+            super(owner);
+        }
+
+        @Override
+        public void onInit() {
+
+        }
+
+        @Override
+        public void onUpdate(int delta) {
+            lastChange += delta;
+            if(lastChange > 2000){
+                lastChange = 0;
+                if(lt){
+                    sourceProperty.setDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
+                }else{
+                    sourceProperty.setDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
+                }
+            }
+        }
+    }
+
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         try {
             Component component = new SceneComponent(context);
@@ -102,14 +134,13 @@ public class Test1 {
             property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
             component.addProperty(property);
             component.addProperty(new TransformProperty());
+            //component.addScript(Sc.class);
+            //component.addProperty(new Sup(() -> 5f));
 
-            component.addProperty(new Sup(() -> 5f));
-
-            component.addScript(ZoneDrawerScript.class);
+            //component.addScript(ZoneDrawerScript.class);
         } catch (Exception e) {
             System.out.println("Failed to init Audio module");
             e.printStackTrace();
-            context.getLoadedContext().findOne(AudioThread.class).get().interrupt();
         }
     }
 

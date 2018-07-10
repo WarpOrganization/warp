@@ -54,6 +54,7 @@ public class AudioUpdateTask extends EngineTask {
         attr.flip();
         alcResetDeviceSOFT(device, attr);
 
+        //alEnable(EXTSourceDistanceModel.AL_SOURCE_DISTANCE_MODEL);
         alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
     }
 
@@ -138,11 +139,7 @@ public class AudioUpdateTask extends EngineTask {
     }
 
     private void updateSourcePos(AudioSourceProperty source) {
-        try {
-            Transforms.getAbsolutePosition(source.getOwner(), posVector);
-        } catch (NullPointerException e) {
-            posVector.zero();
-        }
+        Transforms.getAbsolutePosition(source.getOwner(), posVector);
         alSource3f(source.getId(), AL_POSITION, posVector.x, posVector.y, posVector.z);
 
     }

@@ -14,28 +14,26 @@ public class AudioSourceProperty extends Property {
 
     private int id = -1;
 
-    private float pitch = 1f;
-    private float volume = 0.5f;
-
-    private float maxDistance = 1f;
-    private float minDistance = 5f;
+    private float pitch = 1;
+    private float volume = 1;
+    //Achtung! maxDistance > minDistance
+    private float minDistance = 1;
+    private float maxDistance = 500;
     private float rollOffFactor = 1;
-
-    private float minGain;
-    private float maxGain;
 
     private float coneOuterGain;
     private float coneInnerAngle;
     private float coneOuterAngle;
 
     private boolean looping = false;
-    private boolean isPlaying = false;
-    private boolean playOnStartup = false;
+    private boolean playOnStartup = true;
 
+    private int distanceModel = AL_INVERSE_DISTANCE_CLAMPED;
     private AudioClip audioClip;
 
-    private BlockingQueue<Command> commandQueue = new ArrayBlockingQueue<>(20);
+    private boolean isPlaying = false;
 
+    private BlockingQueue<Command> commandQueue = new ArrayBlockingQueue<>(20);
     private AudioContext audioContext;
 
     public AudioSourceProperty() {
@@ -179,6 +177,16 @@ public class AudioSourceProperty extends Property {
     public AudioSourceProperty setRollOffFactor(float rollOffFactor) {
         this.rollOffFactor = rollOffFactor;
         commandQueue.add(new SetSourceFloatCommand(this, AL_ROLLOFF_FACTOR, rollOffFactor));
+        return this;
+    }
+
+    public int getDistanceModel() {
+        return distanceModel;
+    }
+
+    public AudioSourceProperty setDistanceModel(int distanceModel) {
+        this.distanceModel = distanceModel;
+        commandQueue.add(new SetSourceIntCommand(this, AL_DISTANCE_MODEL, distanceModel));
         return this;
     }
 }
