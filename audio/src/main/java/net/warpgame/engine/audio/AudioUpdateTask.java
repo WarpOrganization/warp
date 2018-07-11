@@ -54,8 +54,8 @@ public class AudioUpdateTask extends EngineTask {
         attr.flip();
         alcResetDeviceSOFT(device, attr);
 
-        //alEnable(EXTSourceDistanceModel.AL_SOURCE_DISTANCE_MODEL);
-        alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
+        alEnable(EXTSourceDistanceModel.AL_SOURCE_DISTANCE_MODEL);
+        alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
     }
 
 

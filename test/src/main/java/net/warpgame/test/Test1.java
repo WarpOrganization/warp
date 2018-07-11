@@ -8,8 +8,6 @@ import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -118,9 +116,9 @@ public class Test1 {
             if(lastChange > 2000){
                 lastChange = 0;
                 if(lt){
-                    sourceProperty.setDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
+                    sourceProperty.setVolumeRollOff(AL11.AL_LINEAR_DISTANCE_CLAMPED);
                 }else{
-                    sourceProperty.setDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
+                    sourceProperty.setVolumeRollOff(AL10.AL_INVERSE_DISTANCE_CLAMPED);
                 }
             }
         }

@@ -14,7 +14,7 @@ public class Serializer {
     }
 
     public Serializer write(Object object, int objectTypeId) {
-        serializersService.continueSerialization(this, object, objectTypeId);
+        serializersService.continueSerialization(this, object, (short)objectTypeId);
         return this;
     }
 
