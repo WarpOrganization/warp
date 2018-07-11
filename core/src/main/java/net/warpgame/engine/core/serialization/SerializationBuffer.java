@@ -149,4 +149,30 @@ public class SerializationBuffer {
         }
         return stringBuilder.toString();
     }
+
+    public int getReaderIndex() {
+        return readerIndex;
+    }
+
+    public void setReaderIndex(int readerIndex) {
+        this.readerIndex = readerIndex;
+    }
+
+    public int getWriterIndex() {
+        return writerIndex;
+    }
+
+    public void setWriterIndex(int writerIndex) {
+        this.writerIndex = writerIndex;
+    }
+
+    /**
+     * Copies used part of the buffer into new byte array starting from 0 to (writerIndex - 1)
+     * @return copied part of the buffer
+     */
+    public byte[] getWrittenData(){
+        byte[] out = new byte[writerIndex];
+        System.arraycopy(buffer,0, out, 0, writerIndex);
+        return out;
+    }
 }

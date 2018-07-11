@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.DesynchronizationException;
 import net.warpgame.engine.net.Peer;
@@ -33,12 +34,16 @@ public class EventMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(Peer sourcePeer, ByteBuf messageContent) {
-        //TODO implement fast deserialization
-        int eventId = messageContent.readInt();
-        int targetComponentId = messageContent.readInt();
+        byte[] bytes = new byte[messageContent.readableBytes()];
+        messageContent.readBytes(bytes);
+        SerializationBuffer buffer = new SerializationBuffer(bytes);
+
+        int eventId = buffer.readInt();
+        int targetComponentId = buffer.readInt();
         Component targetComponent = componentRegistry.getComponent(targetComponentId);
         if (targetComponent == null) throw new DesynchronizationException("Target component not found");
-        NetworkEvent networkEvent = (NetworkEvent) basicMessageDeserializer.deserialize(messageContent);
+
+        NetworkEvent networkEvent = (NetworkEvent) serializers.deserialize(buffer);
         networkEvent.setTransfered(true);
         networkEvent.setSourceId(sourcePeer.getId());
         networkEvent.setTargetId(connectionTools.getPeerId());

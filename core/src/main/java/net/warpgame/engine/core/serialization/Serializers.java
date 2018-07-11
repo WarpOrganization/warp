@@ -25,7 +25,7 @@ public class Serializers {
         Serialization serialization = classSerializationMap.get(object.getClass());
         if (serialization != null) {
             Serializer serializer = new Serializer(this, buffer);
-            serializer.write(serialization.getType());
+            serializer.write((short) serialization.getType());
             serialization.serialize(object, serializer);
         } else {
             throw new SerializationNotFoundException(object.getClass().getName());
@@ -33,7 +33,7 @@ public class Serializers {
         return this;
     }
 
-    public Serializers serialize(SerializationBuffer buffer, Object object, int objectTypeId) {
+    public Serializers serialize(SerializationBuffer buffer, Object object, short objectTypeId) {
         Serialization serialization = serializationMap.get(objectTypeId);
         if (serialization != null) {
             Serializer serializer = new Serializer(this, buffer);
@@ -45,7 +45,7 @@ public class Serializers {
         return this;
     }
 
-    void continueSerialization(Serializer serializer, Object object, int objectTypeId) {
+    void continueSerialization(Serializer serializer, Object object, short objectTypeId) {
         Serialization serialization = serializationMap.get(objectTypeId);
         if (serialization != null) {
             serializer.write(objectTypeId);
