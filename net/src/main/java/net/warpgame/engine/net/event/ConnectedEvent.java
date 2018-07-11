@@ -29,5 +29,10 @@ public class ConnectedEvent extends NetworkEvent {
         public ConnectedEvent deserialize(Deserializer deserializer) {
             return new ConnectedEvent();
         }
+
+        @Override
+        public int getType() {
+            return 1;
+        }
     }
 }

@@ -46,7 +46,8 @@ public class LoadShipEvent extends NetworkEvent implements Serializable {
         public void serialize(LoadShipEvent object, Serializer serializer) {
             serializer
                     .write(object.shipComponentId)
-                    .write(object.pos, Serialization.getTypeId(Vector3f.class)); //in the future .write(object.pos, Vector3f.class);
+                    //TODO fix when serialization ids work
+                    .write(object.pos, 6); //in the future .write(object.pos, Vector3f.class);
         }
 
         @Override
@@ -55,6 +56,11 @@ public class LoadShipEvent extends NetworkEvent implements Serializable {
                     deserializer.getInt(),
                     (Vector3f) deserializer.getObject(),
                     0);
+        }
+
+        @Override
+        public int getType() {
+            return 5;
         }
     }
 }

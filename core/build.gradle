@@ -32,8 +32,12 @@ dependencies {
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.12', version: '3.7.2'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.18'
-    compile group: 'org.ow2.asm', name: 'asm-all', version: '6.0_BETA'
-    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0_BETA'
+    compile group: 'org.ow2.asm', name: 'asm', version: '6.2'
+    compile group: 'org.ow2.asm', name: 'asm-commons', version: '6.2'
+    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.2'
+    compile group: 'org.ow2.asm', name: 'asm-tree', version: '6.2'
+    compile group: 'org.ow2.asm', name: 'asm-analysis', version: '6.2'
+
 
 
     testCompile 'junit:junit:4.12'

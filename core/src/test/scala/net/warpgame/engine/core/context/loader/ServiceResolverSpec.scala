@@ -10,7 +10,7 @@ import net.warpgame.engine.core.context.service.{Qualified, ServiceBuilder}
 /**
   * @author Jaca777
   *         Created 2017-09-04 at 10
-  */
+  *         */
 class ServiceResolverSpec extends WordSpecLike with Matchers with MockFactory {
 
   "ServiceResolver" should {

@@ -12,6 +12,7 @@ import scala.reflect.ClassTag
 import ServiceGraphBuilderSpec._
 import net.warpgame.engine.core.context.loader.service.ServiceGraphBuilder.AmbiguousServiceDependencyException
 import net.warpgame.engine.core.graph.{CycleFoundException, DAG}
+
 /**
   * @author Jaca777
   *         Created 2017-09-04 at 10
@@ -105,11 +106,14 @@ class ServiceGraphBuilderSpec extends WordSpecLike with Matchers with MockFactor
 object ServiceGraphBuilderSpec {
 
   class A
-  class B
-  class C
-  class D extends A
-  class E extends A
 
+  class B
+
+  class C
+
+  class D extends A
+
+  class E extends A
 
 
   trait GraphMatchers {
@@ -160,10 +164,10 @@ object ServiceGraphBuilderSpec {
 
   trait ServiceBuilders {
     def service[T: ClassTag](
-      qualifier: Option[String] = None,
-      builder: MethodHandle = null,
-      dependencies: List[DependencyInfo] = List.empty
-    ): ServiceInfo = {
+                              qualifier: Option[String] = None,
+                              builder: MethodHandle = null,
+                              dependencies: List[DependencyInfo] = List.empty
+                            ): ServiceInfo = {
       ServiceInfo(implicitly[ClassTag[T]].runtimeClass, qualifier, builder, dependencies)
     }
 
