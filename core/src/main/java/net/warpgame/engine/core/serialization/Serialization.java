@@ -12,7 +12,7 @@ public abstract class Serialization<T> {
     }
 
     public abstract void serialize(T object, Serializer serializer);
-    public abstract T deserialize(Deserializer deserializer);
+    public abstract Object deserialize(Deserializer deserializer);
 
     public Class<T> getTargetClass() {
         return targetClass;
@@ -22,10 +22,12 @@ public abstract class Serialization<T> {
      * Returns generated ID of object this Serialization operates on.
      * Method is generated at runtime.
      */
-    public int getType() {
+    public abstract int getType();
+    //TODO uncomment when id generation works
+    /* {
         String msg = String.format("Engine runtime was unable to generate the getTypeId method for %s class", getClass().getName());
         throw new UnsupportedOperationException(msg);
-    }
+    }*/
 
     /**
      * Returns generated ID object this Serialization operates on.

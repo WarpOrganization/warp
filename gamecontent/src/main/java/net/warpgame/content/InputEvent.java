@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class InputEvent extends NetworkEvent implements Serializable {
     private int input;
     private boolean pressed;
-
     public InputEvent(int input, boolean pressed) {
         this.input = input;
         this.pressed = pressed;

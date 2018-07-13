@@ -56,5 +56,10 @@ public class InternalMessage implements Serializable {
         public InternalMessage deserialize(Deserializer deserializer) {
             return new InternalMessage(internalMessageContentValues[deserializer.getInt()]);
         }
+
+        @Override
+        public int getType() {
+            return 2;
+        }
     }
 }

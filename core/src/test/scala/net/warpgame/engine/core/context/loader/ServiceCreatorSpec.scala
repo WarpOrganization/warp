@@ -79,3 +79,4 @@ object ServiceCreatorSpec {
   case class D(b: B, c: C)
   case class E(a: A, b: B, c: C, D: D)
 }
+
