@@ -19,7 +19,7 @@ public class SoundDecoderManager {
             case "ogg":
                 return OggFileDecoder.decode(pathToFile);
             default:
-                throw new RuntimeException(String.format("No support for %s file system", FilenameUtils.getBaseName(pathToFile)));
+                throw new RuntimeException(String.format("No support for %s file system", FilenameUtils.getExtension(pathToFile)));
         }
     }
 }

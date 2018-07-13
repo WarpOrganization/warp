@@ -128,7 +128,7 @@ public class Test1 {
         try {
             Component component = new SceneComponent(context);
             AudioSourceProperty property = new AudioSourceProperty();
-            AudioClip audioClip = new AudioClip(EngineContext.CODESOURCE_DIR + "sound" + File.separator + "szum.ogg");
+            AudioClip audioClip = new AudioClip(getResourcePath("sound/szum.ogg"));
             property.setAudioClip(audioClip).setLooping(true).setPlayOnStartup(true);
             component.addProperty(property);
             component.addProperty(new TransformProperty());
@@ -140,6 +140,10 @@ public class Test1 {
             System.out.println("Failed to init Audio module");
             e.printStackTrace();
         }
+    }
+
+    private static String getResourcePath(String resource) throws URISyntaxException {
+        return Paths.get(Test1.class.getResource(resource).toURI()).toFile().getAbsolutePath();
     }
 
 
