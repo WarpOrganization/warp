@@ -11,6 +11,10 @@ import java.io.IOException;
  */
 public class SoundDecoderManager {
 
+    public SoundDecoderManager() {
+        throw new UnsupportedOperationException();
+    }
+
     public static SoundData decode(String pathToFile) throws IOException {
         String extension = FilenameUtils.getExtension(pathToFile);
         switch (extension) {

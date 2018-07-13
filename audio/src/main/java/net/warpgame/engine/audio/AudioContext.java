@@ -1,6 +1,7 @@
 package net.warpgame.engine.audio;
 
 import net.warpgame.engine.audio.command.Command;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.*;
@@ -12,9 +13,12 @@ import java.util.concurrent.BlockingQueue;
  *         Created 20.12.2016
  */
 @Service
+@Profile("client")
 public class AudioContext {
 
     private AudioListenerProperty listener;
+
+    private BlockingQueue<Command> commands;
 
     private List<AudioSourceProperty> allSources;
     private List<AudioSourceProperty> playingSources;
@@ -24,6 +28,7 @@ public class AudioContext {
     private BlockingQueue<Integer> freeBuffers;
 
     public AudioContext() {
+        this.commands = new ArrayBlockingQueue<>(100);
         this.allSources = Collections.synchronizedList(new LinkedList<>());
         this.playingSources = Collections.synchronizedList(new ArrayList<>());
         this.freeSources = new ArrayBlockingQueue<>(100);
@@ -65,5 +70,9 @@ public class AudioContext {
 
     List<AudioClip> getAllBuffers() {
         return allBuffers;
+    }
+
+    BlockingQueue<Command> getCommands() {
+        return commands;
     }
 }
