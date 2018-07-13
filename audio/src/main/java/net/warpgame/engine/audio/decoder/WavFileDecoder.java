@@ -17,11 +17,11 @@ import java.nio.ByteBuffer;
  */
 public class WavFileDecoder{
 
-    public WavFileDecoder() {
+    protected WavFileDecoder() {
         throw new UnsupportedOperationException();
     }
 
-    public static SoundData decode(String pathToFile) throws IOException {
+    static SoundData decode(String pathToFile) throws IOException {
         File soundFile = new File(pathToFile);
         AudioInputStream stream;
 

@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class SoundDecoderManager {
 
-    public SoundDecoderManager() {
+    protected SoundDecoderManager() {
         throw new UnsupportedOperationException();
     }
 

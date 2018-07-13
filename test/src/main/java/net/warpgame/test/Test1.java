@@ -94,36 +94,6 @@ public class Test1 {
         }
     }
 
-    public class Sc extends Script {
-
-        @OwnerProperty(@IdOf(AudioSourceProperty.class))
-        private AudioSourceProperty sourceProperty;
-        private int lastChange = 0;
-        private boolean lt = false;
-
-        public Sc(Component owner) {
-            super(owner);
-        }
-
-        @Override
-        public void onInit() {
-
-        }
-
-        @Override
-        public void onUpdate(int delta) {
-            lastChange += delta;
-            if(lastChange > 2000){
-                lastChange = 0;
-                if(lt){
-                    sourceProperty.setVolumeRollOff(AL11.AL_LINEAR_DISTANCE_CLAMPED);
-                }else{
-                    sourceProperty.setVolumeRollOff(AL10.AL_INVERSE_DISTANCE_CLAMPED);
-                }
-            }
-        }
-    }
-
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         try {
             Component component = new SceneComponent(context);

@@ -11,7 +11,7 @@ import static org.lwjgl.system.MemoryStack.stackMallocInt;
  */
 class OggFileDecoder {
 
-    public OggFileDecoder() {
+    protected OggFileDecoder() {
         throw new UnsupportedOperationException();
     }
 
