@@ -50,12 +50,12 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         ship.addProperty(transformProperty);
         ship.addProperty(new RemoteInputProperty());
         ship.addListener(new ClientInputListener(ship));
-        ship.addScript(MovementScript.class);
         RigidBodyBoxShapeConstructor shapeConstructor = new RigidBodyBoxShapeConstructor(new Vector3f(2, 2, 2));
         RigidBodyConstructor constructor = new RigidBodyConstructor(shapeConstructor, 10f);
         FullPhysicsProperty physicsProperty = new FullPhysicsProperty(constructor.construct(transformProperty));
 
         ship.addProperty(physicsProperty);
+        ship.addScript(MovementScript.class);
 
         Client client = clientRegistry.getClient(event.getSourceClientId());
 

@@ -2,7 +2,6 @@ package net.warpgame.engine.net;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.net.event.ConnectedEvent;
-import net.warpgame.engine.net.message.InternalMessageQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,23 +18,23 @@ public class ConnectionStateHolder {
     private ConnectionState partnerRequestedConnectionState;
     private Component rootComponent;
     private int peerId = 0;
-    private InternalMessageQueue internalMessageQueue;
     private static final Logger logger = LoggerFactory.getLogger(ConnectionStateHolder.class);
 
 
     public ConnectionStateHolder(Component rootComponent) {
         this.rootComponent = rootComponent;
-        this.internalMessageQueue = internalMessageQueue;
         this.connectionState = CONNECTING;
     }
 
 
     public synchronized void setRequestedConnectionState(ConnectionState newRequestedConnectionState) {
+        logger.info("setting request connection state: " + newRequestedConnectionState);
         this.requestedConnectionState = newRequestedConnectionState;
         update();
     }
 
     public synchronized void setPartnerRequestedConnectionState(ConnectionState newPartnerRequestedConnectionState) {
+        logger.info("setting partner request connection state " + newPartnerRequestedConnectionState);
         this.partnerRequestedConnectionState = newPartnerRequestedConnectionState;
         update();
     }

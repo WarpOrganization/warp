@@ -32,10 +32,10 @@ public class EngineRuntime {
     private static Processor<ClassNode> createProcessor() {
         IdCodeGeneratorProcessor propertyIdGenerator = new IdCodeGeneratorProcessor(PROPERTY_CLASS_NAME, PREPROCESSOR);
         IdCodeGeneratorProcessor eventIdGenerator = new IdCodeGeneratorProcessor(EVENT_CLASS_NAME, PREPROCESSOR);
-        IdCodeGeneratorProcessor serializationIdGenerator = new IdCodeGeneratorProcessor(SERIALIZATION_CLASS_NAME, PREPROCESSOR);
+//        IdCodeGeneratorProcessor serializationIdGenerator = new IdCodeGeneratorProcessor(SERIALIZATION_CLASS_NAME, PREPROCESSOR);
         IdCallProcessor idCallProcessor = new IdCallProcessor(preprocessedTypes, PREPROCESSOR);
         IdAnnotationProcessor idAnnotationProcessor = new IdAnnotationProcessor(PREPROCESSOR);
-        return new ComposedProcessor<>(propertyIdGenerator, eventIdGenerator, serializationIdGenerator, idCallProcessor, idAnnotationProcessor);
+        return new ComposedProcessor<>(propertyIdGenerator, eventIdGenerator, idCallProcessor, idAnnotationProcessor);
     }
 
     protected void load() {

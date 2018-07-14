@@ -2,6 +2,7 @@ package net.warpgame.engine.client;
 
 import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
 
 /**
  * @author Hubertus
@@ -12,15 +13,17 @@ public class SerializedSceneHolder {
 
     private long latestTimestamp;
     private boolean used = true;
-    private ByteBuf serializedScene;
+    private SerializationBuffer serializedScene;
 
 
     public void offerScene(long timestamp, ByteBuf scene) {
         if (timestamp > latestTimestamp) {
             latestTimestamp = timestamp;
-            serializedScene = scene;
+            byte[] bytes = new byte[scene.readableBytes()];
+            scene.readBytes(bytes);
+            serializedScene = new SerializationBuffer(bytes);
+//            scene.retain();
             used = false;
-            scene.retain();
         }
     }
 
@@ -28,7 +31,7 @@ public class SerializedSceneHolder {
         return !used;
     }
 
-    public ByteBuf getScene() {
+    public SerializationBuffer getScene() {
         used = true;
         return serializedScene;
     }

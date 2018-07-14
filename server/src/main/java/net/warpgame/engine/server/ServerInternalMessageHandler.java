@@ -20,7 +20,7 @@ public class ServerInternalMessageHandler implements InternalMessageHandler {
 
     @Override
     public void handleMessage(InternalMessage message, Peer sourcePeer) {
-        Client targetClient = clientRegistry.getClient(message.getTargetPeerId());
+        Client targetClient = (Client) sourcePeer;
         if (targetClient != null)
             switch (message.getMessageContent()) {
                 case STATE_CHANGE_SYNCHRONIZING:

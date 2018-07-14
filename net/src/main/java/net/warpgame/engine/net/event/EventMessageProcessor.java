@@ -28,6 +28,7 @@ public class EventMessageProcessor implements MessageProcessor {
                                  ConnectionTools connectionTools,
                                  Serializers serializers) {
         this.connectionTools = connectionTools;
+        this.serializers = serializers;
         this.basicMessageDeserializer = new BasicMessageDeserializer();
         this.componentRegistry = componentRegistry;
     }

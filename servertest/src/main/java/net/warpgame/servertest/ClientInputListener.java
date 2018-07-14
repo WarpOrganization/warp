@@ -1,6 +1,6 @@
 package net.warpgame.servertest;
 
-import net.warpgame.content.InputEvent;
+import net.warpgame.content.KeyboardInputEvent;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
@@ -13,42 +13,42 @@ import static java.awt.event.KeyEvent.*;
  * @author Hubertus
  * Created 05.01.2018
  */
-public class ClientInputListener extends Listener<InputEvent> {
+public class ClientInputListener extends Listener<KeyboardInputEvent> {
 
     private RemoteInput input;
 
     protected ClientInputListener(Component owner) {
-        super(owner, Event.getTypeId(InputEvent.class));
+        super(owner, Event.getTypeId(KeyboardInputEvent.class));
         RemoteInputProperty property = owner.getProperty(Property.getTypeId(RemoteInputProperty.class));
         input = property.getRemoteInput();
     }
 
     @Override
-    public void handle(InputEvent inputEvent) {
-        switch (inputEvent.getInput()) {
+    public void handle(KeyboardInputEvent keyboardInputEvent) {
+        switch (keyboardInputEvent.getInput()) {
             case VK_W:
-                input.setForwardPressed(inputEvent.isPressed());
+                input.setForwardPressed(keyboardInputEvent.isPressed());
                 break;
             case VK_S:
-                input.setBackwardsPressed(inputEvent.isPressed());
+                input.setBackwardsPressed(keyboardInputEvent.isPressed());
                 break;
             case VK_A:
-                input.setLeftPressed(inputEvent.isPressed());
+                input.setLeftPressed(keyboardInputEvent.isPressed());
                 break;
             case VK_D:
-                input.setRightPressed(inputEvent.isPressed());
+                input.setRightPressed(keyboardInputEvent.isPressed());
                 break;
             case VK_UP:
-                input.setRotationUp(inputEvent.isPressed());
+                input.setRotationUp(keyboardInputEvent.isPressed());
                 break;
             case VK_DOWN:
-                input.setRotationDown(inputEvent.isPressed());
+                input.setRotationDown(keyboardInputEvent.isPressed());
                 break;
             case VK_LEFT:
-                input.setRotationLeft(inputEvent.isPressed());
+                input.setRotationLeft(keyboardInputEvent.isPressed());
                 break;
             case VK_RIGHT:
-                input.setRotationRight(inputEvent.isPressed());
+                input.setRotationRight(keyboardInputEvent.isPressed());
                 break;
         }
     }

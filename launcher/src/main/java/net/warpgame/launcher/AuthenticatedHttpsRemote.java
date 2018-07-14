@@ -81,7 +81,6 @@ public class AuthenticatedHttpsRemote implements Remote {
         CloseableHttpResponse response;
         try {
             response = httpClient.execute(get);
-            //System.out.println(response.getStatusLine().toString());
             downloadTask.getCallback().accept(new FileResponse(response.getStatusLine().getStatusCode(), response.getEntity().getContent(), downloadTask.getPath()));
             synchronized (downloadTask) {
                 downloadTask.notifyAll();

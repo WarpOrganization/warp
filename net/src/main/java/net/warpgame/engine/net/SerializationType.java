@@ -14,7 +14,7 @@ public enum SerializationType {
          */
         public static final int POSITION_SIZE = 4 * (1 + 1 + 3 + 4);
         /**
-         * id (1), serializationType (1), translation (3), rotation (4), velocity (4)
+         * id (1), serializationType (1), translation (3), rotation (4), velocity (3)
          */
         public static final int POSITION_AND_VELOCITY_SIZE =  4 * (1 + 1 + 3 + 3 + 4);
     }

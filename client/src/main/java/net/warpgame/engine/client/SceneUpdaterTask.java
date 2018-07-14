@@ -1,13 +1,13 @@
 package net.warpgame.engine.client;
 
-import io.netty.buffer.ByteBuf;
-import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.net.SerializationType;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.joml.Quaternionf;
@@ -58,18 +58,19 @@ public class SceneUpdaterTask extends EngineTask {
     private Vector3f velocity = new Vector3f();
     private SerializationType[] serializationTypes = SerializationType.values();
 
-    private void updateScene(ByteBuf serializedScene) {
+
+    private void updateScene(SerializationBuffer serializedScene) {
         while (serializedScene.isReadable()) {
+            SerializationType serializationType = serializationTypes[serializedScene.readInt()];
             int componentId = serializedScene.readInt();
             Component c = componentRegistry.getComponent(componentId);
-            SerializationType serializationType = serializationTypes[serializedScene.readInt()];
 
             if (c != null && !blockerService.isBlocked(c.getId())) deserialize(c, serializationType, serializedScene);
             else skip(serializationType, serializedScene);
         }
     }
 
-    private void deserialize(Component c, SerializationType serializationType, ByteBuf serializedScene) {
+    private void deserialize(Component c, SerializationType serializationType, SerializationBuffer serializedScene) {
         switch (serializationType) {
             case POSITION_AND_VELOCITY:
                 deserializePositionAndVelocity(c, serializedScene);
@@ -81,20 +82,20 @@ public class SceneUpdaterTask extends EngineTask {
 
     }
 
-    private void skip(SerializationType serializationType, ByteBuf serializedScene) {
+    private void skip(SerializationType serializationType, SerializationBuffer serializedScene) {
         switch (serializationType) {
             case POSITION:
-                serializedScene.readerIndex(
-                        serializedScene.readerIndex() + SerializationType.Size.POSITION_SIZE - COMPONENT_HEADER_SIZE);
+                serializedScene.setReaderIndex(
+                        serializedScene.getReaderIndex() + SerializationType.Size.POSITION_SIZE - COMPONENT_HEADER_SIZE);
                 break;
             case POSITION_AND_VELOCITY:
-                serializedScene.readerIndex(
-                        serializedScene.readerIndex() + SerializationType.Size.POSITION_AND_VELOCITY_SIZE - COMPONENT_HEADER_SIZE);
+                serializedScene.setReaderIndex(
+                        serializedScene.getReaderIndex() + SerializationType.Size.POSITION_AND_VELOCITY_SIZE - COMPONENT_HEADER_SIZE);
                 break;
         }
     }
 
-    private void deserializePosition(Component c, ByteBuf data) {
+    private void deserializePosition(Component c, SerializationBuffer data) {
         if (c.hasEnabledProperty(Property.getTypeId(TransformProperty.class))) {
             TransformProperty transformProperty = c.getProperty(Property.getTypeId(TransformProperty.class));
             translation.set(
@@ -111,7 +112,7 @@ public class SceneUpdaterTask extends EngineTask {
         }
     }
 
-    private void deserializePositionAndVelocity(Component c, ByteBuf data) {
+    private void deserializePositionAndVelocity(Component c, SerializationBuffer data) {
         deserializePosition(c, data);
         if (c.hasEnabledProperty(Property.getTypeId(SimplifiedPhysicsProperty.class))) {
             SimplifiedPhysicsProperty physicsProperty = c.getProperty(Property.getTypeId(SimplifiedPhysicsProperty.class));
@@ -121,6 +122,8 @@ public class SceneUpdaterTask extends EngineTask {
                     data.readFloat()
             );
             physicsProperty.setVelocity(velocity);
+        } else {
+            data.setReaderIndex(data.getReaderIndex() + 3 * 4);
         }
     }
 }

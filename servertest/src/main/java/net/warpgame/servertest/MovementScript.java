@@ -18,12 +18,12 @@ import org.joml.Vector3f;
  */
 public class MovementScript extends Script {
 
-    @OwnerProperty(@IdOf(FullPhysicsProperty.class))
+    @OwnerProperty(@IdOf(RemoteInputProperty.class))
     private RemoteInputProperty remoteInputProperty;
 
     private RemoteInput input;
 
-    @OwnerProperty(@IdOf(FullPhysicsProperty.class))
+    @OwnerProperty(@IdOf(TransformProperty.class))
     private TransformProperty transformProperty;
 
     @OwnerProperty(@IdOf(FullPhysicsProperty.class))

@@ -17,14 +17,16 @@ public class SerializationIds {
     public static int BOARD_SHIP_EVENT_ID = 4;
     public static int LOAD_SHIP_EVENT_ID = 5;
     public static int VECTOR3_ID = 6;
+    public static int KEYBOARD_INPUT_EVENT = 7;
 
     public static int getId(Class clazz) {
         if (clazz.equals(ConnectedEvent.class)) return CONNECTED_EVENT_ID;
         else if (clazz.equals(InternalMessage.class)) return INTERNAL_MESSAGE_ID;
-        else if(clazz.equals(InputEvent.class)) return INPUT_EVENT_ID;
+        else if(clazz.equals(KeyboardInputEvent.class)) return INPUT_EVENT_ID;
         else if (clazz.equals(BoardShipEvent.class)) return BOARD_SHIP_EVENT_ID;
         else if (clazz.equals(LoadShipEvent.class)) return LOAD_SHIP_EVENT_ID;
         else if(clazz.equals(Vector3f.class)) return VECTOR3_ID;
+        else if (clazz.equals(KeyboardInputEvent.class)) return KEYBOARD_INPUT_EVENT;
         else throw new RuntimeException("unknown object "+ clazz.toString());
     }
 }

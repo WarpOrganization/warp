@@ -12,7 +12,7 @@ public abstract class Serialization<T> {
     }
 
     public abstract void serialize(T object, Serializer serializer);
-    public abstract Object deserialize(Deserializer deserializer);
+    public abstract T deserialize(Deserializer deserializer);
 
     public Class<T> getTargetClass() {
         return targetClass;

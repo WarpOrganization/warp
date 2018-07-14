@@ -78,7 +78,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         Client c = new Client(
                 address,
                 new IncomingMessageQueue(messageProcessorsService),
-                new ConnectionStateHolder(componentRegistry.getComponent(0)));
+                new ConnectionStateHolder(componentRegistry.getRootComponent()));
         int id = clientRegistry.addClient(c);
         c.getConnectionStateHolder().setPeerId(id);
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);

@@ -40,6 +40,7 @@ public class IncomingPacketProcessor {
                 break;
             case PACKET_SCENE_STATE:
                 processSceneStatePacket(timestamp, packet);
+                break;
             case PACKET_MESSAGE:
                 processMessagePacket(timestamp, packet);
                 break;

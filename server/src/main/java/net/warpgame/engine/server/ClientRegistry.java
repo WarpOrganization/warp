@@ -51,9 +51,10 @@ public class ClientRegistry {
     public synchronized void broadcast(ByteBuf msg) {
         if (clients.size() > 1) msg.retain(clients.size() - 1);
 
-        for (Client client : clients.values())
+        for (Client client : clients.values()) {
             if (client.getConnectionState() == ConnectionState.LIVE)
                 connectionUtil.sendPacket(msg, client);
+        }
     }
 
     public Collection<Client> getClients() {

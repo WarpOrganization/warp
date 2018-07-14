@@ -1,5 +1,6 @@
 package net.warpgame.content;
 
+import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.Deserializer;
 import net.warpgame.engine.core.serialization.Serialization;
 import net.warpgame.engine.core.serialization.Serializer;
@@ -23,6 +24,7 @@ public class BoardShipEvent extends NetworkEvent implements Serializable {
         return shipComponentId;
     }
 
+    @Service
     public static class BoardShipSerialization extends Serialization<BoardShipEvent>{
         public BoardShipSerialization() {
             super(BoardShipEvent.class);
@@ -45,7 +47,7 @@ public class BoardShipEvent extends NetworkEvent implements Serializable {
 
         @Override
         public int getType() {
-            return 0;
+            return 4;
         }
     }
 }

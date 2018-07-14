@@ -74,7 +74,7 @@ public class SimpleControlScript extends Script {
         movementVector.zero();
         if (input.isKeyDown(VK_W)) {
             movementVector.add(0, 0, -1);
-//            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W)));
+//            getOwner().triggerEvent(new Envelope(new KeyboardInputEvent(VK_W)));
         }
         if (input.isKeyDown(VK_S))
             movementVector.add(0, 0, 1);
