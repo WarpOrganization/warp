@@ -1,6 +1,7 @@
 package net.warpgame.engine.server;
 
 import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
 
@@ -14,6 +15,7 @@ import java.util.Map;
  * Created 10.12.2017
  */
 @Service
+@Profile("server")
 public class ClientRegistry {
     private Map<Integer, Client> clients = new HashMap<>();
     private int lastId = 0;

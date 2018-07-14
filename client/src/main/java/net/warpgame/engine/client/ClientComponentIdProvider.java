@@ -1,6 +1,7 @@
 package net.warpgame.engine.client;
 
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.IdPool;
 
@@ -12,6 +13,7 @@ import java.util.HashMap;
  * Created 13.07.2018
  */
 @Service
+@Profile("client")
 public class ClientComponentIdProvider {
     private ArrayDeque<IdPool> awaitingPublicIdPools = new ArrayDeque<>();
     private ArrayDeque<IdPool> awaitingPrivatePools = new ArrayDeque<>();

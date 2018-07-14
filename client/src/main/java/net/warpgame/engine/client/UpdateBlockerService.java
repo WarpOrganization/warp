@@ -1,5 +1,6 @@
 package net.warpgame.engine.client;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
  * Created 08.01.2018
  */
 @Service
+@Profile("client")
 public class UpdateBlockerService {
     private ArrayList<Boolean> flags = new ArrayList<>();
 

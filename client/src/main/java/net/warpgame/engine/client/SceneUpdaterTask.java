@@ -2,6 +2,7 @@ package net.warpgame.engine.client;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -18,6 +19,7 @@ import org.joml.Vector3f;
  * Created 14.12.2017
  */
 @Service
+@Profile("client")
 @RegisterTask(thread = "client")
 public class SceneUpdaterTask extends EngineTask {
 

@@ -1,6 +1,7 @@
 package net.warpgame.engine.server;
 
 import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.ConnectionState;
@@ -14,6 +15,7 @@ import net.warpgame.engine.net.message.InternalMessageQueue;
  * Created 13.05.2018
  */
 @Service
+@Profile("server")
 public class IncomingPacketProcessor {
 
     private ClientRegistry clientRegistry;

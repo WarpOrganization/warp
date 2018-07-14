@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.internal.SocketUtils;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -26,6 +27,7 @@ import java.net.InetSocketAddress;
  * Created 26.11.2017
  */
 @Service
+@Profile("client")
 @RegisterTask(thread = "client")
 public class ClientTask extends EngineTask {
 

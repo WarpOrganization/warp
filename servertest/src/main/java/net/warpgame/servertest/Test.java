@@ -19,7 +19,7 @@ public class Test {
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "server");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
 
-//        Component root = new SceneComponent(engineContext);
+//        Component root = new SceneComponent(engineContext);8558
         engineContext.getScene().addListener(new ConnectedListener(
                 engineContext.getScene(),
                 engineContext.getComponentRegistry(),

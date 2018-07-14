@@ -7,6 +7,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -21,6 +22,7 @@ import net.warpgame.engine.net.message.MessageSourcesService;
  * Created 26.11.2017
  */
 @Service
+@Profile("server")
 @RegisterTask(thread = "server")
 public class ServerTask extends EngineTask {
 

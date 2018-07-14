@@ -1,5 +1,6 @@
 package net.warpgame.engine.server.message;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.message.EnvelopeAddressingService;
 import net.warpgame.engine.net.message.MessageEnvelope;
@@ -11,6 +12,7 @@ import net.warpgame.engine.server.ClientRegistry;
  * Created 30.05.2018
  */
 @Service
+@Profile("server")
 public class ServerEnvelopeAddressingService extends EnvelopeAddressingService {
 
     private ClientRegistry clientRegistry;

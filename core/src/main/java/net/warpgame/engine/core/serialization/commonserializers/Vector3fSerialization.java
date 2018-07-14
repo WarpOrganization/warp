@@ -12,8 +12,8 @@ import org.joml.Vector3f;
  */
 //TODO xd
 @Service
-public class Vector3fSerializationelo extends Serialization<Vector3f> {
-    public Vector3fSerializationelo() {
+public class Vector3fSerialization extends Serialization<Vector3f> {
+    public Vector3fSerialization() {
         super(Vector3f.class);
     }
 

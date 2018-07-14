@@ -2,6 +2,7 @@ package net.warpgame.engine.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  */
 
 @Service
+@Profile("server")
 @RegisterTask(thread = "server")
 public class SceneSynchronizationTask extends EngineTask {
     /**

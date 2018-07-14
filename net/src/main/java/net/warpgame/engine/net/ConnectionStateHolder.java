@@ -27,14 +27,12 @@ public class ConnectionStateHolder {
     }
 
 
-    public synchronized void setRequestedConnectionState(ConnectionState newRequestedConnectionState) {
-        logger.info("setting request connection state: " + newRequestedConnectionState);
+    public synchronized void setRequestedConnecationState(ConnectionState newRequestedConnectionState) {
         this.requestedConnectionState = newRequestedConnectionState;
         update();
     }
 
     public synchronized void setPartnerRequestedConnectionState(ConnectionState newPartnerRequestedConnectionState) {
-        logger.info("setting partner request connection state " + newPartnerRequestedConnectionState);
         this.partnerRequestedConnectionState = newPartnerRequestedConnectionState;
         update();
     }

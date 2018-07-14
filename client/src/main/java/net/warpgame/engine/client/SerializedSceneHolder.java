@@ -1,6 +1,7 @@
 package net.warpgame.engine.client;
 
 import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 
@@ -9,6 +10,7 @@ import net.warpgame.engine.core.serialization.SerializationBuffer;
  * Created 14.12.2017
  */
 @Service
+@Profile("client")
 public class SerializedSceneHolder {
 
     private long latestTimestamp;

@@ -1,12 +1,10 @@
 package net.warpgame.engine.server;
 
-import net.warpgame.engine.core.context.service.Service;
-
 /**
  * @author Hubertus
  * Created 05.01.2018
  */
-@Service
+
 public class RemoteInput {
     private boolean forwardPressed;
     private boolean backwardsPressed;
