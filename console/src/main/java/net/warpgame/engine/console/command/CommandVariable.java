@@ -1,4 +1,4 @@
-package net.warpgame.test.console;
+package net.warpgame.engine.console.command;
 
 /**
  * @author KocproZ

@@ -1,20 +1,21 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.engine.console.ConsoleService;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.EngineContext;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.graphics.GraphicsThread;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
-import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.mesh.StaticMesh;
+import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -42,6 +43,7 @@ public class MultiplayerTest {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "client");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
+        engineContext.getLoadedContext().findOne(ConsoleService.class).get().initConsole();
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();

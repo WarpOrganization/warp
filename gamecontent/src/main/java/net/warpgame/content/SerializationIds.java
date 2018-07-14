@@ -18,6 +18,7 @@ public class SerializationIds {
     public static int LOAD_SHIP_EVENT_ID = 5;
     public static int VECTOR3_ID = 6;
     public static int KEYBOARD_INPUT_EVENT = 7;
+    public static int CONSOLE_INPUT_EVENT = 8;
 
     public static int getId(Class clazz) {
         if (clazz.equals(ConnectedEvent.class)) return CONNECTED_EVENT_ID;

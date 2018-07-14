@@ -1,4 +1,4 @@
-package net.warpgame.test.console;
+package net.warpgame.engine.console.command;
 
 /**
  * @author KocproZ
@@ -33,6 +33,12 @@ public abstract class Command {
 
     public Side getSide() {
         return side;
+    }
+
+    public enum Side {
+        CLIENT, //Executed on client
+        SERVER, //Executed on server
+        LOCAL   //Executed on side where it was run
     }
 
 }

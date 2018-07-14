@@ -1,11 +1,11 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -37,12 +37,8 @@ public class SimpleControlScript extends Script {
     @OwnerProperty(@IdOf(TransformProperty.class))
     private TransformProperty transformProperty;
 
-    @ContextService
-    private Input input;
-
-    @ContextService
-    private Context context;
-
+    @ContextService private Input input;
+    @ContextService private Context context;
 
     private Vector3f movementVector = new Vector3f();
 
