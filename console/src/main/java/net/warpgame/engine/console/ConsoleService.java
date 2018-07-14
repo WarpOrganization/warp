@@ -45,7 +45,7 @@ public class ConsoleService {
         sceneHolder.getScene().addListener(new ConsoleInputEventListener(sceneHolder.getScene()));
 //        consoleComponent = new SceneComponent(sceneHolder.getScene());
         consoleComponent = sceneHolder.getScene();
-        SimpleCommand help = new SimpleCommand("help", Command.Side.CLIENT,
+        SimpleCommand help = new SimpleCommand("help", Command.Side.LOCAL,
                 "Get help", "help [command]");
         help.setExecutor((args) -> {
             if (args.length > 0) {
@@ -59,7 +59,7 @@ public class ConsoleService {
             }
         });
 
-        SimpleCommand list = new SimpleCommand("list", Command.Side.CLIENT,
+        SimpleCommand list = new SimpleCommand("list", Command.Side.LOCAL,
                 "lists all commands", "list");
         list.setExecutor((args) -> {
             output.println("Available commands:");
@@ -68,14 +68,14 @@ public class ConsoleService {
             }
         });
 
-        SimpleCommand print = new SimpleCommand("print", Command.Side.CLIENT,
+        SimpleCommand print = new SimpleCommand("print", Command.Side.LOCAL,
                 "prints variables to console", "print $variable1 [...]");
         print.setExecutor((args) -> {
             for (String s : args)
                 output.printf("%s\n", s);
         });
 
-        SimpleCommand variables = new SimpleCommand("variables", Command.Side.CLIENT,
+        SimpleCommand variables = new SimpleCommand("variables", Command.Side.LOCAL,
                 "Lists all variables", "variables");
         variables.setExecutor((args) -> {
             output.println("Variables:");

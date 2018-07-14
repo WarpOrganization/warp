@@ -1,4 +1,4 @@
-package net.warpgame.test.console;
+package net.warpgame.test.command;
 
 import net.warpgame.engine.console.ConsoleService;
 import net.warpgame.engine.console.command.Command;

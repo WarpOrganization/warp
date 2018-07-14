@@ -1,5 +1,6 @@
 package net.warpgame.test;
 
+import net.warpgame.engine.console.ConsoleService;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneComponent;
@@ -42,6 +43,7 @@ public class MultiplayerTest {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "client");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
+        engineContext.getLoadedContext().findOne(ConsoleService.class).get().initConsole();
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();

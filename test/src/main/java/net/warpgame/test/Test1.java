@@ -49,7 +49,7 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.test.console.MoveCameraCommand;
+import net.warpgame.test.command.MoveCameraCommand;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 

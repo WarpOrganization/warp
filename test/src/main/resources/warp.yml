@@ -14,6 +14,7 @@ graphics:
     smaa:
       preset: !!net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAAPreset MEDIUM
 multiplayer:
-  ip: 127.0.0.1
+  ip: hubertus248.me
+#  ip: 127.0.0.1
   port: 6688
 script.ups: 40
