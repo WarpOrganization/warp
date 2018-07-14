@@ -11,6 +11,9 @@ import static org.lwjgl.system.MemoryStack.stackMallocInt;
  */
 class OggFileDecoder {
 
+    protected OggFileDecoder() {
+        throw new UnsupportedOperationException();
+    }
 
     static SoundData decode(String filename) {
         ShortBuffer shortBuffer;

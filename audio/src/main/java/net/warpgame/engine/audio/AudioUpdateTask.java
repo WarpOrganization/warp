@@ -1,5 +1,6 @@
 package net.warpgame.engine.audio;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
@@ -26,6 +27,7 @@ import static org.lwjgl.openal.SOFTHRTF.alcResetDeviceSOFT;
  */
 
 @Service
+@Profile("client")
 @RegisterTask(thread = "audio")
 public class AudioUpdateTask extends EngineTask {
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
@@ -54,7 +56,6 @@ public class AudioUpdateTask extends EngineTask {
         attr.flip();
         alcResetDeviceSOFT(device, attr);
 
-        alEnable(EXTSourceDistanceModel.AL_SOURCE_DISTANCE_MODEL);
         alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
     }
 

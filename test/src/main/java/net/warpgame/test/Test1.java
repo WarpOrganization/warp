@@ -69,7 +69,7 @@ public class Test1 {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev");
+        EngineContext engineContext = new EngineContext("dev", "client");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
@@ -91,36 +91,6 @@ public class Test1 {
 
         public Sup(Supplier<Float> supplier) {
             this.supplier = supplier;
-        }
-    }
-
-    public class Sc extends Script {
-
-        @OwnerProperty(@IdOf(AudioSourceProperty.class))
-        private AudioSourceProperty sourceProperty;
-        private int lastChange = 0;
-        private boolean lt = false;
-
-        public Sc(Component owner) {
-            super(owner);
-        }
-
-        @Override
-        public void onInit() {
-
-        }
-
-        @Override
-        public void onUpdate(int delta) {
-            lastChange += delta;
-            if(lastChange > 2000){
-                lastChange = 0;
-                if(lt){
-                    sourceProperty.setVolumeRollOff(AL11.AL_LINEAR_DISTANCE_CLAMPED);
-                }else{
-                    sourceProperty.setVolumeRollOff(AL10.AL_INVERSE_DISTANCE_CLAMPED);
-                }
-            }
         }
     }
 

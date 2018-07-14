@@ -20,7 +20,6 @@ public class AudioSourceProperty extends Property {
     private float minDistance = 1;
     private float maxDistance = 500;//Achtung! maxDistance > minDistance
     private float rollOffFactor = 1;
-    private int volumeRollOff = AL_INVERSE_DISTANCE_CLAMPED;
 
     private float coneOuterGain;
     private float coneInnerAngle;
@@ -135,6 +134,8 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty setPitch(float pitch) {
+        if(pitch < 0)
+            throw new RuntimeException("pitch must be non-negative");
         this.pitch = pitch;
         commandQueue.add(new SetSourceFloatCommand(this, AL_PITCH, pitch));
         return this;
@@ -145,6 +146,8 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty setVolume(float volume) {
+        if(volume < 0)
+            throw new RuntimeException("volume must be non-negative");
         this.volume = volume;
         commandQueue.add(new SetSourceFloatCommand(this, AL_GAIN, volume));
         return this;
@@ -155,6 +158,8 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty setMaxDistance(float maxDistance) {
+        if(maxDistance <= minDistance)
+            throw new RuntimeException("max distance can't be lower or equal then min distance");
         this.maxDistance = maxDistance;
         commandQueue.add(new SetSourceFloatCommand(this, AL_MAX_DISTANCE, maxDistance));
         return this;
@@ -165,6 +170,8 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty setMinDistance(float minDistance) {
+        if(minDistance >= maxDistance)
+            throw new RuntimeException("min distance can't be higher or equal then min distance");
         this.minDistance = minDistance;
         commandQueue.add(new SetSourceFloatCommand(this, AL_REFERENCE_DISTANCE, minDistance));
         return this;
@@ -175,18 +182,10 @@ public class AudioSourceProperty extends Property {
     }
 
     public AudioSourceProperty setRollOffFactor(float rollOffFactor) {
+        if(rollOffFactor < 0)
+            throw new RuntimeException("rollOffFactor must be non-negative");
         this.rollOffFactor = rollOffFactor;
         commandQueue.add(new SetSourceFloatCommand(this, AL_ROLLOFF_FACTOR, rollOffFactor));
-        return this;
-    }
-
-    public int getVolumeRollOff() {
-        return volumeRollOff;
-    }
-
-    public AudioSourceProperty setVolumeRollOff(int volumeRollOff) {
-        this.volumeRollOff = volumeRollOff;
-        commandQueue.add(new SetSourceIntCommand(this, AL_DISTANCE_MODEL, volumeRollOff));
         return this;
     }
 }
