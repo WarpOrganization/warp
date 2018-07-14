@@ -1,13 +1,19 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.audio.*;
-import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.engine.audio.AudioClip;
+import net.warpgame.engine.audio.AudioListenerProperty;
+import net.warpgame.engine.audio.AudioSourceProperty;
+import net.warpgame.engine.console.ConsoleService;
+import net.warpgame.engine.console.command.Command;
+import net.warpgame.engine.console.command.CommandVariable;
+import net.warpgame.engine.console.command.SimpleCommand;
 import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -43,13 +49,10 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.test.console.*;
+import net.warpgame.test.console.MoveCameraCommand;
 import org.joml.Vector3f;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL11;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -69,7 +72,7 @@ public class Test1 {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev", "client");
+        EngineContext engineContext = new EngineContext("dev", "client", "server");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
@@ -213,7 +216,7 @@ public class Test1 {
     private static void registerCommandsAndVariables(Context context) {
         consoleService.initConsole();
         SimpleCommand exit = new SimpleCommand("quit",
-                Side.CLIENT,
+                Command.Side.CLIENT,
                 "Stops the engine and quits",
                 "quit");
         exit.setExecutor((args) -> {

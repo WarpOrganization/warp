@@ -1,7 +1,10 @@
 package net.warpgame.test.console;
 
-import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.console.ConsoleService;
+import net.warpgame.engine.console.command.Command;
+import net.warpgame.engine.console.command.CommandVariable;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import org.joml.Vector3f;
 
@@ -11,7 +14,7 @@ import org.joml.Vector3f;
  */
 public class MoveCameraCommand extends Command {
 
-    private CameraHolder cameraHolder; //TODO make output available
+    private CameraHolder cameraHolder;
     private ConsoleService consoleService;
 
     public MoveCameraCommand(CameraHolder holder, ConsoleService consoleService) {

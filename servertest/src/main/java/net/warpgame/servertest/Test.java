@@ -1,5 +1,6 @@
 package net.warpgame.servertest;
 
+import net.warpgame.engine.console.ConsoleService;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.context.EngineContext;
@@ -18,6 +19,7 @@ public class Test {
     public static void start(EngineRuntime engineRuntime) {
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "server");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
+        engineContext.getLoadedContext().findOne(ConsoleService.class).get().initConsole();
 
 //        Component root = new SceneComponent(engineContext);
         engineContext.getScene().addListener(new ConnectedListener(

@@ -1,7 +1,11 @@
-package net.warpgame.test.console;
+package net.warpgame.engine.console;
 
+import net.warpgame.engine.console.command.Command;
+import net.warpgame.engine.console.command.CommandVariable;
+import net.warpgame.engine.console.command.SimpleCommand;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
+import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.service.Service;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -21,10 +25,12 @@ public class ConsoleService {
     private Map<String, CommandVariable> variables = new HashMap<>();
     private PrintStream output;
     private SceneHolder sceneHolder;
+    private Context context;
     private SceneComponent consoleComponent;
 
-    public ConsoleService(SceneHolder holder) {
-        sceneHolder = holder;
+    public ConsoleService(SceneHolder holder, Context context) {
+        this.sceneHolder = holder;
+        this.context = context;
         output = System.out;
     }
 
@@ -36,8 +42,10 @@ public class ConsoleService {
      * Registers basic commands
      */
     public void initConsole() {
-        consoleComponent = new SceneComponent(sceneHolder.getScene());
-        SimpleCommand help = new SimpleCommand("help", Side.CLIENT,
+        sceneHolder.getScene().addListener(new ConsoleInputEventListener(sceneHolder.getScene()));
+//        consoleComponent = new SceneComponent(sceneHolder.getScene());
+        consoleComponent = sceneHolder.getScene();
+        SimpleCommand help = new SimpleCommand("help", Command.Side.CLIENT,
                 "Get help", "help [command]");
         help.setExecutor((args) -> {
             if (args.length > 0) {
@@ -51,7 +59,7 @@ public class ConsoleService {
             }
         });
 
-        SimpleCommand list = new SimpleCommand("list", Side.CLIENT,
+        SimpleCommand list = new SimpleCommand("list", Command.Side.CLIENT,
                 "lists all commands", "list");
         list.setExecutor((args) -> {
             output.println("Available commands:");
@@ -60,14 +68,14 @@ public class ConsoleService {
             }
         });
 
-        SimpleCommand print = new SimpleCommand("print", Side.CLIENT,
+        SimpleCommand print = new SimpleCommand("print", Command.Side.CLIENT,
                 "prints variables to console", "print $variable1 [...]");
         print.setExecutor((args) -> {
             for (String s : args)
                 output.printf("%s\n", s);
         });
 
-        SimpleCommand variables = new SimpleCommand("variables", Side.CLIENT,
+        SimpleCommand variables = new SimpleCommand("variables", Command.Side.CLIENT,
                 "Lists all variables", "variables");
         variables.setExecutor((args) -> {
             output.println("Variables:");
@@ -117,11 +125,16 @@ public class ConsoleService {
             return;
         }
 
-        if (command.getSide() == Side.CLIENT) {
+        if (command.getSide() == Command.Side.LOCAL) {
             command.execute(args);
-        } else {
-//            consoleComponent.triggerEvent();
-            //TODO send command to server
+        } else if (context.isProfileEnabled("client") && command.getSide() == Command.Side.CLIENT) {
+            command.execute(args);
+        } else if (context.isProfileEnabled("server") && command.getSide() == Command.Side.SERVER) {
+            command.execute(args);
+        } else if (context.isProfileEnabled("client") && command.getSide() == Command.Side.SERVER) {
+            consoleComponent.triggerEvent(new ConsoleInputEvent(line));
+        } else if (context.isProfileEnabled("server") && command.getSide() == Command.Side.CLIENT) {
+            consoleComponent.triggerEvent(new ConsoleInputEvent(line));
         }
     }
 

@@ -1,4 +1,4 @@
-package net.warpgame.content;
+package net.warpgame.engine.console;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.Deserializer;
