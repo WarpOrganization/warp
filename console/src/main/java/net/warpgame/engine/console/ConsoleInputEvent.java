@@ -18,6 +18,11 @@ public class ConsoleInputEvent extends NetworkEvent {
         this.input = input;
     }
 
+    public ConsoleInputEvent(int targetId, String input) {
+        super(targetId);
+        this.input = input;
+    }
+
     public String getInput() {
         return input;
     }

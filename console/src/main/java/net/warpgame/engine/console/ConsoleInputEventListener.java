@@ -11,13 +11,21 @@ import org.apache.log4j.Logger;
  */
 public class ConsoleInputEventListener extends Listener<ConsoleInputEvent> {
 
-    public ConsoleInputEventListener(Component owner) {
+    private ConsoleService consoleService;
+
+    public ConsoleInputEventListener(Component owner, ConsoleService consoleService) {
         super(owner, Event.getTypeId(ConsoleInputEvent.class));
+        this.consoleService = consoleService;
     }
 
     @Override
     public void handle(ConsoleInputEvent event) {
-        Logger.getLogger(ConsoleInputEventListener.class).info(event.getInput());
+        Logger.getLogger(ConsoleInputEventListener.class)
+                .debug("ConsoleInputEvent from " + event.getSourceClientId() + ": " + event.getInput());
+        if (!event.getInput().startsWith("/"))
+            consoleService.sendChatMessage(Integer.toString(event.getSourceClientId()), event.getInput());
+        else
+            consoleService.parseAndExecute(event.getInput());
     }
 
 }

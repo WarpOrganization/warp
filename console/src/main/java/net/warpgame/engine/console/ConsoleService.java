@@ -42,7 +42,7 @@ public class ConsoleService {
      * Registers basic commands
      */
     public void initConsole() {
-        sceneHolder.getScene().addListener(new ConsoleInputEventListener(sceneHolder.getScene()));
+        sceneHolder.getScene().addListener(new ConsoleInputEventListener(sceneHolder.getScene(), this));
 //        consoleComponent = new SceneComponent(sceneHolder.getScene());
         consoleComponent = sceneHolder.getScene();
         SimpleCommand help = new SimpleCommand("help", Command.Side.LOCAL,
@@ -136,6 +136,16 @@ public class ConsoleService {
         } else if (context.isProfileEnabled("server") && command.getSide() == Command.Side.CLIENT) {
             consoleComponent.triggerEvent(new ConsoleInputEvent(line));
         }
+    }
+
+    void sendChatMessage(String sender, String msg) {
+        if (context.isProfileEnabled("client"))
+            printToConsole("[" + sender + "] " + msg);
+        else
+            printToConsole("asdasdasdasdasddasasdsadsa");
+//            for (Client c : clientRegistry.getClients()) {
+//                consoleComponent.triggerEvent(new ConsoleInputEvent(c.getId(), msg));
+//            }
     }
 
     /**

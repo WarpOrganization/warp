@@ -19,7 +19,6 @@ dependencies {
     compile project(':graphics')
     compile project(':audio')
     compile project(':physics')
-    compile project(':audio')
     compile project(':launcher')
     compile project(':input')
     compile project(':client')

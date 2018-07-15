@@ -11,5 +11,6 @@ repositories {
 dependencies {
     compile project(':core')
     compile project(':net')
+    compile project(':server')
 
 }
