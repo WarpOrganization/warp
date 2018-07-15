@@ -213,7 +213,7 @@ public class Test1 {
     }
 
     private static void registerCommandsAndVariables(Context context) {
-        consoleService.initConsole();
+        consoleService.init();
         SimpleCommand exit = new SimpleCommand("quit",
                 "Stops the engine and quits",
                 "quit");

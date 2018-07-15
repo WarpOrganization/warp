@@ -43,7 +43,7 @@ public class MultiplayerTest {
         System.out.println();
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "client");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
-        engineContext.getLoadedContext().findOne(ConsoleService.class).get().initConsole();
+        engineContext.getLoadedContext().findOne(ConsoleService.class).get().init();
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
                 .get();

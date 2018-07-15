@@ -3,11 +3,10 @@ package net.warpgame.engine.console;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
-import org.apache.log4j.Logger;
 
 /**
  * @author KocproZ
- * Created 2018-07-14 at 13:12
+ * Created 2018-07-15 at 18:04
  */
 public class ConsoleInputEventListener extends Listener<ConsoleInputEvent> {
 
@@ -20,12 +19,7 @@ public class ConsoleInputEventListener extends Listener<ConsoleInputEvent> {
 
     @Override
     public void handle(ConsoleInputEvent event) {
-        Logger.getLogger(ConsoleInputEventListener.class)
-                .debug("ConsoleInputEvent from " + event.getSourceClientId() + ": " + event.getInput());
-        if (!event.getInput().startsWith("/"))
-            consoleService.sendChatMessage(Integer.toString(event.getSourceClientId()), event.getInput());
-        else
-            consoleService.parseAndExecute(event.getInput());
+        consoleService.sendChatMessage("User", event.getInput()); //TODO: Change to filter commands
     }
 
 }

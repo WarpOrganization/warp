@@ -6,9 +6,6 @@ import net.warpgame.engine.console.command.SimpleCommand;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
-import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.server.Client;
-import net.warpgame.engine.server.ClientRegistry;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.PrintStream;
@@ -20,21 +17,19 @@ import java.util.Set;
  * @author KocproZ
  * Created 2018-01-09 at 22:06
  */
-@Service
-public class ConsoleService {
+public abstract class ConsoleService {
 
     private Map<String, Command> commands = new HashMap<>();
     private Map<String, CommandVariable> variables = new HashMap<>();
     private PrintStream output;
-    private SceneHolder sceneHolder;
+    private SceneHolder sceneHolder; //Temporary, until consoleComponent can be used
     private Context context;
-    private SceneComponent consoleComponent;
-    private ClientRegistry clientRegistry;
+    SceneComponent consoleComponent;
 
-    public ConsoleService(SceneHolder holder, Context context, ClientRegistry registry) {
-        this.sceneHolder = holder;
+
+    public ConsoleService(Context context, SceneHolder holder) {
         this.context = context;
-        this.clientRegistry = registry;
+        this.sceneHolder = holder;
         output = System.out;
     }
 
@@ -45,10 +40,13 @@ public class ConsoleService {
     /**
      * Registers basic commands
      */
-    public void initConsole() {
-        sceneHolder.getScene().addListener(new ConsoleInputEventListener(sceneHolder.getScene(), this));
+    public void init() {
 //        consoleComponent = new SceneComponent(sceneHolder.getScene());
         consoleComponent = sceneHolder.getScene();
+
+        consoleComponent.addListener(new ConsoleInputEventListener(consoleComponent, this));
+        consoleComponent.addListener(new ChatMessageEventListener(consoleComponent, context,  this));
+
         SimpleCommand help = new SimpleCommand("help",
                 "Get help", "help [command]");
         help.setExecutor((args) -> {
@@ -118,7 +116,7 @@ public class ConsoleService {
      *
      * @param line Line from console to parse
      */
-    void parseAndExecute(String line) {
+    public void parseAndExecute(String line) {
         String[] args = line.split(" ");
         String commandString = args[0];
         args = ArrayUtils.removeElement(args, commandString);
@@ -133,15 +131,7 @@ public class ConsoleService {
 
     }
 
-    void sendChatMessage(String sender, String msg) {
-        if (context.isProfileEnabled("client"))
-            print("[" + sender + "] " + msg);
-        else
-            print("asdasdasdasdasddasasdsadsa");
-            for (Client c : clientRegistry.getClients()) {
-                consoleComponent.triggerEvent(new ConsoleInputEvent(c.getId(), msg));
-            }
-    }
+    abstract void sendChatMessage(String sender, String msg);
 
     /**
      * Replaces '$variable' with value.
@@ -162,12 +152,16 @@ public class ConsoleService {
      * @param command Command, eg. "list"
      * @return help text, null if command not found
      */
-    public String getHelpText(String command) {
+    private String getHelpText(String command) {
         return commands.get(command).getHelpText();
     }
 
-    public Set<String> getVariables() {
+    private Set<String> getVariables() {
         return variables.keySet();
+    }
+
+    public SceneComponent getConsoleComponent() {
+        return consoleComponent;
     }
 
 }
