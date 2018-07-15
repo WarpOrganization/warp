@@ -27,7 +27,7 @@ public class ConnectionStateHolder {
     }
 
 
-    public synchronized void setRequestedConnecationState(ConnectionState newRequestedConnectionState) {
+    public synchronized void setRequestedConnectionState(ConnectionState newRequestedConnectionState) {
         this.requestedConnectionState = newRequestedConnectionState;
         update();
     }
