@@ -7,6 +7,8 @@ import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.server.Client;
+import net.warpgame.engine.server.ClientRegistry;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.PrintStream;
@@ -27,14 +29,16 @@ public class ConsoleService {
     private SceneHolder sceneHolder;
     private Context context;
     private SceneComponent consoleComponent;
+    private ClientRegistry clientRegistry;
 
-    public ConsoleService(SceneHolder holder, Context context) {
+    public ConsoleService(SceneHolder holder, Context context, ClientRegistry registry) {
         this.sceneHolder = holder;
         this.context = context;
+        this.clientRegistry = registry;
         output = System.out;
     }
 
-    public void printToConsole(String text) {
+    public void print(String text) {
         output.println(text);
     }
 
@@ -45,7 +49,7 @@ public class ConsoleService {
         sceneHolder.getScene().addListener(new ConsoleInputEventListener(sceneHolder.getScene(), this));
 //        consoleComponent = new SceneComponent(sceneHolder.getScene());
         consoleComponent = sceneHolder.getScene();
-        SimpleCommand help = new SimpleCommand("help", Command.Side.LOCAL,
+        SimpleCommand help = new SimpleCommand("help",
                 "Get help", "help [command]");
         help.setExecutor((args) -> {
             if (args.length > 0) {
@@ -59,7 +63,7 @@ public class ConsoleService {
             }
         });
 
-        SimpleCommand list = new SimpleCommand("list", Command.Side.LOCAL,
+        SimpleCommand list = new SimpleCommand("list",
                 "lists all commands", "list");
         list.setExecutor((args) -> {
             output.println("Available commands:");
@@ -68,14 +72,14 @@ public class ConsoleService {
             }
         });
 
-        SimpleCommand print = new SimpleCommand("print", Command.Side.LOCAL,
+        SimpleCommand print = new SimpleCommand("print",
                 "prints variables to console", "print $variable1 [...]");
         print.setExecutor((args) -> {
             for (String s : args)
                 output.printf("%s\n", s);
         });
 
-        SimpleCommand variables = new SimpleCommand("variables", Command.Side.LOCAL,
+        SimpleCommand variables = new SimpleCommand("variables",
                 "Lists all variables", "variables");
         variables.setExecutor((args) -> {
             output.println("Variables:");
@@ -100,7 +104,8 @@ public class ConsoleService {
 
     /**
      * Registers variable and adds '$' at the beginning
-     * @param variable    CommandVariable to add
+     *
+     * @param variable CommandVariable to add
      */
     public void registerVariable(CommandVariable variable) {
         if (!variable.getName().startsWith("$"))
@@ -125,32 +130,23 @@ public class ConsoleService {
             return;
         }
 
-        if (command.getSide() == Command.Side.LOCAL) {
-            command.execute(args);
-        } else if (context.isProfileEnabled("client") && command.getSide() == Command.Side.CLIENT) {
-            command.execute(args);
-        } else if (context.isProfileEnabled("server") && command.getSide() == Command.Side.SERVER) {
-            command.execute(args);
-        } else if (context.isProfileEnabled("client") && command.getSide() == Command.Side.SERVER) {
-            consoleComponent.triggerEvent(new ConsoleInputEvent(line));
-        } else if (context.isProfileEnabled("server") && command.getSide() == Command.Side.CLIENT) {
-            consoleComponent.triggerEvent(new ConsoleInputEvent(line));
-        }
+
     }
 
     void sendChatMessage(String sender, String msg) {
         if (context.isProfileEnabled("client"))
-            printToConsole("[" + sender + "] " + msg);
+            print("[" + sender + "] " + msg);
         else
-            printToConsole("asdasdasdasdasddasasdsadsa");
-//            for (Client c : clientRegistry.getClients()) {
-//                consoleComponent.triggerEvent(new ConsoleInputEvent(c.getId(), msg));
-//            }
+            print("asdasdasdasdasddasasdsadsa");
+            for (Client c : clientRegistry.getClients()) {
+                consoleComponent.triggerEvent(new ConsoleInputEvent(c.getId(), msg));
+            }
     }
 
     /**
      * Replaces '$variable' with value.
-     * @param args    Reference to String[] of variables to parse
+     *
+     * @param args Reference to String[] of variables to parse
      */
     private void parseVariables(String... args) {
         for (int i = 0; i < args.length; i++) {

@@ -4,7 +4,6 @@ import net.warpgame.engine.audio.AudioClip;
 import net.warpgame.engine.audio.AudioListenerProperty;
 import net.warpgame.engine.audio.AudioSourceProperty;
 import net.warpgame.engine.console.ConsoleService;
-import net.warpgame.engine.console.command.Command;
 import net.warpgame.engine.console.command.CommandVariable;
 import net.warpgame.engine.console.command.SimpleCommand;
 import net.warpgame.engine.core.component.*;
@@ -216,7 +215,6 @@ public class Test1 {
     private static void registerCommandsAndVariables(Context context) {
         consoleService.initConsole();
         SimpleCommand exit = new SimpleCommand("quit",
-                Command.Side.CLIENT,
                 "Stops the engine and quits",
                 "quit");
         exit.setExecutor((args) -> {

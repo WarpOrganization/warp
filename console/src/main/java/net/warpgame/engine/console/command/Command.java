@@ -8,11 +8,9 @@ public abstract class Command {
     private String command;
     private String helpText;
     private String usageText;
-    private Side side;
 
-    protected Command(String command, Side side, String helpText, String usageText) {
+    protected Command(String command, String helpText, String usageText) {
         this.command = command;
-        this.side = side;
         this.helpText = helpText;
         this.usageText = usageText;
     }
@@ -29,16 +27,6 @@ public abstract class Command {
 
     public String getCommand() {
         return command;
-    }
-
-    public Side getSide() {
-        return side;
-    }
-
-    public enum Side {
-        CLIENT, //Executed on client
-        SERVER, //Executed on server
-        LOCAL   //Executed on side where it was run
     }
 
 }

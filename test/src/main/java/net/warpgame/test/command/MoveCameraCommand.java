@@ -18,7 +18,7 @@ public class MoveCameraCommand extends Command {
     private ConsoleService consoleService;
 
     public MoveCameraCommand(CameraHolder holder, ConsoleService consoleService) {
-        super("move", Side.CLIENT, "Moves camera", "move [x] [y] [z]");
+        super("move", "Moves camera", "move [x] [y] [z]");
         this.cameraHolder = holder;
         this.consoleService = consoleService;
 
@@ -27,10 +27,10 @@ public class MoveCameraCommand extends Command {
 
     public void execute(String... args) {
         if (args.length == 3) {
-            ((TransformProperty)cameraHolder.getCamera().getCameraComponent().getProperty(Property.getTypeId(TransformProperty.class)))
+            ((TransformProperty) cameraHolder.getCamera().getCameraComponent().getProperty(Property.getTypeId(TransformProperty.class)))
                     .move(new Vector3f(Float.valueOf(args[0]), Float.valueOf(args[1]), Float.valueOf(args[2])));
         } else {
-            consoleService.printToConsole(getUsageText());
+            consoleService.print(getUsageText());
         }
     }
 

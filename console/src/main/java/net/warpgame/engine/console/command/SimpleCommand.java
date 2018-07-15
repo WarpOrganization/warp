@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 public class SimpleCommand extends Command {
     private Consumer<String[]> executor;
 
-    public SimpleCommand(String command, Side side, String helpText, String usageText) {
-        super(command, side, helpText, usageText);
+    public SimpleCommand(String command, String helpText, String usageText) {
+        super(command, helpText, usageText);
     }
 
     /**
