@@ -71,7 +71,7 @@ public class Test1 {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev", "client", "server");
+        EngineContext engineContext = new EngineContext("dev", "client");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
