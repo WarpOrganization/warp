@@ -1,9 +1,9 @@
 package net.warpgame.servertest;
 
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.physics.Collision;
@@ -77,14 +77,20 @@ public class MovementScript extends Script {
 
     private void rotate(int delta) {
         if (input.isRotationUp())
-            torqueVector.add(0, 0, 1);
-        if (input.isRotationDown())
             torqueVector.add(0, 0, -1);
+        if (input.isRotationDown())
+            torqueVector.add(0, 0, 1);
 
         if (input.isRotationLeft())
-            torqueVector.add(1, 0, 0);
+            torqueVector.add(0, 1, 0);
 
         if (input.isRotationRight())
+            torqueVector.add(0, -1, 0);
+
+        if (input.isRotationLeftX())
+            torqueVector.add(1, 0, 0);
+
+        if (input.isRotationRightX())
             torqueVector.add(-1, 0, 0);
 
         if (torqueVector.lengthSquared() >= 1) {

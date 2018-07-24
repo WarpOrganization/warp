@@ -40,7 +40,7 @@ public class MultiplayerCameraControlScript extends Script {
     private void rotate(int delta) {
         Vector2f cursorPositionDelta = input.getCursorPositionDelta();
         transformProperty.rotateZ(-cursorPositionDelta.y * ROT_MODIFIER * delta);
-        transformProperty.rotateY(-cursorPositionDelta.x * ROT_MODIFIER * delta);
+        transformProperty.rotateLocalY(-cursorPositionDelta.x * ROT_MODIFIER * delta);
     }
 
 }

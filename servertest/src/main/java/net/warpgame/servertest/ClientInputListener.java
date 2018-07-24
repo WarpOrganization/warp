@@ -50,6 +50,11 @@ public class ClientInputListener extends Listener<KeyboardInputEvent> {
             case VK_RIGHT:
                 input.setRotationRight(keyboardInputEvent.isPressed());
                 break;
+            case VK_Q:
+                input.setRotationLeftX(keyboardInputEvent.isPressed());
+                break;
+            case VK_E:
+                input.setRotationRightX(keyboardInputEvent.isPressed());
         }
     }
 }
