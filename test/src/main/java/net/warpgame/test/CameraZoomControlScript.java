@@ -14,7 +14,7 @@ import net.warpgame.engine.input.Input;
  */
 public class CameraZoomControlScript extends Script {
 
-    private static final float ZOOM_MODIFIER = 0.05f;
+    private static final float ZOOM_MODIFIER = 0.02f;
     private double lastScrollPos;
     private double scrollPos;
 
@@ -44,7 +44,6 @@ public class CameraZoomControlScript extends Script {
 
     private void zoom(int delta) {
         double scrollDelta = lastScrollPos - scrollPos;
-        if (scrollDelta != 0) System.out.println(scrollDelta);
         transformProperty.move((float) (scrollDelta * ZOOM_MODIFIER * delta), 0, 0);
     }
 
