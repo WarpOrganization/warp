@@ -110,7 +110,7 @@ public class GLFWInput implements Input {
     }
 
     private void scrollAction(long window, double x, double y) {
-        lastScrollPos = y;
+        scrollPos += y;
     }
 
 
@@ -125,7 +125,7 @@ public class GLFWInput implements Input {
 
     @Override
     public void update() {
-        updateScroll();
+//        updateScroll();
         updateMousePos();
     }
 
