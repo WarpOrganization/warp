@@ -117,18 +117,17 @@ public abstract class ConsoleService {
      * @param line Line from console to parse
      */
     public void parseAndExecute(String line) {
+        line = line.substring(1);
         String[] args = line.split(" ");
         String commandString = args[0];
         args = ArrayUtils.removeElement(args, commandString);
         parseVariables(args);
 
         Command command = commands.get(commandString);
-        if (command == null) {
+        if (command == null)
             output.printf("Command '%s' not found. Type 'list' to list available commands\n", commandString);
-            return;
-        }
-
-
+        else
+            command.execute(args);
     }
 
     abstract void sendChatMessage(String sender, String msg);

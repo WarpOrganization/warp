@@ -229,6 +229,7 @@ public class Test1 {
         consoleService.registerCommand(exit);
 
         CameraHolder ch = context.findOne(CameraHolder.class).get();
+        SceneHolder sh = context.findOne(SceneHolder.class).get();
         consoleService.registerCommand(new MoveCameraCommand(ch, consoleService));
 
 

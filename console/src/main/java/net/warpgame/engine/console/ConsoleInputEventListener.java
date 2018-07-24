@@ -19,7 +19,10 @@ public class ConsoleInputEventListener extends Listener<ConsoleInputEvent> {
 
     @Override
     public void handle(ConsoleInputEvent event) {
-        consoleService.sendChatMessage("User", event.getInput()); //TODO: Change to filter commands
+        if (event.getInput().startsWith("/"))
+            consoleService.parseAndExecute(event.getInput());
+        else
+            consoleService.sendChatMessage("User", event.getInput()); //TODO: Change to filter commands
     }
 
 }
