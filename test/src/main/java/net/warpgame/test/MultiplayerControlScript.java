@@ -35,8 +35,10 @@ public class MultiplayerControlScript extends Script {
     @OwnerProperty(@IdOf(TransformProperty.class))
     private TransformProperty transformProperty;
 
-    @ContextService private Input input;
-    @ContextService private Context context;
+    @ContextService
+    private Input input;
+    @ContextService
+    private Context context;
 
     private Vector3f movementVector = new Vector3f();
 
@@ -52,7 +54,7 @@ public class MultiplayerControlScript extends Script {
         if (input.isKeyDown(VK_ESCAPE)) {
             context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
             try {
-                Thread.sleep(60*delta);
+                Thread.sleep(60 * delta);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -132,14 +134,4 @@ public class MultiplayerControlScript extends Script {
         }
     }
 
-
-//    private void rotate(int delta) {
-//        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
-//        transformProperty.rotateX(-cursorPositionDelta.y * ROT_SPEED * delta);
-//        transformProperty.rotateY(-cursorPositionDelta.x * ROT_SPEED * delta);
-//        if (input.isKeyDown(VK_Q))
-//            transformProperty.rotateZ(ROT_SPEED * delta);
-//        if (input.isKeyDown(VK_E))
-//            transformProperty.rotateZ(-ROT_SPEED * delta);
-//    }
 }

@@ -95,6 +95,10 @@ public class TransformProperty extends Property {
         this.translation.set(translation);
     }
 
+    public TransformProperty move(float x, float y, float z) {
+        return move(new Vector3f(x, y, z));
+    }
+
     public TransformProperty move(Vector3f movement) {
         this.dirty = true;
         this.translation.add(movement);

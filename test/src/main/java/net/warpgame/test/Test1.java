@@ -88,7 +88,7 @@ public class Test1 {
         registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
-    public static class Sup extends Property{
+    public static class Sup extends Property {
         public Supplier<Float> supplier;
 
         public Sup(Supplier<Float> supplier) {
@@ -117,8 +117,6 @@ public class Test1 {
     private static String getResourcePath(String resource) throws URISyntaxException {
         return Paths.get(Test1.class.getResource(resource).toURI()).toFile().getAbsolutePath();
     }
-
-
 
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
@@ -207,7 +205,7 @@ public class Test1 {
 
     private static void genJointNameToJointIds(Joint joint, Map<String, Integer> nameToJointId) {
         nameToJointId.put(joint.getName(), joint.getIndex());
-        for(Joint childJoint : joint.getChildren()) {
+        for (Joint childJoint : joint.getChildren()) {
             genJointNameToJointIds(childJoint, nameToJointId);
         }
     }
@@ -575,7 +573,7 @@ public class Test1 {
         cameraHolder.setCamera(camera);
     }
 
-    private static String resourceToPath(String resource){
+    private static String resourceToPath(String resource) {
         URL url = Test1.class.getResource(resource);
         String path = null;
         try {
