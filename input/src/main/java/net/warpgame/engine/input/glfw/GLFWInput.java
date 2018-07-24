@@ -150,9 +150,15 @@ public class GLFWInput implements Input {
         return cursorPositionDelta;
     }
 
+    @Deprecated
     @Override
     public double getScrollDelta() {
         return scrollPosDelta;
+    }
+
+    @Override
+    public double getScrollPosition() {
+        return scrollPos;
     }
 
     @Override

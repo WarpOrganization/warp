@@ -12,7 +12,10 @@ public interface Input {
 
     Vector2f getCursorPositionDelta();
 
+    @Deprecated
     double getScrollDelta();
+
+    double getScrollPosition();
 
     boolean isKeyDown(int key);
 
