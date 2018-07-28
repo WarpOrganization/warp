@@ -27,6 +27,7 @@ import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
 import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.window.Display;
+import net.warpgame.engine.graphics.window.WindowManager;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -54,6 +55,7 @@ public class MultiplayerTest {
         root.addListener(new ShipLoadListener(root, context.getLoadedContext().findOne(GraphicsThread.class).get()));
         CameraHolder cameraHolder = context.getLoadedContext().findOne(CameraHolder.class).get();
         root.addListener(new BoardShipListener(root, cameraHolder, DISPLAY, context.getComponentRegistry()));
+        root.addListener(new TestKeyboardListener(root, context.getLoadedContext().findOne(WindowManager.class).get()));
     }
 
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {

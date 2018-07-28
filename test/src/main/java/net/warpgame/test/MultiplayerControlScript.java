@@ -68,6 +68,9 @@ public class MultiplayerControlScript extends Script {
             cameraSpeed = CAMERA_SPEED * 3;
         else cameraSpeed = CAMERA_SPEED;
 
+        if (input.isKeyDown(VK_F1))
+            getOwner().triggerOnRoot(new KeyboardInputEvent(VK_F1, true));
+
         movementVector.zero();
         if (input.isKeyDown(VK_W) && !forward) {
             getOwner().triggerEvent(new KeyboardInputEvent(VK_W, true));

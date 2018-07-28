@@ -37,8 +37,10 @@ public class SimpleControlScript extends Script {
     @OwnerProperty(@IdOf(TransformProperty.class))
     private TransformProperty transformProperty;
 
-    @ContextService private Input input;
-    @ContextService private Context context;
+    @ContextService
+    private Input input;
+    @ContextService
+    private Context context;
 
     private Vector3f movementVector = new Vector3f();
 
@@ -54,7 +56,7 @@ public class SimpleControlScript extends Script {
         if (input.isKeyDown(VK_ESCAPE)) {
             context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
             try {
-                Thread.sleep(60*delta);
+                Thread.sleep(60 * delta);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -78,10 +80,10 @@ public class SimpleControlScript extends Script {
             movementVector.add(-1, 0, 0);
         if (input.isKeyDown(VK_D))
             movementVector.add(1, 0, 0);
-        if(input.isKeyDown(VK_SPACE))
-            movementVector.add(0,1,0);
-        if(input.isKeyDown(VK_CONTROL))
-            movementVector.add(0,-1,0);
+        if (input.isKeyDown(VK_SPACE))
+            movementVector.add(0, 1, 0);
+        if (input.isKeyDown(VK_CONTROL))
+            movementVector.add(0, -1, 0);
 
         Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf());
         if (movementVector.lengthSquared() >= 1.0f) {

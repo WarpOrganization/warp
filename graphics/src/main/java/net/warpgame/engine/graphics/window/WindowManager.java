@@ -1,8 +1,8 @@
 package net.warpgame.engine.graphics.window;
 
+import net.warpgame.engine.core.context.service.Service;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import net.warpgame.engine.core.context.service.Service;
 
 import java.io.PrintStream;
 
@@ -34,6 +34,26 @@ public class WindowManager {
             enableVSync();
             glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         } else glfwHideWindow(windowHandle);
+    }
+
+    public static final int CURSOR_DISABLED = GLFW_CURSOR_DISABLED;
+    public static final int CURSOR_HIDDEN = GLFW_CURSOR_HIDDEN;
+    public static final int CURSOR_NORMAL = GLFW_CURSOR_NORMAL;
+
+    public void setCursorDisabled() {
+        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+
+    public void setCursorHidden() {
+        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    }
+
+    public void setCursorNormal() {
+        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+
+    public int getCursorMode() {
+        return glfwGetInputMode(windowHandle, GLFW_CURSOR);
     }
 
     private void initGLFW() {
