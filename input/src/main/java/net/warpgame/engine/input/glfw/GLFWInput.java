@@ -65,15 +65,16 @@ public class GLFWInput implements Input {
         GLFW.glfwSetMouseButtonCallback(windowHandle, this::mouseButtonAction);
         GLFW.glfwSetScrollCallback(windowHandle, this::scrollAction);
         GLFW.glfwSetCursorPosCallback(windowHandle, this::cursorPosAction);
-//        GLFW.glfwSetWindowCloseCallback(windowHandle, (window) -> {
-//            logger.error("This is bad.");
-//        }); TODO: Window close callback
+        GLFW.glfwSetWindowCloseCallback(windowHandle, (window) -> {
+            logger.debug("Window close callback");
+        });
     }
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
         int keyStroke = GLFWKeyMapper.toKeyCode(key);
         if (keyStroke >= keyboardKeys.length || keyStroke == KeyEvent.VK_UNDEFINED)
             return; //key unrecognized
+        logger.warn(action);
         switch (action) {
             case GLFW.GLFW_PRESS:
                 triggerEvent(new KeyPressedEvent(keyStroke));
@@ -134,15 +135,15 @@ public class GLFWInput implements Input {
 //        updateMousePos();
     }
 
-    private void updateMousePos() {
-        Vector2f currentCursorPos = getRealCursorPos();
-        currentCursorPos.sub(cursorPosition, this.cursorPositionDelta);
-        this.cursorPosition = currentCursorPos;
-    }
+//    private void updateMousePos() {
+//        Vector2f currentCursorPos = getRealCursorPos();
+//        currentCursorPos.sub(cursorPosition, this.cursorPositionDelta);
+//        this.cursorPosition = currentCursorPos;
+//    }
 
     @Override
-    public Vector2f getCursorPosition() {
-        return new Vector2f(cursorPosition);
+    public void getCursorPosition(Vector2f vector) {
+        vector.set(cursorPosition);
     }
 
     @Deprecated
@@ -152,8 +153,8 @@ public class GLFWInput implements Input {
     }
 
     @Override
-    public Vector2f getScrollPosition() {
-        return new Vector2f(scrollPos);
+    public void getScrollPosition(Vector2f vector) {
+        vector.set(scrollPos);
     }
 
     @Override

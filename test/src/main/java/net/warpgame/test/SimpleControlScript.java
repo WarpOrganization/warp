@@ -101,7 +101,8 @@ public class SimpleControlScript extends Script {
 
 
     private void rotate(int delta) {
-        Vector2f cursorPositionDelta = input.getCursorPosition();
+        Vector2f cursorPositionDelta = new Vector2f();
+        input.getCursorPosition(cursorPositionDelta);
         cursorPositionDelta.sub(lastCursorPos);
 
         transformProperty.rotateX(-cursorPositionDelta.y * ROTATION_SPEED * delta);
@@ -114,6 +115,6 @@ public class SimpleControlScript extends Script {
         if (input.isKeyDown(VK_E))
             transformProperty.rotateZ(-ROTATION_SPEED * multiplier * delta);
 
-        lastCursorPos = input.getCursorPosition();
+        input.getCursorPosition(lastCursorPos);
     }
 }

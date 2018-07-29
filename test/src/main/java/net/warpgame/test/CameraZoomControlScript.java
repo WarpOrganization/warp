@@ -7,6 +7,7 @@ import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.input.Input;
+import org.joml.Vector2f;
 
 /**
  * @author KocproZ
@@ -15,8 +16,8 @@ import net.warpgame.engine.input.Input;
 public class CameraZoomControlScript extends Script {
 
     private static final float ZOOM_MODIFIER = 0.02f;
-    private double lastScrollPos;
-    private double scrollPos;
+    private Vector2f lastScrollPos;
+    private Vector2f scrollPos;
 
     public CameraZoomControlScript(Component owner) {
         super(owner);
@@ -31,19 +32,19 @@ public class CameraZoomControlScript extends Script {
 
     @Override
     public void onInit() {
-        scrollPos = 0;
-        lastScrollPos = 0;
+        scrollPos = new Vector2f();
+        lastScrollPos = new Vector2f();
     }
 
     @Override
     public void onUpdate(int delta) {
-        scrollPos = input.getScrollPosition().y;
+        input.getScrollPosition(scrollPos);
         zoom(delta);
-        lastScrollPos = scrollPos;
+        lastScrollPos.set(scrollPos);
     }
 
     private void zoom(int delta) {
-        double scrollDelta = lastScrollPos - scrollPos;
+        float scrollDelta = lastScrollPos.y - scrollPos.y;
         transformProperty.move((float) (scrollDelta * ZOOM_MODIFIER * delta), 0, 0);
     }
 

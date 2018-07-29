@@ -48,6 +48,7 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
+import net.warpgame.engine.graphics.window.WindowManager;
 import net.warpgame.test.command.MoveCameraCommand;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -126,6 +127,7 @@ public class Test1 {
         Scene scene = sceneHolder.getScene();
         createModels(scene, thread);
         createCubemap(scene, thread);
+        scene.addListener(new TestKeyboardListener(scene, engineContext.getLoadedContext().findOne(WindowManager.class).get()));
     }
 
     private static void createCubemap(Scene scene, GraphicsThread thread) {
