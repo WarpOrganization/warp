@@ -27,6 +27,8 @@ public class MultiplayerCameraControlScript extends Script {
     @ContextService
     private Input input;
 
+    private Vector2f lastCursorPos = new Vector2f();
+
     @Override
     public void onInit() {
 
@@ -38,9 +40,11 @@ public class MultiplayerCameraControlScript extends Script {
     }
 
     private void rotate(int delta) {
-        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
+        Vector2f cursorPositionDelta = input.getCursorPosition();
+        cursorPositionDelta.sub(lastCursorPos);
         transformProperty.rotateZ(-cursorPositionDelta.y * ROT_MODIFIER * delta);
         transformProperty.rotateLocalY(-cursorPositionDelta.x * ROT_MODIFIER * delta);
+        lastCursorPos = input.getCursorPosition();
     }
 
 }

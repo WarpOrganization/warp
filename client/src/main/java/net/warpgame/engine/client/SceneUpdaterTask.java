@@ -104,6 +104,9 @@ public class SceneUpdaterTask extends EngineTask {
                     data.readFloat(),
                     data.readFloat(),
                     data.readFloat());
+//            data.readFloat();
+//            data.readFloat();
+//            data.readFloat();
             rotation.set(
                     data.readFloat(),
                     data.readFloat(),

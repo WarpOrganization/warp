@@ -1,5 +1,6 @@
 package net.warpgame.test;
 
+import net.warpgame.content.KeyboardInputEvent;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.context.Context;
@@ -43,6 +44,7 @@ public class SimpleControlScript extends Script {
     private Context context;
 
     private Vector3f movementVector = new Vector3f();
+    private Vector2f lastCursorPos = new Vector2f();
 
     @Override
     public void onInit() {
@@ -68,6 +70,9 @@ public class SimpleControlScript extends Script {
         if (input.isKeyDown(VK_SHIFT))
             cameraSpeed = CAMERA_SPEED * CAMERA_SPEED_MULTIPLIER;
         else cameraSpeed = CAMERA_SPEED;
+
+        if (input.isKeyDown(VK_F1))
+            getOwner().triggerOnRoot(new KeyboardInputEvent(VK_F1, true));
 
         movementVector.zero();
         if (input.isKeyDown(VK_W)) {
@@ -96,7 +101,8 @@ public class SimpleControlScript extends Script {
 
 
     private void rotate(int delta) {
-        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
+        Vector2f cursorPositionDelta = input.getCursorPosition();
+        cursorPositionDelta.sub(lastCursorPos);
 
         transformProperty.rotateX(-cursorPositionDelta.y * ROTATION_SPEED * delta);
         transformProperty.rotateY(-cursorPositionDelta.x * ROTATION_SPEED * delta);
@@ -107,5 +113,7 @@ public class SimpleControlScript extends Script {
             transformProperty.rotateZ(ROTATION_SPEED * multiplier * delta);
         if (input.isKeyDown(VK_E))
             transformProperty.rotateZ(-ROTATION_SPEED * multiplier * delta);
+
+        lastCursorPos = input.getCursorPosition();
     }
 }

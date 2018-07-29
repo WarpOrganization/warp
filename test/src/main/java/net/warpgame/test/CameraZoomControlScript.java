@@ -37,7 +37,7 @@ public class CameraZoomControlScript extends Script {
 
     @Override
     public void onUpdate(int delta) {
-        scrollPos = input.getScrollPosition();
+        scrollPos = input.getScrollPosition().y;
         zoom(delta);
         lastScrollPos = scrollPos;
     }
