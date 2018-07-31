@@ -2,8 +2,8 @@ package net.warpgame.engine.core.context.config;
 
 import net.warpgame.engine.core.context.service.Service;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author Jaca777
@@ -13,7 +13,7 @@ import java.util.TreeMap;
 public class Config {
 
     private ConfigurationManager configurationManager;
-    private Map<String, Object> values = new TreeMap<>();
+    private Map<String, Object> values = new HashMap<>();
 
     public Config(ConfigurationManager configurationManager, ConfigLoader configLoader) {
         this.configurationManager = configurationManager;
@@ -28,4 +28,9 @@ public class Config {
     public <T> T getValue(String name) {
         return (T) values.get(name);
     }
+
+    Map<String, Object> getValues() {
+        return values;
+    }
+
 }

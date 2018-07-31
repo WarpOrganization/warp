@@ -74,7 +74,6 @@ public class GLFWInput implements Input {
         int keyStroke = GLFWKeyMapper.toKeyCode(key);
         if (keyStroke >= keyboardKeys.length || keyStroke == KeyEvent.VK_UNDEFINED)
             return; //key unrecognized
-        logger.warn(action);
         switch (action) {
             case GLFW.GLFW_PRESS:
                 triggerEvent(new KeyPressedEvent(keyStroke));

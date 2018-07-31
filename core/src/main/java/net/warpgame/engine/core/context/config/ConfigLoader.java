@@ -1,10 +1,10 @@
 package net.warpgame.engine.core.context.config;
 
+import net.warpgame.engine.core.context.service.Service;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
-import net.warpgame.engine.core.context.service.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +27,34 @@ public class ConfigLoader {
         logger.info("Loading config...");
         Map<String, Object> values = loadFromYaml();
         setValues(config, values, "");
+        setValuesFromProperty(config);
         logger.info("Config loaded");
+    }
+
+    private void setValuesFromProperty(Config config) {
+        String prop;
+        for (String s : config.getValues().keySet()) {
+            if ((prop = System.getProperty("conf." + s)) != null) {
+                logger.info("Detected property: " + s + "=" + prop);
+                config.setValue(s, parse(prop));
+            }
+        }
+    }
+
+    Object parse(String s) { //lol
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            return Float.parseFloat(s);
+        } catch (NumberFormatException ignored) {
+        }
+        if (s.equalsIgnoreCase("true"))
+            return true;
+        if (s.equalsIgnoreCase("false"))
+            return false;
+        return s;
     }
 
     private void setValues(Config config, Map<String, Object> values, String acc) {
