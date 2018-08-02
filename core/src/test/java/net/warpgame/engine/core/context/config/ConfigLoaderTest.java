@@ -10,14 +10,28 @@ import org.junit.Test;
 public class ConfigLoaderTest {
 
     @Test
-    public void parseTest() {
-        ConfigLoader loader = new ConfigLoader();
+    public void parseShouldReturnInteger() {
+        Assert.assertSame(100, new ConfigLoader().parse("100"));
+    }
 
-        Assert.assertSame(100, loader.parse("100"));
-        Assert.assertTrue(loader.parse("1.77") instanceof Float);
-        Assert.assertSame(true, loader.parse("true"));
-        Assert.assertSame(false, loader.parse("false"));
-        Assert.assertSame("test", loader.parse("test"));
+    @Test
+    public void parseShouldReturnFloat() {
+        Assert.assertSame(Float.class, new ConfigLoader().parse("1.1").getClass());
+    }
+
+    @Test
+    public void parseShouldReturnTrue() {
+        Assert.assertSame(true, new ConfigLoader().parse("true"));
+    }
+
+    @Test
+    public void parseShouldReturnFalse() {
+        Assert.assertSame(false, new ConfigLoader().parse("false"));
+    }
+
+    @Test
+    public void parseShouldReturnString() {
+        Assert.assertSame("127.0.0.1", new ConfigLoader().parse("127.0.0.1"));
     }
 
 }

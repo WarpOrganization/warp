@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * @author Jaca777
@@ -41,20 +42,12 @@ public class ConfigLoader {
         }
     }
 
-    Object parse(String s) { //lol
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException ignored) {
-        }
-        try {
-            return Float.parseFloat(s);
-        } catch (NumberFormatException ignored) {
-        }
-        if (s.equalsIgnoreCase("true"))
-            return true;
-        if (s.equalsIgnoreCase("false"))
-            return false;
-        return s;
+    Object parse(String o) { //lol
+        Scanner s = new Scanner(o);
+        if (s.hasNextInt()) return s.nextInt();
+        if (s.hasNextFloat()) return s.nextFloat();
+        if (s.hasNextBoolean()) return s.nextBoolean();
+        return o;
     }
 
     private void setValues(Config config, Map<String, Object> values, String acc) {
