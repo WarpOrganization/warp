@@ -107,6 +107,7 @@ subprojects {
     group 'net.warpgame'
     version '0.1.2'
     test {
-        reports.junitXml.enabled = false
+        reports.html.enabled = false
+        reports.junitXml.enabled = true
     }
 }
