@@ -1,4 +1,4 @@
-package net.warpgame.engine.postbuild.loader;
+package net.warpgame.engine.postbuild.buildclass;
 
 import org.objectweb.asm.tree.ClassNode;
 
@@ -15,7 +15,7 @@ public class BuildClasses {
         buildClasses.put(buildClass.name, buildClass);
     }
 
-    public Iterable<ClassNode> getBuildClasses() {
+    public Collection<ClassNode> getBuildClasses() {
         return buildClasses.values();
     }
 

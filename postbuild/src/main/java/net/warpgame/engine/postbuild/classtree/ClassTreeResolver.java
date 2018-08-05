@@ -1,7 +1,8 @@
 package net.warpgame.engine.postbuild.classtree;
 
 import net.warpgame.engine.core.graph.DAG;
-import net.warpgame.engine.postbuild.loader.BuildClasses;
+import net.warpgame.engine.postbuild.buildclass.BuildClasses;
+import net.warpgame.engine.postbuild.processing.Processor;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.util.HashMap;
@@ -11,17 +12,15 @@ import java.util.Map;
  * @author Jaca777
  * Created 2018-07-01 at 17
  */
-public class ClassTreeResolver {
+public class ClassTreeResolver implements Processor<BuildClasses, ClassTree> {
 
     private BuildClasses buildClasses;
     private Map<String, String> inheritanceLinks = new HashMap<>();
     private DAG<ClassNode> dag = DAG.empty();
 
-    public ClassTreeResolver(BuildClasses buildClasses) {
+    @Override
+    public ClassTree process(BuildClasses buildClasses) {
         this.buildClasses = buildClasses;
-    }
-
-    public ClassTree resolveClassTree() {
         createInheritanceLinks();
         createTree();
         return new ClassTree(dag);
@@ -40,4 +39,6 @@ public class ClassTreeResolver {
             inheritanceLinks.put(classNode.superName, classNode.name);
         }
     }
+
+
 }

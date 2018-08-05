@@ -1,5 +1,8 @@
 package net.warpgame.engine.postbuild;
 
+import java.io.IOException;
+import java.util.jar.JarFile;
+
 /**
  * @author Jaca777
  * Created 2018-07-01 at 17
@@ -13,8 +16,13 @@ public class Main {
     //3. Generowanie de/serializatorow
     //4. serwisy
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        String processedJarName = args[0];
+        String processedPackageRoot = args[1];
+        JarFile jarFile = new JarFile(processedJarName);
 
+        BuildJarProcessor buildJarProcessor = new BuildJarProcessor(processedPackageRoot, jarFile);
+        buildJarProcessor.process();
     }
 
 }

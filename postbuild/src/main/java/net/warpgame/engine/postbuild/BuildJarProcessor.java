@@ -1,9 +1,9 @@
 package net.warpgame.engine.postbuild;
 
-import net.warpgame.engine.postbuild.classtree.ClassTree;
-import net.warpgame.engine.postbuild.classtree.ClassTreeResolver;
-import net.warpgame.engine.postbuild.loader.BuildClasses;
-import net.warpgame.engine.postbuild.loader.BuildJarLoader;
+import net.warpgame.engine.postbuild.buildclass.jar.BuildJarLoader;
+import net.warpgame.engine.postbuild.filters.SubclassFilter;
+import net.warpgame.engine.postbuild.processing.Pipeline;
+import net.warpgame.engine.postbuild.processing.PrintSink;
 
 import java.io.IOException;
 import java.util.jar.JarFile;
@@ -14,26 +14,25 @@ import java.util.jar.JarFile;
  */
 public class BuildJarProcessor {
     private String processedPackagesRoot;
+    private JarFile jarFile;
 
-    public BuildJarProcessor(String processedPackagesRoot) {
+    public BuildJarProcessor(String processedPackagesRoot, JarFile jarFile) {
         this.processedPackagesRoot = processedPackagesRoot;
+        this.jarFile = jarFile;
     }
 
-    public void process(JarFile jarFile) throws IOException {
-        BuildClasses buildClasses = loadBuildClasses(jarFile);
-        ClassTree classTree = resolveClassTree(buildClasses);
+    public void process() throws IOException {
+        Pipeline pipeline = createPipeline();
+        pipeline.run();
     }
 
-    private BuildClasses loadBuildClasses(JarFile jarFile) throws IOException {
-        BuildJarLoader buildJarLoader = new BuildJarLoader(processedPackagesRoot);
-        return buildJarLoader.loadClasses(jarFile);
+    private Pipeline createPipeline() {
+        return Pipeline
+                .from(new BuildJarLoader(processedPackagesRoot, jarFile))
+                .via(new SubclassFilter("Property"))
+                .to(new PrintSink<>(s -> s.getBuildClasses().toString()));
     }
 
-
-    private ClassTree resolveClassTree(BuildClasses buildClasses) {
-        ClassTreeResolver resolver = new ClassTreeResolver(buildClasses);
-        return resolver.resolveClassTree();
-    }
 
 }
 
