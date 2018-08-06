@@ -2,11 +2,12 @@ package net.warpgame.engine.postbuild;
 
 import net.warpgame.engine.postbuild.buildclass.jar.BuildJarLoader;
 import net.warpgame.engine.postbuild.filters.SubclassFilter;
-import net.warpgame.engine.postbuild.processing.Pipeline;
 import net.warpgame.engine.postbuild.processing.PrintSink;
+import net.warpgame.engine.postbuild.processing.pipeline.RunnablePipeline;
 
-import java.io.IOException;
 import java.util.jar.JarFile;
+
+import static net.warpgame.engine.postbuild.processing.pipeline.Pipeline.from;
 
 /**
  * @author Jaca777
@@ -21,14 +22,13 @@ public class BuildJarProcessor {
         this.jarFile = jarFile;
     }
 
-    public void process() throws IOException {
-        Pipeline pipeline = createPipeline();
+    public void process() throws Exception {
+        RunnablePipeline pipeline = createPipeline();
         pipeline.run();
     }
 
-    private Pipeline createPipeline() {
-        return Pipeline
-                .from(new BuildJarLoader(processedPackagesRoot, jarFile))
+    private RunnablePipeline createPipeline() {
+        return from(new BuildJarLoader(processedPackagesRoot, jarFile))
                 .via(new SubclassFilter("Property"))
                 .to(new PrintSink<>(s -> s.getBuildClasses().toString()));
     }
