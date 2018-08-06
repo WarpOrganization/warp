@@ -15,11 +15,11 @@ public class MessageSourcesService {
     private List<MessageSource> messageSources;
 
     public MessageSourcesService(Context context,
-                                 EventQueue eventQueue,
-                                 InternalMessageQueue internalMessageQueue) {
+                                 EventMessageSource eventMessageSource,
+                                 InternalMessageSource internalMessageSource) {
         messageSources = new ArrayList<>();
-        messageSources.add(eventQueue);
-        messageSources.add(internalMessageQueue);
+        messageSources.add(eventMessageSource);
+        messageSources.add(internalMessageSource);
     }
 
     public void update() {

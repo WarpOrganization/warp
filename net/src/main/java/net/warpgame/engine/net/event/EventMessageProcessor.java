@@ -1,16 +1,15 @@
 package net.warpgame.engine.net.event;
 
-import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
+import net.warpgame.engine.core.serialization.Serializers;
 import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.DesynchronizationException;
 import net.warpgame.engine.net.Peer;
 import net.warpgame.engine.net.message.BasicMessageDeserializer;
 import net.warpgame.engine.net.message.MessageProcessor;
-import net.warpgame.engine.core.serialization.Serializers;
 
 /**
  * @author Hubertus
@@ -34,17 +33,13 @@ public class EventMessageProcessor implements MessageProcessor {
     }
 
     @Override
-    public void processMessage(Peer sourcePeer, ByteBuf messageContent) {
-        byte[] bytes = new byte[messageContent.readableBytes()];
-        messageContent.readBytes(bytes);
-        SerializationBuffer buffer = new SerializationBuffer(bytes);
-
-        int eventId = buffer.readInt();
-        int targetComponentId = buffer.readInt();
+    public void processMessage(Peer sourcePeer, SerializationBuffer messageContent) {
+        int eventId = messageContent.readInt();
+        int targetComponentId = messageContent.readInt();
         Component targetComponent = componentRegistry.getComponent(targetComponentId);
         if (targetComponent == null) throw new DesynchronizationException("Target component not found");
 
-        NetworkEvent networkEvent = (NetworkEvent) serializers.deserialize(buffer);
+        NetworkEvent networkEvent = (NetworkEvent) serializers.deserialize(messageContent);
         networkEvent.setTransfered(true);
         networkEvent.setSourceId(sourcePeer.getId());
         networkEvent.setTargetId(connectionTools.getPeerId());

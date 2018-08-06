@@ -12,7 +12,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
-import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
 import net.warpgame.engine.net.message.MessageQueue;
 import net.warpgame.engine.net.message.MessageSourcesService;
@@ -38,7 +38,7 @@ public class ServerTask extends EngineTask {
     private Channel outChannel;
     private MessageQueue messageQueue;
     private MessageProcessorsService messageProcessorsService;
-    private InternalMessageQueue internalMessageQueue;
+    private InternalMessageSource internalMessageSource;
     private MessageSourcesService messageSourcesService;
 
     public ServerTask(ClientRegistry clientRegistry,
@@ -48,7 +48,7 @@ public class ServerTask extends EngineTask {
                       InternalMessageHandler internalMessageHandler,
                       MessageQueue messageQueue,
                       MessageProcessorsService messageProcessorsService,
-                      InternalMessageQueue internalMessageQueue,
+                      InternalMessageSource internalMessageSource,
                       MessageSourcesService messageSourcesService) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
@@ -57,7 +57,7 @@ public class ServerTask extends EngineTask {
         this.internalMessageHandler = internalMessageHandler;
         this.messageQueue = messageQueue;
         this.messageProcessorsService = messageProcessorsService;
-        this.internalMessageQueue = internalMessageQueue;
+        this.internalMessageSource = internalMessageSource;
         this.messageSourcesService = messageSourcesService;
     }
 
@@ -75,7 +75,7 @@ public class ServerTask extends EngineTask {
                             connectionUtil,
                             internalMessageHandler,
                             messageProcessorsService,
-                            internalMessageQueue
+                            internalMessageSource
                     ));
 
 

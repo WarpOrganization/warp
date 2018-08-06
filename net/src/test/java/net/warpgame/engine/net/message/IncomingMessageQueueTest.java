@@ -28,7 +28,7 @@ public class IncomingMessageQueueTest {
     @Mock(stubOnly = true)
     ByteBuf stubContent;
 
-    IncomingMessageQueue messageQueue;
+    private IncomingMessageQueue messageQueue;
 
     private static int MESSAGE_ID = 0;
     private static int OTHER_MESSAGE_ID = 1;
@@ -47,7 +47,7 @@ public class IncomingMessageQueueTest {
     public void shouldProcessMessage() {
         messageQueue.addMessage(stubPeer, MESSAGE_ID, 1, stubContent);
 
-        verify(messageProcessor, times(1)).processMessage(stubPeer, stubContent);
+        verify(messageProcessor, times(1)).processMessage(eq(stubPeer), any());
     }
 
     @Test(expected = UnknownMessageTypeException.class)

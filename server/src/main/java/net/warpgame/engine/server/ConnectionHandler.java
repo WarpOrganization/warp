@@ -14,7 +14,7 @@ import net.warpgame.engine.net.internalmessage.InternalMessage;
 import net.warpgame.engine.net.internalmessage.InternalMessageContent;
 import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
 import net.warpgame.engine.net.message.IncomingMessageQueue;
-import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     private ConnectionUtil connectionUtil;
     private InternalMessageHandler internalMessageHandler;
     private MessageProcessorsService messageProcessorsService;
-    private InternalMessageQueue internalMessageQueue;
+    private InternalMessageSource internalMessageSource;
     private static final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
     private PacketType[] packetTypes = PacketType.values();
 
@@ -44,14 +44,14 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
                       ConnectionUtil connectionUtil,
                       InternalMessageHandler internalMessageHandler,
                       MessageProcessorsService messageProcessorsService,
-                      InternalMessageQueue internalMessageQueue) {
+                      InternalMessageSource internalMessageSource) {
         this.clientRegistry = clientRegistry;
         this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.connectionUtil = connectionUtil;
         this.internalMessageHandler = internalMessageHandler;
         this.messageProcessorsService = messageProcessorsService;
-        this.internalMessageQueue = internalMessageQueue;
+        this.internalMessageSource = internalMessageSource;
     }
 
     /**
@@ -88,6 +88,6 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
 //        componentRegistry.getComponent(0).triggerEvent(new ConnectedEvent(c));
         logger.info("Client connected from address " + address.toString());
         c.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
-        internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, c.getId()));
+        internalMessageSource.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, c.getId()));
     }
 }

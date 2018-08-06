@@ -15,7 +15,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
 import net.warpgame.engine.net.message.MessageQueue;
 import net.warpgame.engine.net.message.MessageSourcesService;
@@ -36,7 +36,7 @@ public class ClientTask extends EngineTask {
     private final SerializedSceneHolder sceneHolder;
     private final ComponentRegistry componentRegistry;
     private MessageSourcesService messageSourcesService;
-    private InternalMessageQueue internalMessageQueue;
+    private InternalMessageSource internalMessageSource;
     private MessageProcessorsService messageProcessorsService;
     private EventLoopGroup group = new NioEventLoopGroup();
     private MessageQueue messageQueue;
@@ -52,7 +52,7 @@ public class ClientTask extends EngineTask {
                       ComponentRegistry componentRegistry,
                       MessageQueue messageQueue,
                       MessageSourcesService messageSourcesService,
-                      InternalMessageQueue internalMessageQueue,
+                      InternalMessageSource internalMessageSource,
                       MessageProcessorsService messageProcessorsService) {
         this.config = config;
         this.connectionService = connectionService;
@@ -60,7 +60,7 @@ public class ClientTask extends EngineTask {
         this.sceneHolder = sceneHolder;
         this.componentRegistry = componentRegistry;
         this.messageSourcesService = messageSourcesService;
-        this.internalMessageQueue = internalMessageQueue;
+        this.internalMessageSource = internalMessageSource;
         this.messageProcessorsService = messageProcessorsService;
     }
 
@@ -85,7 +85,7 @@ public class ClientTask extends EngineTask {
                     new IncomingPacketProcessor(
                             connectionService,
                             sceneHolder,
-                            internalMessageQueue));
+                            internalMessageSource));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)

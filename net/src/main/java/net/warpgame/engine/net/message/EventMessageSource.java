@@ -13,7 +13,7 @@ import net.warpgame.engine.net.event.EventSerializer;
  * Created 30.05.2018
  */
 @Service
-public class EventQueue extends MessageSource<EventEnvelope> {
+public class EventMessageSource extends MessageSource<EventEnvelope> {
 
     private final EnvelopeAddressingService envelopeAddressingService;
     private EventSerializer eventSerializer;
@@ -21,10 +21,10 @@ public class EventQueue extends MessageSource<EventEnvelope> {
     private Serializers serializers;
     private SerializationBuffer buffer = new SerializationBuffer(1500);
 
-    public EventQueue(MessageQueue messageQueue,
-                      EnvelopeAddressingService envelopeAddressingService,
-                      ConnectionTools connectionTools,
-                      Serializers serializers) {
+    public EventMessageSource(MessageQueue messageQueue,
+                              EnvelopeAddressingService envelopeAddressingService,
+                              ConnectionTools connectionTools,
+                              Serializers serializers) {
         super(messageQueue);
         this.envelopeAddressingService = envelopeAddressingService;
         this.connectionTools = connectionTools;

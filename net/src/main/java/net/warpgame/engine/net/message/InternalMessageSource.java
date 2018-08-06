@@ -11,7 +11,7 @@ import net.warpgame.engine.net.internalmessage.InternalMessageSerializer;
  * Created 01.06.2018
  */
 @Service
-public class InternalMessageQueue extends MessageSource<InternalMessage> {
+public class InternalMessageSource extends MessageSource<InternalMessage> {
 
     private final EnvelopeAddressingService envelopeAddressingService;
     private final Serializers serializers;
@@ -19,9 +19,9 @@ public class InternalMessageQueue extends MessageSource<InternalMessage> {
     private SerializationBuffer buffer = new SerializationBuffer(1500);
 
 
-    public InternalMessageQueue(MessageQueue messageQueue,
-                                EnvelopeAddressingService envelopeAddressingService,
-                                Serializers serializers) {
+    public InternalMessageSource(MessageQueue messageQueue,
+                                 EnvelopeAddressingService envelopeAddressingService,
+                                 Serializers serializers) {
         super(messageQueue);
         this.envelopeAddressingService = envelopeAddressingService;
         this.serializers = serializers;

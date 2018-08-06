@@ -8,7 +8,7 @@ import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.internalmessage.InternalMessage;
 import net.warpgame.engine.net.internalmessage.InternalMessageContent;
-import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageSource;
 
 /**
  * @author Hubertus
@@ -20,14 +20,14 @@ public class IncomingPacketProcessor {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private InternalMessageQueue internalMessageQueue;
+    private InternalMessageSource internalMessageSource;
 
     public IncomingPacketProcessor(ClientRegistry clientRegistry,
                                    ConnectionUtil connectionUtil,
-                                   InternalMessageQueue internalMessageQueue) {
+                                   InternalMessageSource internalMessageSource) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.internalMessageQueue = internalMessageQueue;
+        this.internalMessageSource = internalMessageSource;
     }
 
     void processPacket(PacketType packetType, long timestamp, ByteBuf packet) {
@@ -94,7 +94,7 @@ public class IncomingPacketProcessor {
             synchronizer.synchronize(timestamp, requestId);
 
             if (synchronizer.getFinishedSynchronizations() >= 3) {
-                internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, clientId));
+                internalMessageSource.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, clientId));
                 client.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             }
         }

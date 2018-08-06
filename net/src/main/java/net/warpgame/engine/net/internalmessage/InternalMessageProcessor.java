@@ -1,6 +1,5 @@
 package net.warpgame.engine.net.internalmessage;
 
-import io.netty.buffer.ByteBuf;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.core.serialization.Serializers;
@@ -26,11 +25,8 @@ public class InternalMessageProcessor implements MessageProcessor {
     }
 
     @Override
-    public void processMessage(Peer sourcePeer, ByteBuf messageContent) {
-        byte[] bytes = new byte[messageContent.readableBytes()];
-        messageContent.readBytes(bytes);
-        SerializationBuffer buffer = new SerializationBuffer(bytes);
-        InternalMessage message = (InternalMessage) serializers.deserialize(buffer);
+    public void processMessage(Peer sourcePeer, SerializationBuffer messageContent) {
+        InternalMessage message = (InternalMessage) serializers.deserialize(messageContent);
         internalMessageHandler.handleMessage(message, sourcePeer);
     }
 

@@ -5,7 +5,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.EventDispatcher;
 import net.warpgame.engine.core.event.Listener;
-import net.warpgame.engine.net.message.EventQueue;
+import net.warpgame.engine.net.message.EventMessageSource;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,10 +20,10 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
     private static final int THREADS = 1;
     private ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
-    private EventQueue eventQueue;
+    private EventMessageSource eventMessageSource;
 
-    public RemotePoolEventDispatcher(EventQueue eventQueue) {
-        this.eventQueue = eventQueue;
+    public RemotePoolEventDispatcher(EventMessageSource eventMessageSource) {
+        this.eventMessageSource = eventMessageSource;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
         if (event instanceof NetworkEvent) {
             NetworkEvent networkEvent = (NetworkEvent) event;
             if (!networkEvent.isTransfered())
-                eventQueue.pushMessage(new EventEnvelope(networkEvent, component));
+                eventMessageSource.pushMessage(new EventEnvelope(networkEvent, component));
         }
 
         executor.execute(() -> {
@@ -45,7 +45,7 @@ public class RemotePoolEventDispatcher implements EventDispatcher {
 //        if (event instanceof Envelope) {
 //            Envelope toEnvelope = (Envelope) event;
 //            toEnvelope.setTargetComponent(component);
-//            eventQueue.pushEvent(toEnvelope);
+//            eventMessageSource.pushEvent(toEnvelope);
 //            executor.execute(() -> {
 //                for (Listener listener : component.getListeners(toEnvelope.getContent().getTypeName()))
 //                    listener.handle(toEnvelope.getContent());

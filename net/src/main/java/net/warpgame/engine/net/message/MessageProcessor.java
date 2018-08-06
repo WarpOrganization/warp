@@ -1,6 +1,6 @@
 package net.warpgame.engine.net.message;
 
-import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.net.Peer;
 
 /**
@@ -9,7 +9,7 @@ import net.warpgame.engine.net.Peer;
  */
 public interface MessageProcessor {
 
-    void processMessage(Peer sourcePeer, ByteBuf messageContent);
+    void processMessage(Peer sourcePeer, SerializationBuffer messageContent);
 
     int getMessageType();
 }

@@ -1,6 +1,6 @@
 package net.warpgame.engine.net.message;
 
-import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.net.Peer;
 
 /**
@@ -10,10 +10,10 @@ import net.warpgame.engine.net.Peer;
 public class IncomingEnvelope {
     private int messageType;
     private int messageDependencyId;
-    private ByteBuf messageContent;
+    private SerializationBuffer messageContent;
     private Peer sourcePeer;
 
-    public IncomingEnvelope(Peer sourcePeer, int messageType, int messageDependencyId, ByteBuf messageContent) {
+    public IncomingEnvelope(Peer sourcePeer, int messageType, int messageDependencyId, SerializationBuffer messageContent) {
         this.messageType = messageType;
         this.messageDependencyId = messageDependencyId;
         this.messageContent = messageContent;
@@ -36,11 +36,11 @@ public class IncomingEnvelope {
         this.messageDependencyId = messageDependencyId;
     }
 
-    public ByteBuf getMessageContent() {
+    public SerializationBuffer getMessageContent() {
         return messageContent;
     }
 
-    public void setMessageContent(ByteBuf messageContent) {
+    public void setMessageContent(SerializationBuffer messageContent) {
         this.messageContent = messageContent;
     }
 
