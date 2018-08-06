@@ -17,4 +17,5 @@ multiplayer:
   ip: kocproz.ovh
   #  ip: 127.0.0.1
   port: 6688
+  timeout: 10000
 script.ups: 40

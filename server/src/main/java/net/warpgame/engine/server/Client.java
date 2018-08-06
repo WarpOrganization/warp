@@ -11,18 +11,18 @@ import java.net.InetSocketAddress;
  * Created 26.11.2017
  */
 public class Client extends Peer {
-    private long lastKeepAlive;
+    private long lastActivity;
 
     Client(InetSocketAddress address, IncomingMessageQueue incomingMessageQueue, ConnectionStateHolder connectionStateHolder) {
         super(address, incomingMessageQueue, connectionStateHolder);
-        lastKeepAlive = System.currentTimeMillis();
+        lastActivity = System.currentTimeMillis();
     }
 
-    long getLastKeepAlive() {
-        return lastKeepAlive;
+    long getLastActivity() {
+        return lastActivity;
     }
 
-    void setLastKeepAlive(long lastKeepAlive) {
-        this.lastKeepAlive = lastKeepAlive;
+    void setLastActivity(long lastActivity) {
+        this.lastActivity = lastActivity;
     }
 }
