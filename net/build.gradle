@@ -12,4 +12,8 @@ dependencies {
     compile project(':core')
     compile group: 'io.netty', name: 'netty-all', version: '4.1.17.Final'
     compile 'de.ruedigermoeller:fst:2.56'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.21.0'
+    testCompile 'info.solidsoft.mockito:mockito-java8:2.0.0-beta.4'
 }
