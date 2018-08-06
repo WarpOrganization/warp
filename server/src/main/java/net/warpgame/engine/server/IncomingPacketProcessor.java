@@ -32,6 +32,7 @@ public class IncomingPacketProcessor {
 
     void processPacket(PacketType packetType, long timestamp, ByteBuf packet) {
         int clientId = packet.readInt();
+        clientRegistry.updateActivity(clientId);
         switch (packetType) {
             case PACKET_KEEP_ALIVE:
                 processKeepAlivePacket(timestamp, clientId, packet);
@@ -52,7 +53,7 @@ public class IncomingPacketProcessor {
     }
 
     private void processKeepAlivePacket(long timestamp, int clientId, ByteBuf packetData) {
-        clientRegistry.updateKeepAlive(clientId);
+        clientRegistry.updateActivity(clientId);
     }
 
     private void processMessagePacket(long timestamp, int clientId, ByteBuf packetData) {
