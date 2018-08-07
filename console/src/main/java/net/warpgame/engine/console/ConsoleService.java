@@ -137,7 +137,7 @@ public abstract class ConsoleService {
      *
      * @param args Reference to String[] of variables to parse
      */
-    private void parseVariables(String... args) {
+    void parseVariables(String... args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith("$") && variables.containsKey(args[i])) {
                 args[i] = variables.get(args[i]).getValue();
@@ -155,7 +155,7 @@ public abstract class ConsoleService {
         return commands.get(command).getHelpText();
     }
 
-    private Set<String> getVariables() {
+    Set<String> getVariables() {
         return variables.keySet();
     }
 

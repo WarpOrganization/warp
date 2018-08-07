@@ -13,4 +13,7 @@ dependencies {
     compile project(':net')
     compile project(':server')
 
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.21.0'
+    testCompile 'info.solidsoft.mockito:mockito-java8:2.0.0-beta.4'
 }
