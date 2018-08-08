@@ -2,13 +2,13 @@ package net.warpgame.servertest;
 
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.content.LoadShipEvent;
-import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.net.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.physics.PhysicsService;
@@ -44,6 +44,8 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
 
     @Override
     public void handle(ConnectedEvent event) {
+        if (event.getSourceClientId() == 0)
+            return;
         System.out.println("client connected");
         Component ship = new SceneComponent(getOwner());
         TransformProperty transformProperty = new TransformProperty();
