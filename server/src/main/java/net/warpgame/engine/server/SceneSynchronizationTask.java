@@ -2,14 +2,14 @@ package net.warpgame.engine.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.warpgame.engine.core.context.service.Profile;
-import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.SerializationType;
 import net.warpgame.engine.physics.FullPhysicsProperty;
@@ -109,6 +109,7 @@ public class SceneSynchronizationTask extends EngineTask {
     }
 
     private Vector3f velocity = new Vector3f();
+    private Vector3f angularVelocity = new Vector3f();
 
     private void serializeComponentVelocity(Component c, ByteBuf buffer) {
         FullPhysicsProperty physicsProperty = c.getProperty(Property.getTypeId(FullPhysicsProperty.class));
@@ -116,6 +117,11 @@ public class SceneSynchronizationTask extends EngineTask {
         buffer.writeFloat(velocity.x);
         buffer.writeFloat(velocity.y);
         buffer.writeFloat(velocity.z);
+
+        physicsProperty.getAngularVelocity(angularVelocity);
+        buffer.writeFloat(angularVelocity.x);
+        buffer.writeFloat(angularVelocity.y);
+        buffer.writeFloat(angularVelocity.z);
     }
 
     private ByteBuf getBuffer() {

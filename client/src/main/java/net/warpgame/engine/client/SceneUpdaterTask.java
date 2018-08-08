@@ -11,6 +11,7 @@ import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.net.SerializationType;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
+import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -58,6 +59,8 @@ public class SceneUpdaterTask extends EngineTask {
     private Vector3f translation = new Vector3f();
     private Quaternionf rotation = new Quaternionf();
     private Vector3f velocity = new Vector3f();
+    private Vector3f angularVelocity = new Vector3f();
+    private AxisAngle4f convertedAngularVelocity = new AxisAngle4f();
     private SerializationType[] serializationTypes = SerializationType.values();
 
 
@@ -104,9 +107,6 @@ public class SceneUpdaterTask extends EngineTask {
                     data.readFloat(),
                     data.readFloat(),
                     data.readFloat());
-//            data.readFloat();
-//            data.readFloat();
-//            data.readFloat();
             rotation.set(
                     data.readFloat(),
                     data.readFloat(),
@@ -126,7 +126,18 @@ public class SceneUpdaterTask extends EngineTask {
                     data.readFloat(),
                     data.readFloat()
             );
+            angularVelocity.set(
+                    data.readFloat(),
+                    data.readFloat(),
+                    data.readFloat()
+            );
             physicsProperty.setVelocity(velocity);
+
+
+            float angle = angularVelocity.length();
+            angularVelocity.normalize();
+            convertedAngularVelocity.set(angle, angularVelocity.x, angularVelocity.y, angularVelocity.z);
+            physicsProperty.setAngularVelocity(convertedAngularVelocity);
         } else {
             data.setReaderIndex(data.getReaderIndex() + 3 * 4);
         }
