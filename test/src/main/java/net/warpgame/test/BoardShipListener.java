@@ -12,6 +12,7 @@ import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.camera.QuaternionCamera;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
+import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.joml.Vector3f;
 
 /**
@@ -42,6 +43,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
     @Override
     public void handle(BoardShipEvent event) {
         Component shipComponent = componentRegistry.getComponent(event.getShipComponentId());
+        shipComponent.addProperty(new SimplifiedPhysicsProperty(10f));
         shipComponent.addScript(MultiplayerControlScript.class);
 
         Component cameraPivot = new SceneComponent(shipComponent);
