@@ -41,7 +41,7 @@ public class IncomingPacketProcessor {
                 processMessagePacket(timestamp, clientId, packet);
                 break;
             case PACKET_MESSAGE_CONFIRMATION:
-                processEventConfirmationPacket(timestamp, clientId, packet);
+                processMessageConfirmationPacket(timestamp, clientId, packet);
                 break;
             case PACKET_CLOCK_SYNCHRONIZATION_REQUEST:
                 processClockSynchronizationRequestPacket(timestamp, clientId, packet);
@@ -67,7 +67,7 @@ public class IncomingPacketProcessor {
         }
     }
 
-    private void processEventConfirmationPacket(long timestamp, int clientId, ByteBuf packetData) {
+    private void processMessageConfirmationPacket(long timestamp, int clientId, ByteBuf packetData) {
         int eventDependencyId = packetData.readInt();
         Client c = clientRegistry.getClient(clientId);
         c.confirmMessage(eventDependencyId);
