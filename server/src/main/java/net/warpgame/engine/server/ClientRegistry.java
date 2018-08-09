@@ -26,7 +26,7 @@ public class ClientRegistry {
     private HashSet<Integer> toRemove = new HashSet<>();
     private ConnectionUtil connectionUtil;
     //TODO load from config
-    private int timeoutMilis = 10000;
+    private int timeoutMillis = 10000;
 
     public ClientRegistry(ConnectionUtil connectionUtil) {
         this.connectionUtil = connectionUtil;
@@ -68,7 +68,7 @@ public class ClientRegistry {
 
     synchronized void update() {
         for (Client c : clients.values()) {
-            if (c.getLastActivity() < System.currentTimeMillis() - timeoutMilis) {
+            if (c.getLastActivity() < System.currentTimeMillis() - timeoutMillis) {
                 removeClient(c.getId());
                 logger.info(String.format("Dropped client (%s)", c.getAddress().toString()));
             }

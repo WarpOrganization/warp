@@ -44,7 +44,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
 
     @Override
     public void handle(ConnectedEvent event) {
-        if (event.getSourceClientId() != 0)
+        if (event.getSourceClientId() == 0)
             return;
         System.out.println("client connected");
         Component ship = new SceneComponent(getOwner());
@@ -65,7 +65,6 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
             getOwner().triggerEvent(new LoadShipEvent(ship.getId(), transformProperty.getTranslation(), client.getId()));
             sendScene(client, ship.getId());
             getOwner().triggerEvent(new BoardShipEvent(ship.getId(), client.getId()));
-
         }
     }
 

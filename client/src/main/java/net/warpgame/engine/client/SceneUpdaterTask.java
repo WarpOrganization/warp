@@ -135,9 +135,11 @@ public class SceneUpdaterTask extends EngineTask {
 
 
             float angle = angularVelocity.length();
-            angularVelocity.normalize();
-            convertedAngularVelocity.set(angle, angularVelocity.x, angularVelocity.y, angularVelocity.z);
-            physicsProperty.setAngularVelocity(convertedAngularVelocity);
+            if (angle != 0) {
+                angularVelocity.normalize();
+                convertedAngularVelocity.set(angle, angularVelocity.x, angularVelocity.y, angularVelocity.z);
+                physicsProperty.setAngularVelocity(convertedAngularVelocity);
+            }
         } else {
             data.setReaderIndex(data.getReaderIndex() + 3 * 4);
         }
