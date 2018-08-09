@@ -76,9 +76,9 @@ try {
             }
         }
         msg += "\n **Artifacts:**\n"
-        msg += "- [Warp-Windows-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifacts/Warp-Windows-${branch}-${version}.${commit}.zip)\n"
-        msg += "- [Warp-Linux-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifacts/Warp-Linux-${branch}-${version}.${commit}.zip)\n"
-        msg += "- [Warp-Server-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifacts/Warp-Server-${branch}-${version}.${commit}.zip)\n"
+        msg += "- [Warp-Windows-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifact/Warp-Windows-${branch}-${version}.${commit}.zip)\n"
+        msg += "- [Warp-Linux-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifact/Warp-Linux-${branch}-${version}.${commit}.zip)\n"
+        msg += "- [Warp-Server-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifact/Warp-Server-${branch}-${version}.${commit}.zip)\n"
         withCredentials([string(credentialsId: 'discord_webhook', variable: 'discordWebhook')]) {
             discordSend thumbnail: "https://static.kocproz.ovh/warp-logo.png", successful: currentBuild.resultIsBetterOrEqualTo('SUCCESS'), description: "${msg}", link: env.BUILD_URL, title: "${JOB_NAME} #${BUILD_NUMBER}", webhookURL: "${discordWebhook}"
         }
