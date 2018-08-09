@@ -30,7 +30,7 @@ public class MovementScript extends Script {
     private FullPhysicsProperty physicsProperty;
 
 
-    private static final float ROT_SPEED = 0.002f;
+    private static final float ROT_SPEED = 0.008f;
     private static final float MOV_SPEED = 0.04f;
 
     public MovementScript(Component owner) {
@@ -95,6 +95,7 @@ public class MovementScript extends Script {
 
         if (torqueVector.lengthSquared() >= 1) {
             torqueVector.mul(delta * ROT_SPEED);
+            torqueVector.rotate(transformProperty.getRotation());
             physicsProperty.applyTorque(torqueVector);
             torqueVector.set(0);
         }

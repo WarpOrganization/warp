@@ -117,10 +117,13 @@ public class SceneUpdaterTask extends EngineTask {
         }
     }
 
+    private Quaternionf invertedRotation = new Quaternionf();
+
     private void deserializePositionAndVelocity(Component c, SerializationBuffer data) {
         deserializePosition(c, data);
         if (c.hasEnabledProperty(Property.getTypeId(SimplifiedPhysicsProperty.class))) {
             SimplifiedPhysicsProperty physicsProperty = c.getProperty(Property.getTypeId(SimplifiedPhysicsProperty.class));
+            TransformProperty transformProperty = c.getProperty(Property.getTypeId(TransformProperty.class));
             velocity.set(
                     data.readFloat(),
                     data.readFloat(),
@@ -137,6 +140,8 @@ public class SceneUpdaterTask extends EngineTask {
             float angle = angularVelocity.length();
             if (angle != 0) {
                 angularVelocity.normalize();
+                transformProperty.getRotation().invert(invertedRotation);
+                angularVelocity.rotate(invertedRotation);
                 convertedAngularVelocity.set(angle, angularVelocity.x, angularVelocity.y, angularVelocity.z);
                 physicsProperty.setAngularVelocity(convertedAngularVelocity);
             }
