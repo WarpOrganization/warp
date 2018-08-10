@@ -37,7 +37,7 @@ public class ServerIdPoolMessageProcessor extends IdPoolMessageProcessor {
         IdPoolMessage message = (IdPoolMessage) serializers.deserialize(messageContent);
         if (message instanceof IdPoolRequest) {
             IdPool pool = idPoolProvider.issueIdPool((Client) sourcePeer);
-            messageSource.pushMessage(new IdPoolResponse(pool.getOffset(), sourcePeer));
+            messageSource.pushMessage(new IdPoolResponse(pool.getOffset(), sourcePeer.getId()));
         }
     }
 }
