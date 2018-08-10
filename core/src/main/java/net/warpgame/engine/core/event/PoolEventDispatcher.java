@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
  * @author Jaca777
  * Created 2017-02-02 at 13
  */
+//TODO implement service configuration
 //@Service
 public class PoolEventDispatcher implements EventDispatcher {
 

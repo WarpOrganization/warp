@@ -1,1 +1,1 @@
-java -Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader -jar Warp-windows.jar net.warpgame.test.Test1
+java -Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader -jar Warp-windows.jar net.warpgame.test.MultiplayerTest
