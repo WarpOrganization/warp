@@ -1,6 +1,6 @@
 package net.warpgame.engine.client.inputupdateblocker;
 
-import net.warpgame.engine.net.event.ConfirmableNetworkEvent;
+import net.warpgame.engine.net.messagetypes.event.ConfirmableNetworkEvent;
 
 /**
  * @author Hubertus

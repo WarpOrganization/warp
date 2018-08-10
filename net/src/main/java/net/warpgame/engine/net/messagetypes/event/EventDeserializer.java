@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.event;
+package net.warpgame.engine.net.messagetypes.event;
 
 import io.netty.buffer.ByteBuf;
 import org.nustaq.serialization.FSTConfiguration;

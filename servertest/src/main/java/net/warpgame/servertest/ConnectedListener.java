@@ -9,7 +9,7 @@ import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.net.event.ConnectedEvent;
+import net.warpgame.engine.net.messagetypes.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.physics.PhysicsService;
 import net.warpgame.engine.physics.RigidBodyConstructor;

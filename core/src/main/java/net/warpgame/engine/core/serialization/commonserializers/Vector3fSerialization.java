@@ -10,7 +10,6 @@ import org.joml.Vector3f;
  * @author Hubertus
  * Created 11.07.2018
  */
-//TODO xd
 @Service
 public class Vector3fSerialization extends Serialization<Vector3f> {
     public Vector3fSerialization() {

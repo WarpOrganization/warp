@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.event;
+package net.warpgame.engine.net.messagetypes.event;
 
 import net.warpgame.engine.net.Peer;
 

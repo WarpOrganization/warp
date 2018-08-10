@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.internalmessage;
+package net.warpgame.engine.net.messagetypes.internalmessage;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;

@@ -4,7 +4,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.Deserializer;
 import net.warpgame.engine.core.serialization.Serialization;
 import net.warpgame.engine.core.serialization.Serializer;
-import net.warpgame.engine.net.event.NetworkEvent;
+import net.warpgame.engine.net.messagetypes.event.NetworkEvent;
 
 import java.io.Serializable;
 

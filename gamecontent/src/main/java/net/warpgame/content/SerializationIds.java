@@ -1,7 +1,7 @@
 package net.warpgame.content;
 
-import net.warpgame.engine.net.event.ConnectedEvent;
-import net.warpgame.engine.net.internalmessage.InternalMessage;
+import net.warpgame.engine.net.messagetypes.event.ConnectedEvent;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
 import org.joml.Vector3f;
 
 /**

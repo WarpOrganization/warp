@@ -3,8 +3,8 @@ package net.warpgame.engine.net.message;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.core.serialization.Serializers;
-import net.warpgame.engine.net.internalmessage.InternalMessage;
-import net.warpgame.engine.net.internalmessage.InternalMessageSerializer;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageSerializer;
 
 /**
  * @author Hubertus

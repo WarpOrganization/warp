@@ -11,11 +11,11 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
 import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
 import net.warpgame.engine.net.message.MessageQueue;
 import net.warpgame.engine.net.message.MessageSourcesService;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageHandler;
 
 /**
  * @author Hubertus

@@ -4,6 +4,7 @@ import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.IdExistsException;
 import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.context.service.Service;
 
 import java.util.Collection;
 
@@ -11,6 +12,7 @@ import java.util.Collection;
  * @author Hubertus
  * Created 10.08.2018
  */
+@Service
 public class NetComponentRegistry extends ComponentRegistry {
 
     public static final int PRIVATE_ID_POOL_BEGINNING = Integer.MIN_VALUE;
