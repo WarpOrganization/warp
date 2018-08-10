@@ -68,17 +68,25 @@ try {
     currentBuild.result = 'FAILURE'
 } finally {
     stage('Discord notify'){
+        def artifactUrl = env.BUILD_URL + "artifact/"
         def msg = "**Status:** " + currentBuild.currentResult.toLowerCase() + "\n"
         msg += "**Changes:** \n"
         if (!currentBuild.changeSets.isEmpty()) {
+            def counter = 0;
             currentBuild.changeSets.first().getLogs().each {
                 msg += "- `" + it.getCommitId().substring(0, 8) + "` *" + it.getComment().substring(0, it.getComment().length()-1) + "*\n"
             }
         }
+
+        if (msg.length() > 1024) msg.take(msg.length() - 1024)
+
+        def filename
         msg += "\n **Artifacts:**\n"
-        msg += "- [Warp-Windows-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifact/Warp-Windows-${branch}-${version}.${commit}.zip)\n"
-        msg += "- [Warp-Linux-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifact/Warp-Linux-${branch}-${version}.${commit}.zip)\n"
-        msg += "- [Warp-Server-${branch}-${version}.${commit}.zip](${env.BUILD_URL}artifact/Warp-Server-${branch}-${version}.${commit}.zip)\n"
+        currentBuild.rawBuild.getArtifacts().each {
+            filename = it.getFileName()
+            msg += "- [${filename}](${artifactUrl}${it.getFileName()})\n"
+        }
+
         withCredentials([string(credentialsId: 'discord_webhook', variable: 'discordWebhook')]) {
             discordSend thumbnail: "https://static.kocproz.ovh/warp-logo.png", successful: currentBuild.resultIsBetterOrEqualTo('SUCCESS'), description: "${msg}", link: env.BUILD_URL, title: "${JOB_NAME} #${BUILD_NUMBER}", webhookURL: "${discordWebhook}"
         }
