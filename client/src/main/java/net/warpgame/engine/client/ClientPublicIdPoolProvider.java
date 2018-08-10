@@ -4,8 +4,8 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.IdPool;
 import net.warpgame.engine.net.PublicIdPoolProvider;
-
-import java.util.PriorityQueue;
+import net.warpgame.engine.net.message.IdPoolMessageSource;
+import net.warpgame.engine.net.messagetypes.idpoolmessage.IdPoolRequest;
 
 /**
  * @author Hubertus
@@ -15,28 +15,31 @@ import java.util.PriorityQueue;
 @Profile("client")
 public class ClientPublicIdPoolProvider extends PublicIdPoolProvider {
 
-    private PriorityQueue<IdPool> availablePools = new PriorityQueue<>();
+    private IdPoolMessageSource idPoolMessageSource;
+
+    public ClientPublicIdPoolProvider(IdPoolMessageSource idPoolMessageSource) {
+        this.idPoolMessageSource = idPoolMessageSource;
+    }
 
     @Override
     public IdPool requestIdPool() {
-        IdPool pool;
-        if (!availablePools.isEmpty()) {
-            pool = availablePools.poll();
-            if (availablePools.isEmpty()) requestNewIdPool();
+        checkForFreedIdPools();
+        if (!availableIdPools.isEmpty()) {
+            IdPool pool = availableIdPools.poll();
+            if (availableIdPools.isEmpty()) requestNewIdPool();
+            return pool;
         } else throw new OutOfIdPoolsException();
-        return pool;
     }
 
     private void requestNewIdPool() {
-
+        idPoolMessageSource.pushMessage(new IdPoolRequest());
     }
 
-    @Override
-    public void freeIdPool(IdPool idPool) {
-        availablePools.add(idPool);
+    public void offerIssuedIdPool(int offset) {
+        availableIdPools.add(new IdPool(offset));
     }
 
-    public void offerIssuedIdPool(IdPool idPool) {
-        //TODO implement
+    public boolean hasPublicIdPoolReady() {
+        return !availableIdPools.isEmpty();
     }
 }

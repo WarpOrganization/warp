@@ -13,12 +13,15 @@ import net.warpgame.engine.net.messagetypes.idpoolmessage.IdPoolMessage;
 public class IdPoolMessageSource extends MessageSource<IdPoolMessage> {
 
     private Serializers serializers;
+    private final EnvelopeAddressingService addressingService;
     private SerializationBuffer serializationBuffer = new SerializationBuffer(2000);
 
     public IdPoolMessageSource(MessageQueue messageQueue,
-                               Serializers serializers) {
+                               Serializers serializers,
+                               EnvelopeAddressingService addressingService) {
         super(messageQueue);
         this.serializers = serializers;
+        this.addressingService = addressingService;
     }
 
 
@@ -28,7 +31,7 @@ public class IdPoolMessageSource extends MessageSource<IdPoolMessage> {
         serializationBuffer.setReaderIndex(0);
         serializers.serialize(serializationBuffer, message);
         MessageEnvelope messageEnvelope = new MessageEnvelope(serializationBuffer.getWrittenData(), 2);
-        message.setTargetPeer(message.getTargetPeer());
+        addressingService.address(messageEnvelope, message.getTargetPeerId());
         return messageEnvelope;
     }
 }

@@ -30,6 +30,7 @@ public class ClientIdPoolMessageProcessor extends IdPoolMessageProcessor {
         IdPoolMessage message = (IdPoolMessage) serializers.deserialize(messageContent);
         if (message instanceof IdPoolResponse) {
             IdPoolResponse response = (IdPoolResponse) message;
+            publicIdPoolProvider.offerIssuedIdPool(response.getPoolOffset());
         }
     }
 }

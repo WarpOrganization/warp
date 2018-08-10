@@ -1,7 +1,5 @@
 package net.warpgame.engine.net.messagetypes.idpoolmessage;
 
-import net.warpgame.engine.net.Peer;
-
 /**
  * @author Hubertus
  * Created 11.08.2018
@@ -9,7 +7,7 @@ import net.warpgame.engine.net.Peer;
 public class IdPoolResponse extends IdPoolMessage {
     private int poolOffset;
 
-    public IdPoolResponse(int poolOffset, Peer targetPeer) {
+    public IdPoolResponse(int poolOffset, int targetPeer) {
         super(targetPeer);
         this.poolOffset = poolOffset;
     }

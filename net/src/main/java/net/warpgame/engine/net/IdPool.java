@@ -4,7 +4,7 @@ package net.warpgame.engine.net;
  * @author Hubertus
  * Created 12.07.2018
  */
-public class IdPool implements Comparable<IdPool>{
+public class IdPool implements Comparable<IdPool> {
 
     public static final int ID_POOL_SIZE = 5000;
 
@@ -51,7 +51,11 @@ public class IdPool implements Comparable<IdPool>{
         return offset;
     }
 
-    private enum IdPoolState {
+    public IdPoolState getPoolState() {
+        return poolState;
+    }
+
+    public enum IdPoolState {
         AWAITING,
         ACTIVE,
         FREEING
