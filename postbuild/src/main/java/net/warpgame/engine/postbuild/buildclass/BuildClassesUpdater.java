@@ -1,5 +1,6 @@
 package net.warpgame.engine.postbuild.buildclass;
 
+import net.warpgame.engine.postbuild.processing.Context;
 import net.warpgame.engine.postbuild.processing.Sink;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -16,7 +17,7 @@ public class BuildClassesUpdater implements Sink<BuildClasses> {
     }
 
     @Override
-    public void process(BuildClasses buildClasses) {
+    public void process(BuildClasses buildClasses, Context c) {
         for (ClassNode classNode : buildClasses.getBuildClasses()) {
             jarClasses.putClass(classNode);
         }

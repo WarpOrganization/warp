@@ -1,6 +1,7 @@
 package net.warpgame.engine.postbuild.filters;
 
 import net.warpgame.engine.postbuild.buildclass.BuildClasses;
+import net.warpgame.engine.postbuild.processing.Context;
 import net.warpgame.engine.postbuild.processing.Processor;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -20,16 +21,16 @@ public abstract class ClassFilter implements Processor<BuildClasses, BuildClasse
     private ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
 
     @Override
-    public BuildClasses process(BuildClasses buildClasses) {
-        CompletableFuture<Optional<ClassNode>>[] completableFutures = runProcessingTasks(buildClasses);
+    public BuildClasses process(BuildClasses buildClasses, Context c) {
+        init(c);
+        CompletableFuture<Optional<ClassNode>>[] completableFutures = runProcessingTasks(buildClasses, c);
         awaitTasks(completableFutures);
         return getResults(completableFutures);
     }
 
-    private CompletableFuture[] runProcessingTasks(BuildClasses buildClasses) {
-        return buildClasses.getBuildClasses()
-                .stream()
-                .map(this::toCallable)
+    private CompletableFuture[] runProcessingTasks(BuildClasses buildClasses, Context cx) {
+        return Arrays.stream(buildClasses.getBuildClasses())
+                .map(c -> toCallable(c, cx))
                 .map(c -> CompletableFuture.supplyAsync(c, executorService))
                 .toArray(CompletableFuture[]::new);
     }
@@ -49,15 +50,19 @@ public abstract class ClassFilter implements Processor<BuildClasses, BuildClasse
         return result;
     }
 
-    private Supplier<Optional<ClassNode>> toCallable(ClassNode classNode) {
-        return () -> getOptionalClass(classNode);
+    private Supplier<Optional<ClassNode>> toCallable(ClassNode classNode, Context c) {
+        return () -> getOptionalClass(classNode, c);
     }
 
-    private Optional<ClassNode> getOptionalClass(ClassNode classNode) {
-        return passesFilter(classNode)
+    private Optional<ClassNode> getOptionalClass(ClassNode classNode, Context c) {
+        return passesFilter(classNode, c)
                 ? Optional.of(classNode)
                 : Optional.empty();
     }
 
-    protected abstract boolean passesFilter(ClassNode classNode);
+    protected void init(Context c) {
+
+    }
+
+    protected abstract boolean passesFilter(ClassNode classNode, Context c);
 }

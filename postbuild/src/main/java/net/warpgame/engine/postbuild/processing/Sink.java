@@ -7,5 +7,5 @@ package net.warpgame.engine.postbuild.processing;
 
 @FunctionalInterface
 public interface Sink<T> {
-    void process(T t);
+    void process(T t, Context context);
 }

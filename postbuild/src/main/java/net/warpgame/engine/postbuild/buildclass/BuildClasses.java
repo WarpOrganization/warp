@@ -15,8 +15,8 @@ public class BuildClasses {
         buildClasses.put(buildClass.name, buildClass);
     }
 
-    public Collection<ClassNode> getBuildClasses() {
-        return buildClasses.values();
+    public ClassNode[] getBuildClasses() {
+        return buildClasses.values().stream().toArray(ClassNode[]::new);
     }
 
     public ClassNode getClassByName(String name) {

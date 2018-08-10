@@ -7,5 +7,5 @@ package net.warpgame.engine.postbuild.processing;
 
 @FunctionalInterface
 public interface Source<T> {
-    T get() throws Exception;
+    T get(Context context) throws Exception;
 }

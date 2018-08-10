@@ -1,5 +1,6 @@
 package net.warpgame.engine.postbuild.processing.pipeline;
 
+import net.warpgame.engine.postbuild.processing.Context;
 import net.warpgame.engine.postbuild.processing.Processor;
 import net.warpgame.engine.postbuild.processing.Sink;
 import net.warpgame.engine.postbuild.processing.Source;
@@ -17,12 +18,12 @@ public class SourcePipeline<T> implements Source<T> {
     }
 
     @Override
-    public T get() throws Exception {
-        return source.get();
+    public T get(Context c) throws Exception {
+        return source.get(c);
     }
 
     public <R> SourcePipeline<R> via(Processor<T, R> processor) {
-        return new SourcePipeline<>(() -> processor.process(source.get()));
+        return new SourcePipeline<>(c -> processor.process(source.get(c), c));
     }
 
     public RunnablePipeline to(Sink<T> sink) {

@@ -1,5 +1,6 @@
 package net.warpgame.engine.postbuild.processing.pipeline;
 
+import net.warpgame.engine.postbuild.processing.Context;
 import net.warpgame.engine.postbuild.processing.Sink;
 import net.warpgame.engine.postbuild.processing.Source;
 
@@ -20,7 +21,7 @@ public class SinkPipeline<T> implements Sink<T> {
     }
 
     @Override
-    public void process(T t) {
-        sink.process(t);
+    public void process(T t, Context c) {
+        sink.process(t, c);
     }
 }

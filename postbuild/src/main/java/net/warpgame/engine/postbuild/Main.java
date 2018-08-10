@@ -20,7 +20,7 @@ public class Main {
         String processedPackageRoot = args[1];
         JarFile jarFile = new JarFile(processedJarName);
 
-        BuildJarProcessor buildJarProcessor = new BuildJarProcessor(processedPackageRoot, jarFile);
+        BuildJarPipeline buildJarProcessor = new BuildJarPipeline(processedPackageRoot, jarFile);
         buildJarProcessor.process();
     }
 
