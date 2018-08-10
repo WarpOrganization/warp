@@ -19,7 +19,6 @@ public class ServerPublicIdPoolProvider extends PublicIdPoolProvider {
     private PriorityQueue<IdPool> availablePools = new PriorityQueue<>();
     private int nextIdPoolOffset = NetComponentRegistry.PUBLIC_ID_POOL_BEGINNING;
 
-
     @Override
     public IdPool requestIdPool() {
         if(!availablePools.isEmpty()){
@@ -31,7 +30,14 @@ public class ServerPublicIdPoolProvider extends PublicIdPoolProvider {
         }
     }
 
+    @Override
     public void freeIdPool(IdPool idPool){
         availablePools.add(idPool);
+    }
+
+    public IdPool issueIdPool(Client client) {
+        IdPool pool = requestIdPool();
+        client.assignIdPool(pool);
+        return pool;
     }
 }

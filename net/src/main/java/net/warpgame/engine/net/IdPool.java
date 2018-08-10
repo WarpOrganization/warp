@@ -47,6 +47,10 @@ public class IdPool implements Comparable<IdPool>{
         return this.offset - o.offset;
     }
 
+    public int getOffset() {
+        return offset;
+    }
+
     private enum IdPoolState {
         AWAITING,
         ACTIVE,

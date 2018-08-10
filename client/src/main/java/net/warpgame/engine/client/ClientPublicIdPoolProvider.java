@@ -35,4 +35,8 @@ public class ClientPublicIdPoolProvider extends PublicIdPoolProvider {
     public void freeIdPool(IdPool idPool) {
         availablePools.add(idPool);
     }
+
+    public void offerIssuedIdPool(IdPool idPool) {
+        //TODO implement
+    }
 }
