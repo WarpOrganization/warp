@@ -24,7 +24,6 @@ public class SceneRenderingProgram extends Program {
     private static final int DIFFUSE_SAMPLER = 0;
     private static final int NORMAL_MAP_SAMPLER = 1;
 
-
     private int unifProjectionMatrix;
     private int unifModelMatrix;
     private int unifRotationMatrix;

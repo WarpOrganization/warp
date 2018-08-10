@@ -13,7 +13,6 @@ public abstract class Property {
     private boolean triggerStateEvents = false;
 
     public void init(){ }
-
     public void setOwner(Component owner) {
         if (this.owner != null) throw new IllegalStateException("Property can't have two owners.");
         else {

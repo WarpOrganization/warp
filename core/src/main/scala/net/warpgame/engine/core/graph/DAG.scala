@@ -7,8 +7,8 @@ import scala.collection.Map
 /**
   * @author Jaca777
   *         Created 2015-12-23 at 11
-  * Directed Acyclic Graph implementation for the service loader.
-  * Root node is a node that has no nodes connected to it.
+  *         Directed Acyclic Graph implementation for the service loader.
+  *         Root node is a node that has no nodes connected to it.
   */
 case class DAG[+A](rootNodes: List[Node[A]]) {
 
@@ -23,9 +23,9 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
     val fromOpt = findNode(from)
     val toOpt = findNode(to)
     (fromOpt, toOpt) match {
-      case (None,           None)         => addEdgeAndCreateNodes(from, to)
-      case (Some(fromNode), None)         => addEdgeFromExistingNode(fromNode, to)
-      case (None,           Some(toNode)) => addEdgeToExistingNode(from, toNode)
+      case (None, None) => addEdgeAndCreateNodes(from, to)
+      case (Some(fromNode), None) => addEdgeFromExistingNode(fromNode, to)
+      case (None, Some(toNode)) => addEdgeToExistingNode(from, toNode)
       case (Some(fromNode), Some(toNode)) => addEdgeBetweenExistingNodes(fromNode, toNode)
     }
   }
@@ -47,7 +47,7 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
 
   private def addEdgeToExistingNode[B >: A](from: B, to: Node[B]): DAG[B] = {
     val newNode = Node[B](from, to)
-    val roots = (if(rootNodes.contains(to)){
+    val roots = (if (rootNodes.contains(to)) {
       rootNodes.filterNot(_ == to)
     } else rootNodes) :+ newNode
     new DAG[B](roots)
@@ -56,7 +56,7 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
   private def addEdgeBetweenExistingNodes[B >: A](from: Node[B], to: Node[B]): DAG[B] = {
     val leafs = from.leaves :+ to
     val updatedNode = Node[B](from.value, leafs)
-        .checkedForCycle()
+      .checkedForCycle()
     val updatedGraph = replaceNode(from, updatedNode)
     val roots = updatedGraph.rootNodes.filterNot(_ == to)
     new DAG[B](roots)
@@ -82,7 +82,16 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
       case Nil => None
       case node :: tail => resolveAcc(tail ::: node.leaves, visitedNodes + node.value)
     }
+
     resolveAcc(rootNodes, Set.empty)
+  }
+
+
+  def resolveChildren[B >: A](parentCondition: B => Boolean): List[Node[B]] = {
+    resolveNode(parentCondition)
+      .get
+      .leaves
+      .flatMap(n => resolveChildren(_ == n))
   }
 
   /**
@@ -93,14 +102,14 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
       case `node` => Some(newNode)
       case _ =>
         val updatedLeavesByValue = getUpdatedLeavesByValue(currNode)
-        if(updatedLeavesByValue.isEmpty) {
+        if (updatedLeavesByValue.isEmpty) {
           None
         } else {
           val newLeaves = currNode.leaves
             .map(leaf => updatedLeavesByValue.getOrElse(leaf.value, leaf))
           Some(Node(currNode.value, newLeaves))
         }
-      }
+    }
 
     def getUpdatedLeavesByValue(parentNode: Node[A]): Map[B, Node[B]] = {
       parentNode.leaves
@@ -114,7 +123,7 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
     val updatedRoots = rootNodes
       .map(root => (root, update(root)))
       .map {
-        case (_,       Some(updatedRoot)) => updatedRoot
+        case (_, Some(updatedRoot)) => updatedRoot
         case (oldRoot, None) => oldRoot
       }
 
@@ -136,5 +145,6 @@ case class DAG[+A](rootNodes: List[Node[A]]) {
 
 object DAG {
   def apply[V](rootNodes: Node[V]*): DAG[V] = DAG(rootNodes.toList)
+
   def empty[A] = new DAG[A](List.empty[Node[A]])
 }

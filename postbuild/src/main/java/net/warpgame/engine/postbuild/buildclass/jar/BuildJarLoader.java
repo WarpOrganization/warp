@@ -2,6 +2,7 @@ package net.warpgame.engine.postbuild.buildclass.jar;
 
 
 import net.warpgame.engine.postbuild.buildclass.BuildClasses;
+import net.warpgame.engine.postbuild.processing.Context;
 import net.warpgame.engine.postbuild.processing.Source;
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
@@ -29,7 +30,7 @@ public class BuildJarLoader implements Source<BuildClasses> {
     }
 
     @Override
-    public BuildClasses get() throws IOException {
+    public BuildClasses get(Context cx) throws IOException {
         BuildClasses buildClasses = new BuildClasses();
         Enumeration<JarEntry> entries = jarFile.entries();
         loadEntries(jarFile, buildClasses, entries);

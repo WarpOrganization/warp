@@ -18,7 +18,10 @@ public class Pipeline {
         return new ProcessorPipeline<>(processor);
     }
 
+
     public static <T> SinkPipeline<T> to(Sink<T> sink) {
         return new SinkPipeline<>(sink);
     }
+
+
 }
