@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.event;
+package net.warpgame.engine.net.messagetypes.event;
 
 import org.nustaq.serialization.FSTConfiguration;
 

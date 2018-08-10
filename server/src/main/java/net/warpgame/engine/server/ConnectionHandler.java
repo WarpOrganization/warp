@@ -10,12 +10,12 @@ import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.internalmessage.InternalMessage;
-import net.warpgame.engine.net.internalmessage.InternalMessageContent;
-import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
 import net.warpgame.engine.net.message.IncomingMessageQueue;
 import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageContent;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

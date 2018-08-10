@@ -6,9 +6,9 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ClockSynchronizer;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.internalmessage.InternalMessage;
-import net.warpgame.engine.net.internalmessage.InternalMessageContent;
 import net.warpgame.engine.net.message.InternalMessageSource;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageContent;
 
 /**
  * @author Hubertus

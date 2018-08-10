@@ -1,7 +1,7 @@
 package net.warpgame.engine.net;
 
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.net.event.ConnectedEvent;
+import net.warpgame.engine.net.messagetypes.event.ConnectedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

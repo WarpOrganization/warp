@@ -1,7 +1,9 @@
-package net.warpgame.engine.net.event;
+package net.warpgame.engine.net.messagetypes.event;
 
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.serialization.*;
+import net.warpgame.engine.core.serialization.Deserializer;
+import net.warpgame.engine.core.serialization.Serialization;
+import net.warpgame.engine.core.serialization.Serializer;
 
 /**
  * @author Hubertus

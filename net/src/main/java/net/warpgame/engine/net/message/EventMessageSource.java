@@ -4,9 +4,9 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.core.serialization.Serializers;
 import net.warpgame.engine.net.ConnectionTools;
-import net.warpgame.engine.net.event.ConfirmableNetworkEvent;
-import net.warpgame.engine.net.event.EventEnvelope;
-import net.warpgame.engine.net.event.EventSerializer;
+import net.warpgame.engine.net.messagetypes.event.ConfirmableNetworkEvent;
+import net.warpgame.engine.net.messagetypes.event.EventEnvelope;
+import net.warpgame.engine.net.messagetypes.event.EventSerializer;
 
 /**
  * @author Hubertus

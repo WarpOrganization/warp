@@ -1,4 +1,4 @@
-package net.warpgame.engine.net.internalmessage;
+package net.warpgame.engine.net.messagetypes.internalmessage;
 
 /**
  * @author Hubertus
