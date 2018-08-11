@@ -1,10 +1,8 @@
 package net.warpgame.engine.net;
 
-import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.ComponentRegistry;
-import net.warpgame.engine.core.component.IdExistsException;
-import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.event.Event;
 
 import java.util.Collection;
 
@@ -15,21 +13,32 @@ import java.util.Collection;
 @Service
 public class NetComponentRegistry extends ComponentRegistry {
 
-    public static final int PRIVATE_ID_POOL_BEGINNING = Integer.MIN_VALUE;
-    public static final int PUBLIC_ID_POOL_BEGINNING = Integer.MIN_VALUE + IdPool.ID_POOL_SIZE * 20;
+    public static final int PRIVATE_ID_POOL_BEGINNING = 0;
+    public static final int PUBLIC_ID_POOL_BEGINNING = PRIVATE_ID_POOL_BEGINNING + IdPool.ID_POOL_SIZE * 20;
 
     private IdPool publicIdPool;
     private PublicIdPoolProvider publicIdPoolProvider;
 
     public NetComponentRegistry(PublicIdPoolProvider publicIdPoolProvider) {
         this.publicIdPoolProvider = publicIdPoolProvider;
-        publicIdPool = publicIdPoolProvider.requestIdPool();
     }
 
     public synchronized SceneComponent createPublicComponent(Component parent) {
+        if (publicIdPool == null) publicIdPool = publicIdPoolProvider.requestIdPool();
         SceneComponent component = new SceneComponent(parent, publicIdPool.getNextId());
-        //TODO check pool availability
+        if (publicIdPool.getPoolState() == IdPool.IdPoolState.FREEING) {
+            publicIdPool = publicIdPoolProvider.requestIdPool();
+        }
+        SimpleListener.createListener(component,
+                Event.getTypeId(ComponentDeathEvent.class),
+                (e) -> unregisterPublicComponent(component));
+
         return component;
+    }
+
+    private void unregisterPublicComponent(Component c) {
+        IdPool pool = publicIdPoolProvider.getPoolByComponentId(c.getId());
+        pool.freeId(c.getId());
     }
 
     @Override

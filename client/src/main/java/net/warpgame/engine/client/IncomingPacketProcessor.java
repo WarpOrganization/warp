@@ -5,7 +5,9 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
+import net.warpgame.engine.net.message.IdPoolMessageSource;
 import net.warpgame.engine.net.message.InternalMessageSource;
+import net.warpgame.engine.net.messagetypes.idpoolmessage.IdPoolRequest;
 import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
 import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageContent;
 
@@ -20,14 +22,20 @@ public class IncomingPacketProcessor {
     private ConnectionService connectionService;
     private SerializedSceneHolder sceneHolder;
     private InternalMessageSource internalMessageSource;
+    private ClientPublicIdPoolProvider publicIdPoolProvider;
+    private IdPoolMessageSource idPoolMessageSource;
     private PacketType[] packetTypes = PacketType.values();
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
-                                   InternalMessageSource internalMessageSource) {
+                                   InternalMessageSource internalMessageSource,
+                                   ClientPublicIdPoolProvider publicIdPoolProvider,
+                                   IdPoolMessageSource idPoolMessageSource) {
         this.connectionService = connectionService;
         this.sceneHolder = sceneHolder;
         this.internalMessageSource = internalMessageSource;
+        this.publicIdPoolProvider = publicIdPoolProvider;
+        this.idPoolMessageSource = idPoolMessageSource;
     }
 
     public void processPacket(ByteBuf packet) {
@@ -60,6 +68,7 @@ public class IncomingPacketProcessor {
         connectionService.setClientCredentials(clientId, 0);
         connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
         internalMessageSource.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, 0));
+        idPoolMessageSource.pushMessage(new IdPoolRequest());
     }
 
     private void processConnectionRefusedPacket(long timestamp, ByteBuf packetData) {
@@ -93,7 +102,8 @@ public class IncomingPacketProcessor {
         responsePacket.writeInt(requestId);
         connectionService.sendPacket(responsePacket);
 
-        if (connectionService.getServer().getClockSynchronizer().getFinishedSynchronizations() >= 3) {
+        if (connectionService.getServer().getClockSynchronizer().getFinishedSynchronizations() >= 3
+                && publicIdPoolProvider.hasPublicIdPoolReady()) {
             connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             internalMessageSource.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, 0));
         }

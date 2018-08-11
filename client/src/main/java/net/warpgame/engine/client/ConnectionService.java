@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionStateHolder;
@@ -27,17 +26,12 @@ public class ConnectionService implements ConnectionTools {
     private int clientId;
     private long clientSecret;//TODO implement
     private Server server;
-    private ComponentRegistry componentRegistry;
-
-    public ConnectionService(ComponentRegistry componentRegistry) {
-        this.componentRegistry = componentRegistry;
-    }
 
     void connect(InetSocketAddress address, MessageProcessorsService messageProcessorsService) {
         server = new Server(
                 address,
                 new IncomingMessageQueue(messageProcessorsService),
-                new ConnectionStateHolder(componentRegistry.getRootComponent())
+                new ConnectionStateHolder()
         );
         channel.writeAndFlush(
                 new DatagramPacket(

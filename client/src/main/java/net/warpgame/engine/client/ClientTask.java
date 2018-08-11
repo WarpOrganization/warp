@@ -14,11 +14,10 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.message.InternalMessageSource;
-import net.warpgame.engine.net.message.MessageProcessorsService;
-import net.warpgame.engine.net.message.MessageQueue;
-import net.warpgame.engine.net.message.MessageSourcesService;
+import net.warpgame.engine.net.message.*;
+import net.warpgame.engine.net.messagetypes.event.ConnectedEvent;
 
 import java.net.InetSocketAddress;
 
@@ -38,6 +37,8 @@ public class ClientTask extends EngineTask {
     private MessageSourcesService messageSourcesService;
     private InternalMessageSource internalMessageSource;
     private MessageProcessorsService messageProcessorsService;
+    private ClientPublicIdPoolProvider publicIdPoolProvider;
+    private IdPoolMessageSource idPoolMessageSource;
     private EventLoopGroup group = new NioEventLoopGroup();
     private MessageQueue messageQueue;
 
@@ -53,7 +54,9 @@ public class ClientTask extends EngineTask {
                       MessageQueue messageQueue,
                       MessageSourcesService messageSourcesService,
                       InternalMessageSource internalMessageSource,
-                      MessageProcessorsService messageProcessorsService) {
+                      MessageProcessorsService messageProcessorsService,
+                      ClientPublicIdPoolProvider publicIdPoolProvider,
+                      IdPoolMessageSource idPoolMessageSource) {
         this.config = config;
         this.connectionService = connectionService;
         this.messageQueue = messageQueue;
@@ -62,6 +65,8 @@ public class ClientTask extends EngineTask {
         this.messageSourcesService = messageSourcesService;
         this.internalMessageSource = internalMessageSource;
         this.messageProcessorsService = messageProcessorsService;
+        this.publicIdPoolProvider = publicIdPoolProvider;
+        this.idPoolMessageSource = idPoolMessageSource;
     }
 
     @Override
@@ -85,7 +90,9 @@ public class ClientTask extends EngineTask {
                     new IncomingPacketProcessor(
                             connectionService,
                             sceneHolder,
-                            internalMessageSource));
+                            internalMessageSource,
+                            publicIdPoolProvider,
+                            idPoolMessageSource));
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
@@ -105,6 +112,7 @@ public class ClientTask extends EngineTask {
 
 
     private int counter = KEEP_ALIVE_INTERVAL;
+    private ConnectionState lastState = ConnectionState.CONNECTING;
 
     @Override
     public void update(int delta) {
@@ -113,10 +121,14 @@ public class ClientTask extends EngineTask {
         switch (connectionService.getServer().getConnectionState()) {
             case SYNCHRONIZING:
                 syncClock(delta);
+                break;
             case LIVE:
+                if (lastState != ConnectionState.LIVE)
+                    componentRegistry.getRootComponent().triggerEvent(new ConnectedEvent(0));
                 keepAlive(delta);
                 break;
         }
+        lastState = connectionService.getServer().getConnectionState();
     }
 
     private int clockCounter = 0;
