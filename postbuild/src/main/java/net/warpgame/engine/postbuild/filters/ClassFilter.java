@@ -25,6 +25,7 @@ public abstract class ClassFilter implements Processor<BuildClasses, BuildClasse
         init(c);
         CompletableFuture<Optional<ClassNode>>[] completableFutures = runProcessingTasks(buildClasses, c);
         awaitTasks(completableFutures);
+        executorService.shutdown();
         return getResults(completableFutures);
     }
 

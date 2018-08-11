@@ -6,6 +6,6 @@ package net.warpgame.engine.postbuild.processing;
  */
 
 @FunctionalInterface
-public interface Sink<T> {
+public interface Sink<T> extends Named {
     void process(T t, Context context);
 }

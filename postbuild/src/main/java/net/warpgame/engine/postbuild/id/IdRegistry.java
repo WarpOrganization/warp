@@ -11,16 +11,22 @@ import java.util.Optional;
 public class IdRegistry {
 
     private Map<String, Map<String, Integer>> ids = new HashMap<>();
+    private Map<String, String> classToSuperclass = new HashMap<>();
 
-    public void put(String scope, String element, int id) {
-        Map<String, Integer> elementsMap = ids.computeIfAbsent(scope, s -> new HashMap<>());
-        elementsMap.put(element, id);
+    public void put(String superclass, String cls, int id) {
+        classToSuperclass.put(cls, superclass);
+        Map<String, Integer> subclassesMap = ids.computeIfAbsent(superclass, s -> new HashMap<>());
+        subclassesMap.put(cls, id);
     }
 
-    public Optional<Integer> get(String scope, String element) {
+    public Optional<Integer> get(String cls) {
+        return get(classToSuperclass.get(cls), cls);
+    }
+
+    public Optional<Integer> get(String superclass, String cls) {
         return Optional
-                .ofNullable(ids.get(scope))
-                .map(m -> m.get(element));
+                .ofNullable(ids.get(superclass))
+                .map(m -> m.get(cls));
     }
 
 

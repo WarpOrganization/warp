@@ -6,6 +6,6 @@ package net.warpgame.engine.postbuild.processing;
  */
 
 @FunctionalInterface
-public interface Source<T> {
+public interface Source<T> extends Named {
     T get(Context context) throws Exception;
 }

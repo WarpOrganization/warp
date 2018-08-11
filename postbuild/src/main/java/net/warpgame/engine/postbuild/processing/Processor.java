@@ -6,7 +6,7 @@ package net.warpgame.engine.postbuild.processing;
  */
 
 @FunctionalInterface
-public interface Processor<T, R> {
+public interface Processor<T, R> extends Named {
     R process(T t, Context context);
 
     static <T> Processor<T, T> around(Processor<T, ?> around) {
@@ -23,4 +23,6 @@ public interface Processor<T, R> {
             return t;
         });
     }
+
+
 }
