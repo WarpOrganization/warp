@@ -13,8 +13,8 @@ import java.util.Collection;
 @Service
 public class NetComponentRegistry extends ComponentRegistry {
 
-    public static final int PRIVATE_ID_POOL_BEGINNING = Integer.MIN_VALUE;
-    public static final int PUBLIC_ID_POOL_BEGINNING = Integer.MIN_VALUE + IdPool.ID_POOL_SIZE * 20;
+    public static final int PRIVATE_ID_POOL_BEGINNING = 0;
+    public static final int PUBLIC_ID_POOL_BEGINNING = PRIVATE_ID_POOL_BEGINNING + IdPool.ID_POOL_SIZE * 20;
 
     private IdPool publicIdPool;
     private PublicIdPoolProvider publicIdPoolProvider;
