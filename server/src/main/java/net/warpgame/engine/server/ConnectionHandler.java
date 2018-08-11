@@ -6,7 +6,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
@@ -29,7 +28,6 @@ import java.net.InetSocketAddress;
 public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
     private ClientRegistry clientRegistry;
-    private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
     private ConnectionUtil connectionUtil;
     private InternalMessageHandler internalMessageHandler;
@@ -39,14 +37,12 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
     private PacketType[] packetTypes = PacketType.values();
 
     ConnectionHandler(ClientRegistry clientRegistry,
-                      ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
                       ConnectionUtil connectionUtil,
                       InternalMessageHandler internalMessageHandler,
                       MessageProcessorsService messageProcessorsService,
                       InternalMessageSource internalMessageSource) {
         this.clientRegistry = clientRegistry;
-        this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.connectionUtil = connectionUtil;
         this.internalMessageHandler = internalMessageHandler;
@@ -78,7 +74,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         Client c = new Client(
                 address,
                 new IncomingMessageQueue(messageProcessorsService),
-                new ConnectionStateHolder(componentRegistry.getRootComponent()));
+                new ConnectionStateHolder());
         int id = clientRegistry.addClient(c);
         c.getConnectionStateHolder().setPeerId(id);
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);

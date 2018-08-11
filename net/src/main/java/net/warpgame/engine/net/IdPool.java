@@ -4,6 +4,7 @@ package net.warpgame.engine.net;
  * @author Hubertus
  * Created 12.07.2018
  */
+//TODO write tests
 public class IdPool implements Comparable<IdPool> {
 
     public static final int ID_POOL_SIZE = 5000;

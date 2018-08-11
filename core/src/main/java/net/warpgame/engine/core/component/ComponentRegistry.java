@@ -12,7 +12,7 @@ import java.util.Map;
 //@Service
 public class ComponentRegistry {
     private Map<Integer, Component> componentMap = new HashMap<>();
-    private int maxId = 0;
+    private int maxId = Integer.MIN_VALUE;
 
     public synchronized void addComponent(Component component, int id) throws IdExistsException {
         if (componentMap.containsKey(id)) throw new IdExistsException();

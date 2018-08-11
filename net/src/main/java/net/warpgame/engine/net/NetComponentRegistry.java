@@ -23,12 +23,15 @@ public class NetComponentRegistry extends ComponentRegistry {
 
     public NetComponentRegistry(PublicIdPoolProvider publicIdPoolProvider) {
         this.publicIdPoolProvider = publicIdPoolProvider;
-        publicIdPool = publicIdPoolProvider.requestIdPool();
     }
 
     public synchronized SceneComponent createPublicComponent(Component parent) {
+        if (publicIdPool == null) publicIdPool = publicIdPoolProvider.requestIdPool();
         SceneComponent component = new SceneComponent(parent, publicIdPool.getNextId());
-        //TODO check pool availability
+        if (publicIdPool.getPoolState() == IdPool.IdPoolState.FREEING) {
+            publicIdPoolProvider.freeIdPool(publicIdPool);
+            publicIdPool = publicIdPoolProvider.requestIdPool();
+        }
         return component;
     }
 

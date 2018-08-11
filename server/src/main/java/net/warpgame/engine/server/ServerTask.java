@@ -6,7 +6,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
@@ -31,7 +30,6 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
     private InternalMessageHandler internalMessageHandler;
     private EventLoopGroup group = new NioEventLoopGroup();
@@ -43,7 +41,6 @@ public class ServerTask extends EngineTask {
 
     public ServerTask(ClientRegistry clientRegistry,
                       ConnectionUtil connectionUtil,
-                      ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
                       InternalMessageHandler internalMessageHandler,
                       MessageQueue messageQueue,
@@ -52,7 +49,6 @@ public class ServerTask extends EngineTask {
                       MessageSourcesService messageSourcesService) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.internalMessageHandler = internalMessageHandler;
         this.messageQueue = messageQueue;
@@ -70,7 +66,6 @@ public class ServerTask extends EngineTask {
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new ConnectionHandler(
                             clientRegistry,
-                            componentRegistry,
                             packetProcessor,
                             connectionUtil,
                             internalMessageHandler,
