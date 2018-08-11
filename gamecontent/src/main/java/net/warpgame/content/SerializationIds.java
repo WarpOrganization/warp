@@ -19,6 +19,8 @@ public class SerializationIds {
     public static int VECTOR3_ID = 6;
     public static int KEYBOARD_INPUT_EVENT = 7;
     public static int CHAT_MESSAGE_EVENT = 8;
+    public static int ID_POOL_REQUEST = 9;
+    public static int ID_POOL_RESPONSE = 10;
 
     public static int getId(Class clazz) {
         if (clazz.equals(ConnectedEvent.class)) return CONNECTED_EVENT_ID;

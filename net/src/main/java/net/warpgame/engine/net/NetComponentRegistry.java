@@ -1,10 +1,8 @@
 package net.warpgame.engine.net;
 
-import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.ComponentRegistry;
-import net.warpgame.engine.core.component.IdExistsException;
-import net.warpgame.engine.core.component.SceneComponent;
+import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.event.Event;
 
 import java.util.Collection;
 
@@ -29,10 +27,18 @@ public class NetComponentRegistry extends ComponentRegistry {
         if (publicIdPool == null) publicIdPool = publicIdPoolProvider.requestIdPool();
         SceneComponent component = new SceneComponent(parent, publicIdPool.getNextId());
         if (publicIdPool.getPoolState() == IdPool.IdPoolState.FREEING) {
-            publicIdPoolProvider.freeIdPool(publicIdPool);
             publicIdPool = publicIdPoolProvider.requestIdPool();
         }
+        SimpleListener.createListener(component,
+                Event.getTypeId(ComponentDeathEvent.class),
+                (e) -> unregisterPublicComponent(component));
+
         return component;
+    }
+
+    private void unregisterPublicComponent(Component c) {
+        IdPool pool = publicIdPoolProvider.getPoolByComponentId(c.getId());
+        pool.freeId(c.getId());
     }
 
     @Override
