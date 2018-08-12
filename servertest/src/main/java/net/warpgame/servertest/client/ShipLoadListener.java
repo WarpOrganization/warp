@@ -1,4 +1,4 @@
-package net.warpgame.test;
+package net.warpgame.servertest.client;
 
 import net.warpgame.content.LoadShipEvent;
 import net.warpgame.engine.core.component.Component;
@@ -39,10 +39,10 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
 
     private void init() {
         mesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("he-goat.obj"),
+                ClientTest.class.getResourceAsStream("he-goat.obj"),
                 true).toMesh();
         imageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("he-goat_tex.png"),
+                ClientTest.class.getResourceAsStream("he-goat_tex.png"),
                 PNGDecoder.Format.RGBA
         );
         diffuse = new Texture2D(

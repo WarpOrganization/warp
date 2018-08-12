@@ -1,4 +1,4 @@
-package net.warpgame.test;
+package net.warpgame.servertest.client;
 
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.engine.core.component.Component;

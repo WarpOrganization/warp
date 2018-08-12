@@ -1,4 +1,4 @@
-package net.warpgame.servertest;
+package net.warpgame.servertest.server;
 
 import net.warpgame.content.KeyboardInputEvent;
 import net.warpgame.engine.core.component.Component;
@@ -6,6 +6,7 @@ import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.server.RemoteInput;
+import net.warpgame.servertest.RemoteInputProperty;
 
 import static java.awt.event.KeyEvent.*;
 

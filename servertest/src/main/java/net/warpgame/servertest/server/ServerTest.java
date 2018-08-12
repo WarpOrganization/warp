@@ -1,4 +1,4 @@
-package net.warpgame.servertest;
+package net.warpgame.servertest.server;
 
 import net.warpgame.engine.console.ConsoleService;
 import net.warpgame.engine.core.component.Component;
@@ -14,7 +14,7 @@ import org.joml.Vector3f;
  * @author Hubertus
  * Created 26.11.2017
  */
-public class Test {
+public class ServerTest {
 
     public static void start(EngineRuntime engineRuntime) {
         EngineContext engineContext = new EngineContext("dev", "fullPhysics", "server");

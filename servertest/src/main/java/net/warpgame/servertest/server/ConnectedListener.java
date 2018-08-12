@@ -1,4 +1,4 @@
-package net.warpgame.servertest;
+package net.warpgame.servertest.server;
 
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.content.LoadShipEvent;
@@ -16,6 +16,8 @@ import net.warpgame.engine.physics.RigidBodyConstructor;
 import net.warpgame.engine.physics.shapeconstructors.RigidBodyBoxShapeConstructor;
 import net.warpgame.engine.server.Client;
 import net.warpgame.engine.server.ClientRegistry;
+import net.warpgame.servertest.MovementScript;
+import net.warpgame.servertest.RemoteInputProperty;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;

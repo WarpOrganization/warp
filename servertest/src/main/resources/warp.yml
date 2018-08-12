@@ -1,3 +1,20 @@
-script.ups: 40
-server:
+graphics:
+  ups: 60
+  display:
+    !!net.warpgame.engine.graphics.window.Display
+    fullscreen: false
+    width: 1280
+    height: 720
+  upscounter:
+    enabled: true
+    sampleSize: 30
+  rendering:
+    scene:
+      maxLights: 10
+    smaa:
+      preset: !!net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAAPreset MEDIUM
+multiplayer:
+  ip: kocproz.ovh
+  #ip: 127.0.0.1
   port: 6688
+script.ups: 40

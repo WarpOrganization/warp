@@ -1,4 +1,4 @@
-package net.warpgame.test;
+package net.warpgame.servertest.client;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
@@ -13,11 +13,13 @@ import org.joml.Vector2f;
  * @author KocproZ
  * Created 24.07.2018
  */
-public class MultiplayerCameraControlScript extends Script {
+public class CameraZoomControlScript extends Script {
 
-    private static final float ROT_MODIFIER = 0.0001f;
+    private static final float ZOOM_MODIFIER = 0.02f;
+    private Vector2f lastScrollPos;
+    private Vector2f scrollPos;
 
-    public MultiplayerCameraControlScript(Component owner) {
+    public CameraZoomControlScript(Component owner) {
         super(owner);
     }
 
@@ -27,25 +29,23 @@ public class MultiplayerCameraControlScript extends Script {
     @ContextService
     private Input input;
 
-    private Vector2f lastCursorPos = new Vector2f();
 
     @Override
     public void onInit() {
-
+        scrollPos = new Vector2f();
+        lastScrollPos = new Vector2f();
     }
 
     @Override
     public void onUpdate(int delta) {
-        rotate(delta);
+        input.getScrollPosition(scrollPos);
+        zoom(delta);
+        lastScrollPos.set(scrollPos);
     }
 
-    private void rotate(int delta) {
-        Vector2f cursorPositionDelta = new Vector2f();
-        input.getCursorPosition(cursorPositionDelta);
-        cursorPositionDelta.sub(lastCursorPos);
-        transformProperty.rotateZ(-cursorPositionDelta.y * ROT_MODIFIER * delta);
-        transformProperty.rotateLocalY(-cursorPositionDelta.x * ROT_MODIFIER * delta);
-        input.getCursorPosition(lastCursorPos);
+    private void zoom(int delta) {
+        float scrollDelta = lastScrollPos.y - scrollPos.y;
+        transformProperty.move((float) (scrollDelta * ZOOM_MODIFIER * delta), 0, 0);
     }
 
 }
