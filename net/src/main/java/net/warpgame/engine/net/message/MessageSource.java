@@ -10,9 +10,11 @@ public abstract class MessageSource<T> {
 
     private ArrayDeque<T> messages = new ArrayDeque<>();
     private MessageQueue messageQueue;
+    private EnvelopeAddressingService addressingService;
 
-    public MessageSource(MessageQueue messageQueue) {
+    public MessageSource(MessageQueue messageQueue, EnvelopeAddressingService addressingService) {
         this.messageQueue = messageQueue;
+        this.addressingService = addressingService;
     }
 
     public synchronized void pushMessage(T message) {
@@ -24,12 +26,15 @@ public abstract class MessageSource<T> {
     }
 
     public void processMessages() {
+        addressingService.setCurrentMessageType(getMessageType());
         T nextMessage = getNextMessage();
         while (nextMessage != null) {
-            messageQueue.pushEnvelope(toAddressedEnvelope(nextMessage));
+            serializeMessage(nextMessage, addressingService);
             nextMessage = getNextMessage();
         }
     }
 
-    abstract MessageEnvelope toAddressedEnvelope(T message);
+    abstract void serializeMessage(T message, EnvelopeAddressingService addressingService);
+
+    abstract int getMessageType();
 }

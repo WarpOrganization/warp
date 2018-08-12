@@ -22,9 +22,9 @@ public class ChatMessageEventListener extends Listener<ChatMessageEvent> {
 
     @Override
     public void handle(ChatMessageEvent event) {
-        if (context.isProfileEnabled("server") && event.getSourceClientId() != 0)
+        if (context.isProfileEnabled("server") && event.getSourcePeerId() != 0)
             consoleService.sendChatMessage(event.getSender(), event.getMessage());
-        else if (context.isProfileEnabled("client") && event.getTargetClientId() != 0)
+        else if (context.isProfileEnabled("client") && event.getTargetPeerId() != 0)
             consoleService.print(String.format("[%s] %s", event.getSender(), event.getMessage()));
     }
 

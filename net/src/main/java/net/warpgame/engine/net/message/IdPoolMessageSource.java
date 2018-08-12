@@ -13,25 +13,26 @@ import net.warpgame.engine.net.messagetypes.idpoolmessage.IdPoolMessage;
 public class IdPoolMessageSource extends MessageSource<IdPoolMessage> {
 
     private Serializers serializers;
-    private final EnvelopeAddressingService addressingService;
     private SerializationBuffer serializationBuffer = new SerializationBuffer(2000);
 
     public IdPoolMessageSource(MessageQueue messageQueue,
                                Serializers serializers,
                                EnvelopeAddressingService addressingService) {
-        super(messageQueue);
+        super(messageQueue, addressingService);
         this.serializers = serializers;
-        this.addressingService = addressingService;
     }
 
 
     @Override
-    MessageEnvelope toAddressedEnvelope(IdPoolMessage message) {
+    void serializeMessage(IdPoolMessage message, EnvelopeAddressingService envelopeAddressingService) {
         serializationBuffer.setWriterIndex(0);
         serializationBuffer.setReaderIndex(0);
         serializers.serialize(serializationBuffer, message);
-        MessageEnvelope messageEnvelope = new MessageEnvelope(serializationBuffer.getWrittenData(), 2);
-        addressingService.address(messageEnvelope, message.getTargetPeerId());
-        return messageEnvelope;
+        envelopeAddressingService.createEnvelope(serializationBuffer.getWrittenData(), message.getTargetPeerId());
+    }
+
+    @Override
+    int getMessageType() {
+        return 2;
     }
 }

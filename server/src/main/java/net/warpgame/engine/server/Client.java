@@ -14,6 +14,9 @@ import java.util.Map;
  * Created 26.11.2017
  */
 public class Client extends Peer {
+
+    public static final int ALL = -1;
+
     private long lastActivity;
     private Map<Integer, IdPool> ownedPublicIdPools = new HashMap<>();
 

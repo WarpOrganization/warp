@@ -4,7 +4,6 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.core.serialization.Serializers;
 import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
-import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageSerializer;
 
 /**
  * @author Hubertus
@@ -13,27 +12,26 @@ import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageSeria
 @Service
 public class InternalMessageSource extends MessageSource<InternalMessage> {
 
-    private final EnvelopeAddressingService envelopeAddressingService;
     private final Serializers serializers;
-    private InternalMessageSerializer internalMessageSerializer;
     private SerializationBuffer buffer = new SerializationBuffer(1500);
 
 
     public InternalMessageSource(MessageQueue messageQueue,
                                  EnvelopeAddressingService envelopeAddressingService,
                                  Serializers serializers) {
-        super(messageQueue);
-        this.envelopeAddressingService = envelopeAddressingService;
+        super(messageQueue, envelopeAddressingService);
         this.serializers = serializers;
-        internalMessageSerializer = new InternalMessageSerializer();
     }
 
     @Override
-    MessageEnvelope toAddressedEnvelope(InternalMessage message) {
+    void serializeMessage(InternalMessage message, EnvelopeAddressingService addressingService) {
         buffer.setWriterIndex(0);
         serializers.serialize(buffer, message);
-        MessageEnvelope envelope = new MessageEnvelope(buffer.getWrittenData(), 1);
-        envelopeAddressingService.address(envelope, message.getTargetPeerId());
-        return envelope;
+        addressingService.createEnvelope(buffer.getWrittenData(), message.getTargetPeerId());
+    }
+
+    @Override
+    int getMessageType() {
+        return 1;
     }
 }

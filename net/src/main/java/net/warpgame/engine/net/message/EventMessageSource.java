@@ -6,7 +6,6 @@ import net.warpgame.engine.core.serialization.Serializers;
 import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.messagetypes.event.ConfirmableNetworkEvent;
 import net.warpgame.engine.net.messagetypes.event.EventEnvelope;
-import net.warpgame.engine.net.messagetypes.event.EventSerializer;
 
 /**
  * @author Hubertus
@@ -15,8 +14,6 @@ import net.warpgame.engine.net.messagetypes.event.EventSerializer;
 @Service
 public class EventMessageSource extends MessageSource<EventEnvelope> {
 
-    private final EnvelopeAddressingService envelopeAddressingService;
-    private EventSerializer eventSerializer;
     private ConnectionTools connectionTools;
     private Serializers serializers;
     private SerializationBuffer buffer = new SerializationBuffer(1500);
@@ -25,17 +22,14 @@ public class EventMessageSource extends MessageSource<EventEnvelope> {
                               EnvelopeAddressingService envelopeAddressingService,
                               ConnectionTools connectionTools,
                               Serializers serializers) {
-        super(messageQueue);
-        this.envelopeAddressingService = envelopeAddressingService;
+        super(messageQueue, envelopeAddressingService);
         this.connectionTools = connectionTools;
         this.serializers = serializers;
-        eventSerializer = new EventSerializer();
     }
 
     @Override
-    MessageEnvelope toAddressedEnvelope(EventEnvelope message) {
+    void serializeMessage(EventEnvelope message, EnvelopeAddressingService addressingService) {
         //TODO some reflection magic for message type runtime generation.
-        MessageEnvelope addressedEnvelope;
         message.getEvent().setSourceId(connectionTools.getPeerId());
 
         buffer.setWriterIndex(0);
@@ -43,12 +37,16 @@ public class EventMessageSource extends MessageSource<EventEnvelope> {
         buffer.write(message.getTargetComponent().getId());
         serializers.serialize(buffer, message.getEvent());
         if (message.getEvent() instanceof ConfirmableNetworkEvent)
-            addressedEnvelope = new MessageEnvelope(buffer.getWrittenData(),
-                    0,
+            addressingService.createEnvelope(
+                    buffer.getWrittenData(),
+                    message.getEvent().getTargetPeerId(),
                     ((ConfirmableNetworkEvent) message.getEvent()).getConfirmationConsumer());
         else
-            addressedEnvelope = new MessageEnvelope(buffer.getWrittenData(), 0);
-        envelopeAddressingService.address(addressedEnvelope, message.getEvent().getTargetClientId());
-        return addressedEnvelope;
+            addressingService.createEnvelope(buffer.getWrittenData(), message.getEvent().getTargetPeerId());
+    }
+
+    @Override
+    int getMessageType() {
+        return 0;
     }
 }

@@ -44,7 +44,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
 
     @Override
     public void handle(ConnectedEvent event) {
-        if (event.getSourceClientId() == 0)
+        if (event.getSourcePeerId() == 0)
             return;
         System.out.println("client connected");
         Component ship = new SceneComponent(getOwner());
@@ -59,7 +59,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         ship.addProperty(physicsProperty);
         ship.addScript(MovementScript.class);
 
-        Client client = clientRegistry.getClient(event.getSourceClientId());
+        Client client = clientRegistry.getClient(event.getSourcePeerId());
 
         if (client != null) {
             //TODO this is temporary pls belive me

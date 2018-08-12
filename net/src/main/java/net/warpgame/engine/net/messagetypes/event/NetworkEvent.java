@@ -2,13 +2,11 @@ package net.warpgame.engine.net.messagetypes.event;
 
 import net.warpgame.engine.core.event.Event;
 
-import java.io.Serializable;
-
 /**
  * @author Hubertus
  * Created 30.05.2018
  */
-public class NetworkEvent extends Event implements Serializable {
+public class NetworkEvent extends Event {
     private int targetId;
     private int sourceId;
     private boolean transfered = false;
@@ -29,11 +27,11 @@ public class NetworkEvent extends Event implements Serializable {
         this.targetId = targetId;
     }
 
-    public int getSourceClientId() {
+    public int getSourcePeerId() {
         return sourceId;
     }
 
-    public int getTargetClientId() {
+    public int getTargetPeerId() {
         return targetId;
     }
 
