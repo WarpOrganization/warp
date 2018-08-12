@@ -22,16 +22,16 @@ public class ContactHandler extends ContactListener {
     public void onContactStarted(btPersistentManifold manifold) {
         Component c1 = componentRegistry.getComponent(manifold.getBody0().getUserValue());
         Component c2 = componentRegistry.getComponent(manifold.getBody1().getUserValue());
-        c1.triggerEvent(new ContactStartedEvent(c1));
-        c2.triggerEvent(new ContactStartedEvent(c2));
+        c1.triggerEvent(new ContactStartedEvent(c2));
+        c2.triggerEvent(new ContactStartedEvent(c1));
     }
 
     @Override
     public void onContactEnded(btPersistentManifold manifold) {
         Component c1 = componentRegistry.getComponent(manifold.getBody0().getUserValue());
         Component c2 = componentRegistry.getComponent(manifold.getBody1().getUserValue());
-        c1.triggerEvent(new ContactEndedEvent(c1));
-        c2.triggerEvent(new ContactEndedEvent(c2));
+        c1.triggerEvent(new ContactEndedEvent(c2));
+        c2.triggerEvent(new ContactEndedEvent(c1));
 
     }
 }

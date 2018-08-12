@@ -1,9 +1,10 @@
 package net.warpgame.engine.graphics.tessellation;
 
-import org.lwjgl.opengl.GL15;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.mesh.IndexedMesh;
 import net.warpgame.engine.graphics.tessellation.program.TessellationProgram;
+import org.lwjgl.opengl.GL15;
 
 /**
  * @author Jaca777
@@ -11,6 +12,7 @@ import net.warpgame.engine.graphics.tessellation.program.TessellationProgram;
  */
 
 @Service
+@Profile("graphics")
 public class Tessellator {
 
     public enum TessellatorMode {

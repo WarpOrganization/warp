@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering.screenspace;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.texture.Texture2D;
 
@@ -8,6 +9,7 @@ import net.warpgame.engine.graphics.texture.Texture2D;
  * Created 2018-01-13 at 22
  */
 @Service
+@Profile("graphics")
 public class ScreenspaceAlbedoHolder {
     private Texture2D albedoTex;
 

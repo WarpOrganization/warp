@@ -1,6 +1,7 @@
 package net.warpgame.engine.client.message;
 
 import net.warpgame.engine.client.ConnectionService;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.Peer;
 import net.warpgame.engine.net.message.EnvelopeAddressingService;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
  * Created 31.05.2018
  */
 @Service
+@Profile("client")
 public class ClientEnvelopeAddressingService extends EnvelopeAddressingService {
 
     private ConnectionService connectionService;

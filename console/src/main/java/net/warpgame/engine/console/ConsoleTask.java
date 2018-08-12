@@ -11,7 +11,7 @@ import java.util.Scanner;
  * Created 2018-01-09 at 21:38
  */
 @Service
-@RegisterTask(thread = "consoleThread")
+@RegisterTask(thread = "console")
 public class ConsoleTask extends EngineTask {
 
     private ConsoleService consoleService;
