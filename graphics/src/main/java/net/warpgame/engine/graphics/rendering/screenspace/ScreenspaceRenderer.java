@@ -3,6 +3,7 @@ package net.warpgame.engine.graphics.rendering.screenspace;
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.camera.CameraHolder;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
  * Created 2017-11-11 at 15
  */
 @Service
+@Profile("graphics")
 public class ScreenspaceRenderer {
 
     private static final Logger logger = LoggerFactory.getLogger(ScreenspaceRenderer.class);
