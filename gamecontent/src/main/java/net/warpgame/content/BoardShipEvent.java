@@ -34,7 +34,7 @@ public class BoardShipEvent extends NetworkEvent implements Serializable {
         public void serialize(BoardShipEvent object, Serializer serializer) {
             serializer
                     .write(object.shipComponentId)
-                    .write(object.getTargetClientId());
+                    .write(object.getTargetPeerId());
         }
 
         @Override

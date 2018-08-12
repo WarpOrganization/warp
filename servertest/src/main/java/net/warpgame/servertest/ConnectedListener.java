@@ -62,8 +62,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         Client client = clientRegistry.getClient(event.getSourcePeerId());
 
         if (client != null) {
-            //TODO this is temporary pls belive me
-            clientRegistry.getClients().forEach(c -> getOwner().triggerEvent(new LoadShipEvent(ship.getId(), transformProperty.getTranslation(), c.getId())));
+            getOwner().triggerEvent(new LoadShipEvent(ship.getId(), transformProperty.getTranslation(), Client.ALL));
             sendScene(client, ship.getId());
             getOwner().triggerEvent(new BoardShipEvent(ship.getId(), client.getId()));
         }

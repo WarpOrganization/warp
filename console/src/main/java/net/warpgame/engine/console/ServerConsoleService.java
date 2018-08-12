@@ -24,9 +24,7 @@ public class ServerConsoleService extends ConsoleService {
 
     public void sendChatMessage(String sender, String msg) {
         print(String.format("[%s] %s", sender, msg));
-        for (Client c : clientRegistry.getClients()) {
-            consoleComponent.triggerEvent(new ChatMessageEvent(sender, msg, c.getId()));
-        }
+        consoleComponent.triggerEvent(new ChatMessageEvent(sender, msg, Client.ALL));
     }
 
 }
