@@ -10,11 +10,11 @@ import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSol
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Profile;
-import org.apache.log4j.Logger;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.physics.raytester.RayTestSolver;
+import org.apache.log4j.Logger;
 
 /**
  * @author Hubertus
@@ -32,8 +32,11 @@ public class PhysicsTask extends EngineTask {
     private RigidBodyRegistry rigidBodyRegistry;
     private RayTestSolver rayTestSolver;
     private ConstraintRegistry constraintRegistry;
+    private ContactHandler contactHandler;
+    private ComponentRegistry componentRegistry;
 
     public PhysicsTask(ComponentRegistry componentRegistry) {
+        this.componentRegistry = componentRegistry;
         rigidBodyRegistry = new RigidBodyRegistry();
         rayTestSolver = new RayTestSolver(componentRegistry);
         constraintRegistry = new ConstraintRegistry();
@@ -44,12 +47,14 @@ public class PhysicsTask extends EngineTask {
         logger.info("initializing physics");
         new SharedLibraryLoader().load("gdx");
         Bullet.init();
+        contactHandler = new ContactHandler(componentRegistry);
         createPhysicsWorld();
         rayTestSolver.setWorld(mainWorld);
     }
 
     @Override
     protected void onClose() {
+        contactHandler.dispose();
     }
 
     @Override
