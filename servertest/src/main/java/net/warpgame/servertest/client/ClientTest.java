@@ -33,6 +33,7 @@ public class ClientTest {
 
     public static final Display DISPLAY = new Display(false, 1280, 720);
     private static ConsoleService consoleService;
+    private static SceneLightManager sceneLightManager;
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
@@ -45,12 +46,15 @@ public class ClientTest {
         consoleService = engineContext.getLoadedContext()
                 .findOne(ConsoleService.class)
                 .get();
+        sceneLightManager = engineContext.getLoadedContext()
+                .findOne(SceneLightManager.class)
+                .get();
         setupScene(engineContext, thread);
         registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
     private static void setupListeners(Component root, EngineContext context) {
-        root.addListener(new ShipLoadListener(root, context.getLoadedContext().findOne(GraphicsThread.class).get()));
+        root.addListener(new ShipLoadListener(root, context.getLoadedContext().findOne(GraphicsThread.class).get(), sceneLightManager));
         CameraHolder cameraHolder = context.getLoadedContext().findOne(CameraHolder.class).get();
         root.addListener(new BoardShipListener(root, cameraHolder, DISPLAY, context.getComponentRegistry()));
         root.addListener(new TestKeyboardListener(root, context.getLoadedContext().findOne(WindowManager.class).get()));
@@ -61,7 +65,7 @@ public class ClientTest {
                 .findOne(SceneHolder.class)
                 .get();
         Scene scene = sceneHolder.getScene();
-        makeLight(new SceneComponent(scene, 1000000010));
+        createModels(scene, thread);
         createCubemap(scene, thread);
         setupListeners(scene, engineContext);
     }
@@ -96,10 +100,6 @@ public class ClientTest {
     }
 
     private static void makeLight(Component component) {
-        SceneLightManager sceneLightManager = component.getContext()
-                .getLoadedContext()
-                .findOne(SceneLightManager.class)
-                .get();
         LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
         LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
         component.addProperty(lightSourceProperty);
@@ -108,7 +108,7 @@ public class ClientTest {
 
     private static void createModels(Scene scene, GraphicsThread graphicsThread) {
         graphicsThread.scheduleOnce(() -> {
-            Component lsource = new SceneComponent(scene);
+            Component lsource = new SceneComponent(scene, 10000010);
             lsource.addProperty(new TransformProperty().move(new Vector3f(0, 10, 0)));
             makeLight(lsource);
         });

@@ -1,4 +1,4 @@
-package net.warpgame.servertest.client;
+package net.warpgame.servertest.client.scripts;
 
 import net.warpgame.content.KeyboardInputEvent;
 import net.warpgame.engine.core.component.Component;
@@ -109,7 +109,7 @@ public class MultiplayerControlScript extends Script {
             rotateLeftX = true;
         }
         if (input.isKeyDown(VK_E) && !rotateRightX) {
-            getOwner().triggerEvent(new KeyboardInputEvent(VK_RIGHT, true));
+            getOwner().triggerEvent(new KeyboardInputEvent(VK_E, true));
             rotateRightX = true;
         }
         if (!input.isKeyDown(VK_W) && forward) {
@@ -149,7 +149,7 @@ public class MultiplayerControlScript extends Script {
             rotateLeftX = false;
         }
         if (!input.isKeyDown(VK_E) && rotateRightX) {
-            getOwner().triggerEvent(new KeyboardInputEvent(VK_RIGHT, false));
+            getOwner().triggerEvent(new KeyboardInputEvent(VK_E, false));
             rotateRightX = false;
         }
     }

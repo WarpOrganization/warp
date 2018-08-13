@@ -1,4 +1,4 @@
-package net.warpgame.servertest.client;
+package net.warpgame.servertest.client.scripts;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
@@ -45,7 +45,8 @@ public class CameraZoomControlScript extends Script {
 
     private void zoom(int delta) {
         float scrollDelta = lastScrollPos.y - scrollPos.y;
-        transformProperty.move((float) (scrollDelta * ZOOM_MODIFIER * delta), 0, 0);
+        if (scrollDelta * ZOOM_MODIFIER * delta + transformProperty.getTranslation().x > 0)
+            transformProperty.move((scrollDelta * ZOOM_MODIFIER * delta), 0, 0);
     }
 
 }

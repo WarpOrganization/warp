@@ -237,4 +237,12 @@ public class SceneComponent implements Component {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "SceneComponent{" +
+                "id=" + id +
+                '}';
+    }
+
 }

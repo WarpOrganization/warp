@@ -11,12 +11,16 @@ import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.mesh.StaticMesh;
+import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
+import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
+import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import net.warpgame.engine.graphics.resource.texture.ImageData;
 import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
 import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -30,10 +34,12 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     private ImageData imageData;
     private Texture2D diffuse;
     Material material;
+    private SceneLightManager lightManager;
 
-    protected ShipLoadListener(Component owner, EngineThread graphicsThread) {
+    protected ShipLoadListener(Component owner, EngineThread graphicsThread, SceneLightManager lightManager) {
         super(owner, Event.getTypeId(LoadShipEvent.class));
         this.graphicsThread = graphicsThread;
+        this.lightManager = lightManager;
         graphicsThread.scheduleOnce(this::init);
     }
 
@@ -58,11 +64,16 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     @Override
     public void handle(LoadShipEvent event) {
         Component ship = new SceneComponent(getOwner(), event.getShipComponentId());
-        TransformProperty transformProperty = new TransformProperty();
-        transformProperty.move(event.getPos());
-        ship.addProperty(transformProperty);
+        ship.addProperty(new TransformProperty().move(event.getPos()));
         ship.addProperty(new SimplifiedPhysicsProperty(10f));
         ship.addProperty(new MeshProperty(mesh));
         ship.addProperty(new MaterialProperty(material));
+
+        Component light = new SceneComponent(ship, 1000000 + event.getShipComponentId());
+        light.addProperty(new TransformProperty().move(0f, 1f, 0f));
+        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
+        LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+        light.addProperty(lightSourceProperty);
+        lightManager.addLight(lightSourceProperty);
     }
 }

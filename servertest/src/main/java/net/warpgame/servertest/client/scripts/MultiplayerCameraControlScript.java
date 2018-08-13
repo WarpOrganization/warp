@@ -1,4 +1,4 @@
-package net.warpgame.servertest.client;
+package net.warpgame.servertest.client.scripts;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;

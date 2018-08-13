@@ -1,4 +1,4 @@
-package net.warpgame.servertest;
+package net.warpgame.servertest.server;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
@@ -9,6 +9,7 @@ import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.physics.Collision;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.server.RemoteInput;
+import net.warpgame.servertest.RemoteInputProperty;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
