@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.rendering.antialiasing.smaa;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.ScreenFramebuffer;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL30;
  * Created 2018-01-13 at 16
  */
 @Service
+@Profile("graphics")
 public class SMAARenderer {
 
     private SMAAResourceLoader resourceLoader;

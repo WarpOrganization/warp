@@ -6,16 +6,15 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.ConnectionStateHolder;
 import net.warpgame.engine.net.PacketType;
-import net.warpgame.engine.net.internalmessage.InternalMessage;
-import net.warpgame.engine.net.internalmessage.InternalMessageContent;
-import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
 import net.warpgame.engine.net.message.IncomingMessageQueue;
-import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageContent;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,29 +28,26 @@ import java.net.InetSocketAddress;
 public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
     private ClientRegistry clientRegistry;
-    private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
     private ConnectionUtil connectionUtil;
     private InternalMessageHandler internalMessageHandler;
     private MessageProcessorsService messageProcessorsService;
-    private InternalMessageQueue internalMessageQueue;
+    private InternalMessageSource internalMessageSource;
     private static final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
     private PacketType[] packetTypes = PacketType.values();
 
     ConnectionHandler(ClientRegistry clientRegistry,
-                      ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
                       ConnectionUtil connectionUtil,
                       InternalMessageHandler internalMessageHandler,
                       MessageProcessorsService messageProcessorsService,
-                      InternalMessageQueue internalMessageQueue) {
+                      InternalMessageSource internalMessageSource) {
         this.clientRegistry = clientRegistry;
-        this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.connectionUtil = connectionUtil;
         this.internalMessageHandler = internalMessageHandler;
         this.messageProcessorsService = messageProcessorsService;
-        this.internalMessageQueue = internalMessageQueue;
+        this.internalMessageSource = internalMessageSource;
     }
 
     /**
@@ -78,7 +74,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
         Client c = new Client(
                 address,
                 new IncomingMessageQueue(messageProcessorsService),
-                new ConnectionStateHolder(componentRegistry.getComponent(0)));
+                new ConnectionStateHolder());
         int id = clientRegistry.addClient(c);
         c.getConnectionStateHolder().setPeerId(id);
         ByteBuf packet = connectionUtil.getHeader(PacketType.PACKET_CONNECTED, 4);
@@ -88,6 +84,6 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<DatagramPacke
 //        componentRegistry.getComponent(0).triggerEvent(new ConnectedEvent(c));
         logger.info("Client connected from address " + address.toString());
         c.getConnectionStateHolder().setRequestedConnectionState(ConnectionState.SYNCHRONIZING);
-        internalMessageQueue.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, c.getId()));
+        internalMessageSource.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_SYNCHRONIZING, c.getId()));
     }
 }

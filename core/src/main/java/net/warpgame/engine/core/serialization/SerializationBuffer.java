@@ -85,7 +85,7 @@ public class SerializationBuffer {
 
     public boolean readBoolean() {
         readerIndex++;
-        return buffer[writerIndex - 1] == (byte) 0;
+        return buffer[readerIndex - 1] == (byte) 0;
     }
 
     public byte readByte() {
@@ -168,11 +168,16 @@ public class SerializationBuffer {
 
     /**
      * Copies used part of the buffer into new byte array starting from 0 to (writerIndex - 1)
+     *
      * @return copied part of the buffer
      */
-    public byte[] getWrittenData(){
+    public byte[] getWrittenData() {
         byte[] out = new byte[writerIndex];
-        System.arraycopy(buffer,0, out, 0, writerIndex);
+        System.arraycopy(buffer, 0, out, 0, writerIndex);
         return out;
+    }
+
+    public boolean isReadable() {
+        return readerIndex < buffer.length - 1;
     }
 }

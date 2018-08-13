@@ -96,10 +96,9 @@ static def createConfiguration(taskName, mainClass, mod) {
 }
 
 task createRunConfigurations {
-
     createConfiguration("SP - Warp Engine Test", "net.warpgame.test.Test1", "test_main")
-    createConfiguration("MP - Server Test", "net.warpgame.servertest.Test", "servertest_main")
-    createConfiguration("MP - Client Test", "net.warpgame.test.MultiplayerTest", "test_main")
+    createConfiguration("MP - Server Test", "net.warpgame.servertest.server.ServerTest", "servertest_main")
+    createConfiguration("MP - Client Test", "net.warpgame.servertest.client.ClientTest", "servertest_main")
 }
 
 
@@ -107,6 +106,7 @@ subprojects {
     group 'net.warpgame'
     version '0.1.2'
     test {
-        reports.junitXml.enabled = false
+        reports.html.enabled = false
+        reports.junitXml.enabled = true
     }
 }

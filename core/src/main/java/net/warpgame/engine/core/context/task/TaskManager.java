@@ -34,6 +34,8 @@ public class TaskManager implements ServiceRegistry {
 
     private void registerTask(Object service, RegisterTask annotation) {
         Executor executor = executorManager.getExecutor(annotation.thread());
+        if (executor == null)
+            throw new TaskLoadingException("No executor with name " + annotation.thread(), service);
         if (!EngineThread.class.isAssignableFrom(executor.getClass()))
             throw new TaskLoadingException(annotation.thread() + " is not the EngineThread", service);
         if (!EngineTask.class.isAssignableFrom(service.getClass()))

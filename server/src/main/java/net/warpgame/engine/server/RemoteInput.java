@@ -1,12 +1,10 @@
 package net.warpgame.engine.server;
 
-import net.warpgame.engine.core.context.service.Service;
-
 /**
  * @author Hubertus
  * Created 05.01.2018
  */
-@Service
+
 public class RemoteInput {
     private boolean forwardPressed;
     private boolean backwardsPressed;
@@ -14,8 +12,10 @@ public class RemoteInput {
     private boolean leftPressed;
     private boolean rotationUp;
     private boolean rotationDown;
-    private boolean rotationRight;
     private boolean rotationLeft;
+    private boolean rotationRight;
+    private boolean rotationLeftX;
+    private boolean rotationRightX;
 
     public boolean isForwardPressed() {
         return forwardPressed;
@@ -79,5 +79,21 @@ public class RemoteInput {
 
     public void setRotationLeft(boolean rotationLeft) {
         this.rotationLeft = rotationLeft;
+    }
+
+    public boolean isRotationLeftX() {
+        return rotationLeftX;
+    }
+
+    public void setRotationLeftX(boolean rotationLeftX) {
+        this.rotationLeftX = rotationLeftX;
+    }
+
+    public boolean isRotationRightX() {
+        return rotationRightX;
+    }
+
+    public void setRotationRightX(boolean rotationRightX) {
+        this.rotationRightX = rotationRightX;
     }
 }

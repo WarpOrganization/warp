@@ -39,12 +39,9 @@ public class GLFWInput implements Input {
     private boolean[] keyboardKeys = new boolean[2048];
     private boolean[] mouseButtons = new boolean[8];
 
-    private double lastScrollPos;
-    private double scrollPos;
-    private double scrollPosDelta;
-
-    private Vector2f cursorPosition;
-    private Vector2f cursorPositionDelta = new Vector2f(0, 0);
+    private Vector2f scrollPos = new Vector2f(0f, 0f);
+    private Vector2f cursorPosition = new Vector2f(0f, 0f);
+    private Vector2f cursorPositionDelta = new Vector2f(0f, 0f);
 
     public void init(long windowHandle) {
         this.windowHandle = windowHandle;
@@ -67,6 +64,10 @@ public class GLFWInput implements Input {
         GLFW.glfwSetKeyCallback(windowHandle, this::keyAction);
         GLFW.glfwSetMouseButtonCallback(windowHandle, this::mouseButtonAction);
         GLFW.glfwSetScrollCallback(windowHandle, this::scrollAction);
+        GLFW.glfwSetCursorPosCallback(windowHandle, this::cursorPosAction);
+        GLFW.glfwSetWindowCloseCallback(windowHandle, (window) -> {
+            logger.debug("Window close callback");
+        });
     }
 
     private void keyAction(long window, int key, int scancode, int action, int mods) {
@@ -110,49 +111,49 @@ public class GLFWInput implements Input {
     }
 
     private void scrollAction(long window, double x, double y) {
-        lastScrollPos = y;
+        scrollPos.x += x;
+        scrollPos.y += y;
     }
 
+    private void cursorPosAction(long window, double x, double y) {
+        cursorPosition.set((float) x, (float) y);
+    }
 
     private void triggerEvent(Event event) {
         Scene scene = sceneHolder.getScene();
         if(scene != null) {
             scene.triggerEvent(event);
         } else {
-            logger.warn("Couln");
+            logger.warn("Failed to trigger event");
         }
     }
 
     @Override
     public void update() {
-        updateScroll();
-        updateMousePos();
+//        updateScroll();
+//        updateMousePos();
     }
 
-    private void updateScroll() {
-        scrollPosDelta = scrollPos - lastScrollPos;
-        scrollPos = lastScrollPos;
-    }
-
-    private void updateMousePos() {
-        Vector2f currentCursorPos = getRealCursorPos();
-        currentCursorPos.sub(cursorPosition, this.cursorPositionDelta);
-        this.cursorPosition = currentCursorPos;
-    }
+//    private void updateMousePos() {
+//        Vector2f currentCursorPos = getRealCursorPos();
+//        currentCursorPos.sub(cursorPosition, this.cursorPositionDelta);
+//        this.cursorPosition = currentCursorPos;
+//    }
 
     @Override
-    public Vector2f getCursorPosition() {
-        return cursorPosition;
+    public void getCursorPosition(Vector2f vector) {
+        vector.set(cursorPosition);
     }
 
+    @Deprecated
     @Override
     public Vector2f getCursorPositionDelta() {
         return cursorPositionDelta;
     }
 
     @Override
-    public double getScrollDelta() {
-        return scrollPosDelta;
+    public void getScrollPosition(Vector2f vector) {
+        vector.set(scrollPos);
     }
 
     @Override

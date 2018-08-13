@@ -1,6 +1,7 @@
 package net.warpgame.engine.net.message;
 
 import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.net.Peer;
 
 import java.util.Iterator;
@@ -25,7 +26,10 @@ public class IncomingMessageQueue {
 
     public synchronized void addMessage(Peer sourcePeer, int messageType, int dependencyId, ByteBuf content) {
         if (checkDependency(dependencyId)) {
-            messageQueue.add(new IncomingEnvelope(sourcePeer, messageType, dependencyId, content));
+            byte[] contentBytes = new byte[content.readableBytes()];
+            content.readBytes(contentBytes);
+
+            messageQueue.add(new IncomingEnvelope(sourcePeer, messageType, dependencyId, new SerializationBuffer(contentBytes)));
         }
         processIncomingMessages();
     }

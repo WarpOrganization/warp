@@ -3,6 +3,7 @@ package net.warpgame.engine.graphics.rendering.scene;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.config.EnableConfig;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBufferFramebuffer;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
  */
 
 @Service
+@Profile("graphics")
 @EnableConfig
 public class SceneRenderer {
     private static final Logger logger = Logger.getLogger(SceneRenderer.class);

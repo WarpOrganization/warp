@@ -8,11 +8,12 @@ import org.joml.Vector2f;
  */
 public interface Input {
 
-    Vector2f getCursorPosition();
+    void getCursorPosition(Vector2f vector);
 
+    @Deprecated
     Vector2f getCursorPositionDelta();
 
-    double getScrollDelta();
+    void getScrollPosition(Vector2f vector);
 
     boolean isKeyDown(int key);
 

@@ -1,5 +1,6 @@
 package net.warpgame.engine.input.glfw;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
@@ -12,6 +13,7 @@ import net.warpgame.engine.graphics.window.WindowTask;
  *         Created 2016-07-02 at 23
  */
 @Service
+@Profile("graphics")
 @RegisterTask(thread = "graphics")
 @ExecuteAfterTask(WindowTask.class)
 public class GLFWInputTask extends EngineTask {

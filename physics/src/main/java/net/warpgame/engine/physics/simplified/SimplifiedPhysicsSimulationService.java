@@ -1,10 +1,10 @@
 package net.warpgame.engine.physics.simplified;
 
-import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -50,7 +50,6 @@ public class SimplifiedPhysicsSimulationService {
                 transformProperty.move(movementVector
                         .set(physicsProperty.getVelocity())
                         .mul(secondsDelta));
-
                 AxisAngle4f angularVelocity = physicsProperty.getAngularVelocity();
                 rotation.set(0, 0, 0, 1);
                 rotation.rotateAxis(

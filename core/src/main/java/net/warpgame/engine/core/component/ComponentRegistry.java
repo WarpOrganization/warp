@@ -1,7 +1,5 @@
 package net.warpgame.engine.core.component;
 
-import net.warpgame.engine.core.context.service.Service;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +8,12 @@ import java.util.Map;
  * @author Hubertus
  * Created 09.12.2017
  */
-@Service
+//TODO implement service configuration
+//@Service
 public class ComponentRegistry {
     private Map<Integer, Component> componentMap = new HashMap<>();
     private int maxId = 0;
+    private Component rootComponent;
 
     public synchronized void addComponent(Component component, int id) throws IdExistsException {
         if (componentMap.containsKey(id)) throw new IdExistsException();
@@ -22,6 +22,7 @@ public class ComponentRegistry {
     }
 
     public synchronized int addComponent(Component component) {
+        if (rootComponent == null) rootComponent = component;
         componentMap.put(maxId, component);
         maxId++;
         return maxId - 1;
@@ -32,7 +33,7 @@ public class ComponentRegistry {
     }
 
     public synchronized Component getRootComponent() {
-        return componentMap.get(0);
+        return rootComponent;
     }
 
     public synchronized void removeComponent(int id) {

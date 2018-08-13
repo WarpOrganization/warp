@@ -21,7 +21,7 @@ public class ConfigurationManager {
             Ordering.natural(), Comparator.comparing(RegisteredObserver::hashCode)
     );
 
-    public void updateValue(String name, Object value) {
+    void updateValue(String name, Object value) {
         Collection<RegisteredObserver> observers = registeredObservers.get(name);
         observers.forEach(callHandle(value));
     }

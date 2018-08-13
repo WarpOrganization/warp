@@ -22,7 +22,7 @@ public class MessageQueue {
         this.sender = sender;
     }
 
-    void pushEnvelope(MessageEnvelope messageEnvelope) {
+    public void pushEnvelope(MessageEnvelope messageEnvelope) {
         events.add(messageEnvelope);
     }
 

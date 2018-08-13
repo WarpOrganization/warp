@@ -1,10 +1,11 @@
 package net.warpgame.engine.graphics.framebuffer;
 
-import org.lwjgl.opengl.GL11;
 import net.warpgame.engine.core.context.config.ConfigValue;
 import net.warpgame.engine.core.context.config.EnableConfig;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.window.Display;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author Jaca777
@@ -12,6 +13,7 @@ import net.warpgame.engine.graphics.window.Display;
  */
 
 @Service
+@Profile("graphics")
 @EnableConfig
 public class ScreenFramebuffer extends Framebuffer {
     private int screenWidth;

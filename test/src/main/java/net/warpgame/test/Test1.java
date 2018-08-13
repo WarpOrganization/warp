@@ -1,13 +1,18 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.audio.*;
-import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.engine.audio.AudioClip;
+import net.warpgame.engine.audio.AudioListenerProperty;
+import net.warpgame.engine.audio.AudioSourceProperty;
+import net.warpgame.engine.console.ConsoleService;
+import net.warpgame.engine.console.command.CommandVariable;
+import net.warpgame.engine.console.command.SimpleCommand;
 import net.warpgame.engine.core.component.*;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -43,7 +48,8 @@ import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.test.console.*;
+import net.warpgame.engine.graphics.window.WindowManager;
+import net.warpgame.test.command.MoveCameraCommand;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -66,7 +72,7 @@ public class Test1 {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev", "client");
+        EngineContext engineContext = new EngineContext("dev", "client", "graphics");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
@@ -83,7 +89,7 @@ public class Test1 {
         registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
-    public static class Sup extends Property{
+    public static class Sup extends Property {
         public Supplier<Float> supplier;
 
         public Sup(Supplier<Float> supplier) {
@@ -114,8 +120,6 @@ public class Test1 {
     }
 
 
-
-
     private static void setupScene(EngineContext engineContext, GraphicsThread thread) {
         SceneHolder sceneHolder = engineContext.getLoadedContext()
                 .findOne(SceneHolder.class)
@@ -123,6 +127,7 @@ public class Test1 {
         Scene scene = sceneHolder.getScene();
         createModels(scene, thread);
         createCubemap(scene, thread);
+        scene.addListener(new TestKeyboardListener(scene, engineContext.getLoadedContext().findOne(WindowManager.class).get()));
     }
 
     private static void createCubemap(Scene scene, GraphicsThread thread) {
@@ -202,15 +207,14 @@ public class Test1 {
 
     private static void genJointNameToJointIds(Joint joint, Map<String, Integer> nameToJointId) {
         nameToJointId.put(joint.getName(), joint.getIndex());
-        for(Joint childJoint : joint.getChildren()) {
+        for (Joint childJoint : joint.getChildren()) {
             genJointNameToJointIds(childJoint, nameToJointId);
         }
     }
 
     private static void registerCommandsAndVariables(Context context) {
-        consoleService.initConsole();
+        consoleService.init();
         SimpleCommand exit = new SimpleCommand("quit",
-                Side.CLIENT,
                 "Stops the engine and quits",
                 "quit");
         exit.setExecutor((args) -> {
@@ -225,6 +229,7 @@ public class Test1 {
         consoleService.registerCommand(exit);
 
         CameraHolder ch = context.findOne(CameraHolder.class).get();
+        SceneHolder sh = context.findOne(SceneHolder.class).get();
         consoleService.registerCommand(new MoveCameraCommand(ch, consoleService));
 
 
@@ -570,7 +575,7 @@ public class Test1 {
         cameraHolder.setCamera(camera);
     }
 
-    private static String resourceToPath(String resource){
+    private static String resourceToPath(String resource) {
         URL url = Test1.class.getResource(resource);
         String path = null;
         try {

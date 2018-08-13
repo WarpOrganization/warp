@@ -1,10 +1,11 @@
 package net.warpgame.engine.graphics.window;
 
-import org.apache.log4j.Logger;
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import org.apache.log4j.Logger;
 
 /**
  * @author Jaca777
@@ -12,6 +13,7 @@ import net.warpgame.engine.core.execution.task.EngineTask;
  */
 
 @Service
+@Profile("graphics")
 @RegisterTask(thread = "graphics")
 public class WindowTask extends EngineTask {
 

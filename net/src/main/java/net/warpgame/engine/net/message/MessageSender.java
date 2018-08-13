@@ -17,7 +17,7 @@ public abstract class MessageSender {
 
     /**
      * Sends message without updating send time
-     * @param addressedEnvelope message tp send
+     * @param addressedEnvelope message to send
      */
     public abstract void send(MessageEnvelope addressedEnvelope);
 

@@ -10,17 +10,11 @@ public abstract class Listener<U extends Event> {
 
     private Component owner;
     private int eventType;
-//    private String eventType;
 
     protected Listener(Component owner, int eventType) {
         this.owner = owner;
-//        this.eventType = eventType;
         this.eventType = eventType;
     }
-    
-//    public String getEventType() {
-//        return eventType;
-//    }
 
     public abstract void handle(U event);
 

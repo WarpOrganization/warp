@@ -1,7 +1,6 @@
 package net.warpgame.engine.physics;
 
 import com.badlogic.gdx.math.Vector3;
-
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.physics.constraints.Constraint;
 import org.joml.Vector3f;
@@ -20,11 +19,10 @@ public class FullPhysicsProperty extends Property {
 
     public FullPhysicsProperty(RigidBody rigidBody) {
         this.rigidBody = rigidBody;
-
     }
 
     @Override
-    public void init(){
+    public void init() {
         rigidBody
                 .getBulletRigidBody()
                 .setUserValue(getOwner().getId());
@@ -86,12 +84,21 @@ public class FullPhysicsProperty extends Property {
         return getVelocity(new Vector3f());
     }
 
-    public Vector3f getVelocity(Vector3f out){
+    public Vector3f getVelocity(Vector3f out) {
         Vector3 bulletVelocity = rigidBody.getBulletRigidBody().getLinearVelocity();
         return out.set(bulletVelocity.x, bulletVelocity.y, bulletVelocity.z);
     }
 
-    void internalRemoveConstraint(Constraint constraint){
+    public Vector3f getAngularVelocity() {
+        return getAngularVelocity(new Vector3f());
+    }
+
+    public Vector3f getAngularVelocity(Vector3f out){
+        Vector3 bulletAngulerVelocity = rigidBody.getBulletRigidBody().getAngularVelocity();
+        return out.set(bulletAngulerVelocity.x, bulletAngulerVelocity.y, bulletAngulerVelocity.z);
+    }
+
+    void internalRemoveConstraint(Constraint constraint) {
         constraints.remove(constraint);
     }
 

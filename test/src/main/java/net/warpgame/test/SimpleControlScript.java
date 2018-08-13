@@ -1,11 +1,12 @@
 package net.warpgame.test;
 
-import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.content.KeyboardInputEvent;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.IdOf;
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.ContextService;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -39,12 +40,11 @@ public class SimpleControlScript extends Script {
 
     @ContextService
     private Input input;
-
     @ContextService
     private Context context;
 
-
     private Vector3f movementVector = new Vector3f();
+    private Vector2f lastCursorPos = new Vector2f();
 
     @Override
     public void onInit() {
@@ -58,7 +58,7 @@ public class SimpleControlScript extends Script {
         if (input.isKeyDown(VK_ESCAPE)) {
             context.findAll(EngineThread.class).forEach(EngineThread::interrupt);
             try {
-                Thread.sleep(60*delta);
+                Thread.sleep(60 * delta);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -71,10 +71,13 @@ public class SimpleControlScript extends Script {
             cameraSpeed = CAMERA_SPEED * CAMERA_SPEED_MULTIPLIER;
         else cameraSpeed = CAMERA_SPEED;
 
+        if (input.isKeyDown(VK_F1))
+            getOwner().triggerOnRoot(new KeyboardInputEvent(VK_F1, true));
+
         movementVector.zero();
         if (input.isKeyDown(VK_W)) {
             movementVector.add(0, 0, -1);
-//            getOwner().triggerEvent(new Envelope(new InputEvent(VK_W)));
+//            getOwner().triggerEvent(new Envelope(new KeyboardInputEvent(VK_W)));
         }
         if (input.isKeyDown(VK_S))
             movementVector.add(0, 0, 1);
@@ -82,10 +85,10 @@ public class SimpleControlScript extends Script {
             movementVector.add(-1, 0, 0);
         if (input.isKeyDown(VK_D))
             movementVector.add(1, 0, 0);
-        if(input.isKeyDown(VK_SPACE))
-            movementVector.add(0,1,0);
-        if(input.isKeyDown(VK_CONTROL))
-            movementVector.add(0,-1,0);
+        if (input.isKeyDown(VK_SPACE))
+            movementVector.add(0, 1, 0);
+        if (input.isKeyDown(VK_CONTROL))
+            movementVector.add(0, -1, 0);
 
         Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf());
         if (movementVector.lengthSquared() >= 1.0f) {
@@ -98,7 +101,9 @@ public class SimpleControlScript extends Script {
 
 
     private void rotate(int delta) {
-        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
+        Vector2f cursorPositionDelta = new Vector2f();
+        input.getCursorPosition(cursorPositionDelta);
+        cursorPositionDelta.sub(lastCursorPos);
 
         transformProperty.rotateX(-cursorPositionDelta.y * ROTATION_SPEED * delta);
         transformProperty.rotateY(-cursorPositionDelta.x * ROTATION_SPEED * delta);
@@ -109,5 +114,7 @@ public class SimpleControlScript extends Script {
             transformProperty.rotateZ(ROTATION_SPEED * multiplier * delta);
         if (input.isKeyDown(VK_E))
             transformProperty.rotateZ(-ROTATION_SPEED * multiplier * delta);
+
+        input.getCursorPosition(lastCursorPos);
     }
 }

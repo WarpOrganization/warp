@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering.antialiasing.smaa;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import org.lwjgl.BufferUtils;
@@ -16,6 +17,7 @@ import java.nio.channels.ReadableByteChannel;
  * Created 2018-01-13 at 16
  */
 @Service
+@Profile("graphics")
 public class SMAAResourceLoader {
 
     private static final int TEX_CHANNELS = 2;

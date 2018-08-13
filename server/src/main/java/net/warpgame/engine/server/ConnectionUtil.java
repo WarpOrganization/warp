@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionTools;
 import net.warpgame.engine.net.PacketType;
@@ -15,6 +16,7 @@ import java.net.InetSocketAddress;
  * Created 29.12.2017
  */
 @Service
+@Profile("server")
 public class ConnectionUtil implements ConnectionTools {
 
     private Channel outChannel;

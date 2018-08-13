@@ -1,8 +1,10 @@
 package net.warpgame.engine.server;
 
 import io.netty.buffer.ByteBuf;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
+import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,13 +16,17 @@ import java.util.Map;
  * Created 10.12.2017
  */
 @Service
+@Profile("server")
 public class ClientRegistry {
+    private static final Logger logger = Logger.getLogger(ClientRegistry.class);
     private Map<Integer, Client> clients = new HashMap<>();
     private int lastId = 0;
 
     private HashSet<Client> toAdd = new HashSet<>();
     private HashSet<Integer> toRemove = new HashSet<>();
     private ConnectionUtil connectionUtil;
+    //TODO load from config
+    private int timeoutMillis = 10000;
 
     public ClientRegistry(ConnectionUtil connectionUtil) {
         this.connectionUtil = connectionUtil;
@@ -33,7 +39,6 @@ public class ClientRegistry {
         return lastId;
     }
 
-    //TODO this probably should be used somewhere
     public synchronized void removeClient(int clientId) {
         toRemove.add(clientId);
     }
@@ -42,18 +47,19 @@ public class ClientRegistry {
         return clients.get(clientId);
     }
 
-    public void updateKeepAlive(int clientId) {
+    public void updateActivity(int clientId) {
         Client client = clients.get(clientId);
         if (client != null && client.getConnectionState() == ConnectionState.LIVE)
-            client.setLastKeepAlive(System.currentTimeMillis());
+            client.setLastActivity(System.currentTimeMillis());
     }
 
     public synchronized void broadcast(ByteBuf msg) {
         if (clients.size() > 1) msg.retain(clients.size() - 1);
 
-        for (Client client : clients.values())
+        for (Client client : clients.values()) {
             if (client.getConnectionState() == ConnectionState.LIVE)
                 connectionUtil.sendPacket(msg, client);
+        }
     }
 
     public Collection<Client> getClients() {
@@ -61,6 +67,13 @@ public class ClientRegistry {
     }
 
     synchronized void update() {
+        for (Client c : clients.values()) {
+            if (c.getLastActivity() < System.currentTimeMillis() - timeoutMillis) {
+                removeClient(c.getId());
+                logger.info(String.format("Dropped client (%s)", c.getAddress().toString()));
+            }
+        }
+
         for (int id : toRemove) clients.remove(id);
 
         toRemove.clear();
@@ -68,4 +81,5 @@ public class ClientRegistry {
         for (Client c : toAdd) clients.put(c.getId(), c);
         toAdd.clear();
     }
+
 }

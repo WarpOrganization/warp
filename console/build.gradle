@@ -1,0 +1,19 @@
+group 'net.warpgame'
+version '0.1.2'
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':core')
+    compile project(':net')
+    compile project(':server')
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.21.0'
+    testCompile 'info.solidsoft.mockito:mockito-java8:2.0.0-beta.4'
+}

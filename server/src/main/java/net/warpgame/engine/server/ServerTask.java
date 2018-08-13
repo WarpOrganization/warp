@@ -6,21 +6,22 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
-import net.warpgame.engine.net.message.InternalMessageQueue;
+import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.message.MessageProcessorsService;
 import net.warpgame.engine.net.message.MessageQueue;
 import net.warpgame.engine.net.message.MessageSourcesService;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageHandler;
 
 /**
  * @author Hubertus
  * Created 26.11.2017
  */
 @Service
+@Profile("server")
 @RegisterTask(thread = "server")
 public class ServerTask extends EngineTask {
 
@@ -29,33 +30,30 @@ public class ServerTask extends EngineTask {
 
     private ClientRegistry clientRegistry;
     private ConnectionUtil connectionUtil;
-    private ComponentRegistry componentRegistry;
     private IncomingPacketProcessor packetProcessor;
     private InternalMessageHandler internalMessageHandler;
     private EventLoopGroup group = new NioEventLoopGroup();
     private Channel outChannel;
     private MessageQueue messageQueue;
     private MessageProcessorsService messageProcessorsService;
-    private InternalMessageQueue internalMessageQueue;
+    private InternalMessageSource internalMessageSource;
     private MessageSourcesService messageSourcesService;
 
     public ServerTask(ClientRegistry clientRegistry,
                       ConnectionUtil connectionUtil,
-                      ComponentRegistry componentRegistry,
                       IncomingPacketProcessor packetProcessor,
                       InternalMessageHandler internalMessageHandler,
                       MessageQueue messageQueue,
                       MessageProcessorsService messageProcessorsService,
-                      InternalMessageQueue internalMessageQueue,
+                      InternalMessageSource internalMessageSource,
                       MessageSourcesService messageSourcesService) {
         this.clientRegistry = clientRegistry;
         this.connectionUtil = connectionUtil;
-        this.componentRegistry = componentRegistry;
         this.packetProcessor = packetProcessor;
         this.internalMessageHandler = internalMessageHandler;
         this.messageQueue = messageQueue;
         this.messageProcessorsService = messageProcessorsService;
-        this.internalMessageQueue = internalMessageQueue;
+        this.internalMessageSource = internalMessageSource;
         this.messageSourcesService = messageSourcesService;
     }
 
@@ -68,12 +66,11 @@ public class ServerTask extends EngineTask {
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new ConnectionHandler(
                             clientRegistry,
-                            componentRegistry,
                             packetProcessor,
                             connectionUtil,
                             internalMessageHandler,
                             messageProcessorsService,
-                            internalMessageQueue
+                            internalMessageSource
                     ));
 
 

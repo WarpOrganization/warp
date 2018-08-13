@@ -1,6 +1,7 @@
 package net.warpgame.engine.server;
 
 import net.warpgame.engine.core.context.executor.RegisterExecutor;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.execution.RapidExecutionStrategy;
 import net.warpgame.engine.core.execution.SyncEngineThread;
@@ -11,6 +12,7 @@ import net.warpgame.engine.core.execution.SyncTimer;
  * Created 28.11.2017
  */
 @Service
+@Profile("server")
 @RegisterExecutor("server")
 public class ServerThread extends SyncEngineThread {
     public ServerThread() {

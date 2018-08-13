@@ -3,6 +3,7 @@ package net.warpgame.engine.client.inputupdateblocker;
 import net.warpgame.engine.client.UpdateBlockerService;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.SimpleListener;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
@@ -15,6 +16,7 @@ import java.util.Set;
  * Created 24.06.2018
  */
 @Service
+@Profile("client")
 public class InputUpdateBlockerService {
     private UpdateBlockerService updateBlockerService;
     private Component playerComponent;

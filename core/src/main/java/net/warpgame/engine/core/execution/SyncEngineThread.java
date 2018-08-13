@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.execution;
 
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.core.execution.task.EngineTask;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,8 +22,10 @@ public class SyncEngineThread implements EngineThread {
     private Thread engineThread;
 
     public SyncEngineThread(Timer timer, ScheduledExecutionStrategy executionStrategy) {
+        engineThread = new Thread(this::startEngine);
         this.timer = timer;
         this.executionStrategy = executionStrategy;
+        engineThread.setName(this.getClass().getSimpleName());
     }
 
     @Override
@@ -45,7 +46,6 @@ public class SyncEngineThread implements EngineThread {
 
     @Override
     public void start() {
-        engineThread = new Thread(this::startEngine);
         engineThread.start();
     }
 

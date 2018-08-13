@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.animation;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -12,6 +13,7 @@ import java.util.Set;
  * Created 2018-06-24 at 17
  */
 @Service
+@Profile("graphics")
 @RegisterTask(thread = "graphics")
 public class AnimatorTask extends EngineTask {
 

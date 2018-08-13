@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL11;
  */
 
 @Service
+@Profile("graphics")
 @RegisterTask(thread = "graphics")
 @ExecuteAfterTask(WindowTask.class)
 public class RenderingTask extends EngineTask {

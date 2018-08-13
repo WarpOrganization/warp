@@ -1,8 +1,9 @@
 package net.warpgame.engine.physics;
 
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObjectWrapper;
-import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
+import com.badlogic.gdx.physics.bullet.collision.btPersistentManifold;
+import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.component.ComponentRegistry;
 
 /**
  * @author Hubertus
@@ -10,9 +11,27 @@ import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
  */
 //TODO implement contact events
 public class ContactHandler extends ContactListener {
+
+    private ComponentRegistry componentRegistry;
+
+    public ContactHandler(ComponentRegistry componentRegistry) {
+        this.componentRegistry = componentRegistry;
+    }
+
     @Override
-    public boolean onContactAdded(btManifoldPoint cp, btCollisionObjectWrapper colObj0Wrap, int partId0, int index0, btCollisionObjectWrapper colObj1Wrap, int partId1, int index1) {
-        System.out.println("contact added");
-        return true;
+    public void onContactStarted(btPersistentManifold manifold) {
+        Component c1 = componentRegistry.getComponent(manifold.getBody0().getUserValue());
+        Component c2 = componentRegistry.getComponent(manifold.getBody1().getUserValue());
+        c1.triggerEvent(new ContactStartedEvent(c2));
+        c2.triggerEvent(new ContactStartedEvent(c1));
+    }
+
+    @Override
+    public void onContactEnded(btPersistentManifold manifold) {
+        Component c1 = componentRegistry.getComponent(manifold.getBody0().getUserValue());
+        Component c2 = componentRegistry.getComponent(manifold.getBody1().getUserValue());
+        c1.triggerEvent(new ContactEndedEvent(c2));
+        c2.triggerEvent(new ContactEndedEvent(c1));
+
     }
 }

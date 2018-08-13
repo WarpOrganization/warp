@@ -1,16 +1,18 @@
 package net.warpgame.engine.server;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.net.ConnectionState;
 import net.warpgame.engine.net.Peer;
-import net.warpgame.engine.net.internalmessage.InternalMessage;
-import net.warpgame.engine.net.internalmessage.InternalMessageHandler;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
+import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageHandler;
 
 /**
  * @author Hubertus
  * Created 16.05.2018
  */
 @Service
+@Profile("server")
 public class ServerInternalMessageHandler implements InternalMessageHandler {
     private ClientRegistry clientRegistry;
 
@@ -20,7 +22,7 @@ public class ServerInternalMessageHandler implements InternalMessageHandler {
 
     @Override
     public void handleMessage(InternalMessage message, Peer sourcePeer) {
-        Client targetClient = clientRegistry.getClient(message.getTargetPeerId());
+        Client targetClient = (Client) sourcePeer;
         if (targetClient != null)
             switch (message.getMessageContent()) {
                 case STATE_CHANGE_SYNCHRONIZING:
