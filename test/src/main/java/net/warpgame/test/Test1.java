@@ -25,7 +25,7 @@ import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.mesh.StaticMesh;
-import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
+import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
@@ -45,11 +45,8 @@ import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.test.console.*;
 import org.joml.Vector3f;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL11;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -294,7 +291,7 @@ public class Test1 {
     }
 
     private static void createFloor(Scene scene) {
-        StaticMesh quadMesh = new QuadMesh();
+        StaticMesh quadMesh = new PlainMesh();
         Texture2D diffuse = new Texture2D(
                 white.getWidth(),
                 white.getHeight(),

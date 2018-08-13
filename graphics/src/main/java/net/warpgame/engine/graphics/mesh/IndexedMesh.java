@@ -56,8 +56,8 @@ public class IndexedMesh {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
     }
 
-    public IndexedMesh(ByteBuffer[] data, int[] sizes, int vertices, int[] indices) {
-        this(data, sizes, BufferTools.toDirectBuffer(indices), indices.length, vertices);
+    public IndexedMesh(ByteBuffer[] data, int[] sizes, int vertexCount, int[] indices) {
+        this(data, sizes, BufferTools.toDirectBuffer(indices), indices.length, vertexCount);
     }
 
     protected static ByteBuffer[] toDirectBuffers(float[][] data) {

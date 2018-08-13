@@ -7,7 +7,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
-import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
+import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBufferManager;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
@@ -31,7 +31,7 @@ public class ScreenspaceRenderer {
     private GBufferManager gBufferManager;
     private ScreenspaceProgram screenspaceProgram;
     private SceneLightManager sceneLightManager;
-    private QuadMesh quadMesh;
+    private PlainMesh plainMesh;
     private SceneHolder sceneHolder;
     private CameraHolder cameraHolder;
     private ScreenspaceAlbedoHolder albedoHolder;
@@ -59,7 +59,7 @@ public class ScreenspaceRenderer {
     }
 
     public void init() {
-        this.quadMesh = new QuadMesh();
+        this.plainMesh = new PlainMesh();
         try {
             this.screenspaceProgram = new ScreenspaceProgram(maxLights);
         }catch(ShaderCompilationException e) {
@@ -79,6 +79,7 @@ public class ScreenspaceRenderer {
         );
         this.destinationFramebuffer = new TextureFramebuffer(destinationTexture);
         this.albedoHolder.setAlbedoTex(destinationTexture);
+        this.albedoHolder.setAlbedoTextureFramebuffer(destinationFramebuffer);
     }
 
     public void update() {
@@ -114,10 +115,10 @@ public class ScreenspaceRenderer {
 
 
     protected void renderScreenspace() {
-        quadMesh.draw();
+        plainMesh.draw();
     }
 
     public void destroy() {
-        quadMesh.destroy();
+        plainMesh.destroy();
     }
 }

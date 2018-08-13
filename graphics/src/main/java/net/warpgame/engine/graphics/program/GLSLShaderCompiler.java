@@ -41,20 +41,24 @@ public class GLSLShaderCompiler {
         return shader;
     }
 
-    private static final Pattern PATTERN = Pattern.compile("(\\d*):(\\d*):");
+    private static final Pattern PATTERN = Pattern.compile("(\\d+):(\\d+):");
 
     private static void tryLogErrorLine(String log, String shaderCode) {
         Matcher matcher = PATTERN.matcher(log);
         boolean found = matcher.find();
         if (found) {
-            int line = Integer.parseInt(matcher.group(2));
-            int character = Integer.parseInt(matcher.group(1));
-            String[] lines = shaderCode.split("\n");
-            String errorLine = lines[line - 1];
-            String characterPointer = Strings.repeat(" ", character) + "^";
-            logger.error("Error line: ");
-            logger.error(errorLine);
-            logger.error(characterPointer);
+            try {
+                int line = Integer.parseInt(matcher.group(2));
+                int character = Integer.parseInt(matcher.group(1));
+                String[] lines = shaderCode.split("\n");
+                String errorLine = lines[line - 1];
+                String characterPointer = Strings.repeat(" ", character) + "^";
+                logger.error("Error line: ");
+                logger.error(errorLine);
+                logger.error(characterPointer);
+            } catch(NumberFormatException e) {
+                logger.error("Failed parse");
+            }
         }
     }
 

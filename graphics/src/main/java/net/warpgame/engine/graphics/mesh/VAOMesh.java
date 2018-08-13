@@ -12,8 +12,8 @@ public class VAOMesh extends IndexedMesh {
 
     protected VAO vao;
 
-    public VAOMesh(float[][] fData, int[] sizes, int types[], int vertices, int[] indices) {
-        super(toDirectBuffers(fData), sizes, vertices, indices);
+    public VAOMesh(float[][] fData, int[] sizes, int types[], int vertexCount, int[] indices) {
+        super(toDirectBuffers(fData), sizes, vertexCount, indices);
         this.vao = createVAO(sizes, types);
     }
 
