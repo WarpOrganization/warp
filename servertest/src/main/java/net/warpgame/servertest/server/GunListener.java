@@ -48,8 +48,8 @@ public class GunListener extends Listener<ShotEvent> {
         TransformProperty transformProperty = new TransformProperty();
         TransformProperty ownerTransformProperty = getOwner().getProperty(Property.getTypeId(TransformProperty.class));
 
-        Vector3f forwardVector = new Vector3f(-2, 0, 0);
-        forwardVector.rotate(transformProperty.getRotation());
+        Vector3f forwardVector = new Vector3f(-6, 0, 0);
+        forwardVector.rotate(ownerTransformProperty.getRotation());
         transformProperty.move(ownerTransformProperty.getTranslation(new Vector3f()).add(forwardVector));
         transformProperty.setRotation(ownerTransformProperty.getRotation());
         bullet.addProperty(transformProperty);
@@ -57,7 +57,9 @@ public class GunListener extends Listener<ShotEvent> {
 
         FullPhysicsProperty physicsProperty = new FullPhysicsProperty(rigidBodyConstructor.construct(transformProperty));
         FullPhysicsProperty ownerPhysicsProperty = getOwner().getProperty(Property.getTypeId(FullPhysicsProperty.class));
-        physicsProperty.setVelocity(new Vector3f(-2).add(ownerPhysicsProperty.getVelocity()));
+        Vector3f initialVelocity = new Vector3f(-100, 0, 0).add(ownerPhysicsProperty.getVelocity());
+        initialVelocity.rotate(ownerTransformProperty.getRotation());
+        physicsProperty.setVelocity(initialVelocity);
         bullet.addProperty(physicsProperty);
 
         bullet.addScript(BulletDeathCountdownScript.class);

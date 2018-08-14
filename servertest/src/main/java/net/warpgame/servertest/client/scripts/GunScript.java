@@ -18,7 +18,7 @@ import static java.awt.event.KeyEvent.VK_CONTROL;
  */
 public class GunScript extends Script {
 
-    private static final int GUN_COOLDOWN = 1000;
+    private static final int GUN_COOLDOWN = 200;
 
     private int cooldown = 0;
     private RigidBodyConstructor rigidBodyConstructor;

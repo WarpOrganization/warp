@@ -16,7 +16,6 @@ import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
 import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.net.NetComponentRegistry;
-import net.warpgame.engine.physics.RigidBodyConstructor;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -32,7 +31,6 @@ public class BulletCreator {
     private NetComponentRegistry componentRegistry;
     private StaticMesh mesh;
     private Material material;
-    private RigidBodyConstructor rigidBodyConstructor;
 
     public BulletCreator(NetComponentRegistry componentRegistry) {
         this.componentRegistry = componentRegistry;
@@ -73,15 +71,17 @@ public class BulletCreator {
         TransformProperty transformProperty = new TransformProperty();
         TransformProperty ownerTransformProperty = gun.getProperty(Property.getTypeId(TransformProperty.class));
 
-        Vector3f forwardVector = new Vector3f(-2, 0, 0);
-        forwardVector.rotate(transformProperty.getRotation());
+        Vector3f forwardVector = new Vector3f(-6, 0, 0);
+        forwardVector.rotate(ownerTransformProperty.getRotation());
         transformProperty.move(ownerTransformProperty.getTranslation(new Vector3f()).add(forwardVector));
         transformProperty.setRotation(ownerTransformProperty.getRotation());
         bullet.addProperty(transformProperty);
 
         SimplifiedPhysicsProperty physicsProperty = new SimplifiedPhysicsProperty(0.1f);
         SimplifiedPhysicsProperty ownerPhysicsProperty = gun.getProperty(Property.getTypeId(SimplifiedPhysicsProperty.class));
-        physicsProperty.setVelocity(new Vector3f(-2).add(ownerPhysicsProperty.getVelocity()));
+        Vector3f initialVelocity = new Vector3f(-100, 0, 0).add(ownerPhysicsProperty.getVelocity());
+        initialVelocity.rotate(ownerTransformProperty.getRotation());
+        physicsProperty.setVelocity(initialVelocity);
         bullet.addProperty(physicsProperty);
 
         bullet.addProperty(new MeshProperty(mesh));
