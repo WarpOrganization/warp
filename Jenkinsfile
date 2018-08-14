@@ -60,7 +60,7 @@ try {
             unstash("server")
             sh "sudo systemctl stop warp || true"
             sh "7z -y x Warp-Server-*.zip"
-            sh "chmod +x run.sh"
+            sh "chmod +x runServer.sh"
             sh "sudo systemctl start warp"
         }
     }

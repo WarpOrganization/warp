@@ -1,11 +1,13 @@
 package net.warpgame.engine.graphics.rendering.antialiasing.smaa;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import net.warpgame.engine.graphics.window.Display;
 
 @Service
+@Profile("graphics")
 public class SMAAShadingSettings {
 
     private Config config;

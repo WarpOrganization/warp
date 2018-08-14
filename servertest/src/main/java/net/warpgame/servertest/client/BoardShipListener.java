@@ -1,4 +1,4 @@
-package net.warpgame.test;
+package net.warpgame.servertest.client;
 
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.engine.core.component.Component;
@@ -13,6 +13,9 @@ import net.warpgame.engine.graphics.camera.QuaternionCamera;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
+import net.warpgame.servertest.client.scripts.CameraZoomControlScript;
+import net.warpgame.servertest.client.scripts.MultiplayerCameraControlScript;
+import net.warpgame.servertest.client.scripts.MultiplayerControlScript;
 import org.joml.Vector3f;
 
 /**

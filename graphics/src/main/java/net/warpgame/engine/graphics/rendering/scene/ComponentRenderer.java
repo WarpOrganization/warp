@@ -1,9 +1,10 @@
 package net.warpgame.engine.graphics.rendering.scene;
 
-import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.graphics.animation.AnimatedModelProperty;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL30;
  */
 
 @Service
+@Profile("graphics")
 public class ComponentRenderer {
 
     private MatrixStack matrixStack = new MatrixStack();

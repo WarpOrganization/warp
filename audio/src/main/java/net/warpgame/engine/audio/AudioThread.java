@@ -10,7 +10,7 @@ import net.warpgame.engine.core.execution.SyncEngineThread;
 import net.warpgame.engine.core.execution.SyncTimer;
 
 @Service
-@Profile("client")
+@Profile("sound")
 @EnableConfig
 @RegisterExecutor("audio")
 public class AudioThread extends SyncEngineThread {

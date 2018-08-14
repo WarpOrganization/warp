@@ -1,10 +1,11 @@
 package net.warpgame.engine.graphics.rendering.antialiasing.smaa;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.ScreenFramebuffer;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
-import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
+import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
 import net.warpgame.engine.graphics.rendering.antialiasing.smaa.program.BlendPassProgram;
 import net.warpgame.engine.graphics.rendering.antialiasing.smaa.program.EdgePassProgram;
 import net.warpgame.engine.graphics.rendering.antialiasing.smaa.program.NeighbourhoodPassProgram;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL30;
  * Created 2018-01-13 at 16
  */
 @Service
+@Profile("graphics")
 public class SMAARenderer {
 
     private SMAAResourceLoader resourceLoader;
@@ -41,7 +43,7 @@ public class SMAARenderer {
     private EdgePassProgram edgePassProgram;
     private NeighbourhoodPassProgram neighbourhoodPassProgram;
 
-    private QuadMesh quadMesh;
+    private PlainMesh plainMesh;
 
 
     public SMAARenderer(
@@ -61,7 +63,7 @@ public class SMAARenderer {
         initTextures();
         initFramebuffers();
         initShaders();
-        this.quadMesh = new QuadMesh();
+        this.plainMesh = new PlainMesh();
     }
 
     private void initTextures() {
@@ -121,7 +123,7 @@ public class SMAARenderer {
         edgeFramebuffer.clear();
         edgePassProgram.use();
         edgePassProgram.useAlbedoTexture(albedoTex);
-        quadMesh.draw();
+        plainMesh.draw();
         edgeTex.genMipmap();
     }
 
@@ -130,7 +132,7 @@ public class SMAARenderer {
         blendFramebuffer.clear();
         blendPassProgram.use();
         blendPassProgram.useTextures(edgeTex, areaTex, searchTex);
-        quadMesh.draw();
+        plainMesh.draw();
         blendTex.genMipmap();
     }
 
@@ -139,7 +141,7 @@ public class SMAARenderer {
         destinationFramebuffer.clear();
         neighbourhoodPassProgram.use();
         neighbourhoodPassProgram.useTextures(albedoTex, blendTex);
-        quadMesh.draw();
+        plainMesh.draw();
     }
 
     public void destroy() {

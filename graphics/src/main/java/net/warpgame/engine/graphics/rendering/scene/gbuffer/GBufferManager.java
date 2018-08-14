@@ -3,6 +3,7 @@ package net.warpgame.engine.graphics.rendering.scene.gbuffer;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.config.ConfigValue;
 import net.warpgame.engine.core.context.config.EnableConfig;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.window.Display;
 
@@ -11,6 +12,7 @@ import net.warpgame.engine.graphics.window.Display;
  * Created 2017-11-11 at 15
  */
 @Service
+@Profile("graphics")
 @EnableConfig
 public class GBufferManager {
 

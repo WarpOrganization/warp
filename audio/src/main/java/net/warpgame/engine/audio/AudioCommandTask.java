@@ -11,7 +11,7 @@ import java.util.concurrent.BlockingQueue;
 
 
 @Service
-@Profile("client")
+@Profile("sound")
 @RegisterTask(thread = "audio")
 @ExecuteAfterTask(AudioUpdateTask.class)
 public class AudioCommandTask extends EngineTask {

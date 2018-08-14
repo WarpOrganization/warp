@@ -15,12 +15,17 @@ repositories {
 dependencies {
 
     compile project(':core')
+    compile project(':graphics')
     compile project(':physics')
     compile project(':server')
+    compile project(':audio')
+    compile project(':launcher')
+    compile project(':input')
+    compile project(':client')
     compile project(':gamecontent')
 
     compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'org.joml:joml:1.8.0'
+
     testCompile 'junit:junit:4.12'
 }
 

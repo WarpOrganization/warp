@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering.scene.program;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.animation.AnimatedModelProperty;
 import net.warpgame.engine.graphics.camera.CameraHolder;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
  * Created 2017-09-26 at 15
  */
 @Service
+@Profile("graphics")
 public class SceneRenderingProgramManager {
 
     private static final Logger logger = LoggerFactory.getLogger(SceneRenderingProgramManager.class);

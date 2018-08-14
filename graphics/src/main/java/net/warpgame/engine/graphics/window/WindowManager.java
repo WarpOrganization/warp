@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.window;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -16,6 +17,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
  */
 
 @Service
+@Profile("graphics")
 public class WindowManager {
 
     private long windowHandle;

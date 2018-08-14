@@ -1,8 +1,9 @@
 package net.warpgame.engine.graphics.rendering.screenspace.light;
 
-import org.joml.Vector3f;
-import net.warpgame.engine.core.property.Transforms;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.property.Transforms;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 
 @Service
+@Profile("graphics")
 public class SceneLightManager {
     private List<LightSourceProperty> lightProperties;
 

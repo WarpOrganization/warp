@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.camera;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 /**
@@ -8,6 +9,7 @@ import net.warpgame.engine.core.context.service.Service;
  */
 
 @Service
+@Profile("graphics")
 public class CameraHolder {
     private Camera camera;
 

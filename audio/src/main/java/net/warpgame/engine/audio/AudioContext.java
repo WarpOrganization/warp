@@ -13,7 +13,7 @@ import java.util.concurrent.BlockingQueue;
  *         Created 20.12.2016
  */
 @Service
-@Profile("client")
+@Profile("sound")
 public class AudioContext {
 
     private AudioListenerProperty listener;

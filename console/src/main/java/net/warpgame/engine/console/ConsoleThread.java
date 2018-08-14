@@ -11,7 +11,7 @@ import net.warpgame.engine.core.execution.SyncTimer;
  * Created 2018-01-09 at 21:25
  */
 @Service
-@RegisterExecutor("consoleThread")
+@RegisterExecutor("console")
 public class ConsoleThread extends SyncEngineThread {
 
     public ConsoleThread() {
