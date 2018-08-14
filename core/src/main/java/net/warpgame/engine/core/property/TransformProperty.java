@@ -90,6 +90,10 @@ public class TransformProperty extends Property {
         return translation;
     }
 
+    public synchronized Vector3f getTranslation(Vector3f out) {
+        return out.set(translation);
+    }
+
     public synchronized void setTranslation(Vector3f translation) {
         this.dirty = true;
         this.translation.set(translation);

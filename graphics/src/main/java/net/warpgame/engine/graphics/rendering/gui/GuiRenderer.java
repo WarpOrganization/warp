@@ -1,18 +1,18 @@
 package net.warpgame.engine.graphics.rendering.gui;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
-import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.gui.program.GuiProgram;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceAlbedoHolder;
-import net.warpgame.engine.graphics.window.Display;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@Profile("client") //TODO quick workaround to start server
 public class GuiRenderer {
     private static final Logger logger = LoggerFactory.getLogger(GuiRenderer.class);
 

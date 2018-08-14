@@ -6,10 +6,10 @@ package net.warpgame.engine.core.serialization;
  */
 public class SerializationNotFoundException extends RuntimeException {
     public SerializationNotFoundException(String className) {
-        super("Serialization for class " + className + " not found.");
+        super("Serialization service for class " + className + " not found.");
     }
 
     public SerializationNotFoundException(int objectTypeId) {
-        super("Serialization for object type " + objectTypeId + " not found");
+        super("Serialization service for object type " + objectTypeId + " not found");
     }
 }

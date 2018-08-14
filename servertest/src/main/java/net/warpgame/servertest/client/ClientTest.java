@@ -49,12 +49,18 @@ public class ClientTest {
         sceneLightManager = engineContext.getLoadedContext()
                 .findOne(SceneLightManager.class)
                 .get();
+
+        thread.scheduleOnce(() -> engineContext.getLoadedContext().findOne(BulletCreator.class).get().initialize()); //TODO i guess it would be useful to have engine initialization phases, so this would not be required
         setupScene(engineContext, thread);
         registerCommandsAndVariables(engineContext.getLoadedContext());
     }
 
     private static void setupListeners(Component root, EngineContext context) {
-        root.addListener(new ShipLoadListener(root, context.getLoadedContext().findOne(GraphicsThread.class).get(), sceneLightManager));
+        root.addListener(new ShipLoadListener(
+                root,
+                context.getLoadedContext().findOne(GraphicsThread.class).get(),
+                sceneLightManager,
+                context.getLoadedContext().findOne(BulletCreator.class).get()));
         CameraHolder cameraHolder = context.getLoadedContext().findOne(CameraHolder.class).get();
         root.addListener(new BoardShipListener(root, cameraHolder, DISPLAY, context.getComponentRegistry()));
         root.addListener(new TestKeyboardListener(root, context.getLoadedContext().findOne(WindowManager.class).get()));

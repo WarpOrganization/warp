@@ -93,7 +93,7 @@ public class FullPhysicsProperty extends Property {
         return getAngularVelocity(new Vector3f());
     }
 
-    public Vector3f getAngularVelocity(Vector3f out){
+    public Vector3f getAngularVelocity(Vector3f out) {
         Vector3 bulletAngulerVelocity = rigidBody.getBulletRigidBody().getAngularVelocity();
         return out.set(bulletAngulerVelocity.x, bulletAngulerVelocity.y, bulletAngulerVelocity.z);
     }
@@ -104,5 +104,11 @@ public class FullPhysicsProperty extends Property {
 
     void addConstraint(Constraint constraint) {
         constraints.add(constraint);
+    }
+
+    private Vector3 helper3 = new Vector3();
+
+    public void setVelocity(Vector3f velocity) {
+        rigidBody.getBulletRigidBody().setLinearVelocity(helper3.set(velocity.x, velocity.y, velocity.z));
     }
 }

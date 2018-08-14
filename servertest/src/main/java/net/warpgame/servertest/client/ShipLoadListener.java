@@ -35,11 +35,13 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     private Texture2D diffuse;
     Material material;
     private SceneLightManager lightManager;
+    private final BulletCreator bulletCreator;
 
-    protected ShipLoadListener(Component owner, EngineThread graphicsThread, SceneLightManager lightManager) {
+    protected ShipLoadListener(Component owner, EngineThread graphicsThread, SceneLightManager lightManager, BulletCreator bulletCreator) {
         super(owner, Event.getTypeId(LoadShipEvent.class));
         this.graphicsThread = graphicsThread;
         this.lightManager = lightManager;
+        this.bulletCreator = bulletCreator;
         graphicsThread.scheduleOnce(this::init);
     }
 
@@ -68,6 +70,7 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
         ship.addProperty(new SimplifiedPhysicsProperty(10f));
         ship.addProperty(new MeshProperty(mesh));
         ship.addProperty(new MaterialProperty(material));
+        ship.addListener(new BulletCreatedListener(ship, bulletCreator));
 
         Component light = new SceneComponent(ship, 1000000 + event.getShipComponentId());
         light.addProperty(new TransformProperty().move(0f, 1f, 0f));

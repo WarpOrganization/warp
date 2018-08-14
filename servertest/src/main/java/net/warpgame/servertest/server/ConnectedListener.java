@@ -3,12 +3,12 @@ package net.warpgame.servertest.server;
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.content.LoadShipEvent;
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.ComponentRegistry;
 import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
+import net.warpgame.engine.net.NetComponentRegistry;
 import net.warpgame.engine.net.messagetypes.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.physics.PhysicsService;
@@ -27,13 +27,13 @@ import java.util.ArrayList;
  */
 public class ConnectedListener extends Listener<ConnectedEvent> {
 
-    private final ComponentRegistry componentRegistry;
+    private final NetComponentRegistry componentRegistry;
     private final PhysicsService physicsService;
     private final ClientRegistry clientRegistry;
     private Component scene;
 
     ConnectedListener(Component owner,
-                      ComponentRegistry componentRegistry,
+                      NetComponentRegistry componentRegistry,
                       PhysicsService physicsService,
                       ClientRegistry clientRegistry) {
         super(owner, Event.getTypeId(ConnectedEvent.class));
@@ -59,6 +59,11 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
 
         ship.addProperty(physicsProperty);
         ship.addScript(MovementScript.class);
+
+
+        RigidBodyBoxShapeConstructor bulletShapeConstructor = new RigidBodyBoxShapeConstructor(new Vector3f(0.1f, 0.1f, 0.1f));
+        RigidBodyConstructor bulletRigidBodyConstuctor = new RigidBodyConstructor(bulletShapeConstructor, 0.1f);
+        ship.addListener(new GunListener(ship, componentRegistry, bulletRigidBodyConstuctor));
 
         Client client = clientRegistry.getClient(event.getSourcePeerId());
 

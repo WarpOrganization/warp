@@ -6,6 +6,7 @@ import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.core.runtime.EngineRuntime;
+import net.warpgame.engine.net.NetComponentRegistry;
 import net.warpgame.engine.physics.PhysicsService;
 import net.warpgame.engine.server.ClientRegistry;
 import org.joml.Vector3f;
@@ -24,7 +25,7 @@ public class ServerTest {
 //        Component root = new SceneComponent(engineContext);8558
         engineContext.getScene().addListener(new ConnectedListener(
                 engineContext.getScene(),
-                engineContext.getComponentRegistry(),
+                engineContext.getLoadedContext().findOne(NetComponentRegistry.class).get(),
                 engineContext.getLoadedContext().findOne(PhysicsService.class).get(),
                 engineContext.getLoadedContext().findOne(ClientRegistry.class).get()));
         Component referenceShip = new SceneComponent(engineContext.getScene());
