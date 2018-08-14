@@ -72,7 +72,7 @@ public class Test1 {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        EngineContext engineContext = new EngineContext("dev", "client", "graphics");
+        EngineContext engineContext = new EngineContext("dev", "client", "graphics", "sound");
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
@@ -296,7 +296,7 @@ public class Test1 {
     }
 
     private static void createFloor(Scene scene) {
-        StaticMesh quadMesh = new PlainMesh();
+        StaticMesh plainMesh = new PlainMesh();
         Texture2D diffuse = new Texture2D(
                 white.getWidth(),
                 white.getHeight(),
@@ -310,7 +310,7 @@ public class Test1 {
         transformProperty.move(new Vector3f(0, -30, 0));
         Material material = new Material(diffuse);
         MaterialProperty materialProperty = new MaterialProperty(material);
-        MeshProperty meshProperty = new MeshProperty(quadMesh);
+        MeshProperty meshProperty = new MeshProperty(plainMesh);
         Component component = new SceneComponent(scene);
         component.addProperty(meshProperty);
         component.addProperty(materialProperty);

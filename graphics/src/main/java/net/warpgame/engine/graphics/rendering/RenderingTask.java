@@ -25,24 +25,25 @@ import org.lwjgl.opengl.GL11;
 @RegisterTask(thread = "graphics")
 @ExecuteAfterTask(WindowTask.class)
 public class RenderingTask extends EngineTask {
+    private static Logger logger = Logger.getLogger(RenderingTask.class);
 
     private SceneRenderer sceneRenderer;
     private ScreenspaceRenderer screenspaceRenderer;
     private GuiRenderer guiRenderer;
     private SMAARenderer smaaRenderer;
 
+
     public RenderingTask(
             SceneRenderer sceneRenderer,
             ScreenspaceRenderer screenspaceRenderer,
-            GuiRenderer guiRenderer, SMAARenderer smaaRenderer
+            GuiRenderer guiRenderer,
+            SMAARenderer smaaRenderer
     ) {
         this.sceneRenderer = sceneRenderer;
         this.screenspaceRenderer = screenspaceRenderer;
         this.guiRenderer = guiRenderer;
         this.smaaRenderer = smaaRenderer;
     }
-
-    private static Logger logger = Logger.getLogger(RenderingTask.class);
 
     @Override
     protected void onInit() {

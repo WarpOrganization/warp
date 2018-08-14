@@ -7,7 +7,7 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 
 @Service()
-@Profile("client")
+@Profile("sound")
 public class AudioSettings {
 
     private float masterVolume = 1;

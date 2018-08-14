@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering.gui;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@Profile("graphics")
 public class GuiRenderer {
     private static final Logger logger = LoggerFactory.getLogger(GuiRenderer.class);
 
