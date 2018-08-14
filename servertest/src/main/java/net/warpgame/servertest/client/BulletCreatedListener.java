@@ -3,6 +3,7 @@ package net.warpgame.servertest.client;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.servertest.BulletCreatedEvent;
 
 /**
@@ -19,6 +20,7 @@ public class BulletCreatedListener extends Listener<BulletCreatedEvent> {
 
     @Override
     public void handle(BulletCreatedEvent event) {
-        bulletCreator.create(getOwner(), event.getBulletComponentId());
+        if (!getOwner().hasEnabledProperty(Property.getTypeId(PlayerProperty.class)))
+            bulletCreator.create(getOwner(), event.getBulletComponentId());
     }
 }

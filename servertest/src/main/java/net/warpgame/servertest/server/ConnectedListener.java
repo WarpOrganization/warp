@@ -3,7 +3,6 @@ package net.warpgame.servertest.server;
 import net.warpgame.content.BoardShipEvent;
 import net.warpgame.content.LoadShipEvent;
 import net.warpgame.engine.core.component.Component;
-import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
@@ -30,17 +29,20 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
     private final NetComponentRegistry componentRegistry;
     private final PhysicsService physicsService;
     private final ClientRegistry clientRegistry;
+    private final NetComponentRegistry netComponentRegistry;
     private Component scene;
 
     ConnectedListener(Component owner,
                       NetComponentRegistry componentRegistry,
                       PhysicsService physicsService,
-                      ClientRegistry clientRegistry) {
+                      ClientRegistry clientRegistry,
+                      NetComponentRegistry netComponentRegistry) {
         super(owner, Event.getTypeId(ConnectedEvent.class));
 
         this.componentRegistry = componentRegistry;
         this.physicsService = physicsService;
         this.clientRegistry = clientRegistry;
+        this.netComponentRegistry = netComponentRegistry;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         if (event.getSourcePeerId() == 0)
             return;
         System.out.println("client connected");
-        Component ship = new SceneComponent(getOwner());
+        Component ship = netComponentRegistry.createPublicComponent(getOwner());
         TransformProperty transformProperty = new TransformProperty();
         ship.addProperty(transformProperty);
         ship.addProperty(new RemoteInputProperty());

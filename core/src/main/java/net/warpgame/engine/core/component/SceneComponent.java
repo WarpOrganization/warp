@@ -199,6 +199,8 @@ public class SceneComponent implements Component {
 
     @Override
     public void addProperty(Property property) {
+        if (this.properties.containsKey(property.getType()))
+            throw new IllegalStateException("Property type already present");
         this.properties.put(property.getType(), property);
         property.setOwner(this);
         property.init();

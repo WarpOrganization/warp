@@ -6,8 +6,8 @@ import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.GLErrors;
-import net.warpgame.engine.graphics.rendering.gui.GuiRenderer;
 import net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAARenderer;
+import net.warpgame.engine.graphics.rendering.gui.GuiRenderer;
 import net.warpgame.engine.graphics.rendering.scene.SceneRenderer;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 import net.warpgame.engine.graphics.window.WindowTask;
@@ -52,7 +52,7 @@ public class RenderingTask extends EngineTask {
         logger.info("OpenGL capabilities created.");
         sceneRenderer.init();
         screenspaceRenderer.init();
-        guiRenderer.init();
+//        guiRenderer.init();
         smaaRenderer.initialize();
         //pipeline initialization...
         logger.info("Initialized pipeline.");
@@ -68,7 +68,7 @@ public class RenderingTask extends EngineTask {
     protected void onClose() {
         sceneRenderer.destroy();
         screenspaceRenderer.destroy();
-        guiRenderer.destroy();
+//        guiRenderer.destroy();
         smaaRenderer.destroy();
         //destroy pipeline
     }
@@ -77,7 +77,7 @@ public class RenderingTask extends EngineTask {
     public void update(int delta) {
         sceneRenderer.update();
         screenspaceRenderer.update();
-        guiRenderer.update();
+//        guiRenderer.update();
         smaaRenderer.update();
         GLErrors.checkOGLErrors();
     }

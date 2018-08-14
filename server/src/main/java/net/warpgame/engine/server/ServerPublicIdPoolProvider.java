@@ -24,12 +24,16 @@ public class ServerPublicIdPoolProvider extends PublicIdPoolProvider {
         } else {
             IdPool newPool = new IdPool(nextIdPoolOffset);
             nextIdPoolOffset += IdPool.ID_POOL_SIZE;
+            freeingIdPools.put(newPool.getOffset(), newPool);
+            System.out.println("providing id pool " + newPool.getOffset());
             return newPool;
         }
     }
 
     IdPool issueIdPool(Client client) {
         IdPool pool = requestIdPool();
+        pool.setPoolState(IdPool.IdPoolState.ACTIVE);
+        System.out.println("issuing id pool " + pool.getOffset());
         client.assignIdPool(pool);
         return pool;
     }

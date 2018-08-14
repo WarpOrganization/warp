@@ -21,9 +21,11 @@ public class IdPool implements Comparable<IdPool> {
     }
 
     public int getNextId() {
+        if (poolState == IdPoolState.AWAITING) poolState = IdPoolState.ACTIVE;
         isTaken[nextId] = true;
         nIdsTaken++;
         nextId++;
+        if (nextId == ID_POOL_SIZE) poolState = IdPoolState.FREEING;
         stateCheck();
         return nextId - 1 + offset;
     }
@@ -37,10 +39,12 @@ public class IdPool implements Comparable<IdPool> {
     }
 
     private void stateCheck() {
-        if (nextId == ID_POOL_SIZE && nIdsTaken == 0) {
-            nextId = 0;
-            poolState = IdPoolState.AWAITING;
-        } else if (poolState == IdPoolState.ACTIVE) poolState = IdPoolState.FREEING;
+        if (poolState == IdPoolState.FREEING) {
+            if (nIdsTaken == 0) {
+                nextId = 0;
+                poolState = IdPoolState.AWAITING;
+            }
+        }
     }
 
     @Override
@@ -54,6 +58,10 @@ public class IdPool implements Comparable<IdPool> {
 
     public IdPoolState getPoolState() {
         return poolState;
+    }
+
+    public void setPoolState(IdPoolState poolState) {
+        this.poolState = poolState;
     }
 
     public enum IdPoolState {

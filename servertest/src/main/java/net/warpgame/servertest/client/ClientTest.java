@@ -23,6 +23,7 @@ import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
 import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.engine.graphics.window.WindowManager;
+import net.warpgame.engine.net.NetComponentRegistry;
 import org.joml.Vector3f;
 
 /**
@@ -62,7 +63,12 @@ public class ClientTest {
                 sceneLightManager,
                 context.getLoadedContext().findOne(BulletCreator.class).get()));
         CameraHolder cameraHolder = context.getLoadedContext().findOne(CameraHolder.class).get();
-        root.addListener(new BoardShipListener(root, cameraHolder, DISPLAY, context.getComponentRegistry()));
+        root.addListener(new BoardShipListener(
+                root,
+                cameraHolder,
+                DISPLAY,
+                context.getLoadedContext().findOne(NetComponentRegistry.class).get(),
+                context.getLoadedContext().findOne(SceneLightManager.class).get()));
         root.addListener(new TestKeyboardListener(root, context.getLoadedContext().findOne(WindowManager.class).get()));
     }
 

@@ -10,9 +10,11 @@ import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.graphics.camera.Camera;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.camera.QuaternionCamera;
+import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
+import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
+import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import net.warpgame.servertest.client.scripts.CameraZoomControlScript;
 import net.warpgame.servertest.client.scripts.GunScript;
 import net.warpgame.servertest.client.scripts.MultiplayerCameraControlScript;
@@ -27,11 +29,13 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
     private final CameraHolder cameraHolder;
     private PerspectiveMatrix projection;
     private final ComponentRegistry componentRegistry;
+    private final SceneLightManager lightManager;
 
     protected BoardShipListener(Component owner,
                                 CameraHolder cameraHolder,
                                 Display display,
-                                ComponentRegistry componentRegistry) {
+                                ComponentRegistry componentRegistry,
+                                SceneLightManager lightManager) {
         super(owner, Event.getTypeId(BoardShipEvent.class));
         this.cameraHolder = cameraHolder;
         projection = new PerspectiveMatrix(
@@ -42,12 +46,13 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
                 display.getHeight()
         );
         this.componentRegistry = componentRegistry;
+        this.lightManager = lightManager;
     }
 
     @Override
     public void handle(BoardShipEvent event) {
         Component shipComponent = componentRegistry.getComponent(event.getShipComponentId());
-        shipComponent.addProperty(new SimplifiedPhysicsProperty(10f));
+        shipComponent.addProperty(new PlayerProperty());
         shipComponent.addScript(MultiplayerControlScript.class);
         shipComponent.addScript(GunScript.class);
 
@@ -56,7 +61,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
         cameraPivot.addProperty(pivotTransform);
         cameraPivot.addScript(MultiplayerCameraControlScript.class);
 
-        Component cameraComponent = new SceneComponent(cameraPivot, 1000000001);
+        Component cameraComponent = new SceneComponent(cameraPivot);
         TransformProperty cameraTransform = new TransformProperty();
         cameraTransform.move(new Vector3f(20, 0, 0)).rotateY((float) (Math.PI / 2));
         cameraComponent.addProperty(cameraTransform);
@@ -64,5 +69,12 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
 
         Camera camera = new QuaternionCamera(cameraComponent, projection);
         cameraHolder.setCamera(camera);
+
+        Component light = new SceneComponent(shipComponent);
+        light.addProperty(new TransformProperty().move(0f, 1f, 0f));
+        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
+        LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+        light.addProperty(lightSourceProperty);
+        lightManager.addLight(lightSourceProperty);
     }
 }

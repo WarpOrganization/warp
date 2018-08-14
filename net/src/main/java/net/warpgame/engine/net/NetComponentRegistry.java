@@ -31,14 +31,14 @@ public class NetComponentRegistry extends ComponentRegistry {
         }
         SimpleListener.createListener(component,
                 Event.getTypeId(ComponentDeathEvent.class),
-                (e) -> unregisterPublicComponent(component));
+                (e) -> unregisterPublicComponent(component.getId()));
 
         return component;
     }
 
-    private void unregisterPublicComponent(Component c) {
-        IdPool pool = publicIdPoolProvider.getPoolByComponentId(c.getId());
-        pool.freeId(c.getId());
+    private void unregisterPublicComponent(int id) {
+        IdPool pool = publicIdPoolProvider.getPoolByComponentId(id);
+        pool.freeId(id);
     }
 
     @Override

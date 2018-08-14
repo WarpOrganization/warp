@@ -21,6 +21,9 @@ public class SerializationIds {
     public static int CHAT_MESSAGE_EVENT = 8;
     public static int ID_POOL_REQUEST = 9;
     public static int ID_POOL_RESPONSE = 10;
+    public static int SHOT_EVENT = 11;
+    public static int BULLET_CREATED_EVENT = 12;
+    public static int BULLET_DEATH_EVENT = 13;
 
     public static int getId(Class clazz) {
         if (clazz.equals(ConnectedEvent.class)) return CONNECTED_EVENT_ID;

@@ -27,6 +27,8 @@ public class ClientPublicIdPoolProvider extends PublicIdPoolProvider {
         if (!availableIdPools.isEmpty()) {
             IdPool pool = availableIdPools.poll();
             if (availableIdPools.isEmpty()) requestNewIdPool();
+            freeingIdPools.put(pool.getOffset(), pool);
+            System.out.println("providing id pool " + pool.getOffset());
             return pool;
         } else throw new OutOfIdPoolsException();
     }

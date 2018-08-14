@@ -18,7 +18,7 @@ public class ComponentRegistry {
     public synchronized void addComponent(Component component, int id) throws IdExistsException {
         if (componentMap.containsKey(id)) throw new IdExistsException();
         componentMap.put(id, component);
-        if (maxId < id) maxId = id;
+//        if (maxId < id) maxId = id;
     }
 
     public synchronized int addComponent(Component component) {

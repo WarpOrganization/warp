@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
  */
 public abstract class PublicIdPoolProvider {
     protected PriorityQueue<IdPool> availableIdPools = new PriorityQueue<>();
-    private Map<Integer, IdPool> freeingIdPools = new HashMap<>();
+    protected Map<Integer, IdPool> freeingIdPools = new HashMap<>();
 
     public abstract IdPool requestIdPool();
 
