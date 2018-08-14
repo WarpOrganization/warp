@@ -11,7 +11,7 @@ import net.warpgame.servertest.BulletDeathEvent;
  */
 public class BulletDeathCountdownScript extends Script {
 
-    private static final int BULLET_LIFETIME = 7000;
+    private static final int BULLET_LIFETIME = 4000;
 
     private int sumDelta;
 
