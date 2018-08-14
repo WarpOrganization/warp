@@ -3,12 +3,10 @@ package net.warpgame.engine.graphics.rendering.gui;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
-import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.gui.program.GuiProgram;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceAlbedoHolder;
-import net.warpgame.engine.graphics.window.Display;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +23,11 @@ public class GuiRenderer {
 
     private TextureFramebuffer destinationFramebuffer;
 
-    public GuiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder) {
+    private GuiTest guiTest;
+
+    public GuiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, GuiTest guiTest) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
+        this.guiTest = guiTest;
     }
 
     public void init(){
@@ -60,7 +61,9 @@ public class GuiRenderer {
     }
 
     protected void renderGui() {
-        //TODO renderGUI
+        guiProgram.useTexture(guiTest.texture2D);
+        guiProgram.useMatrix(guiTest.matrix3f);
+        quad.draw();
     }
 
     public void destroy() {
