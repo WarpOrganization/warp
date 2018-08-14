@@ -61,6 +61,9 @@ public class GuiRenderer {
     }
 
     protected void renderGui() {
+        if (guiTest.texture2D == null || guiTest.matrix3f == null) {
+            return;
+        }
         guiProgram.useTexture(guiTest.texture2D);
         guiProgram.useMatrix(guiTest.matrix3f);
         quad.draw();
