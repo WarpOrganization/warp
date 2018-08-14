@@ -35,6 +35,7 @@ import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
+import net.warpgame.engine.graphics.rendering.gui.GuiTest;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -50,6 +51,7 @@ import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.engine.graphics.window.WindowManager;
 import net.warpgame.test.command.MoveCameraCommand;
+import org.joml.Matrix3f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -84,6 +86,7 @@ public class Test1 {
                 .findOne(ConsoleService.class)
                 .get();
         setupScene(engineContext, thread);
+        setupGui(engineContext, thread);
         setupCamera(engineContext);
         createAudioSources(engineContext, thread);
         registerCommandsAndVariables(engineContext.getLoadedContext());
@@ -95,8 +98,8 @@ public class Test1 {
         public Sup(Supplier<Float> supplier) {
             this.supplier = supplier;
         }
-    }
 
+    }
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         try {
             Component component = new SceneComponent(context);
@@ -117,6 +120,25 @@ public class Test1 {
 
     private static String getResourcePath(String resource) throws URISyntaxException {
         return Paths.get(Test1.class.getResource(resource).toURI()).toFile().getAbsolutePath();
+    }
+
+    private static void setupGui(EngineContext context, GraphicsThread thread) {
+        thread.scheduleOnce(() ->{
+            GuiTest guiTest = context.getLoadedContext().findOne(GuiTest.class).get();
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("cross.png"),
+                PNGDecoder.Format.RGBA
+        );
+        guiTest.texture2D =  new Texture2D(
+                imageData.getWidth(),
+                imageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                imageData.getData());
+        guiTest.matrix3f = new Matrix3f().scale(0.05f);
+        });
+
     }
 
 
