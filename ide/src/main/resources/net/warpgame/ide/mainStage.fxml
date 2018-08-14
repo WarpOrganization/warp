@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<GridPane alignment="center" hgap="10" prefHeight="500.0" prefWidth="500.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.warpgame.ide.MainStage">
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
+    <children>
+        <BorderPane fx:id="borderPane" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+         <top>
+                <MenuBar BorderPane.alignment="CENTER">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#chooseFile" text="Open" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Save as" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#copy" text="Copy" />
+                        <MenuItem mnemonicParsing="false" onAction="#paste" text="Paste" />
+                        <MenuItem mnemonicParsing="false" onAction="#delete" text="Delete" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+         </top>
+         <center>
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="468.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <content>
+                  <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#copy" text="Copy" />
+                        <MenuItem mnemonicParsing="false" onAction="#paste" text="Paste" />
+                        <MenuItem mnemonicParsing="false" onAction="#delete" text="Delete" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </ScrollPane>
+         </center>
+         <right>
+            <VBox fx:id="draggableArea" fillWidth="false" BorderPane.alignment="CENTER_RIGHT">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding></VBox>
+         </right></BorderPane>
+    </children>
+</GridPane>

@@ -99,6 +99,7 @@ task createRunConfigurations {
     createConfiguration("SP - Warp Engine Test", "net.warpgame.test.Test1", "test_main")
     createConfiguration("MP - Server Test", "net.warpgame.servertest.server.ServerTest", "servertest_main")
     createConfiguration("MP - Client Test", "net.warpgame.servertest.client.ClientTest", "servertest_main")
+    createConfiguration("IDE - Ai Behavior Tree Editor", "net.warpgame.ide.AiBehaviorTreeEditor", "ide_main")
 }
 
 

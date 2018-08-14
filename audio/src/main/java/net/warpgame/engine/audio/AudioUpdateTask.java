@@ -27,7 +27,7 @@ import static org.lwjgl.openal.SOFTHRTF.alcResetDeviceSOFT;
  */
 
 @Service
-@Profile("client")
+@Profile("sound")
 @RegisterTask(thread = "audio")
 public class AudioUpdateTask extends EngineTask {
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
