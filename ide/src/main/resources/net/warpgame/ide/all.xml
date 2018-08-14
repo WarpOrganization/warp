@@ -1,0 +1,8 @@
+<root>
+    <baseNode path="net.warpgame.engine.ai.behaviortree.SequenceNode"/>
+    <node path="net.warpgame.engine.ai.behaviortree.SelectorNode" test="hehe"/>
+    <node path="net.warpgame.test.tankAI.HasTargetLeaf"/>
+    <node path="net.warpgame.test.tankAI.ChooseTargetLeaf"/>
+    <node path="net.warpgame.engine.ai.behaviortree.SequenceNode"/>
+    <node path="net.warpgame.test.tankAI.AdjustTurretLeaf"/>
+</root>
