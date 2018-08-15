@@ -1,15 +1,21 @@
 package net.warpgame.engine.graphics.rendering.gui;
 
+import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.gui.program.GuiProgram;
+import net.warpgame.engine.graphics.rendering.gui.property.CanvasProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceAlbedoHolder;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Profile("graphics")
@@ -20,14 +26,15 @@ public class GuiRenderer {
 
     private GuiProgram guiProgram;
     private QuadMesh quad;
-
     private TextureFramebuffer destinationFramebuffer;
 
     private GuiTest guiTest;
+    private List<Component> canvas;
 
     public GuiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, GuiTest guiTest) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
         this.guiTest = guiTest;
+        this.canvas = new ArrayList<>();
     }
 
     public void init(){
@@ -46,21 +53,26 @@ public class GuiRenderer {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         prepareFramebuffer();
         prepareProgram();
-        renderGui();
+        testRender();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
     }
 
-    protected void prepareFramebuffer() {
+    private void prepareFramebuffer() {
         destinationFramebuffer.bindDraw();
     }
 
-    protected void prepareProgram() {
+    private void prepareProgram() {
         guiProgram.use();
     }
 
-    protected void renderGui() {
+    private void render() {
+
+
+    }
+
+    private void testRender() {
         if (guiTest.texture2D == null || guiTest.matrix3f == null) {
             return;
         }
@@ -71,5 +83,9 @@ public class GuiRenderer {
 
     public void destroy() {
         quad.destroy();
+    }
+
+    public void addCanvas(CanvasProperty canvasProperty){
+        canvas.add(canvasProperty.getOwner());
     }
 }
