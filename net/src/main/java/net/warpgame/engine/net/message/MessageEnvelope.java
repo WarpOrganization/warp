@@ -2,7 +2,6 @@ package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.net.Peer;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
 public class MessageEnvelope {
     private byte[] serializedMessage;
     private int dependencyId;
-    private long sendTime;
+    private long nextResendTime;
     private boolean confirmed;
     private int messageType;
     private Peer targetPeer;
@@ -54,12 +53,12 @@ public class MessageEnvelope {
         this.dependencyId = dependencyId;
     }
 
-    public long getSendTime() {
-        return sendTime;
+    public long getNextResendTime() {
+        return nextResendTime;
     }
 
-    public void setSendTime(long sendTime) {
-        this.sendTime = sendTime;
+    public void setNextResendTime(long nextResendTime) {
+        this.nextResendTime = nextResendTime;
     }
 
     public boolean isConfirmed() {

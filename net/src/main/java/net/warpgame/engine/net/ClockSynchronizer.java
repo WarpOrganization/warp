@@ -15,7 +15,7 @@ public class ClockSynchronizer {
         if (requestId == this.requestId) {
             long rtt = System.currentTimeMillis() - requestTimestamp;
             if (rtt < minRTT) {
-                delta = System.currentTimeMillis() - responseTimestamp + (rtt / 2);
+                delta = responseTimestamp - requestTimestamp - (rtt / 2);
                 minRTT = rtt;
             }
             finishedSynchronizations++;

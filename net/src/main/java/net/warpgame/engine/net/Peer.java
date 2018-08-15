@@ -3,6 +3,7 @@ package net.warpgame.engine.net;
 import net.warpgame.engine.net.message.DependencyIdGenerator;
 import net.warpgame.engine.net.message.IncomingMessageQueue;
 import net.warpgame.engine.net.message.MessageEnvelope;
+import org.apache.log4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -19,7 +20,9 @@ public abstract class Peer {
     private ClockSynchronizer clockSynchronizer;
     private ConnectionStateHolder connectionStateHolder;
     private DependencyIdGenerator dependencyIdGenerator;
+    private int lastRtt = 100;
     private int id = 0;
+    private Logger logger = Logger.getLogger(Peer.class);
 
     public Peer(InetSocketAddress address, IncomingMessageQueue incomingMessageQueue, ConnectionStateHolder connectionStateHolder) {
         this.address = address;
@@ -93,5 +96,18 @@ public abstract class Peer {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getLastRtt() {
+        return lastRtt;
+    }
+
+    public void setLastRtt(int lastRtt) {
+        this.lastRtt = lastRtt;
+    }
+
+    public void updateRTT(long partnerKeepAliveTimestamp) {
+        lastRtt = (int) (System.currentTimeMillis() - (partnerKeepAliveTimestamp - clockSynchronizer.getDelta()));
+        logger.info("RTT: " + lastRtt);
     }
 }

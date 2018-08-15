@@ -10,6 +10,7 @@ import net.warpgame.engine.net.message.InternalMessageSource;
 import net.warpgame.engine.net.messagetypes.idpoolmessage.IdPoolRequest;
 import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessage;
 import net.warpgame.engine.net.messagetypes.internalmessage.InternalMessageContent;
+import org.apache.log4j.Logger;
 
 /**
  * @author Hubertus
@@ -25,6 +26,7 @@ public class IncomingPacketProcessor {
     private ClientPublicIdPoolProvider publicIdPoolProvider;
     private IdPoolMessageSource idPoolMessageSource;
     private PacketType[] packetTypes = PacketType.values();
+    private Logger logger = Logger.getLogger(IncomingPacketProcessor.class);
 
     public IncomingPacketProcessor(ConnectionService connectionService,
                                    SerializedSceneHolder sceneHolder,
@@ -60,6 +62,9 @@ public class IncomingPacketProcessor {
             case PACKET_CLOCK_SYNCHRONIZATION_RESPONSE:
                 processClockSynchronizationResponsePacket(timestamp, packet);
                 break;
+            case PACKET_KEEP_ALIVE:
+                processKeepAlivePacket(timestamp, packet);
+                break;
         }
     }
 
@@ -75,7 +80,12 @@ public class IncomingPacketProcessor {
         System.out.println("Connection refused!");
     }
 
+    private long lastTimeStamp = 0;
+
     private void processSceneStatePacket(long timestamp, ByteBuf packetData) {
+        if (timestamp - lastTimeStamp > 80)
+            logger.warn("Waiting for scene state took a long time! " + (timestamp - lastTimeStamp) + "ms");
+        lastTimeStamp = timestamp;
         sceneHolder.offerScene(timestamp, packetData);
     }
 
@@ -107,5 +117,9 @@ public class IncomingPacketProcessor {
             connectionService.getServer().getConnectionStateHolder().setRequestedConnectionState(ConnectionState.LIVE);
             internalMessageSource.pushMessage(new InternalMessage(InternalMessageContent.STATE_CHANGE_LIVE, 0));
         }
+    }
+
+    private void processKeepAlivePacket(long timestamp, ByteBuf packetData) {
+        connectionService.getServer().updateRTT(timestamp);
     }
 }
