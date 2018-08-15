@@ -10,11 +10,20 @@ import java.nio.FloatBuffer;
 import java.text.NumberFormat;
 
 /**
- * @author Jaca777
- * Created 2017-12-14 at 21
- * It was a long clicking.
+ * @author MarconZet, Jaca777
+ * Created 16.08.2018
  */
 public class ImmutableMatrix4f extends Matrix4f {
+
+    @Override
+    public Matrix4f assume(int properties) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f determineProperties() {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
 
     @Override
     public Matrix4f m00(float m00) {
@@ -97,22 +106,107 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
+    public Matrix4f _m00(float m00) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m01(float m01) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m02(float m02) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m03(float m03) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m10(float m10) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m11(float m11) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m12(float m12) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m13(float m13) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m20(float m20) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m21(float m21) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m22(float m22) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m23(float m23) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m30(float m30) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m31(float m31) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m32(float m32) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f _m33(float m33) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
     public Matrix4f identity() {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f set(Matrix4f m) {
+    public Matrix4f set(Matrix4fc m) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f set(Matrix4d m) {
+    public Matrix4f set(Matrix4x3fc m) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f set(Matrix3f mat) {
+    public Matrix4f set(Matrix4dc m) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f set(Matrix3fc mat) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -127,12 +221,12 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f set(Quaternionf q) {
+    public Matrix4f set(Quaternionfc q) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f set(Quaterniond q) {
+    public Matrix4f set(Quaterniondc q) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -142,103 +236,88 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f mul(Matrix4f right) {
+    public Matrix4f set4x3(Matrix4x3fc mat) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f mul(Matrix4f right, Matrix4f dest) {
-        return super.mul(right, dest);
-    }
-
-    @Override
-    public Matrix4f mulPerspectiveAffine(Matrix4f view) {
+    public Matrix4f set4x3(Matrix4f mat) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f mulPerspectiveAffine(Matrix4f view, Matrix4f dest) {
-        return super.mulPerspectiveAffine(view, dest);
-    }
-
-    @Override
-    public Matrix4f mulAffineR(Matrix4f right) {
+    public Matrix4f mul(Matrix4fc right) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f mulAffineR(Matrix4f right, Matrix4f dest) {
-        return super.mulAffineR(right, dest);
-    }
-
-    @Override
-    public Matrix4f mulAffine(Matrix4f right) {
+    public Matrix4f mulLocal(Matrix4fc left) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f mulAffine(Matrix4f right, Matrix4f dest) {
-        return super.mulAffine(right, dest);
-    }
-
-    @Override
-    public Matrix4f mulOrthoAffine(Matrix4f view) {
+    public Matrix4f mulLocalAffine(Matrix4fc left) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f mulOrthoAffine(Matrix4f view, Matrix4f dest) {
-        return super.mulOrthoAffine(view, dest);
-    }
-
-    @Override
-    public Matrix4f fma4x3(Matrix4f other, float otherFactor) {
+    public Matrix4f mul(Matrix4x3fc right) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f fma4x3(Matrix4f other, float otherFactor, Matrix4f dest) {
-        return super.fma4x3(other, otherFactor, dest);
-    }
-
-    @Override
-    public Matrix4f add(Matrix4f other) {
+    public Matrix4f mul(Matrix3x2fc right) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f add(Matrix4f other, Matrix4f dest) {
-        return super.add(other, dest);
-    }
-
-    @Override
-    public Matrix4f sub(Matrix4f subtrahend) {
+    public Matrix4f mulPerspectiveAffine(Matrix4fc view) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f sub(Matrix4f subtrahend, Matrix4f dest) {
-        return super.sub(subtrahend, dest);
-    }
-
-    @Override
-    public Matrix4f mulComponentWise(Matrix4f other) {
+    public Matrix4f mulPerspectiveAffine(Matrix4x3fc view) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f mulComponentWise(Matrix4f other, Matrix4f dest) {
-        return super.mulComponentWise(other, dest);
-    }
-
-    @Override
-    public Matrix4f add4x3(Matrix4f other) {
+    public Matrix4f mulAffineR(Matrix4fc right) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f add4x3(Matrix4f other, Matrix4f dest) {
-        return super.add4x3(other, dest);
+    public Matrix4f mulAffine(Matrix4fc right) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f mulOrthoAffine(Matrix4fc view) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f fma4x3(Matrix4fc other, float otherFactor) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f add(Matrix4fc other) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f sub(Matrix4fc subtrahend) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f mulComponentWise(Matrix4fc other) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f add4x3(Matrix4fc other) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -247,18 +326,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f sub4x3(Matrix4f subtrahend, Matrix4f dest) {
-        return super.sub4x3(subtrahend, dest);
-    }
-
-    @Override
-    public Matrix4f mul4x3ComponentWise(Matrix4f other) {
+    public Matrix4f mul4x3ComponentWise(Matrix4fc other) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f mul4x3ComponentWise(Matrix4f other, Matrix4f dest) {
-        return super.mul4x3ComponentWise(other, dest);
     }
 
     @Override
@@ -287,23 +356,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public float determinant() {
-        return super.determinant();
+    public Matrix4f setFromAddress(long address) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public float determinant3x3() {
-        return super.determinant3x3();
-    }
-
-    @Override
-    public float determinantAffine() {
-        return super.determinantAffine();
-    }
-
-    @Override
-    public Matrix4f invert(Matrix4f dest) {
-        return super.invert(dest);
+    public Matrix4f set(Vector4fc col0, Vector4fc col1, Vector4fc col2, Vector4fc col3) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -312,43 +371,18 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f invertPerspective(Matrix4f dest) {
-        return super.invertPerspective(dest);
-    }
-
-    @Override
     public Matrix4f invertPerspective() {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f invertFrustum(Matrix4f dest) {
-        return super.invertFrustum(dest);
-    }
-
-    @Override
     public Matrix4f invertFrustum() {
-        return super.invertFrustum();
-    }
-
-    @Override
-    public Matrix4f invertOrtho(Matrix4f dest) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
     public Matrix4f invertOrtho() {
-        return super.invertOrtho();
-    }
-
-    @Override
-    public Matrix4f invertPerspectiveView(Matrix4f view, Matrix4f dest) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f invertAffine(Matrix4f dest) {
-        return super.invertAffine(dest);
     }
 
     @Override
@@ -357,42 +391,7 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f invertAffineUnitScale(Matrix4f dest) {
-        return super.invertAffineUnitScale(dest);
-    }
-
-    @Override
-    public Matrix4f invertAffineUnitScale() {
-        throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f invertLookAt(Matrix4f dest) {
-        return super.invertLookAt(dest);
-    }
-
-    @Override
-    public Matrix4f invertLookAt() {
-        throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f transpose(Matrix4f dest) {
-        return super.transpose(dest);
-    }
-
-    @Override
     public Matrix4f transpose3x3() {
-        return super.transpose3x3();
-    }
-
-    @Override
-    public Matrix4f transpose3x3(Matrix4f dest) {
-        return super.transpose3x3(dest);
-    }
-
-    @Override
-    public Matrix3f transpose3x3(Matrix3f dest) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -407,7 +406,7 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f translation(Vector3f offset) {
+    public Matrix4f translation(Vector3fc offset) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -417,128 +416,18 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f setTranslation(Vector3f xyz) {
+    public Matrix4f setTranslation(Vector3fc xyz) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Vector3f getTranslation(Vector3f dest) {
-        return super.getTranslation(dest);
-    }
-
-    @Override
-    public Vector3f getScale(Vector3f dest) {
-        return super.getScale(dest);
-    }
-
-    @Override
     public String toString() {
-        return super.toString();
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
     public String toString(NumberFormat formatter) {
-        return super.toString(formatter);
-    }
-
-    @Override
-    public Matrix4f get(Matrix4f dest) {
-        return super.get(dest);
-    }
-
-    @Override
-    public Matrix4d get(Matrix4d dest) {
-        return super.get(dest);
-    }
-
-    @Override
-    public Matrix3f get3x3(Matrix3f dest) {
-        return super.get3x3(dest);
-    }
-
-    @Override
-    public Matrix3d get3x3(Matrix3d dest) {
-        return super.get3x3(dest);
-    }
-
-    @Override
-    public AxisAngle4f getRotation(AxisAngle4f dest) {
-        return super.getRotation(dest);
-    }
-
-    @Override
-    public AxisAngle4d getRotation(AxisAngle4d dest) {
-        return super.getRotation(dest);
-    }
-
-    @Override
-    public Quaternionf getUnnormalizedRotation(Quaternionf dest) {
-        return super.getUnnormalizedRotation(dest);
-    }
-
-    @Override
-    public Quaternionf getNormalizedRotation(Quaternionf dest) {
-        return super.getNormalizedRotation(dest);
-    }
-
-    @Override
-    public Quaterniond getUnnormalizedRotation(Quaterniond dest) {
-        return super.getUnnormalizedRotation(dest);
-    }
-
-    @Override
-    public Quaterniond getNormalizedRotation(Quaterniond dest) {
-        return super.getNormalizedRotation(dest);
-    }
-
-    @Override
-    public FloatBuffer get(FloatBuffer buffer) {
-        return super.get(buffer);
-    }
-
-    @Override
-    public FloatBuffer get(int index, FloatBuffer buffer) {
-        return super.get(index, buffer);
-    }
-
-    @Override
-    public ByteBuffer get(ByteBuffer buffer) {
-        return super.get(buffer);
-    }
-
-    @Override
-    public ByteBuffer get(int index, ByteBuffer buffer) {
-        return super.get(index, buffer);
-    }
-
-    @Override
-    public FloatBuffer getTransposed(FloatBuffer buffer) {
-        return super.getTransposed(buffer);
-    }
-
-    @Override
-    public FloatBuffer getTransposed(int index, FloatBuffer buffer) {
-        return super.getTransposed(index, buffer);
-    }
-
-    @Override
-    public ByteBuffer getTransposed(ByteBuffer buffer) {
-        return super.getTransposed(buffer);
-    }
-
-    @Override
-    public ByteBuffer getTransposed(int index, ByteBuffer buffer) {
-        return super.getTransposed(index, buffer);
-    }
-
-    @Override
-    public float[] get(float[] arr, int offset) {
-        return super.get(arr, offset);
-    }
-
-    @Override
-    public float[] get(float[] arr) {
-        return super.get(arr);
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -557,12 +446,12 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f scaling(Vector3f xyz) {
+    public Matrix4f scaling(Vector3fc xyz) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotation(float angle, Vector3f axis) {
+    public Matrix4f rotation(float angle, Vector3fc axis) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -588,6 +477,11 @@ public class ImmutableMatrix4f extends Matrix4f {
 
     @Override
     public Matrix4f rotationZ(float ang) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotationTowardsXY(float dirX, float dirY) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -622,7 +516,7 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotation(Quaternionf quat) {
+    public Matrix4f rotation(Quaternionfc quat) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -632,7 +526,32 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f translationRotateScale(Vector3f translation, Quaternionf quat, Vector3f scale) {
+    public Matrix4f translationRotateScale(Vector3fc translation, Quaternionfc quat, Vector3fc scale) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateScale(float tx, float ty, float tz, float qx, float qy, float qz, float qw, float scale) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateScale(Vector3fc translation, Quaternionfc quat, float scale) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateScaleInvert(float tx, float ty, float tz, float qx, float qy, float qz, float qw, float sx, float sy, float sz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateScaleInvert(Vector3fc translation, Quaternionfc quat, Vector3fc scale) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateScaleInvert(Vector3fc translation, Quaternionfc quat, float scale) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -642,93 +561,28 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f translationRotateScaleMulAffine(Vector3f translation, Quaternionf quat, Vector3f scale, Matrix4f m) {
+    public Matrix4f translationRotateScaleMulAffine(Vector3fc translation, Quaternionfc quat, Vector3fc scale, Matrix4f m) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f translationRotate(float tx, float ty, float tz, Quaternionf quat) {
+    public Matrix4f translationRotate(float tx, float ty, float tz, float qx, float qy, float qz, float qw) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f set3x3(Matrix3f mat) {
+    public Matrix4f translationRotate(float tx, float ty, float tz, Quaternionfc quat) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Vector4f transform(Vector4f v) {
-        return super.transform(v);
+    public Matrix4f set3x3(Matrix3fc mat) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Vector4f transform(Vector4f v, Vector4f dest) {
-        return super.transform(v, dest);
-    }
-
-    @Override
-    public Vector4f transformProject(Vector4f v) {
-        return super.transformProject(v);
-    }
-
-    @Override
-    public Vector4f transformProject(Vector4f v, Vector4f dest) {
-        return super.transformProject(v, dest);
-    }
-
-    @Override
-    public Vector3f transformProject(Vector3f v) {
-        return super.transformProject(v);
-    }
-
-    @Override
-    public Vector3f transformProject(Vector3f v, Vector3f dest) {
-        return super.transformProject(v, dest);
-    }
-
-    @Override
-    public Vector3f transformPosition(Vector3f v) {
-        return super.transformPosition(v);
-    }
-
-    @Override
-    public Vector3f transformPosition(Vector3f v, Vector3f dest) {
-        return super.transformPosition(v, dest);
-    }
-
-    @Override
-    public Vector3f transformDirection(Vector3f v) {
-        return super.transformDirection(v);
-    }
-
-    @Override
-    public Vector3f transformDirection(Vector3f v, Vector3f dest) {
-        return super.transformDirection(v, dest);
-    }
-
-    @Override
-    public Vector4f transformAffine(Vector4f v) {
-        return super.transformAffine(v);
-    }
-
-    @Override
-    public Vector4f transformAffine(Vector4f v, Vector4f dest) {
-        return super.transformAffine(v, dest);
-    }
-
-    @Override
-    public Matrix4f scale(Vector3f xyz, Matrix4f dest) {
-        return super.scale(xyz, dest);
-    }
-
-    @Override
-    public Matrix4f scale(Vector3f xyz) {
-        return super.scale(xyz);
-    }
-
-    @Override
-    public Matrix4f scale(float xyz, Matrix4f dest) {
-        return super.scale(xyz, dest);
+    public Matrix4f scale(Vector3fc xyz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -737,18 +591,23 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f scale(float x, float y, float z, Matrix4f dest) {
-        return super.scale(x, y, z, dest);
-    }
-
-    @Override
     public Matrix4f scale(float x, float y, float z) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f scaleLocal(float x, float y, float z, Matrix4f dest) {
-        return super.scaleLocal(x, y, z, dest);
+    public Matrix4f scaleAround(float sx, float sy, float sz, float ox, float oy, float oz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f scaleAround(float factor, float ox, float oy, float oz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f scaleLocal(float xyz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -757,8 +616,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotateX(float ang, Matrix4f dest) {
-        return super.rotateX(ang, dest);
+    public Matrix4f scaleAroundLocal(float sx, float sy, float sz, float ox, float oy, float oz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f scaleAroundLocal(float factor, float ox, float oy, float oz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -767,22 +631,22 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotateY(float ang, Matrix4f dest) {
-        return super.rotateY(ang, dest);
-    }
-
-    @Override
     public Matrix4f rotateY(float ang) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateZ(float ang, Matrix4f dest) {
-        return super.rotateZ(ang, dest);
+    public Matrix4f rotateZ(float ang) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateZ(float ang) {
+    public Matrix4f rotateTowardsXY(float dirX, float dirY) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotateXYZ(Vector3f angles) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -792,18 +656,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotateXYZ(float angleX, float angleY, float angleZ, Matrix4f dest) {
-        return super.rotateXYZ(angleX, angleY, angleZ, dest);
-    }
-
-    @Override
     public Matrix4f rotateAffineXYZ(float angleX, float angleY, float angleZ) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateAffineXYZ(float angleX, float angleY, float angleZ, Matrix4f dest) {
-        return super.rotateAffineXYZ(angleX, angleY, angleZ, dest);
+    public Matrix4f rotateZYX(Vector3f angles) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -812,18 +671,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotateZYX(float angleZ, float angleY, float angleX, Matrix4f dest) {
-        return super.rotateZYX(angleZ, angleY, angleX, dest);
-    }
-
-    @Override
     public Matrix4f rotateAffineZYX(float angleZ, float angleY, float angleX) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateAffineZYX(float angleZ, float angleY, float angleX, Matrix4f dest) {
-        return super.rotateAffineZYX(angleZ, angleY, angleX, dest);
+    public Matrix4f rotateYXZ(Vector3f angles) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -832,23 +686,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotateYXZ(float angleY, float angleX, float angleZ, Matrix4f dest) {
-        return super.rotateYXZ(angleY, angleX, angleZ, dest);
-    }
-
-    @Override
     public Matrix4f rotateAffineYXZ(float angleY, float angleX, float angleZ) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f rotateAffineYXZ(float angleY, float angleX, float angleZ, Matrix4f dest) {
-        return super.rotateAffineYXZ(angleY, angleX, angleZ, dest);
-    }
-
-    @Override
-    public Matrix4f rotate(float ang, float x, float y, float z, Matrix4f dest) {
-        return super.rotate(ang, x, y, z, dest);
     }
 
     @Override
@@ -857,38 +696,33 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotateAffine(float ang, float x, float y, float z, Matrix4f dest) {
-        return super.rotateAffine(ang, x, y, z, dest);
-    }
-
-    @Override
     public Matrix4f rotateAffine(float ang, float x, float y, float z) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateAffineLocal(float ang, float x, float y, float z, Matrix4f dest) {
-        return super.rotateAffineLocal(ang, x, y, z, dest);
-    }
-
-    @Override
-    public Matrix4f rotateAffineLocal(float ang, float x, float y, float z) {
+    public Matrix4f rotateLocal(float ang, float x, float y, float z) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f translate(Vector3f offset) {
+    public Matrix4f rotateLocalX(float ang) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f translate(Vector3f offset, Matrix4f dest) {
-        return super.translate(offset, dest);
+    public Matrix4f rotateLocalY(float ang) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f translate(float x, float y, float z, Matrix4f dest) {
-        return super.translate(x, y, z, dest);
+    public Matrix4f rotateLocalZ(float ang) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translate(Vector3fc offset) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -897,18 +731,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f translateLocal(Vector3f offset) {
+    public Matrix4f translateLocal(Vector3fc offset) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f translateLocal(Vector3f offset, Matrix4f dest) {
-        return super.translateLocal(offset, dest);
-    }
-
-    @Override
-    public Matrix4f translateLocal(float x, float y, float z, Matrix4f dest) {
-        return super.translateLocal(x, y, z, dest);
     }
 
     @Override
@@ -918,22 +742,12 @@ public class ImmutableMatrix4f extends Matrix4f {
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
-    }
-
-    @Override
-    public Matrix4f ortho(float left, float right, float bottom, float top, float zNear, float zFar, boolean zZeroToOne, Matrix4f dest) {
-        return super.ortho(left, right, bottom, top, zNear, zFar, zZeroToOne, dest);
-    }
-
-    @Override
-    public Matrix4f ortho(float left, float right, float bottom, float top, float zNear, float zFar, Matrix4f dest) {
-        return super.ortho(left, right, bottom, top, zNear, zFar, dest);
+    public void readExternal(ObjectInput in) throws IOException {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -943,6 +757,16 @@ public class ImmutableMatrix4f extends Matrix4f {
 
     @Override
     public Matrix4f ortho(float left, float right, float bottom, float top, float zNear, float zFar) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f orthoLH(float left, float right, float bottom, float top, float zNear, float zFar, boolean zZeroToOne) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f orthoLH(float left, float right, float bottom, float top, float zNear, float zFar) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -957,13 +781,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f orthoSymmetric(float width, float height, float zNear, float zFar, boolean zZeroToOne, Matrix4f dest) {
-        return super.orthoSymmetric(width, height, zNear, zFar, zZeroToOne, dest);
+    public Matrix4f setOrthoLH(float left, float right, float bottom, float top, float zNear, float zFar, boolean zZeroToOne) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f orthoSymmetric(float width, float height, float zNear, float zFar, Matrix4f dest) {
-        return super.orthoSymmetric(width, height, zNear, zFar, dest);
+    public Matrix4f setOrthoLH(float left, float right, float bottom, float top, float zNear, float zFar) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -973,6 +797,16 @@ public class ImmutableMatrix4f extends Matrix4f {
 
     @Override
     public Matrix4f orthoSymmetric(float width, float height, float zNear, float zFar) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f orthoSymmetricLH(float width, float height, float zNear, float zFar, boolean zZeroToOne) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f orthoSymmetricLH(float width, float height, float zNear, float zFar) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -987,12 +821,22 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f ortho2D(float left, float right, float bottom, float top, Matrix4f dest) {
-        return super.ortho2D(left, right, bottom, top, dest);
+    public Matrix4f setOrthoSymmetricLH(float width, float height, float zNear, float zFar, boolean zZeroToOne) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f setOrthoSymmetricLH(float width, float height, float zNear, float zFar) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
     public Matrix4f ortho2D(float left, float right, float bottom, float top) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f ortho2DLH(float left, float right, float bottom, float top) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -1002,18 +846,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f lookAlong(Vector3f dir, Vector3f up) {
+    public Matrix4f setOrtho2DLH(float left, float right, float bottom, float top) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f lookAlong(Vector3f dir, Vector3f up, Matrix4f dest) {
-        return super.lookAlong(dir, up, dest);
-    }
-
-    @Override
-    public Matrix4f lookAlong(float dirX, float dirY, float dirZ, float upX, float upY, float upZ, Matrix4f dest) {
-        return super.lookAlong(dirX, dirY, dirZ, upX, upY, upZ, dest);
+    public Matrix4f lookAlong(Vector3fc dir, Vector3fc up) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -1022,7 +861,7 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f setLookAlong(Vector3f dir, Vector3f up) {
+    public Matrix4f setLookAlong(Vector3fc dir, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -1032,7 +871,7 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f setLookAt(Vector3f eye, Vector3f center, Vector3f up) {
+    public Matrix4f setLookAt(Vector3fc eye, Vector3fc center, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -1042,18 +881,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f lookAt(Vector3f eye, Vector3f center, Vector3f up, Matrix4f dest) {
-        return super.lookAt(eye, center, up, dest);
-    }
-
-    @Override
-    public Matrix4f lookAt(Vector3f eye, Vector3f center, Vector3f up) {
+    public Matrix4f lookAt(Vector3fc eye, Vector3fc center, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ, Matrix4f dest) {
-        return super.lookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ, dest);
     }
 
     @Override
@@ -1062,7 +891,7 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f setLookAtLH(Vector3f eye, Vector3f center, Vector3f up) {
+    public Matrix4f setLookAtLH(Vector3fc eye, Vector3fc center, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -1072,33 +901,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f lookAtLH(Vector3f eye, Vector3f center, Vector3f up, Matrix4f dest) {
-        return super.lookAtLH(eye, center, up, dest);
-    }
-
-    @Override
-    public Matrix4f lookAtLH(Vector3f eye, Vector3f center, Vector3f up) {
+    public Matrix4f lookAtLH(Vector3fc eye, Vector3fc center, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f lookAtLH(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ, Matrix4f dest) {
-        return super.lookAtLH(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ, dest);
     }
 
     @Override
     public Matrix4f lookAtLH(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f perspective(float fovy, float aspect, float zNear, float zFar, boolean zZeroToOne, Matrix4f dest) {
-        return super.perspective(fovy, aspect, zNear, zFar, zZeroToOne, dest);
-    }
-
-    @Override
-    public Matrix4f perspective(float fovy, float aspect, float zNear, float zFar, Matrix4f dest) {
-        return super.perspective(fovy, aspect, zNear, zFar, dest);
     }
 
     @Override
@@ -1122,18 +931,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f perspectiveLH(float fovy, float aspect, float zNear, float zFar, boolean zZeroToOne, Matrix4f dest) {
-        return super.perspectiveLH(fovy, aspect, zNear, zFar, zZeroToOne, dest);
-    }
-
-    @Override
     public Matrix4f perspectiveLH(float fovy, float aspect, float zNear, float zFar, boolean zZeroToOne) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f perspectiveLH(float fovy, float aspect, float zNear, float zFar, Matrix4f dest) {
-        return super.perspectiveLH(fovy, aspect, zNear, zFar, dest);
     }
 
     @Override
@@ -1149,16 +948,6 @@ public class ImmutableMatrix4f extends Matrix4f {
     @Override
     public Matrix4f setPerspectiveLH(float fovy, float aspect, float zNear, float zFar) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f frustum(float left, float right, float bottom, float top, float zNear, float zFar, boolean zZeroToOne, Matrix4f dest) {
-        return super.frustum(left, right, bottom, top, zNear, zFar, zZeroToOne, dest);
-    }
-
-    @Override
-    public Matrix4f frustum(float left, float right, float bottom, float top, float zNear, float zFar, Matrix4f dest) {
-        return super.frustum(left, right, bottom, top, zNear, zFar, dest);
     }
 
     @Override
@@ -1182,18 +971,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f frustumLH(float left, float right, float bottom, float top, float zNear, float zFar, boolean zZeroToOne, Matrix4f dest) {
-        return super.frustumLH(left, right, bottom, top, zNear, zFar, zZeroToOne, dest);
-    }
-
-    @Override
     public Matrix4f frustumLH(float left, float right, float bottom, float top, float zNear, float zFar, boolean zZeroToOne) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f frustumLH(float left, float right, float bottom, float top, float zNear, float zFar, Matrix4f dest) {
-        return super.frustumLH(left, right, bottom, top, zNear, zFar, dest);
     }
 
     @Override
@@ -1212,32 +991,32 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotate(Quaternionf quat, Matrix4f dest) {
-        return super.rotate(quat, dest);
-    }
-
-    @Override
-    public Matrix4f rotate(Quaternionf quat) {
+    public Matrix4f setFromIntrinsic(float alphaX, float alphaY, float gamma, float u0, float v0, int imgWidth, int imgHeight, float near, float far) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateAffine(Quaternionf quat, Matrix4f dest) {
-        return super.rotateAffine(quat, dest);
-    }
-
-    @Override
-    public Matrix4f rotateAffine(Quaternionf quat) {
+    public Matrix4f rotate(Quaternionfc quat) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateAffineLocal(Quaternionf quat, Matrix4f dest) {
-        return super.rotateAffineLocal(quat, dest);
+    public Matrix4f rotateAffine(Quaternionfc quat) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f rotateAffineLocal(Quaternionf quat) {
+    public Matrix4f rotateAround(Quaternionfc quat, float ox, float oy, float oz) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotateLocal(Quaternionfc quat) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotateAroundLocal(Quaternionfc quat, float ox, float oy, float oz) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -1247,103 +1026,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f rotate(AxisAngle4f axisAngle, Matrix4f dest) {
-        return super.rotate(axisAngle, dest);
-    }
-
-    @Override
-    public Matrix4f rotate(float angle, Vector3f axis) {
+    public Matrix4f rotate(float angle, Vector3fc axis) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f rotate(float angle, Vector3f axis, Matrix4f dest) {
-        return super.rotate(angle, axis, dest);
-    }
-
-    @Override
-    public Vector4f unproject(float winX, float winY, float winZ, int[] viewport, Vector4f dest) {
-        return super.unproject(winX, winY, winZ, viewport, dest);
-    }
-
-    @Override
-    public Vector3f unproject(float winX, float winY, float winZ, int[] viewport, Vector3f dest) {
-        return super.unproject(winX, winY, winZ, viewport, dest);
-    }
-
-    @Override
-    public Vector4f unproject(Vector3f winCoords, int[] viewport, Vector4f dest) {
-        return super.unproject(winCoords, viewport, dest);
-    }
-
-    @Override
-    public Vector3f unproject(Vector3f winCoords, int[] viewport, Vector3f dest) {
-        return super.unproject(winCoords, viewport, dest);
-    }
-
-    @Override
-    public Matrix4f unprojectRay(float winX, float winY, int[] viewport, Vector3f originDest, Vector3f dirDest) {
-        return super.unprojectRay(winX, winY, viewport, originDest, dirDest);
-    }
-
-    @Override
-    public Matrix4f unprojectRay(Vector2f winCoords, int[] viewport, Vector3f originDest, Vector3f dirDest) {
-        return super.unprojectRay(winCoords, viewport, originDest, dirDest);
-    }
-
-    @Override
-    public Vector4f unprojectInv(Vector3f winCoords, int[] viewport, Vector4f dest) {
-        return super.unprojectInv(winCoords, viewport, dest);
-    }
-
-    @Override
-    public Vector4f unprojectInv(float winX, float winY, float winZ, int[] viewport, Vector4f dest) {
-        return super.unprojectInv(winX, winY, winZ, viewport, dest);
-    }
-
-    @Override
-    public Matrix4f unprojectInvRay(Vector2f winCoords, int[] viewport, Vector3f originDest, Vector3f dirDest) {
-        return super.unprojectInvRay(winCoords, viewport, originDest, dirDest);
-    }
-
-    @Override
-    public Matrix4f unprojectInvRay(float winX, float winY, int[] viewport, Vector3f originDest, Vector3f dirDest) {
-        return super.unprojectInvRay(winX, winY, viewport, originDest, dirDest);
-    }
-
-    @Override
-    public Vector3f unprojectInv(Vector3f winCoords, int[] viewport, Vector3f dest) {
-        return super.unprojectInv(winCoords, viewport, dest);
-    }
-
-    @Override
-    public Vector3f unprojectInv(float winX, float winY, float winZ, int[] viewport, Vector3f dest) {
-        return super.unprojectInv(winX, winY, winZ, viewport, dest);
-    }
-
-    @Override
-    public Vector4f project(float x, float y, float z, int[] viewport, Vector4f winCoordsDest) {
-        return super.project(x, y, z, viewport, winCoordsDest);
-    }
-
-    @Override
-    public Vector3f project(float x, float y, float z, int[] viewport, Vector3f winCoordsDest) {
-        return super.project(x, y, z, viewport, winCoordsDest);
-    }
-
-    @Override
-    public Vector4f project(Vector3f position, int[] viewport, Vector4f winCoordsDest) {
-        return super.project(position, viewport, winCoordsDest);
-    }
-
-    @Override
-    public Vector3f project(Vector3f position, int[] viewport, Vector3f winCoordsDest) {
-        return super.project(position, viewport, winCoordsDest);
-    }
-
-    @Override
-    public Matrix4f reflect(float a, float b, float c, float d, Matrix4f dest) {
-        return super.reflect(a, b, c, d, dest);
     }
 
     @Override
@@ -1357,28 +1041,13 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f reflect(float nx, float ny, float nz, float px, float py, float pz, Matrix4f dest) {
-        return super.reflect(nx, ny, nz, px, py, pz, dest);
-    }
-
-    @Override
-    public Matrix4f reflect(Vector3f normal, Vector3f point) {
+    public Matrix4f reflect(Vector3fc normal, Vector3fc point) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f reflect(Quaternionf orientation, Vector3f point) {
+    public Matrix4f reflect(Quaternionfc orientation, Vector3fc point) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f reflect(Quaternionf orientation, Vector3f point, Matrix4f dest) {
-        return super.reflect(orientation, point, dest);
-    }
-
-    @Override
-    public Matrix4f reflect(Vector3f normal, Vector3f point, Matrix4f dest) {
-        return super.reflect(normal, point, dest);
     }
 
     @Override
@@ -1392,22 +1061,22 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f reflection(Vector3f normal, Vector3f point) {
+    public Matrix4f reflection(Vector3fc normal, Vector3fc point) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f reflection(Quaternionf orientation, Vector3f point) {
+    public Matrix4f reflection(Quaternionfc orientation, Vector3fc point) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Vector4f getRow(int row, Vector4f dest) throws IndexOutOfBoundsException {
-        return super.getRow(row, dest);
+    public Matrix4f setRow(int row, Vector4fc src) throws IndexOutOfBoundsException {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Vector4f getColumn(int column, Vector4f dest) throws IndexOutOfBoundsException {
+    public Matrix4f setColumn(int column, Vector4fc src) throws IndexOutOfBoundsException {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
@@ -1417,103 +1086,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f normal(Matrix4f dest) {
-        return super.normal(dest);
-    }
-
-    @Override
-    public Matrix3f normal(Matrix3f dest) {
-        return super.normal(dest);
-    }
-
-    @Override
     public Matrix4f normalize3x3() {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f normalize3x3(Matrix4f dest) {
-        return super.normalize3x3(dest);
-    }
-
-    @Override
-    public Matrix3f normalize3x3(Matrix3f dest) {
-        return super.normalize3x3(dest);
-    }
-
-    @Override
-    public Vector4f frustumPlane(int plane, Vector4f planeEquation) {
-        return super.frustumPlane(plane, planeEquation);
-    }
-
-    @Override
-    public Vector3f frustumCorner(int corner, Vector3f point) {
-        return super.frustumCorner(corner, point);
-    }
-
-    @Override
-    public Vector3f perspectiveOrigin(Vector3f origin) {
-        return super.perspectiveOrigin(origin);
-    }
-
-    @Override
-    public float perspectiveFov() {
-        return super.perspectiveFov();
-    }
-
-    @Override
-    public float perspectiveNear() {
-        return super.perspectiveNear();
-    }
-
-    @Override
-    public float perspectiveFar() {
-        return super.perspectiveFar();
-    }
-
-    @Override
-    public Vector3f frustumRayDir(float x, float y, Vector3f dir) {
-        return super.frustumRayDir(x, y, dir);
-    }
-
-    @Override
-    public Vector3f positiveZ(Vector3f dir) {
-        return super.positiveZ(dir);
-    }
-
-    @Override
-    public Vector3f normalizedPositiveZ(Vector3f dir) {
-        return super.normalizedPositiveZ(dir);
-    }
-
-    @Override
-    public Vector3f positiveX(Vector3f dir) {
-        return super.positiveX(dir);
-    }
-
-    @Override
-    public Vector3f normalizedPositiveX(Vector3f dir) {
-        return super.normalizedPositiveX(dir);
-    }
-
-    @Override
-    public Vector3f positiveY(Vector3f dir) {
-        return super.positiveY(dir);
-    }
-
-    @Override
-    public Vector3f normalizedPositiveY(Vector3f dir) {
-        return super.normalizedPositiveY(dir);
-    }
-
-    @Override
-    public Vector3f originAffine(Vector3f origin) {
-        return super.originAffine(origin);
-    }
-
-    @Override
-    public Vector3f origin(Vector3f origin) {
-        return super.origin(origin);
     }
 
     @Override
@@ -1522,23 +1096,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f shadow(Vector4f light, float a, float b, float c, float d, Matrix4f dest) {
-        return super.shadow(light, a, b, c, d, dest);
-    }
-
-    @Override
     public Matrix4f shadow(float lightX, float lightY, float lightZ, float lightW, float a, float b, float c, float d) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f shadow(float lightX, float lightY, float lightZ, float lightW, float a, float b, float c, float d, Matrix4f dest) {
-        return super.shadow(lightX, lightY, lightZ, lightW, a, b, c, d, dest);
-    }
-
-    @Override
-    public Matrix4f shadow(Vector4f light, Matrix4f planeTransform, Matrix4f dest) {
-        return super.shadow(light, planeTransform, dest);
     }
 
     @Override
@@ -1547,43 +1106,33 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f shadow(float lightX, float lightY, float lightZ, float lightW, Matrix4f planeTransform, Matrix4f dest) {
-        return super.shadow(lightX, lightY, lightZ, lightW, planeTransform, dest);
-    }
-
-    @Override
     public Matrix4f shadow(float lightX, float lightY, float lightZ, float lightW, Matrix4f planeTransform) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f billboardCylindrical(Vector3f objPos, Vector3f targetPos, Vector3f up) {
+    public Matrix4f billboardCylindrical(Vector3fc objPos, Vector3fc targetPos, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f billboardSpherical(Vector3f objPos, Vector3f targetPos, Vector3f up) {
+    public Matrix4f billboardSpherical(Vector3fc objPos, Vector3fc targetPos, Vector3fc up) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f billboardSpherical(Vector3f objPos, Vector3f targetPos) {
+    public Matrix4f billboardSpherical(Vector3fc objPos, Vector3fc targetPos) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    @Override
-    public Matrix4f pick(float x, float y, float width, float height, int[] viewport, Matrix4f dest) {
-        return super.pick(x, y, width, height, viewport, dest);
+        throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
@@ -1592,23 +1141,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public boolean isAffine() {
-        return super.isAffine();
-    }
-
-    @Override
     public Matrix4f swap(Matrix4f other) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f arcball(float radius, float centerX, float centerY, float centerZ, float angleX, float angleY, Matrix4f dest) {
-        return super.arcball(radius, centerX, centerY, centerZ, angleX, angleY, dest);
-    }
-
-    @Override
-    public Matrix4f arcball(float radius, Vector3f center, float angleX, float angleY, Matrix4f dest) {
-        return super.arcball(radius, center, angleX, angleY, dest);
     }
 
     @Override
@@ -1617,28 +1151,8 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f arcball(float radius, Vector3f center, float angleX, float angleY) {
+    public Matrix4f arcball(float radius, Vector3fc center, float angleX, float angleY) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f frustumAabb(Vector3f min, Vector3f max) {
-        throw new UnsupportedOperationException("Identity matrix is immutable");
-    }
-
-    @Override
-    public Matrix4f projectedGridRange(Matrix4f projector, float sLower, float sUpper, Matrix4f dest) {
-        return super.projectedGridRange(projector, sLower, sUpper, dest);
-    }
-
-    @Override
-    public Matrix4f perspectiveFrustumSlice(float near, float far, Matrix4f dest) {
-        return super.perspectiveFrustumSlice(near, far, dest);
-    }
-
-    @Override
-    public Matrix4f orthoCrop(Matrix4f view, Matrix4f dest) {
-        return super.orthoCrop(view, dest);
     }
 
     @Override
@@ -1647,12 +1161,47 @@ public class ImmutableMatrix4f extends Matrix4f {
     }
 
     @Override
-    public Matrix4f transformAab(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, Vector3f outMin, Vector3f outMax) {
+    public Matrix4f lerp(Matrix4fc other, float t) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 
     @Override
-    public Matrix4f transformAab(Vector3f min, Vector3f max, Vector3f outMin, Vector3f outMax) {
+    public Matrix4f rotateTowards(Vector3fc dir, Vector3fc up) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotateTowards(float dirX, float dirY, float dirZ, float upX, float upY, float upZ) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotationTowards(Vector3fc dir, Vector3fc up) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f rotationTowards(float dirX, float dirY, float dirZ, float upX, float upY, float upZ) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateTowards(Vector3fc pos, Vector3fc dir, Vector3fc up) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f translationRotateTowards(float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float upX, float upY, float upZ) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f affineSpan(Vector3f corner, Vector3f xDir, Vector3f yDir, Vector3f zDir) {
+        throw new UnsupportedOperationException("Identity matrix is immutable");
+    }
+
+    @Override
+    public Matrix4f obliqueZ(float a, float b) {
         throw new UnsupportedOperationException("Identity matrix is immutable");
     }
 }

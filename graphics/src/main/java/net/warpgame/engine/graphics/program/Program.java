@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL20;
 import net.warpgame.engine.graphics.program.extendedglsl.ExtendedGLSLProgram;
 import net.warpgame.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
 import net.warpgame.engine.graphics.texture.Texture;
+import org.lwjgl.opengl.GL21;
 
 import java.nio.FloatBuffer;
 
@@ -110,6 +111,12 @@ public abstract class Program {
 
     public void setUniformMatrix3(int location, Matrix3f matrix) {
         GL20.glUniformMatrix3fv(location, false, matrix.get(tempBuff3));
+    }
+
+    private FloatBuffer tempBuff3x2 = BufferUtils.createFloatBuffer(6);
+
+    public void setUniformMatrix3x2(int location, Matrix3x2f matrix){
+        GL21.glUniformMatrix3x2fv(location, false, matrix.get(tempBuff3x2));
     }
 
     public void setUniformf(int location, float f) {

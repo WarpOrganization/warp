@@ -35,14 +35,14 @@ public class PerspectiveMatrix implements ProjectionMatrix {
     private Matrix4f frustum(float left, float right, float bottom, float top) {
         Matrix4f matrix = new Matrix4f();
 
-        matrix.m00 = 2 * zNear / (right - left);
-        matrix.m11 = 2 * zNear / (top - bottom);
-        matrix.m22 = -(zFar + zNear) / (zFar - zNear);
-        matrix.m23 = -1;
-        matrix.m32 = -2 * zFar * zNear / (zFar - zNear);
-        matrix.m20 = (right + left) / (right - left);
-        matrix.m21 = (top + bottom) / (top - bottom);
-        matrix.m33 = 0;
+        matrix.m00(2 * zNear / (right - left));
+        matrix.m11(2 * zNear / (top - bottom));
+        matrix.m22(-(zFar + zNear) / (zFar - zNear));
+        matrix.m23(-1);
+        matrix.m32(-2 * zFar * zNear / (zFar - zNear));
+        matrix.m20((right + left) / (right - left));
+        matrix.m21((top + bottom) / (top - bottom));
+        matrix.m33(0);
 
         return matrix;
     }

@@ -43,7 +43,7 @@ public class AnimationLoader {
      */
     private static JointTransform createTransform(JointTransformData data) {
         Matrix4f mat = data.jointLocalTransform;
-        Vector3f translation = new Vector3f(mat.m30, mat.m31, mat.m32);
+        Vector3f translation = new Vector3f(mat.m30(), mat.m31(), mat.m32());
         Quaternionf rotation = new Quaternionf().setFromNormalized(mat);
         return new JointTransform(translation, rotation);
     }

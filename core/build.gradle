@@ -23,8 +23,8 @@ dependencies {
 
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.2'
 
-    compile 'org.joml:joml:1.8.0'
     compile 'org.slf4j:slf4j-api:1.7.12'
+    compile group: 'org.joml', name: 'joml', version: '1.9.10'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'

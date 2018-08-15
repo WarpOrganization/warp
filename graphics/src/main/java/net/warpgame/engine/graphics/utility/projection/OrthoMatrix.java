@@ -27,12 +27,12 @@ public class OrthoMatrix implements ProjectionMatrix {
 
     private void recalcMatrix() {
         this.matrix.identity();
-        this.matrix.m00 = 2f / (right - left);
-        this.matrix.m11 = 2f / (top - bottom);
-        this.matrix.m22 = 2f / (far - near);
-        this.matrix.m30 = -((right + left) / (right - left));
-        this.matrix.m31 = -((top + bottom) / (top - bottom));
-        this.matrix.m32 = -((far + near) / (far - near));
+        this.matrix.m00(2f / (right - left));
+        this.matrix.m11(2f / (top - bottom));
+        this.matrix.m22(2f / (far - near));
+        this.matrix.m30(-((right + left) / (right - left)));
+        this.matrix.m31(-((top + bottom) / (top - bottom)));
+        this.matrix.m32(-((far + near) / (far - near)));
     }
 
     public void setRight(float right) {

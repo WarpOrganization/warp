@@ -45,7 +45,7 @@ public class TransformProperty extends Property {
 
     public synchronized TransformProperty rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
         this.dirty = true;
-        rotation.rotate(xAngleInRadians, yAngleInRadians, zAngleInRadians);
+        rotation.rotateXYZ(xAngleInRadians, yAngleInRadians, zAngleInRadians);
         return this;
     }
 

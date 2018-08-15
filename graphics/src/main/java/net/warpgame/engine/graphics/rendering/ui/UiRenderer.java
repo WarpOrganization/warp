@@ -47,6 +47,7 @@ public class UiRenderer {
     }
 
     public void update() {
+        GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -55,6 +56,7 @@ public class UiRenderer {
         testRender();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_CULL_FACE);
 
     }
 
@@ -72,11 +74,12 @@ public class UiRenderer {
     }
 
     private void testRender() {
-        if (uiTest.texture2D == null || uiTest.matrix3f == null) {
+        if (uiTest.texture2D == null || uiTest.matrix3x2f == null) {
             return;
         }
         uiProgram.useTexture(uiTest.texture2D);
-        uiProgram.useMatrix(uiTest.matrix3f);
+        uiTest.matrix3x2f.rotate((float)Math.PI/128);
+        uiProgram.useMatrix(uiTest.matrix3x2f);
         quad.draw();
     }
 
