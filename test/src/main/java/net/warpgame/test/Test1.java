@@ -12,7 +12,6 @@ import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
@@ -421,118 +420,118 @@ public class Test1 {
             PNGDecoder.Format.RGB
     );
 
-    private static ImageData woodDiffuse = ImageDecoder.decodePNG(
-            Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
-            PNGDecoder.Format.RGBA
-    );
-
-    private static ImageData woodBump = ImageDecoder.decodePNG(
-            Test1.class.getResourceAsStream("wood/wood-stack-1-DISP.png"),
-            PNGDecoder.Format.RGBA
-    );
-
-    private static ImageData woodNorm = ImageDecoder.decodePNG(
-            Test1.class.getResourceAsStream("wood/wood-stack-1-NORM.png"),
-            PNGDecoder.Format.RGBA
-    );
-
-    private static ImageData stoneDiffuse = ImageDecoder.decodePNG(
-            Test1.class.getResourceAsStream("stone/stone-redstone-2.png"),
-            PNGDecoder.Format.RGBA
-    );
-
-    private static ImageData stoneBump = ImageDecoder.decodePNG(
-            Test1.class.getResourceAsStream("stone/stone-redstone-2-DISP.png"),
-            PNGDecoder.Format.RGBA
-    );
-
-    private static ImageData stoneNorm = ImageDecoder.decodePNG(
-            Test1.class.getResourceAsStream("stone/stone-redstone-2-NORM.png"),
-            PNGDecoder.Format.RGBA
-    );
+//    private static ImageData woodDiffuse = ImageDecoder.decodePNG(
+//            Test1.class.getResourceAsStream("wood/wood-stack-1-DIFFUSE.png"),
+//            PNGDecoder.Format.RGBA
+//    );
+//
+//    private static ImageData woodBump = ImageDecoder.decodePNG(
+//            Test1.class.getResourceAsStream("wood/wood-stack-1-DISP.png"),
+//            PNGDecoder.Format.RGBA
+//    );
+//
+//    private static ImageData woodNorm = ImageDecoder.decodePNG(
+//            Test1.class.getResourceAsStream("wood/wood-stack-1-NORM.png"),
+//            PNGDecoder.Format.RGBA
+//    );
+//
+//    private static ImageData stoneDiffuse = ImageDecoder.decodePNG(
+//            Test1.class.getResourceAsStream("stone/stone-redstone-2.png"),
+//            PNGDecoder.Format.RGBA
+//    );
+//
+//    private static ImageData stoneBump = ImageDecoder.decodePNG(
+//            Test1.class.getResourceAsStream("stone/stone-redstone-2-DISP.png"),
+//            PNGDecoder.Format.RGBA
+//    );
+//
+//    private static ImageData stoneNorm = ImageDecoder.decodePNG(
+//            Test1.class.getResourceAsStream("stone/stone-redstone-2-NORM.png"),
+//            PNGDecoder.Format.RGBA
+//    );
 
     private static void createSpheres(Component scene) {
 
-
-        Texture2D woodD = new Texture2D(
-                woodDiffuse.getWidth(),
-                woodDiffuse.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                woodDiffuse.getData());
-
-        Texture2D woodB = new Texture2D(
-                woodBump.getWidth(),
-                woodBump.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                woodBump.getData());
-
-        Texture2D woodN = new Texture2D(
-                woodNorm.getWidth(),
-                woodNorm.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                woodNorm.getData());
-
-        Texture2D stoneD = new Texture2D(
-                stoneDiffuse.getWidth(),
-                stoneDiffuse.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                stoneDiffuse.getData());
-
-        Texture2D stoneB = new Texture2D(
-                stoneBump.getWidth(),
-                stoneBump.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                stoneBump.getData());
-
-        Texture2D stoneN = new Texture2D(
-                stoneNorm.getWidth(),
-                stoneNorm.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                stoneNorm.getData());
-
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-
-                createSphere(scene,
-                        new Vector3f(i * 15, j * 15, 0),
-                        ((i + j) % 2 == 0) ? woodD : stoneD,
-                        ((i + j) % 2 == 0) ? woodB : stoneB,
-                        ((i + j) % 2 == 0) ? woodN : stoneN,
-                        0.15f
-                );
-            }
-        }
-
-        Texture2D whiteD = new Texture2D(
-                white.getWidth(),
-                white.getHeight(),
-                GL11.GL_RGB16,
-                GL11.GL_RGB,
-                true,
-                white.getData());
-
-
-        Component a = new SceneComponent(scene);
-        a.addProperty(new TransformProperty().rotateY((float) (Math.PI / 2.0f)).move(new Vector3f(20, 0, 20)));
-        Component b = new SceneComponent(scene);
-        b.addProperty(new TransformProperty().rotateX((float) (Math.PI / 2.0f)).move(new Vector3f(0, 0, 20)));
-        Component sphere = createSphere(b, new Vector3f(0, 0, 40), whiteD, null, null, 0.0f);
-        Vector3f t = Transforms.getAbsolutePosition(sphere, new Vector3f());
-        //t.add(0, -3, 0);
-        createSphere(scene, t.negate(), stoneD, null, null, 0.3f).addScript(S.class);
+//
+//        Texture2D woodD = new Texture2D(
+//                woodDiffuse.getWidth(),
+//                woodDiffuse.getHeight(),
+//                GL11.GL_RGBA16,
+//                GL11.GL_RGBA,
+//                true,
+//                woodDiffuse.getData());
+//
+//        Texture2D woodB = new Texture2D(
+//                woodBump.getWidth(),
+//                woodBump.getHeight(),
+//                GL11.GL_RGBA16,
+//                GL11.GL_RGBA,
+//                true,
+//                woodBump.getData());
+//
+//        Texture2D woodN = new Texture2D(
+//                woodNorm.getWidth(),
+//                woodNorm.getHeight(),
+//                GL11.GL_RGBA16,
+//                GL11.GL_RGBA,
+//                true,
+//                woodNorm.getData());
+//
+//        Texture2D stoneD = new Texture2D(
+//                stoneDiffuse.getWidth(),
+//                stoneDiffuse.getHeight(),
+//                GL11.GL_RGBA16,
+//                GL11.GL_RGBA,
+//                true,
+//                stoneDiffuse.getData());
+//
+//        Texture2D stoneB = new Texture2D(
+//                stoneBump.getWidth(),
+//                stoneBump.getHeight(),
+//                GL11.GL_RGBA16,
+//                GL11.GL_RGBA,
+//                true,
+//                stoneBump.getData());
+//
+//        Texture2D stoneN = new Texture2D(
+//                stoneNorm.getWidth(),
+//                stoneNorm.getHeight(),
+//                GL11.GL_RGBA16,
+//                GL11.GL_RGBA,
+//                true,
+//                stoneNorm.getData());
+//
+//
+//        for (int i = 0; i < 10; i++) {
+//            for (int j = 0; j < 10; j++) {
+//
+//                createSphere(scene,
+//                        new Vector3f(i * 15, j * 15, 0),
+//                        ((i + j) % 2 == 0) ? woodD : stoneD,
+//                        ((i + j) % 2 == 0) ? woodB : stoneB,
+//                        ((i + j) % 2 == 0) ? woodN : stoneN,
+//                        0.15f
+//                );
+//            }
+//        }
+//
+//        Texture2D whiteD = new Texture2D(
+//                white.getWidth(),
+//                white.getHeight(),
+//                GL11.GL_RGB16,
+//                GL11.GL_RGB,
+//                true,
+//                white.getData());
+//
+//
+//        Component a = new SceneComponent(scene);
+//        a.addProperty(new TransformProperty().rotateY((float) (Math.PI / 2.0f)).move(new Vector3f(20, 0, 20)));
+//        Component b = new SceneComponent(scene);
+//        b.addProperty(new TransformProperty().rotateX((float) (Math.PI / 2.0f)).move(new Vector3f(0, 0, 20)));
+//        Component sphere = createSphere(b, new Vector3f(0, 0, 40), whiteD, null, null, 0.0f);
+//        Vector3f t = Transforms.getAbsolutePosition(sphere, new Vector3f());
+//        t.add(0, -3, 0);
+//        createSphere(scene, t.negate(), stoneD, null, null, 0.3f).addScript(S.class);
     }
 
     public static class S extends Script {

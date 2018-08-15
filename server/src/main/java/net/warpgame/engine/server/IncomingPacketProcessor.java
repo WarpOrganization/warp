@@ -54,6 +54,12 @@ public class IncomingPacketProcessor {
 
     private void processKeepAlivePacket(long timestamp, int clientId, ByteBuf packetData) {
         clientRegistry.updateActivity(clientId);
+        Client client = clientRegistry.getClient(clientId);
+        client.updateRTT(timestamp);
+        connectionUtil.sendPacket(
+                connectionUtil.getHeader(PacketType.PACKET_KEEP_ALIVE, 0),
+                client
+        );
     }
 
     private void processMessagePacket(long timestamp, int clientId, ByteBuf packetData) {

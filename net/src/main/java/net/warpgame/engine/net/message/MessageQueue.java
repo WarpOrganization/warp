@@ -47,7 +47,7 @@ public class MessageQueue {
     private void resendEvents() {
         long currentTime = System.currentTimeMillis();
         while (!resendQueue.isEmpty()
-                && (currentTime - resendQueue.getFirst().getSendTime() > EVENT_RESEND_INTERVAL
+                && (resendQueue.getFirst().getNextResendTime() < currentTime
                 || resendQueue.getFirst().isConfirmed())) {
             MessageEnvelope envelope = resendQueue.pop();
             if (!envelope.isConfirmed()) {

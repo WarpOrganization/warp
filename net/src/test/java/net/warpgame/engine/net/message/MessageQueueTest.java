@@ -28,7 +28,7 @@ public class MessageQueueTest {
 
         doAnswer(invocation -> {
             MessageEnvelope envelope = invocation.getArgument(0);
-            envelope.setSendTime(System.currentTimeMillis());
+            envelope.setNextResendTime(System.currentTimeMillis() + 10);
             return null;
         }).when(messageSender).sendMessage(any(MessageEnvelope.class));
 
@@ -79,7 +79,7 @@ public class MessageQueueTest {
 
     private void sleepResendInterval() {
         try {
-            Thread.sleep(650);
+            Thread.sleep(15);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

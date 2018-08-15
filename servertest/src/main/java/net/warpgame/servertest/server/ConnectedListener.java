@@ -8,6 +8,8 @@ import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.net.NetComponentRegistry;
+import net.warpgame.engine.net.SerializationType;
+import net.warpgame.engine.net.StateSynchronizerProperty;
 import net.warpgame.engine.net.messagetypes.event.ConnectedEvent;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import net.warpgame.engine.physics.PhysicsService;
@@ -60,6 +62,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         FullPhysicsProperty physicsProperty = new FullPhysicsProperty(constructor.construct(transformProperty));
 
         ship.addProperty(physicsProperty);
+        ship.addProperty(new StateSynchronizerProperty(SerializationType.POSITION_AND_VELOCITY));
         ship.addScript(MovementScript.class);
 
 

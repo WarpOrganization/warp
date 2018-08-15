@@ -12,6 +12,7 @@ import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.net.PacketType;
 import net.warpgame.engine.net.SerializationType;
+import net.warpgame.engine.net.StateSynchronizerProperty;
 import net.warpgame.engine.physics.FullPhysicsProperty;
 import org.joml.Vector3f;
 
@@ -31,7 +32,7 @@ public class SceneSynchronizationTask extends EngineTask {
      */
     private static final int HEADER_SIZE = 4 + 8;
 
-    private static final int MAX_PACKET_SIZE = 2048;
+    private static final int MAX_PACKET_SIZE = 576;
 
     private static final int SCENE_SYNCHRONIZATION_INTERVAL = 50;
 
@@ -73,17 +74,18 @@ public class SceneSynchronizationTask extends EngineTask {
         int spaceLeft = MAX_PACKET_SIZE;
         spaceLeft -= HEADER_SIZE;
         for (Component c : components) {
-            if (c.hasEnabledProperty(Property.getTypeId(TransformProperty.class))) {
-
-                if (c.hasEnabledProperty(Property.getTypeId(FullPhysicsProperty.class))) {
+            if (c.hasEnabledProperty(Property.getTypeId(StateSynchronizerProperty.class))) {
+                StateSynchronizerProperty stateSynchronizerProperty =
+                        c.getProperty(Property.getTypeId(StateSynchronizerProperty.class));
+                if (stateSynchronizerProperty.getSerializationType() == SerializationType.POSITION) {
+                    out.writeInt(SerializationType.POSITION.ordinal());
+                    serializeComponentPosition(c, out);
+                    spaceLeft -= SerializationType.Size.POSITION_SIZE;
+                } else if (stateSynchronizerProperty.getSerializationType() == SerializationType.POSITION_AND_VELOCITY) {
                     out.writeInt(SerializationType.POSITION_AND_VELOCITY.ordinal());
                     serializeComponentPosition(c, out);
                     serializeComponentVelocity(c, out);
                     spaceLeft -= SerializationType.Size.POSITION_AND_VELOCITY_SIZE;
-                } else {
-                    out.writeInt(SerializationType.POSITION.ordinal());
-                    serializeComponentPosition(c, out);
-                    spaceLeft -= SerializationType.Size.POSITION_SIZE;
                 }
 
                 if (spaceLeft < SerializationType.Size.POSITION_AND_VELOCITY_SIZE) {
@@ -92,6 +94,7 @@ public class SceneSynchronizationTask extends EngineTask {
                     out = getBuffer();
                 }
             }
+
         }
         if (spaceLeft < MAX_PACKET_SIZE - HEADER_SIZE) clientRegistry.broadcast(out);
     }
