@@ -35,7 +35,7 @@ import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
-import net.warpgame.engine.graphics.rendering.gui.GuiTest;
+import net.warpgame.engine.graphics.rendering.ui.UiTest;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -124,19 +124,19 @@ public class Test1 {
 
     private static void setupGui(EngineContext context, GraphicsThread thread) {
         thread.scheduleOnce(() ->{
-            GuiTest guiTest = context.getLoadedContext().findOne(GuiTest.class).get();
+            UiTest uiTest = context.getLoadedContext().findOne(UiTest.class).get();
         ImageData imageData = ImageDecoder.decodePNG(
                 Test1.class.getResourceAsStream("cross.png"),
                 PNGDecoder.Format.RGBA
         );
-        guiTest.texture2D =  new Texture2D(
+        uiTest.texture2D =  new Texture2D(
                 imageData.getWidth(),
                 imageData.getHeight(),
                 GL11.GL_RGBA16,
                 GL11.GL_RGBA,
                 true,
                 imageData.getData());
-        guiTest.matrix3f = new Matrix3f().scale(0.05f);
+        uiTest.matrix3f = new Matrix3f().scale(0.05f);
         });
 
     }

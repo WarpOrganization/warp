@@ -1,14 +1,13 @@
-package net.warpgame.engine.graphics.rendering.gui;
+package net.warpgame.engine.graphics.rendering.ui;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
-import net.warpgame.engine.graphics.rendering.gui.program.GuiProgram;
-import net.warpgame.engine.graphics.rendering.gui.property.CanvasProperty;
+import net.warpgame.engine.graphics.rendering.ui.program.UiProgram;
+import net.warpgame.engine.graphics.rendering.ui.property.CanvasProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceAlbedoHolder;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
@@ -19,30 +18,30 @@ import java.util.List;
 
 @Service
 @Profile("graphics")
-public class GuiRenderer {
-    private static final Logger logger = LoggerFactory.getLogger(GuiRenderer.class);
+public class UiRenderer {
+    private static final Logger logger = LoggerFactory.getLogger(UiRenderer.class);
 
     private ScreenspaceAlbedoHolder screenspaceAlbedoHolder;
 
-    private GuiProgram guiProgram;
+    private UiProgram uiProgram;
     private QuadMesh quad;
     private TextureFramebuffer destinationFramebuffer;
 
-    private GuiTest guiTest;
+    private UiTest uiTest;
     private List<Component> canvas;
 
-    public GuiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, GuiTest guiTest) {
+    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiTest uiTest) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
-        this.guiTest = guiTest;
+        this.uiTest = uiTest;
         this.canvas = new ArrayList<>();
     }
 
     public void init(){
         this.quad = new QuadMesh();
         try {
-            guiProgram = new GuiProgram();
+            uiProgram = new UiProgram();
         }catch(ShaderCompilationException e) {
-            logger.error("Failed to compile gui rendering program");
+            logger.error("Failed to compile ui rendering program");
         }
         this.destinationFramebuffer = screenspaceAlbedoHolder.getAlbedoTextureFramebuffer();
     }
@@ -64,7 +63,7 @@ public class GuiRenderer {
     }
 
     private void prepareProgram() {
-        guiProgram.use();
+        uiProgram.use();
     }
 
     private void render() {
@@ -73,11 +72,11 @@ public class GuiRenderer {
     }
 
     private void testRender() {
-        if (guiTest.texture2D == null || guiTest.matrix3f == null) {
+        if (uiTest.texture2D == null || uiTest.matrix3f == null) {
             return;
         }
-        guiProgram.useTexture(guiTest.texture2D);
-        guiProgram.useMatrix(guiTest.matrix3f);
+        uiProgram.useTexture(uiTest.texture2D);
+        uiProgram.useMatrix(uiTest.matrix3f);
         quad.draw();
     }
 

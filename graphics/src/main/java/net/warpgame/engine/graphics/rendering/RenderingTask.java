@@ -7,7 +7,7 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.GLErrors;
 import net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAARenderer;
-import net.warpgame.engine.graphics.rendering.gui.GuiRenderer;
+import net.warpgame.engine.graphics.rendering.ui.UiRenderer;
 import net.warpgame.engine.graphics.rendering.scene.SceneRenderer;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceRenderer;
 import net.warpgame.engine.graphics.window.WindowTask;
@@ -29,19 +29,19 @@ public class RenderingTask extends EngineTask {
 
     private SceneRenderer sceneRenderer;
     private ScreenspaceRenderer screenspaceRenderer;
-    private GuiRenderer guiRenderer;
+    private UiRenderer uiRenderer;
     private SMAARenderer smaaRenderer;
 
 
     public RenderingTask(
             SceneRenderer sceneRenderer,
             ScreenspaceRenderer screenspaceRenderer,
-            GuiRenderer guiRenderer,
+            UiRenderer uiRenderer,
             SMAARenderer smaaRenderer
     ) {
         this.sceneRenderer = sceneRenderer;
         this.screenspaceRenderer = screenspaceRenderer;
-        this.guiRenderer = guiRenderer;
+        this.uiRenderer = uiRenderer;
         this.smaaRenderer = smaaRenderer;
     }
 
@@ -52,7 +52,7 @@ public class RenderingTask extends EngineTask {
         logger.info("OpenGL capabilities created.");
         sceneRenderer.init();
         screenspaceRenderer.init();
-        guiRenderer.init();
+        uiRenderer.init();
         smaaRenderer.initialize();
         //pipeline initialization...
         logger.info("Initialized pipeline.");
@@ -68,7 +68,7 @@ public class RenderingTask extends EngineTask {
     protected void onClose() {
         sceneRenderer.destroy();
         screenspaceRenderer.destroy();
-        guiRenderer.destroy();
+        uiRenderer.destroy();
         smaaRenderer.destroy();
         //destroy pipeline
     }
@@ -77,7 +77,7 @@ public class RenderingTask extends EngineTask {
     public void update(int delta) {
         sceneRenderer.update();
         screenspaceRenderer.update();
-        guiRenderer.update();
+        uiRenderer.update();
         smaaRenderer.update();
         GLErrors.checkOGLErrors();
     }
