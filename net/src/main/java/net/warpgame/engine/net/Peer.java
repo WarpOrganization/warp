@@ -107,7 +107,7 @@ public abstract class Peer {
     }
 
     public void updateRTT(long partnerKeepAliveTimestamp) {
-        lastRtt = (int) (System.currentTimeMillis() - (partnerKeepAliveTimestamp - clockSynchronizer.getDelta()));
+        lastRtt = (int) (2 * (System.currentTimeMillis() - (partnerKeepAliveTimestamp - clockSynchronizer.getDelta())));
         logger.info("RTT: " + lastRtt);
     }
 }
