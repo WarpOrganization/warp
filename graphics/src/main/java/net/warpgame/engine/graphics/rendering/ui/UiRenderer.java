@@ -26,14 +26,17 @@ public class UiRenderer {
     private UiProgram uiProgram;
     private QuadMesh quad;
     private TextureFramebuffer destinationFramebuffer;
+    private List<Component> canvas;
+    private Matrix3x2Stack matrixStack;
+
 
     private UiTest uiTest;
-    private List<Component> canvas;
 
     public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiTest uiTest) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
         this.uiTest = uiTest;
         this.canvas = new ArrayList<>();
+        this.matrixStack = new Matrix3x2Stack();
     }
 
     public void init(){
@@ -68,7 +71,7 @@ public class UiRenderer {
         uiProgram.use();
     }
 
-    private void render() {
+    private void render(Component object) {
 
 
     }
@@ -78,7 +81,6 @@ public class UiRenderer {
             return;
         }
         uiProgram.useTexture(uiTest.texture2D);
-        uiTest.matrix3x2f.rotate((float)Math.PI/128);
         uiProgram.useMatrix(uiTest.matrix3x2f);
         quad.draw();
     }

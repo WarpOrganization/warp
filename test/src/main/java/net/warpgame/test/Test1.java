@@ -137,7 +137,7 @@ public class Test1 {
                 GL11.GL_RGBA,
                 true,
                 imageData.getData());
-        uiTest.matrix3x2f = new Matrix3x2f().scale(0.1f);
+        uiTest.matrix3x2f = new Matrix3x2f().scale(0.1f).rotate((float)Math.PI/2);
 
         });
 
