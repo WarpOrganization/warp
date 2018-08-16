@@ -33,11 +33,9 @@ public class ConnectionStateHolder {
     }
 
     private void update() {
-        if (requestedConnectionState == partnerRequestedConnectionState) {
+        if (connectionState != requestedConnectionState && requestedConnectionState == partnerRequestedConnectionState) {
             connectionState = requestedConnectionState;
             logger.info("Connection state changed to " + connectionState);
-//            if (connectionState == LIVE)
-//                rootComponent.triggerEvent(new ConnectedEvent(peerId));
         }
     }
 
