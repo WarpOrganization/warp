@@ -66,6 +66,7 @@ try {
             unstash("server")
             sh "sudo systemctl stop warp || true"
             sh "7z -y x Warp-Server-*.zip"
+            sh "7z t Warp-server.jar"
             sh "chmod +x runServer.sh"
             sh "sudo systemctl start warp"
         }
@@ -78,7 +79,6 @@ try {
         def msg = "**Status:** " + currentBuild.currentResult.toLowerCase() + "\n"
         msg += "**Changes:** \n"
         if (!currentBuild.changeSets.isEmpty()) {
-            def counter = 0;
             currentBuild.changeSets.first().getLogs().each {
                 msg += "- `" + it.getCommitId().substring(0, 8) + "` *" + it.getComment().substring(0, it.getComment().length()-1) + "*\n"
             }
