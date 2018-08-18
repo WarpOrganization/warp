@@ -9,4 +9,16 @@ import net.warpgame.engine.graphics.texture.Texture2D;
  */
 public class ImageProperty extends Property {
     Texture2D texture;
+
+    public ImageProperty(Texture2D texture) {
+        this.texture = texture;
+    }
+
+    public Texture2D getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture2D texture) {
+        this.texture = texture;
+    }
 }

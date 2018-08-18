@@ -1,5 +1,8 @@
 package net.warpgame.engine.graphics.rendering.ui;
 
+import net.warpgame.engine.core.context.service.Profile;
+import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.core.context.service.ServiceBuilder;
 import org.joml.Matrix3x2f;
 
 import java.util.EmptyStackException;
@@ -8,6 +11,9 @@ import java.util.EmptyStackException;
  * @author MarconZet
  * Created 16.08.2018
  */
+
+@Service
+@Profile("graphics")
 public class Matrix3x2Stack {
     private static final int DEFAULT_SIZE = 10;
 
@@ -24,6 +30,7 @@ public class Matrix3x2Stack {
         array[0].identity();
     }
 
+    @ServiceBuilder
     public Matrix3x2Stack() {
         this(DEFAULT_SIZE);
     }

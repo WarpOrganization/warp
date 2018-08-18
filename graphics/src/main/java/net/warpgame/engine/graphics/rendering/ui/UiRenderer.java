@@ -1,14 +1,17 @@
 package net.warpgame.engine.graphics.rendering.ui;
 
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
 import net.warpgame.engine.graphics.mesh.shapes.QuadMesh;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.rendering.ui.program.UiProgram;
+import net.warpgame.engine.graphics.rendering.ui.program.UiProgramManager;
 import net.warpgame.engine.graphics.rendering.ui.property.CanvasProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceAlbedoHolder;
+import net.warpgame.engine.graphics.window.Display;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,21 +25,26 @@ public class UiRenderer {
     private static final Logger logger = LoggerFactory.getLogger(UiRenderer.class);
 
     private ScreenspaceAlbedoHolder screenspaceAlbedoHolder;
+    private UiComponentRenderer uiComponentRenderer;
+    private Display display;
 
     private UiProgram uiProgram;
+    private UiProgramManager uiProgramManager;
+
+
     private QuadMesh quad;
     private TextureFramebuffer destinationFramebuffer;
     private List<Component> canvas;
-    private Matrix3x2Stack matrixStack;
-
 
     private UiTest uiTest;
 
-    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiTest uiTest) {
+    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiComponentRenderer uiComponentRenderer, UiTest uiTest, Config config, UiProgramManager uiProgramManager) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
+        this.uiComponentRenderer = uiComponentRenderer;
         this.uiTest = uiTest;
+        this.uiProgramManager = uiProgramManager;
         this.canvas = new ArrayList<>();
-        this.matrixStack = new Matrix3x2Stack();
+        this.display = config.getValue("graphics.display");
     }
 
     public void init(){
@@ -47,6 +55,7 @@ public class UiRenderer {
             logger.error("Failed to compile ui rendering program");
         }
         this.destinationFramebuffer = screenspaceAlbedoHolder.getAlbedoTextureFramebuffer();
+        uiProgramManager.setUiProgram(uiProgram);
     }
 
     public void update() {
@@ -56,6 +65,7 @@ public class UiRenderer {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         prepareFramebuffer();
         prepareProgram();
+        canvas.forEach(this::render);
         testRender();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -71,9 +81,8 @@ public class UiRenderer {
         uiProgram.use();
     }
 
-    private void render(Component object) {
-
-
+    private void render(Component canvas) {
+        uiComponentRenderer.renderComponent(canvas);
     }
 
     private void testRender() {

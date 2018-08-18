@@ -8,12 +8,11 @@ import net.warpgame.engine.graphics.rendering.ui.UiRenderer;
  * Created 15.08.2018
  */
 public class CanvasProperty extends Property {
-    UiRenderer uiRenderer;
 
     @Override
     public void init() {
         super.init();
-        uiRenderer = getOwner().getContext().getLoadedContext().findOne(UiRenderer.class).get();
-
+        UiRenderer uiRenderer = getOwner().getContext().getLoadedContext().findOne(UiRenderer.class).get();
+        uiRenderer.addCanvas(this);
     }
 }

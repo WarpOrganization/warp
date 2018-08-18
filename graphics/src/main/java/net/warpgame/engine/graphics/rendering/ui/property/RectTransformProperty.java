@@ -1,17 +1,16 @@
 package net.warpgame.engine.graphics.rendering.ui.property;
 
 import net.warpgame.engine.core.property.Property;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import org.joml.Vector2f;
 
 /**
  * @author MarconZet
  * Created 15.08.2018
  */
 public class RectTransformProperty extends Property {
-    private Vector3f position;
-    private Quaternionf rotation;
-    private Vector3f scale;
+    private Vector2f position;
+    private float rotation;
+    private Vector2f scale;
     private int width;
     private int height;
 
@@ -22,9 +21,9 @@ public class RectTransformProperty extends Property {
     }
 
     private void setUp(){
-        position = new Vector3f();
-        rotation = new Quaternionf();
-        scale = new Vector3f().set(1);
+        position = new Vector2f();
+        rotation = 0;
+        scale = new Vector2f().set(1);
     }
 
     public void setWidth(int width) {
@@ -35,23 +34,35 @@ public class RectTransformProperty extends Property {
         this.height = height;
     }
 
-    public Vector3f getPosition() {
-        return position;
-    }
-
-    public Quaternionf getRotation() {
-        return rotation;
-    }
-
-    public Vector3f getScale() {
-        return scale;
-    }
-
     public int getWidth() {
         return width;
     }
 
     public int getHeight() {
         return height;
+    }
+
+    public Vector2f getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2f position) {
+        this.position = position;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
+
+    public Vector2f getScale() {
+        return scale;
+    }
+
+    public void setScale(Vector2f scale) {
+        this.scale = scale;
     }
 }
