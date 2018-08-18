@@ -22,11 +22,11 @@ import org.joml.Vector2f;
 public class UiComponentRenderer {
 
     private Display display;
-    private Matrix3x2Stack stack;
+    private UiMatrixStack stack;
     private UiProgramManager uiProgramManager;
     private QuadMesh quad;
 
-    public UiComponentRenderer(Config config, Matrix3x2Stack stack, UiProgramManager uiProgramManager) {
+    public UiComponentRenderer(Config config, UiMatrixStack stack, UiProgramManager uiProgramManager) {
         this.display = config.getValue("graphics.display");
         this.stack = stack;
         this.uiProgramManager = uiProgramManager;
@@ -37,11 +37,16 @@ public class UiComponentRenderer {
     }
 
     public void renderComponent(Component component){
-        RectTransformProperty rectTransform = component.getProperty(Property.getTypeId(RectTransformProperty.class));
-        ImageProperty image = component.getProperty(Property.getTypeId(ImageProperty.class));
-        uiProgramManager.getUiProgram().useMatrix(getTransformationMatrix(rectTransform));
-        uiProgramManager.getUiProgram().useTexture(image.getTexture());
-        quad.draw();
+        RectTransformProperty rectTransform = component.getPropertyOrNull(Property.getTypeId(RectTransformProperty.class));
+        if(rectTransform != null) {
+            ImageProperty image = component.getPropertyOrNull(Property.getTypeId(ImageProperty.class));
+            if(image != null) {
+                uiProgramManager.getUiProgram().useMatrix(getTransformationMatrix(rectTransform));
+                uiProgramManager.getUiProgram().useTexture(image.getTexture());
+                quad.draw();
+            }
+            component.forEachChildren(this::renderComponent);
+        }
     }
 
     private Matrix3x2f getTransformationMatrix(RectTransformProperty rectTransform){
@@ -49,8 +54,8 @@ public class UiComponentRenderer {
         Vector2f position = rectTransform.getPosition();
         res.translate(position.x * 2/ display.getWidth()-1, position.y *2/display.getHeight()-1);
         res.rotate(rectTransform.getRotation());
-        res.scale((float)rectTransform.getWidth()/display.getWidth(), (float)rectTransform.getHeight()/display.getHeight());
         res.scale(rectTransform.getScale());
+        res.scale((float) rectTransform.getWidth() / display.getWidth(), (float) rectTransform.getHeight() / display.getHeight());
         return res;
     }
 

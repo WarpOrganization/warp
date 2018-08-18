@@ -25,12 +25,12 @@ public class UiRenderer {
     private static final Logger logger = LoggerFactory.getLogger(UiRenderer.class);
 
     private ScreenspaceAlbedoHolder screenspaceAlbedoHolder;
-    private UiComponentRenderer uiComponentRenderer;
+    private TextureFramebuffer destinationFramebuffer;
 
+    private UiComponentRenderer uiComponentRenderer;
     private UiProgram uiProgram;
     private UiProgramManager uiProgramManager;
 
-    private TextureFramebuffer destinationFramebuffer;
     private List<Component> canvas;
 
     public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiComponentRenderer uiComponentRenderer, UiProgramManager uiProgramManager) {

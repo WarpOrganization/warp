@@ -128,25 +128,30 @@ public class Test1 {
         thread.scheduleOnce(() ->{
             Component component = new SceneComponent(context);
             component.addProperty(new CanvasProperty());
+            component.addProperty(new RectTransformProperty(DISPLAY.getWidth(), DISPLAY.getHeight()));
 
-            ImageData imageData = ImageDecoder.decodePNG(
-                    Test1.class.getResourceAsStream("cross.png"),
-                    PNGDecoder.Format.RGBA
-            );
-
-            Texture2D texture2D = new Texture2D(
-                    imageData.getWidth(),
-                    imageData.getHeight(),
-                    GL11.GL_RGBA16,
-                    GL11.GL_RGBA,
-                    true,
-                    imageData.getData());
-
-            component.addProperty(new ImageProperty(texture2D));
-            RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
-            rectTransformProperty.setPosition(new Vector2f(DISPLAY.getWidth() >> 1, DISPLAY.getHeight() >> 1));
-            component.addProperty(rectTransformProperty);
+            createCross(new SceneComponent(component));
         });
+    }
+
+    private static void createCross(Component component) {
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("cross.png"),
+                PNGDecoder.Format.RGBA
+        );
+
+        Texture2D texture2D = new Texture2D(
+                imageData.getWidth(),
+                imageData.getHeight(),
+                GL11.GL_RGBA16,
+                GL11.GL_RGBA,
+                true,
+                imageData.getData());
+
+        component.addProperty(new ImageProperty(texture2D));
+        RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
+        rectTransformProperty.setPosition(new Vector2f(DISPLAY.getWidth() >> 1, DISPLAY.getHeight() >> 1));
+        component.addProperty(rectTransformProperty);
     }
 
 
