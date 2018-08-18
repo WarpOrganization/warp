@@ -44,13 +44,7 @@ public class BulletCreator {
                 ClientTest.class.getResourceAsStream("bullet.png"),
                 PNGDecoder.Format.RGBA
         );
-        Texture2D diffuse = new Texture2D(
-                imageData.getHeight(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
+        Texture2D diffuse = new Texture2D(imageData);
         material = new Material(diffuse);
     }
 

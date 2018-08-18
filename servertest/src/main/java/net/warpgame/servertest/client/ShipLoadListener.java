@@ -50,13 +50,7 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
                 ClientTest.class.getResourceAsStream("he-goat_tex.png"),
                 PNGDecoder.Format.RGBA
         );
-        diffuse = new Texture2D(
-                imageData.getHeight(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
+        diffuse = new Texture2D(imageData);
         material = new Material(diffuse);
     }
 

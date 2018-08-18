@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.texture;
 
+import net.warpgame.engine.graphics.resource.texture.ImageData;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL43;
 
@@ -37,6 +38,23 @@ public class Texture2D extends TextureShape2D {
         this.width = width;
         this.height = height;
         setDefaultParams(mipmap);
+    }
+
+    public Texture2D(ImageData imageData){
+        super(GL11.GL_TEXTURE_2D,
+                genTexture2D(GL11.GL_TEXTURE_2D,
+                        imageData.getInternalFormat(),
+                        imageData.getFormat(),
+                        imageData.getWidth(),
+                        imageData.getHeight(),
+                        true,
+                        imageData.getData()),
+                imageData.getInternalFormat(),
+                imageData.getFormat());
+        this.width = imageData.getWidth();
+        this.height = imageData.getHeight();
+        setDefaultParams(true);
+
     }
 
     private void setDefaultParams(boolean mipmap) {

@@ -140,13 +140,7 @@ public class Test1 {
                 PNGDecoder.Format.RGBA
         );
 
-        Texture2D texture2D = new Texture2D(
-                imageData.getWidth(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
+        Texture2D texture2D = new Texture2D(imageData);
 
         component.addProperty(new ImageProperty(texture2D));
         RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
@@ -225,13 +219,7 @@ public class Test1 {
                 Test1.class.getResourceAsStream("gosciu.png"),
                 PNGDecoder.Format.RGBA
         );
-        Texture2D diffuse = new Texture2D(
-                imageData.getWidth(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
+        Texture2D diffuse = new Texture2D(imageData);
         Material material = new Material(diffuse);
         material.setShininess(0.05f);
         MaterialProperty materialProperty = new MaterialProperty(material);
@@ -280,13 +268,7 @@ public class Test1 {
                 Test1.class.getResourceAsStream("satellite/sat_tex.png"),
                 PNGDecoder.Format.RGBA
         );
-        Texture2D diffuse = new Texture2D(
-                imageData.getWidth(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
+        Texture2D diffuse = new Texture2D(imageData);
         Material material = new Material(diffuse);
         material.setShininess(0.05f);
 
@@ -312,13 +294,7 @@ public class Test1 {
                 Test1.class.getResourceAsStream("castle_tex.png"),
                 PNGDecoder.Format.RGBA
         );
-        Texture2D diffuse = new Texture2D(
-                imageData.getWidth(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
+        Texture2D diffuse = new Texture2D(imageData);
         Material material = new Material(diffuse);
         MeshProperty meshProperty = new MeshProperty(mesh);
         MaterialProperty materialProperty = new MaterialProperty(material);
@@ -332,13 +308,7 @@ public class Test1 {
 
     private static void createFloor(Scene scene) {
         StaticMesh plainMesh = new PlainMesh();
-        Texture2D diffuse = new Texture2D(
-                white.getWidth(),
-                white.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                white.getData());
+        Texture2D diffuse = new Texture2D(white);
         TransformProperty transformProperty = new TransformProperty();
         transformProperty.rotateX((float) -(Math.PI / 2));
         transformProperty.scale(new Vector3f(100f));
@@ -361,13 +331,7 @@ public class Test1 {
                 Test1.class.getResourceAsStream("tex.png"),
                 PNGDecoder.Format.RGBA
         );
-        Texture2D mugDiffuse = new Texture2D(
-                mugImageData.getWidth(),
-                mugImageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                mugImageData.getData());
+        Texture2D mugDiffuse = new Texture2D(mugImageData);
         Material mugMaterial = new Material(mugDiffuse);
 
         StaticMesh boundingBoxMesh = ObjLoader.read(
@@ -377,13 +341,7 @@ public class Test1 {
                 Test1.class.getResourceAsStream("palette.png"),
                 PNGDecoder.Format.RGB
         );
-        Texture2D boxDiffuse = new Texture2D(
-                boxImageData.getWidth(),
-                boxImageData.getHeight(),
-                GL11.GL_RGB16,
-                GL11.GL_RGB,
-                true,
-                boxImageData.getData());
+        Texture2D boxDiffuse = new Texture2D(boxImageData);
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
         boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         Material boxMaterial = new Material(boxDiffuse);

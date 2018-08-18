@@ -2,6 +2,9 @@ package net.warpgame.engine.graphics.resource.texture;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL32;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +39,17 @@ public class ImageDecoder {
                 e.printStackTrace();
             }
         }
-        return new ImageData(buffer, w, h);
+        return new ImageData(buffer, w, h, getOpenGlFormat(format));
+    }
+
+    private static int getOpenGlFormat(PNGDecoder.Format format) {
+        switch (format) {
+            case RGBA: return GL11.GL_RGBA;
+            case RGB: return GL11.GL_RGB;
+            case BGRA: return GL12.GL_BGRA;
+            case ABGR: throw new UnsupportedOperationException("ABGR png format is not supported but it can be");
+            default: throw new UnsupportedOperationException(format.toString()+" is not supported");
+        }
     }
 
     public static final String[] CUBEMAP_ELEMENTS = new String[]{
