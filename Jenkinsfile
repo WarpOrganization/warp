@@ -5,6 +5,7 @@ try {
     node('master') {
         stage('Prepare') {
             sh "rm Warp-*.zip || true"
+            sh "rm Warp-*.jar || true"
             checkout scm
             sh "./gradlew clean"
         }
