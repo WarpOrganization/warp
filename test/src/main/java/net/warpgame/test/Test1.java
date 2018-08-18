@@ -34,7 +34,6 @@ import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
-import net.warpgame.engine.graphics.rendering.ui.UiTest;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
@@ -53,9 +52,7 @@ import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.engine.graphics.window.WindowManager;
 import net.warpgame.test.command.MoveCameraCommand;
-import org.joml.Matrix3f;
-import org.joml.Matrix3x2f;
-import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -127,23 +124,6 @@ public class Test1 {
     }
 
     private static void setupGui(EngineContext context, GraphicsThread thread) {
-        thread.scheduleOnce(() ->{
-            UiTest uiTest = context.getLoadedContext().findOne(UiTest.class).get();
-        ImageData imageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("cross.png"),
-                PNGDecoder.Format.RGBA
-        );
-        uiTest.texture2D =  new Texture2D(
-                imageData.getWidth(),
-                imageData.getHeight(),
-                GL11.GL_RGBA16,
-                GL11.GL_RGBA,
-                true,
-                imageData.getData());
-        uiTest.matrix3x2f = new Matrix3x2f().scale(0.1f).rotate((float)Math.PI/2);
-
-        });
-
 
         thread.scheduleOnce(() ->{
             Component component = new SceneComponent(context);
@@ -163,7 +143,9 @@ public class Test1 {
                     imageData.getData());
 
             component.addProperty(new ImageProperty(texture2D));
-            component.addProperty(new RectTransformProperty(imageData.getWidth(), imageData.getHeight()));
+            RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
+            rectTransformProperty.setPosition(new Vector2f(DISPLAY.getWidth() >> 1, DISPLAY.getHeight() >> 1));
+            component.addProperty(rectTransformProperty);
         });
     }
 

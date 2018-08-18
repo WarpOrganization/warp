@@ -26,29 +26,22 @@ public class UiRenderer {
 
     private ScreenspaceAlbedoHolder screenspaceAlbedoHolder;
     private UiComponentRenderer uiComponentRenderer;
-    private Display display;
 
     private UiProgram uiProgram;
     private UiProgramManager uiProgramManager;
 
-
-    private QuadMesh quad;
     private TextureFramebuffer destinationFramebuffer;
     private List<Component> canvas;
 
-    private UiTest uiTest;
-
-    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiComponentRenderer uiComponentRenderer, UiTest uiTest, Config config, UiProgramManager uiProgramManager) {
+    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiComponentRenderer uiComponentRenderer, UiProgramManager uiProgramManager) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
         this.uiComponentRenderer = uiComponentRenderer;
-        this.uiTest = uiTest;
         this.uiProgramManager = uiProgramManager;
         this.canvas = new ArrayList<>();
-        this.display = config.getValue("graphics.display");
     }
 
     public void init(){
-        this.quad = new QuadMesh();
+        uiComponentRenderer.init();
         try {
             uiProgram = new UiProgram();
         }catch(ShaderCompilationException e) {
@@ -66,7 +59,6 @@ public class UiRenderer {
         prepareFramebuffer();
         prepareProgram();
         canvas.forEach(this::render);
-        testRender();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -85,20 +77,11 @@ public class UiRenderer {
         uiComponentRenderer.renderComponent(canvas);
     }
 
-    private void testRender() {
-        if (uiTest.texture2D == null || uiTest.matrix3x2f == null) {
-            return;
-        }
-        uiProgram.useTexture(uiTest.texture2D);
-        uiProgram.useMatrix(uiTest.matrix3x2f);
-        quad.draw();
+    public void addCanvas(CanvasProperty canvasProperty){
+        canvas.add(canvasProperty.getOwner());
     }
 
     public void destroy() {
-        quad.destroy();
-    }
-
-    public void addCanvas(CanvasProperty canvasProperty){
-        canvas.add(canvasProperty.getOwner());
+        uiComponentRenderer.destroy();
     }
 }

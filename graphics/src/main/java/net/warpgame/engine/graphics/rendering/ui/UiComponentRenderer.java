@@ -32,8 +32,11 @@ public class UiComponentRenderer {
         this.uiProgramManager = uiProgramManager;
     }
 
+    public void init(){
+        quad = new QuadMesh();
+    }
+
     public void renderComponent(Component component){
-        quad = new QuadMesh();//TODO no need to create new quad every frame
         RectTransformProperty rectTransform = component.getProperty(Property.getTypeId(RectTransformProperty.class));
         ImageProperty image = component.getProperty(Property.getTypeId(ImageProperty.class));
         uiProgramManager.getUiProgram().useMatrix(getTransformationMatrix(rectTransform));
@@ -41,12 +44,17 @@ public class UiComponentRenderer {
         quad.draw();
     }
 
-    private Matrix3x2f getTransformationMatrix(RectTransformProperty rectTransformProperty){
+    private Matrix3x2f getTransformationMatrix(RectTransformProperty rectTransform){
         Matrix3x2f res = new Matrix3x2f();
-        Vector2f position = rectTransformProperty.getPosition();
+        Vector2f position = rectTransform.getPosition();
         res.translate(position.x * 2/ display.getWidth()-1, position.y *2/display.getHeight()-1);
-        res.rotate(rectTransformProperty.getRotation());
-        res.scale(rectTransformProperty.getScale());
+        res.rotate(rectTransform.getRotation());
+        res.scale((float)rectTransform.getWidth()/display.getWidth(), (float)rectTransform.getHeight()/display.getHeight());
+        res.scale(rectTransform.getScale());
         return res;
+    }
+
+    public void destroy() {
+        quad.destroy();
     }
 }
