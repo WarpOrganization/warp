@@ -41,7 +41,6 @@ public class UiRenderer {
     }
 
     public void init(){
-        uiComponentRenderer.init();
         try {
             uiProgram = new UiProgram();
         }catch(ShaderCompilationException e) {
@@ -49,6 +48,7 @@ public class UiRenderer {
         }
         this.destinationFramebuffer = screenspaceAlbedoHolder.getAlbedoTextureFramebuffer();
         uiProgramManager.setUiProgram(uiProgram);
+        uiComponentRenderer.init();
     }
 
     public void update() {
