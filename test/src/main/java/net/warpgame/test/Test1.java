@@ -38,6 +38,7 @@ import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapPropert
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
+import net.warpgame.engine.graphics.rendering.ui.UiComponentRenderer;
 import net.warpgame.engine.graphics.rendering.ui.property.CanvasProperty;
 import net.warpgame.engine.graphics.rendering.ui.property.ImageProperty;
 import net.warpgame.engine.graphics.rendering.ui.property.RectTransformProperty;
@@ -145,6 +146,44 @@ public class Test1 {
         component.addProperty(new ImageProperty(texture2D));
         RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
         rectTransformProperty.setPosition(new Vector2f(DISPLAY.getWidth() >> 1, DISPLAY.getHeight() >> 1));
+        component.addProperty(rectTransformProperty);
+
+        createGray(new SceneComponent(component));
+
+        component.addScript(UiConstRotScript.class);
+    }
+
+    public static class UiConstRotScript extends Script {
+
+        @OwnerProperty(@IdOf(RectTransformProperty.class))
+        private RectTransformProperty transformProperty;
+
+        public UiConstRotScript(Component owner) {
+            super(owner);
+        }
+
+        @Override
+        public void onInit() {
+
+        }
+
+        @Override
+        public void onUpdate(int delta) {
+            transformProperty.setRotation(transformProperty.getRotation() + (float)Math.PI/10000 * delta);
+        }
+    }
+
+    private static void createGray(Component component) {
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("grey.png"),
+                PNGDecoder.Format.RGBA
+        );
+
+        Texture2D texture2D = new Texture2D(imageData);
+
+        component.addProperty(new ImageProperty(texture2D));
+        RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
+        rectTransformProperty.setPosition(new Vector2f(-300, 200));
         component.addProperty(rectTransformProperty);
     }
 
