@@ -24,7 +24,6 @@ public class UiComponentRenderer {
 
     private Display display;
     private Matrix3x2fStack stack;
-    private Matrix4f projectionMatrix;//after multiplying quad by projectionMatrix it has size of 2x2 pixels
     private UiProgramManager uiProgramManager;
     private QuadMesh quad;
 
@@ -36,8 +35,9 @@ public class UiComponentRenderer {
 
     public void init(){
         quad = new QuadMesh();
-        projectionMatrix = new Matrix4f().setOrtho2D(0, (float)display.getWidth(), 0, (float)display.getHeight());
-        uiProgramManager.getUiProgram().useProjectionMatrix(projectionMatrix);
+        uiProgramManager.init();
+        Matrix4f projectionMatrix = new Matrix4f().setOrtho2D(0, (float) display.getWidth(), 0, (float) display.getHeight());
+        uiProgramManager.setProjectionMatrix(projectionMatrix);
     }
 
     public void renderComponent(Component component){
@@ -47,8 +47,8 @@ public class UiComponentRenderer {
             getTransformationMatrix(rectTransform, stack);
             ImageProperty image = component.getPropertyOrNull(Property.getTypeId(ImageProperty.class));
             if(image != null) {
-                uiProgramManager.getUiProgram().useTransformationMatrix(stack.scale((float)rectTransform.getWidth()/2, (float)rectTransform.getHeight()/2, new Matrix3x2f()));
-                uiProgramManager.getUiProgram().useTexture(image.getTexture());
+                Matrix3x2f fullTransformation = stack.scale((float) rectTransform.getWidth() / 2, (float) rectTransform.getHeight() / 2, new Matrix3x2f());
+                uiProgramManager.prepareProgram(fullTransformation, image.getTexture());
                 quad.draw();
             }
             component.forEachChildren(this::renderComponent);
