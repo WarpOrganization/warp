@@ -13,6 +13,8 @@ graphics:
       maxLights: 10
     smaa:
       preset: !!net.warpgame.engine.graphics.rendering.antialiasing.smaa.SMAAPreset MEDIUM
+    ui:
+      stackSize: 10
 multiplayer:
   #ip: kocproz.ovh
   ip: 127.0.0.1
