@@ -12,8 +12,6 @@ import java.nio.FloatBuffer;
  *         Created 2016-06-28 at 11
  */
 public class MatrixStack {
-    private static final int MATRIX = 0;
-    private static final int R_MATRIX = 1;
 
     private static final int DEFAULT_DEPTH = 32;
 
@@ -21,7 +19,6 @@ public class MatrixStack {
     private Matrix4f[] composeMatrixStack;
     private Matrix3f[] rotationMatrixStack;
     private int top = 0;
-    private Matrix3f rotation;
 
     public MatrixStack(int size) {
         this.size = size;
@@ -167,55 +164,5 @@ public class MatrixStack {
     public void storeRotationBuffer(FloatBuffer dest) {
         rotationMatrixStack[top].get(dest);
     }
-
-    /**
-     * Immutable MatrixStack containing only one, identity matrix.
-     */
-    public static final MatrixStack IDENTITY_STACK = new MatrixStack(1) {
-        @Override
-        public void push() {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.push()");
-        }
-
-        @Override
-        public void pop() {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.pop()");
-        }
-
-        @Override
-        public void translate(float x, float y, float z) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.translate(x,y,z)");
-        }
-
-        @Override
-        public void translate(Vector3f vector) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.translate(vector)");
-        }
-
-        @Override
-        public void scale(float x, float y, float z) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.scale(x,y,z)");
-        }
-
-        @Override
-        public void rotate(float rad, float x, float y, float z) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.rotate(x,y,z)");
-        }
-
-        @Override
-        public void mul(Matrix4f matrix) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.rotate(matrix)");
-        }
-
-        @Override
-        public void setTop(Matrix4f topMatrix) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.setTop(topMatrix)");
-        }
-
-        @Override
-        public void setTopRotation(Matrix3f rotationMatrix) {
-            throw new UnsupportedOperationException("MatrixStack.IDENTITY_STACK.setTopRotation(rotationMatrix)");
-        }
-    };
 
 }

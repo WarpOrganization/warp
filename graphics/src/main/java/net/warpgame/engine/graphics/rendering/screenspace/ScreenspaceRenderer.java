@@ -85,7 +85,7 @@ public class ScreenspaceRenderer {
     }
 
     public void update() {
-        if (cameraHolder.getCamera() != null) {
+        if (cameraHolder.getCameraProperty() != null) {
             prepareFramebuffer();
             prepareProgram();
             renderScreenspace();
@@ -101,7 +101,7 @@ public class ScreenspaceRenderer {
 
     protected void prepareProgram() {
         this.screenspaceProgram.use();
-        this.screenspaceProgram.useCamera(cameraHolder.getCamera());
+        this.screenspaceProgram.useCamera(cameraHolder.getCameraProperty());
         this.screenspaceProgram.useLights(sceneLightManager.getLightPositions(), sceneLightManager.getLightProperties());
         this.screenspaceProgram.useGBuffer(gBufferManager.getGBuffer());
         prepareCubemap();

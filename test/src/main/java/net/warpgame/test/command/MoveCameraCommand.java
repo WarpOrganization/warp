@@ -27,7 +27,7 @@ public class MoveCameraCommand extends Command {
 
     public void execute(String... args) {
         if (args.length == 3) {
-            ((TransformProperty) cameraHolder.getCamera().getCameraComponent().getProperty(Property.getTypeId(TransformProperty.class)))
+            ((TransformProperty) cameraHolder.getCameraComponent().getProperty(Property.getTypeId(TransformProperty.class)))
                     .move(new Vector3f(Float.valueOf(args[0]), Float.valueOf(args[1]), Float.valueOf(args[2])));
         } else {
             consoleService.print(getUsageText());

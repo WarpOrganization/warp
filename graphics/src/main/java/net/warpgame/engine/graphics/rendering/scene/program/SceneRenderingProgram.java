@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.rendering.scene.program;
 
 import net.warpgame.engine.graphics.animation.AnimatedModel;
 import net.warpgame.engine.graphics.animation.AnimatedModelProperty;
-import net.warpgame.engine.graphics.camera.Camera;
+import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.program.Program;
 import net.warpgame.engine.graphics.program.ProgramAssemblyInfo;
@@ -71,10 +71,10 @@ public class SceneRenderingProgram extends Program {
 
     private Vector3f tempCameraPos = new Vector3f();
 
-    public void useCamera(Camera camera) {
+    public void useCamera(CameraProperty camera) {
         setUniformMatrix4(unifViewMatrix, camera.getCameraMatrix());
-        setUniformMatrix4(unifProjectionMatrix, camera.getProjectionMatrix().getMatrix());
-        setUniformV3(unifCameraPos, camera.getPosition(tempCameraPos));
+        setUniformMatrix4(unifProjectionMatrix, camera.getProjection().getMatrix());
+        setUniformV3(unifCameraPos, camera.getCameraPos());
     }
 
     public void useMatrixStack(MatrixStack stack) {

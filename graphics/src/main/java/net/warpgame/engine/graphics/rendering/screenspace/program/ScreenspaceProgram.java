@@ -1,9 +1,6 @@
 package net.warpgame.engine.graphics.rendering.screenspace.program;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
-import net.warpgame.engine.graphics.camera.Camera;
+import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.program.Program;
 import net.warpgame.engine.graphics.program.ProgramAssemblyInfo;
 import net.warpgame.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
@@ -13,6 +10,9 @@ import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBuffer;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.texture.Cubemap;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
@@ -91,10 +91,10 @@ public class ScreenspaceProgram extends Program {
 
     private Matrix4f mat = new Matrix4f();
     private Vector3f cameraPos = new Vector3f();
-    public void useCamera(Camera camera) {
-        camera.getPosition(cameraPos);
+    public void useCamera(CameraProperty camera) {
+        cameraPos = camera.getCameraPos();
         setUniformV3(uCameraPos, cameraPos);
-        camera.getProjectionMatrix()
+        camera.getProjection()
                 .getMatrix()
                 .invert(mat);
         setUniformMatrix4(uInverseProjection, mat);

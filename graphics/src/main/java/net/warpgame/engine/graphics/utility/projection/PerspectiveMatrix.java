@@ -25,6 +25,7 @@ public class PerspectiveMatrix implements ProjectionMatrix {
         ymax = (float) (zNear * Math.tan(fov));
         xmax = ymax * aspectRatio;
         this.matrix = frustum(-xmax, xmax, -ymax, ymax);
+
     }
 
     private float toRadians(float degrees) {

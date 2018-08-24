@@ -45,7 +45,7 @@ public class SceneRenderer {
     }
 
     public void update() {
-        if (sceneHolder.getScene() != null && cameraHolder.getCamera() != null) {
+        if (sceneHolder.getScene() != null && cameraHolder.getCameraProperty() != null) {
             initRendering();
             render(sceneHolder.getScene(), false);
         } else {

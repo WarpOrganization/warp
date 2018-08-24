@@ -15,7 +15,7 @@ public class Transforms {
 
     private static ArrayDeque<Component> stack = new ArrayDeque<>();
 
-    public synchronized static Matrix4f getImmediateTransform(Component component, Matrix4f dest) {
+    public synchronized static Matrix4f getAbsoluteTransform(Component component, Matrix4f dest) {
         Component firstUndirty = loadDirtyAndFetchTop(component); //see loadDirtyAndFetchCachedTop comment
         if (stack.isEmpty()) {
             TransformProperty transformProperty = component.getProperty(Property.getTypeId(TransformProperty.class));
@@ -108,7 +108,7 @@ public class Transforms {
     public synchronized static Vector3f getAbsolutePosition(Component component, Vector3f dest) {
         tempM.identity();
         dest.zero();
-        Matrix4f transform = getImmediateTransform(component, tempM);
+        Matrix4f transform = getAbsoluteTransform(component, tempM);
         Vector3f vector3f = transform.transformPosition(dest);
         return vector3f;
     }

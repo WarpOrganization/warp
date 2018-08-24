@@ -22,7 +22,7 @@ public class CameraUpdaterTask extends SimpleEngineTask {
 
     @Override
     public void update(int delta) {
-        Camera camera = this.cameraHolder.getCamera();
-        if(camera != null) camera.update(delta);
+        CameraProperty camera = this.cameraHolder.getCameraProperty();
+        if(camera != null) camera.update();
     }
 }

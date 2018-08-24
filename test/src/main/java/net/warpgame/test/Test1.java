@@ -22,9 +22,8 @@ import net.warpgame.engine.graphics.animation.colladaloader.datastructures.Anima
 import net.warpgame.engine.graphics.animation.colladaloader.datastructures.AnimationData;
 import net.warpgame.engine.graphics.animation.dataloader.AnimatedModelLoader;
 import net.warpgame.engine.graphics.animation.dataloader.AnimationLoader;
-import net.warpgame.engine.graphics.camera.Camera;
 import net.warpgame.engine.graphics.camera.CameraHolder;
-import net.warpgame.engine.graphics.camera.QuaternionCamera;
+import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.material.Material;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
@@ -38,7 +37,6 @@ import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapPropert
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
-import net.warpgame.engine.graphics.rendering.ui.UiComponentRenderer;
 import net.warpgame.engine.graphics.rendering.ui.property.CanvasProperty;
 import net.warpgame.engine.graphics.rendering.ui.property.ImageProperty;
 import net.warpgame.engine.graphics.rendering.ui.property.RectTransformProperty;
@@ -147,11 +145,7 @@ public class Test1 {
         RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
         rectTransformProperty.setPosition(new Vector2f(DISPLAY.getWidth() >> 1, DISPLAY.getHeight() >> 1));
         component.addProperty(rectTransformProperty);
-
-        createGray(new SceneComponent(component));
-
-        component.addScript(UiConstRotScript.class);
-    }
+}
 
     public static class UiConstRotScript extends Script {
 
@@ -296,7 +290,7 @@ public class Test1 {
 
 
         consoleService.registerVariable(
-                new CommandVariable("cameraPosX", ch.getCamera().getPosition(new Vector3f())));
+                new CommandVariable("cameraPosX", ch.getCameraProperty().getCameraPos()));
     }
 
     private static void createSatellite(Scene scene) {
@@ -603,8 +597,9 @@ public class Test1 {
                 DISPLAY.getWidth(),
                 DISPLAY.getHeight()
         );
-        Camera camera = new QuaternionCamera(cameraComponent, projection);
-        cameraHolder.setCamera(camera);
+        CameraProperty cameraProperty = new CameraProperty(projection);
+        cameraComponent.addProperty(cameraProperty);
+        cameraHolder.setCamera(cameraComponent);
     }
 
     private static String resourceToPath(String resource) {

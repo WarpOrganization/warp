@@ -7,9 +7,8 @@ import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.graphics.camera.Camera;
 import net.warpgame.engine.graphics.camera.CameraHolder;
-import net.warpgame.engine.graphics.camera.QuaternionCamera;
+import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
@@ -67,8 +66,9 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
         cameraComponent.addProperty(cameraTransform);
         cameraComponent.addScript(CameraZoomControlScript.class);
 
-        Camera camera = new QuaternionCamera(cameraComponent, projection);
-        cameraHolder.setCamera(camera);
+        CameraProperty cameraProperty = new CameraProperty(projection);
+        cameraComponent.addProperty(cameraProperty);
+        cameraHolder.setCamera(cameraComponent);
 
         Component light = new SceneComponent(shipComponent);
         light.addProperty(new TransformProperty().move(0f, 1f, 0f));

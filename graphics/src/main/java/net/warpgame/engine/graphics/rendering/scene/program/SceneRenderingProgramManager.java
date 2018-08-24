@@ -38,7 +38,7 @@ public class SceneRenderingProgramManager {
 
     public void update() {
         sceneRenderingProgram.use();
-        sceneRenderingProgram.useCamera(cameraHolder.getCamera());
+        sceneRenderingProgram.useCamera(cameraHolder.getCameraProperty());
     }
 
     public void prepareProgram(
