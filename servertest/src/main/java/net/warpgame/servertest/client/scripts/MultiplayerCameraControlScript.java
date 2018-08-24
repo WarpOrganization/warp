@@ -15,7 +15,7 @@ import org.joml.Vector2f;
  */
 public class MultiplayerCameraControlScript extends Script {
 
-    private static final float ROT_MODIFIER = 0.0001f;
+    private static final float ROT_MODIFIER = 0.00002f;
 
     public MultiplayerCameraControlScript(Component owner) {
         super(owner);
@@ -43,8 +43,8 @@ public class MultiplayerCameraControlScript extends Script {
         Vector2f cursorPositionDelta = new Vector2f();
         input.getCursorPosition(cursorPositionDelta);
         cursorPositionDelta.sub(lastCursorPos);
-        transformProperty.rotateZ(-cursorPositionDelta.y * ROT_MODIFIER * delta);
-        transformProperty.rotateLocalY(-cursorPositionDelta.x * ROT_MODIFIER * delta);
+        transformProperty.rotateZ(cursorPositionDelta.y * ROT_MODIFIER * delta);
+        transformProperty.rotateLocalY(cursorPositionDelta.x * ROT_MODIFIER * delta);
         input.getCursorPosition(lastCursorPos);
     }
 
