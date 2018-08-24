@@ -16,8 +16,8 @@ public class RemoteInput {
     private boolean rotationRight;
     private boolean rotationLeftX;
     private boolean rotationRightX;
-    //private boolean AVR;
-    //private boolean CAS;
+    private boolean AVR;
+    private boolean CAS;
 
     public boolean isForwardPressed() {
         return forwardPressed;
@@ -99,11 +99,11 @@ public class RemoteInput {
         this.rotationRightX = rotationRightX;
     }
 
-    /*public boolean isAVR() { return AVR; }
+    public boolean isAVR() { return AVR; }
 
     public void setAVR(boolean AVR) { this.AVR = AVR; }
 
     public boolean isCAS() { return CAS; }
 
-    public void setCAS(boolean CAS) { this.CAS = CAS; }*/
+    public void setCAS(boolean CAS) { this.CAS = CAS; }
 }

@@ -27,7 +27,7 @@ public class MultiplayerControlScript extends Script {
     private float cameraSpeed = CAMERA_SPEED;
 
     private boolean forward, backward, left, right,
-            rotateUp, rotateDown, rotateLeft, rotateRight, rotateLeftX, rotateRightX;
+            rotateUp, rotateDown, rotateLeft, rotateRight, rotateLeftX, rotateRightX, AVR, CAS;
 
     public MultiplayerControlScript(Component owner) {
         super(owner);
@@ -112,6 +112,14 @@ public class MultiplayerControlScript extends Script {
             getOwner().triggerEvent(new KeyboardInputEvent(VK_E, true));
             rotateRightX = true;
         }
+        if (input.isKeyDown(VK_C) && !CAS) {
+            getOwner().triggerEvent(new KeyboardInputEvent(VK_C, true));
+            CAS = true;
+        }
+        if (input.isKeyDown(VK_X) && !AVR) {
+            getOwner().triggerEvent(new KeyboardInputEvent(VK_X, true));
+            AVR = true;
+        }
         if (!input.isKeyDown(VK_W) && forward) {
             getOwner().triggerEvent(new KeyboardInputEvent(VK_W, false));
             forward = false;
@@ -151,6 +159,14 @@ public class MultiplayerControlScript extends Script {
         if (!input.isKeyDown(VK_E) && rotateRightX) {
             getOwner().triggerEvent(new KeyboardInputEvent(VK_E, false));
             rotateRightX = false;
+        }
+        if (!input.isKeyDown(VK_C) && CAS) {
+            getOwner().triggerEvent(new KeyboardInputEvent(VK_C, false));
+            CAS = false;
+        }
+        if (!input.isKeyDown(VK_X) && AVR) {
+            getOwner().triggerEvent(new KeyboardInputEvent(VK_X, false));
+            AVR = false;
         }
     }
 

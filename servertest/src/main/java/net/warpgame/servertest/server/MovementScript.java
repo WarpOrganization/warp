@@ -59,25 +59,30 @@ public class MovementScript extends Script {
     private void control(int delta) {
         systemsSwitchCounter += delta;
         if (systemsSwitchCounter > 200) {
-            /*if(input.isCAS()) {
+            if(input.isCAS()) {
                 controlAugmentationSystem = !controlAugmentationSystem;
                 systemsSwitchCounter = 0;
             }
             if(input.isAVR()) {
                 automaticVelocityRestorationSystem = !automaticVelocityRestorationSystem;
                 systemsSwitchCounter = 0;
-            }*/
+            }
         }
     }
 
     private Vector3f movementVector = new Vector3f();
+    private Vector3f  velocityVector = new Vector3f();
+    private Vector3f  frontVector = new Vector3f();
+    private Quaternionf rotation = new Quaternionf();
+    private Quaternionf rotationInverted = new Quaternionf();
+    private boolean manualEngineControl;
 
     private void move(int delta) {
         movementVector.zero();
 
-        Quaternionf rotation = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf());
-        Quaternionf rotationInverted = Transforms.getAbsoluteRotation(getOwner(), new Quaternionf()).invert();
-        boolean manualMainEngineControl = input.isForwardPressed() || input.isBackwardsPressed()
+        Transforms.getAbsoluteRotation(getOwner(), rotation);
+        rotation.invert(rotationInverted);
+        manualEngineControl = input.isForwardPressed() || input.isBackwardsPressed()
                 || input.isLeftPressed() || input.isRightPressed();
 
         if (input.isForwardPressed())
@@ -89,10 +94,12 @@ public class MovementScript extends Script {
         if (input.isRightPressed())
             movementVector.add(0, 0, -1);
 
-        if (automaticVelocityRestorationSystem && !manualMainEngineControl) {
-            if (physicsProperty.getVelocity().rotate(rotationInverted).x > currentCruiseSpeedSquared)
+        if (automaticVelocityRestorationSystem && !manualEngineControl) {
+            physicsProperty.getVelocity(velocityVector);
+            velocityVector.rotate(rotationInverted);
+            if (velocityVector.x - currentCruiseSpeedSquared > 0.01f)
                 movementVector.add(-1, 0, 0);
-            else
+            if (velocityVector.x - currentCruiseSpeedSquared < -0.01f)
                 movementVector.add(1, 0, 0);
         }
 
@@ -102,26 +109,28 @@ public class MovementScript extends Script {
             movementVector.mul(MOV_SPEED * delta);
             physicsProperty.applyCentralForce(movementVector);
 
-            if (manualMainEngineControl)
-                currentCruiseSpeedSquared = physicsProperty.getVelocity().rotate(rotationInverted).x;
+            if (manualEngineControl) {
+                physicsProperty.getVelocity(velocityVector);
+                velocityVector.rotate(rotationInverted);
+                currentCruiseSpeedSquared = velocityVector.x;
+            }
         }
-        movementVector.zero();
 
-        if (automaticVelocityRestorationSystem)
-        {
+        if (automaticVelocityRestorationSystem && !manualEngineControl) {
+            frontVector.zero();
+            frontVector.x = -1;
             //Vector pointing ship front
-            Vector3f  frontVector =  (new Vector3f(-1, 0, 0)).rotate(rotation);
+            frontVector.rotate(rotation);
             //Vector pointing ship velocity direction
-            Vector3f  velocityVector =  physicsProperty.getVelocity();
+            physicsProperty.getVelocity(velocityVector);
 
-            //movementVector = new Vector3f(frontVector);
             //the parameter in next line is component of velocityVector parallel to frontVector
             velocityVector.sub(frontVector.mul(frontVector.dot(velocityVector)/frontVector.lengthSquared()));
             //velocityVector is now storing component of velocityVector perpendicular to frontVector
-            if (velocityVector.lengthSquared() >= 0.00001f) {
-                velocityVector.mul(-1);
+            if (velocityVector.lengthSquared() >= 0.001f) {
+                velocityVector.negate();
                 velocityVector.normalize();
-                velocityVector.mul(MOV_SPEED * delta);
+                velocityVector.mul(MOV_SPEED * delta * 0.4f);
                 physicsProperty.applyCentralForce(velocityVector);
             }
         }
@@ -130,32 +139,30 @@ public class MovementScript extends Script {
     private Vector3f torqueVector = new Vector3f();
 
     private void rotate(int delta) {
-        boolean manualManeuverEngineControl = input.isRotationUp() || input.isRotationDown() || input.isRotationLeft()
+        torqueVector.zero();
+
+        manualEngineControl = input.isRotationUp() || input.isRotationDown() || input.isRotationLeft()
                 || input.isRotationRight() || input.isRotationLeftX() || input.isRotationRightX();
 
         if (input.isRotationUp())
             torqueVector.add(0, 0, -1);
         if (input.isRotationDown())
             torqueVector.add(0, 0, 1);
-
         if (input.isRotationLeft())
             torqueVector.add(0, 1, 0);
-
         if (input.isRotationRight())
             torqueVector.add(0, -1, 0);
-
         if (input.isRotationLeftX())
             torqueVector.add(1, 0, 0);
-
         if (input.isRotationRightX())
             torqueVector.add(-1, 0, 0);
 
-        if(controlAugmentationSystem && !manualManeuverEngineControl) {
-            torqueVector = physicsProperty.getAngularVelocity();
-            torqueVector.mul(-1);
-            if (torqueVector.lengthSquared() >= 0.00001f) {
+        if(controlAugmentationSystem && !manualEngineControl) {
+            physicsProperty.getAngularVelocity(torqueVector);
+            torqueVector.negate();
+            if (torqueVector.lengthSquared() >= 0.0005f) {
                 torqueVector.normalize();
-                torqueVector.mul(delta * ROT_SPEED);
+                torqueVector.mul(delta * ROT_SPEED * 0.8f);
                 physicsProperty.applyTorque(torqueVector);
             }
         } else if (torqueVector.lengthSquared() >= 1) {
@@ -164,12 +171,6 @@ public class MovementScript extends Script {
             torqueVector.rotate(transformProperty.getRotation());
             physicsProperty.applyTorque(torqueVector);
         }
-        torqueVector.set(0);
-
-
-        /*Vector3f x = physicsProperty.getAngularVelocity();
-        x.mul(-0.1f*delta);
-        physicsProperty.applyTorque(x);*/
     }
 //    private void rotate(int delta) {
 //        Vector2f cursorPositionDelta = input.getCursorPositionDelta();
