@@ -80,19 +80,19 @@ public class CameraProperty extends Property {
         dirty = false;
     }
 
-    public Vector3f getCameraPos() {
+    public Vector3fc getCameraPos() {
         return cameraPos;
     }
 
-    public Matrix4f getCameraMatrix() {
+    public Matrix4fc getCameraMatrix() {
         return cameraMatrix;
     }
 
-    public Quaternionf getRotation() {
+    public Quaternionfc getRotation() {
         return rotation;
     }
 
-    public Matrix4f getRotationMatrix() {
+    public Matrix4fc getRotationMatrix() {
         return rotationMatrix;
     }
 
@@ -173,7 +173,7 @@ public class CameraProperty extends Property {
         return depth;
     }
 
-    public Matrix4f getProjection() {
+    public Matrix4fc getProjection() {
         return projection;
     }
 }

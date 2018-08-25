@@ -5,8 +5,10 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import net.warpgame.engine.core.property.TransformProperty;
+import org.joml.Vector3fc;
 
 /**
  * @author Hubertus
@@ -66,7 +68,7 @@ public class PhysicsMotionState extends btMotionState {
 
     private Vector3f helperTranslation = new Vector3f();
 
-    private void translate(Matrix4 matrix, Vector3f translation) {
+    private void translate(Matrix4 matrix, Vector3fc translation) {
         helperTranslation.set(translation);
         helperTranslation.add(translationOffset);
         matrix.setToTranslation(helperTranslation.x, helperTranslation.y, helperTranslation.z);
@@ -74,7 +76,7 @@ public class PhysicsMotionState extends btMotionState {
 
     private Quaternionf helperRotation = new Quaternionf();
 
-    private void rotate(Matrix4 matrix, Quaternionf rotation) {
+    private void rotate(Matrix4 matrix, Quaternionfc rotation) {
         helperRotation.set(rotation);
         helperRotation.mul(rotationOffset);
         bulletRotation.set(helperRotation.x, helperRotation.y, helperRotation.z, helperRotation.w);

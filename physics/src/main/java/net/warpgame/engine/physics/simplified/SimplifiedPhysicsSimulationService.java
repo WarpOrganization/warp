@@ -57,7 +57,8 @@ public class SimplifiedPhysicsSimulationService {
                         angularVelocity.x,
                         angularVelocity.y,
                         angularVelocity.z);
-                transformProperty.getRotation().mul(rotation);
+                transformProperty.getRotation().mul(rotation, rotation);
+                transformProperty.setRotation(rotation);
             }
         }
     }

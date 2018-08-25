@@ -5,7 +5,9 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.program.ShaderCompilationException;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import org.joml.Matrix3x2f;
+import org.joml.Matrix3x2fc;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,7 @@ public class UiProgramManager {
     private static final Logger logger = LoggerFactory.getLogger(UiProgramManager.class);
 
     private UiProgram uiProgram;
-    private Matrix4f projectionMatrix;
+    private Matrix4fc projectionMatrix;
 
     public void init(){
         try {
@@ -35,12 +37,12 @@ public class UiProgramManager {
         uiProgram.useProjectionMatrix(projectionMatrix);
     }
 
-    public void prepareProgram(Matrix3x2f matrix, Texture2D texture){
+    public void prepareProgram(Matrix3x2fc matrix, Texture2D texture){
         uiProgram.useTransformationMatrix(matrix);
         uiProgram.useTexture(texture);
     }
 
-    public void setProjectionMatrix(Matrix4f projectionMatrix) {
+    public void setProjectionMatrix(Matrix4fc projectionMatrix) {
         this.projectionMatrix = projectionMatrix;
     }
 }

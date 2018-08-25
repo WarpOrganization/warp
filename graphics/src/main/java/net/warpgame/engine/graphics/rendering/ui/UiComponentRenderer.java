@@ -10,9 +10,7 @@ import net.warpgame.engine.graphics.rendering.ui.program.UiProgramManager;
 import net.warpgame.engine.graphics.rendering.ui.property.ImageProperty;
 import net.warpgame.engine.graphics.rendering.ui.property.RectTransformProperty;
 import net.warpgame.engine.graphics.window.Display;
-import org.joml.Matrix3x2f;
-import org.joml.Matrix3x2fStack;
-import org.joml.Matrix4f;
+import org.joml.*;
 
 /**
  * @author MarconZet
@@ -36,7 +34,7 @@ public class UiComponentRenderer {
     public void init(){
         quad = new QuadMesh();
         uiProgramManager.init();
-        Matrix4f projectionMatrix = new Matrix4f().setOrtho2D(0, (float) display.getWidth(), 0, (float) display.getHeight());
+        Matrix4fc projectionMatrix = new Matrix4f().setOrtho2D(0, (float) display.getWidth(), 0, (float) display.getHeight());
         uiProgramManager.setProjectionMatrix(projectionMatrix);
     }
 
@@ -47,7 +45,7 @@ public class UiComponentRenderer {
             getTransformationMatrix(rectTransform, stack);
             ImageProperty image = component.getPropertyOrNull(Property.getTypeId(ImageProperty.class));
             if(image != null) {
-                Matrix3x2f fullTransformation = stack.scale((float) rectTransform.getWidth() / 2, (float) rectTransform.getHeight() / 2, new Matrix3x2f());
+                Matrix3x2fc fullTransformation = stack.scale((float) rectTransform.getWidth() / 2, (float) rectTransform.getHeight() / 2, new Matrix3x2f());
                 uiProgramManager.prepareProgram(fullTransformation, image.getTexture());
                 quad.draw();
             }

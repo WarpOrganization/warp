@@ -73,7 +73,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         Client client = clientRegistry.getClient(event.getSourcePeerId());
 
         if (client != null) {
-            getOwner().triggerEvent(new LoadShipEvent(ship.getId(), transformProperty.getTranslation(), Client.ALL));
+            getOwner().triggerEvent(new LoadShipEvent(ship.getId(), (Vector3f) transformProperty.getTranslation(), Client.ALL));//TODO change to Vector3fc
             sendScene(client, ship.getId());
             getOwner().triggerEvent(new BoardShipEvent(ship.getId(), client.getId()));
         }
@@ -86,7 +86,7 @@ public class ConnectedListener extends Listener<ConnectedEvent> {
         for (Component c : components) {
             if (c.getId() != 0 && c.getId() != currentShip) {
                 property = c.getProperty(Property.getTypeId(TransformProperty.class));
-                getOwner().triggerEvent(new LoadShipEvent(c.getId(), property.getTranslation(), client.getId()));
+                getOwner().triggerEvent(new LoadShipEvent(c.getId(), (Vector3f) property.getTranslation(), client.getId()));//TODO change to Vector3fc
             }
         }
     }

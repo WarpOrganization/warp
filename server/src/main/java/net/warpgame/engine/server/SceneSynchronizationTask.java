@@ -102,13 +102,13 @@ public class SceneSynchronizationTask extends EngineTask {
     private void serializeComponentPosition(Component c, ByteBuf buffer) {
         TransformProperty transformProperty = c.getProperty(Property.getTypeId(TransformProperty.class));
         buffer.writeInt(c.getId());
-        buffer.writeFloat(transformProperty.getTranslation().x);
-        buffer.writeFloat(transformProperty.getTranslation().y);
-        buffer.writeFloat(transformProperty.getTranslation().z);
-        buffer.writeFloat(transformProperty.getRotation().x);
-        buffer.writeFloat(transformProperty.getRotation().y);
-        buffer.writeFloat(transformProperty.getRotation().z);
-        buffer.writeFloat(transformProperty.getRotation().w);
+        buffer.writeFloat(transformProperty.getTranslation().x());
+        buffer.writeFloat(transformProperty.getTranslation().y());
+        buffer.writeFloat(transformProperty.getTranslation().z());
+        buffer.writeFloat(transformProperty.getRotation().x());
+        buffer.writeFloat(transformProperty.getRotation().y());
+        buffer.writeFloat(transformProperty.getRotation().z());
+        buffer.writeFloat(transformProperty.getRotation().w());
     }
 
     private Vector3f velocity = new Vector3f();

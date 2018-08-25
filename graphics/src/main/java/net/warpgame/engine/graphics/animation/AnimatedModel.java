@@ -42,7 +42,7 @@ public class AnimatedModel {
         mesh.destroy();
     }
 
-    public Matrix4f[] getJointTransforms() {
+    public Matrix4f[] getJointTransforms() {//TODO Matrix4fc ??
         Matrix4f[] jointMatrices = new Matrix4f[jointCount];
         addJointToArray(rootJoint, jointMatrices);
         return jointMatrices;

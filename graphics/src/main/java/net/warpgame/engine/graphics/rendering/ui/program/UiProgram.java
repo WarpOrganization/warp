@@ -5,7 +5,9 @@ import net.warpgame.engine.graphics.program.ProgramAssemblyInfo;
 import net.warpgame.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import org.joml.Matrix3x2f;
+import org.joml.Matrix3x2fc;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 
 public class UiProgram extends Program {
     private static final int TEX_LOCATION = 0;
@@ -29,11 +31,11 @@ public class UiProgram extends Program {
         useTexture(TEX_LOCATION, texture);
     }
 
-    public void useTransformationMatrix(Matrix3x2f matrix){
+    public void useTransformationMatrix(Matrix3x2fc matrix){
         setUniformMatrix3x2(unifTransformationMatrix, matrix);
     }
 
-    public void useProjectionMatrix(Matrix4f matrix){
+    public void useProjectionMatrix(Matrix4fc matrix){
         setUniformMatrix4(unifProjectionMatrix, matrix);
     }
 }

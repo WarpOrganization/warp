@@ -99,7 +99,7 @@ public abstract class Program {
 
     private FloatBuffer tempBuff4 = BufferUtils.createFloatBuffer(16);
 
-    public void setUniformMatrix4(int location, Matrix4f matrix) {
+    public void setUniformMatrix4(int location, Matrix4fc matrix) {
         GL20.glUniformMatrix4fv(location, false, matrix.get(tempBuff4));
     }
 
@@ -109,13 +109,13 @@ public abstract class Program {
 
     private FloatBuffer tempBuff3 = BufferUtils.createFloatBuffer(9);
 
-    public void setUniformMatrix3(int location, Matrix3f matrix) {
+    public void setUniformMatrix3(int location, Matrix3fc matrix) {
         GL20.glUniformMatrix3fv(location, false, matrix.get(tempBuff3));
     }
 
     private FloatBuffer tempBuff3x2 = BufferUtils.createFloatBuffer(6);
 
-    public void setUniformMatrix3x2(int location, Matrix3x2f matrix){
+    public void setUniformMatrix3x2(int location, Matrix3x2fc matrix){
         GL21.glUniformMatrix3x2fv(location, false, matrix.get(tempBuff3x2));
     }
 
@@ -139,20 +139,20 @@ public abstract class Program {
         GL20.glUniform2f(location, v1, v2);
     }
 
-    public void setUniformV2(int location, Vector2f vector) {
-        setUniformV2(location, vector.x, vector.y);
+    public void setUniformV2(int location, Vector2fc vector) {
+        setUniformV2(location, vector.get(0), vector.get(1));
     }
 
     public void setUniformV3(int location, float v1, float v2, float v3) {
         GL20.glUniform3f(location, v1, v2, v3);
     }
 
-    public void setUniformV4(int location, Vector4f vector) {
-        GL20.glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+    public void setUniformV4(int location, Vector4fc vector) {
+        GL20.glUniform4f(location, vector.get(0),vector.get(1),vector.get(2),vector.get(3));
     }
 
-    public void setUniformV3(int location, Vector3f vector) {
-        GL20.glUniform3f(location, vector.x, vector.y, vector.z);
+    public void setUniformV3(int location, Vector3fc vector) {
+        GL20.glUniform3f(location, vector.get(0), vector.get(1), vector.get(2));
     }
 
     public int getProgram() {

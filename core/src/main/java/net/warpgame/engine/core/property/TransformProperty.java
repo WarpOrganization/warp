@@ -1,9 +1,6 @@
 package net.warpgame.engine.core.property;
 
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import org.joml.*;
 
 /**
  * @author Jaca777
@@ -11,36 +8,45 @@ import org.joml.Vector3f;
  */
 public class TransformProperty extends Property {
 
-    private Vector3f translation = new Vector3f();
-    private Quaternionf rotation = new Quaternionf();
-    private Vector3f scale = new Vector3f().set(1);
+    private Vector3f translation;
+    private Quaternionf rotation;
+    private Vector3f scale;
 
-    private boolean dirty = true;
-    private Matrix4f transformCache = new Matrix4f();
-    private Matrix3f rotationCache = new Matrix3f();
+    private boolean dirty;
+    private Matrix4f transformCache;
+    private Matrix3f rotationCache;
 
-    protected TransformProperty(Vector3f translation, Quaternionf rotation, Vector3f scale) {
-        this.translation = translation;
-        this.rotation = rotation;
-        this.scale = scale;
+    protected TransformProperty(Vector3fc translation, Quaternionfc rotation, Vector3fc scale) {
+        this.translation = new Vector3f(translation);
+        this.rotation = new Quaternionf().set(rotation);
+        this.scale = new Vector3f(scale);
+        dirty = true;
+        transformCache = new Matrix4f();
+        rotationCache = new Matrix3f();
     }
 
     public TransformProperty() {
+        translation = new Vector3f();
+        rotation = new Quaternionf();
+        scale = new Vector3f().set(1);
+        dirty = true;
+        transformCache = new Matrix4f();
+        rotationCache = new Matrix3f();
     }
 
-    public synchronized Vector3f getScale() {
+    public synchronized Vector3fc getScale() {
         return scale;
     }
 
-    public synchronized TransformProperty scale(Vector3f value) {
+    public synchronized TransformProperty scale(Vector3fc value) {
         this.dirty = true;
         this.scale.mul(value);
         return this;
     }
 
-    public synchronized void setScale(Vector3f scale) {
+    public synchronized void setScale(Vector3fc scale) {
         this.dirty = true;
-        this.scale = scale;
+        this.scale.set(scale);
     }
 
     public synchronized TransformProperty rotate(float xAngleInRadians, float yAngleInRadians, float zAngleInRadians) {
@@ -82,11 +88,11 @@ public class TransformProperty extends Property {
         return this;
     }
 
-    public synchronized Quaternionf getRotation() {
+    public synchronized Quaternionfc getRotation() {
         return rotation;
     }
 
-    public synchronized Vector3f getTranslation() {
+    public synchronized Vector3fc getTranslation() {
         return translation;
     }
 
@@ -94,7 +100,7 @@ public class TransformProperty extends Property {
         return out.set(translation);
     }
 
-    public synchronized void setTranslation(Vector3f translation) {
+    public synchronized void setTranslation(Vector3fc translation) {
         this.dirty = true;
         this.translation.set(translation);
     }
@@ -103,13 +109,13 @@ public class TransformProperty extends Property {
         return move(new Vector3f(x, y, z));
     }
 
-    public TransformProperty move(Vector3f movement) {
+    public TransformProperty move(Vector3fc movement) {
         this.dirty = true;
         this.translation.add(movement);
         return this;
     }
 
-    public synchronized TransformProperty setRotation(Quaternionf rotation) {
+    public synchronized TransformProperty setRotation(Quaternionfc rotation) {
         this.dirty = true;
         this.rotation.set(rotation);
         return this;
@@ -125,11 +131,11 @@ public class TransformProperty extends Property {
         this.dirty = false;
     }
 
-    public Matrix4f getCachedNonrelativeTransform() {
+    public Matrix4fc getCachedNonrelativeTransform() {
         return transformCache;
     }
 
-    public Matrix3f getCachedNonrelativeRotation() {
+    public Matrix3fc getCachedNonrelativeRotation() {
         return rotationCache;
     }
 }

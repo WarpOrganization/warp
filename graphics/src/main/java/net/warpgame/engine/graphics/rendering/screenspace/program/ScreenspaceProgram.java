@@ -12,6 +12,7 @@ import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourcePrope
 import net.warpgame.engine.graphics.texture.Cubemap;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -90,9 +91,9 @@ public class ScreenspaceProgram extends Program {
     }
 
     private Matrix4f mat = new Matrix4f();
-    private Vector3f cameraPos = new Vector3f();
+
     public void useCamera(CameraProperty camera) {
-        cameraPos = camera.getCameraPos();
+        Vector3fc cameraPos = camera.getCameraPos();
         setUniformV3(uCameraPos, cameraPos);
         camera.getProjection()
                 .invert(mat);

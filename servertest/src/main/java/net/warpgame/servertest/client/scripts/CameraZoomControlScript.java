@@ -45,7 +45,7 @@ public class CameraZoomControlScript extends Script {
 
     private void zoom(int delta) {
         float scrollDelta = lastScrollPos.y - scrollPos.y;
-        if (scrollDelta * ZOOM_MODIFIER * delta + transformProperty.getTranslation().x > 0)
+        if (scrollDelta * ZOOM_MODIFIER * delta + transformProperty.getTranslation().x() > 0)
             transformProperty.move((scrollDelta * ZOOM_MODIFIER * delta), 0, 0);
     }
 

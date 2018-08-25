@@ -1,9 +1,6 @@
 package net.warpgame.engine.graphics.utility;
 
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import org.joml.*;
 
 import java.nio.FloatBuffer;
 
@@ -72,8 +69,8 @@ public class MatrixStack {
      *
      * @param vector
      */
-    public void translate(Vector3f vector) {
-        translate(vector.x, vector.y, vector.z);
+    public void translate(Vector3fc vector) {
+        translate(vector.get(0), vector.get(0), vector.get(0));
     }
 
     /**
@@ -90,7 +87,7 @@ public class MatrixStack {
         rotationMatrixStack[top].rotate(rad, tempVector);
     }
 
-    public void rotate(Quaternionf quaternion) {
+    public void rotate(Quaternionfc quaternion) {
         composeMatrixStack[top].rotate(quaternion);
         rotationMatrixStack[top].rotate(quaternion);
     }
@@ -107,7 +104,7 @@ public class MatrixStack {
         composeMatrixStack[top].scale(tempVector);
     }
 
-    public void scale(Vector3f scale) {
+    public void scale(Vector3fc scale) {
         composeMatrixStack[top].scale(scale);
     }
 
@@ -117,15 +114,15 @@ public class MatrixStack {
      *
      * @param matrix
      */
-    public void mul(Matrix4f matrix) {
+    public void mul(Matrix4fc matrix) {
         composeMatrixStack[top].mul(matrix, composeMatrixStack[top]);
     }
 
-    public void setTop(Matrix4f topMatrix) {
+    public void setTop(Matrix4fc topMatrix) {
         topMatrix().set(topMatrix);
     }
 
-    public void setTopRotation(Matrix3f rotationMatrix) {
+    public void setTopRotation(Matrix3fc rotationMatrix) {
         topRotationMatrix().set(rotationMatrix);
     }
 
@@ -139,7 +136,7 @@ public class MatrixStack {
     /**
      * @return The topMatrix matrix.
      */
-    public Matrix4f topMatrix() {
+    public Matrix4f topMatrix() {//TODO Matrix4fc ??
         return composeMatrixStack[top];
     }
 
@@ -157,7 +154,7 @@ public class MatrixStack {
     /**
      * @return A rotation matrix of the topMatrix matrix.
      */
-    public Matrix3f topRotationMatrix() {
+    public Matrix3f topRotationMatrix() {//TODO Matrix3fc ??
         return rotationMatrixStack[top];
     }
 
