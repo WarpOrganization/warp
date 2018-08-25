@@ -70,7 +70,7 @@ public class MatrixStack {
      * @param vector
      */
     public void translate(Vector3fc vector) {
-        translate(vector.get(0), vector.get(0), vector.get(0));
+        translate(vector.x(), vector.y(), vector.z());
     }
 
     /**

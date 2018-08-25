@@ -140,7 +140,7 @@ public abstract class Program {
     }
 
     public void setUniformV2(int location, Vector2fc vector) {
-        setUniformV2(location, vector.get(0), vector.get(1));
+        setUniformV2(location, vector.x(), vector.y());
     }
 
     public void setUniformV3(int location, float v1, float v2, float v3) {
@@ -148,11 +148,11 @@ public abstract class Program {
     }
 
     public void setUniformV4(int location, Vector4fc vector) {
-        GL20.glUniform4f(location, vector.get(0),vector.get(1),vector.get(2),vector.get(3));
+        GL20.glUniform4f(location, vector.x(),vector.y(),vector.z(),vector.w());
     }
 
     public void setUniformV3(int location, Vector3fc vector) {
-        GL20.glUniform3f(location, vector.get(0), vector.get(1), vector.get(2));
+        GL20.glUniform3f(location, vector.x(),vector.y(),vector.z());
     }
 
     public int getProgram() {
