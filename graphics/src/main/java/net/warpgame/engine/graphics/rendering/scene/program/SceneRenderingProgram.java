@@ -73,7 +73,7 @@ public class SceneRenderingProgram extends Program {
 
     public void useCamera(CameraProperty camera) {
         setUniformMatrix4(unifViewMatrix, camera.getCameraMatrix());
-        setUniformMatrix4(unifProjectionMatrix, camera.getProjection().getMatrix());
+        setUniformMatrix4(unifProjectionMatrix, camera.getProjection());
         setUniformV3(unifCameraPos, camera.getCameraPos());
     }
 

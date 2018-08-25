@@ -12,7 +12,6 @@ import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
-import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.servertest.client.scripts.CameraZoomControlScript;
 import net.warpgame.servertest.client.scripts.GunScript;
@@ -26,7 +25,7 @@ import org.joml.Vector3f;
  */
 public class BoardShipListener extends Listener<BoardShipEvent> {
     private final CameraHolder cameraHolder;
-    private PerspectiveMatrix projection;
+    private Display display;
     private final ComponentRegistry componentRegistry;
     private final SceneLightManager lightManager;
 
@@ -37,13 +36,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
                                 SceneLightManager lightManager) {
         super(owner, Event.getTypeId(BoardShipEvent.class));
         this.cameraHolder = cameraHolder;
-        projection = new PerspectiveMatrix(
-                55f,
-                0.1f,
-                10000f,
-                display.getWidth(),
-                display.getHeight()
-        );
+        this.display = display;
         this.componentRegistry = componentRegistry;
         this.lightManager = lightManager;
     }
@@ -66,7 +59,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
         cameraComponent.addProperty(cameraTransform);
         cameraComponent.addScript(CameraZoomControlScript.class);
 
-        CameraProperty cameraProperty = new CameraProperty(projection);
+        CameraProperty cameraProperty = new CameraProperty(55f, (float)display.getWidth()/display.getHeight(), 0.1f, 10000f);
         cameraComponent.addProperty(cameraProperty);
         cameraHolder.setCamera(cameraComponent);
 

@@ -95,7 +95,6 @@ public class ScreenspaceProgram extends Program {
         cameraPos = camera.getCameraPos();
         setUniformV3(uCameraPos, cameraPos);
         camera.getProjection()
-                .getMatrix()
                 .invert(mat);
         setUniformMatrix4(uInverseProjection, mat);
         camera.getCameraMatrix().invert(mat);

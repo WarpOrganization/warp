@@ -47,7 +47,6 @@ import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
 import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
 import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
-import net.warpgame.engine.graphics.utility.projection.PerspectiveMatrix;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.engine.graphics.window.WindowManager;
 import net.warpgame.test.command.MoveCameraCommand;
@@ -590,14 +589,7 @@ public class Test1 {
         CameraHolder cameraHolder = engineContext.getLoadedContext()
                 .findOne(CameraHolder.class)
                 .get();
-        PerspectiveMatrix projection = new PerspectiveMatrix(
-                55f,
-                0.1f,
-                10000f,
-                DISPLAY.getWidth(),
-                DISPLAY.getHeight()
-        );
-        CameraProperty cameraProperty = new CameraProperty(projection);
+        CameraProperty cameraProperty = new CameraProperty(55f, (float)DISPLAY.getWidth()/DISPLAY.getHeight(), 0.1f, 10000f);
         cameraComponent.addProperty(cameraProperty);
         cameraHolder.setCamera(cameraComponent);
     }
