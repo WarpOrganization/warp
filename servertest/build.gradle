@@ -12,6 +12,10 @@ repositories {
     }
 }
 
+ext {
+    server = project.properties['server'] ?: false
+}
+
 dependencies {
 
     compile project(':core')
@@ -38,5 +42,9 @@ jar {
     manifest {
         attributes 'Main-Class': 'net.warpgame.engine.core.runtime.EngineLauncher'
     }
-    baseName = "Warp-server"
+    if (server) {
+        baseName = "Warp-server"
+    } else {
+        baseName = "Warp-${platform}"
+    }
 }
