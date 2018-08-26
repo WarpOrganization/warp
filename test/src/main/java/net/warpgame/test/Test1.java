@@ -89,6 +89,7 @@ public class Test1 {
         setupCamera(engineContext);
         createAudioSources(engineContext, thread);
         registerCommandsAndVariables(engineContext.getLoadedContext());
+        thread.scheduleOnce(() -> createShip(engineContext.getScene()));
     }
 
     public static class Sup extends Property {
@@ -99,6 +100,7 @@ public class Test1 {
         }
 
     }
+
     private static void createAudioSources(EngineContext context, GraphicsThread thread) {
         try {
             Component component = new SceneComponent(context);
@@ -123,7 +125,7 @@ public class Test1 {
 
     private static void setupGui(EngineContext context, GraphicsThread thread) {
 
-        thread.scheduleOnce(() ->{
+        thread.scheduleOnce(() -> {
             Component component = new SceneComponent(context);
             component.addProperty(new CanvasProperty());
             component.addProperty(new RectTransformProperty(DISPLAY.getWidth(), DISPLAY.getHeight()));
@@ -144,7 +146,30 @@ public class Test1 {
         RectTransformProperty rectTransformProperty = new RectTransformProperty(imageData.getWidth(), imageData.getHeight());
         rectTransformProperty.setPosition(new Vector2f(DISPLAY.getWidth() >> 1, DISPLAY.getHeight() >> 1));
         component.addProperty(rectTransformProperty);
-}
+    }
+
+    private static void createShip(Component scene) {
+        Component shipComponent = new SceneComponent(scene);
+        StaticMesh mesh = ObjLoader.read(
+                Test1.class.getResourceAsStream("ship/ship1.obj"),
+                true).toMesh();
+        ImageData imageData = ImageDecoder.decodePNG(
+                Test1.class.getResourceAsStream("ship/Color.png"),
+                PNGDecoder.Format.RGBA
+        );
+        Texture2D diffuse = new Texture2D(imageData);
+        Material material = new Material(diffuse);
+        material.setShininess(100f);
+
+        MeshProperty meshProperty = new MeshProperty(mesh);
+        TransformProperty transformProperty = new TransformProperty();
+        transformProperty.move(new Vector3f(-20f, 10f, -10f));
+        MaterialProperty materialProperty = new MaterialProperty(material);
+
+        shipComponent.addProperty(meshProperty);
+        shipComponent.addProperty(transformProperty);
+        shipComponent.addProperty(materialProperty);
+    }
 
     public static class UiConstRotScript extends Script {
 
@@ -162,7 +187,7 @@ public class Test1 {
 
         @Override
         public void onUpdate(int delta) {
-            transformProperty.setRotation(transformProperty.getRotation() + (float)Math.PI/10000 * delta);
+            transformProperty.setRotation(transformProperty.getRotation() + (float) Math.PI / 10000 * delta);
         }
     }
 
@@ -589,7 +614,7 @@ public class Test1 {
         CameraHolder cameraHolder = engineContext.getLoadedContext()
                 .findOne(CameraHolder.class)
                 .get();
-        CameraProperty cameraProperty = new CameraProperty(55f, (float)DISPLAY.getWidth()/DISPLAY.getHeight(), 0.1f, 10000f);
+        CameraProperty cameraProperty = new CameraProperty(55f, (float) DISPLAY.getWidth() / DISPLAY.getHeight(), 0.1f, 10000f);
         cameraComponent.addProperty(cameraProperty);
         cameraHolder.setCamera(cameraComponent);
     }
