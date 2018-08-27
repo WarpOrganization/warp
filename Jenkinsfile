@@ -24,8 +24,8 @@ try {
 
         def jar_steps = [:]
         jar_steps["Windows"] = {
-            sh "./gradlew jar -Pplatform=windows"
-            sh "mv build/libs/Warp-windows.jar Warp-windows.jar"
+            sh "./gradlew servertest:jar -Pplatform=windows"
+            sh "mv servertest/build/libs/Warp-windows-*.jar Warp-windows.jar"
             sh "cp runScripts/runWindows.bat run.bat"
             sh "7z a Warp-Windows-${branch}-${version}.zip run.bat Warp-windows.jar"
             sh "7z t Warp-windows.jar"
@@ -33,8 +33,8 @@ try {
             sh "rm Warp-windows.jar run.bat"
         }
         jar_steps["Linux"] = {
-            sh "./gradlew jar -Pplatform=linux"
-            sh "mv build/libs/Warp-linux.jar Warp-linux.jar"
+            sh "./gradlew servertest:jar -Pplatform=linux"
+            sh "mv servertest/build/libs/Warp-linux-*.jar Warp-linux.jar"
             sh "cp runScripts/runLinux.sh run.sh"
             sh "7z a Warp-Linux-${branch}-${version}.zip run.sh Warp-linux.jar"
             sh "7z t Warp-linux.jar"
@@ -42,8 +42,8 @@ try {
             sh "rm Warp-linux.jar run.sh"
         }
         jar_steps["Server"] = {
-            sh "./gradlew servertest:jar"
-            sh "mv servertest/build/libs/Warp-server*.jar Warp-server.jar"
+            sh "./gradlew servertest:jar -Pserver=true"
+            sh "mv servertest/build/libs/Warp-server-*.jar Warp-server.jar"
             sh "cp runScripts/runServerWindows.bat runServer.bat"
             sh "cp runScripts/runServerLinux.sh runServer.sh"
             sh "7z a Warp-Server-${branch}-${version}.zip runServer.sh runServer.bat Warp-server.jar"
