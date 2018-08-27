@@ -38,6 +38,7 @@ public class UiProgramManager {
     }
 
     public void prepareProgram(Matrix3x2fc matrix, Texture2D texture){
+        uiProgram.use();
         uiProgram.useTransformationMatrix(matrix);
         uiProgram.useTexture(texture);
     }
