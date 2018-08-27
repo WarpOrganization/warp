@@ -1,23 +1,21 @@
-package net.warpgame.engine.graphics.rendering.ui.program;
+package net.warpgame.engine.graphics.rendering.ui.image.program;
 
 import net.warpgame.engine.graphics.program.Program;
 import net.warpgame.engine.graphics.program.ProgramAssemblyInfo;
 import net.warpgame.engine.graphics.program.extendedglsl.ExtendedGLSLProgramCompiler;
 import net.warpgame.engine.graphics.texture.Texture2D;
-import org.joml.Matrix3x2f;
 import org.joml.Matrix3x2fc;
-import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
-public class UiProgram extends Program {
+public class ImageProgram extends Program {
     private static final int TEX_LOCATION = 0;
 
     private int unifTransformationMatrix;
     private int unifProjectionMatrix;
 
 
-    public UiProgram() {
-        super(new ProgramAssemblyInfo("ui"), ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
+    public ImageProgram() {
+        super(new ProgramAssemblyInfo("image"), ExtendedGLSLProgramCompiler.DEFAULT_COMPILER);
         setTextureLocation("tex", TEX_LOCATION);
         loadUniforms();
     }

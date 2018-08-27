@@ -4,9 +4,9 @@ import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.framebuffer.TextureFramebuffer;
-import net.warpgame.engine.graphics.rendering.ui.program.UiProgramManager;
-import net.warpgame.engine.graphics.rendering.ui.property.CanvasProperty;
+import net.warpgame.engine.graphics.rendering.ui.image.program.ImageProgramManager;
 import net.warpgame.engine.graphics.rendering.screenspace.ScreenspaceAlbedoHolder;
+import net.warpgame.engine.graphics.rendering.ui.text.program.TextProgramManager;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +23,16 @@ public class UiRenderer {
     private TextureFramebuffer destinationFramebuffer;
 
     private UiComponentRenderer uiComponentRenderer;
-    private UiProgramManager uiProgramManager;
+    private ImageProgramManager imageProgramManager;
+    private TextProgramManager textProgramManager;
 
     private List<Component> canvas;
 
-    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiComponentRenderer uiComponentRenderer, UiProgramManager uiProgramManager) {
+    public UiRenderer(ScreenspaceAlbedoHolder screenspaceAlbedoHolder, UiComponentRenderer uiComponentRenderer, ImageProgramManager imageProgramManager, TextProgramManager textProgramManager) {
         this.screenspaceAlbedoHolder = screenspaceAlbedoHolder;
         this.uiComponentRenderer = uiComponentRenderer;
-        this.uiProgramManager = uiProgramManager;
+        this.imageProgramManager = imageProgramManager;
+        this.textProgramManager = textProgramManager;
         this.canvas = new ArrayList<>();
     }
 
@@ -55,7 +57,8 @@ public class UiRenderer {
     }
 
     private void prepareProgram() {
-        uiProgramManager.update();
+        imageProgramManager.update();
+        textProgramManager.update();
     }
 
     private void render(Component canvas) {
@@ -68,5 +71,7 @@ public class UiRenderer {
 
     public void destroy() {
         uiComponentRenderer.destroy();
+        imageProgramManager.destroy();
+        textProgramManager.destroy();
     }
 }

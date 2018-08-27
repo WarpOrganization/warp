@@ -37,9 +37,9 @@ import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapPropert
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
-import net.warpgame.engine.graphics.rendering.ui.property.CanvasProperty;
-import net.warpgame.engine.graphics.rendering.ui.property.ImageProperty;
-import net.warpgame.engine.graphics.rendering.ui.property.RectTransformProperty;
+import net.warpgame.engine.graphics.rendering.ui.CanvasProperty;
+import net.warpgame.engine.graphics.rendering.ui.image.ImageProperty;
+import net.warpgame.engine.graphics.rendering.ui.RectTransformProperty;
 import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import net.warpgame.engine.graphics.resource.texture.ImageData;
 import net.warpgame.engine.graphics.resource.texture.ImageDataArray;

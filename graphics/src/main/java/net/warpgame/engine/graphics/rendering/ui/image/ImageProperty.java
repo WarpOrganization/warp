@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.rendering.ui.property;
+package net.warpgame.engine.graphics.rendering.ui.image;
 
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.texture.Texture2D;

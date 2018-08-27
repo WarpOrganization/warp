@@ -29,7 +29,7 @@ public class VAOMesh extends IndexedMesh {
 
     @Override
     public void finalizeRendering() {
-        GL30.glBindVertexArray(0);
+        vao.unbind();
     }
 
     protected VAO createVAO(int[] sizes, int[] types) {
@@ -38,7 +38,7 @@ public class VAOMesh extends IndexedMesh {
 
     @Override
     public void destroy() {
-        this.vao.destroy();
+        vao.destroy();
     }
 
 

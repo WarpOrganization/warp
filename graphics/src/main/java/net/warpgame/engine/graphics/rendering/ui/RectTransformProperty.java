@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.rendering.ui.property;
+package net.warpgame.engine.graphics.rendering.ui;
 
 import net.warpgame.engine.core.property.Property;
 import org.joml.Vector2f;
