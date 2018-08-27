@@ -14,35 +14,78 @@ import java.util.Map;
  *
  */
 public class FontFile {
-
-	private static final int PAD_TOP = 0;
-	private static final int PAD_LEFT = 1;
-	private static final int PAD_BOTTOM = 2;
-	private static final int PAD_RIGHT = 3;
-
-	private static final int DESIRED_PADDING = 3;
+    private static final int PAD_TOP = 0;
+    private static final int PAD_LEFT = 1;
+    private static final int PAD_BOTTOM = 2;
+    private static final int PAD_RIGHT = 3;
 
 	private static final String SPLITTER = " ";
 	private static final String NUMBER_SEPARATOR = ",";
 
-	private Map<Integer, Character> metaData = new HashMap<>();
+	private String face;
+	private int size;
+	private int[] padding;
+    private int paddingWidth;
+    private int paddingHeight;
+    private String bitmap;
 
-	private BufferedReader reader;
-	private Map<String, String> values = new HashMap<>();
+    private Map<Integer, Character> metaData = new HashMap<>();
 
-	/**
+    private BufferedReader reader;
+    private Map<String, String> values = new HashMap<>();
+
+    /**
 	 * Opens a font file in preparation for reading.
-	 * 
+	 *
 	 * @param file
 	 *            - the font file.
 	 */
 	protected FontFile(File file) {
 		openFile(file);
-
+        readHeader();
+        readCharData();
 		close();
 	}
 
-	/**
+    private void readCharData() {
+        while(processNextLine()){
+            int id = getValueOfVariable("id");
+            int x = getValueOfVariable("x");
+            int y = getValueOfVariable("y");
+            int width = getValueOfVariable("width");
+            int height = getValueOfVariable("height");
+            int xoffset = getValueOfVariable("xoffset");
+            int yoffset = getValueOfVariable("yoffset");
+            int xadvance = getValueOfVariable("xadvance");
+            Character c = new Character(
+                    id,
+                    x + padding[PAD_LEFT],
+                    y + padding[PAD_TOP],
+                    width - paddingWidth,
+                    height - paddingHeight,
+                    xoffset,
+                    yoffset,
+                    xadvance-paddingWidth
+            );
+            metaData.put(c.getId(), c);
+        }
+    }
+
+    private void readHeader() {
+        processNextLine();
+        face = values.get("face");
+        padding = getValuesOfVariable("padding");
+        paddingWidth = padding[PAD_LEFT] + padding[PAD_RIGHT];
+        paddingHeight = padding[PAD_TOP] + padding[PAD_BOTTOM];
+        processNextLine();
+        size = getValueOfVariable("base");
+        if(getValueOfVariable("pages") != 1)
+            throw new RuntimeException("Cannot load fonts consisting of more then one page");
+        processNextLine();
+        bitmap = values.get("file");
+    }
+
+    /**
 	 * Read in the next line and store the variable values.
 	 * 
 	 * @return {@code true} if the end of the file hasn't been reached.
