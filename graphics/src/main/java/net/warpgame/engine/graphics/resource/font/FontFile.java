@@ -162,4 +162,20 @@ public class FontFile {
 			System.err.println("Couldn't read font meta file!");
 		}
 	}
+
+    public String getFace() {
+        return face;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getBitmap() {
+        return bitmap;
+    }
+
+    public Map<Integer, Character> getMetaData() {
+        return metaData;
+    }
 }

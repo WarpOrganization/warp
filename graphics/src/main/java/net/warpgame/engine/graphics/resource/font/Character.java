@@ -54,8 +54,35 @@ public class Character {
         this.xAdvance = xAdvance;
     }
 
-    protected int getId() {
+    public int getId() {
         return id;
     }
 
+    public int getxTextureCoord() {
+        return xTextureCoord;
+    }
+
+    public int getyTextureCoord() {
+        return yTextureCoord;
+    }
+
+    public int getxTexSize() {
+        return xTexSize;
+    }
+
+    public int getyTexSize() {
+        return yTexSize;
+    }
+
+    public int getxOffset() {
+        return xOffset;
+    }
+
+    public int getyOffset() {
+        return yOffset;
+    }
+
+    public int getxAdvance() {
+        return xAdvance;
+    }
 }
