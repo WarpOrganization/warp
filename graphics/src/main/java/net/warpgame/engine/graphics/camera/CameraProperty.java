@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.camera;
 
+import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.Transforms;
 import org.joml.*;
@@ -11,18 +12,22 @@ import java.lang.Math;
  * Created 24.08.2018
  */
 public class CameraProperty extends Property {
-    private Matrix4f projection;
+    private Matrix4f projectionMatrix;
+    private Matrix4f uiProjectionMatrix;
     private boolean dirty;
 
     public enum CameraType {
         ORTHOGRAPHIC,
         PERSPECTIVE
-    }
 
-    private CameraType type;
+    }
+    private CameraType cameraType;
 
     private float size;
     private float fov;
+
+    private int width;
+    private int height;
     private float aspect;
 
     private float zNear;
@@ -33,25 +38,26 @@ public class CameraProperty extends Property {
 
     private float depth;
 
-    public CameraProperty(float fov, float aspect, float zNear, float zFar){
-        this(CameraType.PERSPECTIVE, 5, fov, aspect, zNear, zFar, new Vector2f(), new Vector2f(), 0);
-    }
 
-    public CameraProperty(float size, float zNear, float zFar){
-        this(CameraType.ORTHOGRAPHIC, size, 60, 1, zNear, zFar, new Vector2f(), new Vector2f(), 0);
-    }
-
-    private CameraProperty(CameraType type, float size, float fov, float aspect, float zNear, float zFar, Vector2f viewportXY, Vector2f viewportWH, float depth) {
-        this.type = type;
-        this.size = size;
-        this.fov = fov;
-        this.aspect = aspect;
+    public CameraProperty(CameraType type, float value, int width, int height, float zNear, float zFar){
+        this.projectionMatrix = new Matrix4f();
+        this.uiProjectionMatrix = new Matrix4f();
+        this.dirty = true;
+        this.cameraType = type;
+        this.width = width;
+        this.height = height;
+        this.aspect = (float)width/height;
         this.zNear = zNear;
         this.zFar = zFar;
-        this.viewportXY = viewportXY;
-        this.viewportWH = viewportWH;
-        this.depth = depth;
-        this.projection = new Matrix4f();
+        switch (type){
+            case PERSPECTIVE:
+                this.fov = value;
+                break;
+            case ORTHOGRAPHIC:
+                this.size = value;
+                break;
+        }
+
     }
 
     @Override
@@ -59,11 +65,17 @@ public class CameraProperty extends Property {
         super.init();
         updateProjectionMatrix();
     }
-
     private Matrix4f cameraMatrix = new Matrix4f();
     private Quaternionf rotation = new Quaternionf();
     private Matrix4f rotationMatrix = new Matrix4f();
     private Vector3f cameraPos = new Vector3f();
+
+
+    public Vector2f getPostitionOnCanvas(Component component){
+        Matrix4f transform = Transforms.getAbsoluteTransform(component, new Matrix4f());
+        Vector4f vector = new Vector4f(0, 0, 0, 1).mul(transform).mul(cameraMatrix).mul(projectionMatrix);
+        return new Vector2f((width >> 1) * (1 + vector.x), (height >> 1) * (1 + vector.y));
+    }
 
     public void update() {
         Transforms.getAbsoluteTransform(getOwner(), cameraMatrix).invert();
@@ -73,10 +85,11 @@ public class CameraProperty extends Property {
     }
 
     private void updateProjectionMatrix(){
-        switch (type){
-            case ORTHOGRAPHIC: projection.ortho(-size, size, -size, size, zNear, zFar);
-            case PERSPECTIVE: projection.perspective(fov*(float)Math.PI/180, aspect, zNear, zFar);
+        switch (cameraType){
+            case ORTHOGRAPHIC: projectionMatrix.ortho(-size, size, -size, size, zNear, zFar);
+            case PERSPECTIVE: projectionMatrix.perspective(fov*(float)Math.PI/180, aspect, zNear, zFar);
         }
+        uiProjectionMatrix.ortho2D(0, width, 0, height);
         dirty = false;
     }
 
@@ -96,8 +109,12 @@ public class CameraProperty extends Property {
         return rotationMatrix;
     }
 
-    public void setType(CameraType type) {
-        this.type = type;
+    public CameraType getCameraType() {
+        return cameraType;
+    }
+
+    public void setCameraType(CameraType cameraType) {
+        this.cameraType = cameraType;
         this.dirty = true;
     }
 
@@ -173,7 +190,13 @@ public class CameraProperty extends Property {
         return depth;
     }
 
-    public Matrix4fc getProjection() {
-        return projection;
+    public Matrix4fc getProjectionMatrix() {
+        return projectionMatrix;
     }
+
+    public Matrix4fc getUiProjectionMatrix() {
+        return uiProjectionMatrix;
+    }
+
+
 }

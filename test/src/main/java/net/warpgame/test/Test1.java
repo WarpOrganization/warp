@@ -127,9 +127,18 @@ public class Test1 {
 
         thread.scheduleOnce(() -> {
             Component component = new SceneComponent(context);
-            component.addProperty(new CanvasProperty());
+            component.addProperty(new CanvasProperty(context.getLoadedContext().findOne(CameraHolder.class).get().getCameraProperty()));
             component.addProperty(new RectTransformProperty(DISPLAY.getWidth(), DISPLAY.getHeight()));
 
+            context.getLoadedContext()
+                    .findOne(UiTargetHolder.class)
+                    .get()
+                    .setTargetHighlight(
+                            new Texture2D(
+                                    ImageDecoder.decodePNG(Test1.class.getResourceAsStream("square.png"), PNGDecoder.Format.RGBA))
+                    );
+
+            component.addScript(UiTargetScript.class);
             createCross(new SceneComponent(component));
         });
     }
@@ -169,6 +178,7 @@ public class Test1 {
         shipComponent.addProperty(meshProperty);
         shipComponent.addProperty(transformProperty);
         shipComponent.addProperty(materialProperty);
+        scene.getContext().getLoadedContext().findOne(UiTargetHolder.class).get().addComponent(shipComponent);
     }
 
     public static class UiConstRotScript extends Script {
@@ -614,7 +624,7 @@ public class Test1 {
         CameraHolder cameraHolder = engineContext.getLoadedContext()
                 .findOne(CameraHolder.class)
                 .get();
-        CameraProperty cameraProperty = new CameraProperty(55f, (float) DISPLAY.getWidth() / DISPLAY.getHeight(), 0.1f, 10000f);
+        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE,55f, DISPLAY.getWidth(),  DISPLAY.getHeight(), 0.1f, 10000f);
         cameraComponent.addProperty(cameraProperty);
         cameraHolder.setCamera(cameraComponent);
     }
