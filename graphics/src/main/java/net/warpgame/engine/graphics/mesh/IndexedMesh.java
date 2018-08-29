@@ -20,6 +20,14 @@ public class IndexedMesh {
     protected int indices = -1;
     protected int vertices = -1;
 
+    public IndexedMesh(int[] buffers, int[] sizes, int indexBuff, int indices, int vertices) {
+        this.buffers = buffers;
+        this.sizes = sizes;
+        this.indexBuff = indexBuff;
+        this.indices = indices;
+        this.vertices = vertices;
+    }
+
     public IndexedMesh(ByteBuffer[] data, int[] sizes, IntBuffer indices, int indicesCount, int verticesCount) {
         loadBuffers(data, indices);
         this.sizes = sizes;
@@ -74,14 +82,6 @@ public class IndexedMesh {
             buffers[i] = BufferTools.toDirectByteBuffer(data[i]);
         }
         return buffers;
-    }
-
-    public IndexedMesh(int[] buffers, int[] sizes, int indexBuff, int indices, int vertices) {
-        this.buffers = buffers;
-        this.sizes = sizes;
-        this.indexBuff = indexBuff;
-        this.indices = indices;
-        this.vertices = vertices;
     }
 
 

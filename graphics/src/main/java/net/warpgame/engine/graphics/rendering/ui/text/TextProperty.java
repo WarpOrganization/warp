@@ -1,6 +1,8 @@
 package net.warpgame.engine.graphics.rendering.ui.text;
 
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.graphics.resource.font.Font;
+import net.warpgame.engine.graphics.resource.font.FontManager;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -11,23 +13,38 @@ import org.joml.Vector3fc;
 public class TextProperty extends Property {
     private String text;
     private Vector3f color;
-    private Integer fontSize;
+    private int fontSize;
 
-    private String font;
+    private String fontName;
+    private Font font;
+    private FontManager fontManager;
 
-    public TextProperty(String text, Vector3f color, Integer fontSize, String font) {
+    public TextProperty(String text, Vector3f color, Integer fontSize, String fontName) {
         this.text = text;
         this.color = color;
         this.fontSize = fontSize;
-        this.font = font;
+        this.fontName = fontName;
     }
 
-    public TextProperty(String text, String font) {
-        this(text, new Vector3f(0, 0, 0), 72, font);
+    public TextProperty(String text, String fontName) {
+        this(text, new Vector3f(0, 0, 0), 72, fontName);
     }
 
-    public TextProperty(String font) {
-        this("Bottom Text", font);
+    public TextProperty(String fontName) {
+        this("Bottom Text", fontName);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        fontManager = getOwner().getContext().getLoadedContext().findOne(FontManager.class).get();
+        updateFont();
+    }
+
+    private void updateFont(){
+        font = fontManager.findFont(fontName);
+        if(font == null)
+            throw new RuntimeException(String.format("Font of name %s hasn't been loaded", fontName));
     }
 
     public String getText() {
@@ -46,19 +63,21 @@ public class TextProperty extends Property {
         this.color.set(color);
     }
 
-    public Integer getFontSize() {
+    public int getFontSize() {
         return fontSize;
     }
 
-    public void setFontSize(Integer fontSize) {
+    public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
     }
 
-    public String getFont() {
-        return font;
+    public String getFontName() {
+        return fontName;
     }
 
-    public void setFont(String font) {
-        this.font = font;
+    public void setFontName(String fontName) {
+        this.fontName = fontName;
+        if(getOwner() != null)
+            updateFont();
     }
 }

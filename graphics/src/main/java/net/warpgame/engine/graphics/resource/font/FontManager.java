@@ -21,6 +21,10 @@ public class FontManager {
         fonts.put(font.getName(), font);
     }
 
+    public Font findFont(String font){
+        return fonts.get(font);
+    }
+
     public void destroy(){
         fonts.forEach((x,y) -> y.destroy());
         fonts.clear();
