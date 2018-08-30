@@ -83,6 +83,8 @@ public class CameraProperty extends Property {
     public Vector2f getPositionOnCanvas(Component component){
         Matrix4f transform = Transforms.getAbsoluteTransform(component, new Matrix4f());
         Vector4f vector = new Vector4f(0, 0, 0, 1).mul(transform).mul(cameraMatrix).mul(projectionMatrix);
+        if(vector.z < 0)
+            return new Vector2f(Float.MAX_VALUE, Float.MAX_VALUE);
         return new Vector2f((width >> 1) * (1 + vector.x/vector.w), (height >> 1) * (1 + vector.y/vector.w));
     }
 
