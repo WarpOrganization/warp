@@ -14,7 +14,6 @@ import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.graphics.GraphicsThread;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
-import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.resource.texture.ImageDataArray;
@@ -112,8 +111,7 @@ public class ClientTest {
     }
 
     private static void makeLight(Component component) {
-        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
-        LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+        LightSourceProperty lightSourceProperty = new LightSourceProperty(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
         component.addProperty(lightSourceProperty);
         sceneLightManager.addLight(lightSourceProperty);
     }

@@ -34,9 +34,7 @@ import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
 import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
-import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
-import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.rendering.ui.CanvasProperty;
 import net.warpgame.engine.graphics.rendering.ui.image.ImageProperty;
 import net.warpgame.engine.graphics.rendering.ui.RectTransformProperty;
@@ -235,15 +233,13 @@ public class Test1 {
         });
     }
 
-    private static void createLight(Component component) {
-        SceneLightManager sceneLightManager = component.getContext()
-                .getLoadedContext()
-                .findOne(SceneLightManager.class)
-                .get();
-        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(40));
-        LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
-        component.addProperty(lightSourceProperty);
-        sceneLightManager.addLight(lightSourceProperty);
+    private static void createLight(Component scene) {
+
+        Component lsource = new SceneComponent(scene);
+        lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
+
+        LightSourceProperty lightSourceProperty = new LightSourceProperty(new Vector3f(1.3f, 1.3f, 1.3f).mul(40));
+        lsource.addProperty(lightSourceProperty);
     }
 
     private static Component createModels(Scene scene, GraphicsThread graphicsThread) {
@@ -255,9 +251,7 @@ public class Test1 {
             createFloor(scene);
             createSatellite(scene);
             createAnimated(scene);
-            Component lsource = new SceneComponent(scene);
-            lsource.addProperty(new TransformProperty().move(new Vector3f(0, 0, 20)));
-            createLight(lsource);
+            createLight(scene);
         });
 
         return ship;

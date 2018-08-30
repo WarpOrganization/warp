@@ -7,7 +7,6 @@ import net.warpgame.engine.graphics.program.extendedglsl.ExtendedGLSLProgramComp
 import net.warpgame.engine.graphics.program.extendedglsl.loader.LocalProgramLoader;
 import net.warpgame.engine.graphics.program.extendedglsl.preprocessor.ConstantField;
 import net.warpgame.engine.graphics.rendering.scene.gbuffer.GBuffer;
-import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.texture.Cubemap;
 import org.joml.Matrix4f;
@@ -85,7 +84,7 @@ public class ScreenspaceProgram extends Program {
         setUniformi(uLightNumber, positions.size());
         for(int i = 0; i < positions.size(); i++) {
             setUniformV3(uLightSourcePositions[i], positions.get(i));
-            LightSource lightSource = sources.get(i).getLightSource();
+            LightSourceProperty lightSource = sources.get(i);
             setUniformV3(uLightSourceColors[i], lightSource.getColor());
         }
     }

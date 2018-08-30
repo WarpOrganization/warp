@@ -9,7 +9,6 @@ import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.property.TransformProperty;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.camera.CameraProperty;
-import net.warpgame.engine.graphics.rendering.screenspace.light.LightSource;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
 import net.warpgame.engine.graphics.window.Display;
@@ -65,8 +64,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
 
         Component light = new SceneComponent(shipComponent);
         light.addProperty(new TransformProperty().move(0f, 1f, 0f));
-        LightSource lightSource = new LightSource(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
-        LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
+        LightSourceProperty lightSourceProperty = new LightSourceProperty(new Vector3f(1.3f, 1.3f, 1.3f).mul(20));
         light.addProperty(lightSourceProperty);
         lightManager.addLight(lightSourceProperty);
     }

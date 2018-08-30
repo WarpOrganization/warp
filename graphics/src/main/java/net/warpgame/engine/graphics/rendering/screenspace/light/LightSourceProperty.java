@@ -1,6 +1,8 @@
 package net.warpgame.engine.graphics.rendering.screenspace.light;
 
 import net.warpgame.engine.core.property.Property;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 /**
  * @author Jaca777
@@ -8,13 +10,26 @@ import net.warpgame.engine.core.property.Property;
  */
 public class LightSourceProperty extends Property {
 
-    private LightSource lightSource;
+    private Vector3f color;
 
-    public LightSourceProperty(LightSource lightSource) {
-        this.lightSource = lightSource;
+    public LightSourceProperty(Vector3fc color) {
+        this.color = new Vector3f(color);
     }
 
-    public LightSource getLightSource() {
-        return lightSource;
+    @Override
+    public void init() {
+        SceneLightManager sceneLightManager = getOwner().getContext()
+                .getLoadedContext()
+                .findOne(SceneLightManager.class)
+                .get();
+        sceneLightManager.addLight(this);
+    }
+
+    public Vector3fc getColor() {
+        return color;
+    }
+
+    public void setColor(Vector3fc color) {
+        this.color.set(color);
     }
 }
