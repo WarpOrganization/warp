@@ -44,38 +44,25 @@ public class CameraProperty extends Property {
         this.uiProjectionMatrix = new Matrix4f();
         this.dirty = true;
         this.cameraType = type;
+        this.size = value;
+        this.fov = value;
         this.width = width;
         this.height = height;
         this.aspect = (float)width/height;
         this.zNear = zNear;
         this.zFar = zFar;
-        switch (type){
-            case PERSPECTIVE:
-                this.fov = value;
-                break;
-            case ORTHOGRAPHIC:
-                this.size = value;
-                break;
-        }
-
     }
 
     @Override
     public void init() {
-        super.init();
         updateProjectionMatrix();
     }
+
     private Matrix4f cameraMatrix = new Matrix4f();
     private Quaternionf rotation = new Quaternionf();
     private Matrix4f rotationMatrix = new Matrix4f();
     private Vector3f cameraPos = new Vector3f();
 
-
-    public Vector2f getPostitionOnCanvas(Component component){
-        Matrix4f transform = Transforms.getAbsoluteTransform(component, new Matrix4f());
-        Vector4f vector = new Vector4f(0, 0, 0, 1).mul(transform).mul(cameraMatrix).mul(projectionMatrix);
-        return new Vector2f((width >> 1) * (1 + vector.x), (height >> 1) * (1 + vector.y));
-    }
 
     public void update() {
         Transforms.getAbsoluteTransform(getOwner(), cameraMatrix).invert();
@@ -91,6 +78,12 @@ public class CameraProperty extends Property {
         }
         uiProjectionMatrix.ortho2D(0, width, 0, height);
         dirty = false;
+    }
+
+    public Vector2f getPositionOnCanvas(Component component){
+        Matrix4f transform = Transforms.getAbsoluteTransform(component, new Matrix4f());
+        Vector4f vector = new Vector4f(0, 0, 0, 1).mul(transform).mul(cameraMatrix).mul(projectionMatrix);
+        return new Vector2f((width >> 1) * (1 + vector.x/vector.w), (height >> 1) * (1 + vector.y/vector.w));
     }
 
     public Vector3fc getCameraPos() {

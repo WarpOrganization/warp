@@ -2,6 +2,7 @@ package net.warpgame.engine.graphics.rendering.ui;
 
 import net.warpgame.engine.core.property.Property;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 /**
  * @author MarconZet
@@ -42,12 +43,12 @@ public class RectTransformProperty extends Property {
         return height;
     }
 
-    public Vector2f getPosition() {
+    public Vector2fc getPosition() {
         return position;
     }
 
-    public void setPosition(Vector2f position) {
-        this.position = position;
+    public void setPosition(Vector2fc position) {
+        this.position.set(position);
     }
 
     public float getRotation() {
@@ -58,11 +59,16 @@ public class RectTransformProperty extends Property {
         this.rotation = rotation;
     }
 
-    public Vector2f getScale() {
+    public Vector2fc getScale() {
         return scale;
     }
 
-    public void setScale(Vector2f scale) {
-        this.scale = scale;
+    public void setScale(Vector2fc scale) {
+        this.scale.set(scale);
+    }
+
+    public void setWidthAndHeight(int val){
+        this.width = val;
+        this.height = val;
     }
 }
