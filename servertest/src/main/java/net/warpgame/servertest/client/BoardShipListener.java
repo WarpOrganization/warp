@@ -59,7 +59,7 @@ public class BoardShipListener extends Listener<BoardShipEvent> {
         cameraComponent.addProperty(cameraTransform);
         cameraComponent.addScript(CameraZoomControlScript.class);
 
-        CameraProperty cameraProperty = new CameraProperty(55f, (float)display.getWidth()/display.getHeight(), 0.1f, 10000f);
+        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE,55f, display.getWidth(), display.getHeight(), 0.1f, 10000f);
         cameraComponent.addProperty(cameraProperty);
         cameraHolder.setCamera(cameraComponent);
 

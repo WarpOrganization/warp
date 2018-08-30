@@ -44,20 +44,13 @@ public class CameraProperty extends Property {
         this.uiProjectionMatrix = new Matrix4f();
         this.dirty = true;
         this.cameraType = type;
+        this.size = value;
+        this.fov = value;
         this.width = width;
         this.height = height;
         this.aspect = (float)width/height;
         this.zNear = zNear;
         this.zFar = zFar;
-        switch (type){
-            case PERSPECTIVE:
-                this.fov = value;
-                break;
-            case ORTHOGRAPHIC:
-                this.size = value;
-                break;
-        }
-
     }
 
     @Override
