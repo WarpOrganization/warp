@@ -19,9 +19,9 @@ public class TextProperty extends Property {
     private Font font;
     private FontManager fontManager;
 
-    public TextProperty(String text, Vector3f color, Integer fontSize, String fontName) {
+    public TextProperty(String text, Vector3fc color, Integer fontSize, String fontName) {
         this.text = text;
-        this.color = color;
+        this.color = new Vector3f(color);
         this.fontSize = fontSize;
         this.fontName = fontName;
     }

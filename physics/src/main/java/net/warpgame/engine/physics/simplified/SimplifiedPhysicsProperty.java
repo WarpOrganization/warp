@@ -3,6 +3,7 @@ package net.warpgame.engine.physics.simplified;
 import net.warpgame.engine.core.property.Property;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 /**
  * @author Hubertus
@@ -14,7 +15,7 @@ public class SimplifiedPhysicsProperty extends Property {
     private AxisAngle4f angularVelocity;
     private float mass;
 
-    public SimplifiedPhysicsProperty(Vector3f acceleration, Vector3f velocity, AxisAngle4f angularVelocity, float mass) {
+    public SimplifiedPhysicsProperty(Vector3fc acceleration, Vector3fc velocity, AxisAngle4f angularVelocity, float mass) {
         this.velocity = new Vector3f();
         this.acceleration = new Vector3f();
         this.angularVelocity = new AxisAngle4f();
