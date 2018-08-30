@@ -1,4 +1,4 @@
-def branch
+def branch = BRANCH_NAME
 def version
 try {
     node('master') {
@@ -10,12 +10,12 @@ try {
             checkout scm
             sh "./gradlew clean"
         }
+        
+        version = sh(returnStdout: true, script: "cat version.txt").trim()
+        
         stage('Build') {
             sh "./gradlew build"
         }
-
-        branch = BRANCH_NAME
-        version = sh(returnStdout: true, script: "cat version.txt").trim()
 
         stage('Test') {
             sh "./gradlew test"
