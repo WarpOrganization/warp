@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.utility;
 
 import org.joml.*;
+import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 
@@ -130,7 +131,7 @@ public class MatrixStack {
      * @return A direct FloatBuffer containing the topMatrix matrix.
      */
     public FloatBuffer topBuff() {
-        return BufferTools.toDirectBuffer(topMatrix());
+        return topMatrix().get(BufferUtils.createFloatBuffer(16));
     }
 
     /**
@@ -148,7 +149,7 @@ public class MatrixStack {
      * @return A direct FloatBuffer containing a rotation matrix of the topMatrix matrix.
      */
     public FloatBuffer topRotationBuff() {
-        return BufferTools.toDirectBuffer(topRotationMatrix());
+        return topRotationMatrix().get(BufferUtils.createFloatBuffer(9));
     }
 
     /**

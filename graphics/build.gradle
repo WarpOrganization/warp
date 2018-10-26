@@ -27,10 +27,14 @@ dependencies {
     compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-vma:${lwjglVersion}"
+	compile "org.lwjgl:lwjgl-vulkan:${lwjglVersion}" 
     // LWJGL natives
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-vulkan:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-vma:${lwjglVersion}:{$lwjglNatives}"
 
     testCompile 'junit:junit:4.12'
 }

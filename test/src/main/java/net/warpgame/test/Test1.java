@@ -16,12 +16,6 @@ import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.core.script.Script;
 import net.warpgame.engine.core.script.annotation.OwnerProperty;
 import net.warpgame.engine.graphics.GraphicsThread;
-import net.warpgame.engine.graphics.animation.*;
-import net.warpgame.engine.graphics.animation.colladaloader.ColladaLoader;
-import net.warpgame.engine.graphics.animation.colladaloader.datastructures.AnimatedModelData;
-import net.warpgame.engine.graphics.animation.colladaloader.datastructures.AnimationData;
-import net.warpgame.engine.graphics.animation.dataloader.AnimatedModelLoader;
-import net.warpgame.engine.graphics.animation.dataloader.AnimationLoader;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.material.Material;
@@ -30,14 +24,11 @@ import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.mesh.StaticMesh;
 import net.warpgame.engine.graphics.mesh.shapes.PlainMesh;
 import net.warpgame.engine.graphics.mesh.shapes.SphereBuilder;
-import net.warpgame.engine.graphics.rendering.culling.BoundingBox;
-import net.warpgame.engine.graphics.rendering.culling.BoundingBoxCalculator;
-import net.warpgame.engine.graphics.rendering.culling.BoundingBoxProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.cubemap.CubemapProperty;
 import net.warpgame.engine.graphics.rendering.screenspace.light.LightSourceProperty;
 import net.warpgame.engine.graphics.rendering.ui.CanvasProperty;
-import net.warpgame.engine.graphics.rendering.ui.image.ImageProperty;
 import net.warpgame.engine.graphics.rendering.ui.RectTransformProperty;
+import net.warpgame.engine.graphics.rendering.ui.image.ImageProperty;
 import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import net.warpgame.engine.graphics.resource.texture.ImageData;
 import net.warpgame.engine.graphics.resource.texture.ImageDataArray;
@@ -46,17 +37,13 @@ import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
 import net.warpgame.engine.graphics.texture.Cubemap;
 import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.graphics.window.Display;
-import net.warpgame.engine.graphics.window.WindowManager;
 import net.warpgame.test.command.MoveCameraCommand;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -66,7 +53,6 @@ import java.util.function.Supplier;
 public class Test1 {
 
     public static final Display DISPLAY = new Display(false, 1280, 720);
-    private static BoundingBoxCalculator calc;
     private static ConsoleService consoleService;
 
     public static void start(EngineRuntime engineRuntime) {
@@ -75,9 +61,6 @@ public class Test1 {
         engineContext.getLoadedContext().addService(engineRuntime.getIdRegistry());
         GraphicsThread thread = engineContext.getLoadedContext()
                 .findOne(GraphicsThread.class)
-                .get();
-        calc = engineContext.getLoadedContext()
-                .findOne(BoundingBoxCalculator.class)
                 .get();
         consoleService = engineContext.getLoadedContext()
                 .findOne(ConsoleService.class)
@@ -221,7 +204,6 @@ public class Test1 {
         Scene scene = sceneHolder.getScene();
         createModels(scene, thread);
         createCubemap(scene, thread);
-        scene.addListener(new TestKeyboardListener(scene, engineContext.getLoadedContext().findOne(WindowManager.class).get()));
     }
 
     private static void createCubemap(Scene scene, GraphicsThread thread) {
@@ -246,54 +228,13 @@ public class Test1 {
         Component ship = new SceneComponent(scene);
         graphicsThread.scheduleOnce(() -> {
             createSpheres(scene);
-            createMugs(scene);
             createCastle(scene);
             createFloor(scene);
             createSatellite(scene);
-            createAnimated(scene);
             createLight(scene);
         });
 
         return ship;
-    }
-
-    private static void createAnimated(Scene scene) {
-        AnimatedModelData animatedModelData = ColladaLoader.loadColladaModel(Test1.class.getResourceAsStream("model.dae"), 3);
-        AnimationData animationData = ColladaLoader.loadColladaAnimation(Test1.class.getResourceAsStream("model.dae"));
-        AnimatedModel model = AnimatedModelLoader.loadData(animatedModelData);
-
-        Map<String, Integer> nameToJointId = new HashMap<>();
-        genJointNameToJointIds(model.getRootJoint(), nameToJointId);
-        Animation animation = AnimationLoader.loadAnimation(animationData, nameToJointId);
-
-        AnimatedModelProperty animatedModelProperty = new AnimatedModelProperty(model);
-        Component c = new SceneComponent(scene);
-        c.addProperty(new TransformProperty().move(new Vector3f(0, 0, 10)));
-        c.addProperty(animatedModelProperty);
-        AnimatorTask animatorTask = c.getContext()
-                .getLoadedContext()
-                .findOne(AnimatorTask.class)
-                .get();
-        animatorTask.addAnimator(model.getAnimator());
-
-        ImageData imageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("gosciu.png"),
-                PNGDecoder.Format.RGBA
-        );
-        Texture2D diffuse = new Texture2D(imageData);
-        Material material = new Material(diffuse);
-        material.setShininess(0.05f);
-        MaterialProperty materialProperty = new MaterialProperty(material);
-        c.addProperty(materialProperty);
-
-        model.getAnimator().startAnimation(animation);
-    }
-
-    private static void genJointNameToJointIds(Joint joint, Map<String, Integer> nameToJointId) {
-        nameToJointId.put(joint.getName(), joint.getIndex());
-        for (Joint childJoint : joint.getChildren()) {
-            genJointNameToJointIds(childJoint, nameToJointId);
-        }
     }
 
     private static void registerCommandsAndVariables(Context context) {
@@ -384,66 +325,6 @@ public class Test1 {
 
     }
 
-    private static void createMugs(Scene scene) {
-        StaticMesh mugMesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("mug.obj"),
-                true).toMesh();
-        ImageData mugImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("tex.png"),
-                PNGDecoder.Format.RGBA
-        );
-        Texture2D mugDiffuse = new Texture2D(mugImageData);
-        Material mugMaterial = new Material(mugDiffuse);
-
-        StaticMesh boundingBoxMesh = ObjLoader.read(
-                Test1.class.getResourceAsStream("boundingbox.obj"),
-                true).toMesh();
-        ImageData boxImageData = ImageDecoder.decodePNG(
-                Test1.class.getResourceAsStream("palette.png"),
-                PNGDecoder.Format.RGB
-        );
-        Texture2D boxDiffuse = new Texture2D(boxImageData);
-        boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-        boxDiffuse.setParameter(GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-        Material boxMaterial = new Material(boxDiffuse);
-        boxMaterial.setShininess(1f);
-        for (int x = 0; x < 2; x++) {
-            for (int y = 0; y < 2; y++) {
-                for (int z = 0; z < 2; z++) {
-                    MeshProperty mugMeshProperty = new MeshProperty(mugMesh);
-                    MaterialProperty mugMaterialProperty = new MaterialProperty(mugMaterial);
-                    TransformProperty mugTransformProperty = new TransformProperty();
-                    mugTransformProperty.setTranslation(new Vector3f(x * 5, y * 5, z * 5));
-                    mugTransformProperty.move(new Vector3f(0, 0, -50));
-                    mugTransformProperty.scale(new Vector3f(0.8f, 0.8f, 0.8f));
-                    mugTransformProperty.rotate(x, y, z);
-
-                    BoundingBox bb = calc.compute(mugMesh);
-                    Component mugComponent = new SceneComponent(scene);
-                    mugComponent.addScript(ConstantRotationScript.class);
-                    mugComponent.addProperty(mugMeshProperty);
-                    mugComponent.addProperty(mugMaterialProperty);
-                    mugComponent.addProperty(mugTransformProperty);
-                    mugComponent.addProperty(new BoundingBoxProperty(bb));
-
-                    MeshProperty boxMeshProperty = new MeshProperty(boundingBoxMesh);
-                    MaterialProperty boxMaterialProperty = new MaterialProperty(boxMaterial);
-                    TransformProperty boxTransformProperty = new TransformProperty();
-                    boxTransformProperty.setTranslation(new Vector3f((bb.max().x + bb.min().x) / 2, (bb.max().y + bb.min().y) / 2, (bb.max().z + bb.min().z) / 2));
-                    boxTransformProperty.scale(new Vector3f((bb.max().x - bb.min().x), (bb.max().y - bb.min().y), (bb.max().z - bb.min().z)));
-                    Component boxComponent = new SceneComponent(mugComponent);
-                    boxComponent.addProperty(boxMeshProperty);
-                    boxComponent.addProperty(boxMaterialProperty);
-                    boxComponent.addProperty(boxTransformProperty);
-
-//                    LightSource lightSource = new LightSource(new Vector3f(1.3f, 0f, 0.5f).mul(20));
-//                    LightSourceProperty lightSourceProperty = new LightSourceProperty(lightSource);
-//                    boxComponent.addProperty(lightSourceProperty);
-//                    sceneLightManager.addLight(lightSourceProperty); //CRASHES!!!!
-                }
-            }
-        }
-    }
 
     private static ImageData white = ImageDecoder.decodePNG(
             Test1.class.getResourceAsStream("tex.png"),
