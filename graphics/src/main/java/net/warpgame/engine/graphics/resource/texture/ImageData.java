@@ -1,7 +1,5 @@
 package net.warpgame.engine.graphics.resource.texture;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.nio.ByteBuffer;
 
@@ -38,11 +36,12 @@ public final class ImageData {
     }
 
     public int getInternalFormat(){
-        switch (format){
+        /*switch (format){
             case GL12.GL_BGRA:
             case GL11.GL_RGB: return GL11.GL_RGB16;
             case GL11.GL_RGBA: return GL11.GL_RGBA16;
             default: throw new RuntimeException("OpenGL doesn't support this format");
-        }
+        }*/
+        throw new UnsupportedOperationException();
     }
 }

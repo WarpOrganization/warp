@@ -11,30 +11,25 @@ repositories {
 }
 
 project.ext.lwjglNatives = "natives-${platform}"
-project.ext.lwjglVersion = "3.1.0"
+project.ext.lwjglVersion = "3.2.0"
+project.ext.jomlVersion = "1.9.13"
 
 dependencies {
     compile project(':core')
 
     compile 'org.slf4j:slf4j-api:1.7.12'
-
+    compile "org.joml:joml:${jomlVersion}"
 
     // LWJGL dependencies
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-egl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-jawt:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-vma:${lwjglVersion}"
-	compile "org.lwjgl:lwjgl-vulkan:${lwjglVersion}" 
+	compile "org.lwjgl:lwjgl-vulkan:${lwjglVersion}"
     // LWJGL natives
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-vulkan:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-vma:${lwjglVersion}:{$lwjglNatives}"
+    if (lwjglNatives == "natives-macos") runtime "org.lwjgl:lwjgl-vulkan:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-vma:${lwjglVersion}:${lwjglNatives}"
 
     testCompile 'junit:junit:4.12'
 }

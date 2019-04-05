@@ -1,7 +1,6 @@
 package net.warpgame.engine.graphics.texture;
 
 import net.warpgame.engine.graphics.resource.texture.ImageData;
-import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 
@@ -12,8 +11,8 @@ import java.nio.ByteBuffer;
  */
 public class Texture2D{
 
-    private static final int DEFAULT_TEXTURE_WRAP_METHOD = GL11.GL_REPEAT;
-    private static final int DEFAULT_TEXTURE_RESIZE_FILTER = GL11.GL_LINEAR;
+    /*private static final int DEFAULT_TEXTURE_WRAP_METHOD = GL11.GL_REPEAT;
+    private static final int DEFAULT_TEXTURE_RESIZE_FILTER = GL11.GL_LINEAR;*/
 
     private int width, height;
 
