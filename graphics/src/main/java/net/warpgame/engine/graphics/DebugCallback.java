@@ -1,0 +1,69 @@
+package net.warpgame.engine.graphics;
+
+import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Service;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.vulkan.VkDebugReportCallbackCreateInfoEXT;
+import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
+
+import java.nio.LongBuffer;
+
+import static net.warpgame.engine.graphics.ZerviceBypass.DEBUG_REPORT;
+import static net.warpgame.engine.graphics.utility.VKUtil.translateDebugFlags;
+import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.vulkan.EXTDebugReport.*;
+import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
+
+/**
+ * @author MarconZet
+ * Created 05.04.2019
+ */
+@Service
+public class DebugCallback extends VkObject{
+    private long debugCallbackHandle;
+
+    private Instance instance;
+    private Config config;
+
+    public DebugCallback(Instance instance, Config config) {
+        this.instance = instance;
+        this.config = config;
+    }
+
+    @Override
+    public void create() {
+        VkDebugReportCallbackEXT debugCallback = new VkDebugReportCallbackEXT() {
+            public int invoke(int flags, int objectType, long object, long location, int messageCode, long pLayerPrefix, long pMessage, long pUserData) {
+                String type;
+                if(flags >= VK_DEBUG_REPORT_WARNING_BIT_EXT)
+                    System.err.println(translateDebugFlags(flags) + VkDebugReportCallbackEXT.getString(pMessage));
+                else
+                    System.out.println(translateDebugFlags(flags) + VkDebugReportCallbackEXT.getString(pMessage));
+                return 0;
+            }
+        };
+        debugCallbackHandle = setupDebugging(instance, DEBUG_REPORT, debugCallback);
+    }
+
+    @Override
+    public void destroy() {
+        vkDestroyDebugReportCallbackEXT(instance.get(), debugCallbackHandle, null);
+    }
+
+    private long setupDebugging(Instance instance, int flags, VkDebugReportCallbackEXT callback) {
+        VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = VkDebugReportCallbackCreateInfoEXT.create()
+                .sType(VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT)
+                .pNext(NULL)
+                .pfnCallback(callback)
+                .pUserData(NULL)
+                .flags(flags);
+        LongBuffer pCallback = BufferUtils.createLongBuffer(1);
+        int err = vkCreateDebugReportCallbackEXT(instance.get(), dbgCreateInfo, null, pCallback);
+        long callbackHandle = pCallback.get(0);
+        if (err != VK_SUCCESS) {
+            throw new AssertionError("Failed to create VkInstance: " + translateVulkanResult(err));
+        }
+        return callbackHandle;
+    }
+}

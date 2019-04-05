@@ -5,6 +5,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 
+import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 
@@ -18,9 +19,11 @@ import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 @RegisterTask(thread = "graphics")
 public class VulkanTask extends EngineTask {
     private Instance instance;
+    private DebugCallback debugCallback;
 
-    public VulkanTask(Instance instance) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback) {
         this.instance = instance;
+        this.debugCallback = debugCallback;
     }
 
     @Override
@@ -33,6 +36,8 @@ public class VulkanTask extends EngineTask {
         }
 
         instance.create();
+        if(ENABLE_VALIDATION_LAYERS)
+            debugCallback.create();
     }
 
     @Override
@@ -42,6 +47,8 @@ public class VulkanTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        if(ENABLE_VALIDATION_LAYERS)
+            debugCallback.destroy();
         instance.destroy();
     }
 }

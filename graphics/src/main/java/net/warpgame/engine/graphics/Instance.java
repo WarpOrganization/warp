@@ -11,11 +11,10 @@ import org.lwjgl.vulkan.VkInstanceCreateInfo;
 
 import java.nio.IntBuffer;
 
+import static net.warpgame.engine.graphics.ZerviceBypass.*;
 import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;
-import static org.lwjgl.vulkan.EXTDebugReport.VK_EXT_DEBUG_REPORT_EXTENSION_NAME;
-import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
 import static org.lwjgl.vulkan.VK10.*;
 
 /**
@@ -24,18 +23,13 @@ import static org.lwjgl.vulkan.VK10.*;
  */
 
 @Service
-public class Instance {
-    //TODO this staff should come form config, and not be hardcoded
-    private static final boolean ENABLE_VALIDATION_LAYERS = true;
-    private static final String[] VALIDATION_LAYERS = {"VK_LAYER_LUNARG_standard_validation", "VK_LAYER_RENDERDOC_Capture"};
-    private static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
-    private static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
-
+public class Instance extends VkObject {
     private VkInstance instance;
 
     public Instance(Config config) {
     }
 
+    @Override
     public void create(){
         VkApplicationInfo appInfo = VkApplicationInfo.create()
                 .sType(VK_STRUCTURE_TYPE_APPLICATION_INFO)
@@ -67,6 +61,7 @@ public class Instance {
         memFree(appInfo.pEngineName());
     }
 
+    @Override
     public void destroy(){
         vkDestroyInstance(instance, null);
     }
@@ -90,6 +85,7 @@ public class Instance {
         VkExtensionProperties.Buffer ppExtensions = VkExtensionProperties.create(extensionCount);
         vkEnumerateInstanceExtensionProperties((CharSequence) null, pExtensionCount, ppExtensions);
 
+        //TODO check if all extensions are present
         PointerBuffer ppRequiredExtensions = glfwGetRequiredInstanceExtensions();
         if (ppRequiredExtensions == null) {
             throw new AssertionError("Failed to find list of required Vulkan extensions");
@@ -113,5 +109,9 @@ public class Instance {
         ppEnabledExtensionNames.flip();
 
         return ppEnabledExtensionNames;
+    }
+
+    public VkInstance get() {
+        return instance;
     }
 }

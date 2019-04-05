@@ -4,7 +4,7 @@
  */
 package net.warpgame.engine.graphics.utility;
 
-import static org.lwjgl.vulkan.EXTDebugReport.VK_ERROR_VALIDATION_FAILED_EXT;
+import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.KHRDisplaySwapchain.VK_ERROR_INCOMPATIBLE_DISPLAY_KHR;
 import static org.lwjgl.vulkan.KHRSurface.VK_ERROR_NATIVE_WINDOW_IN_USE_KHR;
 import static org.lwjgl.vulkan.KHRSurface.VK_ERROR_SURFACE_LOST_KHR;
@@ -76,6 +76,25 @@ public class VKUtil {
             return "A validation layer found an error.";
         default:
             return String.format("%s [%d]", "Unknown", Integer.valueOf(result));
+        }
+    }
+
+    public static String translateDebugFlags(int flags){
+        switch (flags){
+            case VK_DEBUG_REPORT_INFORMATION_BIT_EXT:
+                return "INFO";
+            case VK_DEBUG_REPORT_WARNING_BIT_EXT:
+                return "WARN";
+            case VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT:
+                return "PERFORMANCE WARN";
+            case VK_DEBUG_REPORT_ERROR_BIT_EXT:
+                return "ERROR";
+            case VK_DEBUG_REPORT_DEBUG_BIT_EXT:
+                return "DEBUG";
+            default:
+                return String.format("Unknown [%d]", flags);
+
+
         }
     }
 

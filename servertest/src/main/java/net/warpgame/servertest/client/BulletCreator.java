@@ -18,7 +18,6 @@ import net.warpgame.engine.graphics.texture.Texture2D;
 import net.warpgame.engine.net.NetComponentRegistry;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 
 /**
  * @author Hubertus
