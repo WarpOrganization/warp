@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics;
+package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
@@ -8,7 +8,7 @@ import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
 
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.DEBUG_REPORT;
+import static net.warpgame.engine.graphics.core.ZerviceBypass.DEBUG_REPORT;
 import static net.warpgame.engine.graphics.utility.VKUtil.translateDebugFlags;
 import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -20,7 +20,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  * Created 05.04.2019
  */
 @Service
-public class DebugCallback extends VkObject{
+public class DebugCallback extends VkObject {
     private long debugCallbackHandle;
 
     private Instance instance;
@@ -35,11 +35,11 @@ public class DebugCallback extends VkObject{
     public void create() {
         VkDebugReportCallbackEXT debugCallback = new VkDebugReportCallbackEXT() {
             public int invoke(int flags, int objectType, long object, long location, int messageCode, long pLayerPrefix, long pMessage, long pUserData) {
-                String type;
+                String decodedMessage = String.format("%s %s", translateDebugFlags(flags), VkDebugReportCallbackEXT.getString(pMessage));
                 if(flags >= VK_DEBUG_REPORT_WARNING_BIT_EXT)
-                    System.err.println(translateDebugFlags(flags) + VkDebugReportCallbackEXT.getString(pMessage));
+                    System.err.println(decodedMessage);
                 else
-                    System.out.println(translateDebugFlags(flags) + VkDebugReportCallbackEXT.getString(pMessage));
+                    System.out.println(decodedMessage);
                 return 0;
             }
         };

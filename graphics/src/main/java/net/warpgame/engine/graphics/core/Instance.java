@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics;
+package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
@@ -11,7 +11,7 @@ import org.lwjgl.vulkan.VkInstanceCreateInfo;
 
 import java.nio.IntBuffer;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.*;
+import static net.warpgame.engine.graphics.core.ZerviceBypass.*;
 import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;

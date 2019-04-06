@@ -26,8 +26,6 @@ ext {
     platform = project.properties['platform'] ?: os()
 }
 
-ext.repo = Grgit.open(project.file('.'))
-
 group 'net.warpgame'
 
 //def branch = "${System.env.GIT_BRANCH ? System.env.GIT_BRANCH : versioning.info.branch}"

@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics;
+package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
 
@@ -15,13 +15,14 @@ public class ZerviceBypass {
     public static final String[] VALIDATION_LAYERS = {"VK_LAYER_LUNARG_standard_validation", "VK_LAYER_RENDERDOC_Capture"};
     public static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
     public static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
-    public static int DEBUG_REPORT = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
+    public static int DEBUG_REPORT = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
 
     public static void main(String... args){
         Config config = null;
         Instance instance = new Instance(config);
         DebugCallback debugCallback = new DebugCallback(instance, config);
-        VulkanTask vulkanTask = new VulkanTask(instance, debugCallback);
+        PhysicalDevice physicalDevice = new PhysicalDevice(instance);
+        VulkanTask vulkanTask = new VulkanTask(instance, debugCallback, physicalDevice);
 
         System.out.println("Starting");
         vulkanTask.onInit();

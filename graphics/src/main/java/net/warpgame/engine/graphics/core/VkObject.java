@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics;
+package net.warpgame.engine.graphics.core;
 
 /**
  * @author MarconZet

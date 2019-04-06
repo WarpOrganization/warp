@@ -1,11 +1,11 @@
-package net.warpgame.engine.graphics;
+package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
+import static net.warpgame.engine.graphics.core.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 
@@ -20,10 +20,12 @@ import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 public class VulkanTask extends EngineTask {
     private Instance instance;
     private DebugCallback debugCallback;
+    private PhysicalDevice physicalDevice;
 
-    public VulkanTask(Instance instance, DebugCallback debugCallback) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback, PhysicalDevice physicalDevice) {
         this.instance = instance;
         this.debugCallback = debugCallback;
+        this.physicalDevice = physicalDevice;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class VulkanTask extends EngineTask {
         instance.create();
         if(ENABLE_VALIDATION_LAYERS)
             debugCallback.create();
+        physicalDevice.create();
     }
 
     @Override
