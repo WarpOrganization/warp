@@ -1,6 +1,12 @@
-package net.warpgame.engine.graphics.core;
+package net.warpgame.engine.graphics;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.core.DebugCallback;
+import net.warpgame.engine.graphics.core.Instance;
+import net.warpgame.engine.graphics.core.PhysicalDevice;
+import net.warpgame.engine.graphics.core.VulkanTask;
+import net.warpgame.engine.graphics.window.Window;
 
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
@@ -16,22 +22,25 @@ public class ZerviceBypass {
     public static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
     public static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
     public static int DEBUG_REPORT = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
 
     public static void main(String... args){
         Config config = null;
         Instance instance = new Instance(config);
         DebugCallback debugCallback = new DebugCallback(instance, config);
+        Window window = new Window(config, instance);
         PhysicalDevice physicalDevice = new PhysicalDevice(instance);
-        VulkanTask vulkanTask = new VulkanTask(instance, debugCallback, physicalDevice);
+        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice);
 
         System.out.println("Starting");
-        vulkanTask.onInit();
+        vulkanTask.init();
         System.out.println("Running");
         while (true) {
             break;
         }
         System.out.println("Closing");
-        vulkanTask.onClose();
+        vulkanTask.close();
 
     }
 }

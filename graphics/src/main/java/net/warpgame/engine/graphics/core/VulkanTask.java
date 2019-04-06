@@ -4,8 +4,9 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.window.Window;
 
-import static net.warpgame.engine.graphics.core.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
+import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 
@@ -20,12 +21,14 @@ import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 public class VulkanTask extends EngineTask {
     private Instance instance;
     private DebugCallback debugCallback;
+    private Window window;
     private PhysicalDevice physicalDevice;
 
-    public VulkanTask(Instance instance, DebugCallback debugCallback, PhysicalDevice physicalDevice) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.physicalDevice = physicalDevice;
+        this.window = window;
     }
 
     @Override
@@ -40,6 +43,7 @@ public class VulkanTask extends EngineTask {
         instance.create();
         if(ENABLE_VALIDATION_LAYERS)
             debugCallback.create();
+        window.create();
         physicalDevice.create();
     }
 
@@ -52,6 +56,7 @@ public class VulkanTask extends EngineTask {
     protected void onClose() {
         if(ENABLE_VALIDATION_LAYERS)
             debugCallback.destroy();
+        window.destroy();
         instance.destroy();
     }
 }

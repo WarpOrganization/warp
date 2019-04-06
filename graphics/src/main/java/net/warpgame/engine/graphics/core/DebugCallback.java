@@ -2,13 +2,14 @@ package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkDebugReportCallbackCreateInfoEXT;
 import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
 
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.core.ZerviceBypass.DEBUG_REPORT;
+import static net.warpgame.engine.graphics.ZerviceBypass.DEBUG_REPORT;
 import static net.warpgame.engine.graphics.utility.VKUtil.translateDebugFlags;
 import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -20,7 +21,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  * Created 05.04.2019
  */
 @Service
-public class DebugCallback extends VkObject {
+public class DebugCallback extends CreateAndDestroy {
     private long debugCallbackHandle;
 
     private Instance instance;
