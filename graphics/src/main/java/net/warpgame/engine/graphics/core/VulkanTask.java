@@ -23,12 +23,14 @@ public class VulkanTask extends EngineTask {
     private DebugCallback debugCallback;
     private Window window;
     private PhysicalDevice physicalDevice;
+    private Device device;
 
-    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.physicalDevice = physicalDevice;
         this.window = window;
+        this.device = device;
     }
 
     @Override
@@ -45,6 +47,7 @@ public class VulkanTask extends EngineTask {
             debugCallback.create();
         window.create();
         physicalDevice.create();
+        device.create();
     }
 
     @Override
@@ -54,9 +57,11 @@ public class VulkanTask extends EngineTask {
 
     @Override
     protected void onClose() {
-        if(ENABLE_VALIDATION_LAYERS)
-            debugCallback.destroy();
+        device.destroy();
         window.destroy();
+        if(ENABLE_VALIDATION_LAYERS) {
+            debugCallback.destroy();
+        }
         instance.destroy();
     }
 }

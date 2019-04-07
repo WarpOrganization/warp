@@ -10,6 +10,7 @@ import net.warpgame.engine.graphics.window.Window;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
+import static org.lwjgl.vulkan.KHRSwapchain.VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 
 /**
  * @author MarconZet
@@ -21,6 +22,7 @@ public class ZerviceBypass {
     public static final String[] VALIDATION_LAYERS = {"VK_LAYER_LUNARG_standard_validation", "VK_LAYER_RENDERDOC_Capture"};
     public static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
     public static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
+    public static final String[] DEVICE_EXTENSIONS = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
     public static int DEBUG_REPORT =
             VK_DEBUG_REPORT_ERROR_BIT_EXT |
             VK_DEBUG_REPORT_WARNING_BIT_EXT |
@@ -36,7 +38,8 @@ public class ZerviceBypass {
         SwapChainSupportDetails swapChainSupportDetails = new SwapChainSupportDetails(window);
         QueueFamilyIndices queueFamilyIndices = new QueueFamilyIndices();
         PhysicalDevice physicalDevice = new PhysicalDevice(instance, swapChainSupportDetails, queueFamilyIndices, window);
-        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice);
+        Device device = new Device(physicalDevice, queueFamilyIndices, config);
+        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device);
 
         System.out.println("Starting");
         vulkanTask.init();

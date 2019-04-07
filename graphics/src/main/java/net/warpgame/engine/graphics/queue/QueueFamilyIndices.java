@@ -19,9 +19,8 @@ import static org.lwjgl.vulkan.VK10.*;
 @Service
 public class QueueFamilyIndices {
     private int graphicsFamily = -1;
-    private int graphicsFamilyCount = -1;
     private int presentFamily = -1;
-    private int presentFamilyCount = -1;
+    private int transportFamily = -1;//to think about
 
     public QueueFamilyIndices() {
 
@@ -44,16 +43,14 @@ public class QueueFamilyIndices {
             boolean support = pSupport.get() == VK_TRUE;
             if (queueFamily.queueCount() > 0 && (queueFamily.queueFlags() & VK_QUEUE_GRAPHICS_BIT)>0) {
                 graphicsFamily = i;
-                graphicsFamilyCount = queueFamily.queueCount();
             }
 
             if (queueFamily.queueCount() > 0 && support) {
                 presentFamily = i;
-                presentFamilyCount = queueFamily.queueCount();
             }
 
             if (isComplete()) {
-                break;
+                //break;
             }
 
             i++;
@@ -72,11 +69,8 @@ public class QueueFamilyIndices {
         return presentFamily;
     }
 
-    public int getGraphicsFamilyCount() {
-        return graphicsFamilyCount;
+    public int number(){
+        return (graphicsFamily != presentFamily)?2:1;
     }
 
-    public int getPresentFamilyCount() {
-        return presentFamilyCount;
-    }
 }
