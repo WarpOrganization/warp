@@ -64,6 +64,9 @@ public class Window extends CreateAndDestroy {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
         window = glfwCreateWindow(WIDTH, HEIGHT, "Wrap", 0, 0);
+        if(window == 0){
+            throw new AssertionError("Failed to create window");
+        }
 
         GLFWFramebufferSizeCallback framebufferSizeCallback = new GLFWFramebufferSizeCallback() {
             @Override

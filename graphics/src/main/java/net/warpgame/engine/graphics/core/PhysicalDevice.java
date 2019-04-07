@@ -2,6 +2,7 @@ package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.vulkan.VkPhysicalDevice;
@@ -26,9 +27,11 @@ public class PhysicalDevice extends CreateAndDestroy {
     private VkPhysicalDeviceFeatures deviceFeatures;
 
     private Instance instance;
+    private SwapChainSupportDetails swapChainSupportDetails;
 
-    public PhysicalDevice(Instance instance) {
+    public PhysicalDevice(Instance instance, SwapChainSupportDetails swapChainSupportDetails) {
         this.instance = instance;
+        this.swapChainSupportDetails = swapChainSupportDetails;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class PhysicalDevice extends CreateAndDestroy {
 
         while(pPhysicalDevices.hasRemaining()) {
             physicalDevice = new VkPhysicalDevice(pPhysicalDevices.get(), instance.get());
-            if (isDeviceSuitable(physicalDevice)) {
+            if (isDeviceSuitable()) {
                 return;
             }
         }
@@ -63,12 +66,19 @@ public class PhysicalDevice extends CreateAndDestroy {
 
     }
 
-    private boolean isDeviceSuitable(VkPhysicalDevice physicalDevice) {
+    private boolean isDeviceSuitable() {
         deviceProperties = VkPhysicalDeviceProperties.create();
         deviceFeatures = VkPhysicalDeviceFeatures.create();
         vkGetPhysicalDeviceProperties(physicalDevice, deviceProperties);
         vkGetPhysicalDeviceFeatures(physicalDevice, deviceFeatures);
-        return true;
+        swapChainSupportDetails.acquireSupportDetails(this);
+        if(swapChainSupportDetails.getFormats().sizeof() == 0){
+            return false;
+        }
+        if(!swapChainSupportDetails.getPresentModes().hasRemaining()){
+            return false;
+        }
+        return deviceProperties.deviceType() == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
     }
 
     public VkPhysicalDevice get(){

@@ -7,7 +7,7 @@ import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.window.Window;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
-import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 
 /**
@@ -49,7 +49,7 @@ public class VulkanTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-
+            glfwPollEvents();
     }
 
     @Override

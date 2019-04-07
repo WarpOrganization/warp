@@ -6,8 +6,10 @@ import net.warpgame.engine.graphics.core.DebugCallback;
 import net.warpgame.engine.graphics.core.Instance;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.core.VulkanTask;
+import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
 import net.warpgame.engine.graphics.window.Window;
 
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
 
@@ -21,7 +23,10 @@ public class ZerviceBypass {
     public static final String[] VALIDATION_LAYERS = {"VK_LAYER_LUNARG_standard_validation", "VK_LAYER_RENDERDOC_Capture"};
     public static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
     public static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
-    public static int DEBUG_REPORT = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+    public static int DEBUG_REPORT =
+            VK_DEBUG_REPORT_ERROR_BIT_EXT |
+            VK_DEBUG_REPORT_WARNING_BIT_EXT |
+            VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
@@ -30,14 +35,15 @@ public class ZerviceBypass {
         Instance instance = new Instance(config);
         DebugCallback debugCallback = new DebugCallback(instance, config);
         Window window = new Window(config, instance);
-        PhysicalDevice physicalDevice = new PhysicalDevice(instance);
+        SwapChainSupportDetails swapChainSupportDetails = new SwapChainSupportDetails(window);
+        PhysicalDevice physicalDevice = new PhysicalDevice(instance, swapChainSupportDetails);
         EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice);
 
         System.out.println("Starting");
         vulkanTask.init();
         System.out.println("Running");
-        while (true) {
-            break;
+        while (!glfwWindowShouldClose(window.get())) {
+            vulkanTask.update(10);
         }
         System.out.println("Closing");
         vulkanTask.close();
