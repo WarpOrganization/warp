@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.queue;
+package net.warpgame.engine.graphics.command;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
@@ -47,10 +47,6 @@ public class QueueFamilyIndices {
 
             if (queueFamily.queueCount() > 0 && support) {
                 presentFamily = i;
-            }
-
-            if (isComplete()) {
-                //break;
             }
 
             i++;

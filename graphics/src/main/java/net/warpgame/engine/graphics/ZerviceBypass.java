@@ -2,9 +2,11 @@ package net.warpgame.engine.graphics;
 
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.command.GraphicsQueue;
+import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.core.*;
 import net.warpgame.engine.graphics.memory.Allocator;
-import net.warpgame.engine.graphics.queue.QueueFamilyIndices;
+import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
 import net.warpgame.engine.graphics.window.Window;
 
@@ -42,7 +44,9 @@ public class ZerviceBypass {
         PhysicalDevice physicalDevice = new PhysicalDevice(instance, swapChainSupportDetails, queueFamilyIndices, window);
         Device device = new Device(physicalDevice, queueFamilyIndices, config);
         Allocator allocator = new Allocator(instance, physicalDevice, device);
-        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device, allocator);
+        GraphicsQueue graphicsQueue = new GraphicsQueue(device, queueFamilyIndices);
+        PresentationQueue presentationQueue = new PresentationQueue(device, queueFamilyIndices);
+        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue);
 
         System.out.println("Starting");
         vulkanTask.init();

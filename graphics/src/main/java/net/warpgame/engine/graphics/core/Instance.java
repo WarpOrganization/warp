@@ -25,7 +25,7 @@ import static org.lwjgl.vulkan.VK11.VK_API_VERSION_1_1;
  */
 
 @Service
-public class Instance extends CreateAndDestroy {
+public class Instance implements CreateAndDestroy {
     private VkInstance instance;
 
     public Instance(Config config) {

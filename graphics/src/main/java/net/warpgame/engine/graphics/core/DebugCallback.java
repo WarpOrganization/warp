@@ -21,7 +21,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  * Created 05.04.2019
  */
 @Service
-public class DebugCallback extends CreateAndDestroy {
+public class DebugCallback implements CreateAndDestroy {
     private long debugCallbackHandle;
 
     private Instance instance;

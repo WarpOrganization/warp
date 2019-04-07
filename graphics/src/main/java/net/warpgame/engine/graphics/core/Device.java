@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.queue.QueueFamilyIndices;
+import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -26,7 +26,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  */
 
 @Service
-public class Device extends CreateAndDestroy {
+public class Device implements CreateAndDestroy {
     private VkDevice device;
 
     private PhysicalDevice physicalDevice;

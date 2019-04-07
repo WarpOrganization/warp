@@ -4,6 +4,8 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.command.GraphicsQueue;
+import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.window.Window;
 
@@ -26,14 +28,18 @@ public class VulkanTask extends EngineTask {
     private PhysicalDevice physicalDevice;
     private Device device;
     private Allocator allocator;
+    private GraphicsQueue graphicsQueue;
+    private PresentationQueue presentationQueue;
 
-    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.physicalDevice = physicalDevice;
         this.window = window;
         this.device = device;
         this.allocator = allocator;
+        this.graphicsQueue = graphicsQueue;
+        this.presentationQueue = presentationQueue;
     }
 
     @Override
@@ -52,6 +58,8 @@ public class VulkanTask extends EngineTask {
         physicalDevice.create();
         device.create();
         allocator.create();
+        graphicsQueue.create();
+        presentationQueue.create();
     }
 
     @Override

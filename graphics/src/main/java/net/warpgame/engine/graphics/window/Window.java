@@ -25,7 +25,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  */
 
 @Service
-public class Window extends CreateAndDestroy {
+public class Window implements CreateAndDestroy {
     private long window;
     private long surface;
     private boolean framebufferResized;

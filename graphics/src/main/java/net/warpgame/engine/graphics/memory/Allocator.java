@@ -21,7 +21,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  */
 
 @Service
-public class Allocator extends CreateAndDestroy {
+public class Allocator implements CreateAndDestroy {
     private long allocator;
 
     private Instance instance;
