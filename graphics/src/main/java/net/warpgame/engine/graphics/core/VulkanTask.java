@@ -4,6 +4,7 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.window.Window;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
@@ -24,13 +25,15 @@ public class VulkanTask extends EngineTask {
     private Window window;
     private PhysicalDevice physicalDevice;
     private Device device;
+    private Allocator allocator;
 
-    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.physicalDevice = physicalDevice;
         this.window = window;
         this.device = device;
+        this.allocator = allocator;
     }
 
     @Override
@@ -48,6 +51,7 @@ public class VulkanTask extends EngineTask {
         window.create();
         physicalDevice.create();
         device.create();
+        allocator.create();
     }
 
     @Override
@@ -57,6 +61,7 @@ public class VulkanTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        allocator.destroy();
         device.destroy();
         window.destroy();
         if(ENABLE_VALIDATION_LAYERS) {

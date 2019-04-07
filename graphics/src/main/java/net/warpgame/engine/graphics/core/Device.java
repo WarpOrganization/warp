@@ -94,4 +94,8 @@ public class Device extends CreateAndDestroy {
     public void destroy() {
         vkDestroyDevice(device, null);
     }
+
+    public VkDevice get() {
+        return device;
+    }
 }

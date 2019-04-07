@@ -17,6 +17,7 @@ import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.vulkan.VK10.*;
+import static org.lwjgl.vulkan.VK11.VK_API_VERSION_1_1;
 
 /**
  * @author MarconZet
@@ -39,7 +40,7 @@ public class Instance extends CreateAndDestroy {
                 .pEngineName(memUTF8("Warp Engine"))
                 .applicationVersion(VK_MAKE_VERSION(0, 1, 0))
                 .engineVersion(VK_MAKE_VERSION(0,1,0))
-                .apiVersion(VK_API_VERSION_1_0);
+                .apiVersion(VK_API_VERSION_1_1);
 
         PointerBuffer ppEnabledExtensionNames = getInstanceExtensions();
         PointerBuffer ppEnabledLayerNames = getValidationLayers();

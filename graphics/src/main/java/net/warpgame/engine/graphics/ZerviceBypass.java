@@ -3,12 +3,14 @@ package net.warpgame.engine.graphics;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.core.*;
+import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.queue.QueueFamilyIndices;
 import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
 import net.warpgame.engine.graphics.window.Window;
 
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
+import static org.lwjgl.vulkan.KHRGetMemoryRequirements2.VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME;
 import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
 import static org.lwjgl.vulkan.KHRSwapchain.VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 
@@ -22,7 +24,7 @@ public class ZerviceBypass {
     public static final String[] VALIDATION_LAYERS = {"VK_LAYER_LUNARG_standard_validation", "VK_LAYER_RENDERDOC_Capture"};
     public static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
     public static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
-    public static final String[] DEVICE_EXTENSIONS = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+    public static final String[] DEVICE_EXTENSIONS = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME};
     public static int DEBUG_REPORT =
             VK_DEBUG_REPORT_ERROR_BIT_EXT |
             VK_DEBUG_REPORT_WARNING_BIT_EXT |
@@ -39,7 +41,8 @@ public class ZerviceBypass {
         QueueFamilyIndices queueFamilyIndices = new QueueFamilyIndices();
         PhysicalDevice physicalDevice = new PhysicalDevice(instance, swapChainSupportDetails, queueFamilyIndices, window);
         Device device = new Device(physicalDevice, queueFamilyIndices, config);
-        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device);
+        Allocator allocator = new Allocator(instance, physicalDevice, device);
+        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device, allocator);
 
         System.out.println("Starting");
         vulkanTask.init();
