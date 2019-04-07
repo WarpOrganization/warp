@@ -1,8 +1,10 @@
 package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.graphics.queue.QueueFamilyIndices;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
+import net.warpgame.engine.graphics.window.Window;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.vulkan.VkPhysicalDevice;
@@ -28,10 +30,14 @@ public class PhysicalDevice extends CreateAndDestroy {
 
     private Instance instance;
     private SwapChainSupportDetails swapChainSupportDetails;
+    private QueueFamilyIndices indices;
+    private Window window;
 
-    public PhysicalDevice(Instance instance, SwapChainSupportDetails swapChainSupportDetails) {
+    public PhysicalDevice(Instance instance, SwapChainSupportDetails swapChainSupportDetails, QueueFamilyIndices indices, Window window) {
         this.instance = instance;
         this.swapChainSupportDetails = swapChainSupportDetails;
+        this.indices = indices;
+        this.window = window;
     }
 
     @Override
@@ -76,6 +82,10 @@ public class PhysicalDevice extends CreateAndDestroy {
             return false;
         }
         if(!swapChainSupportDetails.getPresentModes().hasRemaining()){
+            return false;
+        }
+        indices.getQueueFamilyIndices(this, window);
+        if(!indices.isComplete()){
             return false;
         }
         return deviceProperties.deviceType() == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
