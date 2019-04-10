@@ -3,6 +3,7 @@ package net.warpgame.engine.graphics.core;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkDebugReportCallbackCreateInfoEXT;
 import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
@@ -10,9 +11,7 @@ import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
 import java.nio.LongBuffer;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.DEBUG_REPORT;
-import static net.warpgame.engine.graphics.utility.VKUtil.translateDebugFlags;
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
 
@@ -63,8 +62,27 @@ public class DebugCallback implements CreateAndDestroy {
         int err = vkCreateDebugReportCallbackEXT(instance.get(), dbgCreateInfo, null, pCallback);
         long callbackHandle = pCallback.get(0);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to create VkInstance: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to create VkInstance", err);
         }
         return callbackHandle;
+    }
+
+    private static String translateDebugFlags(int flags){
+        switch (flags){
+            case VK_DEBUG_REPORT_INFORMATION_BIT_EXT:
+                return "INFO";
+            case VK_DEBUG_REPORT_WARNING_BIT_EXT:
+                return "WARN";
+            case VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT:
+                return "PERFORMANCE WARN";
+            case VK_DEBUG_REPORT_ERROR_BIT_EXT:
+                return "ERROR";
+            case VK_DEBUG_REPORT_DEBUG_BIT_EXT:
+                return "DEBUG";
+            default:
+                return String.format("Unknown [%d]", flags);
+
+
+        }
     }
 }

@@ -2,6 +2,7 @@ package net.warpgame.engine.graphics.window;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkExtent2D;
 import org.lwjgl.vulkan.VkSurfaceCapabilitiesKHR;
@@ -10,7 +11,6 @@ import org.lwjgl.vulkan.VkSurfaceFormatKHR;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.glfw.GLFW.glfwGetFramebufferSize;
 import static org.lwjgl.vulkan.KHRSurface.*;
 import static org.lwjgl.vulkan.VK10.*;
@@ -39,33 +39,33 @@ public class SwapChainSupportDetails {
         capabilities = VkSurfaceCapabilitiesKHR.create();
         err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice.get(), surface, capabilities);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to get physical device surface capabilities: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to get physical device surface capabilities", err);
         }
 
         IntBuffer pFormatCount = BufferUtils.createIntBuffer(1);
         err = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice.get(), surface, pFormatCount, null);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to query number of physical device surface formats: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to query number of physical device surface formats", err);
         }
         int formatCount = pFormatCount.get(0);
 
         formats = VkSurfaceFormatKHR.create(formatCount);
         err = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice.get(), surface, pFormatCount, formats);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to query physical device surface formats: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to query physical device surface formats" , err);
         }
 
         IntBuffer pPresentModeCount = BufferUtils.createIntBuffer(1);
         err = vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice.get(), surface, pPresentModeCount, null);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to get number of physical device surface presentation modes: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to get number of physical device surface presentation modes", err);
         }
         int presentModeCount = pPresentModeCount.get(0);
 
         presentModes = BufferUtils.createIntBuffer(presentModeCount);
         err = vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice.get(), surface, pPresentModeCount, presentModes);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to get physical device surface presentation modes: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to get physical device surface presentation modes", err);
         }
     }
 

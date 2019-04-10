@@ -3,6 +3,7 @@ package net.warpgame.engine.graphics.core;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.vulkan.VkApplicationInfo;
@@ -13,7 +14,6 @@ import org.lwjgl.vulkan.VkInstanceCreateInfo;
 import java.nio.IntBuffer;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.*;
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.vulkan.VK10.*;
@@ -56,7 +56,7 @@ public class Instance implements CreateAndDestroy {
         long instance = pInstance.get(0);
         memFree(pInstance);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to create VkInstance: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to create VkInstance", err);
         }
         this.instance = new VkInstance(instance, pCreateInfo);
         memFree(appInfo.pApplicationName());

@@ -5,12 +5,12 @@ import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.Instance;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.vma.VmaAllocatorCreateInfo;
 import org.lwjgl.util.vma.VmaVulkanFunctions;
 
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.util.vma.Vma.vmaCreateAllocator;
 import static org.lwjgl.util.vma.Vma.vmaDestroyAllocator;
 import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
@@ -47,7 +47,7 @@ public class Allocator implements CreateAndDestroy {
         PointerBuffer pAllocator = BufferUtils.createPointerBuffer(1);
         int err = vmaCreateAllocator(allocatorInfo, pAllocator);
         if(err != VK_SUCCESS){
-            throw new AssertionError("Failed to create allocator: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to create allocator",  err);
         }
         allocator = pAllocator.get(0);
     }

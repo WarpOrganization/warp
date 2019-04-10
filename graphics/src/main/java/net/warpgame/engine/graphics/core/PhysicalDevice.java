@@ -3,6 +3,7 @@ package net.warpgame.engine.graphics.core;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
 import net.warpgame.engine.graphics.window.Window;
 import org.lwjgl.BufferUtils;
@@ -13,9 +14,7 @@ import org.lwjgl.vulkan.VkPhysicalDeviceProperties;
 
 import java.nio.IntBuffer;
 
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.vulkan.VK10.*;
-import static org.lwjgl.vulkan.VK10.vkGetPhysicalDeviceFeatures;
 
 /**
  * @author MarconZet
@@ -45,7 +44,7 @@ public class PhysicalDevice implements CreateAndDestroy {
         IntBuffer pPhysicalDeviceCount = BufferUtils.createIntBuffer(1);
         int err = vkEnumeratePhysicalDevices(instance.get(), pPhysicalDeviceCount, null);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to get number of physical devices: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to get number of physical devices", err);
         }
         int deviceCount = pPhysicalDeviceCount.get(0);
         if (deviceCount == 0) {
@@ -55,7 +54,7 @@ public class PhysicalDevice implements CreateAndDestroy {
         PointerBuffer pPhysicalDevices = BufferUtils.createPointerBuffer(deviceCount);
         err = vkEnumeratePhysicalDevices(instance.get(), pPhysicalDeviceCount, pPhysicalDevices);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to get physical devices: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to get physical devices", err);
         }
 
         while(pPhysicalDevices.hasRemaining()) {

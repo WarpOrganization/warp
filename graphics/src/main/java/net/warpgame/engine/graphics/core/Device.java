@@ -4,6 +4,7 @@ import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.vulkan.VkDevice;
@@ -14,11 +15,9 @@ import org.lwjgl.vulkan.VkPhysicalDeviceFeatures;
 import java.nio.FloatBuffer;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.*;
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.system.MemoryUtil.memUTF8;
 import static org.lwjgl.vulkan.VK10.*;
-import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
 
 /**
  * @author MarconZet
@@ -85,7 +84,7 @@ public class Device implements CreateAndDestroy {
         PointerBuffer pDevice = BufferUtils.createPointerBuffer(1);
         int err = vkCreateDevice(physicalDevice.get(), pCreateInfo, null, pDevice);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to create device: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to create device", err);
         }
         device = new VkDevice(pDevice.get(0), physicalDevice.get(), pCreateInfo);
     }

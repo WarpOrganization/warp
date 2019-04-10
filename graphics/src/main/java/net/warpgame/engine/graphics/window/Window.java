@@ -2,8 +2,9 @@ package net.warpgame.engine.graphics.window;
 
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.core.Instance;
+import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -12,9 +13,7 @@ import java.nio.LongBuffer;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.HEIGHT;
 import static net.warpgame.engine.graphics.ZerviceBypass.WIDTH;
-import static net.warpgame.engine.graphics.utility.VKUtil.translateVulkanResult;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback;
 import static org.lwjgl.glfw.GLFWVulkan.glfwCreateWindowSurface;
 import static org.lwjgl.vulkan.KHRSurface.vkDestroySurfaceKHR;
 import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
@@ -54,7 +53,7 @@ public class Window implements CreateAndDestroy {
         LongBuffer pSurface = BufferUtils.createLongBuffer(1);
         int err = glfwCreateWindowSurface(instance.get(), window, null, pSurface);
         if (err != VK_SUCCESS) {
-            throw new AssertionError("Failed to create surface: " + translateVulkanResult(err));
+            throw new VulkanAssertionError("Failed to create surface", err);
         }
         surface = pSurface.get(0);
     }
