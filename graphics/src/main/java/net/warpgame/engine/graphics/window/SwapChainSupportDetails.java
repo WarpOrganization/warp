@@ -69,7 +69,7 @@ public class SwapChainSupportDetails {
         }
     }
 
-    public VkSurfaceFormatKHR chooseSwapSurfaceFormat() {
+    private VkSurfaceFormatKHR chooseSwapSurfaceFormat() {
         if (formats.limit() == 1 && formats.get(0).format() == VK_FORMAT_UNDEFINED) {
             ByteBuffer container = BufferUtils.createByteBuffer(VkSurfaceFormatKHR.SIZEOF);
             container.putInt(VK_FORMAT_B8G8R8A8_UNORM).putInt(VK_COLOR_SPACE_SRGB_NONLINEAR_KHR);
@@ -87,7 +87,7 @@ public class SwapChainSupportDetails {
         return formats.get(0);
     }
 
-    int chooseSwapPresentMode() {
+    private int chooseSwapPresentMode() {
         int bestMode = VK_PRESENT_MODE_FIFO_KHR;
         while(presentModes.hasRemaining()) {
             int presentMode = presentModes.get();
@@ -102,7 +102,7 @@ public class SwapChainSupportDetails {
         return bestMode;
     }
 
-    VkExtent2D chooseSwapExtent(long window) {
+    private VkExtent2D chooseSwapExtent(long window) {
         if(capabilities.currentExtent().width() != Integer.MAX_VALUE){
             return capabilities.currentExtent();
         }else {
