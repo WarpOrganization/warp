@@ -28,13 +28,11 @@ public class PhysicalDevice implements CreateAndDestroy {
     private VkPhysicalDeviceFeatures deviceFeatures;
 
     private Instance instance;
-    private SwapChainSupportDetails swapChainSupportDetails;
     private QueueFamilyIndices indices;
     private Window window;
 
-    public PhysicalDevice(Instance instance, SwapChainSupportDetails swapChainSupportDetails, QueueFamilyIndices indices, Window window) {
+    public PhysicalDevice(Instance instance, QueueFamilyIndices indices, Window window) {
         this.instance = instance;
-        this.swapChainSupportDetails = swapChainSupportDetails;
         this.indices = indices;
         this.window = window;
     }
@@ -76,11 +74,11 @@ public class PhysicalDevice implements CreateAndDestroy {
         deviceFeatures = VkPhysicalDeviceFeatures.create();
         vkGetPhysicalDeviceProperties(physicalDevice, deviceProperties);
         vkGetPhysicalDeviceFeatures(physicalDevice, deviceFeatures);
-        swapChainSupportDetails.acquireSupportDetails(this);
-        if(swapChainSupportDetails.getFormats().sizeof() == 0){
+        SwapChainSupportDetails supportDetails = new SwapChainSupportDetails(window, this);
+        if(supportDetails.getFormats().sizeof() == 0){
             return false;
         }
-        if(!swapChainSupportDetails.getPresentModes().hasRemaining()){
+        if(!supportDetails.getPresentModes().hasRemaining()){
             return false;
         }
         indices.getQueueFamilyIndices(this, window);

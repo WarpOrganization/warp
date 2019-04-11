@@ -1,6 +1,5 @@
 package net.warpgame.engine.graphics.window;
 
-import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
@@ -20,19 +19,16 @@ import static org.lwjgl.vulkan.VK10.*;
  * Created 10.09.2018
  */
 
-@Service
 public class SwapChainSupportDetails {
     private VkSurfaceCapabilitiesKHR capabilities;
     private VkSurfaceFormatKHR.Buffer formats;
     private IntBuffer presentModes;
 
-    private Window window;
-
-    public SwapChainSupportDetails(Window window) {
-        this.window = window;
+    public SwapChainSupportDetails(Window window, PhysicalDevice physicalDevice) {
+        acquireSupportDetails(window, physicalDevice);
     }
 
-    public void acquireSupportDetails(PhysicalDevice physicalDevice) {
+    private void acquireSupportDetails(Window window, PhysicalDevice physicalDevice) {
         int err;
         long surface = window.getSurface();
 
@@ -69,7 +65,7 @@ public class SwapChainSupportDetails {
         }
     }
 
-    private VkSurfaceFormatKHR chooseSwapSurfaceFormat() {
+    public VkSurfaceFormatKHR chooseSwapSurfaceFormat() {
         if (formats.limit() == 1 && formats.get(0).format() == VK_FORMAT_UNDEFINED) {
             ByteBuffer container = BufferUtils.createByteBuffer(VkSurfaceFormatKHR.SIZEOF);
             container.putInt(VK_FORMAT_B8G8R8A8_UNORM).putInt(VK_COLOR_SPACE_SRGB_NONLINEAR_KHR);
@@ -87,7 +83,7 @@ public class SwapChainSupportDetails {
         return formats.get(0);
     }
 
-    private int chooseSwapPresentMode() {
+    public int chooseSwapPresentMode() {
         int bestMode = VK_PRESENT_MODE_FIFO_KHR;
         while(presentModes.hasRemaining()) {
             int presentMode = presentModes.get();
@@ -102,13 +98,13 @@ public class SwapChainSupportDetails {
         return bestMode;
     }
 
-    private VkExtent2D chooseSwapExtent(long window) {
+    public VkExtent2D chooseSwapExtent(Window window) {
         if(capabilities.currentExtent().width() != Integer.MAX_VALUE){
             return capabilities.currentExtent();
         }else {
             IntBuffer width = BufferUtils.createIntBuffer(1);
             IntBuffer height = BufferUtils.createIntBuffer(1);
-            glfwGetFramebufferSize(window, width, height);
+            glfwGetFramebufferSize(window.get(), width, height);
 
             VkExtent2D actualExtent = VkExtent2D.create()
                     .width(width.get())

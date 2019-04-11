@@ -4,13 +4,12 @@ import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.PresentationQueue;
+import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.core.*;
 import net.warpgame.engine.graphics.memory.Allocator;
-import net.warpgame.engine.graphics.command.QueueFamilyIndices;
-import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
+import net.warpgame.engine.graphics.window.SwapChain;
 import net.warpgame.engine.graphics.window.Window;
 
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.KHRGetMemoryRequirements2.VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME;
 import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
@@ -34,24 +33,26 @@ public class ZerviceBypass {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
+    public static boolean run = true;
+
     public static void main(String... args){
         Config config = null;
         Instance instance = new Instance(config);
         DebugCallback debugCallback = new DebugCallback(instance, config);
         Window window = new Window(config, instance);
-        SwapChainSupportDetails swapChainSupportDetails = new SwapChainSupportDetails(window);
         QueueFamilyIndices queueFamilyIndices = new QueueFamilyIndices();
-        PhysicalDevice physicalDevice = new PhysicalDevice(instance, swapChainSupportDetails, queueFamilyIndices, window);
+        PhysicalDevice physicalDevice = new PhysicalDevice(instance, queueFamilyIndices, window);
         Device device = new Device(physicalDevice, queueFamilyIndices, config);
         Allocator allocator = new Allocator(instance, physicalDevice, device);
         GraphicsQueue graphicsQueue = new GraphicsQueue(device, queueFamilyIndices);
         PresentationQueue presentationQueue = new PresentationQueue(device, queueFamilyIndices);
-        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue);
+        SwapChain swapChain = new SwapChain(physicalDevice, device, window, queueFamilyIndices);
+        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue, queueFamilyIndices, swapChain);
 
         System.out.println("Starting");
         vulkanTask.init();
         System.out.println("Running");
-        while (!glfwWindowShouldClose(window.get())) {
+        while (run) {
             vulkanTask.update(10);
         }
         System.out.println("Closing");

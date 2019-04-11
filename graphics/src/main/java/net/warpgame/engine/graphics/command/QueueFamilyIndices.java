@@ -69,4 +69,8 @@ public class QueueFamilyIndices {
         return (graphicsFamily != presentFamily)?2:1;
     }
 
+    public boolean isPresentGraphics(){
+        return graphicsFamily != presentFamily;
+    }
+
 }

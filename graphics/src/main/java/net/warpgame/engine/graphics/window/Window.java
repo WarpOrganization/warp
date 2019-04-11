@@ -27,7 +27,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
 public class Window implements CreateAndDestroy {
     private long window;
     private long surface;
-    private boolean framebufferResized;
+    private boolean framebufferResized = true;
 
     private Config config;
     private Instance instance;

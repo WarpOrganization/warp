@@ -4,9 +4,12 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
+import net.warpgame.engine.graphics.ZerviceBypass;
 import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.PresentationQueue;
+import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.memory.Allocator;
+import net.warpgame.engine.graphics.window.SwapChain;
 import net.warpgame.engine.graphics.window.Window;
 
 import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
@@ -30,8 +33,9 @@ public class VulkanTask extends EngineTask {
     private Allocator allocator;
     private GraphicsQueue graphicsQueue;
     private PresentationQueue presentationQueue;
+    private SwapChain swapChain;
 
-    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue) {
+    public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue, QueueFamilyIndices queueFamilyIndices, SwapChain swapChain) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.physicalDevice = physicalDevice;
@@ -40,6 +44,7 @@ public class VulkanTask extends EngineTask {
         this.allocator = allocator;
         this.graphicsQueue = graphicsQueue;
         this.presentationQueue = presentationQueue;
+        this.swapChain = swapChain;
     }
 
     @Override
@@ -58,17 +63,20 @@ public class VulkanTask extends EngineTask {
         physicalDevice.create();
         device.create();
         allocator.create();
-        graphicsQueue.create();
         presentationQueue.create();
+        graphicsQueue.create();
+        swapChain.create();
     }
 
     @Override
     public void update(int delta) {
-            glfwPollEvents();
+        ZerviceBypass.run = !glfwWindowShouldClose(window.get())  ;
+        glfwPollEvents();
     }
 
     @Override
     protected void onClose() {
+        swapChain.destroy();
         allocator.destroy();
         device.destroy();
         window.destroy();
