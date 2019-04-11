@@ -54,6 +54,7 @@ public class ZerviceBypass {
         System.out.println("Running");
         while (run) {
             vulkanTask.update(10);
+            run = false;
         }
         System.out.println("Closing");
         vulkanTask.close();

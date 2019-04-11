@@ -8,6 +8,7 @@ import net.warpgame.engine.graphics.ZerviceBypass;
 import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
+import net.warpgame.engine.graphics.command.StandardCommandPool;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.window.SwapChain;
 import net.warpgame.engine.graphics.window.Window;
@@ -33,6 +34,7 @@ public class VulkanTask extends EngineTask {
     private Allocator allocator;
     private GraphicsQueue graphicsQueue;
     private PresentationQueue presentationQueue;
+    private StandardCommandPool commandPool;
     private SwapChain swapChain;
 
     public VulkanTask(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue, QueueFamilyIndices queueFamilyIndices, SwapChain swapChain) {
@@ -65,6 +67,7 @@ public class VulkanTask extends EngineTask {
         allocator.create();
         presentationQueue.create();
         graphicsQueue.create();
+        commandPool = new StandardCommandPool(device, graphicsQueue);
         swapChain.create();
     }
 
@@ -77,6 +80,7 @@ public class VulkanTask extends EngineTask {
     @Override
     protected void onClose() {
         swapChain.destroy();
+        commandPool.destroy();
         allocator.destroy();
         device.destroy();
         window.destroy();

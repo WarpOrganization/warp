@@ -17,7 +17,7 @@ public class PresentationQueue extends Queue {
     }
 
     @Override
-    protected int getFamily() {
+    public int getFamily() {
         return queueFamilyIndices.getPresentFamily();
     }
 }

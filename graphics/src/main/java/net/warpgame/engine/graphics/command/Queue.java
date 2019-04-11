@@ -33,7 +33,7 @@ public abstract class Queue implements CreateAndDestroy {
 
     }
 
-    protected abstract int getFamily();
+    public abstract int getFamily();
 
     public VkQueue get() {
         return queue;

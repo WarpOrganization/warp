@@ -4,6 +4,9 @@ import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.vulkan.VkCommandBuffer;
+import org.lwjgl.vulkan.VkCommandBufferAllocateInfo;
 import org.lwjgl.vulkan.VkCommandPoolCreateInfo;
 
 import java.nio.LongBuffer;
@@ -18,17 +21,21 @@ public abstract class CommandPool implements CreateAndDestroy {
     private long commandPool;
 
     private Device device;
+    private Queue queue;
 
-    public CommandPool(Device device) {
+    public CommandPool(Device device, Queue queue) {
         this.device = device;
+        this.queue = queue;
+        create();
     }
 
     @Override
     public void create() {
         VkCommandPoolCreateInfo createInfo = VkCommandPoolCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO)
-                .queueFamilyIndex(getFamily())
-                .flags(0);
+                .pNext(VK_NULL_HANDLE)
+                .queueFamilyIndex(queue.getFamily())
+                .flags(getFlags());
 
 
         LongBuffer pCommandPoll = BufferUtils.createLongBuffer(1);
@@ -44,7 +51,32 @@ public abstract class CommandPool implements CreateAndDestroy {
         vkDestroyCommandPool(device.get(), commandPool, null);
     }
 
-    protected abstract int getFamily();
+    public VkCommandBuffer[] createCommandBuffer(int n){
+        VkCommandBuffer[] commandBuffers = new VkCommandBuffer[n];
+        VkCommandBufferAllocateInfo allocateInfo = VkCommandBufferAllocateInfo.create()
+                .sType(VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO)
+                .commandPool(commandPool)
+                .level(VK_COMMAND_BUFFER_LEVEL_PRIMARY)
+                .commandBufferCount(commandBuffers.length);
+
+        PointerBuffer pointerBuffer = BufferUtils.createPointerBuffer(commandBuffers.length);
+        int err = vkAllocateCommandBuffers(device.get(), allocateInfo, pointerBuffer);
+        if (err != VK_SUCCESS) {
+            throw new VulkanAssertionError("Failed to allocate command buffers", err);
+        }
+
+        for (int i = 0; i < commandBuffers.length; i++) {
+            long l = pointerBuffer.get();
+            commandBuffers[i] = new VkCommandBuffer(l, device.get());
+        }
+        return commandBuffers;
+    }
+
+    public VkCommandBuffer createCommandBuffer(){
+        return createCommandBuffer(1)[0];
+    }
+
+    protected abstract int getFlags();
 
     public long get(){
         return commandPool;
