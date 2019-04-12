@@ -14,7 +14,7 @@ import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import net.warpgame.engine.graphics.resource.texture.ImageData;
 import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
 import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
-import net.warpgame.engine.graphics.texture.Texture2D;
+import net.warpgame.engine.graphics.image.Texture2D;
 import net.warpgame.engine.net.NetComponentRegistry;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.joml.Vector3f;

@@ -4,6 +4,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
+import net.warpgame.engine.graphics.image.Image;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
@@ -25,10 +26,11 @@ import static org.lwjgl.vulkan.VK10.*;
 
 @Service
 public class SwapChain implements CreateAndDestroy {
-    private long swapChain;
+    private long swapChain = -1;
 
     private VkExtent2D swapChainExtent;
     private int swapChainImageFormat;
+    private Image[] swapChainImages;
 
     private PhysicalDevice physicalDevice;
     private Device device;
@@ -44,6 +46,18 @@ public class SwapChain implements CreateAndDestroy {
 
     @Override
     public void create() {
+        boolean firstTime = swapChain == -1;
+        createSwapChain();
+        if(firstTime)
+            getSwapChainImages();
+    }
+
+    @Override
+    public void destroy() {
+        vkDestroySwapchainKHR(device.get(), swapChain, null);
+    }
+
+    private void createSwapChain() {
         SwapChainSupportDetails swapChainSupport = new SwapChainSupportDetails(window, physicalDevice);
 
         VkSurfaceFormatKHR surfaceFormat = swapChainSupport.chooseSwapSurfaceFormat();
@@ -91,9 +105,24 @@ public class SwapChain implements CreateAndDestroy {
         swapChain = pSwapChain.get(0);
     }
 
-    @Override
-    public void destroy() {
-        vkDestroySwapchainKHR(device.get(), swapChain, null);
+    private void getSwapChainImages() {
+        IntBuffer pImageCount = BufferUtils.createIntBuffer(1);
+        int err = vkGetSwapchainImagesKHR(device.get(), swapChain, pImageCount, null);
+        if(err != VK_SUCCESS){
+            throw new VulkanAssertionError("Failed to get number of swap chain images", err);
+        }
+        int imageCount = pImageCount.get(0);
+
+        LongBuffer swapChainImages = BufferUtils.createLongBuffer(imageCount);
+        err = vkGetSwapchainImagesKHR(device.get(), swapChain, pImageCount, swapChainImages);
+        if(err != VK_SUCCESS){
+            throw new VulkanAssertionError("Failed to get swap chain images", err);
+        }
+        Image[] res = new Image[imageCount];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = new Image(swapChainImages.get(i), device);
+        }
+        this.swapChainImages = res;
     }
 
     public long get() {

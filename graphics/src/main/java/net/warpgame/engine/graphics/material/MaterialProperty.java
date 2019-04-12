@@ -8,14 +8,8 @@ import net.warpgame.engine.core.property.Property;
  */
 public class MaterialProperty extends Property{
 
-    private Material material;
+    public MaterialProperty() {
 
-    public MaterialProperty(Material material) {
-        this.material = material;
-    }
-
-    public Material getMaterial() {
-        return material;
     }
 
 }

@@ -19,7 +19,7 @@ import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManage
 import net.warpgame.engine.graphics.resource.texture.ImageDataArray;
 import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
 import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
-import net.warpgame.engine.graphics.texture.Cubemap;
+import net.warpgame.engine.graphics.image.Cubemap;
 import net.warpgame.engine.graphics.window.Display;
 import net.warpgame.engine.graphics.window.WindowManager;
 import net.warpgame.engine.net.NetComponentRegistry;

@@ -1,7 +1,6 @@
 package net.warpgame.engine.graphics.resource.font;
 
 import net.warpgame.engine.graphics.resource.texture.ImageData;
-import net.warpgame.engine.graphics.texture.Texture2D;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -17,11 +16,9 @@ public class Font {
     private String name;
     private Map<Integer, Character> metaData;
     private Map<Integer, FloatBuffer> textureData;
-    private Texture2D fontImage;
 
     public Font(FontFile file, ImageData fontImage){
         this.metaData = file.getMetaData();
-        this.fontImage = new Texture2D(fontImage);
         this.textureData = new HashMap<>();
         this.metaData.forEach(
                 (i, c) -> calcTextureCords(file, i, c)
@@ -41,7 +38,7 @@ public class Font {
     }
 
     protected void destroy(){
-        fontImage.delete();
+
     }
 
     public String getName() {
@@ -56,7 +53,4 @@ public class Font {
         return textureData;
     }
 
-    public Texture2D getFontImage() {
-        return fontImage;
-    }
 }
