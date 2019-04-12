@@ -4,7 +4,8 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
-import net.warpgame.engine.graphics.image.Image;
+import net.warpgame.engine.graphics.memory.Image;
+import net.warpgame.engine.graphics.memory.ImageView;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
@@ -31,6 +32,7 @@ public class SwapChain implements CreateAndDestroy {
     private VkExtent2D swapChainExtent;
     private int swapChainImageFormat;
     private Image[] swapChainImages;
+    private ImageView[] swapChainImageViews;
 
     private PhysicalDevice physicalDevice;
     private Device device;
@@ -46,14 +48,16 @@ public class SwapChain implements CreateAndDestroy {
 
     @Override
     public void create() {
-        boolean firstTime = swapChain == -1;
         createSwapChain();
-        if(firstTime)
-            getSwapChainImages();
+        getSwapChainImages();
+        createImageViews();
     }
 
     @Override
     public void destroy() {
+        for (ImageView imageView : swapChainImageViews) {
+            imageView.destroy();
+        }
         vkDestroySwapchainKHR(device.get(), swapChain, null);
     }
 
@@ -120,9 +124,16 @@ public class SwapChain implements CreateAndDestroy {
         }
         Image[] res = new Image[imageCount];
         for (int i = 0; i < res.length; i++) {
-            res[i] = new Image(swapChainImages.get(i), device);
+            res[i] = new Image(swapChainImages.get(i), swapChainImageFormat, 1, device);
         }
         this.swapChainImages = res;
+    }
+
+    private void createImageViews() {
+        swapChainImageViews = new ImageView[swapChainImages.length];
+        for (int i = 0; i < swapChainImageViews.length; i++) {
+            swapChainImageViews[i] = new ImageView(swapChainImages[i], VK_IMAGE_ASPECT_COLOR_BIT, device);
+        }
     }
 
     public long get() {
