@@ -29,10 +29,10 @@ import static org.lwjgl.vulkan.VK10.*;
 public class SwapChain implements CreateAndDestroy {
     private long swapChain = -1;
 
-    private VkExtent2D swapChainExtent;
-    private int swapChainImageFormat;
-    private Image[] swapChainImages;
-    private ImageView[] swapChainImageViews;
+    private VkExtent2D extent;
+    private int imageFormat;
+    private Image[] images;
+    private ImageView[] imageViews;
 
     private PhysicalDevice physicalDevice;
     private Device device;
@@ -55,7 +55,7 @@ public class SwapChain implements CreateAndDestroy {
 
     @Override
     public void destroy() {
-        for (ImageView imageView : swapChainImageViews) {
+        for (ImageView imageView : imageViews) {
             imageView.destroy();
         }
         vkDestroySwapchainKHR(device.get(), swapChain, null);
@@ -66,8 +66,8 @@ public class SwapChain implements CreateAndDestroy {
 
         VkSurfaceFormatKHR surfaceFormat = swapChainSupport.chooseSwapSurfaceFormat();
         int presentMode = swapChainSupport.chooseSwapPresentMode();
-        swapChainExtent = swapChainSupport.chooseSwapExtent(window);
-        swapChainImageFormat = surfaceFormat.format();
+        extent = swapChainSupport.chooseSwapExtent(window);
+        imageFormat = surfaceFormat.format();
 
         int imageCount = swapChainSupport.getCapabilities().minImageCount() + 1;
         if (swapChainSupport.getCapabilities().maxImageCount() > 0) {
@@ -80,7 +80,7 @@ public class SwapChain implements CreateAndDestroy {
                 .minImageCount(imageCount)
                 .imageFormat(surfaceFormat.format())
                 .imageColorSpace(surfaceFormat.colorSpace())
-                .imageExtent(swapChainExtent)
+                .imageExtent(extent)
                 .imageArrayLayers(1)
                 .imageUsage(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
                 .preTransform(swapChainSupport.getCapabilities().currentTransform())
@@ -124,15 +124,15 @@ public class SwapChain implements CreateAndDestroy {
         }
         Image[] res = new Image[imageCount];
         for (int i = 0; i < res.length; i++) {
-            res[i] = new Image(swapChainImages.get(i), swapChainImageFormat, 1, device);
+            res[i] = new Image(swapChainImages.get(i), imageFormat, 1, device);
         }
-        this.swapChainImages = res;
+        this.images = res;
     }
 
     private void createImageViews() {
-        swapChainImageViews = new ImageView[swapChainImages.length];
-        for (int i = 0; i < swapChainImageViews.length; i++) {
-            swapChainImageViews[i] = new ImageView(swapChainImages[i], VK_IMAGE_ASPECT_COLOR_BIT, device);
+        imageViews = new ImageView[images.length];
+        for (int i = 0; i < imageViews.length; i++) {
+            imageViews[i] = new ImageView(images[i], VK_IMAGE_ASPECT_COLOR_BIT, device);
         }
     }
 
@@ -140,11 +140,11 @@ public class SwapChain implements CreateAndDestroy {
         return swapChain;
     }
 
-    public VkExtent2D getSwapChainExtent() {
-        return swapChainExtent;
+    public VkExtent2D getExtent() {
+        return extent;
     }
 
-    public int getSwapChainImageFormat() {
-        return swapChainImageFormat;
+    public int getImageFormat() {
+        return imageFormat;
     }
 }

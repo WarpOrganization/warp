@@ -7,6 +7,7 @@ import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.core.*;
 import net.warpgame.engine.graphics.memory.Allocator;
+import net.warpgame.engine.graphics.window.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
 import net.warpgame.engine.graphics.window.Window;
 
@@ -37,6 +38,7 @@ public class ZerviceBypass {
 
     public static void main(String... args){
         Config config = null;
+
         Instance instance = new Instance(config);
         DebugCallback debugCallback = new DebugCallback(instance, config);
         Window window = new Window(config, instance);
@@ -46,8 +48,12 @@ public class ZerviceBypass {
         Allocator allocator = new Allocator(instance, physicalDevice, device);
         GraphicsQueue graphicsQueue = new GraphicsQueue(device, queueFamilyIndices);
         PresentationQueue presentationQueue = new PresentationQueue(device, queueFamilyIndices);
+        InstanceManager instanceManager = new InstanceManager(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue);
+
         SwapChain swapChain = new SwapChain(physicalDevice, device, window, queueFamilyIndices);
-        EngineTask vulkanTask = new VulkanTask(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue, queueFamilyIndices, swapChain);
+        RenderPass renderPass = new RenderPass(physicalDevice, device, swapChain);
+
+        EngineTask vulkanTask = new VulkanTask(instanceManager, swapChain, renderPass);
 
         System.out.println("Starting");
         vulkanTask.init();

@@ -26,6 +26,7 @@ public class ImageView implements CreateAndDestroy {
         this.image = image;
         this.aspectFlags = aspectFlags;
         this.device = device;
+        create();
     }
 
     @Override

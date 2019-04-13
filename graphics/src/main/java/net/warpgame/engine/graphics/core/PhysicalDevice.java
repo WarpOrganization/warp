@@ -8,6 +8,7 @@ import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
 import net.warpgame.engine.graphics.window.Window;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.vulkan.VkFormatProperties;
 import org.lwjgl.vulkan.VkPhysicalDevice;
 import org.lwjgl.vulkan.VkPhysicalDeviceFeatures;
 import org.lwjgl.vulkan.VkPhysicalDeviceProperties;
@@ -67,6 +68,21 @@ public class PhysicalDevice implements CreateAndDestroy {
     @Override
     public void destroy() {
 
+    }
+
+    public int findSupportedFormat(int[] candidates, int tiling, int features) {
+        for (int format : candidates) {
+            VkFormatProperties props = VkFormatProperties.create();
+            vkGetPhysicalDeviceFormatProperties(physicalDevice, format, props);
+
+            if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures() & features) == features) {
+                return format;
+            } else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures() & features) == features) {
+                return format;
+            }
+        }
+
+        throw new RuntimeException("Failed to find supported format");
     }
 
     private boolean isDeviceSuitable() {
