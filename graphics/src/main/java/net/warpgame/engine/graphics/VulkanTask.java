@@ -6,6 +6,7 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.command.StandardCommandPool;
 import net.warpgame.engine.graphics.core.InstanceManager;
+import net.warpgame.engine.graphics.window.GraphicsPipeline;
 import net.warpgame.engine.graphics.window.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
 
@@ -25,11 +26,13 @@ public class VulkanTask extends EngineTask {
     private StandardCommandPool commandPool;
     private SwapChain swapChain;
     private RenderPass renderPass;
+    private GraphicsPipeline graphicsPipeline;
 
-    public VulkanTask(InstanceManager instanceManager, SwapChain swapChain, RenderPass renderPass) {
+    public VulkanTask(InstanceManager instanceManager, SwapChain swapChain, RenderPass renderPass, GraphicsPipeline graphicsPipeline) {
         this.instanceManager = instanceManager;
         this.swapChain = swapChain;
         this.renderPass = renderPass;
+        this.graphicsPipeline = graphicsPipeline;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class VulkanTask extends EngineTask {
         commandPool = new StandardCommandPool(instanceManager.getDevice(), instanceManager.getGraphicsQueue());
         swapChain.create();
         renderPass.create();
+        graphicsPipeline.create();
     }
 
     @Override
@@ -48,6 +52,7 @@ public class VulkanTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        graphicsPipeline.destroy();
         renderPass.destroy();
         swapChain.destroy();
         commandPool.destroy();
