@@ -98,10 +98,8 @@ public class PhysicalDevice implements CreateAndDestroy {
             return false;
         }
         indices.getQueueFamilyIndices(this, window);
-        if(!indices.isComplete()){
-            return false;
-        }
-        return deviceProperties.deviceType() == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
+        return indices.isComplete();
+        //return deviceProperties.deviceType() == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
     }
 
     public VkPhysicalDevice get(){

@@ -40,7 +40,7 @@ public class Instance implements CreateAndDestroy {
                 .pEngineName(memUTF8("Warp Engine"))
                 .applicationVersion(VK_MAKE_VERSION(0, 1, 0))
                 .engineVersion(VK_MAKE_VERSION(0,1,0))
-                .apiVersion(VK_API_VERSION_1_1);
+                .apiVersion(VK_API_VERSION_1_0);
 
         PointerBuffer ppEnabledExtensionNames = getInstanceExtensions();
         PointerBuffer ppEnabledLayerNames = getValidationLayers();
