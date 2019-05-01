@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.memory;
 
+import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VkUtil;
@@ -7,6 +8,7 @@ import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.vma.VmaAllocationCreateInfo;
+import org.lwjgl.vulkan.VkCommandBuffer;
 import org.lwjgl.vulkan.VkImageCreateInfo;
 import org.lwjgl.vulkan.VkImageMemoryBarrier;
 
@@ -24,14 +26,14 @@ public class Image implements CreateAndDestroy {
     private long image;
 
     private long allocation;
-    private int imageFormat;
+    private int format;
     private int mipLevels;
 
     private Device device;
     private Allocator allocator;
 
-    public Image(long image, int imageFormat, int mipLevels, Device device) {
-        assign(image, -1, imageFormat, mipLevels, device, null);
+    public Image(long image, int format, int mipLevels, Device device) {
+        assign(image, -1, format, mipLevels, device, null);
     }
 
     public Image(int width, int height, int format, int mipLevels, int imageUsage, int memoryUsage, Allocator allocator) {
@@ -66,8 +68,8 @@ public class Image implements CreateAndDestroy {
         assign(pImage.get(0), pAllocation.get(0), format, mipLevels, null, allocator);
     }
 
-    public void transitionLayout(long format, int oldLayout, int newLayout, int mipLevels) {
-        //VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+    public void transitionLayout(int oldLayout, int newLayout, CommandPool commandPool) {
+        VkCommandBuffer commandBuffer = commandPool.beginSingleTimeCommands();
 
         VkImageMemoryBarrier.Buffer barrier = VkImageMemoryBarrier.create(1)
                 .sType(VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER)
@@ -119,9 +121,9 @@ public class Image implements CreateAndDestroy {
             throw new RuntimeException("Unsupported layout transition");
         }
 
-        //vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, null, null, barrier);
+        vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, null, null, barrier);
 
-        //endSingleTimeCommands(commandBuffer);
+        commandPool.endSingleTimeCommands(commandBuffer);
     }
 
     @Override
@@ -141,7 +143,7 @@ public class Image implements CreateAndDestroy {
     private void assign(long image, long allocation, int imageFormat, int mipLevels, Device device, Allocator allocator) {
         this.image = image;
         this.allocation = allocation;
-        this.imageFormat = imageFormat;
+        this.format = imageFormat;
         this.mipLevels = mipLevels;
         this.device = device;
         this.allocator = allocator;
@@ -155,8 +157,8 @@ public class Image implements CreateAndDestroy {
         return image;
     }
 
-    public int getImageFormat() {
-        return imageFormat;
+    public int getFormat() {
+        return format;
     }
 
     public int getMipLevels() {

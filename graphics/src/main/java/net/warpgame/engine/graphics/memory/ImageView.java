@@ -37,7 +37,7 @@ public class ImageView implements CreateAndDestroy {
                 .flags(0)
                 .image(image.get())
                 .viewType(VK_IMAGE_VIEW_TYPE_2D)
-                .format(image.getImageFormat());
+                .format(image.getFormat());
         viewInfo.subresourceRange()
                 .aspectMask(aspectFlags)
                 .baseMipLevel(0)

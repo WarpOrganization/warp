@@ -52,7 +52,7 @@ public class ZerviceBypass {
         InstanceManager instanceManager = new InstanceManager(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue);
 
         SwapChain swapChain = new SwapChain(physicalDevice, device, window, queueFamilyIndices);
-        RenderPass renderPass = new RenderPass(physicalDevice, device, allocator, swapChain);
+        RenderPass renderPass = new RenderPass(physicalDevice, device, graphicsQueue, allocator, swapChain);
         GraphicsPipeline graphicsPipeline = new GraphicsPipeline(device, swapChain, renderPass);
 
         EngineTask vulkanTask = new VulkanTask(instanceManager, swapChain, renderPass, graphicsPipeline);

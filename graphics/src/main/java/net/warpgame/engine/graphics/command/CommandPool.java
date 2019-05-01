@@ -5,9 +5,7 @@ import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.vulkan.VkCommandBuffer;
-import org.lwjgl.vulkan.VkCommandBufferAllocateInfo;
-import org.lwjgl.vulkan.VkCommandPoolCreateInfo;
+import org.lwjgl.vulkan.*;
 
 import java.nio.LongBuffer;
 
@@ -74,6 +72,33 @@ public abstract class CommandPool implements CreateAndDestroy {
 
     public VkCommandBuffer createCommandBuffer(){
         return createCommandBuffer(1)[0];
+    }
+
+    public VkCommandBuffer beginSingleTimeCommands() {
+        VkCommandBuffer commandBuffer = this.createCommandBuffer();
+
+        VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.create()
+                .sType(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO)
+                .flags(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+
+        int err = vkBeginCommandBuffer(commandBuffer, beginInfo);
+        if(err != VK_SUCCESS){
+            throw new VulkanAssertionError("Failed to begin single time command buffer", err);
+        }
+        return commandBuffer;
+    }
+
+    public void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+        vkEndCommandBuffer(commandBuffer);
+
+        PointerBuffer pointerBuffer = BufferUtils.createPointerBuffer(1).put(0, commandBuffer);
+        VkSubmitInfo submitInfo = VkSubmitInfo.create()
+                .sType(VK_STRUCTURE_TYPE_SUBMIT_INFO)
+                .pCommandBuffers(pointerBuffer);
+
+        vkQueueSubmit(queue.get(), submitInfo, VK_NULL_HANDLE);//TODO add fence and make function return it
+        vkQueueWaitIdle(queue.get());
+        vkFreeCommandBuffers(device.get(), commandPool, pointerBuffer);
     }
 
     protected abstract int getFlags();

@@ -1,6 +1,9 @@
 package net.warpgame.engine.graphics.pipeline;
 
 import net.warpgame.engine.core.context.service.Service;
+import net.warpgame.engine.graphics.command.CommandPool;
+import net.warpgame.engine.graphics.command.GraphicsQueue;
+import net.warpgame.engine.graphics.command.OneTimeCommandPool;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.memory.Allocator;
@@ -27,21 +30,25 @@ public class RenderPass implements CreateAndDestroy {
     private long renderPass;
 
     private Image depthImage;
+    private CommandPool commandPool;
 
     private PhysicalDevice physicalDevice;
     private Device device;
+    private GraphicsQueue graphicsQueue;
     private Allocator allocator;
     private SwapChain swapChain;
 
-    public RenderPass(PhysicalDevice physicalDevice, Device device, Allocator allocator, SwapChain swapChain) {
+    public RenderPass(PhysicalDevice physicalDevice, Device device, GraphicsQueue graphicsQueue, Allocator allocator, SwapChain swapChain) {
         this.physicalDevice = physicalDevice;
         this.device = device;
+        this.graphicsQueue = graphicsQueue;
         this.allocator = allocator;
         this.swapChain = swapChain;
     }
 
     @Override
     public void create() {
+        commandPool = new OneTimeCommandPool(device, graphicsQueue);
         createRenderPass();
         createDepthImage();
     }
@@ -50,6 +57,7 @@ public class RenderPass implements CreateAndDestroy {
     public void destroy() {
         depthImage.destroy();
         vkDestroyRenderPass(device.get(), renderPass, null);
+        commandPool.destroy();
     }
 
     private void createRenderPass() {
@@ -122,8 +130,7 @@ public class RenderPass implements CreateAndDestroy {
                 VMA_MEMORY_USAGE_GPU_ONLY,
                 allocator
         );
-        //depthImage = new Image(1024, 1024, VK_FORMAT_R8G8B8A8_UNORM, 1, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,  VMA_MEMORY_USAGE_GPU_ONLY, allocator);
-        //depthImage.transitionLayout(depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, 1);
+        depthImage.transitionLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, commandPool);
     }
 
     private int findDepthFormat() {
