@@ -1,10 +1,11 @@
-package net.warpgame.engine.graphics.window;
+package net.warpgame.engine.graphics.pipeline;
 
 import net.warpgame.engine.graphics.VulkanTask;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.resource.mesh.Vertex;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
+import net.warpgame.engine.graphics.window.SwapChain;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.*;
 

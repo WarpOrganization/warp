@@ -1,15 +1,19 @@
-package net.warpgame.engine.graphics.window;
+package net.warpgame.engine.graphics.pipeline;
 
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
+import net.warpgame.engine.graphics.memory.Allocator;
+import net.warpgame.engine.graphics.memory.Image;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
+import net.warpgame.engine.graphics.window.SwapChain;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.*;
 
 import java.nio.LongBuffer;
 
+import static org.lwjgl.util.vma.Vma.VMA_MEMORY_USAGE_GPU_ONLY;
 import static org.lwjgl.vulkan.KHRSwapchain.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 import static org.lwjgl.vulkan.VK10.*;
 
@@ -22,18 +26,33 @@ import static org.lwjgl.vulkan.VK10.*;
 public class RenderPass implements CreateAndDestroy {
     private long renderPass;
 
+    private Image depthImage;
+
     private PhysicalDevice physicalDevice;
     private Device device;
+    private Allocator allocator;
     private SwapChain swapChain;
 
-    public RenderPass(PhysicalDevice physicalDevice, Device device, SwapChain swapChain) {
+    public RenderPass(PhysicalDevice physicalDevice, Device device, Allocator allocator, SwapChain swapChain) {
         this.physicalDevice = physicalDevice;
         this.device = device;
+        this.allocator = allocator;
         this.swapChain = swapChain;
     }
 
     @Override
     public void create() {
+        createRenderPass();
+        createDepthImage();
+    }
+
+    @Override
+    public void destroy() {
+        depthImage.destroy();
+        vkDestroyRenderPass(device.get(), renderPass, null);
+    }
+
+    private void createRenderPass() {
         VkAttachmentDescription.Buffer attachmentDescriptions = VkAttachmentDescription.create(2);
 
         attachmentDescriptions.get(0)
@@ -92,9 +111,19 @@ public class RenderPass implements CreateAndDestroy {
         this.renderPass = pRenderPass.get(0);
     }
 
-    @Override
-    public void destroy() {
-        vkDestroyRenderPass(device.get(), renderPass, null);
+    private void createDepthImage() {
+        int depthFormat = findDepthFormat();
+        depthImage = new Image(
+                swapChain.getExtent().width(),
+                swapChain.getExtent().height(),
+                depthFormat,
+                1,
+                VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                VMA_MEMORY_USAGE_GPU_ONLY,
+                allocator
+        );
+        //depthImage = new Image(1024, 1024, VK_FORMAT_R8G8B8A8_UNORM, 1, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,  VMA_MEMORY_USAGE_GPU_ONLY, allocator);
+        //depthImage.transitionLayout(depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, 1);
     }
 
     private int findDepthFormat() {

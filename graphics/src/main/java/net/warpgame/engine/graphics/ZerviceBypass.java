@@ -7,8 +7,8 @@ import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.core.*;
 import net.warpgame.engine.graphics.memory.Allocator;
-import net.warpgame.engine.graphics.window.GraphicsPipeline;
-import net.warpgame.engine.graphics.window.RenderPass;
+import net.warpgame.engine.graphics.pipeline.GraphicsPipeline;
+import net.warpgame.engine.graphics.pipeline.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
 import net.warpgame.engine.graphics.window.Window;
 
@@ -52,7 +52,7 @@ public class ZerviceBypass {
         InstanceManager instanceManager = new InstanceManager(instance, debugCallback, window, physicalDevice, device, allocator, graphicsQueue, presentationQueue);
 
         SwapChain swapChain = new SwapChain(physicalDevice, device, window, queueFamilyIndices);
-        RenderPass renderPass = new RenderPass(physicalDevice, device, swapChain);
+        RenderPass renderPass = new RenderPass(physicalDevice, device, allocator, swapChain);
         GraphicsPipeline graphicsPipeline = new GraphicsPipeline(device, swapChain, renderPass);
 
         EngineTask vulkanTask = new VulkanTask(instanceManager, swapChain, renderPass, graphicsPipeline);

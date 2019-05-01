@@ -57,4 +57,8 @@ public class Allocator implements CreateAndDestroy {
         vmaDestroyAllocator(allocator);
     }
 
+
+    public long get(){
+        return allocator;
+    }
 }

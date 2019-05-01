@@ -6,8 +6,8 @@ import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.command.StandardCommandPool;
 import net.warpgame.engine.graphics.core.InstanceManager;
-import net.warpgame.engine.graphics.window.GraphicsPipeline;
-import net.warpgame.engine.graphics.window.RenderPass;
+import net.warpgame.engine.graphics.pipeline.GraphicsPipeline;
+import net.warpgame.engine.graphics.pipeline.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
