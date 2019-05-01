@@ -19,8 +19,9 @@ public class ImageView implements CreateAndDestroy {
 
     private int aspectFlags;
 
-    private Device device;
     private Image image;
+
+    private Device device;
 
     public ImageView(Image image, int aspectFlags, Device device) {
         this.image = image;
@@ -58,4 +59,8 @@ public class ImageView implements CreateAndDestroy {
         vkDestroyImageView(device.get(), imageView, null);
     }
 
+
+    public long get(){
+        return imageView;
+    }
 }

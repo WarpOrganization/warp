@@ -7,7 +7,9 @@ import net.warpgame.engine.graphics.command.OneTimeCommandPool;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.memory.Allocator;
+import net.warpgame.engine.graphics.memory.Framebuffer;
 import net.warpgame.engine.graphics.memory.Image;
+import net.warpgame.engine.graphics.memory.ImageView;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChain;
@@ -29,6 +31,8 @@ import static org.lwjgl.vulkan.VK10.*;
 public class RenderPass implements CreateAndDestroy {
     private long renderPass;
 
+    private Framebuffer[] framebuffers;
+    private ImageView depthImageView;
     private Image depthImage;
     private CommandPool commandPool;
 
@@ -51,13 +55,25 @@ public class RenderPass implements CreateAndDestroy {
         commandPool = new OneTimeCommandPool(device, graphicsQueue);
         createRenderPass();
         createDepthImage();
+        createFramebuffers();
     }
 
     @Override
     public void destroy() {
+        for (Framebuffer framebuffer : framebuffers) {
+            framebuffer.destroy();
+        }
+        depthImageView.destroy();
         depthImage.destroy();
         vkDestroyRenderPass(device.get(), renderPass, null);
         commandPool.destroy();
+    }
+
+    private void createFramebuffers(){
+        framebuffers = new Framebuffer[swapChain.getImageViews().length];
+        for (int i = 0; i < framebuffers.length; i++) {
+            framebuffers[i] = new Framebuffer(swapChain.getImageViews()[i], depthImageView, device, swapChain, this);
+        }
     }
 
     private void createRenderPass() {
@@ -130,6 +146,7 @@ public class RenderPass implements CreateAndDestroy {
                 VMA_MEMORY_USAGE_GPU_ONLY,
                 allocator
         );
+        depthImageView = new ImageView(depthImage, VK_IMAGE_ASPECT_DEPTH_BIT, device);
         depthImage.transitionLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, commandPool);
     }
 
