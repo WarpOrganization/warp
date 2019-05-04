@@ -15,6 +15,6 @@ public class VkUtil {
             case VMA_MEMORY_USAGE_CPU_TO_GPU: return 3;
             case VMA_MEMORY_USAGE_GPU_TO_CPU: return 4;
         }
-        throw new RuntimeException(usage + " is unknown usage type");
+        throw new RuntimeException(usage + " is an unknown memory usage type");
     }
 }

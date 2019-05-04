@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.memory;
 
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.pipeline.RenderPass;
-import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.Destroyable;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChain;
 import org.lwjgl.BufferUtils;
@@ -16,7 +16,7 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 01.05.2019
  */
-public class Framebuffer implements CreateAndDestroy {
+public class Framebuffer implements Destroyable {
     private long framebuffer;
 
     private ImageView swapChainImageView;
@@ -32,10 +32,10 @@ public class Framebuffer implements CreateAndDestroy {
         this.device = device;
         this.swapChain = swapChain;
         this.renderPass = renderPass;
+        create();
     }
 
-    @Override
-    public void create() {
+    private void create() {
         LongBuffer attachments = BufferUtils.createLongBuffer(2)
                 .put(swapChainImageView.get())
                 .put(depthImageView.get());

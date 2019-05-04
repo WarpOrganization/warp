@@ -1,7 +1,7 @@
 package net.warpgame.engine.graphics.command;
 
 import net.warpgame.engine.graphics.core.Device;
-import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.Destroyable;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -15,7 +15,7 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 11.04.2019
  */
-public abstract class CommandPool implements CreateAndDestroy {
+public abstract class CommandPool implements Destroyable {
     private long commandPool;
 
     private Device device;
@@ -27,8 +27,7 @@ public abstract class CommandPool implements CreateAndDestroy {
         create();
     }
 
-    @Override
-    public void create() {
+    private void create() {
         VkCommandPoolCreateInfo createInfo = VkCommandPoolCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO)
                 .pNext(VK_NULL_HANDLE)

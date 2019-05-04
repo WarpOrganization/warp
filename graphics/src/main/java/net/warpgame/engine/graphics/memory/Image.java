@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.memory;
 
 import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.core.Device;
-import net.warpgame.engine.graphics.utility.CreateAndDestroy;
+import net.warpgame.engine.graphics.utility.Destroyable;
 import net.warpgame.engine.graphics.utility.VkUtil;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
@@ -22,7 +22,7 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 12.04.2019
  */
-public class Image implements CreateAndDestroy {
+public class Image implements Destroyable {
     private long image;
 
     private long allocation;
@@ -124,11 +124,6 @@ public class Image implements CreateAndDestroy {
         vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, null, null, barrier);
 
         commandPool.endSingleTimeCommands(commandBuffer);
-    }
-
-    @Override
-    public void create() {
-
     }
 
     @Override
