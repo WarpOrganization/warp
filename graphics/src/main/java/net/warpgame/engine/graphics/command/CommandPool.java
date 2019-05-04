@@ -87,7 +87,7 @@ public abstract class CommandPool implements Destroyable {
         return commandBuffer;
     }
 
-    public void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+    public Fence endSingleTimeCommands(VkCommandBuffer commandBuffer) {
         vkEndCommandBuffer(commandBuffer);
 
         PointerBuffer pointerBuffer = BufferUtils.createPointerBuffer(1).put(0, commandBuffer);
@@ -95,8 +95,13 @@ public abstract class CommandPool implements Destroyable {
                 .sType(VK_STRUCTURE_TYPE_SUBMIT_INFO)
                 .pCommandBuffers(pointerBuffer);
 
-        vkQueueSubmit(queue.get(), submitInfo, VK_NULL_HANDLE);//TODO add fence and make function return it
-        vkQueueWaitIdle(queue.get());
+        Fence fence = new Fence(device);
+        vkQueueSubmit(queue.get(), submitInfo, fence.get());
+        return fence;
+    }
+
+    public void freeCommandBuffer(VkCommandBuffer commandBuffer){
+        PointerBuffer pointerBuffer = BufferUtils.createPointerBuffer(1).put(0, commandBuffer);
         vkFreeCommandBuffers(device.get(), commandPool, pointerBuffer);
     }
 
