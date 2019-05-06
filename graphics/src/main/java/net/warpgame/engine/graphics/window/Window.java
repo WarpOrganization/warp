@@ -11,8 +11,8 @@ import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.HEIGHT;
-import static net.warpgame.engine.graphics.ZerviceBypass.WIDTH;
+import static net.warpgame.engine.graphics.GraphicsConfig.HEIGHT;
+import static net.warpgame.engine.graphics.GraphicsConfig.WIDTH;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFWVulkan.glfwCreateWindowSurface;
 import static org.lwjgl.vulkan.KHRSurface.vkDestroySurfaceKHR;

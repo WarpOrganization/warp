@@ -14,7 +14,7 @@ import org.lwjgl.vulkan.VkInstanceCreateInfo;
 
 import java.nio.IntBuffer;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.*;
+import static net.warpgame.engine.graphics.GraphicsConfig.*;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.vulkan.VK10.*;

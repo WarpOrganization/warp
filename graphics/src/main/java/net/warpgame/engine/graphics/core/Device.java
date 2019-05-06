@@ -15,7 +15,7 @@ import org.lwjgl.vulkan.VkPhysicalDeviceFeatures;
 
 import java.nio.FloatBuffer;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.*;
+import static net.warpgame.engine.graphics.GraphicsConfig.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.system.MemoryUtil.memUTF8;
 import static org.lwjgl.vulkan.VK10.*;

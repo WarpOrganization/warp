@@ -11,7 +11,6 @@ import net.warpgame.engine.graphics.pipeline.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 /**
  * @author MarconZet
@@ -46,7 +45,6 @@ public class VulkanTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        ZerviceBypass.run = !glfwWindowShouldClose(instanceManager.getWindow().get())  ;
         glfwPollEvents();
     }
 

@@ -8,10 +8,12 @@ import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkDebugReportCallbackCreateInfoEXT;
 import org.lwjgl.vulkan.VkDebugReportCallbackEXT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.DEBUG_REPORT;
+import static net.warpgame.engine.graphics.GraphicsConfig.DEBUG_REPORT;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
@@ -23,6 +25,8 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
 @Service
 @Profile("graphics")
 public class DebugCallback implements CreateAndDestroy {
+    private static final Logger logger = LoggerFactory.getLogger(DebugCallback.class);
+
     private long debugCallbackHandle;
 
     private Instance instance;
@@ -37,11 +41,27 @@ public class DebugCallback implements CreateAndDestroy {
     public void create() {
         VkDebugReportCallbackEXT debugCallback = new VkDebugReportCallbackEXT() {
             public int invoke(int flags, int objectType, long object, long location, int messageCode, long pLayerPrefix, long pMessage, long pUserData) {
-                String decodedMessage = String.format("%s %s", translateDebugFlags(flags), VkDebugReportCallbackEXT.getString(pMessage));
-                if(flags >= VK_DEBUG_REPORT_WARNING_BIT_EXT)
-                    System.err.println(decodedMessage);
-                else
-                    System.out.println(decodedMessage);
+                String decodedMessage = VkDebugReportCallbackEXT.getString(pMessage);
+                int bit = 1;
+                while ((flags >>= 1)>0)
+                    bit <<= 1;
+                switch (bit) {
+                    case VK_DEBUG_REPORT_DEBUG_BIT_EXT:
+                        logger.debug(decodedMessage);
+                        break;
+                    case VK_DEBUG_REPORT_ERROR_BIT_EXT:
+                        logger.error(decodedMessage);
+                        break;
+                    case VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT:
+                    case VK_DEBUG_REPORT_WARNING_BIT_EXT:
+                        logger.warn(decodedMessage);
+                        break;
+                    case VK_DEBUG_REPORT_INFORMATION_BIT_EXT:
+                        logger.info(decodedMessage);
+                        break;
+                    default:
+                        logger.error("Unexpected value: " + bit);
+                }
                 return 0;
             }
         };

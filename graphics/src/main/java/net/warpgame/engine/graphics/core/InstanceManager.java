@@ -8,7 +8,7 @@ import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.window.Window;
 
-import static net.warpgame.engine.graphics.ZerviceBypass.ENABLE_VALIDATION_LAYERS;
+import static net.warpgame.engine.graphics.GraphicsConfig.ENABLE_VALIDATION_LAYERS;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 
