@@ -1,5 +1,7 @@
 package net.warpgame.engine.graphics.pipeline;
 
+import net.warpgame.engine.core.context.service.Profile;
+import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.VulkanTask;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.resource.mesh.Vertex;
@@ -27,6 +29,8 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 13.04.2019
  */
+@Service
+@Profile("graphics")
 public class GraphicsPipeline implements CreateAndDestroy {
     private long graphicsPipeline;
 

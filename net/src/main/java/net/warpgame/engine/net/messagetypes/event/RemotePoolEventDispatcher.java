@@ -1,6 +1,7 @@
 package net.warpgame.engine.net.messagetypes.event;
 
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.EventDispatcher;
@@ -15,6 +16,7 @@ import java.util.concurrent.Executors;
  * Created 18.12.2017
  */
 @Service
+@Profile("net")
 public class RemotePoolEventDispatcher implements EventDispatcher {
     //    private static final int THREADS = Runtime.getRuntime().availableProcessors() * 4;
     private static final int THREADS = 1;

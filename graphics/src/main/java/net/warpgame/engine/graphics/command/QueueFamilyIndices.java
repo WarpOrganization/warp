@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.command;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.window.Window;
@@ -17,6 +18,7 @@ import static org.lwjgl.vulkan.VK10.*;
  */
 
 @Service
+@Profile("graphics")
 public class QueueFamilyIndices {
     private int graphicsFamily = -1;
     private int presentFamily = -1;

@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
@@ -17,7 +18,6 @@ import static net.warpgame.engine.graphics.ZerviceBypass.*;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.vulkan.VK10.*;
-import static org.lwjgl.vulkan.VK11.VK_API_VERSION_1_1;
 
 /**
  * @author MarconZet
@@ -25,6 +25,7 @@ import static org.lwjgl.vulkan.VK11.VK_API_VERSION_1_1;
  */
 
 @Service
+@Profile("graphics")
 public class Instance implements CreateAndDestroy {
     private VkInstance instance;
 

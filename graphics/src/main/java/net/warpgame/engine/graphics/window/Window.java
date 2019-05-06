@@ -1,13 +1,13 @@
 package net.warpgame.engine.graphics.window;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.Instance;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 import java.nio.LongBuffer;
 
@@ -24,6 +24,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  */
 
 @Service
+@Profile("graphics")
 public class Window implements CreateAndDestroy {
     private long window;
     private long surface;
@@ -74,17 +75,6 @@ public class Window implements CreateAndDestroy {
             }
         };
         glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-
-        GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if (action != GLFW_RELEASE)
-                    return;
-                if (key == GLFW_KEY_ESCAPE)
-                    glfwSetWindowShouldClose(window, true);
-            }
-        };
-        glfwSetKeyCallback(window, keyCallback);
     }
 
     public long get(){

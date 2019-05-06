@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.config.Config;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
@@ -20,6 +21,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  * Created 05.04.2019
  */
 @Service
+@Profile("graphics")
 public class DebugCallback implements CreateAndDestroy {
     private long debugCallbackHandle;
 

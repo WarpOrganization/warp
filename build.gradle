@@ -1,3 +1,5 @@
+import groovy.xml.MarkupBuilder
+
 buildscript {
     repositories {
         mavenCentral()
@@ -22,9 +24,14 @@ static def os() {
     else if(system.contains("mac")) return "macos"
     else throw new IllegalStateException("Unsupported operating system")
 }
+
 ext {
     platform = project.properties['platform'] ?: os()
 }
+
+import org.ajoberstar.grgit.*
+
+ext.repo = Grgit.open(project.file('.'))
 
 group 'net.warpgame'
 
@@ -40,7 +47,6 @@ dependencies {
 }
 
 subprojects.each { subproject -> evaluationDependsOn(subproject.path) }
-//jar.dependsOn subprojects.tasks['classes']
 jar {
     zip64 true
     from {
@@ -54,8 +60,49 @@ jar {
 }
 
 dependencies {
-    compile project(':test')
+    compile project(':graphicstest')
+    compile group: 'org.codehaus.groovy', name: 'groovy-xml', version: '2.5.6'
+
 }
+
+
+task runEngine(type:JavaExec) {
+    main = "net.warpgame.engine.core.runtime.EngineLauncher"
+    classpath = sourceSets.main.runtimeClasspath
+    if(project.hasProperty('cl')){
+        args(cl)
+    }
+    jvmArgs '-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader'
+}
+
+static def createConfiguration(taskName, mainClass, mod) {
+    def runConfigurationsDir = new File(".idea/runConfigurations")
+    runConfigurationsDir.mkdirs()
+
+    def launcherClass = "net.warpgame.engine.core.runtime.EngineLauncher"
+    def props = "-Djava.system.class.loader=net.warpgame.engine.core.runtime.EngineClassLoader"
+
+    def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
+    def xml = new MarkupBuilder(writer)
+
+    xml.component(name: "ProjectRunConfigurationManager") {
+        configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
+            option(name: 'MAIN_CLASS_NAME', value: launcherClass)
+            option(name: 'VM_PARAMETERS', value: props)
+            option(name: 'PROGRAM_PARAMETERS', value: mainClass)
+            option(name: 'WORKING_DIRECTORY', value: 'file://$PROJECT_DIR$')
+            module(name: mod)
+        }
+    }
+}
+
+task createRunConfigurations {
+    createConfiguration("SP - Vulkan Test", "net.warpgame.engine.graphicstest.GraphicsTest", "graphicstest_main")
+    createConfiguration("MP - Server Test", "net.warpgame.servertest.server.ServerTest", "servertest_main")
+    createConfiguration("MP - Client Test", "net.warpgame.servertest.client.ClientTest", "servertest_main")
+    createConfiguration("IDE - Ai Behavior Tree Editor", "net.warpgame.ide.AiBehaviorTreeEditor", "ide_main")
+}
+
 
 subprojects {
     group 'net.warpgame'

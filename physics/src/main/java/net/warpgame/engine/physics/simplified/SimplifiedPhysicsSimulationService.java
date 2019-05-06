@@ -2,6 +2,7 @@ package net.warpgame.engine.physics.simplified;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentRegistry;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
  * Created 17.06.2018
  */
 @Service
+@Profile("simplePhysics")
 public class SimplifiedPhysicsSimulationService {
 
     private ComponentRegistry componentRegistry;

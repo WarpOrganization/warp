@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.command;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.Device;
 
@@ -8,6 +9,7 @@ import net.warpgame.engine.graphics.core.Device;
  * Created 07.04.2019
  */
 @Service
+@Profile("graphics")
 public class PresentationQueue extends Queue {
     private QueueFamilyIndices queueFamilyIndices;
 

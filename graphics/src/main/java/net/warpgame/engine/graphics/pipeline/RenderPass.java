@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.pipeline;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.command.GraphicsQueue;
@@ -28,6 +29,7 @@ import static org.lwjgl.vulkan.VK10.*;
  */
 
 @Service
+@Profile("graphics")
 public class RenderPass implements CreateAndDestroy {
     private long renderPass;
 

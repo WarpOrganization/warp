@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.window;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.core.Device;
@@ -26,6 +27,7 @@ import static org.lwjgl.vulkan.VK10.*;
  */
 
 @Service
+@Profile("graphics")
 public class SwapChain implements CreateAndDestroy {
     private long swapChain = -1;
 

@@ -11,7 +11,7 @@ import net.warpgame.engine.core.execution.task.EngineTask;
  */
 @Service
 @RegisterTask(thread = "physics")
-@Profile("simplePhysics")
+@Profile("physics")
 public class SimplifiedPhysicsTask extends EngineTask {
 
 

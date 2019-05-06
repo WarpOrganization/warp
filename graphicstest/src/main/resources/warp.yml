@@ -1,0 +1,12 @@
+graphics:
+  ups: 60
+  upscounter:
+    enabled: true
+    sampleSize: 30
+  rendering:
+    scene:
+      maxLights: 10
+    ui:
+      stackSize: 10
+script.ups: 40
+

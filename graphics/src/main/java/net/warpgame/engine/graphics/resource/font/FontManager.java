@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.resource.font;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
  */
 
 @Service
+@Profile("graphics")
 public class FontManager {
     private Map<String, Font> fonts = new HashMap<>();
 

@@ -4,6 +4,7 @@ import net.warpgame.engine.ai.behaviortree.BehaviorTreeNotFoundException;
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.component.ComponentDeathEvent;
 import net.warpgame.engine.core.component.SimpleListener;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 
@@ -16,6 +17,7 @@ import java.util.Set;
  */
 
 @Service
+@Profile("ai")
 public class AIService {
     private Set<AIProperty> properties = new HashSet<>();
     private Set<AIProperty> propertiesToAdd = new HashSet<>();

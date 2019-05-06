@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.messagetypes.internalmessage;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.Deserializer;
 import net.warpgame.engine.core.serialization.Serialization;
@@ -41,6 +42,7 @@ public class InternalMessage implements Serializable {
     }
 
     @Service
+    @Profile("net")
     public static class InternalMessageSerialization extends Serialization<InternalMessage> {
 
         private InternalMessageContent[] internalMessageContentValues = InternalMessageContent.values();

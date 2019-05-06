@@ -2,6 +2,7 @@ package net.warpgame.engine.input.glfw;
 
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneHolder;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.input.Input;
@@ -24,6 +25,7 @@ import java.awt.event.MouseEvent;
 @SuppressWarnings("Duplicates") //srsly intellij?
 
 @Service
+@Profile("input")
 public class GLFWInput implements Input {
 
     private static Logger logger = Logger.getLogger(GLFWInput.class);

@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.core;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.PresentationQueue;
@@ -16,6 +17,7 @@ import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
  * Created 13.04.2019
  */
 @Service
+@Profile("graphics")
 public class InstanceManager implements CreateAndDestroy {
     private Instance instance;
     private DebugCallback debugCallback;

@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.core;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.QueueFamilyIndices;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
@@ -23,6 +24,7 @@ import static org.lwjgl.vulkan.VK10.*;
  */
 
 @Service
+@Profile("graphics")
 public class PhysicalDevice implements CreateAndDestroy {
     private VkPhysicalDevice physicalDevice;
     private VkPhysicalDeviceProperties deviceProperties;

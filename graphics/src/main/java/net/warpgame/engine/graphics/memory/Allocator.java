@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.memory;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.Instance;
@@ -21,6 +22,7 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
  */
 
 @Service
+@Profile("graphics")
 public class Allocator implements CreateAndDestroy {
     private long allocator;
 
