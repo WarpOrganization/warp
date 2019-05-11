@@ -19,8 +19,7 @@ public class GraphicsConfig {
     public static int DEBUG_REPORT =
                     VK_DEBUG_REPORT_ERROR_BIT_EXT |
                     VK_DEBUG_REPORT_WARNING_BIT_EXT |
-                    VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
-                    VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
+                    VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 }

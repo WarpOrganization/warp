@@ -5,11 +5,15 @@ import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.memory.Loadable;
 import net.warpgame.engine.graphics.memory.VulkanLoadTask;
+import net.warpgame.engine.graphics.resource.mesh.Model;
+import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * @author MarconZet
@@ -40,7 +44,9 @@ public class StaticMesh implements Loadable {
     }
 
     @Override
-    public void load(Allocator allocator, CommandPool commandPool) {
+    public void load(Allocator allocator, CommandPool commandPool) throws FileNotFoundException {
+        ObjLoader obj = ObjLoader.read(new FileInputStream(source), true);
+        Model model = obj.toModel();
         logger.info("Model loaded");
         loaded = 1;
     }

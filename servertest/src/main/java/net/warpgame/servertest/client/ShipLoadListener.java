@@ -45,7 +45,7 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     private void init() {
         mesh = ObjLoader.read(
                 ClientTest.class.getResourceAsStream("he-goat.obj"),
-                true).toMesh();
+                true).toModel();
         imageData = ImageDecoder.decodePNG(
                 ClientTest.class.getResourceAsStream("he-goat_tex.png"),
                 PNGDecoder.Format.RGBA

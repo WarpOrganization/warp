@@ -15,7 +15,6 @@ public class Vertex {
      * Vector2f texture coordinate
      * Vector3f normal
      */
-    private float[] data;
 
     private static int positionOffset(){
         return 0;

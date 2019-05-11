@@ -12,6 +12,7 @@ import net.warpgame.engine.graphics.core.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -50,8 +51,12 @@ public class VulkanLoadTask extends EngineTask {
     public void update(int delta) {
         Loadable loadable;
         while ((loadable = loadQueue.poll())!=null) {
-            loadable.load(allocator, commandPool);
-            loadedQueue.add(loadable);
+            try {
+                loadable.load(allocator, commandPool);
+                loadedQueue.add(loadable);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         while ((loadable = unloadQueue.poll())!=null) {
             loadable.unload(allocator);

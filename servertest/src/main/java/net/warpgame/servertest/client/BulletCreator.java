@@ -38,7 +38,7 @@ public class BulletCreator {
     public void initialize() {
         mesh = ObjLoader.read(
                 ClientTest.class.getResourceAsStream("bullet.obj"),
-                true).toMesh();
+                true).toModel();
         ImageData imageData = ImageDecoder.decodePNG(
                 ClientTest.class.getResourceAsStream("bullet.png"),
                 PNGDecoder.Format.RGBA

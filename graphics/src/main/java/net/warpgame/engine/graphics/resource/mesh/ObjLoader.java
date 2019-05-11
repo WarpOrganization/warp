@@ -2,7 +2,6 @@ package net.warpgame.engine.graphics.resource.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import net.warpgame.engine.graphics.mesh.StaticMesh;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -143,14 +142,14 @@ public class ObjLoader {
     }
 
 
-    public StaticMesh toMesh() {
+    public Model toModel() {
         int size = this.vertices.length + hVertices.size();
         float[] v = new float[size * 3];
         float[] t = new float[size * 2];
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
         load(v, t, n, indices);
-        throw new UnsupportedOperationException("ObjLoader will come back, better than before");
+        return new Model(v, t, n, indices, size);
     }
 
     private void load(float[] v, float[] t, float[] n, int[] indices) {
