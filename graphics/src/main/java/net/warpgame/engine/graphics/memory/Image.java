@@ -124,7 +124,6 @@ public class Image implements Destroyable {
         vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, null, null, barrier);
 
         commandPool.endSingleTimeCommands(commandBuffer).block().destroy();
-        commandPool.freeCommandBuffer(commandBuffer);
     }
 
     @Override

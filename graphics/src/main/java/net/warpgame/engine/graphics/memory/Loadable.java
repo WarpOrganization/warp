@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
  */
 public interface Loadable {
     void load(Allocator allocator, CommandPool commandPool) throws FileNotFoundException;
-    void unload(Allocator allocator);
+    void unload();
     void schedule(Property property);
     boolean isLoaded();
 }

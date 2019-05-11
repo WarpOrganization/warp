@@ -1,18 +1,22 @@
 package net.warpgame.engine.graphics.memory;
 
+import net.warpgame.engine.graphics.command.CommandPool;
+import net.warpgame.engine.graphics.command.Fence;
 import net.warpgame.engine.graphics.utility.Destroyable;
 import net.warpgame.engine.graphics.utility.VkUtil;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.vma.VmaAllocationCreateInfo;
+import org.lwjgl.vulkan.VkBufferCopy;
 import org.lwjgl.vulkan.VkBufferCreateInfo;
+import org.lwjgl.vulkan.VkCommandBuffer;
 
+import java.nio.ByteBuffer;
 import java.nio.LongBuffer;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.util.vma.Vma.vmaCreateBuffer;
-import static org.lwjgl.util.vma.Vma.vmaDestroyBuffer;
+import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.util.vma.Vma.*;
 import static org.lwjgl.vulkan.VK10.*;
 
 /**
@@ -26,9 +30,37 @@ public class Buffer implements Destroyable {
 
     private Allocator allocator;
 
-    Buffer(long size, int usage, int flags, int memeUsage, Allocator allocator){
+    public Buffer(long size, int usage, int flags, int memeUsage, Allocator allocator){
         this.allocator = allocator;
         createBuffer(size, usage, flags, memeUsage);
+    }
+
+    @Override
+    public void destroy() {
+        vmaDestroyBuffer(allocator.get(), buffer, allocation);
+    }
+
+    public static void copyBuffer(ByteBuffer src, Buffer dst, long bytes){
+        PointerBuffer pData = BufferUtils.createPointerBuffer(1);
+        int err = vmaMapMemory(dst.getAllocator().get(), dst.getAllocation(), pData);
+        if(err != VK_SUCCESS){
+            throw new VulkanAssertionError("Failed to map destination buffer memory", err);
+        }
+        long data = pData.get();
+        memCopy(memAddress(src), data, bytes);
+        vmaUnmapMemory(dst.getAllocator().get(), dst.getAllocation());
+    }
+
+    public static Fence copyBuffer(Buffer src, Buffer dst, long bytes, CommandPool commandPool){
+        VkCommandBuffer commandBuffer = commandPool.beginSingleTimeCommands();
+
+        VkBufferCopy.Buffer copyRegion = VkBufferCopy.create(1)
+                .srcOffset(0)
+                .dstOffset(0)
+                .size(bytes);
+        vkCmdCopyBuffer(commandBuffer, src.get(), dst.get(), copyRegion);
+
+        return commandPool.endSingleTimeCommands(commandBuffer);
     }
 
     private void createBuffer(long size, int usage, int flags, int memUsage) {
@@ -54,8 +86,15 @@ public class Buffer implements Destroyable {
         allocation = pAllocation.get();
     }
 
-    @Override
-    public void destroy() {
-        vmaDestroyBuffer(allocator.get(), buffer, allocation);
+    private Allocator getAllocator() {
+        return allocator;
+    }
+
+    public long get(){
+        return buffer;
+    }
+
+    public long getAllocation() {
+        return allocation;
     }
 }

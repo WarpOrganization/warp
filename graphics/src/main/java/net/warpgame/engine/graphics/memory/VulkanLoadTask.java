@@ -59,7 +59,7 @@ public class VulkanLoadTask extends EngineTask {
             }
         }
         while ((loadable = unloadQueue.poll())!=null) {
-            loadable.unload(allocator);
+            loadable.unload();
             loadedQueue.remove(loadable);
         }
     }

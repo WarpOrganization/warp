@@ -23,7 +23,7 @@ public class GraphicsTest {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        context = new EngineContext("dev", "graphics", "local");
+        context = new EngineContext( "graphics", "local");
         context.getLoadedContext().addService(engineRuntime.getIdRegistry());
         SceneHolder sceneHolder = context.getLoadedContext().findOne(SceneHolder.class).get();
         try {

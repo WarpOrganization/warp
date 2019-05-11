@@ -44,4 +44,12 @@ public class Model {
         IntBuffer ib = indices.asIntBuffer();
         ib.put(index);
     }
+
+    public ByteBuffer getVertices() {
+        return vertices;
+    }
+
+    public ByteBuffer getIndices() {
+        return indices;
+    }
 }

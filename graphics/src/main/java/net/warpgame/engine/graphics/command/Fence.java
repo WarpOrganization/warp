@@ -17,6 +17,8 @@ import static org.lwjgl.vulkan.VK10.*;
 public class Fence implements Destroyable {
     private long fence;
 
+    private Runnable onDestroy;
+
     private Device device;
 
     public Fence(Device device) {
@@ -28,8 +30,14 @@ public class Fence implements Destroyable {
         create(flags);
     }
 
+    public Fence onDestory(Runnable runnable){
+        onDestroy = runnable;
+        return this;
+    }
+
     @Override
     public void destroy() {
+        onDestroy.run();
         vkDestroyFence(device.get(), fence, null);
     }
 
