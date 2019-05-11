@@ -150,7 +150,7 @@ public class ObjLoader {
         float[] n = new float[size * 3];
         int[] indices = new int[this.indices.size()];
         load(v, t, n, indices);
-        return new StaticMesh(v, t, n, indices);
+        throw new UnsupportedOperationException("ObjLoader will come back, better than before");
     }
 
     private void load(float[] v, float[] t, float[] n, int[] indices) {

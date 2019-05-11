@@ -18,8 +18,7 @@ public class CanvasProperty extends Property {
 
     @Override
     public void init() {
-        super.init();
-        projectionMatrix = cameraProperty.getUiProjectionMatrix();;
+        projectionMatrix = cameraProperty.getUiProjectionMatrix();
     }
 
     public Matrix4fc getProjectionMatrix() {

@@ -7,6 +7,8 @@ import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.window.Window;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static net.warpgame.engine.graphics.GraphicsConfig.ENABLE_VALIDATION_LAYERS;
 import static org.lwjgl.glfw.GLFW.glfwInit;
@@ -19,6 +21,8 @@ import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 @Service
 @Profile("graphics")
 public class InstanceManager implements CreateAndDestroy {
+    private static final Logger logger = LoggerFactory.getLogger(InstanceManager.class);
+
     private Instance instance;
     private DebugCallback debugCallback;
     private Window window;
@@ -47,6 +51,7 @@ public class InstanceManager implements CreateAndDestroy {
         if (!glfwVulkanSupported()) {
             throw new AssertionError("GLFW failed to find the Vulkan loader");
         }
+        logger.info("Creating Vulkan static resources");
         instance.create();
         if(ENABLE_VALIDATION_LAYERS)
             debugCallback.create();

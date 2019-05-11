@@ -88,23 +88,4 @@ public class DebugCallback implements CreateAndDestroy {
         }
         return callbackHandle;
     }
-
-    private static String translateDebugFlags(int flags){
-        switch (flags){
-            case VK_DEBUG_REPORT_INFORMATION_BIT_EXT:
-                return "INFO";
-            case VK_DEBUG_REPORT_WARNING_BIT_EXT:
-                return "WARN";
-            case VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT:
-                return "PERFORMANCE WARN";
-            case VK_DEBUG_REPORT_ERROR_BIT_EXT:
-                return "ERROR";
-            case VK_DEBUG_REPORT_DEBUG_BIT_EXT:
-                return "DEBUG";
-            default:
-                return String.format("Unknown [%d]", flags);
-
-
-        }
-    }
 }

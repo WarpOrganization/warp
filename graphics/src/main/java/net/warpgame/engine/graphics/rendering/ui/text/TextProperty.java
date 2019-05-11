@@ -36,7 +36,6 @@ public class TextProperty extends Property {
 
     @Override
     public void init() {
-        super.init();
         fontManager = getOwner().getContext().getLoadedContext().findOne(FontManager.class).get();
         updateFont();
     }

@@ -4,11 +4,12 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.graphics.command.StandardCommandPool;
 import net.warpgame.engine.graphics.core.InstanceManager;
 import net.warpgame.engine.graphics.pipeline.GraphicsPipeline;
 import net.warpgame.engine.graphics.pipeline.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 
@@ -21,8 +22,9 @@ import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 @Profile("graphics")
 @RegisterTask(thread = "graphics")
 public class VulkanTask extends EngineTask {
+    private static final Logger logger = LoggerFactory.getLogger(VulkanTask.class);
+
     private InstanceManager instanceManager;
-    private StandardCommandPool commandPool;
     private SwapChain swapChain;
     private RenderPass renderPass;
     private GraphicsPipeline graphicsPipeline;
@@ -37,7 +39,7 @@ public class VulkanTask extends EngineTask {
     @Override
     protected void onInit() {
         instanceManager.create();
-        commandPool = new StandardCommandPool(instanceManager.getDevice(), instanceManager.getGraphicsQueue());
+        logger.info("Creating Vulkan static resources");
         swapChain.create();
         renderPass.create();
         graphicsPipeline.create();
@@ -50,10 +52,17 @@ public class VulkanTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        logger.info("Destroying Vulkan instance and static resources");
         graphicsPipeline.destroy();
         renderPass.destroy();
         swapChain.destroy();
-        commandPool.destroy();
         instanceManager.destroy();
+        logger.info("Terminated Vulkan");
+    }
+
+    @Override
+    public int getPriority() {
+        super.getPriority();
+        return -20;
     }
 }
