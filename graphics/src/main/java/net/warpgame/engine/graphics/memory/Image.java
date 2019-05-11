@@ -129,10 +129,10 @@ public class Image implements Destroyable {
 
     @Override
     public void destroy() {
-        if(allocation == -1) {
-            vkDestroyImage(device.get(), image, null);
-        }else{
+        if(allocation != -1) {
             vmaDestroyImage(allocator.get(), image, allocation);
+        }else{
+            vkDestroyImage(device.get(), image, null);
         }
     }
 

@@ -11,5 +11,5 @@ public interface Loadable {
     void load(Allocator allocator, CommandPool commandPool);
     void unload(Allocator allocator);
     void schedule(Property property);
-    void isLoaded();
+    boolean isLoaded();
 }

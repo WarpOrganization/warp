@@ -6,7 +6,4 @@ package net.warpgame.engine.graphics.utility;
  */
 public interface Destroyable {
     void destroy();
-    default boolean isDestroyed() {
-        return false;
-    }
 }

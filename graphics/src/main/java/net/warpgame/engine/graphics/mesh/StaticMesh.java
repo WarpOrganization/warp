@@ -18,6 +18,7 @@ import java.io.File;
 public class StaticMesh implements Loadable {
     private static final Logger logger = LoggerFactory.getLogger(StaticMesh.class);
 
+    private int loaded = 0;
     private final File source;
 
     public StaticMesh(File source) {
@@ -31,22 +32,27 @@ public class StaticMesh implements Loadable {
     }
 
     @Override
-    public void schedule(Property property){
-        property.getOwner().getContext().getLoadedContext().findOne(VulkanLoadTask.class).get().addToLoad(this);
+    public synchronized void schedule(Property property) {
+        if (loaded == 0) {
+            loaded = -1;
+            property.getOwner().getContext().getLoadedContext().findOne(VulkanLoadTask.class).get().addToLoad(this);
+        }
     }
 
     @Override
     public void load(Allocator allocator, CommandPool commandPool) {
         logger.info("Model loaded");
+        loaded = 1;
     }
 
     @Override
     public void unload(Allocator allocator) {
         logger.info("Model unloaded");
+        loaded = 0;
     }
 
     @Override
-    public void isLoaded() {
-
+    public boolean isLoaded() {
+        return loaded == 1;
     }
 }
