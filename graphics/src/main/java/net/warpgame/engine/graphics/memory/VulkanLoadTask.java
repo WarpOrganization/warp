@@ -52,7 +52,7 @@ public class VulkanLoadTask extends EngineTask {
         Loadable loadable;
         while ((loadable = loadQueue.poll())!=null) {
             try {
-                loadable.load(allocator, commandPool);
+                loadable.load(device, allocator, commandPool);
                 loadedQueue.add(loadable);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

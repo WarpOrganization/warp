@@ -5,13 +5,14 @@ import net.warpgame.engine.core.component.SceneComponent;
 import net.warpgame.engine.core.component.SceneHolder;
 import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
+import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.runtime.EngineRuntime;
-import net.warpgame.engine.graphics.VulkanTask;
+import net.warpgame.engine.graphics.material.MaterialProperty;
+import net.warpgame.engine.graphics.material.Texture;
 import net.warpgame.engine.graphics.mesh.MeshProperty;
 import net.warpgame.engine.graphics.mesh.StaticMesh;
 
 import java.io.File;
-import java.net.URISyntaxException;
 
 /**
  * @author MarconZet
@@ -20,6 +21,7 @@ import java.net.URISyntaxException;
 public class GraphicsTest {
 
     private static EngineContext context;
+    private static SceneComponent testComponent;
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
@@ -31,8 +33,10 @@ public class GraphicsTest {
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-        VulkanTask vulkanTask = context.getLoadedContext().findOne(VulkanTask.class).get();
-        while(!vulkanTask.isInitialized()){
+
+        MaterialProperty property = testComponent.getProperty(Property.getTypeId(MaterialProperty.class));
+        Texture tex = property.getTexture();
+        while(!tex.isLoaded()){
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -47,15 +51,17 @@ public class GraphicsTest {
     }*/
 
     private static void createScene(Component scene){
-        SceneComponent testComponent = new SceneComponent(scene);
-        try {
-            File source = new File(GraphicsTest.class.getResource("dragon.obj").toURI());
-            StaticMesh mesh = new StaticMesh(source);
-            MeshProperty meshProperty = new MeshProperty(mesh);
-            testComponent.addProperty(meshProperty);
-        }catch (URISyntaxException e){
-            e.printStackTrace();
-        }
+        testComponent = new SceneComponent(scene);
+
+        File meshSource = new File(GraphicsTest.class.getResource("dragon.obj").getFile());
+        StaticMesh mesh = new StaticMesh(meshSource);
+        MeshProperty meshProperty = new MeshProperty(mesh);
+        testComponent.addProperty(meshProperty);
+
+        File texSource = new File(GraphicsTest.class.getResource("tex.png").getFile());
+        Texture texture = new Texture(texSource);
+        MaterialProperty materialProperty = new MaterialProperty(texture);
+        testComponent.addProperty(materialProperty);
     }
 
     private static void close() {

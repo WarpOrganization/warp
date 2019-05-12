@@ -149,7 +149,7 @@ public class RenderPass implements CreateAndDestroy {
                 allocator
         );
         depthImageView = new ImageView(depthImage, VK_IMAGE_ASPECT_DEPTH_BIT, device);
-        depthImage.transitionLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, commandPool);
+        depthImage.transitionLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, commandPool).block().destroy();
     }
 
     private int findDepthFormat() {

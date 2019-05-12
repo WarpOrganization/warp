@@ -7,9 +7,18 @@ import net.warpgame.engine.core.property.Property;
  * Created 2017-09-23 at 14
  */
 public class MaterialProperty extends Property{
+    Texture texture;
 
-    public MaterialProperty() {
-
+    public MaterialProperty(Texture texture) {
+        this.texture = texture;
     }
 
+    @Override
+    public void init() {
+        texture.schedule(this);
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
 }

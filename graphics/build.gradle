@@ -7,7 +7,6 @@ apply plugin: 'maven'
 
 repositories {
     mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 project.ext.lwjglNatives = "natives-${platform}"
@@ -25,11 +24,13 @@ dependencies {
     implementation  "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
     implementation  "org.lwjgl:lwjgl-vma:${lwjglVersion}"
     implementation  "org.lwjgl:lwjgl-vulkan:${lwjglVersion}"
+    implementation  "org.lwjgl:lwjgl-stb:${lwjglVersion}"
     // LWJGL natives
     runtimeOnly "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-vma:${lwjglVersion}:${lwjglNatives}"
     if (lwjglNatives == "natives-macos") runtimeOnly "org.lwjgl:lwjgl-vulkan:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
 
     testImplementation 'junit:junit:4.12'
 }

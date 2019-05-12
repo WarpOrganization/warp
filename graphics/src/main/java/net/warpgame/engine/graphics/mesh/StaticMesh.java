@@ -3,13 +3,13 @@ package net.warpgame.engine.graphics.mesh;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.command.Fence;
+import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.memory.Buffer;
 import net.warpgame.engine.graphics.memory.Loadable;
 import net.warpgame.engine.graphics.memory.VulkanLoadTask;
 import net.warpgame.engine.graphics.resource.mesh.Model;
 import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
-import net.warpgame.engine.graphics.utility.VkUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.util.vma.Vma.*;
+import static org.lwjgl.util.vma.Vma.VMA_MEMORY_USAGE_CPU_ONLY;
+import static org.lwjgl.util.vma.Vma.VMA_MEMORY_USAGE_GPU_ONLY;
 import static org.lwjgl.vulkan.VK10.*;
 
 /**
@@ -56,7 +57,7 @@ public class StaticMesh implements Loadable {
     }
 
     @Override
-    public void load(Allocator allocator, CommandPool commandPool) throws FileNotFoundException {
+    public void load(Device device, Allocator allocator, CommandPool commandPool) throws FileNotFoundException {
         this.allocator = allocator;
         ObjLoader obj = ObjLoader.read(new FileInputStream(source), true);
         Model model = obj.toModel();
@@ -72,7 +73,7 @@ public class StaticMesh implements Loadable {
                 bufferSize,
                 VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                VkUtil.fixVmaMemoryUsage(VMA_MEMORY_USAGE_CPU_ONLY),
+                VMA_MEMORY_USAGE_CPU_ONLY,
                 allocator
         );
         Buffer.copyBuffer(src, stagingBuffer, bufferSize);
@@ -80,7 +81,7 @@ public class StaticMesh implements Loadable {
                 bufferSize,
                 flags,
                 0,
-                VkUtil.fixVmaMemoryUsage(VMA_MEMORY_USAGE_GPU_ONLY),
+                VMA_MEMORY_USAGE_GPU_ONLY,
                 allocator
         );
         Fence fence = Buffer.copyBuffer(stagingBuffer, res, bufferSize, commandPool);

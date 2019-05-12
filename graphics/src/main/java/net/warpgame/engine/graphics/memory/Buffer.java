@@ -10,6 +10,7 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.vma.VmaAllocationCreateInfo;
 import org.lwjgl.vulkan.VkBufferCopy;
 import org.lwjgl.vulkan.VkBufferCreateInfo;
+import org.lwjgl.vulkan.VkBufferImageCopy;
 import org.lwjgl.vulkan.VkCommandBuffer;
 
 import java.nio.ByteBuffer;
@@ -59,6 +60,28 @@ public class Buffer implements Destroyable {
                 .dstOffset(0)
                 .size(bytes);
         vkCmdCopyBuffer(commandBuffer, src.get(), dst.get(), copyRegion);
+
+        return commandPool.endSingleTimeCommands(commandBuffer);
+    }
+
+    public static Fence copyBuffer(Buffer src, Image dst, int width, int height, CommandPool commandPool){
+        VkCommandBuffer commandBuffer = commandPool.beginSingleTimeCommands();
+
+        VkBufferImageCopy.Buffer region = VkBufferImageCopy.create(1)
+                .bufferOffset(0)
+                .bufferRowLength(0)
+                .bufferImageHeight(0);
+
+        region.imageSubresource()
+                .aspectMask(VK_IMAGE_ASPECT_COLOR_BIT)
+                .mipLevel(0)
+                .baseArrayLayer(0)
+                .layerCount(1);
+
+        region.imageOffset().set(0,0,0);
+        region.imageExtent().set(width, height, 1);
+
+        vkCmdCopyBufferToImage(commandBuffer, src.get(), dst.get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, region);
 
         return commandPool.endSingleTimeCommands(commandBuffer);
     }
