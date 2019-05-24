@@ -8,13 +8,16 @@ import net.warpgame.engine.core.property.Property;
  */
 public class MeshProperty extends Property {
     private StaticMesh mesh;
+    private VulkanTransform vulkanTransform;
 
     public MeshProperty(StaticMesh mesh) {
         this.mesh = mesh;
+        this.vulkanTransform = new VulkanTransform();
     }
 
     @Override
     public void init() {
         mesh.schedule(this);
+        vulkanTransform.schedule(this);
     }
 }

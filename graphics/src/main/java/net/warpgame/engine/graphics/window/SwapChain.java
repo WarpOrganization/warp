@@ -150,6 +150,10 @@ public class SwapChain implements CreateAndDestroy {
         return imageViews;
     }
 
+    public Image[] getImages() {
+        return images;
+    }
+
     public int getImageFormat() {
         return imageFormat;
     }
