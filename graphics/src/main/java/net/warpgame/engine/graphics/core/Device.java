@@ -67,7 +67,8 @@ public class Device implements CreateAndDestroy {
         }
         ppExtensionNames.flip();
 
-        VkPhysicalDeviceFeatures deviceFeatures = VkPhysicalDeviceFeatures.create();
+        VkPhysicalDeviceFeatures deviceFeatures = VkPhysicalDeviceFeatures.create()
+                .samplerAnisotropy(true);
         VkDeviceCreateInfo pCreateInfo = VkDeviceCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO)
                 .pNext(NULL)

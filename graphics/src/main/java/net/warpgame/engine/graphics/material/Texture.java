@@ -26,6 +26,7 @@ public class Texture implements Loadable {
     private static final Logger logger = LoggerFactory.getLogger(Texture.class);
 
     private int loaded = 0;
+    private TextureSampler textureSampler;
     private ImageView textureImageView;
     private Image textureImage;
 
@@ -49,7 +50,7 @@ public class Texture implements Loadable {
         int texChannels = textureInfo[2].get();
         long imageSize = texWidth * texHeight * 4;
         if(pixels == null){
-            throw new AssertionError("Failed to load texture image");
+            throw new FileNotFoundException("Failed to load texture image");
         }
         int mipLevels = (int) Math.floor(Math.log((double) Math.max(texWidth, texHeight)) / Math.log(2));
 
@@ -78,6 +79,7 @@ public class Texture implements Loadable {
 
         stagingBuffer.destroy();
         textureImageView = new ImageView(textureImage, VK_IMAGE_ASPECT_COLOR_BIT, device);
+        textureSampler = new TextureSampler(device, mipLevels);
         logger.info("Texture loaded");
         loaded = 1;
     }
@@ -97,6 +99,8 @@ public class Texture implements Loadable {
             property.getOwner().getContext().getLoadedContext().findOne(VulkanLoadTask.class).get().addToLoad(this);
         }
     }
+
+
 
     @Override
     public boolean isLoaded() {

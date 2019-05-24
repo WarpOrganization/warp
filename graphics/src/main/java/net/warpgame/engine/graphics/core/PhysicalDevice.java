@@ -93,6 +93,9 @@ public class PhysicalDevice implements CreateAndDestroy {
         vkGetPhysicalDeviceProperties(physicalDevice, deviceProperties);
         vkGetPhysicalDeviceFeatures(physicalDevice, deviceFeatures);
         SwapChainSupportDetails supportDetails = new SwapChainSupportDetails(window, this);
+        if(!deviceFeatures.samplerAnisotropy()){
+            return false;
+        }
         if(supportDetails.getFormats().sizeof() == 0){
             return false;
         }
