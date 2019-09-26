@@ -52,10 +52,9 @@ public class Instance implements CreateAndDestroy {
                 .pApplicationInfo(appInfo)
                 .ppEnabledExtensionNames(ppEnabledExtensionNames)
                 .ppEnabledLayerNames(ppEnabledLayerNames);
-        PointerBuffer pInstance = memAllocPointer(1);
+        PointerBuffer pInstance = BufferUtils.createPointerBuffer(1);
         int err = vkCreateInstance(pCreateInfo, null, pInstance);
         long instance = pInstance.get(0);
-        memFree(pInstance);
         if (err != VK_SUCCESS) {
             throw new VulkanAssertionError("Failed to create VkInstance", err);
         }

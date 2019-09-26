@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.vulkan.VK10.vkDeviceWaitIdle;
 
 /**
  * @author MarconZet
@@ -52,6 +53,7 @@ public class VulkanTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        vkDeviceWaitIdle(instanceManager.getDevice().get());
         logger.info("Destroying Vulkan instance and static resources");
         graphicsPipeline.destroy();
         renderPass.destroy();

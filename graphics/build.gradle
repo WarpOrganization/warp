@@ -10,8 +10,8 @@ repositories {
 }
 
 project.ext.lwjglNatives = "natives-${platform}"
-project.ext.lwjglVersion = "3.2.1"
-project.ext.jomlVersion = "1.9.13"
+project.ext.lwjglVersion = "3.2.3"
+project.ext.jomlVersion = "1.9.17"
 
 dependencies {
     implementation project(':core')
