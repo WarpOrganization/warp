@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.texture;
+package net.warpgame.engine.graphics.utility.resource.texture;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;

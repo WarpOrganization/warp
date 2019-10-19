@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.mesh;
+package net.warpgame.engine.graphics.utility.resource.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;

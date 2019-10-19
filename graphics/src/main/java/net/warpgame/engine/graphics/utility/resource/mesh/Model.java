@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.mesh;
+package net.warpgame.engine.graphics.utility.resource.mesh;
 
 import org.lwjgl.BufferUtils;
 

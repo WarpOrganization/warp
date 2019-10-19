@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.pipeline;
+package net.warpgame.engine.graphics.rendering.pipeline;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;

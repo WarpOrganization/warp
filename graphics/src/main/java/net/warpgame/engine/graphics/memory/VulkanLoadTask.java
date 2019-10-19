@@ -9,13 +9,15 @@ import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.OneTimeCommandPool;
 import net.warpgame.engine.graphics.command.Queue;
 import net.warpgame.engine.graphics.core.Device;
+import net.warpgame.engine.graphics.window.SwapChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * @author MarconZet
@@ -23,12 +25,13 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 @Service
 @Profile("graphics")
-@RegisterTask(thread = "graphics")//TODO this task should happen in another thread and it MUST be synchronised with VulkanTask when it executes to onInit() and onClose()
+@RegisterTask(thread = "graphics")
+//TODO this task should happen in another thread and it MUST be synchronised with VulkanTask when it executes to onInit() and onClose()
 public class VulkanLoadTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(VulkanLoadTask.class);
 
     private BlockingQueue<Loadable> loadQueue = new ArrayBlockingQueue<>(10);
-    private BlockingQueue<Loadable> loadedQueue = new LinkedBlockingDeque<>();
+    private Set<Loadable> loadedSet = new HashSet<>();
     private BlockingQueue<Loadable> unloadQueue = new ArrayBlockingQueue<>(10);
     private CommandPool commandPool;
 
@@ -36,7 +39,7 @@ public class VulkanLoadTask extends EngineTask {
     private Allocator allocator;
     private Queue queue;
 
-    public VulkanLoadTask(Device device, Allocator allocator, GraphicsQueue queue) {
+    public VulkanLoadTask(Device device, Allocator allocator, GraphicsQueue queue, SwapChain swapChain) {
         this.device = device;
         this.allocator = allocator;
         this.queue = queue;
@@ -50,30 +53,26 @@ public class VulkanLoadTask extends EngineTask {
     @Override
     public void update(int delta) {
         Loadable loadable;
-        while ((loadable = loadQueue.poll())!=null) {
+        while ((loadable = loadQueue.poll()) != null) {
             try {
                 loadable.load(device, allocator, commandPool);
-                loadedQueue.add(loadable);
+                loadedSet.add(loadable);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        while ((loadable = unloadQueue.poll())!=null) {
+        while ((loadable = unloadQueue.poll()) != null) {
+            loadedSet.remove(loadable);
             loadable.unload();
-            loadedQueue.remove(loadable);
         }
     }
 
     @Override
-    protected void onClose() {//this function is very dangerous because of lack of synchronisation with instance creation and destruction
-        /*Loadable loadable;
-        while ((loadable = loadedQueue.poll())!=null) {
-            loadable.unload(allocator);
-        }
-        commandPool.destroy();*/
+    protected void onClose() {
+        //leaves everything to vulkan
     }
 
-    public void addToLoad(Loadable loadable){
+    public void addToLoad(Loadable loadable) {
         loadQueue.add(loadable);
     }
 }

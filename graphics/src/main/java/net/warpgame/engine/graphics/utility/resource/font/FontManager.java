@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.font;
+package net.warpgame.engine.graphics.utility.resource.font;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;

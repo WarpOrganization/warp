@@ -3,7 +3,6 @@ package net.warpgame.engine.graphics.memory;
 import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.command.Fence;
 import net.warpgame.engine.graphics.utility.Destroyable;
-import net.warpgame.engine.graphics.utility.VkUtil;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -96,7 +95,7 @@ public class Buffer implements Destroyable {
                 .sharingMode(VK_SHARING_MODE_EXCLUSIVE);
 
         VmaAllocationCreateInfo allocInfo = VmaAllocationCreateInfo.create()
-                .usage(VkUtil.fixVmaMemoryUsage(memUsage))
+                .usage(memUsage)
                 .requiredFlags(flags);
 
         LongBuffer pBuffer = BufferUtils.createLongBuffer(1);

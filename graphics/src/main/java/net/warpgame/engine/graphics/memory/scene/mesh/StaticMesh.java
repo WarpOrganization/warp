@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.mesh;
+package net.warpgame.engine.graphics.memory.scene.mesh;
 
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.command.CommandPool;
@@ -8,8 +8,8 @@ import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.memory.Buffer;
 import net.warpgame.engine.graphics.memory.Loadable;
 import net.warpgame.engine.graphics.memory.VulkanLoadTask;
-import net.warpgame.engine.graphics.resource.mesh.Model;
-import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
+import net.warpgame.engine.graphics.utility.resource.mesh.Model;
+import net.warpgame.engine.graphics.utility.resource.mesh.ObjLoader;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,10 +1,10 @@
-package net.warpgame.engine.graphics.pipeline;
+package net.warpgame.engine.graphics.rendering.pipeline;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.VulkanTask;
 import net.warpgame.engine.graphics.core.Device;
-import net.warpgame.engine.graphics.resource.mesh.Vertex;
+import net.warpgame.engine.graphics.utility.resource.mesh.Vertex;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChain;
@@ -29,6 +29,7 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 13.04.2019
  */
+
 @Service
 @Profile("graphics")
 public class GraphicsPipeline implements CreateAndDestroy {

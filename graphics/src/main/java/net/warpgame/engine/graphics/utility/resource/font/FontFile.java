@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.font;
+package net.warpgame.engine.graphics.utility.resource.font;
 
 import java.io.BufferedReader;
 import java.io.File;

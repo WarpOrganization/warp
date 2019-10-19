@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.font;
+package net.warpgame.engine.graphics.utility.resource.font;
 
 /**
  * Simple data structure class holding information about a certain glyph in the

@@ -9,8 +9,8 @@ import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.runtime.EngineRuntime;
 import net.warpgame.engine.graphics.material.MaterialProperty;
 import net.warpgame.engine.graphics.material.Texture;
-import net.warpgame.engine.graphics.mesh.MeshProperty;
-import net.warpgame.engine.graphics.mesh.StaticMesh;
+import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
+import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 
 import java.io.File;
 

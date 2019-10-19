@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.warpgame.engine.graphics.resource.texture;
+package net.warpgame.engine.graphics.utility.resource.texture;
 
 import java.io.EOFException;
 import java.io.IOException;

@@ -18,6 +18,7 @@ dependencies {
 
     implementation  'org.slf4j:slf4j-api:1.7.12'
     implementation  "org.joml:joml:${jomlVersion}"
+    implementation  "org.jetbrains:annotations:16.0.2"
 
     // LWJGL dependencies
     implementation  "org.lwjgl:lwjgl:${lwjglVersion}"

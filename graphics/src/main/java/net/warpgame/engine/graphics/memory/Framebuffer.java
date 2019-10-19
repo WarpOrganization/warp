@@ -1,8 +1,8 @@
 package net.warpgame.engine.graphics.memory;
 
 import net.warpgame.engine.graphics.core.Device;
-import net.warpgame.engine.graphics.pipeline.RenderPass;
 import net.warpgame.engine.graphics.utility.Destroyable;
+import net.warpgame.engine.graphics.rendering.pipeline.RenderPass;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChain;
 import org.lwjgl.BufferUtils;

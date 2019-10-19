@@ -1,6 +1,6 @@
-package net.warpgame.engine.graphics.resource.font;
+package net.warpgame.engine.graphics.utility.resource.font;
 
-import net.warpgame.engine.graphics.resource.texture.ImageData;
+import net.warpgame.engine.graphics.utility.resource.texture.ImageData;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;

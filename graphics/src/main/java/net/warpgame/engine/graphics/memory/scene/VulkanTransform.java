@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.mesh;
+package net.warpgame.engine.graphics.memory.scene;
 
 import net.warpgame.engine.core.component.Component;
 import net.warpgame.engine.core.property.Property;

@@ -4,7 +4,6 @@ import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.command.Fence;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.Destroyable;
-import net.warpgame.engine.graphics.utility.VkUtil;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -58,7 +57,7 @@ public class Image implements Destroyable {
                 .depth(1);
 
         VmaAllocationCreateInfo allocInfo = VmaAllocationCreateInfo.create()
-                .usage(VkUtil.fixVmaMemoryUsage(memoryUsage));
+                .usage(memoryUsage);
 
         LongBuffer pImage = BufferUtils.createLongBuffer(1);
         PointerBuffer pAllocation = BufferUtils.createPointerBuffer(1);

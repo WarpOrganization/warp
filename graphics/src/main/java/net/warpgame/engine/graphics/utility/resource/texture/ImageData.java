@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.resource.texture;
+package net.warpgame.engine.graphics.utility.resource.texture;
 
 
 import java.nio.ByteBuffer;

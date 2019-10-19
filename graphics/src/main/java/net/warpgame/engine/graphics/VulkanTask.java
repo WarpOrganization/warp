@@ -5,8 +5,8 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.core.InstanceManager;
-import net.warpgame.engine.graphics.pipeline.GraphicsPipeline;
-import net.warpgame.engine.graphics.pipeline.RenderPass;
+import net.warpgame.engine.graphics.rendering.pipeline.GraphicsPipeline;
+import net.warpgame.engine.graphics.rendering.pipeline.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,6 @@ public class VulkanTask extends EngineTask {
 
     @Override
     public int getPriority() {
-        super.getPriority();
         return -20;
     }
 }

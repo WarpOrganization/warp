@@ -1,6 +1,7 @@
-package net.warpgame.engine.graphics.mesh;
+package net.warpgame.engine.graphics.memory.scene.mesh;
 
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.graphics.memory.scene.VulkanTransform;
 
 /**
  * @author MarconZet
