@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.memory.scene;
+package net.warpgame.engine.graphics.memory.scene.ubo;
 
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;

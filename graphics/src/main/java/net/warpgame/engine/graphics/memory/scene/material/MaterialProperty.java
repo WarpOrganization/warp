@@ -1,6 +1,7 @@
-package net.warpgame.engine.graphics.material;
+package net.warpgame.engine.graphics.memory.scene.material;
 
 import net.warpgame.engine.core.property.Property;
+import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
 
 /**
  * @author Jaca777
@@ -15,7 +16,11 @@ public class MaterialProperty extends Property{
 
     @Override
     public void init() {
-        texture.schedule(this);
+        texture.scheduleForLoad(this);
+        MeshProperty meshProperty = getOwner().getPropertyOrNull(Property.getTypeId(MeshProperty.class));
+        if(meshProperty != null){
+
+        }
     }
 
     public Texture getTexture() {

@@ -1,18 +1,14 @@
 package net.warpgame.engine.graphics.memory.scene.mesh;
 
-import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.command.Fence;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.memory.Buffer;
-import net.warpgame.engine.graphics.memory.Loadable;
-import net.warpgame.engine.graphics.memory.VulkanLoadTask;
+import net.warpgame.engine.graphics.memory.scene.Loadable;
 import net.warpgame.engine.graphics.utility.resource.mesh.Model;
 import net.warpgame.engine.graphics.utility.resource.mesh.ObjLoader;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,13 +23,10 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 11.05.2019
  */
-public class StaticMesh implements Loadable {
-    private static final Logger logger = LoggerFactory.getLogger(StaticMesh.class);
-
+public class StaticMesh extends Loadable {
     private Buffer vertex;
     private Buffer indices;
 
-    private int loaded = 0;
     private final File source;
 
     private Allocator allocator;
@@ -49,22 +42,11 @@ public class StaticMesh implements Loadable {
     }
 
     @Override
-    public synchronized void schedule(Property property) {
-        if (loaded == 0) {
-            loaded = -1;
-            property.getOwner().getContext().getLoadedContext().findOne(VulkanLoadTask.class).get().addToLoad(this);
-        }
-    }
-
-    @Override
     public void load(Device device, Allocator allocator, CommandPool commandPool) throws FileNotFoundException {
         this.allocator = allocator;
-        ObjLoader obj = ObjLoader.read(new FileInputStream(source), true);
-        Model model = obj.toModel();
+        Model model = ObjLoader.read(new FileInputStream(source), true).toModel();
         vertex = loadBuffer(model.getVertices(), VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, commandPool);
         indices = loadBuffer(model.getIndices(), VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, commandPool);
-        logger.info("Model loaded");
-        loaded = 1;
     }
 
     private Buffer loadBuffer(ByteBuffer src, int flags, CommandPool commandPool) {
@@ -94,12 +76,5 @@ public class StaticMesh implements Loadable {
     public void unload() {
         vertex.destroy();
         indices.destroy();
-        logger.info("Model unloaded");
-        loaded = 0;
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return loaded == 1;
     }
 }

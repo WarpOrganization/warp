@@ -7,12 +7,14 @@ import net.warpgame.engine.core.context.EngineContext;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.runtime.EngineRuntime;
-import net.warpgame.engine.graphics.material.MaterialProperty;
-import net.warpgame.engine.graphics.material.Texture;
+import net.warpgame.engine.graphics.memory.scene.material.MaterialProperty;
+import net.warpgame.engine.graphics.memory.scene.material.Texture;
 import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 
 import java.io.File;
+
+import static net.warpgame.engine.graphics.memory.scene.Loadable.LOADED;
 
 /**
  * @author MarconZet
@@ -36,7 +38,7 @@ public class GraphicsTest {
 
         MaterialProperty property = testComponent.getProperty(Property.getTypeId(MaterialProperty.class));
         Texture tex = property.getTexture();
-        while(!tex.isLoaded()){
+        while(tex.getLoadStatus() != LOADED){
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

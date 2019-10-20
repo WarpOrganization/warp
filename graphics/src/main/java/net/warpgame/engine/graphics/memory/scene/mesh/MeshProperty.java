@@ -1,7 +1,7 @@
 package net.warpgame.engine.graphics.memory.scene.mesh;
 
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.graphics.memory.scene.VulkanTransform;
+import net.warpgame.engine.graphics.memory.scene.ubo.VulkanTransform;
 
 /**
  * @author MarconZet
@@ -18,7 +18,7 @@ public class MeshProperty extends Property {
 
     @Override
     public void init() {
-        mesh.schedule(this);
-        vulkanTransform.schedule(this);
+        mesh.scheduleForLoad(this);
+        vulkanTransform.scheduleForLoad(this);
     }
 }

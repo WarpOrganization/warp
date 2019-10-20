@@ -24,7 +24,7 @@ public class DescriptorPool implements CreateAndDestroy {
     private long descriptorPool;
 
     private int[] types = new int[]{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER};
-    private int maxSets = GraphicsConfig.DESCRIPTOR_POOL_MAX_SETS;
+    private int sets = GraphicsConfig.DESCRIPTOR_POOL_MAX_SETS;
 
     private Device device;
     private SwapChain swapChain;
@@ -38,13 +38,13 @@ public class DescriptorPool implements CreateAndDestroy {
     public void create() {
         VkDescriptorPoolSize.Buffer poolSize = VkDescriptorPoolSize.create(types.length);
         for (int i = 0; i < types.length; i++) {
-            poolSize.get(i).type(types[i]).descriptorCount(swapChain.getImages().length);
+            poolSize.get(i).type(types[i]).descriptorCount(sets * swapChain.getImages().length);
         }
 
         VkDescriptorPoolCreateInfo poolCreateInfo = VkDescriptorPoolCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO)
                 .pPoolSizes(poolSize)
-                .maxSets(maxSets)
+                .maxSets(sets * swapChain.getImages().length)
                 .flags(0);
 
         LongBuffer pointer = BufferUtils.createLongBuffer(1);

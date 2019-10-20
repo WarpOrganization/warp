@@ -1,12 +1,13 @@
-package net.warpgame.engine.graphics.material;
+package net.warpgame.engine.graphics.memory.scene.material;
 
-import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.core.Device;
-import net.warpgame.engine.graphics.memory.*;
+import net.warpgame.engine.graphics.memory.Allocator;
+import net.warpgame.engine.graphics.memory.Buffer;
+import net.warpgame.engine.graphics.memory.Image;
+import net.warpgame.engine.graphics.memory.ImageView;
+import net.warpgame.engine.graphics.memory.scene.Loadable;
 import org.lwjgl.BufferUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,10 +23,7 @@ import static org.lwjgl.vulkan.VK10.*;
  * @author MarconZet
  * Created 12.05.2019
  */
-public class Texture implements Loadable {
-    private static final Logger logger = LoggerFactory.getLogger(Texture.class);
-
-    private int loaded = 0;
+public class Texture extends Loadable {
     private TextureSampler textureSampler;
     private ImageView textureImageView;
     private Image textureImage;
@@ -80,30 +78,11 @@ public class Texture implements Loadable {
         stagingBuffer.destroy();
         textureImageView = new ImageView(textureImage, VK_IMAGE_ASPECT_COLOR_BIT, device);
         textureSampler = new TextureSampler(device, mipLevels);
-        logger.info("Texture loaded");
-        loaded = 1;
     }
 
     @Override
     public void unload() {
-        loaded = 0;
         textureImageView.destroy();
         textureImage.destroy();
-        logger.info("Texture unloaded");
-    }
-
-    @Override
-    public synchronized void schedule(Property property) {
-        if (loaded == 0) {
-            loaded = -1;
-            property.getOwner().getContext().getLoadedContext().findOne(VulkanLoadTask.class).get().addToLoad(this);
-        }
-    }
-
-
-
-    @Override
-    public boolean isLoaded() {
-        return loaded == 1;
     }
 }

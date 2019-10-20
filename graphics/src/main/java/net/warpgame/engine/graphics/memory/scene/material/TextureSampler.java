@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.material;
+package net.warpgame.engine.graphics.memory.scene.material;
 
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.Destroyable;

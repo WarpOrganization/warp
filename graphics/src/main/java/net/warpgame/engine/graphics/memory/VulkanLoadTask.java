@@ -9,13 +9,11 @@ import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.OneTimeCommandPool;
 import net.warpgame.engine.graphics.command.Queue;
 import net.warpgame.engine.graphics.core.Device;
-import net.warpgame.engine.graphics.window.SwapChain;
+import net.warpgame.engine.graphics.memory.scene.Loadable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -31,7 +29,6 @@ public class VulkanLoadTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(VulkanLoadTask.class);
 
     private BlockingQueue<Loadable> loadQueue = new ArrayBlockingQueue<>(10);
-    private Set<Loadable> loadedSet = new HashSet<>();
     private BlockingQueue<Loadable> unloadQueue = new ArrayBlockingQueue<>(10);
     private CommandPool commandPool;
 
@@ -39,7 +36,7 @@ public class VulkanLoadTask extends EngineTask {
     private Allocator allocator;
     private Queue queue;
 
-    public VulkanLoadTask(Device device, Allocator allocator, GraphicsQueue queue, SwapChain swapChain) {
+    public VulkanLoadTask(Device device, Allocator allocator, GraphicsQueue queue) {
         this.device = device;
         this.allocator = allocator;
         this.queue = queue;
@@ -55,15 +52,13 @@ public class VulkanLoadTask extends EngineTask {
         Loadable loadable;
         while ((loadable = loadQueue.poll()) != null) {
             try {
-                loadable.load(device, allocator, commandPool);
-                loadedSet.add(loadable);
+                loadable.loadResource(device, allocator, commandPool);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
         while ((loadable = unloadQueue.poll()) != null) {
-            loadedSet.remove(loadable);
-            loadable.unload();
+            loadable.unloadResource();
         }
     }
 
@@ -74,5 +69,9 @@ public class VulkanLoadTask extends EngineTask {
 
     public void addToLoad(Loadable loadable) {
         loadQueue.add(loadable);
+    }
+
+    public void addToUnload(Loadable loadable){
+        unloadQueue.add(loadable);
     }
 }
