@@ -97,7 +97,7 @@ public abstract class CommandPool implements Destroyable {
 
         Fence fence = new Fence(device);
         vkQueueSubmit(queue.get(), submitInfo, fence.get());
-        return fence.onDestory(() -> freeCommandBuffer(commandBuffer));
+        return fence.onDestroy(() -> freeCommandBuffer(commandBuffer));
     }
 
     public void freeCommandBuffer(VkCommandBuffer commandBuffer){

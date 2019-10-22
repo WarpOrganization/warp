@@ -30,7 +30,7 @@ public class Fence implements Destroyable {
         create(flags);
     }
 
-    public Fence onDestory(Runnable runnable){
+    public Fence onDestroy(Runnable runnable){
         this.runnable = runnable;
         return this;
     }
@@ -44,7 +44,7 @@ public class Fence implements Destroyable {
 
     public boolean isSignaled(){
         int result = vkGetFenceStatus(device.get(), fence);
-        if(result == VK_ERROR_DEVICE_LOST){
+        if(!(result == VK_SUCCESS || result == VK_NOT_READY)){
             throw new VulkanAssertionError("Failed to get fence status", result);
         }
         return result == VK_SUCCESS;

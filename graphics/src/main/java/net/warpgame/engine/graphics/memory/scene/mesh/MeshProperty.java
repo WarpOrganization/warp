@@ -21,4 +21,12 @@ public class MeshProperty extends Property {
         mesh.scheduleForLoad(this);
         vulkanTransform.scheduleForLoad(this);
     }
+
+    public StaticMesh getMesh() {
+        return mesh;
+    }
+
+    public VulkanTransform getVulkanTransform() {
+        return vulkanTransform;
+    }
 }
