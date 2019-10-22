@@ -11,6 +11,7 @@ import net.warpgame.engine.graphics.command.CommandPool;
 import net.warpgame.engine.graphics.command.GraphicsQueue;
 import net.warpgame.engine.graphics.command.StandardCommandPool;
 import net.warpgame.engine.graphics.core.Device;
+import net.warpgame.engine.graphics.memory.VulkanLoadTask;
 import net.warpgame.engine.graphics.memory.scene.DescriptorPool;
 import net.warpgame.engine.graphics.memory.scene.Loadable;
 import net.warpgame.engine.graphics.memory.scene.material.MaterialProperty;
@@ -40,15 +41,16 @@ public class RecordingTask extends EngineTask {
 
     private boolean recreate;
     private CommandPool commandPool;
-    private SceneHolder sceneHolder;
     private Set<Component> registeredComponents = Collections.newSetFromMap(new WeakHashMap<>());
     private Set<VulkanRender> vulkanRenders = new HashSet<>();
+
+    private SceneHolder sceneHolder;
 
     private DescriptorPool descriptorPool;
     private GraphicsQueue graphicsQueue;
     private Device device;
 
-    public RecordingTask(DescriptorPool descriptorPool, GraphicsQueue graphicsQueue, Device device, SceneHolder sceneHolder) {
+    public RecordingTask(DescriptorPool descriptorPool, GraphicsQueue graphicsQueue, Device device, SceneHolder sceneHolder, VulkanLoadTask loadTask) {
         this.descriptorPool = descriptorPool;
         this.graphicsQueue = graphicsQueue;
         this.device = device;
@@ -89,7 +91,8 @@ public class RecordingTask extends EngineTask {
             VulkanTransform transform = meshProperty.getVulkanTransform();
             if(Stream.of(texture, mesh, transform).allMatch(x -> x.getLoadStatus() == Loadable.LOADED)){
                 registeredComponents.add(component);
-                vulkanRenders.add(new VulkanRender(component, transform, mesh, texture));
+                VulkanRender render = new VulkanRender(component, transform, mesh, texture, descriptorPool, device);
+                vulkanRenders.add(render);
             }
         }
     }

@@ -24,7 +24,6 @@ import java.util.concurrent.BlockingQueue;
 @Service
 @Profile("graphics")
 @RegisterTask(thread = "graphics")
-//TODO this task should happen in another thread and it MUST be synchronised with VulkanTask when it executes to onInit() and onClose()
 public class VulkanLoadTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(VulkanLoadTask.class);
 

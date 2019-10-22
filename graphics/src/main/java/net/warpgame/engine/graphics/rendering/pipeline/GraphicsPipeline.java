@@ -260,4 +260,8 @@ public class GraphicsPipeline implements CreateAndDestroy {
         fis.close();
         return buffer;
     }
+
+    public long getDescriptorSetLayout() {
+        return descriptorSetLayout;
+    }
 }

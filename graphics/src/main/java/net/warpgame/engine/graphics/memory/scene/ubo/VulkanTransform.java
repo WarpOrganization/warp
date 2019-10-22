@@ -46,4 +46,8 @@ public class VulkanTransform extends Loadable {
             uniformBuffer.destroy();
         }
     }
+
+    public Buffer[] getUniformBuffers() {
+        return uniformBuffers;
+    }
 }

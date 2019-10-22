@@ -3,12 +3,14 @@ package net.warpgame.engine.graphics.memory.scene;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.GraphicsConfig;
 import net.warpgame.engine.graphics.core.Device;
+import net.warpgame.engine.graphics.rendering.pipeline.GraphicsPipeline;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChain;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkDescriptorPoolCreateInfo;
 import org.lwjgl.vulkan.VkDescriptorPoolSize;
+import org.lwjgl.vulkan.VkDescriptorSetAllocateInfo;
 
 import java.nio.LongBuffer;
 
@@ -28,10 +30,12 @@ public class DescriptorPool implements CreateAndDestroy {
 
     private Device device;
     private SwapChain swapChain;
+    private GraphicsPipeline graphicsPipeline;
 
-    public DescriptorPool(Device device, SwapChain swapChain) {
+    public DescriptorPool(Device device, SwapChain swapChain, GraphicsPipeline graphicsPipeline) {
         this.device = device;
         this.swapChain = swapChain;
+        this.graphicsPipeline = graphicsPipeline;
     }
 
     @Override
@@ -53,6 +57,28 @@ public class DescriptorPool implements CreateAndDestroy {
             throw new VulkanAssertionError("Failed to create descriptor pool", err);
         }
         descriptorPool = pointer.get(0);
+    }
+
+    public long[] getDescriptorSets(){
+        LongBuffer layouts = BufferUtils.createLongBuffer(swapChain.getImages().length);
+        for (int i = 0; i < swapChain.getImages().length; i++) {
+            layouts.put(graphicsPipeline.getDescriptorSetLayout());
+        }
+        layouts.flip();
+        VkDescriptorSetAllocateInfo allocateInfo = VkDescriptorSetAllocateInfo.create()
+                .sType(VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO)
+                .descriptorPool(descriptorPool)
+                .pSetLayouts(layouts);
+
+
+        LongBuffer array = BufferUtils.createLongBuffer(swapChain.getImages().length);
+        int err = vkAllocateDescriptorSets(device.get(), allocateInfo, array);
+        if(err != VK_SUCCESS){
+            throw new VulkanAssertionError("Failed to create descriptor sets", err);
+        }
+        long[] descriptorSets = new long[swapChain.getImages().length];
+        array.get(descriptorSets);
+        return descriptorSets;
     }
 
     @Override

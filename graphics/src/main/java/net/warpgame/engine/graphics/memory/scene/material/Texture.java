@@ -85,4 +85,12 @@ public class Texture extends Loadable {
         textureImageView.destroy();
         textureImage.destroy();
     }
+
+    public TextureSampler getTextureSampler() {
+        return textureSampler;
+    }
+
+    public ImageView getTextureImageView() {
+        return textureImageView;
+    }
 }
