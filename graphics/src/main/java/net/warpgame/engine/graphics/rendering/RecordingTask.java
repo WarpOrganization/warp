@@ -162,4 +162,8 @@ public class RecordingTask extends EngineTask {
             }
         }
     }
+
+    public Set<VulkanRender> getVulkanRenders() {
+        return vulkanRenders;
+    }
 }

@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.memory.scene.ubo;
 
-import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -13,15 +13,7 @@ import java.nio.FloatBuffer;
 public class UniformBufferObject {
     public ByteBuffer data;
 
-    private Matrix4f modelMatrix;
-    private Matrix4f viewMatrix;
-    private Matrix4f projMatrix;
-
-    public UniformBufferObject(Matrix4f modelMatrix, Matrix4f viewMatrix, Matrix4f projMatrix) {
-        this.modelMatrix = modelMatrix;
-        this.viewMatrix = viewMatrix;
-        this.projMatrix = projMatrix;
-
+    public UniformBufferObject(Matrix4fc modelMatrix, Matrix4fc viewMatrix, Matrix4fc projMatrix) {
         data = BufferUtils.createByteBuffer((int)sizeOf());
         FloatBuffer fb = data.asFloatBuffer();
         modelMatrix.get(fb);

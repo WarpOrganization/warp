@@ -1,6 +1,7 @@
 package net.warpgame.engine.graphics.rendering;
 
 import net.warpgame.engine.core.component.Component;
+import net.warpgame.engine.core.property.Transforms;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.Buffer;
 import net.warpgame.engine.graphics.memory.scene.DescriptorPool;
@@ -9,6 +10,8 @@ import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 import net.warpgame.engine.graphics.memory.scene.ubo.UniformBufferObject;
 import net.warpgame.engine.graphics.memory.scene.ubo.VulkanTransform;
 import net.warpgame.engine.graphics.utility.Destroyable;
+import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkCommandBuffer;
 import org.lwjgl.vulkan.VkDescriptorBufferInfo;
@@ -40,17 +43,31 @@ public class VulkanRender implements Destroyable {
         this.descriptorSets = getDescriptorSets(descriptorPool, device);
     }
 
-    public void render(VkCommandBuffer commandBuffer, int frameNumber, long pipelineLayout){
+    public void render(VkCommandBuffer commandBuffer, int currentImage, long pipelineLayout){
         LongBuffer vertexBuffers = BufferUtils.createLongBuffer(1).put(0, mesh.getVertex().get());
         LongBuffer offsets = BufferUtils.createLongBuffer(1).put(0, 0);
         vkCmdBindVertexBuffers(commandBuffer, 0, vertexBuffers, offsets);
 
         vkCmdBindIndexBuffer(commandBuffer, mesh.getIndices().get(), 0, VK_INDEX_TYPE_UINT32);
 
-        LongBuffer descriptorSet = BufferUtils.createLongBuffer(1).put(0, descriptorSets[frameNumber]);
+        LongBuffer descriptorSet = BufferUtils.createLongBuffer(1).put(0, descriptorSets[currentImage]);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, descriptorSet, null);
 
         vkCmdDrawIndexed(commandBuffer, (int)(mesh.getIndices().getSize()), 1, 0, 0, 0);
+    }
+
+    public void updateUniformBuffer(Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage){
+        Component owner = origin.get();
+        if(owner == null) return;
+
+        Matrix4f transformMatrix = new Matrix4f();
+        Transforms.getAbsoluteTransform(owner, transformMatrix);
+        transform.update(transformMatrix, viewMatrix, projectionMatrix, currentImage);
+    }
+
+    @Override
+    public void destroy() {
+
     }
 
     private long[] getDescriptorSets(DescriptorPool pool, Device device){
@@ -87,10 +104,5 @@ public class VulkanRender implements Destroyable {
             vkUpdateDescriptorSets(device.get(), writeDescriptor, null);
         }
         return sets;
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }

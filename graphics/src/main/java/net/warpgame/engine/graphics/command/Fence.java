@@ -50,6 +50,11 @@ public class Fence implements Destroyable {
         return result == VK_SUCCESS;
     }
 
+    public Fence reset(){
+        vkResetFences(device.get(), fence);
+        return this;
+    }
+
     public Fence block() {
         block(Long.MAX_VALUE);
         return this;
