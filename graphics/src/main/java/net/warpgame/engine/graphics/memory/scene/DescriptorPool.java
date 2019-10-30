@@ -27,11 +27,12 @@ public class DescriptorPool implements CreateAndDestroy {
 
     private int[] types = new int[]{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER};
     private int sets = GraphicsConfig.DESCRIPTOR_POOL_MAX_SETS;
+    private int swapChainImagesLength;
 
     private Device device;
+
     private SwapChain swapChain;
     private GraphicsPipeline graphicsPipeline;
-
     public DescriptorPool(Device device, SwapChain swapChain, GraphicsPipeline graphicsPipeline) {
         this.device = device;
         this.swapChain = swapChain;
@@ -40,15 +41,16 @@ public class DescriptorPool implements CreateAndDestroy {
 
     @Override
     public void create() {
+        swapChainImagesLength = swapChain.getImages().length;
         VkDescriptorPoolSize.Buffer poolSize = VkDescriptorPoolSize.create(types.length);
         for (int i = 0; i < types.length; i++) {
-            poolSize.get(i).type(types[i]).descriptorCount(sets * swapChain.getImages().length);
+            poolSize.get(i).type(types[i]).descriptorCount(sets * swapChainImagesLength);
         }
 
         VkDescriptorPoolCreateInfo poolCreateInfo = VkDescriptorPoolCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO)
                 .pPoolSizes(poolSize)
-                .maxSets(sets * swapChain.getImages().length)
+                .maxSets(sets * swapChainImagesLength)
                 .flags(0);
 
         LongBuffer pointer = BufferUtils.createLongBuffer(1);
@@ -60,8 +62,8 @@ public class DescriptorPool implements CreateAndDestroy {
     }
 
     public long[] getDescriptorSets(){
-        LongBuffer layouts = BufferUtils.createLongBuffer(swapChain.getImages().length);
-        for (int i = 0; i < swapChain.getImages().length; i++) {
+        LongBuffer layouts = BufferUtils.createLongBuffer(swapChainImagesLength);
+        for (int i = 0; i < swapChainImagesLength; i++) {
             layouts.put(graphicsPipeline.getDescriptorSetLayout());
         }
         layouts.flip();
@@ -71,12 +73,12 @@ public class DescriptorPool implements CreateAndDestroy {
                 .pSetLayouts(layouts);
 
 
-        LongBuffer array = BufferUtils.createLongBuffer(swapChain.getImages().length);
+        LongBuffer array = BufferUtils.createLongBuffer(swapChainImagesLength);
         int err = vkAllocateDescriptorSets(device.get(), allocateInfo, array);
         if(err != VK_SUCCESS){
             throw new VulkanAssertionError("Failed to create descriptor sets", err);
         }
-        long[] descriptorSets = new long[swapChain.getImages().length];
+        long[] descriptorSets = new long[swapChainImagesLength];
         array.get(descriptorSets);
         return descriptorSets;
     }
@@ -84,5 +86,9 @@ public class DescriptorPool implements CreateAndDestroy {
     @Override
     public void destroy() {
         vkDestroyDescriptorPool(device.get(), descriptorPool, null);
+    }
+
+    public int getSwapChainImagesLength() {
+        return swapChainImagesLength;
     }
 }

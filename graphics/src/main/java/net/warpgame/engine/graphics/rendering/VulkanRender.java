@@ -9,11 +9,14 @@ import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 import net.warpgame.engine.graphics.memory.scene.ubo.UniformBufferObject;
 import net.warpgame.engine.graphics.memory.scene.ubo.VulkanTransform;
 import net.warpgame.engine.graphics.utility.Destroyable;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.vulkan.VkCommandBuffer;
 import org.lwjgl.vulkan.VkDescriptorBufferInfo;
 import org.lwjgl.vulkan.VkDescriptorImageInfo;
 import org.lwjgl.vulkan.VkWriteDescriptorSet;
 
 import java.lang.ref.WeakReference;
+import java.nio.LongBuffer;
 
 import static org.lwjgl.vulkan.VK10.*;
 
@@ -35,6 +38,19 @@ public class VulkanRender implements Destroyable {
         this.mesh = mesh;
         this.texture = texture;
         this.descriptorSets = getDescriptorSets(descriptorPool, device);
+    }
+
+    public void render(VkCommandBuffer commandBuffer, int frameNumber, long pipelineLayout){
+        LongBuffer vertexBuffers = BufferUtils.createLongBuffer(1).put(0, mesh.getVertex().get());
+        LongBuffer offsets = BufferUtils.createLongBuffer(1).put(0, 0);
+        vkCmdBindVertexBuffers(commandBuffer, 0, vertexBuffers, offsets);
+
+        vkCmdBindIndexBuffer(commandBuffer, mesh.getIndices().get(), 0, VK_INDEX_TYPE_UINT32);
+
+        LongBuffer descriptorSet = BufferUtils.createLongBuffer(1).put(0, descriptorSets[frameNumber]);
+        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, descriptorSet, null);
+
+        vkCmdDrawIndexed(commandBuffer, (int)(mesh.getIndices().getSize()), 1, 0, 0, 0);
     }
 
     private long[] getDescriptorSets(DescriptorPool pool, Device device){

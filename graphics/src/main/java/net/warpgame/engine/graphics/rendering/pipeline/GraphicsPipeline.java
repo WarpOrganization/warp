@@ -264,4 +264,12 @@ public class GraphicsPipeline implements CreateAndDestroy {
     public long getDescriptorSetLayout() {
         return descriptorSetLayout;
     }
+
+    public long get(){
+        return this.graphicsPipeline;
+    }
+
+    public long getPipelineLayout() {
+        return pipelineLayout;
+    }
 }

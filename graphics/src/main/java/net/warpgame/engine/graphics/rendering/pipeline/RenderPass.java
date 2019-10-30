@@ -160,6 +160,10 @@ public class RenderPass implements CreateAndDestroy {
         );
     }
 
+    public Framebuffer[] getFramebuffers() {
+        return framebuffers;
+    }
+
     public long get() {
         return renderPass;
     }

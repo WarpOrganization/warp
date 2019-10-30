@@ -27,11 +27,13 @@ public class Buffer implements Destroyable {
     private long buffer;
 
     private long allocation;
+    private final long size;
 
     private Allocator allocator;
 
     public Buffer(long size, int usage, int flags, int memeUsage, Allocator allocator){
         this.allocator = allocator;
+        this.size = size;
         createBuffer(size, usage, flags, memeUsage);
     }
 
@@ -114,6 +116,10 @@ public class Buffer implements Destroyable {
 
     public long get(){
         return buffer;
+    }
+
+    public long getSize() {
+        return size;
     }
 
     public long getAllocation() {

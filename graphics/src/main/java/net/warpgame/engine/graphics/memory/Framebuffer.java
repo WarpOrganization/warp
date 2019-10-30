@@ -61,4 +61,8 @@ public class Framebuffer implements Destroyable {
     public void destroy() {
         vkDestroyFramebuffer(device.get(), framebuffer, null);
     }
+
+    public long get(){
+        return this.framebuffer;
+    }
 }

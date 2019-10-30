@@ -77,4 +77,12 @@ public class StaticMesh extends Loadable {
         vertex.destroy();
         indices.destroy();
     }
+
+    public Buffer getVertex() {
+        return vertex;
+    }
+
+    public Buffer getIndices() {
+        return indices;
+    }
 }
