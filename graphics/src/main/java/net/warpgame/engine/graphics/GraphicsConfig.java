@@ -23,4 +23,5 @@ public class GraphicsConfig {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     public static final int DESCRIPTOR_POOL_MAX_SETS = 100;
+    public static final int MAX_FRAMES_IN_FLIGHT = 2;
 }
