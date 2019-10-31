@@ -83,12 +83,12 @@ public class RecordingTask extends EngineTask {
     public void update(int delta) {
         if (recreate) {
             recreate = false;
-            collectComponents();
+            collectComponents(sceneHolder.getScene());
             VkCommandBuffer[] result = recordCommandBuffers();
             //TODO make render thread stop here
             oldCommandBuffers = commandBuffers;
             commandBuffers = result;
-            if(!commandBuffersOffered) {
+            if(!commandBuffersOffered && oldCommandBuffers != null) {
                 commandPool.freeCommandBuffer(oldCommandBuffers);
                 oldCommandBuffers = null;
             }
@@ -153,10 +153,6 @@ public class RecordingTask extends EngineTask {
         return commandBuffers;
     }
 
-    private void collectComponents() {
-        collectComponents(sceneHolder.getScene());
-    }
-
     private void collectComponents(Component component) {
         if (component.hasProperty(Property.getTypeId(CanvasProperty.class))) return;
         component.forEachChildren(this::collectComponents);
@@ -186,5 +182,9 @@ public class RecordingTask extends EngineTask {
             oldCommandBuffers = null;
         }
         return commandBuffers;
+    }
+
+    public void setRecreate(boolean recreate) {
+        this.recreate = recreate;
     }
 }

@@ -48,7 +48,12 @@ public class VulkanRenderTask extends EngineTask {
     private SwapChain swapChain;
     private Device device;
 
-    public VulkanRenderTask(Device device) {
+    public VulkanRenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue, SwapChain swapChain, Device device) {
+        this.recordingTask = recordingTask;
+        this.cameraHolder = cameraHolder;
+        this.graphicsQueue = graphicsQueue;
+        this.presentationQueue = presentationQueue;
+        this.swapChain = swapChain;
         this.device = device;
     }
 

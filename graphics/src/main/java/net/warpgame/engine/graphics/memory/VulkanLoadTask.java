@@ -10,6 +10,7 @@ import net.warpgame.engine.graphics.command.OneTimeCommandPool;
 import net.warpgame.engine.graphics.command.Queue;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.scene.Loadable;
+import net.warpgame.engine.graphics.rendering.RecordingTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,14 @@ public class VulkanLoadTask extends EngineTask {
     private BlockingQueue<Loadable> unloadQueue = new ArrayBlockingQueue<>(10);
     private CommandPool commandPool;
 
+    private RecordingTask recordingTask;
+
     private Device device;
     private Allocator allocator;
     private Queue queue;
 
-    public VulkanLoadTask(Device device, Allocator allocator, GraphicsQueue queue) {
+    public VulkanLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, GraphicsQueue queue) {
+        this.recordingTask = recordingTask;
         this.device = device;
         this.allocator = allocator;
         this.queue = queue;
@@ -55,6 +59,7 @@ public class VulkanLoadTask extends EngineTask {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            recordingTask.setRecreate(true);
         }
         while ((loadable = unloadQueue.poll()) != null) {
             loadable.unloadResource();

@@ -43,7 +43,7 @@ public class VulkanRender implements Destroyable {
         this.descriptorSets = getDescriptorSets(descriptorPool, device);
     }
 
-    public void render(VkCommandBuffer commandBuffer, int currentImage, long pipelineLayout){
+    public void render(VkCommandBuffer commandBuffer, int currentImage, long pipelineLayout) {
         LongBuffer vertexBuffers = BufferUtils.createLongBuffer(1).put(0, mesh.getVertex().get());
         LongBuffer offsets = BufferUtils.createLongBuffer(1).put(0, 0);
         vkCmdBindVertexBuffers(commandBuffer, 0, vertexBuffers, offsets);
@@ -53,12 +53,12 @@ public class VulkanRender implements Destroyable {
         LongBuffer descriptorSet = BufferUtils.createLongBuffer(1).put(0, descriptorSets[currentImage]);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, descriptorSet, null);
 
-        vkCmdDrawIndexed(commandBuffer, (int)(mesh.getIndices().getSize()), 1, 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffer, (int) (mesh.getIndices().getSize()), 1, 0, 0, 0);
     }
 
-    public void updateUniformBuffer(Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage){
+    public void updateUniformBuffer(Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage) {
         Component owner = origin.get();
-        if(owner == null) return;
+        if (owner == null) return;
 
         Matrix4f transformMatrix = new Matrix4f();
         Transforms.getAbsoluteTransform(owner, transformMatrix);
@@ -70,7 +70,7 @@ public class VulkanRender implements Destroyable {
 
     }
 
-    private long[] getDescriptorSets(DescriptorPool pool, Device device){
+    private long[] getDescriptorSets(DescriptorPool pool, Device device) {
         long[] sets = pool.getDescriptorSets();
         Buffer[] uniformBuffers = transform.getUniformBuffers();
         for (int i = 0; i < uniformBuffers.length; i++) {
@@ -91,7 +91,8 @@ public class VulkanRender implements Destroyable {
                     .dstBinding(0)
                     .dstArrayElement(0)
                     .descriptorType(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
-                    .pBufferInfo(bufferInfo);
+                    .pBufferInfo(bufferInfo)
+                    .descriptorCount(1);
 
             writeDescriptor.get(1)
                     .sType(VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET)
@@ -99,7 +100,8 @@ public class VulkanRender implements Destroyable {
                     .dstBinding(1)
                     .dstArrayElement(0)
                     .descriptorType(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
-                    .pImageInfo(imageInfo);
+                    .pImageInfo(imageInfo)
+                    .descriptorCount(1);
 
             vkUpdateDescriptorSets(device.get(), writeDescriptor, null);
         }

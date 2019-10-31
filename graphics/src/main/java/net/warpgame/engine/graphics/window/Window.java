@@ -28,7 +28,6 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
 public class Window implements CreateAndDestroy {
     private long window;
     private long surface;
-    private boolean framebufferResized = true;
 
     private Config config;
     private Instance instance;
@@ -39,7 +38,7 @@ public class Window implements CreateAndDestroy {
     }
 
     @Override
-    public void create(){
+    public void create() {
         createWindow();
         createSurface();
     }
@@ -48,6 +47,13 @@ public class Window implements CreateAndDestroy {
     public void destroy() {
         vkDestroySurfaceKHR(instance.get(), surface, null);
         glfwDestroyWindow(window);
+    }
+
+    public boolean shouldClose() {
+        if (window == 0)
+            return false;
+        else
+            return glfwWindowShouldClose(window);
     }
 
     private void createSurface() {
@@ -64,20 +70,19 @@ public class Window implements CreateAndDestroy {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
         window = glfwCreateWindow(WIDTH, HEIGHT, "Wrap", 0, 0);
-        if(window == 0){
+        if (window == 0) {
             throw new AssertionError("Failed to create window");
         }
 
         GLFWFramebufferSizeCallback framebufferSizeCallback = new GLFWFramebufferSizeCallback() {
             @Override
             public void invoke(long window, int width, int height) {
-                framebufferResized = true;
             }
         };
         glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     }
 
-    public long get(){
+    public long get() {
         return window;
     }
 
