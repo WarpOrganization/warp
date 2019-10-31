@@ -45,6 +45,9 @@ import static org.lwjgl.vulkan.VK10.*;
 public class RecordingTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(RecordingTask.class);
 
+    private VkCommandBuffer[] commandBuffers;
+    private VkCommandBuffer[] oldCommandBuffers;
+    private boolean commandBuffersOffered;
     private boolean recreate;
     private CommandPool commandPool;
     private Set<Component> registeredComponents = Collections.newSetFromMap(new WeakHashMap<>());
@@ -81,7 +84,16 @@ public class RecordingTask extends EngineTask {
         if (recreate) {
             recreate = false;
             collectComponents();
-            recordCommandBuffers();
+            VkCommandBuffer[] result = recordCommandBuffers();
+            //TODO make render thread stop here
+            oldCommandBuffers = commandBuffers;
+            commandBuffers = result;
+            if(!commandBuffersOffered) {
+                commandPool.freeCommandBuffer(oldCommandBuffers);
+                oldCommandBuffers = null;
+            }
+            commandBuffersOffered = false;
+            //and here render thread should start
         }
     }
 
@@ -165,5 +177,14 @@ public class RecordingTask extends EngineTask {
 
     public Set<VulkanRender> getVulkanRenders() {
         return vulkanRenders;
+    }
+
+    public VkCommandBuffer[] getCommandBuffers() {
+        commandBuffersOffered = true;
+        if(oldCommandBuffers != null){
+            commandPool.freeCommandBuffer(oldCommandBuffers);
+            oldCommandBuffers = null;
+        }
+        return commandBuffers;
     }
 }

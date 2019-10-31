@@ -100,8 +100,12 @@ public abstract class CommandPool implements Destroyable {
         return fence.onDestroy(() -> freeCommandBuffer(commandBuffer));
     }
 
-    public void freeCommandBuffer(VkCommandBuffer commandBuffer){
-        PointerBuffer pointerBuffer = BufferUtils.createPointerBuffer(1).put(0, commandBuffer);
+    public void freeCommandBuffer(VkCommandBuffer... commandBuffer){
+        PointerBuffer pointerBuffer = BufferUtils.createPointerBuffer(commandBuffer.length);
+        for (VkCommandBuffer buffer : commandBuffer) {
+            pointerBuffer.put(buffer);
+        }
+        pointerBuffer.flip();
         vkFreeCommandBuffers(device.get(), commandPool, pointerBuffer);
     }
 
