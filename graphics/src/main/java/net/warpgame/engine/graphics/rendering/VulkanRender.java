@@ -53,7 +53,7 @@ public class VulkanRender implements Destroyable {
         LongBuffer descriptorSet = BufferUtils.createLongBuffer(1).put(0, descriptorSets[currentImage]);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, descriptorSet, null);
 
-        vkCmdDrawIndexed(commandBuffer, (int) (mesh.getIndices().getSize()), 1, 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffer, (int) (mesh.getIndices().getSize())/4, 1, 0, 0, 0);
     }
 
     public void updateUniformBuffer(Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage) {
