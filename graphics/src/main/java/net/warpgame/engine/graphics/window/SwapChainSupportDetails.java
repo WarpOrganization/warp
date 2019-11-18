@@ -100,7 +100,7 @@ public class SwapChainSupportDetails {
 
     public VkExtent2D chooseSwapExtent(Window window) {
         if(capabilities.currentExtent().width() != Integer.MAX_VALUE){
-            return capabilities.currentExtent();
+            return VkExtent2D.create().set(capabilities.currentExtent());
         }else {
             IntBuffer width = BufferUtils.createIntBuffer(1);
             IntBuffer height = BufferUtils.createIntBuffer(1);

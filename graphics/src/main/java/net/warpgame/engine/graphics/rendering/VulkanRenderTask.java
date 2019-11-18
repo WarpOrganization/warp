@@ -72,7 +72,7 @@ public class VulkanRenderTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        if(cameraHolder.getCameraProperty() == null) return;
+        if(cameraHolder.getCameraProperty() == null || recordingTask.getCommandBuffers() == null) return;
         drawFrame();
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }

@@ -69,7 +69,7 @@ public class RecordingTask extends EngineTask {
         this.renderPass = renderPass;
         this.swapChain = swapChain;
         this.graphicsPipeline = graphicsPipeline;
-        this.recreate = true;
+        this.recreate = false;
         this.sceneHolder = sceneHolder;
     }
 
