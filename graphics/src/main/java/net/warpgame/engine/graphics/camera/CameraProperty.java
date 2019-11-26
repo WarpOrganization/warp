@@ -73,8 +73,8 @@ public class CameraProperty extends Property {
 
     private void updateProjectionMatrix(){
         switch (cameraType){
-            case ORTHOGRAPHIC: projectionMatrix.ortho(-size, size, -size, size, zNear, zFar);
-            case PERSPECTIVE: projectionMatrix.perspective(fov*(float)Math.PI/180, aspect, zNear, zFar);
+            case ORTHOGRAPHIC: projectionMatrix.orthoLH(-size, size, -size, size, zNear, zFar);
+            case PERSPECTIVE: projectionMatrix.perspectiveLH(fov*(float)Math.PI/180, aspect, zNear, zFar);
         }
         uiProjectionMatrix.ortho2D(0, width, 0, height);
         dirty = false;

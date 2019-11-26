@@ -30,7 +30,7 @@ public class GraphicsTest {
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
-        context = new EngineContext( "graphics", "local");
+        context = new EngineContext( "graphics", "local", "input");
         context.getLoadedContext().addService(engineRuntime.getIdRegistry());
         SceneHolder sceneHolder = context.getLoadedContext().findOne(SceneHolder.class).get();
         try {
@@ -55,18 +55,20 @@ public class GraphicsTest {
     }*/
 
     private static void createScene(Component scene){
-        dragon = createDragon(scene);
         camera = createCamera(scene);
+        dragon = createDragon(scene);
     }
 
     private static Component createCamera(Component parent){
         Component camera = new SceneComponent(parent);
 
-        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE, (float) Math.PI/2, 600, 400, 10, 1000);
+        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE, (float) Math.PI/2, 600, 400, 1, 1000);
         camera.addProperty(cameraProperty);
 
         TransformProperty transformProperty = new TransformProperty();
         camera.addProperty(transformProperty);
+
+        camera.addScript(CameraScript.class);
 
         parent.getContext().getLoadedContext().findOne(CameraHolder.class).get().setCamera(camera);
 
@@ -89,6 +91,8 @@ public class GraphicsTest {
         TransformProperty transformProperty = new TransformProperty();
         transformProperty.move(0, 0, -10);
         dragon.addProperty(transformProperty);
+
+        dragon.addScript(DragonScript.class);
 
         return dragon;
     }

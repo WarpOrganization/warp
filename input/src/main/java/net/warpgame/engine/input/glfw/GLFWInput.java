@@ -12,6 +12,7 @@ import net.warpgame.engine.input.event.MouseButtonPressedEvent;
 import net.warpgame.engine.input.event.MouseButtonReleasedEvent;
 import org.apache.log4j.Logger;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.event.KeyEvent;
@@ -142,9 +143,14 @@ public class GLFWInput implements Input {
 //        this.cursorPosition = currentCursorPos;
 //    }
 
+    @Deprecated
     @Override
     public void getCursorPosition(Vector2f vector) {
         vector.set(cursorPosition);
+    }
+
+    public Vector2fc getCursorPosition() {
+        return cursorPosition;
     }
 
     @Deprecated
@@ -153,9 +159,15 @@ public class GLFWInput implements Input {
         return cursorPositionDelta;
     }
 
+    @Deprecated
     @Override
     public void getScrollPosition(Vector2f vector) {
         vector.set(scrollPos);
+    }
+
+    @Override
+    public Vector2fc getScrollPosition() {
+        return scrollPos;
     }
 
     @Override

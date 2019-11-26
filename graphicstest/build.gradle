@@ -15,4 +15,5 @@ dependencies {
     implementation project(':core')
     implementation project(':graphics')
     implementation project(':console')
+    implementation project(':input')
 }

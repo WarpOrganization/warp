@@ -60,6 +60,7 @@ public class VulkanTask extends EngineTask {
         swapChain.destroy();
         instanceManager.destroy();
         logger.info("Terminated Vulkan");
+        throw new RuntimeException();//better terminate thread with exception, then with core dump
     }
 
     @Override

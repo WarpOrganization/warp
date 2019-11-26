@@ -12,7 +12,7 @@ import static org.lwjgl.vulkan.KHRSwapchain.VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 public class GraphicsConfig {
     //TODO this staff should come form config, and not be hardcoded
     public static final boolean ENABLE_VALIDATION_LAYERS = true;
-    public static final String[] VALIDATION_LAYERS = {"VK_LAYER_KHRONOS_validation"};
+    public static final String[] VALIDATION_LAYERS = {"VK_LAYER_KHRONOS_validation", "VK_LAYER_RENDERDOC_Capture"};
     public static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
     public static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
     public static final String[] DEVICE_EXTENSIONS = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME};
