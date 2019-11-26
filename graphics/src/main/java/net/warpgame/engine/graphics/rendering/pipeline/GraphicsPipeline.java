@@ -53,8 +53,8 @@ public class GraphicsPipeline implements CreateAndDestroy {
     public void create() {
         VkPipelineShaderStageCreateInfo.Buffer shaderStages = VkPipelineShaderStageCreateInfo.create(2);
         try {
-            shaderStages.get(0).set(loadShader("program/scene/prototype/vert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-            shaderStages.get(1).set(loadShader("program/scene/prototype/frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+            shaderStages.get(0).set(loadShader("program/vert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+            shaderStages.get(1).set(loadShader("program/frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

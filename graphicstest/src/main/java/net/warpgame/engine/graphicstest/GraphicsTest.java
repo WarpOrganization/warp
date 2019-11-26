@@ -14,6 +14,7 @@ import net.warpgame.engine.graphics.memory.scene.material.Texture;
 import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 import net.warpgame.engine.graphics.window.Window;
+import org.joml.Vector3f;
 
 import java.io.File;
 import java.util.List;
@@ -62,10 +63,13 @@ public class GraphicsTest {
     private static Component createCamera(Component parent){
         Component camera = new SceneComponent(parent);
 
-        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE, (float) Math.PI/2, 600, 400, 1, 1000);
+        Window window = context.getLoadedContext().findOne(Window.class).get();
+
+        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE, 90f, window.getWidth(), window.getHeight(), 1, 10000);
         camera.addProperty(cameraProperty);
 
         TransformProperty transformProperty = new TransformProperty();
+        transformProperty.move(0,0,0);
         camera.addProperty(transformProperty);
 
         camera.addScript(CameraScript.class);
@@ -89,7 +93,9 @@ public class GraphicsTest {
         dragon.addProperty(materialProperty);
 
         TransformProperty transformProperty = new TransformProperty();
-        transformProperty.move(0, 0, -10);
+        transformProperty.move(0, 0, 10);
+        transformProperty.scale(new Vector3f(1f));
+        transformProperty.rotateLocalX((float)Math.PI);
         dragon.addProperty(transformProperty);
 
         dragon.addScript(DragonScript.class);

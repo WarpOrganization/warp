@@ -29,12 +29,17 @@ public class Window implements CreateAndDestroy {
     private long window;
     private long surface;
 
+    private int width;
+    private int height;
+
     private Config config;
     private Instance instance;
 
     public Window(Config config, Instance instance) {
         this.config = config;
         this.instance = instance;
+        this.width = WIDTH;
+        this.height = HEIGHT;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class Window implements CreateAndDestroy {
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Wrap", 0, 0);
+        window = glfwCreateWindow(width, height, "Wrap", 0, 0);
         if (window == 0) {
             throw new AssertionError("Failed to create window");
         }
@@ -88,5 +93,13 @@ public class Window implements CreateAndDestroy {
 
     public long getSurface() {
         return surface;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
