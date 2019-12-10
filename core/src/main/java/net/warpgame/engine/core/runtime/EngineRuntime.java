@@ -26,7 +26,7 @@ public class EngineRuntime {
     private static final EngineRuntimePreprocessor PREPROCESSOR = new EngineRuntimePreprocessor(preprocessedTypes);
     private static final Processor PROCESSOR = createProcessor();
 
-    private IdRegistry idRegistry; //IDK XD TODO sth
+    private IdRegistry idRegistry;
 
 
     private static Processor<ClassNode> createProcessor() {
