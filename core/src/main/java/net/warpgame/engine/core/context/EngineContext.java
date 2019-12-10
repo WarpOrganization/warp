@@ -15,8 +15,6 @@ public class EngineContext {
 
     public static final String CODESOURCE_DIR = EngineLauncher.CODESOURCE_DIR;
 
-
-
     private Context context;
     private SceneHolder sceneHolder;
     private ScriptManager scriptManager;
