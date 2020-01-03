@@ -76,7 +76,7 @@ public class CameraProperty extends Property {
             case ORTHOGRAPHIC: projectionMatrix.orthoLH(-size, size, -size, size, zNear, zFar);
             case PERSPECTIVE: projectionMatrix.perspectiveLH(fov*(float)Math.PI/180, aspect, zNear, zFar);
         }
-        uiProjectionMatrix.ortho2D(0, width, 0, height);
+        uiProjectionMatrix.ortho2DLH(0, width, 0, height);
         dirty = false;
     }
 

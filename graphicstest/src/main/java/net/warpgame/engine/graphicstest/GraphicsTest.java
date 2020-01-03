@@ -28,6 +28,7 @@ public class GraphicsTest {
     private static EngineContext context;
     private static Component dragon;
     private static Component camera;
+    private static Component floor;
 
     public static void start(EngineRuntime engineRuntime) {
         System.out.println();
@@ -58,6 +59,7 @@ public class GraphicsTest {
     private static void createScene(Component scene){
         camera = createCamera(scene);
         dragon = createDragon(scene);
+        floor = createFloor(scene);
     }
 
     private static Component createCamera(Component parent){
@@ -65,11 +67,12 @@ public class GraphicsTest {
 
         Window window = context.getLoadedContext().findOne(Window.class).get();
 
-        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE, 90f, window.getWidth(), window.getHeight(), 1, 10000);
+        CameraProperty cameraProperty = new CameraProperty(CameraProperty.CameraType.PERSPECTIVE, 90f, window.getWidth(), window.getHeight(), 0.1f, 10000f);
         camera.addProperty(cameraProperty);
 
         TransformProperty transformProperty = new TransformProperty();
-        transformProperty.move(0,0,0);
+        transformProperty.move(0,1,0);
+        transformProperty.rotateZ((float)Math.PI);
         camera.addProperty(transformProperty);
 
         camera.addScript(CameraScript.class);
@@ -96,11 +99,33 @@ public class GraphicsTest {
         transformProperty.move(0, 0, 10);
         transformProperty.scale(new Vector3f(1f));
         transformProperty.rotateLocalX((float)Math.PI);
+        transformProperty.rotateZ((float)Math.PI);
         dragon.addProperty(transformProperty);
 
         dragon.addScript(DragonScript.class);
 
         return dragon;
+    }
+
+    private static Component createFloor(Component parent) {
+        Component floor = new SceneComponent(parent);
+
+        File meshSource = new File(GraphicsTest.class.getResource("floor.obj").getFile());
+        StaticMesh mesh = new StaticMesh(meshSource);
+        MeshProperty meshProperty = new MeshProperty(mesh);
+        floor.addProperty(meshProperty);
+
+        File texSource = new File(GraphicsTest.class.getResource("strips.png").getFile());
+        Texture texture = new Texture(texSource);
+        MaterialProperty materialProperty = new MaterialProperty(texture);
+        floor.addProperty(materialProperty);
+
+        TransformProperty transformProperty = new TransformProperty();
+        transformProperty.move(0, -4, 0);
+        floor.addProperty(transformProperty);
+
+        return floor;
+
     }
 
     private static void close() {
