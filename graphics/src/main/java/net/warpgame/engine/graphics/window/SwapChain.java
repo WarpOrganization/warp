@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.window;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.command.QueueFamilyIndices;
+import net.warpgame.engine.graphics.command.queue.QueueManager;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.core.PhysicalDevice;
 import net.warpgame.engine.graphics.memory.Image;
@@ -39,13 +39,13 @@ public class SwapChain implements CreateAndDestroy {
     private PhysicalDevice physicalDevice;
     private Device device;
     private Window window;
-    private QueueFamilyIndices queueFamilyIndices;
+    private QueueManager queueManager;
 
-    public SwapChain(PhysicalDevice physicalDevice, Device device, Window window, QueueFamilyIndices queueFamilyIndices) {
+    public SwapChain(PhysicalDevice physicalDevice, Device device, Window window, QueueManager queueManager) {
         this.physicalDevice = physicalDevice;
         this.device = device;
         this.window = window;
-        this.queueFamilyIndices = queueFamilyIndices;
+        this.queueManager = queueManager;
     }
 
     @Override
@@ -99,10 +99,10 @@ public class SwapChain implements CreateAndDestroy {
                 .clipped(true)
                 .oldSwapchain(VK_NULL_HANDLE);
 
-        if (queueFamilyIndices.isPresentGraphics()) {
+        if (queueManager.isPresentationUnique()) {
             IntBuffer indices = BufferUtils.createIntBuffer(2)
-                    .put(queueFamilyIndices.getGraphicsFamily())
-                    .put(queueFamilyIndices.getPresentFamily());
+                    .put(queueManager.getGraphicsFamily())
+                    .put(queueManager.getPresentFamily());
             indices.flip();
             createInfo.imageSharingMode(VK_SHARING_MODE_CONCURRENT)
                     .pQueueFamilyIndices(indices);

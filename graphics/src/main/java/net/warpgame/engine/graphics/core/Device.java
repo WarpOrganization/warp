@@ -3,7 +3,7 @@ package net.warpgame.engine.graphics.core;
 import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.command.QueueFamilyIndices;
+import net.warpgame.engine.graphics.command.queue.QueueManager;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import org.lwjgl.BufferUtils;
@@ -30,13 +30,13 @@ import static org.lwjgl.vulkan.VK10.*;
 public class Device implements CreateAndDestroy {
     private VkDevice device;
 
+    private QueueManager queueManager;
     private PhysicalDevice physicalDevice;
-    private QueueFamilyIndices indices;
     private Config config;
 
-    public Device(PhysicalDevice physicalDevice, QueueFamilyIndices indices, Config config) {
+    public Device(PhysicalDevice physicalDevice, QueueManager queueManager, Config config) {
         this.physicalDevice = physicalDevice;
-        this.indices = indices;
+        this.queueManager = queueManager;
         this.config = config;
     }
 
@@ -50,17 +50,25 @@ public class Device implements CreateAndDestroy {
         FloatBuffer pQueuePriorities = BufferUtils.createFloatBuffer(1).put(1.0f);
         pQueuePriorities.flip();
 
-        VkDeviceQueueCreateInfo.Buffer pQueueCreateInfo = VkDeviceQueueCreateInfo.create(indices.number()).put(
+        VkDeviceQueueCreateInfo.Buffer pQueueCreateInfo = VkDeviceQueueCreateInfo.create(queueManager.queueNumber()).put(
                 VkDeviceQueueCreateInfo.create()
                         .sType(VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO)
-                        .queueFamilyIndex(indices.getGraphicsFamily())
+                        .queueFamilyIndex(queueManager.getGraphicsFamily())
                         .pQueuePriorities(pQueuePriorities)
         );
-        if(indices.number() > 1) {
+        if(queueManager.isPresentationUnique()) {
             pQueueCreateInfo.put(
                     VkDeviceQueueCreateInfo.create()
                             .sType(VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO)
-                            .queueFamilyIndex(indices.getPresentFamily())
+                            .queueFamilyIndex(queueManager.getPresentFamily())
+                            .pQueuePriorities(pQueuePriorities)
+            );
+        }
+        if(queueManager.isTransportUnique()) {
+            pQueueCreateInfo.put(
+                    VkDeviceQueueCreateInfo.create()
+                            .sType(VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO)
+                            .queueFamilyIndex(queueManager.getTransportFamily())
                             .pQueuePriorities(pQueuePriorities)
             );
         }

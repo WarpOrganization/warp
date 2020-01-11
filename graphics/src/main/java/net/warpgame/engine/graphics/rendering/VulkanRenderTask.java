@@ -7,9 +7,10 @@ import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.camera.CameraHolder;
 import net.warpgame.engine.graphics.camera.CameraProperty;
 import net.warpgame.engine.graphics.command.Fence;
-import net.warpgame.engine.graphics.command.GraphicsQueue;
-import net.warpgame.engine.graphics.command.PresentationQueue;
 import net.warpgame.engine.graphics.command.Semaphore;
+import net.warpgame.engine.graphics.command.queue.PresentationQueue;
+import net.warpgame.engine.graphics.command.queue.Queue;
+import net.warpgame.engine.graphics.command.queue.QueueManager;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChain;
@@ -39,26 +40,29 @@ public class VulkanRenderTask extends EngineTask {
     private Semaphore[] imageAvailableSemaphore;
     private Semaphore[] renderFinishedSemaphore;
     private Fence[] inFlightFences;
+    private Queue graphicsQueue;
+    private PresentationQueue presentationQueue;
 
     private RecordingTask recordingTask;
     private CameraHolder cameraHolder;
 
-    private GraphicsQueue graphicsQueue;
-    private PresentationQueue presentationQueue;
     private SwapChain swapChain;
+    private QueueManager queueManager;
     private Device device;
 
-    public VulkanRenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue, SwapChain swapChain, Device device) {
+    public VulkanRenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, SwapChain swapChain, QueueManager queueManager, Device device) {
         this.recordingTask = recordingTask;
         this.cameraHolder = cameraHolder;
-        this.graphicsQueue = graphicsQueue;
-        this.presentationQueue = presentationQueue;
         this.swapChain = swapChain;
+        this.queueManager = queueManager;
         this.device = device;
     }
 
     @Override
     protected void onInit() {
+        graphicsQueue = queueManager.getGraphicsQueue();
+        presentationQueue = queueManager.getPresentationQueue();
+        recordingTask.setRenderQueue(graphicsQueue);
         imageAvailableSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
         renderFinishedSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
         inFlightFences = new Fence[MAX_FRAMES_IN_FLIGHT];
@@ -114,7 +118,7 @@ public class VulkanRenderTask extends EngineTask {
                 .pCommandBuffers(BufferUtils.createPointerBuffer(1).put(0, recordingTask.getCommandBuffers()[imageIndex]))
                 .pSignalSemaphores(signalSemaphores);
 
-        err = vkQueueSubmit(graphicsQueue.get(), submitInfo, inFlightFences[currentFrame].get());
+        err = graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
         if (err != VK_SUCCESS) {
             throw new VulkanAssertionError("Failed to submit draw command buffer", err);
         }
@@ -126,7 +130,7 @@ public class VulkanRenderTask extends EngineTask {
                 .pSwapchains(BufferUtils.createLongBuffer(1).put(0, swapChain.get()))
                 .pImageIndices(pointer);
 
-        err = vkQueuePresentKHR(presentationQueue.get(), presentInfo);
+        err = presentationQueue.presentKHR(presentInfo);
         if (err != VK_SUCCESS && err != VK_SUBOPTIMAL_KHR) {
             throw new VulkanAssertionError("Failed to present swap chain image", err);
         }
@@ -135,5 +139,9 @@ public class VulkanRenderTask extends EngineTask {
     @Override
     public int getPriority() {
         return 20;
+    }
+
+    public Queue getGraphicsQueue() {
+        return graphicsQueue;
     }
 }

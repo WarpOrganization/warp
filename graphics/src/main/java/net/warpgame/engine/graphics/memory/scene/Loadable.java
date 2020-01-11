@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.memory.scene;
 
 import net.warpgame.engine.core.context.Context;
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.graphics.command.CommandPool;
+import net.warpgame.engine.graphics.command.poll.CommandPool;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.memory.VulkanLoadTask;

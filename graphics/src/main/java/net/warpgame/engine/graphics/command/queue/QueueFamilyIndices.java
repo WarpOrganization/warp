@@ -1,4 +1,4 @@
-package net.warpgame.engine.graphics.command;
+package net.warpgame.engine.graphics.command.queue;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
@@ -8,6 +8,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.vulkan.VkQueueFamilyProperties;
 
 import java.nio.IntBuffer;
+import java.util.stream.Stream;
 
 import static org.lwjgl.vulkan.KHRSurface.vkGetPhysicalDeviceSurfaceSupportKHR;
 import static org.lwjgl.vulkan.VK10.*;
@@ -20,9 +21,9 @@ import static org.lwjgl.vulkan.VK10.*;
 @Service
 @Profile("graphics")
 public class QueueFamilyIndices {
-    private int graphicsFamily = -1;
-    private int presentFamily = -1;
-    private int transportFamily = -1;//to think about
+    private int transportFamily = -1;
+
+    private QueueFamilyProperties[] queueFamiliesProperties;
 
     public QueueFamilyIndices() {
 
@@ -37,42 +38,28 @@ public class QueueFamilyIndices {
         VkQueueFamilyProperties.Buffer pQueueFamilies = VkQueueFamilyProperties.create(queueFamilyCount);
         vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice.get(), pQueueFamilyCount, pQueueFamilies);
 
+        queueFamiliesProperties = new QueueFamilyProperties[queueFamilyCount];
+
         int i = 0;
         while (pQueueFamilies.hasRemaining()) {
             VkQueueFamilyProperties queueFamily = pQueueFamilies.get();
             IntBuffer pSupport = BufferUtils.createIntBuffer(1);
             vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice.get(), i, surface, pSupport);
             boolean support = pSupport.get() == VK_TRUE;
-            if (queueFamily.queueCount() > 0 && (queueFamily.queueFlags() & VK_QUEUE_GRAPHICS_BIT)>0) {
-                graphicsFamily = i;
-            }
-
-            if (queueFamily.queueCount() > 0 && support) {
-                presentFamily = i;
-            }
-
+            queueFamiliesProperties[i] = new QueueFamilyProperties(i, queueFamily.queueFlags(), queueFamily.queueCount(), support);
             i++;
         }
+
+
     }
 
-    public boolean isComplete() {
-        return graphicsFamily >= 0 && presentFamily >= 0;
+    public boolean isGoodEnough() {
+        return Stream.of(queueFamiliesProperties).anyMatch(QueueFamilyProperties::isPresentSupport) &&
+                Stream.of(queueFamiliesProperties).anyMatch(QueueFamilyProperties::isGraphicsSupport) &&
+                Stream.of(queueFamiliesProperties).anyMatch(QueueFamilyProperties::isTransferSupport);
     }
 
-    public int getGraphicsFamily() {
-        return graphicsFamily;
+    public QueueFamilyProperties[] getQueueFamiliesProperties() {
+        return queueFamiliesProperties;
     }
-
-    public int getPresentFamily() {
-        return presentFamily;
-    }
-
-    public int number(){
-        return (graphicsFamily != presentFamily)?2:1;
-    }
-
-    public boolean isPresentGraphics(){
-        return graphicsFamily != presentFamily;
-    }
-
 }

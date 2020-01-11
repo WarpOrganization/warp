@@ -1,5 +1,6 @@
-package net.warpgame.engine.graphics.command;
+package net.warpgame.engine.graphics.command.poll;
 
+import net.warpgame.engine.graphics.command.queue.Queue;
 import net.warpgame.engine.graphics.core.Device;
 
 /**

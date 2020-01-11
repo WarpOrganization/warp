@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.memory.scene.material;
 
-import net.warpgame.engine.graphics.command.CommandPool;
+import net.warpgame.engine.graphics.command.poll.CommandPool;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.memory.Buffer;
@@ -50,7 +50,7 @@ public class Texture extends Loadable {
         if(pixels == null){
             throw new FileNotFoundException("Failed to load texture image");
         }
-        int mipLevels = (int) Math.floor(Math.log((double) Math.max(texWidth, texHeight)) / Math.log(2));
+        int mipLevels = (int) Math.floor(Math.log(Math.max(texWidth, texHeight)) / Math.log(2));
 
         Buffer stagingBuffer = new Buffer(
                 imageSize,

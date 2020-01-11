@@ -1,6 +1,6 @@
 package net.warpgame.engine.graphics.memory;
 
-import net.warpgame.engine.graphics.command.CommandPool;
+import net.warpgame.engine.graphics.command.poll.CommandPool;
 import net.warpgame.engine.graphics.command.Fence;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.Destroyable;

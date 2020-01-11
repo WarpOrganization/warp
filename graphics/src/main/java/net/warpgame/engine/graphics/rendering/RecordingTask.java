@@ -7,9 +7,9 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.graphics.command.CommandPool;
-import net.warpgame.engine.graphics.command.GraphicsQueue;
-import net.warpgame.engine.graphics.command.StandardCommandPool;
+import net.warpgame.engine.graphics.command.poll.CommandPool;
+import net.warpgame.engine.graphics.command.poll.StandardCommandPool;
+import net.warpgame.engine.graphics.command.queue.Queue;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.scene.DescriptorPool;
 import net.warpgame.engine.graphics.memory.scene.Loadable;
@@ -56,15 +56,13 @@ public class RecordingTask extends EngineTask {
     private SceneHolder sceneHolder;
 
     private DescriptorPool descriptorPool;
-    private GraphicsQueue graphicsQueue;
     private RenderPass renderPass;
     private SwapChain swapChain;
     private GraphicsPipeline graphicsPipeline;
     private Device device;
 
-    public RecordingTask(DescriptorPool descriptorPool, GraphicsQueue graphicsQueue, Device device, SceneHolder sceneHolder, RenderPass renderPass, SwapChain swapChain, GraphicsPipeline graphicsPipeline) {
+    public RecordingTask(DescriptorPool descriptorPool, Device device, SceneHolder sceneHolder, RenderPass renderPass, SwapChain swapChain, GraphicsPipeline graphicsPipeline) {
         this.descriptorPool = descriptorPool;
-        this.graphicsQueue = graphicsQueue;
         this.device = device;
         this.renderPass = renderPass;
         this.swapChain = swapChain;
@@ -76,7 +74,10 @@ public class RecordingTask extends EngineTask {
     @Override
     protected void onInit() {
         descriptorPool.create();
-        commandPool = new StandardCommandPool(device, graphicsQueue);
+    }
+
+    public void setRenderQueue(Queue renderQueue) {
+        commandPool = new StandardCommandPool(device, renderQueue);
     }
 
     @Override
@@ -187,4 +188,5 @@ public class RecordingTask extends EngineTask {
     public void setRecreate(boolean recreate) {
         this.recreate = recreate;
     }
+
 }

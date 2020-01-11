@@ -2,8 +2,7 @@ package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.command.GraphicsQueue;
-import net.warpgame.engine.graphics.command.PresentationQueue;
+import net.warpgame.engine.graphics.command.queue.QueueManager;
 import net.warpgame.engine.graphics.memory.Allocator;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.window.Window;
@@ -27,20 +26,18 @@ public class InstanceManager implements CreateAndDestroy {
     private DebugCallback debugCallback;
     private Window window;
     private PhysicalDevice physicalDevice;
+    private QueueManager queueManager;
     private Device device;
     private Allocator allocator;
-    private GraphicsQueue graphicsQueue;
-    private PresentationQueue presentationQueue;
 
-    public InstanceManager(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, Device device, Allocator allocator, GraphicsQueue graphicsQueue, PresentationQueue presentationQueue) {
+    public InstanceManager(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, QueueManager queueManager, Device device, Allocator allocator) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.window = window;
         this.physicalDevice = physicalDevice;
+        this.queueManager = queueManager;
         this.device = device;
         this.allocator = allocator;
-        this.graphicsQueue = graphicsQueue;
-        this.presentationQueue = presentationQueue;
     }
 
     @Override
@@ -57,10 +54,10 @@ public class InstanceManager implements CreateAndDestroy {
             debugCallback.create();
         window.create();
         physicalDevice.create();
+        queueManager.create();
         device.create();
+        queueManager.setDevice(device);
         allocator.create();
-        presentationQueue.create();
-        graphicsQueue.create();
     }
 
     @Override
@@ -96,13 +93,5 @@ public class InstanceManager implements CreateAndDestroy {
 
     public Allocator getAllocator() {
         return allocator;
-    }
-
-    public GraphicsQueue getGraphicsQueue() {
-        return graphicsQueue;
-    }
-
-    public PresentationQueue getPresentationQueue() {
-        return presentationQueue;
     }
 }

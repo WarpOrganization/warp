@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.core;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.command.QueueFamilyIndices;
+import net.warpgame.engine.graphics.command.queue.QueueFamilyIndices;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
 import net.warpgame.engine.graphics.window.SwapChainSupportDetails;
@@ -103,7 +103,7 @@ public class PhysicalDevice implements CreateAndDestroy {
             return false;
         }
         indices.getQueueFamilyIndices(this, window);
-        return indices.isComplete();
+        return indices.isGoodEnough();
         //return deviceProperties.deviceType() == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
     }
 

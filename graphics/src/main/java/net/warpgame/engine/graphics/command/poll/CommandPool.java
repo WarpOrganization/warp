@@ -1,5 +1,7 @@
-package net.warpgame.engine.graphics.command;
+package net.warpgame.engine.graphics.command.poll;
 
+import net.warpgame.engine.graphics.command.Fence;
+import net.warpgame.engine.graphics.command.queue.Queue;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.Destroyable;
 import net.warpgame.engine.graphics.utility.VulkanAssertionError;
@@ -31,9 +33,8 @@ public abstract class CommandPool implements Destroyable {
         VkCommandPoolCreateInfo createInfo = VkCommandPoolCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO)
                 .pNext(VK_NULL_HANDLE)
-                .queueFamilyIndex(queue.getFamily())
+                .queueFamilyIndex(queue.getFamilyIndex())
                 .flags(getFlags());
-
 
         LongBuffer pCommandPoll = BufferUtils.createLongBuffer(1);
         int err = vkCreateCommandPool(device.get(), createInfo, null, pCommandPoll);
@@ -96,7 +97,7 @@ public abstract class CommandPool implements Destroyable {
                 .pCommandBuffers(pointerBuffer);
 
         Fence fence = new Fence(device);
-        vkQueueSubmit(queue.get(), submitInfo, fence.get());
+        queue.submit(submitInfo, fence);
         return fence.onDestroy(() -> freeCommandBuffer(commandBuffer));
     }
 

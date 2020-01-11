@@ -4,10 +4,10 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.graphics.command.CommandPool;
-import net.warpgame.engine.graphics.command.GraphicsQueue;
-import net.warpgame.engine.graphics.command.OneTimeCommandPool;
-import net.warpgame.engine.graphics.command.Queue;
+import net.warpgame.engine.graphics.command.poll.CommandPool;
+import net.warpgame.engine.graphics.command.poll.OneTimeCommandPool;
+import net.warpgame.engine.graphics.command.queue.Queue;
+import net.warpgame.engine.graphics.command.queue.QueueManager;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.scene.Loadable;
 import net.warpgame.engine.graphics.rendering.RecordingTask;
@@ -32,20 +32,22 @@ public class VulkanLoadTask extends EngineTask {
     private BlockingQueue<Loadable> loadQueue = new ArrayBlockingQueue<>(10);
     private BlockingQueue<Loadable> unloadQueue = new ArrayBlockingQueue<>(10);
     private CommandPool commandPool;
+    private Queue queue;
 
     private RecordingTask recordingTask;
 
-    private Device device;
-    private Allocator allocator;
-    private Queue queue;
     private SwapChain swapChain;
+    private Allocator allocator;
+    private QueueManager queueManager;
+    private Device device;
 
-    public VulkanLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, GraphicsQueue queue, SwapChain swapChain) {
+
+    public VulkanLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, SwapChain swapChain, QueueManager queueManager) {
         this.recordingTask = recordingTask;
         this.device = device;
         this.allocator = allocator;
-        this.queue = queue;
         this.swapChain = swapChain;
+        this.queueManager = queueManager;
     }
 
     @Override
@@ -58,11 +60,12 @@ public class VulkanLoadTask extends EngineTask {
                 throw new RuntimeException("Required resources are not ready",e);
             }
         }
+        queue = queueManager.getTransportQueue();
         commandPool = new OneTimeCommandPool(device, queue);
     }
 
     private boolean isReady() {
-        return device.isCreated() && queue.isCreated() && allocator.isCreated() && swapChain.isCreated();
+        return device.isCreated() && queueManager.isCreated() && allocator.isCreated() && swapChain.isCreated();
     }
 
     @Override
