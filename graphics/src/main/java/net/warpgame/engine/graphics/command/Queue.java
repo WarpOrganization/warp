@@ -22,6 +22,11 @@ public abstract class Queue implements CreateAndDestroy {
     }
 
     @Override
+    public boolean isCreated() {
+        return queue != null;
+    }
+
+    @Override
     public void create() {
         PointerBuffer pQueue = BufferUtils.createPointerBuffer(1);
         vkGetDeviceQueue(device.get(), getFamily(), 0, pQueue);

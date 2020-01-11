@@ -5,6 +5,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.graphics.core.InstanceManager;
+import net.warpgame.engine.graphics.memory.VulkanLoadThread;
 import net.warpgame.engine.graphics.rendering.pipeline.GraphicsPipeline;
 import net.warpgame.engine.graphics.rendering.pipeline.RenderPass;
 import net.warpgame.engine.graphics.window.SwapChain;
@@ -25,12 +26,15 @@ import static org.lwjgl.vulkan.VK10.vkDeviceWaitIdle;
 public class VulkanTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(VulkanTask.class);
 
+    private VulkanLoadThread vulkanLoadThread;
+
     private InstanceManager instanceManager;
     private SwapChain swapChain;
     private RenderPass renderPass;
     private GraphicsPipeline graphicsPipeline;
 
-    public VulkanTask(InstanceManager instanceManager, SwapChain swapChain, RenderPass renderPass, GraphicsPipeline graphicsPipeline) {
+    public VulkanTask(VulkanLoadThread vulkanLoadThread, InstanceManager instanceManager, SwapChain swapChain, RenderPass renderPass, GraphicsPipeline graphicsPipeline) {
+        this.vulkanLoadThread = vulkanLoadThread;
         this.instanceManager = instanceManager;
         this.swapChain = swapChain;
         this.renderPass = renderPass;
@@ -40,6 +44,7 @@ public class VulkanTask extends EngineTask {
     @Override
     protected void onInit() {
         instanceManager.create();
+        vulkanLoadThread.interruptThread();
         logger.info("Creating Vulkan static resources");
         swapChain.create();
         renderPass.create();

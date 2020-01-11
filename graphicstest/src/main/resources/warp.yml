@@ -8,5 +8,8 @@ graphics:
       maxLights: 10
     ui:
       stackSize: 10
-script.ups: 40
+  vulkan:
+    loading:
+      ups: 1
+script.ups: 30
 

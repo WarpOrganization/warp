@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.execution;
 
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.core.execution.task.EngineTask;
 
 /**
  * @author Jaca777
@@ -20,5 +19,6 @@ public interface EngineThread extends Executor {
      */
     void start();
     void interrupt();
+    void interruptThread();
     boolean isRunning();
 }

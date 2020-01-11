@@ -84,6 +84,11 @@ public class SyncEngineThread implements EngineThread {
     }
 
     @Override
+    public void interruptThread() {
+        engineThread.interrupt();
+    }
+
+    @Override
     public boolean isRunning() {
         return running;
     }

@@ -24,7 +24,7 @@ import java.util.concurrent.BlockingQueue;
  */
 @Service
 @Profile("graphics")
-@RegisterTask(thread = "graphics")
+@RegisterTask(thread = "loading")
 public class VulkanLoadTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(VulkanLoadTask.class);
 
@@ -47,6 +47,14 @@ public class VulkanLoadTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        try {
+            if (!(device.isCreated() && queue.isCreated()))
+                Thread.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException e) {
+            if (!(device.isCreated() && queue.isCreated())) {
+                throw new RuntimeException(e);
+            }
+        }
         commandPool = new OneTimeCommandPool(device, queue);
     }
 
@@ -75,7 +83,7 @@ public class VulkanLoadTask extends EngineTask {
         loadQueue.add(loadable);
     }
 
-    public void addToUnload(Loadable loadable){
+    public void addToUnload(Loadable loadable) {
         unloadQueue.add(loadable);
     }
 }

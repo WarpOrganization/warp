@@ -6,4 +6,8 @@ package net.warpgame.engine.graphics.utility;
  */
 public interface CreateAndDestroy extends Destroyable {
     void create();
+
+    default boolean isCreated() {
+        return true;
+    }
 }

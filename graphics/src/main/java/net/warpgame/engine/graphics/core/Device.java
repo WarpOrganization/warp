@@ -41,6 +41,11 @@ public class Device implements CreateAndDestroy {
     }
 
     @Override
+    public boolean isCreated() {
+        return device != null;
+    }
+
+    @Override
     public void create() {
         FloatBuffer pQueuePriorities = BufferUtils.createFloatBuffer(1).put(1.0f);
         pQueuePriorities.flip();
