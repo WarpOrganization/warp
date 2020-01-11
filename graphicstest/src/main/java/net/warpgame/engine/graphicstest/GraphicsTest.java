@@ -58,7 +58,7 @@ public class GraphicsTest {
 
     private static void createScene(Component scene){
         camera = createCamera(scene);
-        dragon = createDragon(scene);
+        //dragon = createDragon(scene);
         floor = createFloor(scene);
     }
 
@@ -123,6 +123,8 @@ public class GraphicsTest {
         TransformProperty transformProperty = new TransformProperty();
         transformProperty.move(0, -4, 0);
         floor.addProperty(transformProperty);
+
+        floor.addScript(DragonGenerationScript.class);
 
         return floor;
 

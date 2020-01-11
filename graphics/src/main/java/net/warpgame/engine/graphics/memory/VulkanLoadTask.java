@@ -11,6 +11,7 @@ import net.warpgame.engine.graphics.command.Queue;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.scene.Loadable;
 import net.warpgame.engine.graphics.rendering.RecordingTask;
+import net.warpgame.engine.graphics.window.SwapChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,25 +38,31 @@ public class VulkanLoadTask extends EngineTask {
     private Device device;
     private Allocator allocator;
     private Queue queue;
+    private SwapChain swapChain;
 
-    public VulkanLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, GraphicsQueue queue) {
+    public VulkanLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, GraphicsQueue queue, SwapChain swapChain) {
         this.recordingTask = recordingTask;
         this.device = device;
         this.allocator = allocator;
         this.queue = queue;
+        this.swapChain = swapChain;
     }
 
     @Override
     protected void onInit() {
         try {
-            if (!(device.isCreated() && queue.isCreated()))
+            if (!isReady())
                 Thread.sleep(Long.MAX_VALUE);
         } catch (InterruptedException e) {
-            if (!(device.isCreated() && queue.isCreated())) {
-                throw new RuntimeException(e);
+            if (!isReady()) {
+                throw new RuntimeException("Required resources are not ready",e);
             }
         }
         commandPool = new OneTimeCommandPool(device, queue);
+    }
+
+    private boolean isReady() {
+        return device.isCreated() && queue.isCreated() && allocator.isCreated() && swapChain.isCreated();
     }
 
     @Override

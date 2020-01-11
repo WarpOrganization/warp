@@ -12,6 +12,7 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.vma.VmaAllocatorCreateInfo;
 import org.lwjgl.util.vma.VmaVulkanFunctions;
 
+import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.util.vma.Vma.vmaCreateAllocator;
 import static org.lwjgl.util.vma.Vma.vmaDestroyAllocator;
 import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
@@ -59,6 +60,10 @@ public class Allocator implements CreateAndDestroy {
         vmaDestroyAllocator(allocator);
     }
 
+    @Override
+    public boolean isCreated() {
+        return allocator != NULL;
+    }
 
     public long get(){
         return allocator;

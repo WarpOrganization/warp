@@ -53,6 +53,7 @@ public class SwapChain implements CreateAndDestroy {
         createSwapChain();
         getSwapChainImages();
         createImageViews();
+        created = true;
     }
 
     @Override
@@ -61,6 +62,13 @@ public class SwapChain implements CreateAndDestroy {
             imageView.destroy();
         }
         vkDestroySwapchainKHR(device.get(), swapChain, null);
+    }
+
+
+    private boolean created = false;
+    @Override
+    public boolean isCreated() {
+        return created;
     }
 
     private void createSwapChain() {

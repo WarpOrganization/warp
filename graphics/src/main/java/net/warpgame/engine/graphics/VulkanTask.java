@@ -44,9 +44,9 @@ public class VulkanTask extends EngineTask {
     @Override
     protected void onInit() {
         instanceManager.create();
-        vulkanLoadThread.interruptThread();
         logger.info("Creating Vulkan static resources");
         swapChain.create();
+        vulkanLoadThread.interruptThread();
         renderPass.create();
         graphicsPipeline.create();
     }
@@ -65,7 +65,7 @@ public class VulkanTask extends EngineTask {
         swapChain.destroy();
         instanceManager.destroy();
         logger.info("Terminated Vulkan");
-        throw new RuntimeException();//better terminate thread with exception, then with core dump
+        throw new RuntimeException("Better terminate thread with exception, then with core dump");
     }
 
     @Override
