@@ -33,7 +33,7 @@ public class Vertex {
     }
 
     public static VkVertexInputBindingDescription.Buffer getBindingDescription() {
-        VkVertexInputBindingDescription.Buffer bindingDescription = VkVertexInputBindingDescription.create(1);
+        VkVertexInputBindingDescription.Buffer bindingDescription = VkVertexInputBindingDescription.calloc(1);
         bindingDescription.get(0)
                 .binding(0)
                 .stride(sizeOf())
@@ -42,7 +42,7 @@ public class Vertex {
     }
 
     public static VkVertexInputAttributeDescription.Buffer getAttributeDescriptions() {
-        VkVertexInputAttributeDescription.Buffer attributeDescriptions = VkVertexInputAttributeDescription.create(3);
+        VkVertexInputAttributeDescription.Buffer attributeDescriptions = VkVertexInputAttributeDescription.calloc(3);
         attributeDescriptions.get(0)
                 .binding(0)
                 .location(0)

@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author MarconZet
@@ -29,8 +29,8 @@ import java.util.concurrent.BlockingQueue;
 public class VulkanLoadTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(VulkanLoadTask.class);
 
-    private BlockingQueue<Loadable> loadQueue = new ArrayBlockingQueue<>(10);
-    private BlockingQueue<Loadable> unloadQueue = new ArrayBlockingQueue<>(10);
+    private BlockingQueue<Loadable> loadQueue = new LinkedBlockingQueue<>();
+    private BlockingQueue<Loadable> unloadQueue = new LinkedBlockingQueue<>();
     private CommandPool commandPool;
     private Queue queue;
 
@@ -52,6 +52,30 @@ public class VulkanLoadTask extends EngineTask {
 
     @Override
     protected void onInit() {
+
+      /*  Object resource = new Object();
+
+        Thread a = new Thread() {
+            @Override
+            public void run() {
+                synchronized (resource) {
+                    try {
+                        resource.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        Thread b = new Thread() {
+            @Override
+            public void run() {
+                Thread.sleep(200); //hard work
+                resource.notifyAll();
+            }
+        };*/
+
         try {
             if (!isReady())
                 Thread.sleep(Long.MAX_VALUE);

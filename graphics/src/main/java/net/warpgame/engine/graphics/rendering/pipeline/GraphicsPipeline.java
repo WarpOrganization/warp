@@ -59,12 +59,11 @@ public class GraphicsPipeline implements CreateAndDestroy {
             throw new RuntimeException(e);
         }
 
-        VkPipelineVertexInputStateCreateInfo vertexInputInfo = VkPipelineVertexInputStateCreateInfo.create()
+        VkPipelineVertexInputStateCreateInfo vertexInputInfo = VkPipelineVertexInputStateCreateInfo.calloc()
                 .sType(VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO)
                 .pNext(NULL)
                 .pVertexBindingDescriptions(Vertex.getBindingDescription())
                 .pVertexAttributeDescriptions(Vertex.getAttributeDescriptions());
-
         VkPipelineInputAssemblyStateCreateInfo inputAssembly = VkPipelineInputAssemblyStateCreateInfo.create()
                 .sType(VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO)
                 .pNext(NULL)
@@ -187,6 +186,10 @@ public class GraphicsPipeline implements CreateAndDestroy {
             throw new VulkanAssertionError("Failed to create pipeline", err);
         }
         graphicsPipeline = pPipeline.get(0);
+
+        vertexInputInfo.pVertexBindingDescriptions().free();
+        vertexInputInfo.pVertexAttributeDescriptions().free();
+        vertexInputInfo.free();
     }
 
     @Override

@@ -49,6 +49,7 @@ public class VulkanTask extends EngineTask {
         vulkanLoadThread.interruptThread();
         renderPass.create();
         graphicsPipeline.create();
+        logger.info("Finished creating Vulkan static resources");
     }
 
     @Override
