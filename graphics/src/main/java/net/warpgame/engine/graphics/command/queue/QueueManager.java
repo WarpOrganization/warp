@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 @Service
 @Profile("graphics")
 public class QueueManager implements CreateAndDestroy {
-    private boolean ready = false;
     private QueueFamilyProperties[] queueFamiliesProperties;
 
     private QueueFamilyProperties graphics;
@@ -41,12 +40,17 @@ public class QueueManager implements CreateAndDestroy {
     public void setDevice(Device device) {
         this.device = device;
         createQueues();
-        ready = true;
+        synchronized (this) {
+            created = true;
+            notifyAll();
+        }
     }
+
+    private boolean created = false;
 
     @Override
     public boolean isCreated() {
-        return ready;
+        return created;
     }
 
     @Override

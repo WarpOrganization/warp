@@ -42,8 +42,8 @@ public class GraphicsTask extends EngineTask {
 
     @Override
     protected void onInit() {
-        instanceManager.create();
         logger.info("Creating Vulkan static resources");
+        instanceManager.create();
         swapChain.create();
         renderPass.create();
         graphicsPipeline.create();
@@ -57,6 +57,7 @@ public class GraphicsTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        logger.info("Waiting for device and other threads to finish");
         vkDeviceWaitIdle(instanceManager.getDevice().get());
         threadManager.waitForThreads();
         logger.info("Destroying Vulkan instance and static resources");
@@ -65,7 +66,6 @@ public class GraphicsTask extends EngineTask {
         swapChain.destroy();
         instanceManager.destroy();
         logger.info("Terminated Vulkan");
-        throw new RuntimeException("Better terminate thread with exception, then with core dump");
     }
 
     @Override

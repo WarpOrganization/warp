@@ -190,6 +190,11 @@ public class GraphicsPipeline implements CreateAndDestroy {
         vertexInputInfo.pVertexBindingDescriptions().free();
         vertexInputInfo.pVertexAttributeDescriptions().free();
         vertexInputInfo.free();
+
+        synchronized (this) {
+            created = true;
+            notifyAll();
+        }
     }
 
     @Override
@@ -200,6 +205,13 @@ public class GraphicsPipeline implements CreateAndDestroy {
             vkDestroyShaderModule(device.get(), shaderModule, null);
         }
         vkDestroyDescriptorSetLayout(device.get(), descriptorSetLayout, null);
+    }
+
+    private boolean created = false;
+
+    @Override
+    public boolean isCreated() {
+        return created;
     }
 
     private long createDescriptorSetLayout() {

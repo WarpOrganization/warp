@@ -13,5 +13,8 @@ graphics:
       ups: 1
     recording:
       ups: 2
+    render:
+      ups: 60
 script.ups: 30
+
 

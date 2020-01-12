@@ -41,11 +41,6 @@ public class Device implements CreateAndDestroy {
     }
 
     @Override
-    public boolean isCreated() {
-        return device != null;
-    }
-
-    @Override
     public void create() {
         FloatBuffer pQueuePriorities = BufferUtils.createFloatBuffer(1).put(1.0f);
         pQueuePriorities.flip();
@@ -103,6 +98,17 @@ public class Device implements CreateAndDestroy {
             throw new VulkanAssertionError("Failed to create device", err);
         }
         device = new VkDevice(pDevice.get(0), physicalDevice.get(), pCreateInfo);
+        synchronized (this) {
+            created = true;
+            notifyAll();
+        }
+    }
+
+    private boolean created = false;
+
+    @Override
+    public boolean isCreated() {
+        return created;
     }
 
     @Override

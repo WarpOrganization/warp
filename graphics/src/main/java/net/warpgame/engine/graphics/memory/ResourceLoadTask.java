@@ -19,6 +19,8 @@ import java.io.FileNotFoundException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static org.lwjgl.vulkan.VK10.vkDeviceWaitIdle;
+
 /**
  * @author MarconZet
  * Created 10.05.2019
@@ -83,7 +85,8 @@ public class ResourceLoadTask extends EngineTask {
 
     @Override
     protected void onClose() {
-        //leaves everything to vulkan
+        vkDeviceWaitIdle(device.get());
+        //TODO proper closing
     }
 
     public void addToLoad(Loadable loadable) {

@@ -33,7 +33,7 @@ import static org.lwjgl.vulkan.VK10.*;
 
 @Service
 @Profile("graphics")
-@RegisterTask(thread = "graphics")
+@RegisterTask(thread = "render")
 public class RenderTask extends EngineTask {
 
     private int currentFrame = 0;
@@ -61,6 +61,15 @@ public class RenderTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        try {
+            synchronized (swapChain) {
+                if (!swapChain.isCreated())
+                    swapChain.wait();
+            }
+        } catch (InterruptedException e) {
+            if (!swapChain.isCreated())
+                throw new RuntimeException("Required resources are not ready", e);
+        }
         graphicsQueue = queueManager.getGraphicsQueue();
         presentationQueue = queueManager.getPresentationQueue();
         recordingTask.setRenderTask(this);
@@ -85,6 +94,7 @@ public class RenderTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        vkDeviceWaitIdle(device.get());
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
             imageAvailableSemaphore[i].destroy();
             renderFinishedSemaphore[i].destroy();

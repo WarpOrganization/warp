@@ -43,12 +43,11 @@ public class InstanceManager implements CreateAndDestroy {
     @Override
     public void create() {
         if (!glfwInit()) {
-            throw new RuntimeException("Failed to initialize GLFW");
+            throw new AssertionError("Failed to initialize GLFW");
         }
         if (!glfwVulkanSupported()) {
             throw new AssertionError("GLFW failed to find the Vulkan loader");
         }
-        logger.info("Creating Vulkan static resources");
         instance.create();
         if(ENABLE_VALIDATION_LAYERS)
             debugCallback.create();

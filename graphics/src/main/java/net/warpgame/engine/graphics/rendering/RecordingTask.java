@@ -51,9 +51,9 @@ public class RecordingTask extends EngineTask {
     private RenderTask renderTask;
 
     private DescriptorPool descriptorPool;
+    private GraphicsPipeline graphicsPipeline;
     private RenderPass renderPass;
     private SwapChain swapChain;
-    private GraphicsPipeline graphicsPipeline;
     private Device device;
 
     public RecordingTask(DescriptorPool descriptorPool, Device device, SceneHolder sceneHolder, RenderPass renderPass, SwapChain swapChain, GraphicsPipeline graphicsPipeline) {
@@ -68,16 +68,16 @@ public class RecordingTask extends EngineTask {
     @Override
     protected void onInit() {
         try {
-            synchronized (renderPass) {
-                if (!renderPass.isCreated())
-                    renderPass.wait();
+            synchronized (graphicsPipeline) {
+                if (!graphicsPipeline.isCreated())
+                    graphicsPipeline.wait();
             }
             synchronized (this){
                 if (commandPool == null)
                     this.wait();
             }
         } catch (InterruptedException e) {
-            if (!(renderPass.isCreated() && commandPool != null))
+            if (!(graphicsPipeline.isCreated() && commandPool != null))
                 throw new RuntimeException("Required resources are not ready", e);
         }
         descriptorPool.create();
@@ -101,6 +101,7 @@ public class RecordingTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        vkDeviceWaitIdle(device.get());
         drawCommands.forEach(x -> commandPool.freeCommandBuffer(x.getCommandBuffers()));
         vulkanRenders.forEach(VulkanRender::destroy);
         commandPool.destroy();

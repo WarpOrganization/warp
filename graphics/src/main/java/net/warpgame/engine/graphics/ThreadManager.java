@@ -5,6 +5,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.execution.SyncEngineThread;
 import net.warpgame.engine.graphics.memory.ResourceLoadThread;
 import net.warpgame.engine.graphics.rendering.RecordingThread;
+import net.warpgame.engine.graphics.rendering.RenderThread;
 
 /**
  * @author MarconZet
@@ -15,14 +16,17 @@ import net.warpgame.engine.graphics.rendering.RecordingThread;
 public class ThreadManager {
     private ResourceLoadThread resourceLoadThread;
     private RecordingThread recordingThread;
+    private RenderThread renderThread;
 
-    public ThreadManager(ResourceLoadThread resourceLoadThread, RecordingThread recordingThread) {
+    public ThreadManager(ResourceLoadThread resourceLoadThread, RecordingThread recordingThread, RenderThread renderThread) {
         this.resourceLoadThread = resourceLoadThread;
         this.recordingThread = recordingThread;
+        this.renderThread = renderThread;
     }
 
     public void waitForThreads(){
         waitForThread(recordingThread);
+        waitForThread(renderThread);
         waitForThread(resourceLoadThread);
     }
 
