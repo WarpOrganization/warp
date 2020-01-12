@@ -5,7 +5,7 @@ import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.command.poll.CommandPool;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.Allocator;
-import net.warpgame.engine.graphics.memory.VulkanLoadTask;
+import net.warpgame.engine.graphics.memory.ResourceLoadTask;
 
 import java.io.FileNotFoundException;
 
@@ -23,7 +23,7 @@ public abstract class Loadable {
 
     private int loadStatus = NOT_LOADED;
 
-    private VulkanLoadTask vulkanLoadTask;
+    private ResourceLoadTask resourceLoadTask;
     protected Context loadedContext;
 
     public void loadResource(Device device, Allocator allocator, CommandPool commandPool) throws FileNotFoundException {
@@ -44,15 +44,15 @@ public abstract class Loadable {
         if (loadStatus == NOT_LOADED) {
             loadStatus = SCHEDULED_TO_LOAD;
             loadedContext = property.getOwner().getContext().getLoadedContext();
-            vulkanLoadTask = loadedContext.findOne(VulkanLoadTask.class).get();
-            vulkanLoadTask.addToLoad(this);
+            resourceLoadTask = loadedContext.findOne(ResourceLoadTask.class).get();
+            resourceLoadTask.addToLoad(this);
         }
     }
 
     public synchronized void scheduleForUnload(Property property) {
         if (loadStatus == LOADED) {
             loadStatus = SCHEDULED_TO_UNLOAD;
-            vulkanLoadTask.addToUnload(this);
+            resourceLoadTask.addToUnload(this);
         }
     }
 

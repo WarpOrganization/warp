@@ -26,8 +26,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Service
 @Profile("graphics")
 @RegisterTask(thread = "loading")
-public class VulkanLoadTask extends EngineTask {
-    private static final Logger logger = LoggerFactory.getLogger(VulkanLoadTask.class);
+public class ResourceLoadTask extends EngineTask {
+    private static final Logger logger = LoggerFactory.getLogger(ResourceLoadTask.class);
 
     private BlockingQueue<Loadable> loadQueue = new LinkedBlockingQueue<>();
     private BlockingQueue<Loadable> unloadQueue = new LinkedBlockingQueue<>();
@@ -42,7 +42,7 @@ public class VulkanLoadTask extends EngineTask {
     private Device device;
 
 
-    public VulkanLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, SwapChain swapChain, QueueManager queueManager) {
+    public ResourceLoadTask(RecordingTask recordingTask, Device device, Allocator allocator, SwapChain swapChain, QueueManager queueManager) {
         this.recordingTask = recordingTask;
         this.device = device;
         this.allocator = allocator;
@@ -52,44 +52,17 @@ public class VulkanLoadTask extends EngineTask {
 
     @Override
     protected void onInit() {
-
-      /*  Object resource = new Object();
-
-        Thread a = new Thread() {
-            @Override
-            public void run() {
-                synchronized (resource) {
-                    try {
-                        resource.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-
-        Thread b = new Thread() {
-            @Override
-            public void run() {
-                Thread.sleep(200); //hard work
-                resource.notifyAll();
-            }
-        };*/
-
         try {
-            if (!isReady())
-                Thread.sleep(Long.MAX_VALUE);
-        } catch (InterruptedException e) {
-            if (!isReady()) {
-                throw new RuntimeException("Required resources are not ready",e);
+            synchronized (swapChain) {
+                if (!swapChain.isCreated())
+                    swapChain.wait();
             }
+        } catch (InterruptedException e) {
+            if (!swapChain.isCreated())
+                throw new RuntimeException("Required resources are not ready", e);
         }
         queue = queueManager.getTransportQueue();
         commandPool = new OneTimeCommandPool(device, queue);
-    }
-
-    private boolean isReady() {
-        return device.isCreated() && queueManager.isCreated() && allocator.isCreated() && swapChain.isCreated();
     }
 
     @Override

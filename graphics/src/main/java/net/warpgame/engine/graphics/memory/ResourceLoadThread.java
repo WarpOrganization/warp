@@ -17,8 +17,8 @@ import net.warpgame.engine.core.execution.SyncTimer;
 @Profile("graphics")
 @EnableConfig
 @RegisterExecutor("loading")
-public class VulkanLoadThread extends SyncEngineThread {
-    public VulkanLoadThread(Config config) {
+public class ResourceLoadThread extends SyncEngineThread {
+    public ResourceLoadThread(Config config) {
         super(new SyncTimer(config.getValue("graphics.vulkan.loading.ups")), new OnePerUpdateExecutionStrategy());
     }
 }

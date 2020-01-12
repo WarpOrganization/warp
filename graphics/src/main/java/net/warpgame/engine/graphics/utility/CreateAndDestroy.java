@@ -8,6 +8,6 @@ public interface CreateAndDestroy extends Destroyable {
     void create();
 
     default boolean isCreated() {
-        return true;
+        throw new UnsupportedOperationException();
     }
 }

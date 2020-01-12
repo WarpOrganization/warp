@@ -53,7 +53,10 @@ public class SwapChain implements CreateAndDestroy {
         createSwapChain();
         getSwapChainImages();
         createImageViews();
-        created = true;
+        synchronized (this) {
+            created = true;
+            notifyAll();
+        }
     }
 
     @Override
@@ -66,6 +69,7 @@ public class SwapChain implements CreateAndDestroy {
 
 
     private boolean created = false;
+
     @Override
     public boolean isCreated() {
         return created;
@@ -122,14 +126,14 @@ public class SwapChain implements CreateAndDestroy {
     private void getSwapChainImages() {
         IntBuffer pImageCount = BufferUtils.createIntBuffer(1);
         int err = vkGetSwapchainImagesKHR(device.get(), swapChain, pImageCount, null);
-        if(err != VK_SUCCESS){
+        if (err != VK_SUCCESS) {
             throw new VulkanAssertionError("Failed to get number of swap chain images", err);
         }
         int imageCount = pImageCount.get(0);
 
         LongBuffer swapChainImages = BufferUtils.createLongBuffer(imageCount);
         err = vkGetSwapchainImagesKHR(device.get(), swapChain, pImageCount, swapChainImages);
-        if(err != VK_SUCCESS){
+        if (err != VK_SUCCESS) {
             throw new VulkanAssertionError("Failed to get swap chain images", err);
         }
         Image[] res = new Image[imageCount];

@@ -42,8 +42,7 @@ public class RecordingTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(RecordingTask.class);
 
     private Deque<DrawCommands> drawCommands = new LinkedList<>();
-    private boolean commandBuffersOffered;
-    private boolean recreate;
+    private boolean recreate = false;
     private CommandPool commandPool;
     private Set<Component> registeredComponents = Collections.newSetFromMap(new WeakHashMap<>());
     private Set<VulkanRender> vulkanRenders = new HashSet<>();
@@ -63,7 +62,6 @@ public class RecordingTask extends EngineTask {
         this.renderPass = renderPass;
         this.swapChain = swapChain;
         this.graphicsPipeline = graphicsPipeline;
-        this.recreate = false;
         this.sceneHolder = sceneHolder;
     }
 
@@ -90,6 +88,7 @@ public class RecordingTask extends EngineTask {
 
     @Override
     protected void onClose() {
+        drawCommands.forEach(x -> commandPool.freeCommandBuffer(x.getCommandBuffers()));
         vulkanRenders.forEach(VulkanRender::destroy);
         commandPool.destroy();
         descriptorPool.destroy();

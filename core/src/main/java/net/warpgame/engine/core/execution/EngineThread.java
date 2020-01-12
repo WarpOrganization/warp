@@ -19,6 +19,5 @@ public interface EngineThread extends Executor {
      */
     void start();
     void interrupt();
-    void interruptThread();
     boolean isRunning();
 }
