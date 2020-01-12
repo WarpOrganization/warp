@@ -9,7 +9,6 @@ import net.warpgame.engine.core.execution.task.EngineTask;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.command.poll.CommandPool;
 import net.warpgame.engine.graphics.command.poll.StandardCommandPool;
-import net.warpgame.engine.graphics.command.queue.Queue;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.memory.scene.DescriptorPool;
 import net.warpgame.engine.graphics.memory.scene.Loadable;
@@ -27,10 +26,7 @@ import org.lwjgl.vulkan.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.lwjgl.vulkan.VK10.*;
@@ -45,8 +41,7 @@ import static org.lwjgl.vulkan.VK10.*;
 public class RecordingTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(RecordingTask.class);
 
-    private VkCommandBuffer[] commandBuffers;
-    private VkCommandBuffer[] oldCommandBuffers;
+    private Deque<DrawCommands> drawCommands = new LinkedList<>();
     private boolean commandBuffersOffered;
     private boolean recreate;
     private CommandPool commandPool;
@@ -54,6 +49,7 @@ public class RecordingTask extends EngineTask {
     private Set<VulkanRender> vulkanRenders = new HashSet<>();
 
     private SceneHolder sceneHolder;
+    private VulkanRenderTask vulkanRenderTask;
 
     private DescriptorPool descriptorPool;
     private RenderPass renderPass;
@@ -76,25 +72,19 @@ public class RecordingTask extends EngineTask {
         descriptorPool.create();
     }
 
-    public void setRenderQueue(Queue renderQueue) {
-        commandPool = new StandardCommandPool(device, renderQueue);
-    }
-
     @Override
     public void update(int delta) {
         if (recreate) {
             recreate = false;
             collectComponents(sceneHolder.getScene());
-            VkCommandBuffer[] result = recordCommandBuffers();
-            //TODO make render thread stop here
-            oldCommandBuffers = commandBuffers;
-            commandBuffers = result;
-            if(!commandBuffersOffered && oldCommandBuffers != null) {
-                commandPool.freeCommandBuffer(oldCommandBuffers);
-                oldCommandBuffers = null;
-            }
-            commandBuffersOffered = false;
-            //and here render thread should start
+            drawCommands.addLast(recordCommandBuffers());
+        }
+        while (drawCommands.size() > 1){
+            if(vulkanRenderTask.getFrameNumber() - drawCommands.peekFirst().getLastFrame() > swapChain.getImages().length) {
+                VkCommandBuffer[] commandBuffers = drawCommands.pollFirst().getCommandBuffers();
+                commandPool.freeCommandBuffer(commandBuffers);
+            } else
+                break;
         }
     }
 
@@ -105,7 +95,7 @@ public class RecordingTask extends EngineTask {
         descriptorPool.destroy();
     }
 
-    private VkCommandBuffer[] recordCommandBuffers(){
+    private DrawCommands recordCommandBuffers(){
         VkCommandBuffer[] commandBuffers = commandPool.createCommandBuffer(swapChain.getImages().length);
         for (int i = 0; i < commandBuffers.length; i++) {
             VkCommandBufferBeginInfo bufferBeginInfo = VkCommandBufferBeginInfo.create()
@@ -151,7 +141,7 @@ public class RecordingTask extends EngineTask {
             }
         }
 
-        return commandBuffers;
+        return new DrawCommands(commandBuffers);
     }
 
     private void collectComponents(Component component) {
@@ -176,17 +166,21 @@ public class RecordingTask extends EngineTask {
         return vulkanRenders;
     }
 
-    public VkCommandBuffer[] getCommandBuffers() {
-        commandBuffersOffered = true;
-        if(oldCommandBuffers != null){
-            commandPool.freeCommandBuffer(oldCommandBuffers);
-            oldCommandBuffers = null;
-        }
-        return commandBuffers;
+    public VkCommandBuffer getLatestDrawCommand(int i) {
+        DrawCommands drawCommands = this.drawCommands.peekLast();
+        if (drawCommands == null)
+            return null;
+        drawCommands.setLastFrame(vulkanRenderTask.getFrameNumber());
+        return drawCommands.getCommandBuffers()[i];
     }
 
     public void setRecreate(boolean recreate) {
         this.recreate = recreate;
+    }
+
+    public void setVulkanRenderTask(VulkanRenderTask vulkanRenderTask) {
+        commandPool = new StandardCommandPool(device, vulkanRenderTask.getGraphicsQueue());
+        this.vulkanRenderTask = vulkanRenderTask;
     }
 
 }

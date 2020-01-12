@@ -37,6 +37,7 @@ import static org.lwjgl.vulkan.VK10.*;
 public class VulkanRenderTask extends EngineTask {
 
     private int currentFrame = 0;
+    private long frameNumber = 0;
     private Semaphore[] imageAvailableSemaphore;
     private Semaphore[] renderFinishedSemaphore;
     private Fence[] inFlightFences;
@@ -62,7 +63,7 @@ public class VulkanRenderTask extends EngineTask {
     protected void onInit() {
         graphicsQueue = queueManager.getGraphicsQueue();
         presentationQueue = queueManager.getPresentationQueue();
-        recordingTask.setRenderQueue(graphicsQueue);
+        recordingTask.setVulkanRenderTask(this);
         imageAvailableSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
         renderFinishedSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
         inFlightFences = new Fence[MAX_FRAMES_IN_FLIGHT];
@@ -76,9 +77,10 @@ public class VulkanRenderTask extends EngineTask {
 
     @Override
     public void update(int delta) {
-        if(cameraHolder.getCameraProperty() == null || recordingTask.getCommandBuffers() == null) return;
+        if(cameraHolder.getCameraProperty() == null || recordingTask.getLatestDrawCommand(currentFrame) == null) return;
         drawFrame();
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+        frameNumber++;
     }
 
     @Override
@@ -115,7 +117,7 @@ public class VulkanRenderTask extends EngineTask {
                 .waitSemaphoreCount(1)
                 .pWaitSemaphores(waitSemaphores)
                 .pWaitDstStageMask(waitStages)
-                .pCommandBuffers(BufferUtils.createPointerBuffer(1).put(0, recordingTask.getCommandBuffers()[imageIndex]))
+                .pCommandBuffers(BufferUtils.createPointerBuffer(1).put(0, recordingTask.getLatestDrawCommand(imageIndex)))
                 .pSignalSemaphores(signalSemaphores);
 
         err = graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
@@ -139,6 +141,10 @@ public class VulkanRenderTask extends EngineTask {
     @Override
     public int getPriority() {
         return 20;
+    }
+
+    public long getFrameNumber() {
+        return frameNumber;
     }
 
     public Queue getGraphicsQueue() {
