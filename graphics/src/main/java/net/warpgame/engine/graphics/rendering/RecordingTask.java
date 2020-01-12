@@ -37,7 +37,7 @@ import static org.lwjgl.vulkan.VK10.*;
  */
 @Service
 @Profile("graphics")
-@RegisterTask(thread = "graphics")
+@RegisterTask(thread = "recording")
 public class RecordingTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(RecordingTask.class);
 
@@ -48,7 +48,7 @@ public class RecordingTask extends EngineTask {
     private Set<VulkanRender> vulkanRenders = new HashSet<>();
 
     private SceneHolder sceneHolder;
-    private VulkanRenderTask vulkanRenderTask;
+    private RenderTask renderTask;
 
     private DescriptorPool descriptorPool;
     private RenderPass renderPass;
@@ -67,6 +67,19 @@ public class RecordingTask extends EngineTask {
 
     @Override
     protected void onInit() {
+        try {
+            synchronized (renderPass) {
+                if (!renderPass.isCreated())
+                    renderPass.wait();
+            }
+            synchronized (this){
+                if (commandPool == null)
+                    this.wait();
+            }
+        } catch (InterruptedException e) {
+            if (!(renderPass.isCreated() && commandPool != null))
+                throw new RuntimeException("Required resources are not ready", e);
+        }
         descriptorPool.create();
     }
 
@@ -78,7 +91,7 @@ public class RecordingTask extends EngineTask {
             drawCommands.addLast(recordCommandBuffers());
         }
         while (drawCommands.size() > 1){
-            if(vulkanRenderTask.getFrameNumber() - drawCommands.peekFirst().getLastFrame() > swapChain.getImages().length) {
+            if(renderTask.getFrameNumber() - drawCommands.peekFirst().getLastFrame() > swapChain.getImages().length) {
                 VkCommandBuffer[] commandBuffers = drawCommands.pollFirst().getCommandBuffers();
                 commandPool.freeCommandBuffer(commandBuffers);
             } else
@@ -169,7 +182,7 @@ public class RecordingTask extends EngineTask {
         DrawCommands drawCommands = this.drawCommands.peekLast();
         if (drawCommands == null)
             return null;
-        drawCommands.setLastFrame(vulkanRenderTask.getFrameNumber());
+        drawCommands.setLastFrame(renderTask.getFrameNumber());
         return drawCommands.getCommandBuffers()[i];
     }
 
@@ -177,9 +190,12 @@ public class RecordingTask extends EngineTask {
         this.recreate = recreate;
     }
 
-    public void setVulkanRenderTask(VulkanRenderTask vulkanRenderTask) {
-        commandPool = new StandardCommandPool(device, vulkanRenderTask.getGraphicsQueue());
-        this.vulkanRenderTask = vulkanRenderTask;
+    public void setRenderTask(RenderTask renderTask) {
+        commandPool = new StandardCommandPool(device, renderTask.getGraphicsQueue());
+        this.renderTask = renderTask;
+        synchronized (this){
+            notifyAll();
+        }
     }
 
 }

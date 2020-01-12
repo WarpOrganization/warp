@@ -11,5 +11,7 @@ graphics:
   vulkan:
     loading:
       ups: 1
+    recording:
+      ups: 2
 script.ups: 30
 

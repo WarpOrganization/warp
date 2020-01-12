@@ -34,7 +34,7 @@ import static org.lwjgl.vulkan.VK10.*;
 @Service
 @Profile("graphics")
 @RegisterTask(thread = "graphics")
-public class VulkanRenderTask extends EngineTask {
+public class RenderTask extends EngineTask {
 
     private int currentFrame = 0;
     private long frameNumber = 0;
@@ -51,7 +51,7 @@ public class VulkanRenderTask extends EngineTask {
     private QueueManager queueManager;
     private Device device;
 
-    public VulkanRenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, SwapChain swapChain, QueueManager queueManager, Device device) {
+    public RenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, SwapChain swapChain, QueueManager queueManager, Device device) {
         this.recordingTask = recordingTask;
         this.cameraHolder = cameraHolder;
         this.swapChain = swapChain;
@@ -63,7 +63,7 @@ public class VulkanRenderTask extends EngineTask {
     protected void onInit() {
         graphicsQueue = queueManager.getGraphicsQueue();
         presentationQueue = queueManager.getPresentationQueue();
-        recordingTask.setVulkanRenderTask(this);
+        recordingTask.setRenderTask(this);
         imageAvailableSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
         renderFinishedSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
         inFlightFences = new Fence[MAX_FRAMES_IN_FLIGHT];

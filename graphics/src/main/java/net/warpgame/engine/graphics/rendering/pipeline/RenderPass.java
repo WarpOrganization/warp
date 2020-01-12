@@ -58,6 +58,10 @@ public class RenderPass implements CreateAndDestroy {
         createRenderPass();
         createDepthImage();
         createFramebuffers();
+        synchronized (this) {
+            created = true;
+            notifyAll();
+        }
     }
 
     @Override
@@ -69,6 +73,14 @@ public class RenderPass implements CreateAndDestroy {
         depthImage.destroy();
         vkDestroyRenderPass(device.get(), renderPass, null);
         commandPool.destroy();
+    }
+
+
+    private boolean created = false;
+
+    @Override
+    public boolean isCreated() {
+        return created;
     }
 
     private void createFramebuffers(){
