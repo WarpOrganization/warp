@@ -88,6 +88,10 @@ public class SyncEngineThread implements EngineThread {
         return running;
     }
 
+    public Thread getEngineThread() {
+        return engineThread;
+    }
+
     protected Timer getTimer() {
         return timer;
     }

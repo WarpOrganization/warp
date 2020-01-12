@@ -2,7 +2,7 @@ package net.warpgame.engine.graphics.rendering.pipeline;
 
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.VulkanTask;
+import net.warpgame.engine.graphics.GraphicsTask;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.utility.resource.mesh.Vertex;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
@@ -251,7 +251,7 @@ public class GraphicsPipeline implements CreateAndDestroy {
     }
 
     private static ByteBuffer ioResourceToByteBuffer(String resource) throws IOException {
-        URL url = VulkanTask.class.getResource(resource);
+        URL url = GraphicsTask.class.getResource(resource);
         File file = new File(url.getFile());
         if (!file.isFile()) {
             throw new RuntimeException(String.format("%s is not a file", file.toString()));

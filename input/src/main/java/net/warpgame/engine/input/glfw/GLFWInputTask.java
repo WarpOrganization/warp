@@ -5,7 +5,7 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.graphics.VulkanTask;
+import net.warpgame.engine.graphics.GraphicsTask;
 import net.warpgame.engine.graphics.window.Window;
 
 /**
@@ -15,7 +15,7 @@ import net.warpgame.engine.graphics.window.Window;
 @Service
 @Profile("input")
 @RegisterTask(thread = "graphics")
-@ExecuteAfterTask(VulkanTask.class)
+@ExecuteAfterTask(GraphicsTask.class)
 public class GLFWInputTask extends EngineTask {
 
     private GLFWInput input;

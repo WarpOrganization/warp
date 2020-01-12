@@ -22,15 +22,18 @@ import static org.lwjgl.vulkan.VK10.vkDeviceWaitIdle;
 @Service
 @Profile("graphics")
 @RegisterTask(thread = "graphics")
-public class VulkanTask extends EngineTask {
-    private static final Logger logger = LoggerFactory.getLogger(VulkanTask.class);
+public class GraphicsTask extends EngineTask {
+    private static final Logger logger = LoggerFactory.getLogger(GraphicsTask.class);
+
+    private ThreadManager threadManager;
 
     private InstanceManager instanceManager;
     private SwapChain swapChain;
     private RenderPass renderPass;
     private GraphicsPipeline graphicsPipeline;
 
-    public VulkanTask(InstanceManager instanceManager, SwapChain swapChain, RenderPass renderPass, GraphicsPipeline graphicsPipeline) {
+    public GraphicsTask(ThreadManager threadManager, InstanceManager instanceManager, SwapChain swapChain, RenderPass renderPass, GraphicsPipeline graphicsPipeline) {
+        this.threadManager = threadManager;
         this.instanceManager = instanceManager;
         this.swapChain = swapChain;
         this.renderPass = renderPass;
@@ -55,6 +58,7 @@ public class VulkanTask extends EngineTask {
     @Override
     protected void onClose() {
         vkDeviceWaitIdle(instanceManager.getDevice().get());
+        threadManager.waitForThreads();
         logger.info("Destroying Vulkan instance and static resources");
         graphicsPipeline.destroy();
         renderPass.destroy();
