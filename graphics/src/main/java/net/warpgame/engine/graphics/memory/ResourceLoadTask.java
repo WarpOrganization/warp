@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -32,6 +34,7 @@ public class ResourceLoadTask extends EngineTask {
     private static final Logger logger = LoggerFactory.getLogger(ResourceLoadTask.class);
 
     private BlockingQueue<Loadable> loadQueue = new LinkedBlockingQueue<>();
+    private Set<Loadable> loaded = new HashSet<>();
     private BlockingQueue<Loadable> unloadQueue = new LinkedBlockingQueue<>();
     private CommandPool commandPool;
     private Queue queue;
@@ -76,17 +79,20 @@ public class ResourceLoadTask extends EngineTask {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            loaded.add(loadable);
             recordingTask.setRecreate(true);
         }
         while ((loadable = unloadQueue.poll()) != null) {
             loadable.unloadResource();
+            loaded.remove(loadable);
         }
     }
 
     @Override
     protected void onClose() {
         vkDeviceWaitIdle(device.get());
-        //TODO proper closing
+        loaded.forEach(Loadable::unloadResource);
+        commandPool.destroy();
     }
 
     public void addToLoad(Loadable loadable) {

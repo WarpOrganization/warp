@@ -84,6 +84,7 @@ public class Texture extends Loadable {
     public void unload() {
         textureImageView.destroy();
         textureImage.destroy();
+        textureSampler.destroy();
     }
 
     public TextureSampler getTextureSampler() {
