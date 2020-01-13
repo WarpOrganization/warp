@@ -19,15 +19,11 @@ public class VulkanTransform extends Loadable {
     private Buffer[] uniformBuffers;
     private int length;
 
-    private Device device;
-
     public VulkanTransform() {
     }
 
     @Override
     public void load(Device device, Allocator allocator, CommandPool commandPool) {
-        this.device = device;
-
         long bufferSize = UniformBufferObject.sizeOf();
         length = loadedContext.findOne(SwapChain.class).get().getImages().length;
         uniformBuffers = new Buffer[length];
@@ -43,7 +39,7 @@ public class VulkanTransform extends Loadable {
         }
     }
 
-    public void update(Matrix4fc modelMatrix, Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage){
+    public void update(Matrix4fc modelMatrix, Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage) {
         UniformBufferObject ubo = new UniformBufferObject(modelMatrix, viewMatrix, projectionMatrix);
         Buffer.copyBuffer(ubo.data, uniformBuffers[currentImage], UniformBufferObject.sizeOf());
     }

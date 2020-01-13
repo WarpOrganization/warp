@@ -22,6 +22,7 @@ public abstract class Loadable {
             UNLOADED = 4;
 
     private int loadStatus = NOT_LOADED;
+    private int usageCount = 0;
 
     private ResourceLoadTask resourceLoadTask;
     protected Context loadedContext;
@@ -49,7 +50,17 @@ public abstract class Loadable {
         }
     }
 
-    public synchronized void scheduleForUnload(Property property) {
+    public synchronized void increaseUsage(){
+        usageCount++;
+    }
+
+    public synchronized void decreaseUsage(){
+        usageCount--;
+        if (usageCount == 0)
+            scheduleForUnload();
+    }
+
+    private synchronized void scheduleForUnload() {
         if (loadStatus == LOADED) {
             loadStatus = SCHEDULED_TO_UNLOAD;
             resourceLoadTask.addToUnload(this);

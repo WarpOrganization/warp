@@ -10,8 +10,8 @@ import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
 import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 
 import java.io.File;
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -19,13 +19,15 @@ import java.util.Random;
  * Created 11.01.2020
  */
 public class DragonGenerationScript extends Script {
-    private List<Component> dragonList = new LinkedList<>();
+    private Deque<Component> dragonList = new LinkedList<>();
     private Component floor;
     private Random random = new Random();
     private final float min = 0;
     private final float max = 100;
     private long lastDragonTime = 0;
     private long dragonInterval = 5000;
+    private StaticMesh mesh;
+    private Texture texture;
 
     public DragonGenerationScript(Component owner) {
         super(owner);
@@ -34,28 +36,41 @@ public class DragonGenerationScript extends Script {
     @Override
     public void onInit() {
         floor = getOwner();
+        prepareStaticResources();
+        for (int i = 0; i < 5; i++) {
+            dragonList.add(createDragon(floor));
+        }
+        lastDragonTime = System.currentTimeMillis();
+
+    }
+
+    private void prepareStaticResources() {
+        File meshSource = new File(GraphicsTest.class.getResource("dragon.obj").getFile());
+        mesh = new StaticMesh(meshSource);
+
+        File texSource = new File(GraphicsTest.class.getResource("tex.png").getFile());
+        texture = new Texture(texSource);
     }
 
     @Override
     public void onUpdate(int delta) {
         if(System.currentTimeMillis()-lastDragonTime > dragonInterval){
             lastDragonTime = System.currentTimeMillis();
-            dragonList.add(createDragon(floor));
+            Component dragon = dragonList.pollLast();
+            if(dragon != null) {
+                dragon.destroy();
+                System.gc();
+            }
+            /*dragonList.add(createDragon(floor));
+            dragonList.pollFirst().destroy();*/
         }
     }
 
     private Component createDragon(Component parent) {
         Component dragon = new SceneComponent(parent);
 
-        File meshSource = new File(GraphicsTest.class.getResource("dragon.obj").getFile());
-        StaticMesh mesh = new StaticMesh(meshSource);
-        MeshProperty meshProperty = new MeshProperty(mesh);
-        dragon.addProperty(meshProperty);
-
-        File texSource = new File(GraphicsTest.class.getResource("tex.png").getFile());
-        Texture texture = new Texture(texSource);
-        MaterialProperty materialProperty = new MaterialProperty(texture);
-        dragon.addProperty(materialProperty);
+        dragon.addProperty(new MeshProperty(mesh));
+        dragon.addProperty(new MaterialProperty(texture));
 
         TransformProperty transformProperty = new TransformProperty();
         transformProperty.move(0, 3, 0);
@@ -65,7 +80,7 @@ public class DragonGenerationScript extends Script {
         transformProperty.move(x, 10, z);
         dragon.addProperty(transformProperty);
 
-        dragon.addScript(DragonScript.class);
+        //dragon.addScript(DragonScript.class);
 
         return dragon;
     }

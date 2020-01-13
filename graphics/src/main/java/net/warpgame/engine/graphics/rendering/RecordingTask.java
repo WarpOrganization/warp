@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.lwjgl.vulkan.VK10.*;
@@ -45,7 +46,7 @@ public class RecordingTask extends EngineTask {
     private boolean recreate = false;
     private CommandPool commandPool;
     private Set<Component> registeredComponents = Collections.newSetFromMap(new WeakHashMap<>());
-    private Set<VulkanRender> vulkanRenders = new HashSet<>();
+    private Set<VulkanRender> vulkanRenders = Collections.synchronizedSet(new HashSet<>());
 
     private SceneHolder sceneHolder;
     private RenderTask renderTask;
@@ -85,6 +86,11 @@ public class RecordingTask extends EngineTask {
 
     @Override
     public void update(int delta) {
+        List<VulkanRender> forCleanup = vulkanRenders.parallelStream().filter(VulkanRender::isDead).collect(Collectors.toList());
+        if (forCleanup.size() > 0) {
+            vulkanRenders.removeAll(forCleanup);
+            recreate = true;
+        }
         if (recreate) {
             recreate = false;
             collectComponents(sceneHolder.getScene());
@@ -94,9 +100,11 @@ public class RecordingTask extends EngineTask {
             if(renderTask.getFrameNumber() - drawCommands.peekFirst().getLastFrame() > swapChain.getImages().length) {
                 VkCommandBuffer[] commandBuffers = drawCommands.pollFirst().getCommandBuffers();
                 commandPool.freeCommandBuffer(commandBuffers);
-            } else
+            } else {
                 break;
+            }
         }
+        forCleanup.forEach(VulkanRender::destroy);
     }
 
     @Override

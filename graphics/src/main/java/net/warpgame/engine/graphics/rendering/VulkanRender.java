@@ -36,6 +36,9 @@ public class VulkanRender implements Destroyable {
 
 
     public VulkanRender(Component component, VulkanTransform transform, StaticMesh mesh, Texture texture, DescriptorPool descriptorPool, Device device) {
+        transform.increaseUsage();
+        mesh.increaseUsage();
+        texture.increaseUsage();
         this.origin = new WeakReference<>(component);
         this.transform = transform;
         this.mesh = mesh;
@@ -53,12 +56,14 @@ public class VulkanRender implements Destroyable {
         LongBuffer descriptorSet = BufferUtils.createLongBuffer(1).put(0, descriptorSets[currentImage]);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, descriptorSet, null);
 
-        vkCmdDrawIndexed(commandBuffer, (int) (mesh.getIndices().getSize())/4, 1, 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffer, (int) (mesh.getIndices().getSize()) / 4, 1, 0, 0, 0);
     }
 
     public void updateUniformBuffer(Matrix4fc viewMatrix, Matrix4fc projectionMatrix, int currentImage) {
         Component owner = origin.get();
-        if (owner == null) return;
+        if (owner == null) {
+            return;
+        }
 
         Matrix4f transformMatrix = new Matrix4f();
         Transforms.getAbsoluteTransform(owner, transformMatrix);
@@ -67,7 +72,9 @@ public class VulkanRender implements Destroyable {
 
     @Override
     public void destroy() {
-
+        transform.decreaseUsage();
+        mesh.decreaseUsage();
+        texture.decreaseUsage();
     }
 
     private long[] getDescriptorSets(DescriptorPool pool, Device device) {
@@ -106,5 +113,9 @@ public class VulkanRender implements Destroyable {
             vkUpdateDescriptorSets(device.get(), writeDescriptor, null);
         }
         return sets;
+    }
+
+    public boolean isDead() {
+        return origin.get() == null;
     }
 }
