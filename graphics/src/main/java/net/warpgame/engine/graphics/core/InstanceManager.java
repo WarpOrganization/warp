@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.core;
 
+import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.graphics.command.queue.QueueManager;
@@ -9,7 +10,6 @@ import net.warpgame.engine.graphics.window.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.warpgame.engine.graphics.GraphicsConfig.ENABLE_VALIDATION_LAYERS;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 
@@ -21,6 +21,7 @@ import static org.lwjgl.glfw.GLFWVulkan.glfwVulkanSupported;
 @Profile("graphics")
 public class InstanceManager implements CreateAndDestroy {
     private static final Logger logger = LoggerFactory.getLogger(InstanceManager.class);
+    private final boolean enableValidationLayers;
 
     private Instance instance;
     private DebugCallback debugCallback;
@@ -30,7 +31,7 @@ public class InstanceManager implements CreateAndDestroy {
     private Device device;
     private Allocator allocator;
 
-    public InstanceManager(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, QueueManager queueManager, Device device, Allocator allocator) {
+    public InstanceManager(Instance instance, DebugCallback debugCallback, Window window, PhysicalDevice physicalDevice, QueueManager queueManager, Device device, Allocator allocator, Config config) {
         this.instance = instance;
         this.debugCallback = debugCallback;
         this.window = window;
@@ -38,6 +39,8 @@ public class InstanceManager implements CreateAndDestroy {
         this.queueManager = queueManager;
         this.device = device;
         this.allocator = allocator;
+        enableValidationLayers = config.getValue("graphics.vulkan.debug.enabled");
+
     }
 
     @Override
@@ -49,7 +52,7 @@ public class InstanceManager implements CreateAndDestroy {
             throw new AssertionError("GLFW failed to find the Vulkan loader");
         }
         instance.create();
-        if(ENABLE_VALIDATION_LAYERS)
+        if(enableValidationLayers)
             debugCallback.create();
         window.create();
         physicalDevice.create();
@@ -64,7 +67,7 @@ public class InstanceManager implements CreateAndDestroy {
         allocator.destroy();
         device.destroy();
         window.destroy();
-        if(ENABLE_VALIDATION_LAYERS) {
+        if(enableValidationLayers) {
             debugCallback.destroy();
         }
         instance.destroy();

@@ -1,4 +1,7 @@
 graphics:
+  window:
+    width: 800
+    height: 600
   ups: 60
   upscounter:
     enabled: true
@@ -9,11 +12,16 @@ graphics:
     ui:
       stackSize: 10
   vulkan:
+    debug:
+      enabled: true
+      validationLayers: ["VK_LAYER_KHRONOS_validation", "VK_LAYER_RENDERDOC_Capture"]
     loading:
+      maxObjects: 100
       ups: 1
     recording:
       ups: 2
     render:
+      frameNumber: 2
       ups: 60
 script.ups: 30
 

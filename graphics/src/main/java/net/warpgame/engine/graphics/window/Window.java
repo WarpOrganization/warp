@@ -11,8 +11,6 @@ import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.GraphicsConfig.HEIGHT;
-import static net.warpgame.engine.graphics.GraphicsConfig.WIDTH;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFWVulkan.glfwCreateWindowSurface;
 import static org.lwjgl.vulkan.KHRSurface.vkDestroySurfaceKHR;
@@ -32,14 +30,12 @@ public class Window implements CreateAndDestroy {
     private int width;
     private int height;
 
-    private Config config;
     private Instance instance;
 
     public Window(Config config, Instance instance) {
-        this.config = config;
         this.instance = instance;
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        this.width = config.getValue("graphics.window.width");
+        this.height = config.getValue("graphics.window.height");
     }
 
     @Override

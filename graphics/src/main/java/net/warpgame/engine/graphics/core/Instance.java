@@ -13,10 +13,12 @@ import org.lwjgl.vulkan.VkInstance;
 import org.lwjgl.vulkan.VkInstanceCreateInfo;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
-import static net.warpgame.engine.graphics.GraphicsConfig.*;
 import static org.lwjgl.glfw.GLFWVulkan.glfwGetRequiredInstanceExtensions;
 import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.vulkan.EXTDebugReport.VK_EXT_DEBUG_REPORT_EXTENSION_NAME;
+import static org.lwjgl.vulkan.KHRSurface.VK_KHR_SURFACE_EXTENSION_NAME;
 import static org.lwjgl.vulkan.VK10.*;
 
 /**
@@ -27,9 +29,16 @@ import static org.lwjgl.vulkan.VK10.*;
 @Service
 @Profile("graphics")
 public class Instance implements CreateAndDestroy {
+    private static final String[] VALIDATION_LAYERS_INSTANCE_EXTENSIONS = {VK_EXT_DEBUG_REPORT_EXTENSION_NAME};
+    private static final String[] INSTANCE_EXTENSIONS = {VK_KHR_SURFACE_EXTENSION_NAME};
+    private final boolean enableValidationLayers ;
+    private final ArrayList<String> validationLayers;
+
     private VkInstance instance;
 
     public Instance(Config config) {
+        this.enableValidationLayers = config.getValue("graphics.vulkan.debug.enabled");
+        this.validationLayers = config.getValue("graphics.vulkan.debug.validationLayers");
     }
 
     @Override
@@ -69,9 +78,9 @@ public class Instance implements CreateAndDestroy {
     }
 
     private PointerBuffer getValidationLayers() {
-        if (ENABLE_VALIDATION_LAYERS) {
-            PointerBuffer ppEnabledLayerNames = BufferUtils.createPointerBuffer(VALIDATION_LAYERS.length);
-            for (String layer : VALIDATION_LAYERS) {
+        if (enableValidationLayers) {
+            PointerBuffer ppEnabledLayerNames = BufferUtils.createPointerBuffer(validationLayers.size());
+            for (String layer : validationLayers) {
                 ppEnabledLayerNames.put(memUTF8(layer));
             }
             return ppEnabledLayerNames.flip();
@@ -94,7 +103,7 @@ public class Instance implements CreateAndDestroy {
         }
 
         int size = ppExtensions.remaining() + INSTANCE_EXTENSIONS.length;
-        if (ENABLE_VALIDATION_LAYERS) {
+        if (enableValidationLayers) {
             size += VALIDATION_LAYERS_INSTANCE_EXTENSIONS.length;
         }
 
@@ -103,7 +112,7 @@ public class Instance implements CreateAndDestroy {
         for (String extension : INSTANCE_EXTENSIONS) {
             ppEnabledExtensionNames.put(memUTF8(extension));
         }
-        if (ENABLE_VALIDATION_LAYERS) {
+        if (enableValidationLayers) {
             for (String extension : VALIDATION_LAYERS_INSTANCE_EXTENSIONS) {
                 ppEnabledExtensionNames.put(memUTF8(extension));
             }

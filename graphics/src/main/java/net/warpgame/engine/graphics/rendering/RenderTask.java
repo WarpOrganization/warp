@@ -1,5 +1,6 @@
 package net.warpgame.engine.graphics.rendering;
 
+import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
@@ -22,7 +23,6 @@ import org.lwjgl.vulkan.VkSubmitInfo;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.GraphicsConfig.MAX_FRAMES_IN_FLIGHT;
 import static org.lwjgl.vulkan.KHRSwapchain.*;
 import static org.lwjgl.vulkan.VK10.*;
 
@@ -35,6 +35,7 @@ import static org.lwjgl.vulkan.VK10.*;
 @Profile("graphics")
 @RegisterTask(thread = "render")
 public class RenderTask extends EngineTask {
+    private final int maxFramesInFlight;
 
     private int currentFrame = 0;
     private long frameNumber = 0;
@@ -51,12 +52,13 @@ public class RenderTask extends EngineTask {
     private QueueManager queueManager;
     private Device device;
 
-    public RenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, SwapChain swapChain, QueueManager queueManager, Device device) {
+    public RenderTask(RecordingTask recordingTask, CameraHolder cameraHolder, SwapChain swapChain, QueueManager queueManager, Device device, Config config) {
         this.recordingTask = recordingTask;
         this.cameraHolder = cameraHolder;
         this.swapChain = swapChain;
         this.queueManager = queueManager;
         this.device = device;
+        this.maxFramesInFlight = config.getValue("graphics.vulkan.render.frameNumber");
     }
 
     @Override
@@ -73,11 +75,11 @@ public class RenderTask extends EngineTask {
         graphicsQueue = queueManager.getGraphicsQueue();
         presentationQueue = queueManager.getPresentationQueue();
         recordingTask.setRenderTask(this);
-        imageAvailableSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
-        renderFinishedSemaphore = new Semaphore[MAX_FRAMES_IN_FLIGHT];
-        inFlightFences = new Fence[MAX_FRAMES_IN_FLIGHT];
+        imageAvailableSemaphore = new Semaphore[maxFramesInFlight];
+        renderFinishedSemaphore = new Semaphore[maxFramesInFlight];
+        inFlightFences = new Fence[maxFramesInFlight];
 
-        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        for (int i = 0; i < maxFramesInFlight; i++) {
             imageAvailableSemaphore[i] = new Semaphore(device);
             renderFinishedSemaphore[i] = new Semaphore(device);
             inFlightFences[i] = new Fence(device, VK_FENCE_CREATE_SIGNALED_BIT);
@@ -88,14 +90,14 @@ public class RenderTask extends EngineTask {
     public void update(int delta) {
         if(cameraHolder.getCameraProperty() == null || recordingTask.getLatestDrawCommand(currentFrame) == null) return;
         drawFrame();
-        currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+        currentFrame = (currentFrame + 1) % maxFramesInFlight;
         frameNumber++;
     }
 
     @Override
     protected void onClose() {
         vkDeviceWaitIdle(device.get());
-        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        for (int i = 0; i < maxFramesInFlight; i++) {
             imageAvailableSemaphore[i].destroy();
             renderFinishedSemaphore[i].destroy();
             inFlightFences[i].destroy();

@@ -14,10 +14,12 @@ import org.lwjgl.vulkan.VkDeviceQueueCreateInfo;
 import org.lwjgl.vulkan.VkPhysicalDeviceFeatures;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
-import static net.warpgame.engine.graphics.GraphicsConfig.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.system.MemoryUtil.memUTF8;
+import static org.lwjgl.vulkan.KHRGetMemoryRequirements2.VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME;
+import static org.lwjgl.vulkan.KHRSwapchain.VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 import static org.lwjgl.vulkan.VK10.*;
 
 /**
@@ -28,16 +30,20 @@ import static org.lwjgl.vulkan.VK10.*;
 @Service
 @Profile("graphics")
 public class Device implements CreateAndDestroy {
+    private static final String[] DEVICE_EXTENSIONS = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME};
+    private final boolean enableValidationLayers;
+    private final ArrayList<String> validationLayers;
+
     private VkDevice device;
 
     private QueueManager queueManager;
     private PhysicalDevice physicalDevice;
-    private Config config;
 
     public Device(PhysicalDevice physicalDevice, QueueManager queueManager, Config config) {
         this.physicalDevice = physicalDevice;
         this.queueManager = queueManager;
-        this.config = config;
+        this.enableValidationLayers = config.getValue("graphics.vulkan.debug.enabled");
+        this.validationLayers = config.getValue("graphics.vulkan.debug.validationLayers");
     }
 
     @Override
@@ -84,9 +90,9 @@ public class Device implements CreateAndDestroy {
                 .pEnabledFeatures(deviceFeatures)
                 .ppEnabledExtensionNames(ppExtensionNames);
 
-        if (ENABLE_VALIDATION_LAYERS) {
-            PointerBuffer ppValidationLayers = BufferUtils.createPointerBuffer(VALIDATION_LAYERS.length);
-            for (String layer : VALIDATION_LAYERS) {
+        if (enableValidationLayers) {
+            PointerBuffer ppValidationLayers = BufferUtils.createPointerBuffer(validationLayers.size());
+            for (String layer : validationLayers) {
                 ppValidationLayers.put(memUTF8(layer));
             }
             pCreateInfo.ppEnabledLayerNames(ppValidationLayers.flip());

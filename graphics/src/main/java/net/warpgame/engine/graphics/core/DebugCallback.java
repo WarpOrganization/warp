@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.LongBuffer;
 
-import static net.warpgame.engine.graphics.GraphicsConfig.DEBUG_REPORT;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.vulkan.EXTDebugReport.*;
 import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
@@ -26,6 +25,10 @@ import static org.lwjgl.vulkan.VK10.VK_SUCCESS;
 @Profile("graphics")
 public class DebugCallback implements CreateAndDestroy {
     private static final Logger logger = LoggerFactory.getLogger(DebugCallback.class);
+    private static final int DEBUG_REPORT =
+            VK_DEBUG_REPORT_ERROR_BIT_EXT |
+                    VK_DEBUG_REPORT_WARNING_BIT_EXT |
+                    VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
 
     private long debugCallbackHandle;
 

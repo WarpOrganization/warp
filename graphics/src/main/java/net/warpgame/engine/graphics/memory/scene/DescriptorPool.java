@@ -1,7 +1,7 @@
 package net.warpgame.engine.graphics.memory.scene;
 
+import net.warpgame.engine.core.context.config.Config;
 import net.warpgame.engine.core.context.service.Service;
-import net.warpgame.engine.graphics.GraphicsConfig;
 import net.warpgame.engine.graphics.core.Device;
 import net.warpgame.engine.graphics.rendering.pipeline.GraphicsPipeline;
 import net.warpgame.engine.graphics.utility.CreateAndDestroy;
@@ -26,17 +26,18 @@ public class DescriptorPool implements CreateAndDestroy {
     private long descriptorPool;
 
     private int[] types = new int[]{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER};
-    private int sets = GraphicsConfig.DESCRIPTOR_POOL_MAX_SETS;
+    private int sets;
     private int swapChainImagesLength;
 
     private Device device;
-
     private SwapChain swapChain;
     private GraphicsPipeline graphicsPipeline;
-    public DescriptorPool(Device device, SwapChain swapChain, GraphicsPipeline graphicsPipeline) {
+
+    public DescriptorPool(Device device, SwapChain swapChain, GraphicsPipeline graphicsPipeline, Config config) {
         this.device = device;
         this.swapChain = swapChain;
         this.graphicsPipeline = graphicsPipeline;
+        this.sets = config.getValue("graphics.vulkan.loading.maxObjects");
     }
 
     @Override
