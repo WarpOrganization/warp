@@ -80,7 +80,7 @@ public class DragonGenerationScript extends Script {
         transformProperty.move(x, 10, z);
         dragon.addProperty(transformProperty);
 
-        //dragon.addScript(DragonScript.class);
+        dragon.addScript(DragonScript.class);
 
         return dragon;
     }
