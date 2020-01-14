@@ -1,7 +1,6 @@
 package net.warpgame.engine.core.execution;
 
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.core.execution.task.EngineTask;
 
 /**
  * @author Jaca777

@@ -7,16 +7,16 @@ import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.core.event.Listener;
 import net.warpgame.engine.core.execution.EngineThread;
 import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.graphics.material.Material;
-import net.warpgame.engine.graphics.material.MaterialProperty;
-import net.warpgame.engine.graphics.mesh.MeshProperty;
-import net.warpgame.engine.graphics.mesh.StaticMesh;
+import net.warpgame.engine.graphics.memory.scene.material.Material;
+import net.warpgame.engine.graphics.memory.scene.material.MaterialProperty;
+import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
+import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
 import net.warpgame.engine.graphics.rendering.screenspace.light.SceneLightManager;
-import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
-import net.warpgame.engine.graphics.resource.texture.ImageData;
-import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
-import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
-import net.warpgame.engine.graphics.texture.Texture2D;
+import net.warpgame.engine.graphics.utility.resource.mesh.ObjLoader;
+import net.warpgame.engine.graphics.utility.resource.texture.ImageData;
+import net.warpgame.engine.graphics.utility.resource.texture.ImageDecoder;
+import net.warpgame.engine.graphics.utility.resource.texture.PNGDecoder;
+import net.warpgame.engine.graphics.image.Texture2D;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.lwjgl.opengl.GL11;
 
@@ -45,7 +45,7 @@ public class ShipLoadListener extends Listener<LoadShipEvent> {
     private void init() {
         mesh = ObjLoader.read(
                 ClientTest.class.getResourceAsStream("he-goat.obj"),
-                true).toMesh();
+                true).toModel();
         imageData = ImageDecoder.decodePNG(
                 ClientTest.class.getResourceAsStream("he-goat_tex.png"),
                 PNGDecoder.Format.RGBA

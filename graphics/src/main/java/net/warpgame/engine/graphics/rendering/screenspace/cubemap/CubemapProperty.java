@@ -1,7 +1,6 @@
 package net.warpgame.engine.graphics.rendering.screenspace.cubemap;
 
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.graphics.texture.Cubemap;
 
 /**
  * @author Jaca777
@@ -9,17 +8,4 @@ import net.warpgame.engine.graphics.texture.Cubemap;
  */
 public class CubemapProperty extends Property {
 
-    private Cubemap cubemap;
-
-    public CubemapProperty(Cubemap cubemap) {
-        this.cubemap = cubemap;
-    }
-
-    public Cubemap getCubemap() {
-        return cubemap;
-    }
-
-    public void setCubemap(Cubemap cubemap) {
-        this.cubemap = cubemap;
-    }
 }

@@ -7,31 +7,32 @@ apply plugin: 'maven'
 
 repositories {
     mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 project.ext.lwjglNatives = "natives-${platform}"
-project.ext.lwjglVersion = "3.1.0"
+project.ext.lwjglVersion = "3.2.3"
+project.ext.jomlVersion = "1.9.17"
 
 dependencies {
-    compile project(':core')
+    implementation project(':core')
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
-
+    implementation  'org.slf4j:slf4j-api:1.7.12'
+    implementation  "org.joml:joml:${jomlVersion}"
+    implementation  "org.jetbrains:annotations:16.0.2"
 
     // LWJGL dependencies
-    compile "org.lwjgl:lwjgl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-egl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-jawt:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    implementation  "org.lwjgl:lwjgl:${lwjglVersion}"
+    implementation  "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    implementation  "org.lwjgl:lwjgl-vma:${lwjglVersion}"
+    implementation  "org.lwjgl:lwjgl-vulkan:${lwjglVersion}"
+    implementation  "org.lwjgl:lwjgl-stb:${lwjglVersion}"
     // LWJGL natives
-    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-vma:${lwjglVersion}:${lwjglNatives}"
+    if (lwjglNatives == "natives-macos") runtimeOnly "org.lwjgl:lwjgl-vulkan:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 

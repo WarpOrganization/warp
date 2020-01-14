@@ -1,5 +1,8 @@
 package net.warpgame.engine.core.component;
 
+import net.warpgame.engine.core.context.service.Profile;
+import net.warpgame.engine.core.context.service.Service;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +12,8 @@ import java.util.Map;
  * Created 09.12.2017
  */
 //TODO implement service configuration
-//@Service
+@Service
+@Profile("local")
 public class ComponentRegistry {
     private Map<Integer, Component> componentMap = new HashMap<>();
     private int maxId = 0;

@@ -47,7 +47,6 @@ dependencies {
 }
 
 subprojects.each { subproject -> evaluationDependsOn(subproject.path) }
-jar.dependsOn subprojects.tasks['classes']
 jar {
     zip64 true
     from {
@@ -61,7 +60,9 @@ jar {
 }
 
 dependencies {
-    compile project(':test')
+    compile project(':graphicstest')
+    compile group: 'org.codehaus.groovy', name: 'groovy-xml', version: '2.5.6'
+
 }
 
 
@@ -96,7 +97,7 @@ static def createConfiguration(taskName, mainClass, mod) {
 }
 
 task createRunConfigurations {
-    createConfiguration("SP - Warp Engine Test", "net.warpgame.test.Test1", "test_main")
+    createConfiguration("SP - Vulkan Test", "net.warpgame.engine.graphicstest.GraphicsTest", "graphicstest_main")
     createConfiguration("MP - Server Test", "net.warpgame.servertest.server.ServerTest", "servertest_main")
     createConfiguration("MP - Client Test", "net.warpgame.servertest.client.ClientTest", "servertest_main")
     createConfiguration("IDE - Ai Behavior Tree Editor", "net.warpgame.ide.AiBehaviorTreeEditor", "ide_main")

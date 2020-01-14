@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.message;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.HashMap;
  * Created 01.06.2018
  */
 @Service
+@Profile("net")
 public class MessageProcessorsService {
 
     private HashMap<Integer, MessageProcessor> messageProcessorsMap;

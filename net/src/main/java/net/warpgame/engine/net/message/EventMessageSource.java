@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.message;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.core.serialization.Serializers;
@@ -12,6 +13,7 @@ import net.warpgame.engine.net.messagetypes.event.EventEnvelope;
  * Created 30.05.2018
  */
 @Service
+@Profile("net")
 public class EventMessageSource extends MessageSource<EventEnvelope> {
 
     private ConnectionTools connectionTools;

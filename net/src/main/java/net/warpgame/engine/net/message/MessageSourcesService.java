@@ -1,6 +1,7 @@
 package net.warpgame.engine.net.message;
 
 import net.warpgame.engine.core.context.Context;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 /**
@@ -8,6 +9,7 @@ import net.warpgame.engine.core.context.service.Service;
  * Created 01.06.2018
  */
 @Service
+@Profile("net")
 public class MessageSourcesService {
 
     private MessageSource[] messageSources;

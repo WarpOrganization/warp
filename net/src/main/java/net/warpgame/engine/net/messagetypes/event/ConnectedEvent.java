@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.messagetypes.event;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.Deserializer;
 import net.warpgame.engine.core.serialization.Serialization;
@@ -16,6 +17,7 @@ public class ConnectedEvent extends NetworkEvent {
     private ConnectedEvent(){}
 
     @Service
+    @Profile("net")
     public static class ConnectedEventSerialization extends Serialization<ConnectedEvent> {
 
         public ConnectedEventSerialization() {

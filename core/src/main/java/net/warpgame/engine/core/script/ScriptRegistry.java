@@ -32,9 +32,11 @@ public class ScriptRegistry {
 
     public synchronized void update() {
         scripts.addAll(scriptsToAdd);
+        scriptsToAdd.clear();
         if (!scripts.containsAll(scriptsToRemove))
             throw new ScriptNotFoundException("Unable to remove a script.");
         else scripts.removeAll(scriptsToRemove);
+        scriptsToRemove.clear();
     }
 
     public synchronized void removeComponentScripts(Component component) {

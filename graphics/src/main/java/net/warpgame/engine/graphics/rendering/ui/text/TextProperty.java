@@ -1,8 +1,8 @@
 package net.warpgame.engine.graphics.rendering.ui.text;
 
 import net.warpgame.engine.core.property.Property;
-import net.warpgame.engine.graphics.resource.font.Font;
-import net.warpgame.engine.graphics.resource.font.FontManager;
+import net.warpgame.engine.graphics.utility.resource.font.Font;
+import net.warpgame.engine.graphics.utility.resource.font.FontManager;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -36,7 +36,6 @@ public class TextProperty extends Property {
 
     @Override
     public void init() {
-        super.init();
         fontManager = getOwner().getContext().getLoadedContext().findOne(FontManager.class).get();
         updateFont();
     }

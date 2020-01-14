@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.message;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.serialization.SerializationBuffer;
 import net.warpgame.engine.core.serialization.Serializers;
@@ -10,6 +11,7 @@ import net.warpgame.engine.net.messagetypes.idpoolmessage.IdPoolMessage;
  * Created 11.08.2018
  */
 @Service
+@Profile("net")
 public class IdPoolMessageSource extends MessageSource<IdPoolMessage> {
 
     private Serializers serializers;

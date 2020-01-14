@@ -5,30 +5,30 @@ import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.ExecuteAfterTask;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
-import net.warpgame.engine.graphics.window.WindowManager;
-import net.warpgame.engine.graphics.window.WindowTask;
+import net.warpgame.engine.graphics.GraphicsTask;
+import net.warpgame.engine.graphics.window.Window;
 
 /**
  * @author Jaca777
  *         Created 2016-07-02 at 23
  */
 @Service
-@Profile("graphics")
+@Profile("input")
 @RegisterTask(thread = "graphics")
-@ExecuteAfterTask(WindowTask.class)
+@ExecuteAfterTask(GraphicsTask.class)
 public class GLFWInputTask extends EngineTask {
 
     private GLFWInput input;
-    private WindowManager windowManager;
+    private Window window;
 
-    public GLFWInputTask(GLFWInput input, WindowManager windowManager) {
+    public GLFWInputTask(GLFWInput input, Window window) {
         this.input = input;
-        this.windowManager = windowManager;
+        this.window = window;
     }
 
     @Override
     protected void onInit() {
-        input.init(windowManager.getWindowHandle());
+        input.init(window.get());
     }
 
     @Override

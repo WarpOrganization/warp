@@ -1,5 +1,6 @@
 package net.warpgame.engine.net.message;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 
 import java.util.ArrayDeque;
@@ -9,6 +10,7 @@ import java.util.ArrayDeque;
  * Created 30.05.2018
  */
 @Service
+@Profile("net")
 public class MessageQueue {
 
     private ArrayDeque<MessageEnvelope> events = new ArrayDeque<>();

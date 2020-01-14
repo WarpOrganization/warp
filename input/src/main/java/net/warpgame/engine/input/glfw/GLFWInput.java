@@ -2,6 +2,7 @@ package net.warpgame.engine.input.glfw;
 
 import net.warpgame.engine.core.component.Scene;
 import net.warpgame.engine.core.component.SceneHolder;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 import net.warpgame.engine.input.Input;
@@ -11,6 +12,7 @@ import net.warpgame.engine.input.event.MouseButtonPressedEvent;
 import net.warpgame.engine.input.event.MouseButtonReleasedEvent;
 import org.apache.log4j.Logger;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.event.KeyEvent;
@@ -24,6 +26,7 @@ import java.awt.event.MouseEvent;
 @SuppressWarnings("Duplicates") //srsly intellij?
 
 @Service
+@Profile("input")
 public class GLFWInput implements Input {
 
     private static Logger logger = Logger.getLogger(GLFWInput.class);
@@ -140,9 +143,14 @@ public class GLFWInput implements Input {
 //        this.cursorPosition = currentCursorPos;
 //    }
 
+    @Deprecated
     @Override
     public void getCursorPosition(Vector2f vector) {
         vector.set(cursorPosition);
+    }
+
+    public Vector2fc getCursorPosition() {
+        return cursorPosition;
     }
 
     @Deprecated
@@ -151,9 +159,15 @@ public class GLFWInput implements Input {
         return cursorPositionDelta;
     }
 
+    @Deprecated
     @Override
     public void getScrollPosition(Vector2f vector) {
         vector.set(scrollPos);
+    }
+
+    @Override
+    public Vector2fc getScrollPosition() {
+        return scrollPos;
     }
 
     @Override

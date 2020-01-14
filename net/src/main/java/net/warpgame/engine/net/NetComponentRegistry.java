@@ -1,6 +1,7 @@
 package net.warpgame.engine.net;
 
 import net.warpgame.engine.core.component.*;
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.event.Event;
 
@@ -11,6 +12,7 @@ import java.util.Collection;
  * Created 10.08.2018
  */
 @Service
+@Profile("net")
 public class NetComponentRegistry extends ComponentRegistry {
 
     public static final int PRIVATE_ID_POOL_BEGINNING = 0;

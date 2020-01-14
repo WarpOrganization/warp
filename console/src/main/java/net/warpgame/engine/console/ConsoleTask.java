@@ -1,5 +1,6 @@
 package net.warpgame.engine.console;
 
+import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.context.task.RegisterTask;
 import net.warpgame.engine.core.execution.task.EngineTask;
@@ -11,6 +12,7 @@ import java.util.Scanner;
  * Created 2018-01-09 at 21:38
  */
 @Service
+@Profile("console")
 @RegisterTask(thread = "console")
 public class ConsoleTask extends EngineTask {
 

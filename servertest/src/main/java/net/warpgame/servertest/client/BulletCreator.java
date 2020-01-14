@@ -6,19 +6,18 @@ import net.warpgame.engine.core.context.service.Profile;
 import net.warpgame.engine.core.context.service.Service;
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.core.property.TransformProperty;
-import net.warpgame.engine.graphics.material.Material;
-import net.warpgame.engine.graphics.material.MaterialProperty;
-import net.warpgame.engine.graphics.mesh.MeshProperty;
-import net.warpgame.engine.graphics.mesh.StaticMesh;
-import net.warpgame.engine.graphics.resource.mesh.ObjLoader;
-import net.warpgame.engine.graphics.resource.texture.ImageData;
-import net.warpgame.engine.graphics.resource.texture.ImageDecoder;
-import net.warpgame.engine.graphics.resource.texture.PNGDecoder;
-import net.warpgame.engine.graphics.texture.Texture2D;
+import net.warpgame.engine.graphics.memory.scene.material.Material;
+import net.warpgame.engine.graphics.memory.scene.material.MaterialProperty;
+import net.warpgame.engine.graphics.memory.scene.mesh.MeshProperty;
+import net.warpgame.engine.graphics.memory.scene.mesh.StaticMesh;
+import net.warpgame.engine.graphics.utility.resource.mesh.ObjLoader;
+import net.warpgame.engine.graphics.utility.resource.texture.ImageData;
+import net.warpgame.engine.graphics.utility.resource.texture.ImageDecoder;
+import net.warpgame.engine.graphics.utility.resource.texture.PNGDecoder;
+import net.warpgame.engine.graphics.image.Texture2D;
 import net.warpgame.engine.net.NetComponentRegistry;
 import net.warpgame.engine.physics.simplified.SimplifiedPhysicsProperty;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 
 /**
  * @author Hubertus
@@ -39,7 +38,7 @@ public class BulletCreator {
     public void initialize() {
         mesh = ObjLoader.read(
                 ClientTest.class.getResourceAsStream("bullet.obj"),
-                true).toMesh();
+                true).toModel();
         ImageData imageData = ImageDecoder.decodePNG(
                 ClientTest.class.getResourceAsStream("bullet.png"),
                 PNGDecoder.Format.RGBA

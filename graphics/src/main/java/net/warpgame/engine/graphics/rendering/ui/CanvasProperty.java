@@ -2,8 +2,6 @@ package net.warpgame.engine.graphics.rendering.ui;
 
 import net.warpgame.engine.core.property.Property;
 import net.warpgame.engine.graphics.camera.CameraProperty;
-import net.warpgame.engine.graphics.rendering.ui.UiRenderer;
-import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
 /**
@@ -20,10 +18,7 @@ public class CanvasProperty extends Property {
 
     @Override
     public void init() {
-        super.init();
         projectionMatrix = cameraProperty.getUiProjectionMatrix();
-        UiRenderer uiRenderer = getOwner().getContext().getLoadedContext().findOne(UiRenderer.class).get();
-        uiRenderer.addCanvas(this);
     }
 
     public Matrix4fc getProjectionMatrix() {
