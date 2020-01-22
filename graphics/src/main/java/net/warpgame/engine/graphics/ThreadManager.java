@@ -32,7 +32,7 @@ public class ThreadManager {
 
     private void waitForThread(SyncEngineThread syncEngineThread){
         Thread thread = syncEngineThread.getEngineThread();
-        while (thread.isAlive()){
+        if(thread.isAlive()){
             try {
                 thread.join();
             } catch (InterruptedException e) {
