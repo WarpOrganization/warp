@@ -3,7 +3,9 @@
 [![Build Status](https://jenkins.b.snet.ovh/buildStatus/icon?job=Warp%20Organization/warp/master)](https://jenkins.b.snet.ovh/blue/organizations/jenkins/Warp%20Organization%2Fwarp/activity)
 [![Discord](https://img.shields.io/discord/446443682124529685.svg?style=flat)](https://discord.gg/8UFe8zx)
 
-**Warp Engine** is a 3D game engine designed for a convenient and unlimited creation of games set in space. Its aim is to provide tools allowing a developer to make a space-set game without any boundaries nor loading times.
+**Warp Engine** is a 3D game engine designed for a convenient and unlimited creation of games set in space. Its aim is to provide tools allowing a developer to make a space-set game without any boundaries nor loading times. 
+
+It's quite limited due to being unfinished.
 
 ### Technology Stack
  * Java 1.8
